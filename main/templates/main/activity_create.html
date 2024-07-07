@@ -1,0 +1,375 @@
+{% extends 'main/face.html' %}
+
+{% block content %}
+<style>
+    /* Form container style */
+    .custom-form-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        background-color: #f9f9f9;
+    }
+
+    /* Table style */
+    .custom-table {
+        width: 100%;
+        margin-bottom: 20px;
+        border-collapse: collapse;
+    }
+
+    /* Table cell style */
+    .custom-td {
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    /* Label style */
+    .custom-label {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .custom-input[type="text"],
+    .custom-input[type="email"],
+    .custom-input[type="file"],
+    textarea,
+    select {
+        width: calc(100% - 20px);
+        padding: 15px;
+        border: 1px solid #ccc;
+        border-radius: 25px;
+        box-sizing: border-box;
+        margin-top: 5px;
+        transition: border-color 0.3s ease;
+    }
+
+    .custom-input[type="text"]:focus,
+    .custom-input[type="email"]:focus,
+    .custom-input[type="file"]:focus,
+    textarea:focus,
+    select:focus {
+        outline: none;
+        border-color: #007bff;
+    }
+
+    textarea {
+        resize: none;
+        height: 200px;
+        overflow-y: auto;
+    }
+
+    /* Emoji button style */
+    .emoji-button {
+        display: inline-block;
+        padding: 5px;
+        font-size: 20px;
+        background-color: #f0f0f0;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .emoji-button:hover {
+        background-color: #ccc;
+    }
+
+    /* Submit button style */
+    .submit-button {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .submit-button:hover {
+        background-color: #0056b3;
+    }
+
+    .action-item {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-right: 10px;
+        border-radius: 5px;
+        text-align: center;
+        font-size: 12px; /* Adjust the font size as needed */
+    }
+
+    .action-item a {
+        color: #000;
+        text-decoration: none;
+        font-size: inherit;
+    }
+
+    .action-item i {
+        margin-right: 5px;
+    }
+
+    /* Mobile-specific styles */
+    @media (max-width: 600px) {
+        .custom-form-container {
+            padding: 15px;
+        }
+
+        .custom-td {
+            padding: 8px;
+        }
+
+        .custom-input[type="text"],
+        .custom-input[type="email"],
+        .custom-input[type="file"],
+        textarea,
+        select {
+            width: calc(100% - 10px);
+            padding: 10px;
+        }
+
+        .submit-button {
+            padding: 8px;
+        }
+
+        .action-item {
+            padding: 8px 10px;
+            font-size: 10px; /* Adjust the font size as needed */
+            margin-right: 5px;
+        }
+
+        .emoji-button {
+            padding: 3px;
+            font-size: 18px;
+        }
+    }
+</style>
+
+<h2 style="font-size:19px; padding-left: 20px;">Campaign_Activities_Form</h2>
+
+<div class="custom-form-container">
+
+
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ formset.management_form }}
+        {% for form in formset %}
+            <table class="custom-table">
+                {{ form.as_table }}
+                <tr>
+                    <td class="custom-td">Emoji:</td>
+                    <td class="custom-td">
+                        <button type="button" class="emoji-button" onclick="addEmoji('📢', '{{ form.content.auto_id }}')">📢</button>
+                        <button type="button" class="emoji-button" onclick="addEmoji('🎉', '{{ form.content.auto_id }}')">🎉</button>
+                        <button type="button" class="emoji-button" onclick="addEmoji('💼', '{{ form.content.auto_id }}')">💼</button>
+                        <button type="button" class="emoji-button" onclick="addEmoji('📊', '{{ form.content.auto_id }}')">📊</button>
+                        <button type="button" class="emoji-button" onclick="addEmoji('💡', '{{ form.content.auto_id }}')">💡</button>
+                        <button type="button" class="emoji-button" onclick="addEmoji('🔍', '{{ form.content.auto_id }}')">🔍</button>
+                        <button type="button" class="emoji-button" onclick="addEmoji('📣', '{{ form.content.auto_id }}')">📣</button>
+                        <button type="button" class="emoji-button" onclick="addEmoji('🎯', '{{ form.content.auto_id }}')">🎯</button>
+                        <button type="button" class="emoji-button" onclick="addEmoji('🔔', '{{ form.content.auto_id }}')">🔔</button>
+                        <button type="button" class="emoji-button" onclick="addEmoji('📱', '{{ form.content.auto_id }}')">📱</button>
+                        <button type="button" class="emoji-button" onclick="addEmoji('💸', '{{ form.content.auto_id }}')">💸</button>
+                        <button type="button" class="emoji-button" onclick="addEmoji('🔑', '{{ form.content.auto_id }}')">🔑</button>
+                        <button type="button" class="emoji-button" onclick="addEmoji('🔦', '{{ form.content.auto_id }}')">🔦</button>
+                        <button type="button" class="emoji-button" onclick="addEmoji('🎁', '{{ form.content.auto_id }}')">🎁</button>
+                        <button type="button" class="emoji-button" onclick="addEmoji('📆', '{{ form.content.auto_id }}')">📆</button>
+                        <button type="button" class="emoji-button" onclick="addEmoji('💻', '{{ form.content.auto_id }}')">💻</button>
+                        <button type="button" class="emoji-button" onclick="addEmoji('📝', '{{ form.content.auto_id }}')">📝</button>
+                        <button type="button" class="emoji-button" onclick="addEmoji('🔧', '{{ form.content.auto_id }}')">🔧</button>
+                        <button type="button" class="emoji-button" onclick="addEmoji('🛠️', '{{ form.content.auto_id }}')">🛠️</button>
+                        <!-- Add more buttons with different emojis and onclick functions if needed -->
+                    </td>
+                </tr>
+                                <tr>
+                    <td class="custom-td">Activities eg:</td>
+                    <td class="custom-td">
+                        {{ campaign.get_objective_and_activities.Activities }}
+                         
+                    </td>
+                </tr>
+            </table>
+        {% endfor %}
+        <button type="submit" class="submit-button">Submit</button>
+    </form>
+</div>
+
+<script>
+
+
+
+
+    
+    function addEmoji(emoji, fieldId) {
+        var contentField = document.getElementById(fieldId);
+        contentField.value += emoji;
+    }
+
+
+
+
+
+        // Function to handle file upload and playback
+        function uploadAudio() {
+            var input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'audio/*, video/*'; // Limit file selection to audio files
+
+            // Listen for file selection
+            input.onchange = function(e) {
+                var file = e.target.files[0];
+                var audio = document.getElementById('bgAudio');
+
+                // Pause the current audio playback
+                audio.pause();
+
+                // Store the selected audio file and its playback position in local storage
+                localStorage.setItem('bgAudioFile', URL.createObjectURL(file));
+                localStorage.setItem('bgAudioPosition', audio.currentTime);
+
+                // Set the audio source to the selected file
+                audio.src = localStorage.getItem('bgAudioFile');
+
+                // Resume audio playback
+                audio.play();
+            };
+
+            // Trigger the file input
+            input.click();
+        }
+
+        // Function to set background audio on page load
+        window.onload = function() {
+            var audio = document.getElementById('bgAudio');
+            var bgAudioFile = localStorage.getItem('bgAudioFile');
+            var audioPosition = parseFloat(localStorage.getItem('bgAudioPosition'));
+
+            // Check if there's a stored audio file
+            if (bgAudioFile) {
+                // Set the audio source to the stored file
+                audio.src = bgAudioFile;
+
+                // Set the playback position if available
+                if (!isNaN(audioPosition)) {
+                    audio.currentTime = audioPosition;
+                }
+
+                // Autoplay the audio
+                audio.play();
+            }
+        };
+
+        // Store current playback position before page refresh
+        window.addEventListener('beforeunload', function() {
+            var audio = document.getElementById('bgAudio');
+            localStorage.setItem('bgAudioPosition', audio.currentTime);
+        });
+
+function switchColor() {
+    var body = document.body;
+    var logoContainer = document.querySelector('.logo-container');
+
+    // Define the color sequence (black, white)
+    var colors = ["black", "white"];
+
+    // Find the index of the current color in the sequence
+    var currentIndex = colors.indexOf(body.style.backgroundColor);
+
+    // Set the next color in the sequence
+    var nextColor = colors[(currentIndex + 1) % colors.length];
+
+    // Apply the new color to the body and other elements
+    body.style.backgroundColor = nextColor;
+
+    // Change background color and border of logo-container based on nextColor
+    if (nextColor === "black") {
+        logoContainer.style.backgroundColor = "#262626";
+        logoContainer.style.border = ""; 
+        logoContainer.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)"; 
+         // Add white border
+    } else {
+        logoContainer.style.backgroundColor = ""; // or "transparent"
+        logoContainer.style.border = "none";  // Remove border
+    }
+
+    // Other elements to be updated based on nextColor
+    var header = document.querySelector('header');
+    var footer = document.querySelector('footer');
+    var sections = document.querySelectorAll('section, .left-aside, .right-aside');
+    var textElements = document.querySelectorAll('h1, h2, p, li, nav a, .btn,.upper-post, .reaction, .campaign-content, .action-item, .action-item a');
+    var buttons = document.querySelectorAll('button');
+    var reactDivs = document.querySelectorAll('.react div');
+    var loveCounts = document.querySelectorAll('[id^="love-count-"]');
+    var viewCounts = document.querySelectorAll('#view-count');
+    var commentCounts = document.querySelectorAll('.comment-count');
+
+    header.style.backgroundColor = nextColor;
+    footer.style.backgroundColor = nextColor;
+
+    sections.forEach(function(section) {
+        section.style.backgroundColor = nextColor;
+    });
+
+    var textColor = nextColor === "black" ? "white" : "black";
+    header.style.color = textColor;
+    footer.style.color = textColor;
+
+    textElements.forEach(function(element) {
+        element.style.color = textColor;
+    });
+
+    var buttonColor = nextColor === "black" ? "#262626" : "";
+    buttons.forEach(function(button) {
+        button.style.backgroundColor = buttonColor;
+
+        if (nextColor === "black") {
+            button.classList.add('button-hover');
+        } else {
+            button.classList.remove('button-hover');
+            button.style.backgroundColor = "";
+        }
+    });
+
+    reactDivs.forEach(function(reactDiv) {
+        reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
+
+        var reactTextColor = nextColor === "black" ? "white" : "black";
+        reactDiv.style.color = reactTextColor;
+
+        if (nextColor === "black") {
+            reactDiv.classList.add('react-hover');
+        } else {
+            reactDiv.classList.remove('react-hover');
+            reactDiv.style.backgroundColor = "";
+        }
+    });
+
+    var countTextColor = nextColor === "black" ? "white" : "black";
+    loveCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+    viewCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+    commentCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+}
+
+
+
+
+</script>
+{% endblock %}
+
+
+
+
+
+
+
+

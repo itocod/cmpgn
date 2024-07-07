@@ -1,0 +1,209 @@
+{% extends 'main/face.html' %}
+{% load static %}
+<!-- main/campaign_comments.html -->
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Activity Comments</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emojionearea/dist/emojionearea.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        #commentsList {
+            list-style-type: none;
+            padding: 0;
+        }
+        #commentsList li {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        #commentsList li strong {
+            color: #007bff;
+        }
+        #noCommentsMessage {
+            font-style: italic;
+        }
+        #successMessage {
+            text-align: center;
+            margin-bottom: 10px;
+            color: green;
+        }
+        #commentForm {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        #commentForm button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        #commentForm button:hover {
+            background-color: #0056b3;
+        }
+        .profile-pic {
+            flex-shrink: 0;
+            margin-right: 20px;
+        }
+        .profile-pic img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            padding: 2px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s ease;
+        }
+        .profile-pic:hover img {
+            border-color: #00FF00;
+        }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/emojionearea/dist/emojionearea.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Initialize emojionearea on your message input field
+            $('#id_content').emojioneArea({
+                pickerPosition: "bottom",
+                tones: false // Disable emoji tones if not needed
+            });
+
+            $('#commentForm').submit(function (e) {
+                e.preventDefault();
+                $.ajax({
+                    type: 'POST',
+                    url: $(this).attr('action'),
+                    data: $(this).serialize(),
+                    success: function (data) {
+                        if (data.success) {
+                            $('#commentForm').trigger('reset');
+                            $('#successMessage').text('Comment sent successfully!');
+                            // Prepend the new comment to the comments list
+                            var comment = '<li><div class="profile-pic"><img src="' + data.profile_image_url + '" alt="Profile Picture" class="profile-pic-hover"></div><strong>' + data.username + '</strong> <span style="font-size:14px;">commented  - just now -</span><p style="font-size:16px;">' + data.content + '</p></li>';
+                            $('#commentsList').prepend(comment);
+                            $('#noCommentsMessage').hide(); // Hide the "No comments yet" message
+                        } else {
+                            // Handle validation errors
+                            // Display error messages to the user
+                        }
+                    },
+                    error: function (xhr, textStatus, errorThrown) {
+                        console.error("Error:", textStatus);
+                    }
+                });
+            });
+        });
+        
+  document.addEventListener('DOMContentLoaded', function() {
+    var mediaQuery = window.matchMedia('(max-width: 768px)');
+    var leftAside = document.querySelector('.left-aside');
+    var rightAside = document.querySelector('.right-aside');
+
+    function handleMediaQueryChange(e) {
+      if (e.matches) {
+        leftAside.style.display = 'none';
+        rightAside.style.display = 'none';
+      } else {
+        leftAside.style.display = 'block';
+        rightAside.style.display = 'block';
+      }
+    }
+
+    mediaQuery.addListener(handleMediaQueryChange);
+    handleMediaQueryChange(mediaQuery);
+  });
+
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    const navbarToggle = document.getElementById("navbarToggle");
+    const navbar = document.getElementById("navbar");
+
+    // Toggle navbar visibility
+    navbarToggle.addEventListener("click", function() {
+        if (navbar.style.display === "block") {
+            navbar.style.display = "none";
+        } else {
+            navbar.style.display = "block";
+        }
+    });
+
+    // Adjust navbar display on window resize
+    window.addEventListener("resize", function() {
+        if (window.innerWidth > 768) {
+            navbar.style.display = "none";
+        } else if (navbar.style.display === "block") {
+            navbar.style.display = "block";
+        } else {
+            navbar.style.display = "none";
+        }
+    });
+
+    // Ensure the navbar is initially hidden on page load for larger screens
+    if (window.innerWidth > 768) {
+        navbar.style.display = "none";
+    } else {
+        navbar.style.display = "none"; // or "block" based on your initial requirement
+    }
+});
+
+
+    </script>
+</head>
+<body>
+    <h2 style="font-size:19px; padding-left: 20px;">Activity_Comments</h2>
+    <div style="border-left: 2px solid #3498db; height: 400px; overflow-y: auto; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+        <ul id="commentsList">
+            {% for comment in comments %}
+                <li>
+
+
+                    <div class="profile-pic">
+    <a href="{% url 'profile_view' username=comment.user.username %}">
+        <img src="{{ comment.user.profile.image.url }}" alt="Profile Picture" class="profile-pic-hover">
+    </a>
+</div>
+                  
+                    <strong>{{ comment.user.username }}
+                    {% if comment.user.profile.is_verified %}
+                        <span class="verified-status" style="font-size: 12px;">✅Verified</span>
+                    {% endif %}
+                    </strong> <span style="font-size:14px;">commented  - {{ comment.timestamp|timesince }} ago -</span>
+                    <p style="font-size:16px;">{{ comment.content }}</p>
+                </li>
+            {% empty %}
+                <li id="noCommentsMessage">No comments yet.</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div id="successMessage"></div>
+    <form id="commentForm" action="{% url 'add_activity_comment' activity.id %}" method="post">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit">Submit Comment</button>
+    </form>
+</body>
+</html>
+{% endblock %}

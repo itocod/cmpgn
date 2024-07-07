@@ -1,0 +1,197 @@
+{% load static %}
+{% load socialaccount %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Login</title>
+    <style type="text/css">
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .login-container img {
+            border-radius: 50%;
+            margin-bottom: 10px;
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            margin-top: 20px;
+        }
+        .form-field {
+            margin-bottom: 15px;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .btn-signin {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+        .btn-signin:hover {
+            background-color: #5dade2;
+        }
+        .additional-links {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            color: #777;
+        }
+        .btn-third-party {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background-color: whitesmoke;
+            color: gray;
+            text-align: center;
+            text-decoration: none;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+        .btn-third-party i {
+            margin-right: 10px;
+        }
+        .btn-third-party:hover {
+            background-color: silver;
+            color: white;
+        }
+        .text-danger {
+            color: red;
+        }
+        .logo-initials {
+            color: limegreen; /* Lime text color */
+            display: inline-block;
+            font-size: 60px; /* Adjust size as needed */
+            font-weight: bold;
+            letter-spacing: 2px; /* Spacing between letters */
+            text-transform: uppercase; /* Uppercase text */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font */
+            position: relative; /* Positioning context for pseudo-element */
+            text-shadow: 
+                3px 3px 0 limegreen, /* Lime green shadow */
+                -3px -3px 0 limegreen, /* Lime green shadow */
+                3px -3px 0 limegreen, /* Lime green shadow */
+                -3px 3px 0 limegreen, /* Lime green shadow */
+                5px 5px 0 black, /* Black shadow */
+                -5px -5px 0 black, /* Black shadow */
+                5px -5px 0 black, /* Black shadow */
+                -5px 5px 0 black; /* Black shadow */
+        }
+
+        .logo-initials::after {
+            content: 'R'; /* Ensures the letter is displayed */
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1; /* Behind the main letter */
+            text-shadow: 
+                3px 3px 0 limegreen, /* Lime green shadow */
+                -3px -3px 0 limegreen, /* Lime green shadow */
+                3px -3px 0 limegreen, /* Lime green shadow */
+                -3px 3px 0 limegreen, /* Lime green shadow */
+                5px 5px 0 black, /* Black shadow */
+                -5px -5px 0 black, /* Black shadow */
+                5px -5px 0 black, /* Black shadow */
+                -5px 5px 0 black; /* Black shadow */
+        }
+
+        .logo-container {
+            text-align: center;
+            padding: 2px;
+          
+           
+        }
+
+     
+
+        .logo-name {
+            display: block;
+            font-size: 24px; /* Adjust size as needed */
+            margin-top: 5px; /* Space between initials and name */
+            opacity: 0.8; /* Slightly transparent */
+        }
+
+        .tagline {
+            display: block;
+            font-size: 18px; /* Adjust size as needed */
+            margin-top: 10px; /* Space between name and tagline */
+            opacity: 0.7; /* Slightly transparent */
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo-container">
+            <div class="logo">
+                <span class="logo-initials">R</span>
+                <span class="logo-name">RallyNex</span>
+                <span class="tagline">Your Campaign Hub</span>
+            </div>
+        </div>
+        <h2>Sign In To RallyNex</h2>
+        <form method="post" action="{% url 'account_login' %}">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-field">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.errors %}
+                        <p class="text-danger">{{ field.errors.as_text }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+            <div class="form-field">
+                <label for="agree_terms">I agree to the <a href="{% url 'terms_of_service' %}">Terms of Service</a> and <a href="{% url 'privacy_policy' %}">Privacy Policy</a></label>
+                <input type="checkbox" id="agree_terms" name="agree_terms">
+            </div>
+            <button type="submit" class="btn-signin">Sign In</button>
+        </form>
+        <p class="additional-links">
+            <a href="{% url 'account_reset_password' %}">Forgot password?</a><br>
+            Don't have an account? <a href="{% url 'account_signup' %}">Sign up here</a>.<br>
+        </p>
+        <hr>
+        <h2>Or use a third-party</h2>
+        <a href="{% provider_login_url 'google' %}" class="btn-third-party" aria-label="Sign in with Google">
+            <i class="fab fa-google"></i> Sign in with Google
+        </a>
+    </div>
+</body>
+</html>

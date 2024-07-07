@@ -1,0 +1,291 @@
+{% extends 'main/face.html' %}
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-hrQltZzH5YEmNvzAf6ObX8waGcdnt/kD5j8hlRjzNUtAmq3w2l+2YRPK6B9uEySQW5h0W1K6I5pNz5j7J90pKQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <title>View Campaign</title>
+   
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #333;
+            margin-top: 0;
+        }
+        .idea-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .idea-list li {
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .idea-list li:last-child {
+            margin-bottom: 0;
+        }
+        .custom-form {
+            margin-top: 20px;
+        }
+        .custom-button {
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .custom-button:hover {
+            background-color: #0056b3;
+        }
+        .profile-pic {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 10px;
+        }
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .action-item {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-right: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 12px;
+        }
+        .action-item a {
+            color: #000;
+            text-decoration: none;
+            font-size: inherit;
+        }
+        .action-item i {
+            margin-right: 5px;
+        }
+        .custom-textarea {
+            width: 100%;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        .idea-content {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            max-width: 100%;
+            padding-left: 10px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .idea-content video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 10px;
+        }
+
+
+.nav-list {
+    list-style-type: none; /* Remove default list styles */
+    padding: 0; /* Remove default padding */
+}
+
+.nav-list li {
+    margin-bottom: 10px; /* Spacing between list items */
+}
+
+.nav-list li a {
+    display: flex;
+    align-items: center; /* Align icon and text vertically */
+    padding: 10px 15px; /* Padding inside the link */
+    background-color: #f0f0f0; /* Background color */
+    color: #333; /* Text color */
+    text-decoration: none; /* Remove underline */
+    border-radius: 5px; /* Rounded corners */
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transitions */
+}
+
+.nav-list li a i {
+    margin-right: 10px; /* Spacing between icon and text */
+}
+
+.nav-list li a:hover {
+    background-color: #e0e0e0; /* Darker background color on hover */
+    color: #007bff; /* Blue text color on hover */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Optional: Add subtle shadow on hover */
+}
+
+
+    </style>
+</head>
+<body>
+
+
+    <hr>
+
+        <h2 style="font-size: 19px; padding-left: 20px;">Brainstorm Ideas</h2>
+    <div class="container">
+        <span style="color:#3498db; padding-left: 20px;">
+            <a href="{% url 'view_campaign' campaign_id=campaign.pk %}" style="color:#3498db;">Campaign - {{ campaign.title }}</a>
+        </span>
+
+
+        <div style="border-left: 2px solid #3498db; height: 400px; overflow-y: auto; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+            <ul class="idea-list">
+                {% for idea in ideas_for_campaign %}
+                    <li>
+                        <div class="profile-pic">
+                            <a href="{% url 'profile_view' username=idea.supporter.username %}">
+                                <img src="{{ idea.supporter.profile.image.url }}" alt="Profile Picture">
+                            </a>
+                        </div>- Submitted by {{ idea.supporter.username }}</br></br>
+                      
+                        <div class="idea-content">
+                            {{ idea.idea | safe }}
+                        </div>
+
+                        {% if idea.supporter.profile.is_verified %}
+                            <span class="verified-status" style="font-size: 12px;">✅Verified</span>
+                        {% endif %}
+                    </li>
+                {% empty %}
+                    <li>No brainstormed ideas yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <h2 style="font-size:19px;">Brainstorm New Idea</h2>
+<ul class="nav-list">
+    <li><a href="{% url 'library_affiliates' %}"><i class="fas fa-book-open"></i> Discover In-Depth Knowledge</a></li>
+</ul>
+<ul class="nav-list">
+    <li><a href="{% url 'news_affiliates' %}"><i class="fas fa-newspaper"></i> Stay Informed with Latest News</a></li>
+</ul>
+
+        <form method="post" class="custom-form">
+            {% csrf_token %}
+            <textarea name="idea" id="id_idea" class="custom-textarea" placeholder="Enter your idea..." rows="4"></textarea>
+            <button type="submit" class="custom-button" style="margin-top: 10px;">Submit Idea</button>
+        </form>
+    </div>
+
+    <script src="{% static 'tinymce/tinymce.min.js' %}"></script>
+    <script>
+        tinymce.init({
+            selector: '#id_idea',
+            height: 300,
+            plugins: 'advlist autolink lists link image media emoticons',
+            toolbar: 'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | emoticons | image media link | help',
+            images_upload_url: '/upload/',
+            images_upload_base_path: '/media/',
+            images_upload_credentials: true,
+            file_picker_types: 'file image media',
+            file_picker_callback: function(callback, value, meta) {
+                var input = document.createElement('input');
+                input.setAttribute('type', 'file');
+
+                if (meta.filetype === 'image') {
+                    input.setAttribute('accept', 'image/*');
+                } else if (meta.filetype === 'media') {
+                    input.setAttribute('accept', 'video/*, audio/*');
+                } else {
+                    input.setAttribute('accept', 'application/pdf,.doc,.docx,.xls,.xlsx');
+                }
+
+                input.onchange = function() {
+                    var file = this.files[0];
+                    var formData = new FormData();
+                    formData.append('file', file);
+
+                    fetch('/upload/', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.location) {
+                            if (meta.filetype === 'image' || meta.filetype === 'media') {
+                                callback(data.location, { text: file.name });
+                            } else {
+                                callback(data.location, { text: file.name });
+                            }
+                        } else {
+                            console.error('Upload failed:', data);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+                };
+
+                input.click();
+            },
+            paste_data_images: true,
+            media_live_embeds: true,
+            automatic_uploads: true,
+            media_dimensions: false,
+            media_alt_source: false,
+            media_poster: false,
+            extended_valid_elements: 'video[src|controls|width|height|poster|preload|autoplay|loop|muted|playsinline|class]',
+            setup: function(editor) {
+                editor.on('NodeChange', function(e) {
+                    // Handle node changes here
+                });
+            }
+        });
+
+        window.onload = function() {
+            var audio = document.getElementById('bgAudio');
+            var bgAudioFile = localStorage.getItem('bgAudioFile');
+            var audioPosition = parseFloat(localStorage.getItem('bgAudioPosition'));
+
+            if (bgAudioFile) {
+                audio.src = bgAudioFile;
+
+                if (!isNaN(audioPosition)) {
+                    audio.currentTime = audioPosition;
+                }
+
+                audio.play();
+            }
+        };
+
+        window.addEventListener('beforeunload', function() {
+            var audio = document.getElementById('bgAudio');
+            localStorage.setItem('bgAudioPosition', audio.currentTime);
+        });
+
+
+    </script>
+</body>
+</html>
+{% endblock %}

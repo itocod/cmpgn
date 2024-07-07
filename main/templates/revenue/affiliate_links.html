@@ -1,0 +1,159 @@
+{% extends 'main/face.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affiliate Links</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style type="text/css">
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 300px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .image-container {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .placeholder-image {
+            background-color: #ccc;
+            height: 100%;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .title {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #333;
+            word-wrap: break-word; /* Allow titles to wrap within the container */
+        }
+
+        .description {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .affiliate-btn {
+            display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .affiliate-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .heading {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .card {
+                width: calc(50% - 20px);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .card {
+                width: calc(100% - 20px);
+            }
+        }
+
+        .square-with-arrow {
+            position: relative;
+            display: inline-block;
+        }
+
+        .square-with-arrow .fa-square {
+            position: relative;
+            display: inline-block;
+        }
+
+        .square-with-arrow .fa-arrow-right {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin-top: -5px; /* Adjust this value as needed */
+            margin-right: -10px; /* Adjust this value as needed */
+            transform: rotate(-45deg);
+        }
+    </style>
+</head>
+<body>
+    <h1 class="heading" style="font-size:19px;">Campaign Advancement Tools</h1>
+    <div class="container">
+        {% if not affiliate_links %}
+            <p>No campaign advancement tools yet.</p>
+        {% endif %}
+        {% for affiliate_link in affiliate_links %}
+            <div class="card">
+                <div class="image-container">
+                    {% if affiliate_link.image %}
+                        <img src="{{ affiliate_link.image.url }}" alt="{{ affiliate_link.title }}">
+                    {% else %}
+                        <div class="placeholder-image"></div>
+                    {% endif %}
+                </div>
+                <div class="content" style="font-size:14px;">
+                    <h2 class="title">{{ affiliate_link.title }}</h2>
+                    <p class="description">{{ affiliate_link.description }}</p>
+                    <a href="{{ affiliate_link.link }}" class="affiliate-btn" target="_blank">Gain Access
+                        <div class="square-with-arrow">
+                            <i class="fas fa-square"></i>
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
+
+{% endblock %}

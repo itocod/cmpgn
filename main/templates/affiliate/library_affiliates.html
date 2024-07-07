@@ -1,0 +1,86 @@
+
+{% extends 'main/face.html' %}
+{% load static %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Brainstorming Library Resources</title>
+    <style>
+        /* Reset default margin and padding */
+       
+
+        /* Basic styling for main content */
+        .main-content {
+            font-family: Arial, sans-serif;
+            
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .main-heading {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 19px;
+        }
+
+        .library-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .library-item {
+            margin-bottom: 10px;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .library-link {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .library-link:hover {
+            text-decoration: underline;
+        }
+
+        .library-description {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .no-libraries {
+            color: #999;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body class="main-content">
+    <div class="container">
+        <h1 class="main-heading">Explore Library Resources</h1>
+        <ul class="library-list">
+        {% for library in libraries %}
+            <li class="library-item">
+                <a href="{{ library.affiliate_link }}" target="_blank" class="library-link">{{ library.name }}</a>
+                <p class="library-description">{{ library.description }}</p>
+            </li>
+        {% empty %}
+            <li class="no-libraries">No library affiliates available.</li>
+        {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
+
+{% endblock %}

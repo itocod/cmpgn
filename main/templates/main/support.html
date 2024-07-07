@@ -1,0 +1,587 @@
+{% extends 'main/face.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support Campaign</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .support-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .support-heading {
+            color: #333;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 19px;
+        }
+
+        .support-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .support-list-item {
+            margin-bottom: 10px;
+        }
+
+        .support-link {
+            text-decoration: none;
+            color: #007bff;
+            transition: color 0.3s;
+        }
+
+        .support-link:hover {
+            color: #0056b3;
+        }
+
+        .hidden-link {
+            color: #999;
+        }
+
+        .update-visibility-link {
+            display: block; /* Ensures the link takes up full width */
+            background-color: #007bff; /* Background color */
+            color: #fff; /* Text color */
+            text-align: center; /* Center align text */
+            padding: 10px; /* Add padding for better appearance */
+            margin-bottom: 20px; /* Add some space below the link */
+            text-decoration: none; /* Remove default underline */
+            border-radius: 5px; /* Rounded corners */
+            transition: background-color 0.3s, color 0.3s; /* Smooth transition effect */
+        }
+
+        .update-visibility-link:hover {
+            background-color: #0056b3; /* Darker background color on hover */
+        }
+
+        .action-item {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-right: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 12px; /* Adjust the font size as needed */
+        }
+        .action-item a {
+            color: #000;
+            text-decoration: none;
+            font-size: inherit;
+        }
+        .action-item i {
+            margin-right: 5px;
+        }
+
+
+
+    </style>
+
+
+        <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 300px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .image-container {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .placeholder-image {
+            background-color: #ccc;
+            height: 100%;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .title {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #333;
+            word-wrap: break-word;
+        }
+
+        .description {
+            color: #666;
+            margin-bottom: 20px;
+            word-wrap: break-word;
+        }
+
+        .affiliate-btn, .access-btn {
+            display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .affiliate-btn:hover, .access-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .heading {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .product-form {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 400px;
+            margin: 20px auto;
+        }
+
+        .product-form label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .product-form input[type="text"],
+        .product-form input[type="number"],
+        .product-form input[type="file"],
+        .product-form select,
+        .product-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .product-form button {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .product-form button:hover {
+            background-color: #218838;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .card {
+                width: calc(50% - 20px);
+            }
+
+            .product-form {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .card {
+                width: calc(100% - 20px);
+            }
+
+            .product-form {
+                padding: 10px;
+            }
+        }
+
+
+.square-with-arrow {
+  position: relative;
+  display: inline-block;
+}
+
+.square-with-arrow .fa-square {
+  position: relative;
+  display: inline-block;
+}
+
+.square-with-arrow .fa-arrow-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: -5px; /* Adjust this value as needed */
+  margin-right: -10px; /* Adjust this value as needed */
+  transform: rotate(-45deg);
+}
+    </style>
+</head>
+<body>
+
+  
+
+    <div class="support-container">
+        <h1 class="support-heading">Participate in this Campaign</h1>
+       
+{% if user == campaign.user.user %}
+    <a href="{% url 'update_visibility' campaign_id=campaign.id %}" class="update-visibility-link">Update Visibility</a>
+{% endif %}
+
+<hr>
+
+{% if request.user == campaign.user.user %}
+    <!-- Links visible to the campaign owner -->
+    {% if not support_campaign.donate_monetary_visible and not support_campaign.attend_event_visible and not support_campaign.brainstorm_idea_visible and not support_campaign.campaign_product_visible %}
+        <p>No support links available yet.</p>
+    {% else %}
+        <!-- Display support links if available -->
+        <ul class="support-list">
+            {% if support_campaign.donate_monetary_visible %}
+                <li id="donate-monetary-link-li" class="support-list-item">
+                    <a href="{% url 'donate_monetary' campaign_id=campaign.id %}" class="support-link">Donate Monetary</a> 
+                    {% if not support_campaign.donate_monetary_visible %}<span class="hidden-link">(Hidden)</span>{% endif %}
+                </li>
+            {% endif %}
+            {% if support_campaign.attend_event_visible %}
+                <li id="attend-event-link-li" class="support-list-item">
+                    <a href="{% url 'attend_event' campaign_id=campaign.id %}" class="support-link">Virtual Events</a> 
+                    {% if not support_campaign.attend_event_visible %}<span class="hidden-link">(Hidden)</span>{% endif %}
+                </li>
+            {% endif %}
+            {% if support_campaign.brainstorm_idea_visible %}
+                <li id="brainstorm-idea-link-li" class="support-list-item">
+                    <a href="{% url 'brainstorm_idea' campaign_id=campaign.id %}" class="support-link">Brainstorm Idea</a> 
+                    {% if not support_campaign.brainstorm_idea_visible %}<span class="hidden-link">(Hidden)</span>{% endif %}
+                </li>
+            {% endif %}
+            {% if support_campaign.campaign_product_visible %}
+                <li id="campaign-product-visiblelink-li" class="support-list-item">
+                    <a href="{% url 'product_manage' campaign_id=campaign.id %}" class="support-link">Campaign Products</a> 
+                    {% if not support_campaign.campaign_product_visible %}<span class="hidden-link">(Hidden)</span>{% endif %}
+                </li>
+            {% endif %}
+        </ul>
+    {% endif %}
+{% else %}
+    <!-- Links visible to other users -->
+    {% if support_campaign.donate_monetary_visible or support_campaign.attend_event_visible or support_campaign.brainstorm_idea_visible or support_campaign.campaign_product_visible %}
+        <ul class="support-list">
+            {% if support_campaign.donate_monetary_visible %}
+                <li class="support-list-item"><a href="{% url 'donate_monetary' campaign_id=campaign.id %}" class="support-link">Donate Monetary</a></li>
+            {% endif %}
+            {% if support_campaign.attend_event_visible %}
+                <li class="support-list-item"><a href="{% url 'attend_event' campaign_id=campaign.id %}" class="support-link">Virtual Events</a></li>
+            {% endif %}
+            {% if support_campaign.brainstorm_idea_visible %}
+                <li class="support-list-item"><a href="{% url 'brainstorm_idea' campaign_id=campaign.id %}" class="support-link">Brainstorm Idea</a></li>
+            {% endif %}
+            {% if support_campaign.campaign_product_visible %}
+                <li class="support-list-item"><a href="{% url 'product_manage' campaign_id=campaign.id %}" class="support-link">Campaign Products</a></li>
+            {% endif %}
+        </ul>
+    {% else %}
+        <p>No support links available yet.</p>
+    {% endif %}
+{% endif %}
+
+<p>Participating is good.</p>
+
+
+   
+   
+    </div>
+
+    </div>
+    <hr>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var supportList = document.querySelector('.support-list');
+        var supportItems = supportList.querySelectorAll('.support-list-item');
+        var hasVisibleItem = false;
+
+        supportItems.forEach(function(item) {
+            if (window.getComputedStyle(item).display !== 'none') {
+                hasVisibleItem = true;
+            }
+        });
+
+        if (hasVisibleItem) {
+            supportList.style.display = 'block';
+        }
+    });
+
+
+        function hideLink(link
+        function hideLink(linkName) {
+            // Send an AJAX request to the server to update the hidden links for the campaign
+            $.ajax({
+                type: 'POST',
+                url: '{% url "update_hidden_links" %}',
+                data: {
+                    link_name: linkName,
+                    campaign_id: {{ campaign.id }},
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // Hide the list item containing the link on success
+                        $('#' + linkName + '-link-li').hide();
+                    } else {
+                        alert('Failed to hide link.');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert('AJAX request failed: ' + error);
+                }
+            });
+        }
+
+        // Function to handle file upload and playback
+        function uploadAudio() {
+            var input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'audio/*, video/*'; // Limit file selection to audio files
+
+            // Listen for file selection
+            input.onchange = function(e) {
+                var file = e.target.files[0];
+                var audio = document.getElementById('bgAudio');
+
+                // Pause the current audio playback
+                audio.pause();
+
+                // Store the selected audio file and its playback position in local storage
+                localStorage.setItem('bgAudioFile', URL.createObjectURL(file));
+                localStorage.setItem('bgAudioPosition', audio.currentTime);
+
+                // Set the audio source to the selected file
+                audio.src = localStorage.getItem('bgAudioFile');
+
+                // Resume audio playback
+                audio.play();
+            };
+
+            // Trigger the file input
+            input.click();
+        }
+
+        // Function to set background audio on page load
+        window.onload = function() {
+            var audio = document.getElementById('bgAudio');
+            var bgAudioFile = localStorage.getItem('bgAudioFile');
+            var audioPosition = parseFloat(localStorage.getItem('bgAudioPosition'));
+
+            // Check if there's a stored audio file
+            if (bgAudioFile) {
+                // Set the audio source to the stored file
+                audio.src = bgAudioFile;
+
+                // Set the playback position if available
+                if (!isNaN(audioPosition)) {
+                    audio.currentTime = audioPosition;
+                }
+
+                // Autoplay the audio
+                audio.play();
+            }
+        };
+
+        // Store current playback position before page refresh
+        window.addEventListener('beforeunload', function() {
+            var audio = document.getElementById('bgAudio');
+            localStorage.setItem('bgAudioPosition', audio.currentTime);
+        });
+function switchColor() {
+    var body = document.body;
+    var logoContainer = document.querySelector('.logo-container');
+
+    // Define the color sequence (black, white)
+    var colors = ["black", "white"];
+
+    // Find the index of the current color in the sequence
+    var currentIndex = colors.indexOf(body.style.backgroundColor);
+
+    // Set the next color in the sequence
+    var nextColor = colors[(currentIndex + 1) % colors.length];
+
+    // Apply the new color to the body and other elements
+    body.style.backgroundColor = nextColor;
+
+    // Change background color and border of logo-container based on nextColor
+    if (nextColor === "black") {
+        logoContainer.style.backgroundColor = "#262626";
+        logoContainer.style.border = ""; 
+        logoContainer.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)"; 
+         // Add white border
+    } else {
+        logoContainer.style.backgroundColor = ""; // or "transparent"
+        logoContainer.style.border = "none";  // Remove border
+    }
+
+    // Other elements to be updated based on nextColor
+    var header = document.querySelector('header');
+    var footer = document.querySelector('footer');
+    var sections = document.querySelectorAll('section, .left-aside, .right-aside');
+    var textElements = document.querySelectorAll('h1, h2, p, li, nav a, .btn,.upper-post, .reaction, .campaign-content, .action-item, .action-item a');
+    var buttons = document.querySelectorAll('button');
+    var reactDivs = document.querySelectorAll('.react div');
+    var loveCounts = document.querySelectorAll('[id^="love-count-"]');
+    var viewCounts = document.querySelectorAll('#view-count');
+    var commentCounts = document.querySelectorAll('.comment-count');
+
+    header.style.backgroundColor = nextColor;
+    footer.style.backgroundColor = nextColor;
+
+    sections.forEach(function(section) {
+        section.style.backgroundColor = nextColor;
+    });
+
+    var textColor = nextColor === "black" ? "white" : "black";
+    header.style.color = textColor;
+    footer.style.color = textColor;
+
+    textElements.forEach(function(element) {
+        element.style.color = textColor;
+    });
+
+    var buttonColor = nextColor === "black" ? "#262626" : "";
+    buttons.forEach(function(button) {
+        button.style.backgroundColor = buttonColor;
+
+        if (nextColor === "black") {
+            button.classList.add('button-hover');
+        } else {
+            button.classList.remove('button-hover');
+            button.style.backgroundColor = "";
+        }
+    });
+
+    reactDivs.forEach(function(reactDiv) {
+        reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
+
+        var reactTextColor = nextColor === "black" ? "white" : "black";
+        reactDiv.style.color = reactTextColor;
+
+        if (nextColor === "black") {
+            reactDiv.classList.add('react-hover');
+        } else {
+            reactDiv.classList.remove('react-hover');
+            reactDiv.style.backgroundColor = "";
+        }
+    });
+
+    var countTextColor = nextColor === "black" ? "white" : "black";
+    loveCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+    viewCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+    commentCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+}
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var mediaQuery = window.matchMedia('(max-width: 768px)');
+    var leftAside = document.querySelector('.left-aside');
+    var rightAside = document.querySelector('.right-aside');
+
+    function handleMediaQueryChange(e) {
+      if (e.matches) {
+        leftAside.style.display = 'none';
+        rightAside.style.display = 'none';
+      } else {
+        leftAside.style.display = 'block';
+        rightAside.style.display = 'block';
+      }
+    }
+
+    mediaQuery.addListener(handleMediaQueryChange);
+    handleMediaQueryChange(mediaQuery);
+  });
+
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    const navbarToggle = document.getElementById("navbarToggle");
+    const navbar = document.getElementById("navbar");
+
+    // Toggle navbar visibility
+    navbarToggle.addEventListener("click", function() {
+        if (navbar.style.display === "block") {
+            navbar.style.display = "none";
+        } else {
+            navbar.style.display = "block";
+        }
+    });
+
+    // Adjust navbar display on window resize
+    window.addEventListener("resize", function() {
+        if (window.innerWidth > 768) {
+            navbar.style.display = "none";
+        } else if (navbar.style.display === "block") {
+            navbar.style.display = "block";
+        } else {
+            navbar.style.display = "none";
+        }
+    });
+
+    // Ensure the navbar is initially hidden on page load for larger screens
+    if (window.innerWidth > 768) {
+        navbar.style.display = "none";
+    } else {
+        navbar.style.display = "none"; // or "block" based on your initial requirement
+    }
+});
+
+
+
+    </script>
+
+</body>
+</html>
+
+{% endblock %}

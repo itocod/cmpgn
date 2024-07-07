@@ -1,0 +1,283 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+  <title>Your Page Title</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: white;
+    }
+
+    header {
+      background-color: 
+      color: grey;
+      padding: 10px;
+      text-align: center;
+    }
+main {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+}
+
+
+    .upper-post,
+    .lower-post {
+      padding: 10px;
+    }
+
+section {
+  flex: 3; /* Make the middle section wider */
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%; /* Make the width 100% */
+  padding:0; /* Adjust padding if needed */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  border: 1px solid whitesmoke; /* Set border */
+}
+
+/* Optional: Adjust margin for better spacing */
+section h2 {
+  padding: 20px;
+  margin-top: 0;
+}
+
+.left-aside, .right-aside {
+  flex: 1; /* Keep the asides smaller */
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+
+    .search-container {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      width: calc(100% - 20px);
+      padding: 15px;
+      margin: 8px 0;
+      box-sizing: border-box;
+      border: 2px solid #32CD32; /* Blue border */
+      border-radius: 25px; /* Rounded corners */
+      outline: none; /* Remove default input focus outline */
+    }
+
+    input[type="submit"] {
+      background-color: #32CD32;/* Blue shade */
+      color: white;
+      padding: 15px 20px;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #228B22; /* Slightly darker blue shade on hover */
+    }
+
+    nav {
+      margin-top: 20px;
+      border: 1px solid #808080;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    nav a {
+      text-decoration: none;
+      font-weight: bold;
+      padding: 8px 10px;
+      display: block;
+      transition: background-color 0.3s ease;
+      border-bottom: 1px solid #e6e6e6;
+    }
+
+    nav a:hover {
+      background-color: #32CD32; /* Light lime green on hover */
+    }
+
+    /* Beautiful upload button styles */
+    .upload-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    .upload-btn-wrapper {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+    }
+
+    .btn {
+      border: 2px solid gray;
+      color: gray;
+      background-color: white;
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+
+    .btn:hover {
+      background-color: #eee; /* Change the color on hover */
+    }
+    .upload-btn-wrapper input[type=file] {
+      font-size: 100px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+
+    hr {
+      border: 1px solid whitesmoke; /* Set border to 1px solid silver for a silver color */
+      margin: 10px 0; /* Add some margin for spacing */
+    }
+
+
+
+
+
+  </style>
+
+<script>
+  function switchColor() {
+    var body = document.body;
+    var header = document.querySelector('header');
+    var footer = document.querySelector('footer');
+    var sections = document.querySelectorAll('section, .left-aside, .right-aside');
+    var textElements = document.querySelectorAll('h1, h2, p,  li, nav a,.upper-post,.lower-post,.reaction');
+
+    // Define the color sequence (white, #32CD32, #3498db)
+    var colors = ["white", "black"];
+
+    // Find the index of the current color in the sequence
+    var currentIndex = colors.indexOf(body.style.backgroundColor);
+
+    // Set the next color in the sequence
+    var nextColor = colors[(currentIndex + 1) % colors.length];
+
+    // Apply the new color to the body, header, footer, and sections
+    body.style.backgroundColor = nextColor;
+    header.style.backgroundColor = nextColor;
+    footer.style.backgroundColor = nextColor;
+
+    sections.forEach(function(section) {
+      section.style.backgroundColor = nextColor;
+    });
+
+    // Change text color to white if the background color is black, otherwise set it to black
+    var textColor = nextColor === "black" ? "white" : "black";
+    header.style.color = textColor;
+    footer.style.color = textColor;
+
+    // Set text color to white for various elements
+    textElements.forEach(function(element) {
+      element.style.color = textColor;
+    });
+  }
+
+
+
+</script>
+
+
+</head>
+<body id="mainBody" style="background-color:limegreen;">
+
+  <header>
+    <img src="{% static 'accounts/files/log3.png' %}" alt="Image Description" width="50" height="50">
+    <h1 >campaigna</h1>
+
+    <div class="search-container">
+      <form action="#" method="get">
+        <input type="text" placeholder="Search..." name="search1">
+        <input type="submit" value="Search">
+      </form>
+    </div>
+  </header>
+<hr>
+  <main>
+
+    <aside class="left-aside">
+      <nav>
+        <ul>
+          <li><a href="#" style="color: black;">Home</a></li>
+           <li><a href="#" style="color: black;">Activities</a></li>
+          <li><a href="#" style="color: black;">Notification</a></li>
+          <li><a href="#" style="color: black;">Edit Profile</a></li>
+          <li><a href="" style="color: black;">Followers</a></li>
+          <li><a href="#" style="color: black;">Following</a></li>
+          <li><a href="#" style="color: black;">Chat</a></li>
+          <li><a href="#" style="color: black;">Group</a></li>
+          <li><a href="#" style="color: black;">Recent Activities</a></li>
+          <li><a href="#" style="color: black;" onclick="switchColor()">Switch Color</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <section>
+      <!-- Beautiful upload button -->
+      <div class="upload-container">
+        <div class="upload-btn-wrapper">
+          <button class="btn">Compaign</button>
+        </div>
+      </div></br>
+
+      <h2 style=" text-decoration:underline;">User-profile</h2>
+       <div  style="border-left: 2px solid #3498db; height: 500px; overflow-y: auto; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+
+
+
+<p style="padding: 20px;">{% block content %} {% endblock %}</p>
+
+
+
+
+    </div>
+
+
+    </section>
+
+<aside class="right-aside">
+  <div style="border: 1px solid #808080; padding: 20px; text-align: center; border-radius: 10px;">
+    <h2 style="margin-bottom: 10px;">Profile Name</h2>
+    <img src="{{ user_profile.image.url }}" alt="Profile Image" width="150" height="150" style="
+      object-fit: cover;
+      border: 4px solid #32CD32;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      transition: border-color 0.3s ease;
+      border-radius: 50%; margin-bottom: 15px;
+    " onmouseover="this.style.borderColor='#00FF00';" onmouseout="this.style.borderColor='#32CD32';">
+    <p style="font-size: 16px; color: #555;">Changemaker</p>
+    <hr style="border-color: #ccc; margin: 20px 0;">
+    <p style="font-size: 14px; color: #777; line-height: 1.6;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+    <div style="margin-top: 20px;">
+      <a href="#" style="text-decoration: none; color: #007bff; margin-right: 15px;">Visit Profile</a>
+    </div>
+  </div>
+</aside>
+
+
+  </main>
+<hr>
+  <footer style="background-color: limegreen; color: white; text-align: center; padding: 10px;">
+    <p>&copy; 2024 Your Website Name. All rights reserved.</p>
+  </footer>
+</body>
+</html>

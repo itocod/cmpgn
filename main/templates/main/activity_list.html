@@ -1,0 +1,543 @@
+{% extends 'main/face.html' %}
+{% load custom_filters %}
+{% block content %}
+    <!-- Include FontAwesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-*********" crossorigin="anonymous" />
+    
+    <style>
+        /* Custom CSS styles */
+        .activity-container {
+            max-width: 1000px; /* Increased max-width for activity items */
+            margin: 20px auto;
+            padding: 0;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Soft shadow */
+        }
+        .create-activity-link {
+            display: inline-block;
+            text-align: center;
+            margin-bottom: 20px;
+            width: 100%;
+            color: #fff;
+            background-color: #007bff; /* Blue button color */
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+        .create-activity-link:hover {
+            background-color: #0056b3; /* Darker blue on hover */
+        }
+        .activity-title {
+            font-size: 19px; /* Larger title */
+            color: #333; /* Dark gray title color */
+            text-align: center;
+            margin-bottom: 30px; /* More space below the title */
+        }
+        .activity-list {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+        .activity-item {
+            margin-bottom: 40px; /* Increased space between items */
+            border-radius: 10px;
+            border: 1px solid silver;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05); /* Soft shadow */
+            padding-bottom: 40px; /* Make space for icons */
+            position: relative; /* Ensure relative positioning for absolute positioning of icons */
+            width: 100%; /* Set width to 100% to expand to container width */
+        }
+        .activity-content {
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+        .activity-media {
+            width: 100%;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .activity-timestamp {
+            color: #777;
+            font-style: italic;
+            font-size: 14px;
+            margin-top: 10px; /* Space above timestamp */
+            padding-left: 5px;
+            text-align: left; /* Left align timestamp */
+        }
+        .love-icon,
+        .comment-icon {
+            padding: 10px;
+            position: absolute; /* Position icons absolutely */
+            bottom: 5px; /* Distance from the bottom */
+            color: #777; /* Light gray icon color */
+            font-size: 19px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+            border: 0 solid silver; /* Add a silver border */
+            border-radius: 10px;
+            background-color: #F5F5F5; /* Setting initial background color */
+            transition: box-shadow 0.3s; /* Adding transition for smoother hover effect */
+        }
+        .love-icon {
+            right: 10px;
+             /* Position the love icon */
+        }
+        .comment-icon {
+            right: 60px; /* Adjust position to separate from love icon */
+        }
+        .love-icon:hover,
+        .comment-icon:hover {
+            color: #ff4500; /* Orange on hover for both icons */
+            border-color: #ff4500;
+            background-color: white; /* Changing background color to a lighter shade of silver on hover or focus */
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1); /* Adding box shadow on hover or focus */
+        }
+        .love-comment-count {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            font-size: 14px;
+            color: #777;
+        }
+        .no-activities {
+            text-align: center;
+            font-style: italic;
+            color: #777;
+            margin-top: 30px; /* Space above message */
+        }
+        /* Button styling */
+        .see-more-button {
+            color: #fff;
+            cursor: pointer;
+            text-decoration: underline;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .file-container {
+            position: relative;
+            border: 1px solid silver; /* Border color */
+            border-radius: 5px;
+            overflow: hidden; /* Ensure the border doesn't overflow */
+        }
+        #activity-media {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px; /* Border radius for the image */
+            transition: transform 0.3s ease; /* Add transition for smooth transformation */
+        }
+        .activity-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px; /* Border radius for the image */
+            transition: transform 0.3s ease; /* Add transition for smooth transformation */
+        }
+        /* Apply styles when hovering over the image */
+        #activity-image:hover {
+            transform: scale(1.05); /* Scale the image slightly on hover */
+        }
+        .activity-content-short,
+        .activity-content-full {
+            margin-bottom: 10px; /* Add margin for spacing */
+            font-size: 16px; /* Adjust font size */
+            line-height: 1.5; /* Adjust line height */
+        }
+        .see-more-text {
+            color: #3498db; /* Set color for clickable text */
+            cursor: pointer;
+        }
+        .see-more-text:hover {
+            text-decoration: underline; /* Underline on hover */
+        }
+
+
+     .action-item {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-right: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 12px; /* Adjust the font size as needed */
+        }
+        .action-item a {
+           color: #000;
+            text-decoration: none;
+            font-size: inherit;
+        }
+        .action-item i {
+            margin-right: 5px;
+        }
+    </style>
+
+    <script>
+        // Function to handle loving an activity
+        function loveActivity(activityId) {
+            fetch(`/love_activity/${activityId}/`, {  // Make sure to add trailing slash
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({})
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Network response was not ok.');
+                }
+            })
+            .then(data => {
+                // Update love count on success
+                document.getElementById(`love-count-${activityId}`).textContent = `Love: ${data.love_count}`;
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        function toggleContent(activityId) {
+            var shortContent = document.getElementById(`activity-content-${activityId}-short`);
+            var fullContent = document.getElementById(`activity-content-${activityId}-full`);
+            var seeMoreText = shortContent.querySelector('.see-more-text');
+            var seeLessText = fullContent.querySelector('.see-more-text');
+
+            if (shortContent.style.display === 'none') {
+                shortContent.style.display = 'block';
+                fullContent.style.display = 'none';
+                seeMoreText.textContent = 'See More';
+            } else {
+                shortContent.style.display = 'none';
+                fullContent.style.display = 'block';
+                seeLessText.textContent = 'See Less';
+            }
+        }
+    </script>
+
+  
+
+
+    {% if user == campaign.user.user %}
+        <a href="{% url 'create_activity' campaign_id=campaign.id %}" class="create-activity-link">Create Activity</a>
+    {% endif %}
+
+    <h2 style="font-size:19px; padding-left: 20px;">Campaign_Activities</h2>
+    
+    <div class="activity-container">
+        <h5 class="activity-title"><hr>
+            <b style="text-decoration:underline; color:limegreen;">
+                <div class="profile-pic" style="padding-top: 20px;">
+                    <a href="{% url 'profile_view' username=campaign.user.user.username %}">
+                        <!-- Display campaign owner's profile picture -->
+                        <img src="{{ campaign.user.image.url }}" alt="Profile Picture" class="profile-pic-hover">
+                    </a>
+
+                            {% if campaign.user.is_verified %}
+            <span class="verified-status" style="font-size: 12px;">(✅Verified)</span>
+        {% endif %}
+                    <h3>{{ campaign.user.user.username }} . <i class="cm">cm</i></h3>
+                </div>
+            </b>
+            <span > Activities for "</span>
+            <span style="color:#3498db;">
+                <a href="{% url 'view_campaign' campaign_id=campaign.pk %}" style="color:#3498db;">{{ campaign.title }}</a>
+            </span>
+            <span style="color:black;">"</span>
+
+            
+        </h5>
+
+        <!-- Display activities -->
+        {% if activities %}
+            <h4 style="color: gray; padding-left: 20px; font-size:15px">Total Activities: ({{ activity_count }})</h4>
+            <!-- Display the total activity count -->
+            <ul class="activity-list">
+                {% for activity in activities %}
+                    <li class="activity-item">
+                        <div class="profile-pic" style="padding-left:20px;padding-top: 20px;">
+                            <a href="{% url 'profile_view' username=campaign.user.user.username %}">
+                                <!-- Display campaign owner's profile picture -->
+                                <img src="{{ campaign.user.image.url }}" alt="Profile Picture" class="profile-pic-hover">
+                            </a>
+                            <h3>{{ campaign.user.user.username }} 
+          {% if campaign.user.is_verified %}
+            <span class="verified-status" style="font-size: 12px;">(✅Verified)</span>
+        {% endif %}
+                                . <i class="cm">cm</i></h3>
+                        </div>
+                        
+
+
+
+                        {% if activity.content.split|length > 20 %}
+                            <div id="activity-content-{{ activity.id }}-short" class="activity-content-short" style="padding-left: 10px; padding-bottom: 10px;">
+                                {{ activity.content|truncatewords:20|safe }}
+                                <!-- Show "See More" text only when content exceeds 20 words -->
+                                <span class="see-more-text" onclick="toggleContent('{{ activity.id }}')">See More</span>
+                            </div>
+                            <div id="activity-content-{{ activity.id }}-full" class="activity-content-full" style="display: none;">
+                                {{ activity.content|safe }}
+                                <!-- Replace the button with clickable text -->
+                                <span class="see-more-text" onclick="toggleContent('{{ activity.id }}')">See Less</span>
+                            </div>
+                        {% else %}
+                            <!-- If content length is 20 words or less, display full content -->
+                            <div id="activity-content-{{ activity.id }}-short" style="padding-left: 10px; padding-bottom: 10px;">
+                                {{ activity.content|safe }}
+                            </div>
+                        {% endif %}
+
+                        <div class="activity-timestamp">Posted: {{ activity.timestamp|timesince }} ago</div>
+                        <div class="file-container">
+                            <div style="position: relative;">
+                                {% if activity.file %}
+                                    {% if activity.file.name|lower|slice:'-4:' == '.mp4' %}
+                                        <video src="{{ activity.file.url }}" alt="Video Description" class="activity-media" controls autoplay muted loop>
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    {% elif activity.file.name|lower|slice:'-4:' in image_extensions %}
+                                        <a href="{{ activity.file.url }}"> 
+                                            <img src="{{ activity.file.url }}" alt="Image Description" id="activity-image" style="max-width: 100%; height: auto;">
+                                        </a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <i class="far fa-heart love-icon" onclick="loveActivity('{{ activity.id }}')"></i>
+                        <span id="love-count-{{ activity.id }}" class="love-comment-count">Love: {{ activity.loves.count|format_count }}</span>
+                        <a href="{% url 'add_activity_comment' activity_id=activity.id %}">
+                            <i class="far fa-comment comment-icon"></i>
+                        </a>
+                        <!-- Display the comment count -->
+                        <span class="love-comment-count" style="margin-left: 80px;">| Comments: {{ activity.comment_count|format_count }}</span>
+                        
+                        <!-- Social media sharing buttons -->
+                        <div style="padding-left: 5px;">
+                            Share on:
+                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a>
+                            <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}" target="_blank" rel="noopener noreferrer"><i class="fab fa-twitter"></i></a>
+                            <a href="https://www.linkedin.com/shareArticle?url={{ request.build_absolute_uri }}" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i></a>
+                            <a href="{% url 'activity_detail' activity_id=activity.id %}" style="padding-left: 5px; font-size: 15px; color: gray;">View Activity Details</a>
+                            <!-- Add more social media sharing buttons as needed -->
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="no-activities">No activities yet.</p>
+        {% endif %}
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const videos = document.querySelectorAll('video');
+            const options = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.5
+            };
+
+            const observer = new IntersectionObserver(function(entries, observer) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // Play and unmute the video
+                        entry.target.play();
+                        entry.target.muted = false;
+                    } else {
+                        // Pause the video
+                        entry.target.pause();
+                    }
+                });
+            }, options);
+
+            videos.forEach(video => {
+                observer.observe(video);
+                
+                // Check if the video is initially in the viewport after page refresh
+                const rect = video.getBoundingClientRect();
+                const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+                if (rect.top >= 0 && rect.bottom <= windowHeight) {
+                    // Play and unmute if video is in the viewport
+                    video.play();
+                    video.muted = false;
+                }
+            });
+        });
+
+
+
+
+
+
+        // Function to handle file upload and playback
+        function uploadAudio() {
+            var input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'audio/*, video/*'; // Limit file selection to audio files
+
+            // Listen for file selection
+            input.onchange = function(e) {
+                var file = e.target.files[0];
+                var audio = document.getElementById('bgAudio');
+
+                // Pause the current audio playback
+                audio.pause();
+
+                // Store the selected audio file and its playback position in local storage
+                localStorage.setItem('bgAudioFile', URL.createObjectURL(file));
+                localStorage.setItem('bgAudioPosition', audio.currentTime);
+
+                // Set the audio source to the selected file
+                audio.src = localStorage.getItem('bgAudioFile');
+
+                // Resume audio playback
+                audio.play();
+            };
+
+            // Trigger the file input
+            input.click();
+        }
+
+        // Function to set background audio on page load
+        window.onload = function() {
+            var audio = document.getElementById('bgAudio');
+            var bgAudioFile = localStorage.getItem('bgAudioFile');
+            var audioPosition = parseFloat(localStorage.getItem('bgAudioPosition'));
+
+            // Check if there's a stored audio file
+            if (bgAudioFile) {
+                // Set the audio source to the stored file
+                audio.src = bgAudioFile;
+
+                // Set the playback position if available
+                if (!isNaN(audioPosition)) {
+                    audio.currentTime = audioPosition;
+                }
+
+                // Autoplay the audio
+                audio.play();
+            }
+        };
+
+        // Store current playback position before page refresh
+        window.addEventListener('beforeunload', function() {
+            var audio = document.getElementById('bgAudio');
+            localStorage.setItem('bgAudioPosition', audio.currentTime);
+        });
+function switchColor() {
+    var body = document.body;
+    var logoContainer = document.querySelector('.logo-container');
+
+    // Define the color sequence (black, white)
+    var colors = ["black", "white"];
+
+    // Find the index of the current color in the sequence
+    var currentIndex = colors.indexOf(body.style.backgroundColor);
+
+    // Set the next color in the sequence
+    var nextColor = colors[(currentIndex + 1) % colors.length];
+
+    // Apply the new color to the body and other elements
+    body.style.backgroundColor = nextColor;
+
+    // Change background color and border of logo-container based on nextColor
+    if (nextColor === "black") {
+        logoContainer.style.backgroundColor = "#262626";
+        logoContainer.style.border = ""; 
+        logoContainer.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)"; 
+         // Add white border
+    } else {
+        logoContainer.style.backgroundColor = ""; // or "transparent"
+        logoContainer.style.border = "none";  // Remove border
+    }
+
+    // Other elements to be updated based on nextColor
+    var header = document.querySelector('header');
+    var footer = document.querySelector('footer');
+    var sections = document.querySelectorAll('section, .left-aside, .right-aside');
+    var textElements = document.querySelectorAll('h1, h2, p, li, nav a, .btn,.upper-post, .reaction, .campaign-content, .action-item, .action-item a');
+    var buttons = document.querySelectorAll('button');
+    var reactDivs = document.querySelectorAll('.react div');
+    var loveCounts = document.querySelectorAll('[id^="love-count-"]');
+    var viewCounts = document.querySelectorAll('#view-count');
+    var commentCounts = document.querySelectorAll('.comment-count');
+
+    header.style.backgroundColor = nextColor;
+    footer.style.backgroundColor = nextColor;
+
+    sections.forEach(function(section) {
+        section.style.backgroundColor = nextColor;
+    });
+
+    var textColor = nextColor === "black" ? "white" : "black";
+    header.style.color = textColor;
+    footer.style.color = textColor;
+
+    textElements.forEach(function(element) {
+        element.style.color = textColor;
+    });
+
+    var buttonColor = nextColor === "black" ? "#262626" : "";
+    buttons.forEach(function(button) {
+        button.style.backgroundColor = buttonColor;
+
+        if (nextColor === "black") {
+            button.classList.add('button-hover');
+        } else {
+            button.classList.remove('button-hover');
+            button.style.backgroundColor = "";
+        }
+    });
+
+    reactDivs.forEach(function(reactDiv) {
+        reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
+
+        var reactTextColor = nextColor === "black" ? "white" : "black";
+        reactDiv.style.color = reactTextColor;
+
+        if (nextColor === "black") {
+            reactDiv.classList.add('react-hover');
+        } else {
+            reactDiv.classList.remove('react-hover');
+            reactDiv.style.backgroundColor = "";
+        }
+    });
+
+    var countTextColor = nextColor === "black" ? "white" : "black";
+    loveCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+    viewCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+    commentCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+}
+
+
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var mediaQuery = window.matchMedia('(max-width: 768px)');
+    var leftAside = document.querySelector('.left-aside');
+    var rightAside = document.querySelector('.right-aside');
+
+    function handleMediaQueryChange(e) {
+      if (e.matches) {
+        leftAside.style.display = 'none';
+        rightAside.style.display = 'none';
+      } else {
+        leftAside.style.display = 'block';
+        rightAside.style.display = 'block';
+      }
+    }
+
+    mediaQuery.addListener(handleMediaQueryChange);
+    handleMediaQueryChange(mediaQuery);
+  });
+
+
+
+
+    </script>
+{% endblock %}

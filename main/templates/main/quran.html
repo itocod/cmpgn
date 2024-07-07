@@ -1,0 +1,64 @@
+{% extends 'main/face.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Quran</title>
+    <style>
+        .surah-list, .quran-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .surah-item, .quran-item {
+            border: 1px solid #cccccc;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .surah-item h2, .quran-item h2 {
+            margin: 0 0 10px;
+            color: #333333;
+        }
+        .surah-item p, .quran-item p {
+            color: #555555;
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+    
+            <a href="{% url 'hadith_list' %}" class="back-to-list-link"> Hadith </a>
+
+    <h2 style="font-size: 19px; padding-left: 20px;">Surahs of Quran</h2>
+    <ul class="surah-list">
+        {% for surah in surahs %}
+            <li class="surah-item">
+                <h2 style="font-size: 19px;">{{ surah.name }} ({{ surah.english_name }}) - Chapter {{ surah.chapter }}</h2>
+                <p>Place of Revelation: {{ surah.place_of_revelation }}</p>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <ul class="quran-list">
+        {% for verse in quran_verses %}
+            <li class="quran-item">
+                <h2 style="font-size:19px;">{{ verse.surah.name }}:{{ verse.verse_number }} ayat</h2>
+                <p>{{ verse.verse_text }}</p>
+                <p><em>{{ verse.translation }}</em></p>
+                {% if verse.description %}
+                    <p><strong>Description:</strong> {{ verse.description }}</p>
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+
+</body>
+</html>
+{% endblock %}

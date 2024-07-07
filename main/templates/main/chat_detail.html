@@ -1,0 +1,673 @@
+{% extends 'main/face.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Detail</title>
+    <style>
+        /* Your existing CSS styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .chat-container {
+            max-width: 700px;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 20px 0;
+            text-align: center;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+        .chat-header h1 {
+            margin: 0;
+            font-size: 19px;
+        }
+
+        .chat-details {
+            padding: 20px;
+        }
+
+        .chat-details h2 {
+            color: #007bff;
+            margin: 0 0 10px;
+            font-size: 16px;
+        }
+
+        .participants-list {
+            padding-left: 20px;
+            margin: 0;
+        }
+
+        .participants-list li {
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .manage-participants-section {
+            padding: 20px;
+            background-color: #f0f0f0;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        .manage-participants-section h3 {
+            margin-top: 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .participants-form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .participants-form input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        .delete-chat-form button {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .delete-chat-form button:hover {
+            background-color: #c82333;
+        }
+
+        .messages-section {
+            padding: 20px;
+        }
+
+        .messages-section h3 {
+            margin: 0 0 10px;
+            color: #007bff;
+            font-size: 16px;
+        }
+
+        .messages-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .messages-list li {
+            margin-bottom: 10px;
+        }
+
+        .messages-list li:last-child {
+            margin-bottom: 0;
+        }
+
+        .messages-list li .message-content {
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .messages-list li .message-content p {
+            margin: 0;
+        }
+
+        .send-message-section {
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+
+        .message-form input[type="text"],
+        .message-form textarea {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none;
+        }
+
+        .message-form button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            align-self: flex-end;
+        }
+
+        .message-form button:hover {
+            background-color: #0056b3;
+        }
+
+        .own-message {
+            
+            color: #008000;
+            border-radius: 10px;
+            border: 1px solid lime;
+            padding: 10px;
+            margin-left: auto;
+            max-width: 70%;
+        }
+
+        .own-message .message-content {
+            background-color: black;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .other-user-message {
+          
+            color: #000;
+            border-radius: 10px;
+            border: 1px solid #ADD8E6;
+            padding: 10px;
+            margin-right: auto;
+            max-width: 70%;
+        }
+
+        .other-user-message .message-content {
+            background-color: black;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .message-content img {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .cm {
+            font-size: 12px;
+        }
+
+        /* Style for the toggle button */
+        #toggleInputType {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Style for the icon inside the button */
+        #toggleInputType i {
+            margin-right: 5px;
+        }
+
+        .action-item {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-right: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .action-item a {
+            color: #000;
+            text-decoration: none;
+            font-size: inherit;
+        }
+
+        .action-item i {
+            margin-right: 5px;
+        }
+    </style>
+
+
+
+</head>
+<body>
+
+
+        <h2 style="font-size: 19px; padding-left: 20px;">Chat_Table</h2>
+
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1>⭐️ Chat Table ⭐️</h1>
+            
+        </div>
+        <div class="chat-details">
+            <h2>Chat Name: {{ chat.title }}</h2>
+            <hr>
+            <h2>Chat Manager: {{ chat.manager }}
+      {% if chat.manager.profile.is_verified %}
+            <span class="verified-status" style="font-size: 12px;">✅Verified</span>
+        {% endif %}
+
+            </h2>
+            <hr>
+            <h2>Participants:</h2>
+            <div style="border-left: 2px solid #3498db; height: 100px; overflow-y: auto; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+                <ul class="participants-list">
+                    {% for participant in chat.participants.all %}
+                        <li>{{ participant.username }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+ 
+<div class="messages-section">
+    <h3>Messages:</h3>
+    <div style="border-left: 2px solid #3498db; height: 600px; overflow-y: auto; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+        <ul id="messageList" class="messages-list">
+            {% for message in messages reversed %}
+                <li>
+                    <div  class="message-content {% if message.sender == user %} own-message {% else %} other-user-message {% endif %}">
+                     <a href="{% url 'profile_view' username=message.sender.username %}">
+    <img src="{{ message.sender.profile.image.url }}" alt="Profile Picture" class="profile-pic">
+</a>
+
+                        <p><strong>{{ message.sender.username }}
+      {% if message.sender.profile.is_verified %}
+            <span class="verified-status" style="font-size: 12px;">✅Verified</span>
+        {% endif %}
+
+                        </strong> ({{ message.timestamp|timesince }} ago)</p>
+         
+                        <!-- Wrap the message content in anchor tags if it contains a link -->
+                        {% if 'http' in message.content %}
+                            <p>{{ message.content|safe|urlize }}</p>
+                        {% else %}
+                            <p>{{ message.content|safe }}</p>
+                        {% endif %}
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+
+<!-- Send Message Section -->
+<div class="send-message-section">
+    <h3>Send Message:</h3>
+
+    <div id="successMessage" style="display: none; color: green;">Message sent successfully!</div>
+
+<form id="messageForm" method="post" class="message-form" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    <!-- Input field for message content -->
+    <input type="text" name="content" id="messageInput" placeholder="...">
+    
+    <!-- Input field for link -->
+    <input type="text" name="link" id="linkInput" placeholder="Paste your link here..." style="display: none;">
+    
+
+    <!-- Submit button -->
+    <button type="submit" id="sendButton">Send Message</button>
+</form>
+
+</div>
+       {% if user == chat.manager %}
+
+
+            <div class="manage-participants-section" id="manageParticipants">
+    
+               
+           <!-- Add Participants Form -->
+<h3>Add Participants:</h3>
+<form method="post" action="{% url 'add_participants' chat.id %}">
+    {% csrf_token %}
+    <div style="border-left: 2px solid #3498db; height: 100px; overflow-y: auto; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+        {% for user_choice in user_choices %}
+            <input type="checkbox" name="participants" value="{{ user_choice.pk }}">
+            <label>{{ user_choice.username }}</label><br>
+        {% endfor %}
+    </div>
+    <button type="submit">➕ Add Participants</button>
+</form>
+
+<!-- Remove Participants Form -->
+<h3>Remove Participants:</h3>
+<form method="post" action="{% url 'remove_participants' chat.id %}">
+    {% csrf_token %}
+    <div style="border-left: 2px solid #3498db; height: 100px; overflow-y: auto; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+        {% for participant in chat.participants.all %}
+            <input type="checkbox" name="participants" value="{{ participant.id }}">
+            <label>{{ participant.username }}</label><br>
+        {% endfor %}
+    </div>
+    <button type="submit">❌ Remove Participants</button>
+</form>
+
+<!-- Delete Chat Form -->
+<form method="post" action="{% url 'delete_chat' chat.id %}" style="margin-top: 20px;">
+    {% csrf_token %}
+    <button type="submit">🗑️ Delete Chat</button>
+</form>
+   
+        <hr>
+
+    </div>
+   {% endif %}
+<!-- Include emojionearea library -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emojionearea/dist/emojionearea.min.css">
+<script src="https://cdn.jsdelivr.net/npm/emojionearea/dist/emojionearea.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    // Initialize emojionearea on your message input field
+    $('#messageInput').emojioneArea({
+        pickerPosition: "bottom",
+        tones: false // Disable emoji tones if not needed
+    });
+
+    // Function to toggle manage participants section
+    function toggleManageParticipants() {
+        var manageParticipants = document.getElementById("manageParticipants");
+        var plusSymbol = document.getElementById("plus-symbol");
+        if (manageParticipants.style.display === "none" || manageParticipants.style.display === "") {
+            manageParticipants.style.display = "block";
+            plusSymbol.style.display = "none"; // Hide "+" when manage participants is visible
+        } else {
+            manageParticipants.style.display = "none";
+            plusSymbol.style.display = "inline"; // Show "+" when manage participants is hidden
+        }
+    }
+
+ 
+
+
+
+    // Fetch the latest messages via AJAX
+    function fetchLatestMessages() {
+        $.get('{% url 'chat_detail' chat.id %}', function(data) {
+            // Update the messages section with the latest messages
+            $('.messages-section').html($(data).find('.messages-section').html());
+        });
+    }
+});
+
+
+
+$('#messageForm').submit(function(event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    // Serialize form data
+    var formData = new FormData($(this)[0]);
+
+    $.ajax({
+        url: $(this).attr('action'),
+        type: $(this).attr('method'),
+        data: formData,
+        processData: false, // Prevent jQuery from automatically processing the data
+        contentType: false, // Prevent jQuery from setting contentType
+        success: function(response) {
+            // Display the success message
+            $('#successMessage').text(response.message).show();
+            // Clear the message input field
+            $('#messageInput').val('');
+
+            // Fetch and update the latest messages
+            fetchLatestMessages();
+        },
+        error: function(xhr, errmsg, err) {
+            // Log any errors to the console for debugging
+            console.error(xhr.status + ": " + xhr.responseText);
+        }
+    });
+});
+
+// Fetch the latest messages via AJAX
+function fetchLatestMessages() {
+    $.get(window.location.href, function(data) {
+        // Update the messages section with the latest messages
+        $('.messages-section').html($(data).find('.messages-section').html());
+    });
+}
+
+
+
+function toggleManageParticipants() {
+    var manageParticipants = document.getElementById("manageParticipants");
+    var plusSymbol = document.getElementById("plus-symbol");
+    if (manageParticipants.style.display === "none" || manageParticipants.style.display === "") {
+        manageParticipants.style.display = "block";
+        plusSymbol.style.display = "none"; // Hide "+" when manage participants is visible
+    } else {
+        manageParticipants.style.display = "none";
+        plusSymbol.style.display = "inline"; // Show "+" when manage participants is hidden
+    }
+}
+
+
+
+
+
+        // Function to handle file upload and playback
+        function uploadAudio() {
+            var input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'audio/*, video/*'; // Limit file selection to audio files
+
+            // Listen for file selection
+            input.onchange = function(e) {
+                var file = e.target.files[0];
+                var audio = document.getElementById('bgAudio');
+
+                // Pause the current audio playback
+                audio.pause();
+
+                // Store the selected audio file and its playback position in local storage
+                localStorage.setItem('bgAudioFile', URL.createObjectURL(file));
+                localStorage.setItem('bgAudioPosition', audio.currentTime);
+
+                // Set the audio source to the selected file
+                audio.src = localStorage.getItem('bgAudioFile');
+
+                // Resume audio playback
+                audio.play();
+            };
+
+            // Trigger the file input
+            input.click();
+        }
+
+        // Function to set background audio on page load
+        window.onload = function() {
+            var audio = document.getElementById('bgAudio');
+            var bgAudioFile = localStorage.getItem('bgAudioFile');
+            var audioPosition = parseFloat(localStorage.getItem('bgAudioPosition'));
+
+            // Check if there's a stored audio file
+            if (bgAudioFile) {
+                // Set the audio source to the stored file
+                audio.src = bgAudioFile;
+
+                // Set the playback position if available
+                if (!isNaN(audioPosition)) {
+                    audio.currentTime = audioPosition;
+                }
+
+                // Autoplay the audio
+                audio.play();
+            }
+        };
+
+        // Store current playback position before page refresh
+        window.addEventListener('beforeunload', function() {
+            var audio = document.getElementById('bgAudio');
+            localStorage.setItem('bgAudioPosition', audio.currentTime);
+        });
+function switchColor() {
+    var body = document.body;
+    var logoContainer = document.querySelector('.logo-container');
+
+    // Define the color sequence (black, white)
+    var colors = ["black", "white"];
+
+    // Find the index of the current color in the sequence
+    var currentIndex = colors.indexOf(body.style.backgroundColor);
+
+    // Set the next color in the sequence
+    var nextColor = colors[(currentIndex + 1) % colors.length];
+
+    // Apply the new color to the body and other elements
+    body.style.backgroundColor = nextColor;
+
+    // Change background color and border of logo-container based on nextColor
+    if (nextColor === "black") {
+        logoContainer.style.backgroundColor = "#262626";
+        logoContainer.style.border = ""; 
+        logoContainer.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)"; 
+         // Add white border
+    } else {
+        logoContainer.style.backgroundColor = ""; // or "transparent"
+        logoContainer.style.border = "none";  // Remove border
+    }
+
+    // Other elements to be updated based on nextColor
+    var header = document.querySelector('header');
+    var footer = document.querySelector('footer');
+    var sections = document.querySelectorAll('section, .left-aside, .right-aside');
+    var textElements = document.querySelectorAll('h1, h2, p, li, nav a, .btn,.upper-post, .reaction, .campaign-content, .action-item, .action-item a');
+    var buttons = document.querySelectorAll('button');
+    var reactDivs = document.querySelectorAll('.react div');
+    var loveCounts = document.querySelectorAll('[id^="love-count-"]');
+    var viewCounts = document.querySelectorAll('#view-count');
+    var commentCounts = document.querySelectorAll('.comment-count');
+
+    header.style.backgroundColor = nextColor;
+    footer.style.backgroundColor = nextColor;
+
+    sections.forEach(function(section) {
+        section.style.backgroundColor = nextColor;
+    });
+
+    var textColor = nextColor === "black" ? "white" : "black";
+    header.style.color = textColor;
+    footer.style.color = textColor;
+
+    textElements.forEach(function(element) {
+        element.style.color = textColor;
+    });
+
+    var buttonColor = nextColor === "black" ? "#262626" : "";
+    buttons.forEach(function(button) {
+        button.style.backgroundColor = buttonColor;
+
+        if (nextColor === "black") {
+            button.classList.add('button-hover');
+        } else {
+            button.classList.remove('button-hover');
+            button.style.backgroundColor = "";
+        }
+    });
+
+    reactDivs.forEach(function(reactDiv) {
+        reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
+
+        var reactTextColor = nextColor === "black" ? "white" : "black";
+        reactDiv.style.color = reactTextColor;
+
+        if (nextColor === "black") {
+            reactDiv.classList.add('react-hover');
+        } else {
+            reactDiv.classList.remove('react-hover');
+            reactDiv.style.backgroundColor = "";
+        }
+    });
+
+    var countTextColor = nextColor === "black" ? "white" : "black";
+    loveCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+    viewCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+    commentCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+}
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var mediaQuery = window.matchMedia('(max-width: 768px)');
+    var leftAside = document.querySelector('.left-aside');
+    var rightAside = document.querySelector('.right-aside');
+
+    function handleMediaQueryChange(e) {
+      if (e.matches) {
+        leftAside.style.display = 'none';
+        rightAside.style.display = 'none';
+      } else {
+        leftAside.style.display = 'block';
+        rightAside.style.display = 'block';
+      }
+    }
+
+    mediaQuery.addListener(handleMediaQueryChange);
+    handleMediaQueryChange(mediaQuery);
+  });
+
+
+
+document.addEventListener("DOMContentLoaded", function() {
+    const navbarToggle = document.getElementById("navbarToggle");
+    const navbar = document.getElementById("navbar");
+
+    // Toggle navbar visibility
+    navbarToggle.addEventListener("click", function() {
+        if (navbar.style.display === "block") {
+            navbar.style.display = "none";
+        } else {
+            navbar.style.display = "block";
+        }
+    });
+
+    // Adjust navbar display on window resize
+    window.addEventListener("resize", function() {
+        if (window.innerWidth > 768) {
+            navbar.style.display = "none";
+        } else if (navbar.style.display === "block") {
+            navbar.style.display = "block";
+        } else {
+            navbar.style.display = "none";
+        }
+    });
+
+    // Ensure the navbar is initially hidden on page load for larger screens
+    if (window.innerWidth > 768) {
+        navbar.style.display = "none";
+    } else {
+        navbar.style.display = "none"; // or "block" based on your initial requirement
+    }
+});
+
+
+
+</script>
+</body>
+</html>
+
+
+
+{% endblock %}

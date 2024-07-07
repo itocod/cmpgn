@@ -1,0 +1,322 @@
+{% extends 'main/face.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% if product %}Edit Product{% else %}Add Product{% endif %}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        .card {
+         border: 1px solid silver;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 300px;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .image-container {
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .placeholder-image {
+            background-color: #ccc;
+            height: 100%;
+        }
+
+        .image-container img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+
+        .content {
+            padding: 20px;
+        }
+
+        .title {
+            margin-top: 0;
+            margin-bottom: 10px;
+            color: #333;
+            word-wrap: break-word;
+        }
+
+        .description {
+            color: #666;
+            margin-bottom: 20px;
+            word-wrap: break-word;
+        }
+
+        .affiliate-btn, .access-btn {
+            display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .affiliate-btn:hover, .access-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .heading {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .product-form {
+          
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 400px;
+            margin: 20px auto;
+        }
+
+        .product-form label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .product-form input[type="text"],
+        .product-form input[type="number"],
+        .product-form input[type="file"],
+        .product-form select,
+        .product-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .product-form button {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .product-form button:hover {
+            background-color: #218838;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .card {
+                width: calc(50% - 20px);
+            }
+
+            .product-form {
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .card {
+                width: calc(100% - 20px);
+            }
+
+            .product-form {
+                padding: 10px;
+            }
+        }
+
+
+.square-with-arrow {
+  position: relative;
+  display: inline-block;
+}
+
+.square-with-arrow .fa-square {
+  position: relative;
+  display: inline-block;
+}
+
+.square-with-arrow .fa-arrow-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: -5px; /* Adjust this value as needed */
+  margin-right: -10px; /* Adjust this value as needed */
+  transform: rotate(-45deg);
+}
+    </style>
+</head>
+<body>
+
+
+        <h2 style="font-size: 19px; padding-left: 20px;">Campaign_Products</h2>
+    {% if user == campaign.user.user %}
+        <h1 class="heading" style="font-size:19px;">{% if product %}Edit Product{% else %}Add Product To Store{% endif %}</h1>
+        <form class="product-form" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Save</button>
+        </form>
+    {% endif %}
+
+      <h2 class="heading"style="font-size:19px;" >Store for Campaign: {{ campaign }}</h2>
+    <div class="container">
+        
+        {% for product in products %}
+            <div class="card">
+                <div class="image-container">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                    {% else %}
+                        <div class="placeholder-image"></div>
+                    {% endif %}
+                </div>
+                <div class="content"style="font-size:14px;">
+<h3 class="title">{{ product.name }} 🛒</h3>
+<p class="description">{{ product.description }} 📄</p>
+<p><strong>SKU:</strong> {{ product.sku }} 🔢</p>
+<p><strong>Category:</strong> {{ product.category }} 🗂️</p>
+<p><strong>Price:</strong> {{ product.price }} 💵</p>
+<p><strong>Stock Quantity:</strong> {{ product.stock_quantity }} 📦</p>
+<p><strong>Active:</strong> {% if product.is_active %}Yes ✅{% else %}No ❌{% endif %}</p>
+
+                    <p><strong>Date Added:</strong> {{ product.date_added|timesince }} ago.</p>
+                    <a href="{{ product.url }}" class="access-btn">shop with {{ campaign.user.user.username }} campaign store
+
+               <div class="square-with-arrow" style="font-size:14px;" >
+                            <i class="fas fa-square"></i>
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+
+                    </a>
+                </div>
+            </div>
+        {% empty %}
+            <p>No products found.</p>
+        {% endfor %}
+    </div>
+<script type="text/javascript">
+    function switchColor() {
+    var body = document.body;
+    var logoContainer = document.querySelector('.logo-container');
+
+    // Define the color sequence (black, white)
+    var colors = ["black", "white"];
+
+    // Find the index of the current color in the sequence
+    var currentIndex = colors.indexOf(body.style.backgroundColor);
+
+    // Set the next color in the sequence
+    var nextColor = colors[(currentIndex + 1) % colors.length];
+
+    // Apply the new color to the body and other elements
+    body.style.backgroundColor = nextColor;
+
+    // Change background color and border of logo-container based on nextColor
+    if (nextColor === "black") {
+        logoContainer.style.backgroundColor = "#262626";
+        logoContainer.style.border = ""; 
+        logoContainer.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)"; 
+         // Add white border
+    } else {
+        logoContainer.style.backgroundColor = ""; // or "transparent"
+        logoContainer.style.border = "none";  // Remove border
+    }
+
+    // Other elements to be updated based on nextColor
+    var header = document.querySelector('header');
+    var footer = document.querySelector('footer');
+    var sections = document.querySelectorAll('section, .left-aside, .right-aside');
+    var textElements = document.querySelectorAll('h1, h2, p, li, nav a, .btn,.upper-post, .reaction, .campaign-content, .action-item, .action-item a,.title');
+    var buttons = document.querySelectorAll('button');
+    var reactDivs = document.querySelectorAll('.react div');
+    var loveCounts = document.querySelectorAll('[id^="love-count-"]');
+    var viewCounts = document.querySelectorAll('#view-count');
+    var commentCounts = document.querySelectorAll('.comment-count');
+
+    header.style.backgroundColor = nextColor;
+    footer.style.backgroundColor = nextColor;
+
+    sections.forEach(function(section) {
+        section.style.backgroundColor = nextColor;
+    });
+
+    var textColor = nextColor === "black" ? "white" : "black";
+    header.style.color = textColor;
+    footer.style.color = textColor;
+
+    textElements.forEach(function(element) {
+        element.style.color = textColor;
+    });
+
+    var buttonColor = nextColor === "black" ? "#262626" : "";
+    buttons.forEach(function(button) {
+        button.style.backgroundColor = buttonColor;
+
+        if (nextColor === "black") {
+            button.classList.add('button-hover');
+        } else {
+            button.classList.remove('button-hover');
+            button.style.backgroundColor = "";
+        }
+    });
+
+    reactDivs.forEach(function(reactDiv) {
+        reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
+
+        var reactTextColor = nextColor === "black" ? "white" : "black";
+        reactDiv.style.color = reactTextColor;
+
+        if (nextColor === "black") {
+            reactDiv.classList.add('react-hover');
+        } else {
+            reactDiv.classList.remove('react-hover');
+            reactDiv.style.backgroundColor = "";
+        }
+    });
+
+    var countTextColor = nextColor === "black" ? "white" : "black";
+    loveCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+    viewCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+    commentCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+}
+
+
+
+</script>
+</body>
+</html>
+{% endblock %}

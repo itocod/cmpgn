@@ -1,0 +1,89 @@
+{% extends 'main/face.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Links</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .links-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .links-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #007bff;
+        }
+
+        .link-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .link-list-item {
+            margin-bottom: 20px;
+        }
+
+        .donate-btn {
+            display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .donate-btn:hover {
+            background-color: #0056b3;
+        }
+
+        
+ .action-item {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-right: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 12px; /* Adjust the font size as needed */
+        }
+        .action-item a {
+           color: #000;
+            text-decoration: none;
+            font-size: inherit;
+        }
+        .action-item i {
+            margin-right: 5px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="links-container">
+        <h1 class="links-title" style="font-size: 19px;">Click on the button below to continue</h1>
+        <ul class="link-list">
+            <li class="link-list-item"><!-- Assuming you are in a template displaying information about a specific campaign -->
+                <!-- Replace 'campaign.id' with the variable holding the ID of the current campaign -->
+                <!-- Link to donation form -->
+                <!-- Example of linking to the donation process page for a campaign -->
+                <a href="{% url 'donate' campaign.id %}" class="donate-btn">Donate to {{ campaign.title }}</a>
+            </li>
+        </ul>
+    </div>
+</body>
+
+</html>
+{% endblock %}
+
+

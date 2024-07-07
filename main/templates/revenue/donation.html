@@ -1,0 +1,220 @@
+{% extends 'main/face.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donate to {{ campaign.title }}</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Donate Page Styles */
+        .donate-page {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Donate Header Styles */
+        .donate-header {
+            text-align: center;
+        }
+
+        .donate-title {
+            margin-bottom: 20px;
+            color: #007bff;
+        }
+
+        /* Donations Section Styles */
+        .donations-section {
+            width: 100%;
+            margin-bottom: 40px;
+        }
+
+        .donations-title {
+            color: #007bff;
+        }
+
+        .donations-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .donation-item {
+            margin-bottom: 20px;
+        }
+
+        .recipient-label {
+            font-weight: bold;
+        }
+
+        .link-label {
+            font-weight: bold;
+        }
+
+        .donation-link {
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .donation-link:hover {
+            color: #0056b3;
+        }
+
+        .note {
+            font-size: 14px;
+            color: #888;
+            margin-top: 5px;
+        }
+
+        /* Donation Form Section Styles */
+        .donation-form-section {
+            width: 100%;
+            margin-bottom: 40px;
+        }
+
+        .donation-form-title {
+            color: #007bff;
+        }
+
+        .donation-form {
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .donation-form input[type="text"],
+        .donation-form textarea {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .submit-btn {
+            display: inline-block;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .delete-btn {
+            display: inline-block;
+            background-color: #ff4d4d;
+            color: #fff;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-left: 10px;
+        }
+
+        .delete-btn:hover {
+            background-color: #d70000;
+        }
+
+        .square-with-arrow {
+            position: relative;
+            display: inline-block;
+        }
+
+        .square-with-arrow .fa-square {
+            position: relative;
+            display: inline-block;
+        }
+
+        .square-with-arrow .fa-arrow-right {
+            position: absolute;
+            top: 0;
+            right: 0;
+            margin-top: -5px;
+            margin-right: -10px;
+            transform: rotate(-45deg);
+        }
+
+        @media (max-width: 600px) {
+            .donate-page {
+                padding: 10px;
+            }
+
+            .submit-btn,
+            .delete-btn {
+                width: 100%;
+                margin: 10px 0;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="donate-page">
+        <header class="donate-header">
+            <h1 class="donate-title" style="font-size: 19px;">Donate to {{ campaign.title }}</h1>
+        </header>
+
+        <section class="donations-section">
+            <h2 class="donations-title" style="font-size: 19px;">Donation Links</h2>
+            <ul class="donations-list">
+                {% for donation in donations %}
+                    <li class="donation-item">
+                        <strong class="recipient-label">Recipient:</strong> {{ donation.user.username }}
+
+                        {% if donation.user.profile.is_verified %}
+                            <span class="verified-status" style="font-size: 12px;">✅Verified</span>
+                        {% endif %}
+                        <br>
+                        <strong class="link-label">Donation Link:</strong> <a href="{{ donation.donation_link }}" class="donation-link">{{ donation.donation_link }}
+                            <div class="square-with-arrow" style="font-size: 14px;">
+                                <i class="fas fa-square"></i>
+                                <i class="fas fa-arrow-right"></i>
+                            </div>
+                        </a>
+                        <div class="note">Clicking this link does not initiate a charge. It indicates your intent to donate. Thank you!</div>
+                        {% if user == donation.user %}
+                            <form method="post" style="display: inline;">
+                                {% csrf_token %}
+                                <input type="hidden" name="delete_donation" value="{{ donation.id }}">
+                                <button type="submit" class="delete-btn">Delete</button>
+                            </form>
+                        {% endif %}
+                    </li>
+                {% empty %}
+                    <li>No donations yet.</li>
+                {% endfor %}
+            </ul>
+        </section>
+        
+        {% if user == campaign.user.user %}
+        <section class="donation-form-section">
+            <h2 class="donation-form-title" style="font-size: 19px;">Generate a Donation Link</h2>
+            <form method="post" enctype="multipart/form-data" class="donation-form">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="submit-btn">Submit Donation Link</button>
+            </form>
+        </section>
+        {% endif %}
+    </div>
+</body>
+</html>
+{% endblock %}

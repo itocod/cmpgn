@@ -1,0 +1,54 @@
+<!-- hadith_list.html -->
+{% extends 'main/face.html' %}
+
+{% block content %}
+    <style>
+        /* Unique and appealing styles */
+        .hadith-list-container {
+            background-color: #f7f7f7;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .hadith-item {
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .hadith-item:hover {
+            background-color: #f0f0f0;
+        }
+
+        .hadith-text {
+            color: #333;
+            font-size: 16px;
+            line-height: 1.5;
+        }
+
+        .hadith-detail-link {
+            color: #007bff;
+            text-decoration: none;
+        }
+    </style>
+
+    <div class="hadith-list-container">
+        <h1 style="font-size:19px;">Collection of Hadith</h1>
+        <ul>
+            {% for hadith in hadiths %}
+
+                <li class="hadith-item">
+                    
+                    <p class="hadith-text">{{ hadith.text }}</p>
+                    <span class="hadith-reference">Reference: {{ hadith.reference }}</span><br>
+                    <a href="{% url 'hadith_detail' hadith.id %}" class="hadith-detail-link">View Details</a>
+                </li>
+            {% empty %}
+                <li>No Hadith available.</li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

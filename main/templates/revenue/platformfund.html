@@ -1,0 +1,104 @@
+<!-- donate.html -->
+{% extends 'main/face.html' %}
+
+{% block content %}
+<!-- templates/platformfund.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Platform Funds</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style type="text/css">
+        /* Adjusted CSS naming to avoid conflict */
+        .body-style {
+            font-family: Arial, sans-serif;
+           
+            margin: 0;
+            padding: 0;
+        }
+
+        .heading-style {
+            color: #333;
+            text-align: center;
+        }
+
+        .list-style {
+            list-style-type: none;
+            padding: 0;
+        }
+
+/* Style for fund item */
+.fund-item {
+    background-color: #fff;
+    border-radius: 10px;
+    margin: 10px 0;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center; /* Center vertically */
+    justify-content: space-between; /* Space items evenly */
+}
+
+.donation-link {
+    color: #007bff; /* Default link color */
+    text-decoration: none; /* Remove default underline */
+    font-weight: bold; /* Make link text bold */
+    transition: color 0.3s; /* Smooth color transition on hover */
+}
+
+.donation-link:hover {
+    color: #0056b3; /* Adjusted link color on hover */
+}
+
+.square-with-arrow {
+  position: relative;
+  display: inline-block;
+
+}
+
+.square-with-arrow .fa-square {
+  position: relative;
+  display: inline-block;
+  color: #007bff;
+}
+
+.square-with-arrow .fa-arrow-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: -5px; /* Adjust this value as needed */
+  margin-right: -10px; /* Adjust this value as needed */
+  transform: rotate(-45deg);
+    color: #007bff; /* Default color for icons */
+}
+
+.square-with-arrow:hover .fa-square,
+.square-with-arrow:hover .fa-arrow-right {
+    color: #0056b3; /* Adjusted color for icons on hover */
+}
+
+
+    </style>
+</head>
+<body class="body-style">
+  
+
+    <h2 class="heading-style" style=" font-size: 19px;">"We appreciate your support."</h2>
+    <ul class="list-style">
+        {% for fund in platformfunds %}
+            <li class="fund-item">
+              <a href="{{ fund.donation_link }}" class="donation-link"> <span> Click Here.</span> {{ fund.donation_link }}</a>
+
+
+           <div class="square-with-arrow" style="font-size:14px;" >
+        <i class="fas fa-square"></i>
+        <i class="fas fa-arrow-right"></i>
+    </div>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+
+{% endblock %}

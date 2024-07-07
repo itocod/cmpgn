@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RallyNex Logo</title>
+<style>
+  body {
+    background-color: #1a1a1a; /* Dark background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  .logo-container {
+    text-align: center;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    background-color: #262626; /* Darker container background */
+  }
+
+  .logo-initials {
+    color: limegreen;
+    font-size: 60px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-shadow: 
+      3px 3px 0 limegreen,
+      -3px -3px 0 limegreen,
+      3px -3px 0 limegreen,
+      -3px 3px 0 limegreen,
+      5px 5px 0 black,
+      -5px -5px 0 black,
+      5px -5px 0 black,
+      -5px 5px 0 black;
+  }
+
+  .logo-name {
+    display: block;
+    font-size: 24px;
+    margin-top: 10px;
+    color: #fff; /* White text */
+    opacity: 0.8;
+  }
+
+  .logo-container:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  }
+</style>
+<script>
+  // Redirect after 2 seconds (example)
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(function() {
+      window.location.href = "{% url 'home' %}"; // Replace with your actual URL
+    }, 2000);
+  });
+</script>
+</head>
+<body>
+  <div class="logo-container">
+    <div class="logo">
+      <span class="logo-initials">R</span>
+      <span class="logo-name">RallyNex</span>
+    </div>
+  </div>
+</body>
+</html>

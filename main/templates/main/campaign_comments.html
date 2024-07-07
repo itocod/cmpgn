@@ -1,0 +1,350 @@
+{% extends 'main/face.html' %}
+{% load static %}
+<!-- main/campaign_comments.html -->
+
+{% block content %}
+<!-- campaign_comments.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ campaign.title }} Comments</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emojionearea/dist/emojionearea.min.css">
+    <style>
+        /* Add your custom CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        h1, h2 {
+            text-align: center;
+            font-size: 19px;
+        }
+        #commentsList {
+            list-style-type: none;
+            padding: 0;
+        }
+        #commentsList li {
+            margin-bottom: 10px;
+            border: 1px solid grey;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        #commentsList li strong {
+            color: #007bff;
+        }
+        #noCommentsMessage {
+            font-style: italic;
+        }
+        #successMessage {
+            text-align: center;
+            margin-bottom: 10px;
+            color: green;
+        }
+   #commentForm {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 30px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    #commentForm textarea {
+        width: 100%;
+        min-height: 100px;
+        padding: 10px;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        resize: vertical;
+    }
+    #commentForm button {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        border: none;
+        background-color: #007bff;
+        color: #fff;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    #commentForm button:hover {
+        background-color: #0056b3;
+    }
+
+
+     .action-item {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-right: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 12px; /* Adjust the font size as needed */
+        }
+        .action-item a {
+           color: #000;
+            text-decoration: none;
+            font-size: inherit;
+        }
+        .action-item i {
+            margin-right: 5px;
+        }
+
+                .profile-pic {
+  flex-shrink: 0;
+  margin-right: 20px;
+}
+
+.profile-pic img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  
+  padding: 2px; /* Add padding here */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease;
+}
+
+.profile-pic:hover img {
+  border-color: #00FF00;
+}
+
+    </style>
+   
+           <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/emojionearea/dist/emojionearea.min.js"></script>
+    <script>
+   $(document).ready(function() {
+    // Initialize emojionearea on your message input field
+    $('#commentText').emojioneArea({
+        pickerPosition: "bottom",
+        tones: false // Disable emoji tones if not needed
+    });
+
+    $('#commentForm').submit(function(e) {
+        e.preventDefault();
+        console.log("Form submitted"); // Debug statement to check if form submission is triggered
+        $.ajax({
+            type: 'POST',
+            url: '{% url "campaign_comments" campaign_id=campaign.id %}',
+            data: $('#commentForm').serialize(),
+            success: function(response) {
+                console.log("AJAX success"); // Debug statement to check if AJAX request is successful
+                if (response.success) {
+                    $('#message').text('Comment sent successfully!');
+                    $('#commentsList').load(location.href + ' #commentsList>*'); // Reload comments dynamically
+                } else {
+                    // Handle form validation errors
+                    // For simplicity, just displaying the first error message
+                    $('#message').text('Error: ' + response.errors.text[0]);
+                }
+            },
+            error: function(xhr, errmsg, err) {
+                console.log("AJAX error:", errmsg); // Debug statement to check AJAX error
+                $('#message').text('Error: ' + xhr.status + ': ' + xhr.responseText);
+            }
+        });
+    });
+});
+    </script>
+</head>
+<body>
+
+
+        <h2 style="font-size: 19px; padding-left: 20px;">Campaign_Comment</h2>
+    <h2 style="font-size: 19px;padding-left: 20px;">{{ campaign.title }} Comments</h2>
+    
+    <ul id="commentsList">
+              
+        {% for comment in comments %}
+                
+            <li>
+<div class="profile-pic">
+    <a href="{% url 'profile_view' username=comment.user.user.username %}">
+        <img src="{{ comment.user.user.profile.image.url }}" alt="Profile Picture" class="profile-pic-hover">
+    </a>
+</div>
+
+
+                {{ comment.user }}- {% if comment.user.user.profile.is_verified %}
+                        <span class="verified-status" style="font-size: 12px;">✅Verified</span>
+                    {% endif %} - {{ comment.timestamp|timesince }} ago -
+                 <p>{{ comment.text|safe }}</p>
+            </li>
+           
+        {% empty %}
+       
+            <li>No comments yet.</li>
+        {% endfor %}
+    </ul>
+    <h2>Add a Comment:</h2>
+    <div id="message" style="padding: 20px;"></div>
+    <form id="commentForm">
+        {% csrf_token %}
+        <textarea id="commentText" name="text"></textarea>
+        <button type="submit">Submit</button>
+    </form>
+    
+
+    <script>
+  function switchColor() {
+    var body = document.body;
+    var logoContainer = document.querySelector('.logo-container');
+
+    // Define the color sequence (black, white)
+    var colors = ["black", "white"];
+
+    // Find the index of the current color in the sequence
+    var currentIndex = colors.indexOf(body.style.backgroundColor);
+
+    // Set the next color in the sequence
+    var nextColor = colors[(currentIndex + 1) % colors.length];
+
+    // Apply the new color to the body and other elements
+    body.style.backgroundColor = nextColor;
+
+    // Change background color and border of logo-container based on nextColor
+    if (nextColor === "black") {
+        logoContainer.style.backgroundColor = "#262626";
+        logoContainer.style.border = ""; 
+        logoContainer.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)"; 
+         // Add white border
+    } else {
+        logoContainer.style.backgroundColor = ""; // or "transparent"
+        logoContainer.style.border = "none";  // Remove border
+    }
+
+    // Other elements to be updated based on nextColor
+    var header = document.querySelector('header');
+    var footer = document.querySelector('footer');
+    var sections = document.querySelectorAll('section, .left-aside, .right-aside');
+    var textElements = document.querySelectorAll('h1, h2, p, li, nav a, .btn,.upper-post, .reaction, .campaign-content, .action-item, .action-item a,#commentsList li');
+    var buttons = document.querySelectorAll('button');
+    var reactDivs = document.querySelectorAll('.react div');
+    var loveCounts = document.querySelectorAll('[id^="love-count-"]');
+    var viewCounts = document.querySelectorAll('#view-count');
+    var commentCounts = document.querySelectorAll('.comment-count');
+
+    header.style.backgroundColor = nextColor;
+    footer.style.backgroundColor = nextColor;
+
+    sections.forEach(function(section) {
+        section.style.backgroundColor = nextColor;
+    });
+
+    var textColor = nextColor === "black" ? "white" : "black";
+    header.style.color = textColor;
+    footer.style.color = textColor;
+
+    textElements.forEach(function(element) {
+        element.style.color = textColor;
+    });
+
+    var buttonColor = nextColor === "black" ? "#262626" : "";
+    buttons.forEach(function(button) {
+        button.style.backgroundColor = buttonColor;
+
+        if (nextColor === "black") {
+            button.classList.add('button-hover');
+        } else {
+            button.classList.remove('button-hover');
+            button.style.backgroundColor = "";
+        }
+    });
+
+    reactDivs.forEach(function(reactDiv) {
+        reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
+
+        var reactTextColor = nextColor === "black" ? "white" : "black";
+        reactDiv.style.color = reactTextColor;
+
+        if (nextColor === "black") {
+            reactDiv.classList.add('react-hover');
+        } else {
+            reactDiv.classList.remove('react-hover');
+            reactDiv.style.backgroundColor = "";
+        }
+    });
+
+    var countTextColor = nextColor === "black" ? "white" : "black";
+    loveCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+    viewCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+    commentCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+}
+
+
+
+        // Function to handle file upload and playback
+        function uploadAudio() {
+            var input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'audio/*, video/*'; // Limit file selection to audio files
+
+            // Listen for file selection
+            input.onchange = function(e) {
+                var file = e.target.files[0];
+                var audio = document.getElementById('bgAudio');
+
+                // Pause the current audio playback
+                audio.pause();
+
+                // Store the selected audio file and its playback position in local storage
+                localStorage.setItem('bgAudioFile', URL.createObjectURL(file));
+                localStorage.setItem('bgAudioPosition', audio.currentTime);
+
+                // Set the audio source to the selected file
+                audio.src = localStorage.getItem('bgAudioFile');
+
+                // Resume audio playback
+                audio.play();
+            };
+
+            // Trigger the file input
+            input.click();
+        }
+
+        // Function to set background audio on page load
+        window.onload = function() {
+            var audio = document.getElementById('bgAudio');
+            var bgAudioFile = localStorage.getItem('bgAudioFile');
+            var audioPosition = parseFloat(localStorage.getItem('bgAudioPosition'));
+
+            // Check if there's a stored audio file
+            if (bgAudioFile) {
+                // Set the audio source to the stored file
+                audio.src = bgAudioFile;
+
+                // Set the playback position if available
+                if (!isNaN(audioPosition)) {
+                    audio.currentTime = audioPosition;
+                }
+
+                // Autoplay the audio
+                audio.play();
+            }
+        };
+
+        // Store current playback position before page refresh
+        window.addEventListener('beforeunload', function() {
+            var audio = document.getElementById('bgAudio');
+            localStorage.setItem('bgAudioPosition', audio.currentTime);
+        });
+
+    </script>
+</body>
+</html>
+
+{% endblock %}
+

@@ -1,0 +1,85 @@
+
+{% extends 'main/face.html' %}
+{% load static %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Brainstorming News Sources</title>
+    <style>
+     
+
+        /* Basic styling for main content */
+        .main-content {
+            font-family: Arial, sans-serif;
+          
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .main-heading {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 19px;
+        }
+
+        .news-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .news-item {
+            margin-bottom: 10px;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .news-link {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .news-link:hover {
+            text-decoration: underline;
+        }
+
+        .news-description {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .no-news {
+            color: #999;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body class="main-content">
+    <div class="container">
+        <h1 class="main-heading">Explore News Sources</h1>
+        <ul class="news-list">
+        {% for news_source in news_sources %}
+            <li class="news-item">
+                <a href="{{ news_source.affiliate_link }}" target="_blank" class="news-link">{{ news_source.name }}</a>
+                <p class="news-description">{{ news_source.description }}</p>
+            </li>
+        {% empty %}
+            <li class="no-news">No news affiliates available.</li>
+        {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
+{% endblock %}

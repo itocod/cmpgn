@@ -1,0 +1,8 @@
+
+
+<form class="subscribe-form" method="post" action="{% url 'subscribe' %}" style="display: flex; flex-direction: column; gap: 10px;">
+    {% csrf_token %}
+    {{ form.email }}
+    <button type="submit" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer;">Subscribe</button>
+</form>
+
