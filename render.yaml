@@ -9,7 +9,15 @@ services:
         from: env
       - key: ALLOWED_HOSTS
         from: env
-      - key: DATABASE_URL
+      - key: DB_NAME
+        from: env
+      - key: DB_USER
+        from: env
+      - key: DB_PASSWORD
+        from: env
+      - key: DB_HOST
+        from: env
+      - key: DB_PORT
         from: env
 
 build:
