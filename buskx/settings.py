@@ -84,20 +84,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'buskx.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env('DB_NAME'),
-        'USER': env('DB_USER'),
-        'PASSWORD': env('DB_PASSWORD'),
-        'HOST': env('DB_HOST'),
-        'PORT': env('DB_PORT'),
-    }
-}
 
 
 # Password validation
@@ -118,6 +104,16 @@ AUTH_PASSWORD_VALIDATORS = [
     },
   
 ]
+
+# Parse database configuration from DATABASE_URL environment variable
+DATABASES = {
+    'default': dj_database_url.config(
+        default=os.getenv('DATABASE_URL')
+    )
+}
+
+
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
