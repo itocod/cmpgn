@@ -1,4 +1,6 @@
 asgiref==3.8.1
+boto3==1.34.148
+botocore==1.34.148
 certifi==2024.6.2
 cffi==1.16.0
 charset-normalizer==3.3.2
@@ -12,9 +14,12 @@ django-crispy-forms==2.2
 django-environ==0.11.2
 django-heroku==0.3.1
 django-js-asset==2.2.0
+django-storages==1.14.4
 django-tinymce==4.0.0
+git-filter-repo==2.45.0
 gunicorn==22.0.0
 idna==3.7
+jmespath==1.0.1
 joblib==1.4.2
 numpy==2.0.0
 packaging==24.1
@@ -25,8 +30,10 @@ psycopg2-binary==2.9.9
 pycparser==2.22
 PyJWT==2.8.0
 pyOpenSSL==24.1.0
+python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 requests==2.32.3
+s3transfer==0.10.2
 scikit-learn==1.5.0
 scipy==1.13.1
 six==1.16.0
@@ -36,3 +43,4 @@ typing_extensions==4.12.2
 tzdata==2024.1
 urllib3==2.2.2
 whitenoise==6.7.0
+
