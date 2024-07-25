@@ -159,6 +159,26 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
 
 
+
+# Define GitHub base URL for profile pics
+GITHUB_BASE_URL = 'https://github.com/KISRO-cloudS/rallynex/raw/main/media/profile_pics/'
+
+# Custom storage for profile pics
+from accounts.custom_storage import GitHubStorage
+
+PROFILE_PIC_STORAGE = GitHubStorage()
+
+# Overriding the storage for `pp.png`
+def get_storage(name):
+    if name == 'profile_pics/pp.png':
+        return PROFILE_PIC_STORAGE
+    return DEFAULT_FILE_STORAGE
+
+
+
+
+
+
 AUTHENTICATION_BACKENDS = [
     # other authentication backends
     'allauth.account.auth_backends.AuthenticationBackend',
@@ -242,6 +262,4 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10 MB (increase as needed)
 LOGIN_REDIRECT_URL = '/rallynex-logo/'
 LOGOUT_REDIRECT_URL = 'index'
 
-# Media files settings
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
