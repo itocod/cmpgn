@@ -132,30 +132,13 @@ USE_I18N = True
 USE_TZ = True
 
 # Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Define the path where static files will be collected
+# Static files settings
 STATIC_URL = '/static/'
-# Define the directory where collected static files will be stored
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Add the directories where Django should look for static files
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'accounts/static'),
-    # os.path.join(BASE_DIR, 'your_app2/static'),
-    # Add other app static directories if needed
-]
-
-
-# Heroku settings
-# Whitenoise configuration for serving static files
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-
+# Media files settings
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 
 # AWS S3 configuration
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
@@ -167,14 +150,13 @@ AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
 }
 
-# Static files storage configuration
+# Use S3 for static files
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
 
-# Media files storage configuration
+# Use S3 for media files
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
-
-
 
 
 AUTHENTICATION_BACKENDS = [
