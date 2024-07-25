@@ -10,6 +10,10 @@ from django.dispatch import receiver
 from PIL import Image
 from tinymce.models import HTMLField  
 from django.urls import reverse
+from io import BytesIO
+from django.core.files.base import ContentFile
+
+
 
 User = get_user_model()
 
@@ -75,13 +79,21 @@ class Profile(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        img = Image.open(self.image.path)
-        if img.height > 300 or img.width > 300:
-            output_size = (300, 300)
-            img.thumbnail(output_size)
-            img.save(self.image.path)
 
+        # Handle image processing
+        if self.image:
+            img = Image.open(self.image)
+            if img.height > 300 or img.width > 300:
+                output_size = (300, 300)
+                img.thumbnail(output_size)
 
+                # Save the processed image
+                buffer = BytesIO()
+                img.save(buffer, format=img.format)
+                buffer.seek(0)
+                self.image.save(self.image.name, ContentFile(buffer.read()), save=False)
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.user.username} Profile'
