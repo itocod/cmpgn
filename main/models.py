@@ -158,6 +158,7 @@ class Brainstorming(models.Model):
             # Create the notification
             Notification.objects.create(user=self.campaign.user.user, message=message, campaign=self.campaign)
 
+
 class Campaign(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='user_campaigns')
     title = models.CharField(max_length=200)
@@ -166,25 +167,22 @@ class Campaign(models.Model):
     file = models.FileField(upload_to='campaign_files/', null=True, blank=True)
 
     CATEGORY_CHOICES = (
-        ('Awareness', 'Awareness'),
-        ('Fundraising', 'Fundraising'),
-        ('Volunteering', 'Volunteering'),
-        ('Education', 'Education'),
-        ('Healthcare', 'Healthcare'),
-        ('Environment', 'Environment'),
-        ('Animal Welfare', 'Animal Welfare'),
-        ('Arts and Culture', 'Arts and Culture'),
-        ('Sports', 'Sports'),
-        ('Technology', 'Technology'),
+        ('Environmental Conservation', 'Environmental Conservation'),
         ('Community Development', 'Community Development'),
-        ('Human Rights', 'Human Rights'),
-        ('Emergency Relief', 'Emergency Relief'),
-        ('Political Campaigns', 'Political Campaigns'),
-        ('Business and Entrepreneurship', 'Business and Entrepreneurship'),
-        ('Religious', 'Religious'),
+        ('Health and Wellness', 'Health and Wellness'),
+        ('Education and Literacy', 'Education and Literacy'),
+        ('Equality and Inclusion', 'Equality and Inclusion'),
+        ('Animal Welfare', 'Animal Welfare'),
+        ('Humanitarian Aid', 'Humanitarian Aid'),
+        ('Sustainable Development', 'Sustainable Development'),
+        ('Peace and Conflict Resolution', 'Peace and Conflict Resolution'),
+        ('Digital Rights', 'Digital Rights'),
+        ('Economic Empowerment', 'Economic Empowerment'),
+        ('Policy Advocacy', 'Policy Advocacy'),
+        ('Artistic Advocacy', 'Artistic Advocacy'),
         ('Other', 'Other'),
     )
-    category = models.CharField(max_length=30, choices=CATEGORY_CHOICES, default='Awareness')
+    category = models.CharField(max_length=30, choices=CATEGORY_CHOICES, default='Environmental Conservation')
     
     VISIBILITY_CHOICES = (
         ('public', 'Public'),
@@ -203,61 +201,7 @@ class Campaign(models.Model):
 
     def get_objective_and_activities(self):
         objectives_activities = {
-            'Awareness': {
-                'Objectives': [
-                    'Educate the public about a specific issue or cause.',
-                    'Raise consciousness and encourage action related to the cause.',
-                ],
-                'Activities': [
-                    'Organize awareness events (e.g., workshops, seminars, webinars).',
-                    'Distribute educational materials (e.g., flyers, infographics).etc',
-                    
-                ]
-            },
-            'Fundraising': {
-                'Objectives': [
-                    'Raise funds to support a specific cause or project.',
-                    'Increase awareness about the fundraising campaign.',
-                ],
-                'Activities': [
-    
-                    'Organize fundraising events (e.g., charity galas, auctions).',
-                    'Seek corporate sponsorships and partnerships. etc',
-                ]
-            },
-            'Volunteering': {
-                'Objectives': [
-                    'Recruit volunteers to contribute time and skills to a cause.',
-                    'Engage the community in meaningful volunteer activities.',
-                ],
-                'Activities': [
-                    'Host volunteer recruitment drives.',
-                    'Organize volunteer training sessions.',
-                    'Coordinate volunteer activities (e.g., community clean-ups, mentoring programs).etc',
-                ]
-            },
-            'Education': {
-                'Objectives': [
-                    'Promote and facilitate learning opportunities within a community.',
-                    'Improve access to education resources and support.',
-                ],
-                'Activities': [
-                    'Offer tutoring or mentoring programs for students.',
-                    'Organize workshops or conferences on educational topics.etc',
-                ]
-            },
-            'Healthcare': {
-                'Objectives': [
-                    'Improve healthcare access or services for a specific population.',
-                    'Raise awareness about healthcare issues or conditions.',
-                ],
-                'Activities': [
-                    'Organize health screenings or vaccination drives.',
-                    'Fundraise for medical treatments or equipment.',
-                    'Advocate for healthcare policy changes.etc',
-                ]
-            },
-            'Environment': {
+            'Environmental Conservation': {
                 'Objectives': [
                     'Promote environmental conservation and sustainability practices.',
                     'Protect endangered species or ecosystems.',
@@ -265,51 +209,7 @@ class Campaign(models.Model):
                 'Activities': [
                     'Organize clean-up events for beaches, parks, or urban areas.',
                     'Plant trees or establish community gardens.',
-                    'Advocate for environmental legislation or initiatives.etc',
-                ]
-            },
-            'Animal Welfare': {
-                'Objectives': [
-                    'Promote the welfare and rights of animals.',
-                    'Rescue and provide care for animals in need.',
-                ],
-                'Activities': [
-                    'Fundraise for animal shelters or rescue organizations.',
-                    'Advocate for animal protection laws or policies.',
-                    'Organize adoption events or pet care workshops.etc',
-                ]
-            },
-            'Arts and Culture': {
-                'Objectives': [
-                    'Promote artistic expression and cultural diversity.',
-                    'Preserve and celebrate cultural heritage.',
-                ],
-                'Activities': [
-                    'Organize art exhibitions, performances, or cultural festivals.',
-                    'Provide arts education programs for youth or underserved communities.',
-                    'Support local artists and cultural initiatives.etc',
-                ]
-            },
-            'Sports': {
-                'Objectives': [
-                    'Promote physical activity, sportsmanship, and teamwork.',
-                    'Provide opportunities for community engagement through sports.',
-                ],
-                'Activities': [
-                    'Organize sports tournaments or recreational leagues.',
-                    'Offer sports clinics or training programs.',
-                    'Support athletes or teams in need of financial assistance.etc',
-                ]
-            },
-            'Technology': {
-                'Objectives': [
-                    'Promote innovation and technological advancements.',
-                    'Increase access to technology and digital literacy.',
-                ],
-                'Activities': [
-                    'Launch tech startup incubator programs.',
-                    'Organize hackathons or coding workshops.',
-                    'Provide access to computers or internet in underserved areas. etc',
+                    'Advocate for environmental legislation or initiatives.',
                 ]
             },
             'Community Development': {
@@ -320,62 +220,127 @@ class Campaign(models.Model):
                 'Activities': [
                     'Organize community clean-up or beautification projects.',
                     'Advocate for improvements in housing or public spaces.',
-                    'Establish community centers or hubs for social activities.etc',
+                    'Establish community centers or hubs for social activities.',
                 ]
             },
-            'Human Rights': {
+            'Health and Wellness': {
                 'Objectives': [
-                    'Promote and protect human rights and freedoms.',
-                    'Raise awareness about social justice issues.',
+                    'Promote health and wellness initiatives.',
+                    'Raise awareness about healthcare issues or conditions.',
                 ],
                 'Activities': [
-                    'Organize rallies, marches, or protests.',
-                    'Support legal aid or advocacy campaigns.',
-                    'Educate the public about human rights violations.etc',
+                    'Organize health screenings or vaccination drives.',
+                    'Fundraise for medical treatments or equipment.',
+                    'Advocate for healthcare policy changes.',
                 ]
             },
-            'Emergency Relief': {
+            'Education and Literacy': {
                 'Objectives': [
-                    'Provide immediate assistance to individuals or communities in crisis.',
-                    'Prepare for and respond to natural disasters or emergencies.',
+                    'Promote and facilitate learning opportunities within a community.',
+                    'Improve access to education resources and support.',
                 ],
                 'Activities': [
-                    'Fundraise for emergency relief supplies or shelters.',
-                    'Coordinate relief efforts with local authorities or organizations.',
-                    'Offer psychological support or trauma counseling.etc',
+                    'Offer tutoring or mentoring programs for students.',
+                    'Organize workshops or conferences on educational topics.',
                 ]
             },
-            'Political Campaigns': {
+            'Equality and Inclusion': {
                 'Objectives': [
-                    'Support candidates or advocate for specific political issues.',
-                    'Mobilize voters and increase political participation.',
+                    'Promote equality, diversity, and inclusion.',
+                    'Advocate for the rights of marginalized communities.',
                 ],
                 'Activities': [
-                    'Organize campaign rallies or town hall meetings. etc',
-        
-                    
+                    'Organize awareness campaigns and educational seminars.',
+                    'Support social justice initiatives and advocacy efforts.',
                 ]
             },
-            'Business and Entrepreneurship': {
+            'Animal Welfare': {
                 'Objectives': [
-                    'Support startups, small businesses, or entrepreneurial ventures.',
-                    'Promote economic growth and job creation.',
+                    'Promote the welfare and rights of animals.',
+                    'Rescue and provide care for animals in need.',
                 ],
                 'Activities': [
-                    'Provide mentoring or coaching for aspiring entrepreneurs.',
-
-                    'Organize networking events or pitch competitions. etc',
+                    'Fundraise for animal shelters or rescue organizations.',
+                    'Advocate for animal protection laws or policies.',
+                    'Organize adoption events or pet care workshops.',
                 ]
             },
-            'Religious': {
+            'Humanitarian Aid': {
                 'Objectives': [
-                    'Promote spiritual growth and religious education.',
-                    'Support religious communities and charitable outreach.',
+                    'Provide humanitarian assistance to communities in need.',
+                    'Respond to humanitarian crises and emergencies.',
                 ],
                 'Activities': [
-                    'Organize religious services, retreats, or study groups.',
-                    'Fundraise for religious charities or missions.',
-                    'Support community service projects aligned with religious values. etc',
+                    'Fundraise for humanitarian relief efforts.',
+                    'Coordinate aid distribution and relief operations.',
+                    'Provide medical care and essential supplies.',
+                ]
+            },
+            'Sustainable Development': {
+                'Objectives': [
+                    'Promote sustainable development practices.',
+                    'Support initiatives for long-term environmental and social sustainability.',
+                ],
+                'Activities': [
+                    'Implement renewable energy projects.',
+                    'Advocate for sustainable agriculture and resource management.',
+                    'Educate communities about sustainable living practices.',
+                ]
+            },
+            'Peace and Conflict Resolution': {
+                'Objectives': [
+                    'Promote peacebuilding and conflict resolution.',
+                    'Support reconciliation and peace initiatives.',
+                ],
+                'Activities': [
+                    'Organize peacebuilding workshops and dialogues.',
+                    'Support mediation and dialogue processes.',
+                    'Advocate for peace and disarmament policies.',
+                ]
+            },
+            'Digital Rights': {
+                'Objectives': [
+                    'Advocate for digital rights and online privacy protection.',
+                    'Promote internet freedom and access to information.',
+                ],
+                'Activities': [
+                    'Campaign for digital rights legislation and policies.',
+                    'Raise awareness about online security and data privacy issues.',
+                    'Provide digital literacy training and resources.',
+                ]
+            },
+            'Economic Empowerment': {
+                'Objectives': [
+                    'Promote economic empowerment and entrepreneurship.',
+                    'Support initiatives for job creation and financial inclusion.',
+                ],
+                'Activities': [
+                    'Offer business development training and mentorship.',
+                    'Facilitate access to microloans or small business grants.',
+                    'Organize networking events and economic forums.',
+                ]
+            },
+            'Policy Advocacy': {
+                'Objectives': [
+                    'Advocate for policy changes and legislative reform.',
+                    'Promote public awareness and engagement in policy issues.',
+                ],
+                'Activities': [
+                    'Develop policy briefs and position papers.',
+                    'Engage with policymakers and government officials.',
+                    'Mobilize grassroots advocacy campaigns.',
+                ]
+            },
+            'Artistic Advocacy': {
+                'Objectives': [
+                    'Promote and support artistic expression and creativity for social causes.',
+                    'Provide platforms for artists to advocate for their causes through art.',
+                ],
+                'Activities': [
+                    'Organize art exhibitions and galleries focused on social issues.',
+                    'Conduct art workshops and classes that highlight advocacy.',
+                    'Fundraise for art supplies and resources for advocacy projects.',
+                    'Advocate for the importance of art in education and society.',
                 ]
             },
             'Other': {
@@ -383,11 +348,14 @@ class Campaign(models.Model):
                     'Support miscellaneous causes or initiatives not covered by other categories.',
                 ],
                 'Activities': [
-                    'Tailor  activities based on the specific nature of the campaign.',
+                    'Tailor activities based on the specific nature of the campaign.',
                 ]
             },
         }
         return objectives_activities.get(self.category, {})
+
+
+
 
 
 class Report(models.Model):
