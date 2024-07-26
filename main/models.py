@@ -98,12 +98,6 @@ class Profile(models.Model):
     def __str__(self):
         return f'{self.user.username} Profile'
 
-    @property
-    def profile_pic_url(self):
-        if self.image.name == 'profile_pics/pp.png':
-            return GITHUB_BASE_URL + self.image.name
-        return self.image.url
-
 
 
 

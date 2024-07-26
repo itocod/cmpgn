@@ -160,20 +160,6 @@ MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
 
 
 
-# Define GitHub base URL for profile pics
-GITHUB_BASE_URL = 'https://github.com/KISRO-cloudS/rallynex/raw/main/media/profile_pics/'
-
-# Custom storage for profile pics
-from accounts.custom_storage import GitHubStorage
-
-PROFILE_PIC_STORAGE = GitHubStorage()
-
-# Overriding the storage for `pp.png`
-def get_storage(name):
-    if name == 'profile_pics/pp.png':
-        return PROFILE_PIC_STORAGE
-    return DEFAULT_FILE_STORAGE
-
 
 
 
