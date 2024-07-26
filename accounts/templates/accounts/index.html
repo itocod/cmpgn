@@ -27,7 +27,7 @@
 
         .header {
             position: relative;
-            background: url('{% static 'main/files/sk.jpg' %}') no-repeat center center/cover;
+            background: url('{% static 'main/files/ak.jpg' %}') no-repeat center center/cover;
             height: 100vh;
             display: flex;
             flex-direction: column;
@@ -71,6 +71,12 @@
         .feature h2 {
             color: #1e90ff;
             font-size: 2rem;
+        }
+
+        .feature img {
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 10px;
         }
 
         .success-stories {
@@ -126,14 +132,17 @@
 
         <section class="features">
             <div class="feature">
+                <img src="{% static 'main/files/campaigns.jpg' %}" alt="Diverse Campaigns">
                 <h2>Diverse Campaigns</h2>
                 <p>From awareness to fundraising, explore a variety of campaign types tailored to your goals.</p>
             </div>
             <div class="feature">
+                <img src="{% static 'main/files/community.jpg' %}" alt="Community Support">
                 <h2>Community Support</h2>
                 <p>Connect with like-minded individuals and grow your network of supporters and followers.</p>
             </div>
             <div class="feature">
+                <img src="{% static 'main/files/tools.jpg' %}" alt="Powerful Tools">
                 <h2>Powerful Tools</h2>
                 <p>Use our intuitive tools to create compelling campaigns and track their success.</p>
             </div>
@@ -142,11 +151,11 @@
         <section class="success-stories">
             <h2>Success Stories</h2>
             <div class="story">
-                <img src="{% static 'main/files/dk.jpg' %}" alt="Success Story">
+                <img src="{% static 'main/files/success1.jpg' %}" alt="Success Story 1">
                 <p>“RallyNex helped us raise awareness and funds for our community project. The support we received was overwhelming!” - Kai Kenji, Activist</p>
             </div>
             <div class="story">
-                <img src="{% static 'main/files/ak.jpg' %}" alt="Success Story">
+                <img src="{% static 'main/files/success2.jpg' %}" alt="Success Story 2">
                 <p>“The platform’s tools were instrumental in advocating for our cause, making it easy to launch and manage our advocacy campaign. This led to a highly successful campaign launch." - Jafari Enzo</p>
             </div>
         </section>
