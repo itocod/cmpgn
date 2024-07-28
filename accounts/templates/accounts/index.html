@@ -8,14 +8,13 @@
 
   <!-- Meta Tags for SEO -->
   <meta name="description" content="Support campaigns and causes on RallyNex. Join our community to create, share, and back projects that matter to you.">
-  <meta name="keywords" content="crowdfunding, campaigns, community support, fundraising, donate, social impact, nonprofit, projects, backers, creators, charity,Environmental Conservation,Community Development,Health and Wellness,        Equality and Inclusion,Animal Welfare,Humanitarian Aid
-  Sustainable Development,Peace and Conflict Resolution
-  Digital Rights,Economic Empowerment,Policy Advocacy,Artistic Advocacy">
+  <meta name="keywords" content="crowdfunding, campaigns, community support, fundraising, donate, social impact, nonprofit, projects, backers, creators, charity, Environmental Conservation, Community Development, Health and Wellness, Equality and Inclusion, Animal Welfare, Humanitarian Aid, Sustainable Development, Peace and Conflict Resolution, Digital Rights, Economic Empowerment, Policy Advocacy, Artistic Advocacy">
   <meta name="robots" content="index, follow">
   <meta name="author" content="RallyNex">
   <meta name="language" content="English">
   <link rel="canonical" href="https://rallynex.onrender.com">
-<!-- Open Graph Meta Tags -->
+
+  <!-- Open Graph Meta Tags -->
   <meta property="og:title" content="RallyNex - Support Campaigns and Causes">
   <meta property="og:description" content="Join our community to create, share, and back projects that matter to you.">
   <meta property="og:url" content="https://rallynex.onrender.com">
@@ -33,183 +32,196 @@
   <meta name="twitter:image:alt" content="RallyNex platform image">
   <meta name="twitter:site" content="@RallyNex">
 
+  <!-- Schema Markup for SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Organization",
+    "name": "RallyNex",
+    "url": "https://rallynex.onrender.com",
+    "logo": "https://rallynex.onrender.com/static/main/files/logo.png",
+    "sameAs": [
+      "https://www.facebook.com/RallyNex",
+      "https://twitter.com/RallyNex"
+    ]
+  }
+  </script>
+
   <!-- Stylesheets -->
-
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <title>RallyNex - Support Campaigns and Causes</title>
-    <style>
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            font-family: 'Arial', sans-serif;
-            background: #000;
-            color: #fff;
-            overflow-x: hidden;
-        }
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      font-family: 'Arial', sans-serif;
+      background: #000;
+      color: #fff;
+      overflow-x: hidden;
+    }
 
-        .container {
-            text-align: center;
-            max-width: 1200px;
-            margin: auto;
-            padding: 20px;
-        }
+    .container {
+      text-align: center;
+      max-width: 1200px;
+      margin: auto;
+      padding: 20px;
+    }
 
-        .header {
-            position: relative;
-            background: url('{% static 'main/files/vp.jpg' %}') no-repeat center center/cover;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
+    .header {
+      position: relative;
+      background: url('{% static 'main/files/vp.jpg' %}') no-repeat center center/cover;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
 
-        .title {
-            font-size: 4rem;
-            margin: 0;
-        }
+    .title {
+      font-size: 4rem;
+      margin: 0;
+    }
 
-        .tagline {
-            font-size: 1.5rem;
-            margin: 20px 0;
-            color: #fff;
-        }
+    .tagline {
+      font-size: 1.5rem;
+      margin: 20px 0;
+      color: #fff;
+    }
 
-        .btn-primary {
-            background-color: #1e90ff;
-            color: #fff;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
+    .btn-primary {
+      background-color: #1e90ff;
+      color: #fff;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
 
-        .btn-primary:hover {
-            background-color: #3742fa;
-        }
+    .btn-primary:hover {
+      background-color: #3742fa;
+    }
 
-        .features {
-            background: #111;
-            padding: 50px 20px;
-        }
+    .features {
+      background: #111;
+      padding: 50px 20px;
+    }
 
-        .feature {
-            margin-bottom: 30px;
-        }
+    .feature {
+      margin-bottom: 30px;
+    }
 
-        .feature h2 {
-            color: #1e90ff;
-            font-size: 2rem;
-        }
+    .feature h2 {
+      color: #1e90ff;
+      font-size: 2rem;
+    }
 
-        .feature img {
-            width: 100%;
-            max-width: 300px;
-            margin-bottom: 10px;
-        }
+    .feature img {
+      width: 100%;
+      max-width: 300px;
+      margin-bottom: 10px;
+    }
 
-        .success-stories {
-            background: #222;
-            padding: 50px 20px;
-        }
+    .success-stories {
+      background: #222;
+      padding: 50px 20px;
+    }
 
-        .success-stories h2 {
-            color: #1e90ff;
-            font-size: 2.5rem;
-            margin-bottom: 20px;
-        }
+    .success-stories h2 {
+      color: #1e90ff;
+      font-size: 2.5rem;
+      margin-bottom: 20px;
+    }
 
-        .story {
-            margin-bottom: 30px;
-        }
+    .story {
+      margin-bottom: 30px;
+    }
 
-        .story img {
-            width: 100%;
-            max-width: 800px;
-            margin-bottom: 10px;
-        }
+    .story img {
+      width: 100%;
+      max-width: 800px;
+      margin-bottom: 10px;
+    }
 
-        .footer {
-            background: #000;
-            padding: 20px 0;
-            border-top: 1px solid #333;
-        }
+    .footer {
+      background: #000;
+      padding: 20px 0;
+      border-top: 1px solid #333;
+    }
 
-        .social-links {
-            margin-bottom: 10px;
-        }
+    .social-links {
+      margin-bottom: 10px;
+    }
 
-        .social-links a {
-            color: #1e90ff;
-            margin: 0 10px;
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
+    .social-links a {
+      color: #1e90ff;
+      margin: 0 10px;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
 
-        .social-links a:hover {
-            color: #3742fa;
-        }
-    </style>
+    .social-links a:hover {
+      color: #3742fa;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header class="header">
-            <h1 class="title">RallyNex</h1>
-            <p class="tagline">"Join the Movement, Empower Change with Your Knowledge"</p>
-            <a href="{% url 'account_login' %}" class="btn-primary">Get Started</a>
-        </header>
+  <div class="container">
+    <header class="header">
+      <h1 class="title">RallyNex</h1>
+      <p class="tagline">"Join the Movement, Empower Change with Your Knowledge"</p>
+      <a href="{% url 'account_login' %}" class="btn-primary">Get Started</a>
+    </header>
 
-        <section class="features">
-            <div class="feature">
-                <img src="{% static 'main/files/diverse.jpg' %}" alt="Diverse Campaigns">
-                <h2>Diverse Campaigns</h2>
-                <p>From awareness to fundraising, explore a variety of campaign types tailored to your goals.</p>
-            </div>
-            <div class="feature">
-                <img src="{% static 'main/files/suppo.jpg' %}" alt="Community Support">
-                <h2>Community Support</h2>
-                <p>Connect with like-minded individuals and grow your network of supporters and followers.</p>
-            </div>
-            <div class="feature">
-                <img src="{% static 'main/files/tools.jpg' %}" alt="Powerful Tools">
-                <h2>Powerful Tools</h2>
-                <p>Use our intuitive tools to create compelling campaigns and track their success.</p>
-            </div>
-        </section>
+    <section class="features">
+      <div class="feature">
+        <img src="{% static 'main/files/diverse.jpg' %}" alt="Diverse Campaigns">
+        <h2>Diverse Campaigns</h2>
+        <p>From awareness to fundraising, explore a variety of campaign types tailored to your goals.</p>
+      </div>
+      <div class="feature">
+        <img src="{% static 'main/files/suppo.jpg' %}" alt="Community Support">
+        <h2>Community Support</h2>
+        <p>Connect with like-minded individuals and grow your network of supporters and followers.</p>
+      </div>
+      <div class="feature">
+        <img src="{% static 'main/files/tools.jpg' %}" alt="Powerful Tools">
+        <h2>Powerful Tools</h2>
+        <p>Use our intuitive tools to create compelling campaigns and track their success.</p>
+      </div>
+    </section>
 
-        <section class="success-stories">
-            <h2>Success Stories</h2>
-            <div class="story">
-                <img src="{% static 'main/files/fund.jpg' %}" alt="Success Story 1">
-                <p>“RallyNex helped me raise awareness and funds for my community project. The support i received was overwhelming!” - Kai Kenji, changemaker</p>
-            </div>
-            <div class="story">
-                <img src="{% static 'main/files/advo.jpg' %}" alt="Success Story 2">
-                <p>“The platform’s tools were instrumental in advocating for our cause, making it easy to launch and manage our advocacy campaign. This led to a highly successful campaign launch." - Calista Isla</p>
-            </div>
-        </section>
+    <section class="success-stories">
+      <h2>Success Stories</h2>
+      <div class="story">
+        <img src="{% static 'main/files/fund.jpg' %}" alt="Success Story 1">
+        <p>“RallyNex helped me raise awareness and funds for my community project. The support I received was overwhelming!” - Kai Kenji, Changemaker</p>
+      </div>
+      <div class="story">
+        <img src="{% static 'main/files/advo.jpg' %}" alt="Success Story 2">
+        <p>“The platform’s tools were instrumental in advocating for our cause, making it easy to launch and manage our advocacy campaign. This led to a highly successful campaign launch." - Calista Isla</p>
+      </div>
+    </section>
 
-        <footer class="footer">
-            <p>Stay Connected</p>
-            <div class="social-links">
-                <a href="{% url 'privacy_policy' %}">Privacy Policy|</a>
-                <a href="{% url 'terms_of_service' %}">Terms of Service|</a>
-                <a href="{% url 'project_support' %}">Support</a>
-            </div>
-            <p>© 2024 RallyNex. All rights reserved.</p>
-        </footer>
-    </div>
+    <footer class="footer">
+      <p>Stay Connected</p>
+      <div class="social-links">
+        <a href="{% url 'privacy_policy' %}">Privacy Policy</a> |
+        <a href="{% url 'terms_of_service' %}">Terms of Service</a> |
+        <a href="{% url 'project_support' %}">Support</a>
+      </div>
+      <p>© 2024 RallyNex. All rights reserved.</p>
+    </footer>
+  </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const primaryButton = document.querySelector('.btn-primary');
-            primaryButton.addEventListener('click', () => {
-                alert('Welcome to RallyNex! Get ready to make an impact.');
-            });
-        });
-    </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const primaryButton = document.querySelector('.btn-primary');
+      primaryButton.addEventListener('click', () => {
+        alert('Welcome to RallyNex! Get ready to make an impact.');
+      });
+    });
+  </script>
 </body>
 </html>
