@@ -197,6 +197,19 @@ def project_support(request):
 
 
 
+def robots_txt(request):
+    lines = [
+        "User-agent: *",
+        "Disallow: /admin/",
+        "Disallow: /accounts/",
+        "Disallow: /tinymce/",
+        "Disallow: /static/",
+        "Allow: /",
+        "",
+        "Sitemap: https://rallynex.onrender.com/sitemap.xml",
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
+
 
 
 
