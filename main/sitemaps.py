@@ -20,7 +20,7 @@ class CampaignSitemap(Sitemap):
         return Campaign.objects.all()
 
     def lastmod(self, obj):
-        return obj.updated_at
+        return obj.timestamp
 
     def location(self, obj):
         return reverse('view_campaign', args=[obj.id])  # Adjusted to use IDs
