@@ -1,5 +1,3 @@
-# your_app/sitemaps.py
-
 from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
 from .models import Campaign
@@ -25,4 +23,4 @@ class CampaignSitemap(Sitemap):
         return obj.updated_at
 
     def location(self, obj):
-        return reverse('view_campaign', args=[obj.slug])  # Adjust the view name and URL pattern as necessary
+        return reverse('view_campaign', args=[obj.id])  # Adjusted to use IDs
