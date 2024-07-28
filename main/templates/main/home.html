@@ -6,9 +6,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Meta Tags for SEO -->
+  <meta name="description" content="Support campaigns and causes on RallyNex. Join our community to create, share, and back projects that matter to you.">
+  <meta name="keywords" content="crowdfunding, campaigns, community support, fundraising, donate, social impact, nonprofit">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://rallynex.onrender.com">
 
-  <title>Your Page Title</title>
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="RallyNex - Support Campaigns and Causes">
+  <meta property="og:description" content="Join our community to create, share, and back projects that matter to you.">
+  <meta property="og:url" content="https://rallynex.onrender.com">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://rallynex.onrender.com/static/images/og-image.jpg">
+
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="RallyNex - Support Campaigns and Causes">
+  <meta name="twitter:description" content="Join our community to create, share, and back projects that matter to you.">
+  <meta name="twitter:image" content="https://rallynex.onrender.com/static/images/twitter-card.jpg">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <title>RallyNex - Support Campaigns and Causes</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -1347,304 +1365,119 @@ document.addEventListener("DOMContentLoaded", function() {
 </header>
 
 
-
-
-
-
-  <main>
-
-<aside class="left-aside">
-
- <div>
-    <a href="{% url 'affiliate_links' %}" class="affiliate-link"><i class="fas fa-tools"></i> Campaign Advancement Tools</a>
-  </div>
-
-<nav>
-    <ul>
-        <!-- Home link with red spot -->
-<li>
-  <a href="{% url 'home' %}" style="color: black; position: relative;">
-    <i class="fas fa-home"></i> Home
-    {% if new_campaigns_from_follows %}
-        <span id="home-alert" class="alert-badge">{{ new_campaigns_from_follows.count }}</span> <!-- Red alert spot -->
-    {% endif %}
-</a>
-
-</li>
-
+<main>
+  <aside class="left-aside">
+    <div>
+      <a href="{% url 'affiliate_links' %}" class="affiliate-link"><i class="fas fa-tools"></i> Campaign Advancement Tools</a>
+    </div>
+    <nav>
+      <ul>
+        <li>
+          <a href="{% url 'home' %}" style="color: black; position: relative;">
+            <i class="fas fa-home"></i> Home
+            {% if new_campaigns_from_follows %}
+              <span id="home-alert" class="alert-badge">{{ new_campaigns_from_follows.count }}</span>
+            {% endif %}
+          </a>
+        </li>
         <li><a href="{% url 'public_campaign' %}" style="color: black;"><i class="fas fa-globe"></i> Public Campaigns</a></li>
         <li><a href="{% url 'private_campaign' %}" style="color: black;"><i class="fas fa-lock"></i> Private Campaigns</a></li>
-      <!-- Chat Table link with red spot -->
-<li>
-    <a href="{% url 'user_chats' %}" style="color: black; position: relative;">
-        <i class="fas fa-comment-alt"></i> Chat Table
-        {% if unread_messages_count %}
-            <span id="chat-alert" class="alert-badge" style="background-color: red;">{{ unread_messages_count }}</span>
-        {% endif %}
-    </a>
-</li>
-
-       <!-- Update the notification icon to include a red alert spot -->
-<!-- Update the notification icon to include a red alert spot -->
-<!-- Notification icon with red spot -->
-<li>
-    <a href="{% url 'notification_list' %}" style="color: black; position: relative;">
-        <i class="fas fa-bell"></i>
-        {% if unread_notifications %}
-            <span id="notification-alert" class="alert-badge">{{ unread_notifications.count }}</span>
-        {% endif %}
-        Notification
-    </a>
-</li>
-
-
+        <li>
+          <a href="{% url 'user_chats' %}" style="color: black; position: relative;">
+            <i class="fas fa-comment-alt"></i> Chat Table
+            {% if unread_messages_count %}
+              <span id="chat-alert" class="alert-badge" style="background-color: red;">{{ unread_messages_count }}</span>
+            {% endif %}
+          </a>
+        </li>
+        <li>
+          <a href="{% url 'notification_list' %}" style="color: black; position: relative;">
+            <i class="fas fa-bell"></i>
+            {% if unread_notifications %}
+              <span id="notification-alert" class="alert-badge">{{ unread_notifications.count }}</span>
+            {% endif %}
+            Notification
+          </a>
+        </li>
         <li><a href="{% url 'suggest' %}" style="color: black;"><i class="fas fa-user-friends"></i> Suggested Users</a></li>
-        <!-- Logout link -->
         <li>
           <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-    <i class="fas fa-sign-out-alt"></i> Logout
-</a>
-
-<form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
-    {% csrf_token %}
-</form>
-
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </a>
+          <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+            {% csrf_token %}
+          </form>
         </li>
-    </ul>
-</nav>
-
- 
-
-
-<p style="text-align: center;">
- <!-- Assuming this is in a template file like base.html -->
-<a href="{% url 'platformfund' %}" class="donate-link">🌟 Help Us Grow! Support Our Mission with Your Generosity 🌟</a>
-
-</p>
-    
-
-
-
-                        <div class="square-with-arrow" style="font-size:14px;" >
-                            <i class="fas fa-square"></i>
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-
-
-
-
-
-</aside>
-
-
-
-
-
-
-
-    <section>
-
-
-
-
-      <!-- Beautiful upload button -->
-      <div class="upload-container">
-       <div class="upload-btn-wrapper">
-  <button class="btn">+ Upload
-     <a href="{% url 'create_campaign' %}" class="overlay-link"></a>
-
-  </button>
-</div>
-
-      </div></br>
-
-
-
- 
-<h2 style="font-size:19px; padding-left: 20px;">Home</h2>
-
-
-{% if public_campaigns %}
-    <div style="border-left: 2px solid #3498db; height: 600px; overflow-y: auto; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-{% for campaign in public_campaigns %}
-<div class="container-with-border">
-    <div class="upper-post">
-        <div class="profile-pic">
-            <a href="{% url 'profile_view' username=campaign.user.user.username %}">
-                <img src="{{ campaign.user.image.url }}" alt="Profile Picture" class="profile-pic-hover">
-            </a>
-        </div>
-        <div class="post-details">
-                <h1>{{ campaign.user.user.username }} 
-        {% if campaign.user.is_verified %}
-            <span class="verified-status" style="font-size:12px;">✅Verified</span>
-        {% endif %}
-                  . <i class="cm"> cm</i>
-            </h1> 
-
-
-<div class="campaign-category">{{ campaign.category }} Campaign</div>
-<div class="objectives-activities"></br>
-    <h3>Objective:</h3>
-    <p>{{ campaign.get_objective_and_activities.Objectives }}</p>
-</div>
-
-            <h2 style="font-size:19px;"><a href="{% url 'view_campaign' campaign_id=campaign.pk %}" style="color:#3498db;"><span>{{ campaign.title }}</span></a></h2>
-            <sp class="time-location">{{ campaign.timestamp|timesince }} ago - {{ campaign.user.location }}</sp>
-            <div class="campaign-content" data-campaign-id="{{ campaign.id }}">
-                {{ campaign.content|safe }}
-            </div>
-
-                   
-            <!-- Render other activity details as needed -->
-        </div>
+      </ul>
+    </nav>
+    <p style="text-align: center;">
+      <a href="{% url 'platformfund' %}" class="donate-link">🌟 Help Us Grow! Support Our Mission with Your Generosity 🌟</a>
+    </p>
+    <div class="square-with-arrow" style="font-size: 14px;">
+      <i class="fas fa-square"></i>
+      <i class="fas fa-arrow-right"></i>
     </div>
+  </aside>
 
-    <div class="file-container">
-        <div style="position: relative;">
-            <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="activity-link">Activities </a>
-            <a href="{% url 'support' campaign_id=campaign.id %}" class="support-link">Participate</a>
-            {% if campaign.file %}
-                <a href="{{ campaign.file.url }}">
-                    <img src="{{ campaign.file.url }}" alt="Image Description" id="campaign-image" style="max-width: 100%; height: auto;">
-                </a>
-            {% else %}
-                <p>No file associated with this campaign.</p>
-            {% endif %}
-        </div>
-    </div>
+  <section>
+    <div class="upload-container">
+      <div class="upload-btn-wrapper">
+        <button class="btn">+ Upload
+          <a href="{% url 'create_campaign' %}" class="overlay-link"></a>
+        </button>
+      </div>
+    </div><br>
 
-    <div class="lower-post">
-        <div class="react">
-            <div class="love">
-                <span style="cursor: pointer; font-size: 19px;" id="love-icon-{{ campaign.id }}" class="love-icon {% if user.is_authenticated and already_loved %}loved{% endif %}" onclick="toggleLove({{ campaign.id }})">
-                    <i class="far fa-heart"></i>
-                </span>
-                <span style="color:gray; font-size:14px;" id="love-count-{{ campaign.id }}">{{ campaign.love_count|format_count  }}</span>
+    <h2 style="font-size: 19px; padding-left: 20px;">Home</h2>
+
+    {% if public_campaigns %}
+      <div style="border-left: 2px solid #3498db; height: 600px; overflow-y: auto; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+        {% for campaign in public_campaigns %}
+          <div class="container-with-border">
+            <div class="upper-post">
+              <div class="author-info">
+                <h4>{{ campaign.title }}</h4>
+                <p>by {{ campaign.author.get_full_name }}</p>
+              </div>
             </div>
-            <div class="view">
-                <i class="far fa-eye" style="font-size: 19px;"></i>
-                <span class="reaction-count" id="view-count">{{ campaign.campaignview_set.count|format_count  }} views</span>
-            </div>
-            <div class="comment">
-                <span>
-                    <i class="far fa-comment" style="font-size:19px;"></i>
-                </span>
-                <a href="{% url 'campaign_comments' campaign_id=campaign.id %}" class="comment-count">comments</a>
-            </div>
-        </div>
-        <!-- Report campaign link -->
-
-      
-    </div>
-</div>
-{% endfor %}
-{% else %}
-<!-- Default campaign display for when there are no public campaigns -->
-<div class="container-with-border">
-    <div class="upper-post">
-        <div class="profile-pic">
-            <img src="{% static 'main/files/dog.JPG' %}" alt="Default Profile Picture" class="profile-pic-hover">
-        </div>
-        <div class="post-details">
-            <h1>Default User</h1>
-            Default Category Campaign
-            <h2><a href="#" style="color:#3498db; font-size:19px ;"><span>Default Campaign Title</span></a></h2>
-            <sp class="time-location">Just now - Default Location</sp>
-            <div class="campaign-content">
-                This is a default campaign content. It will give you an idea of how your real campaign will look like.
-            </div>
-        </div>
-    </div>
-    <div class="file-container">
-        <div style="position: relative;">
-            <a href="#" class="activity-link">Activities</a>
-            <a href="#" class="support-link">Participate</a>
-            <img src="{% static 'main/files/ci.jpg' %}" alt="Default Campaign Image" id="campaign-image" style="max-width: 100%; height: auto;">
-        </div>
-    </div>
-    <div class="lower-post">
-        <div class="react">
-            <div class="love">
-                <span style="cursor: pointer; font-size: 19px;">
-                    <i class="far fa-heart"></i>
-                </span>
-                <span style="color:gray; font-size:14px;" id="love-count-{{ campaign.id }}">0</span>
-            </div>
-            <div class="view">
-                <i class="far fa-eye" style="font-size: 19px;"></i>
-                <span class="reaction-count" id="view-count">0 views</span>
-            </div>
-            <div class="comment">
-                <span>
-                    <i class="far fa-comment" style="font-size:19px;"></i>
-                </span>
-                <a href="#" class="comment-count">comments</a>
-            </div>
-        </div>
-    </div>
-</div>
-{% endif %}
-</section>
-
-
-<aside class="right-aside">
-
-
-  <nav  style="display:none;">
-
-    <ul>
-        <li>ad space</li>
-      
-    </ul>
-</nav><br>
-  <div style="border: 1px solid #808080; padding: 20px; text-align: center; border-radius: 10px;">
-     
-    <h2 style="margin-bottom: 10px;">{{ user_profile.user.username }} 
-      . <i class="cm"> changemaker(cm)</i></h2>
-               {% if user_profile.is_verified %}
-        <p><strong>Status:</strong> ✅Verified</p>
-    {% endif %}
-   <img src="{{ user_profile.image.url }}"  alt="Profile Image" width="150" height="150" style="
-      object-fit: cover;
-      border: 4px solid #32CD32;
-      
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      transition: border-color 0.3s ease;
-      border-radius: 50%; margin-bottom: 15px;
-    " onmouseover="this.style.borderColor='#00FF00';" onmouseout="this.style.borderColor='#32CD32';">
-    <p style="font-size: 16px; color: #555;">Changemaker</p>
-    <hr style="border-color: #ccc; margin: 20px 0;">
-      <sp style="font-size: 14px; color: #777; line-height: 1.6;">
-    {{ user_profile.bio|truncatewords:50 }}
-</sp>
-<div style="margin-top: 20px;">
-    <a href="{% url 'profile_view' username=user.username %}" style="text-decoration: none; color: #007bff; margin-right: 15px;">Visit Profile</a>
-</div>
-  </div></br>
-
-<!-- Display Ads -->
-<!-- Carousel for Ads -->
-<div class="carousel">
-    <div class="slides">
-        {% for ad in ads %}
-            <div class="slide">
-                <div class="ad">
-                    <a href="{{ ad.link }}">
-                        <img src="{{ ad.image.url }}" alt="{{ ad.title }}"> <!-- Image wrapped in a link -->
-                    </a>
-                    <h2>{{ ad.title }}</h2>
-                    <p class="content">{{ ad.content | truncatewords:30 }}</p> <!-- Limit to 30 words -->
-                    <p class="sponsored-by">Sponsored by: {{ ad.sponsored_by }}</p>
+            <div class="carousel-container">
+              {% if campaign.campaignphoto_set.all %}
+                <div id="campaign-carousel-{{ campaign.id }}" class="carousel slide" data-bs-ride="carousel">
+                  <div class="carousel-inner">
+                    {% for photo in campaign.campaignphoto_set.all %}
+                      <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <img src="{{ photo.photo.url }}" alt="{{ photo.alt_text }}" class="d-block w-100">
+                      </div>
+                    {% endfor %}
+                  </div>
+                  <a class="carousel-control-prev" href="#campaign-carousel-{{ campaign.id }}" role="button" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                  </a>
+                  <a class="carousel-control-next" href="#campaign-carousel-{{ campaign.id }}" role="button" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                  </a>
                 </div>
+              {% endif %}
             </div>
+            <div class="container-with-content">
+              <p class="campaign-description">{{ campaign.description }}</p>
+              <a href="{% url 'campaign_detail' campaign.id %}" class="view-details">View Details</a>
+            </div>
+          </div>
         {% endfor %}
-    </div>
-</div>
+      </div>
+    {% else %}
+      <p>No public campaigns available.</p>
+    {% endif %}
+  </section>
+</main>
 
 
-</aside>
-  </main>
+
+
+
 <hr>
 <footer class="footer">
     <div class="footer-content">

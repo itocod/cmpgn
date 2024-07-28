@@ -2,11 +2,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-  <title>Your Page Title</title>
+    <!-- Default Title -->
+    <title>{% block title %}RallyNex{% endblock %}</title>
+
+    <!-- Default Meta Tags for SEO -->
+    <meta name="description" content="Support campaigns and causes on RallyNex. Join our community to create, share, and back projects that matter to you.">
+    <meta name="keywords" content="crowdfunding, campaigns, community support, fundraising, donate, social impact, nonprofit">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://rallynex.onrender.com">
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="RallyNex - Support Campaigns and Causes">
+    <meta property="og:description" content="Join our community to create, share, and back projects that matter to you.">
+    <meta property="og:url" content="https://rallynex.onrender.com">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://rallynex.onrender.com/static/images/og-image.jpg">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="RallyNex - Support Campaigns and Causes">
+    <meta name="twitter:description" content="Join our community to create, share, and back projects that matter to you.">
+    <meta name="twitter:image" content="https://rallynex.onrender.com/static/images/twitter-card.jpg">
+    
+    <!-- Placeholder for additional meta tags -->
+    {% block extra_meta %}{% endblock %}
+
   <style>
     body {
       font-family: Arial, sans-serif;
