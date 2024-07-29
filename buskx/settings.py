@@ -171,7 +171,7 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-SITE_ID = 1  # Required for django-allauth
+SITE_ID = 2  # Required for django-allauth
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
