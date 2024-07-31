@@ -5,12 +5,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <!-- Google Site Verification Meta Tag -->
   <meta name="google-site-verification" content="2IjHwnbJp2eoJ42Ec2-vy5FHzwfpyA4qxZlA2Ct1lW8" />
-  <!-- Bing Site Verification Meta Tag -->
+
+  <!-- bing Site Verification Meta Tag -->
   <meta name="msvalidate.01" content="9BD94EF9A2933498D736572C8C2B73B0" />
-  <!-- Yandex Site Verification Meta Tag -->
+
+  <!-- yandex Site Verification Meta Tag -->
   <meta name="yandex-verification" content="27149014e6b080dd" />
+
   <!-- Meta Tags for SEO -->
   <meta name="description" content="Support campaigns and causes on RallyNex. Join our community to create, share, and back projects that matter to you.">
   <meta name="keywords" content="crowdfunding, campaigns, community support, fundraising, donate, social impact, nonprofit, projects, backers, creators, charity, Environmental Conservation, Community Development, Health and Wellness, Equality and Inclusion, Animal Welfare, Humanitarian Aid, Sustainable Development, Peace and Conflict Resolution, Digital Rights, Economic Empowerment, Policy Advocacy, Artistic Advocacy">
@@ -18,6 +22,7 @@
   <meta name="author" content="RallyNex">
   <meta name="language" content="English">
   <link rel="canonical" href="https://rallynex.onrender.com">
+
   <!-- Open Graph Meta Tags -->
   <meta property="og:title" content="RallyNex - Support Campaigns and Causes">
   <meta property="og:description" content="Join our community to create, share, and back projects that matter to you.">
@@ -27,6 +32,7 @@
   <meta property="og:image:alt" content="RallyNex platform image">
   <meta property="og:site_name" content="RallyNex">
   <meta property="og:locale" content="en_US">
+
   <!-- Twitter Card Meta Tags -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="RallyNex - Support Campaigns and Causes">
@@ -34,6 +40,7 @@
   <meta name="twitter:image" content="https://rallynex.onrender.com/static/main/files/og-image.png">
   <meta name="twitter:image:alt" content="RallyNex platform image">
   <meta name="twitter:site" content="@RallyNex">
+
   <!-- Schema Markup for SEO -->
   <script type="application/ld+json">
   {
@@ -48,10 +55,12 @@
     ]
   }
   </script>
+
   <!-- Stylesheets -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <title>RallyNex - Support Campaigns and Causes</title>
   <style>
+    /* Existing styles */
     body, html {
       margin: 0;
       padding: 0;
@@ -166,95 +175,126 @@
       color: #3742fa;
     }
 
-    /* Preloader styles */
-    #preloader {
-      position: fixed;
+    /* Skeleton screen styles */
+    .skeleton-wrapper {
+      position: absolute;
       top: 0;
       left: 0;
       width: 100%;
-      height: 100%;
-      background: #000;
-      color: #fff;
+      height: 100vh;
+      background: #f0f0f0;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      z-index: 9999;
+      z-index: 1000;
+      transition: opacity 0.3s ease;
     }
-
-    .spinner {
-      border: 8px solid #f3f3f3; /* Light grey */
-      border-top: 8px solid #1e90ff; /* Blue */
-      border-radius: 50%;
-      width: 60px;
+    .skeleton {
+      width: 80%;
+      max-width: 1200px;
+      background: #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .skeleton-header {
       height: 60px;
-      animation: spin 1s linear infinite;
+      margin-bottom: 20px;
+      background: #d0d0d0;
     }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+    .skeleton-content {
+      height: 200px;
+      margin-bottom: 20px;
+      background: #d0d0d0;
+    }
+    .skeleton-footer {
+      height: 40px;
+      background: #d0d0d0;
+    }
+    @keyframes pulse {
+      0% {
+        background-color: #e0e0e0;
+      }
+      50% {
+        background-color: #d0d0d0;
+      }
+      100% {
+        background-color: #e0e0e0;
+      }
+    }
+    .skeleton-header, .skeleton-content, .skeleton-footer {
+      animation: pulse 1.5s infinite ease-in-out;
     }
   </style>
 </head>
 <body>
-  <!-- Preloader -->
-  <div id="preloader">
-    <div class="spinner"></div>
+  <!-- Skeleton Screen -->
+  <div class="skeleton-wrapper" id="skeleton-screen">
+    <div class="skeleton">
+      <div class="skeleton-header"></div>
+      <div class="skeleton-content"></div>
+      <div class="skeleton-footer"></div>
+    </div>
   </div>
 
   <!-- Main Content -->
-  <div class="header">
-    <h1 class="title">Welcome to RallyNex</h1>
-    <p class="tagline">Support campaigns and causes that matter to you.</p>
-    <a href="#features" class="btn-primary">Learn More</a>
-  </div>
-
   <div class="container">
-    <section id="features" class="features">
+    <header class="header">
+      <h1 class="title">RallyNex</h1>
+      <p class="tagline">"Join the Movement, Empower Change with Your Knowledge"</p>
+      <a href="{% url 'account_login' %}" class="btn-primary">Get Started</a>
+    </header>
+
+    <section class="features">
       <div class="feature">
-        <h2>Features</h2>
-        <img src="{% static 'main/files/feature1.jpg' %}" alt="Feature 1">
-        <p>Description of feature 1.</p>
+        <img src="{% static 'main/files/diverse.jpg' %}" alt="Diverse Campaigns">
+        <h2>Diverse Campaigns</h2>
+        <p>From awareness to fundraising, explore a variety of campaign types tailored to your goals.</p>
       </div>
       <div class="feature">
-        <h2>Feature 2</h2>
-        <img src="{% static 'main/files/feature2.jpg' %}" alt="Feature 2">
-        <p>Description of feature 2.</p>
+        <img src="{% static 'main/files/suppo.jpg' %}" alt="Community Support">
+        <h2>Community Support</h2>
+        <p>Connect with like-minded individuals and organizations to support meaningful causes.</p>
       </div>
       <div class="feature">
-        <h2>Feature 3</h2>
-        <img src="{% static 'main/files/feature3.jpg' %}" alt="Feature 3">
-        <p>Description of feature 3.</p>
+        <img src="{% static 'main/files/fun.jpg' %}" alt="Fun Features">
+        <h2>Fun Features</h2>
+        <p>Discover interactive tools and features that enhance your crowdfunding experience.</p>
       </div>
     </section>
 
-    <section id="success-stories" class="success-stories">
+    <section class="success-stories">
       <h2>Success Stories</h2>
       <div class="story">
-        <img src="{% static 'main/files/story1.jpg' %}" alt="Story 1">
-        <p>Story description 1.</p>
+        <img src="{% static 'main/files/story1.jpg' %}" alt="Success Story 1">
+        <p>Learn how individuals and communities have made an impact through our platform.</p>
       </div>
       <div class="story">
-        <img src="{% static 'main/files/story2.jpg' %}" alt="Story 2">
-        <p>Story description 2.</p>
+        <img src="{% static 'main/files/story2.jpg' %}" alt="Success Story 2">
+        <p>See real examples of projects that have achieved their goals with RallyNex.</p>
       </div>
     </section>
 
     <footer class="footer">
-      <div class="container">
-        <p>&copy; 2024 RallyNex. All rights reserved.</p>
-        <div class="social-links">
-          <a href="https://www.facebook.com/RallyNex" target="_blank">Facebook</a>
-          <a href="https://twitter.com/RallyNex" target="_blank">Twitter</a>
-        </div>
+      <p>&copy; 2024 RallyNex. All rights reserved.</p>
+      <div class="social-links">
+        <a href="https://facebook.com/RallyNex" target="_blank">Facebook</a>
+        <a href="https://twitter.com/RallyNex" target="_blank">Twitter</a>
       </div>
     </footer>
   </div>
 
   <script>
-    window.addEventListener('load', () => {
-      const preloader = document.getElementById('preloader');
-      preloader.style.display = 'none';
+    document.addEventListener('DOMContentLoaded', () => {
+      const skeletonScreen = document.getElementById('skeleton-screen');
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          skeletonScreen.style.opacity = '0';
+          setTimeout(() => {
+            skeletonScreen.style.display = 'none';
+          }, 300); // match the transition time
+        }, 100); // delay to ensure full page load
+      });
     });
   </script>
 </body>
