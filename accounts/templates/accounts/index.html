@@ -5,18 +5,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <!-- Google Site Verification Meta Tag -->
   <meta name="google-site-verification" content="2IjHwnbJp2eoJ42Ec2-vy5FHzwfpyA4qxZlA2Ct1lW8" />
-
-  <!-- bing Site Verification Meta Tag -->
-<meta name="msvalidate.01" content="9BD94EF9A2933498D736572C8C2B73B0" />
-
-
- <!-- yandex Site Verification Meta Tag -->
-<meta name="yandex-verification" content="27149014e6b080dd" />
-
-
+  <!-- Bing Site Verification Meta Tag -->
+  <meta name="msvalidate.01" content="9BD94EF9A2933498D736572C8C2B73B0" />
+  <!-- Yandex Site Verification Meta Tag -->
+  <meta name="yandex-verification" content="27149014e6b080dd" />
   <!-- Meta Tags for SEO -->
   <meta name="description" content="Support campaigns and causes on RallyNex. Join our community to create, share, and back projects that matter to you.">
   <meta name="keywords" content="crowdfunding, campaigns, community support, fundraising, donate, social impact, nonprofit, projects, backers, creators, charity, Environmental Conservation, Community Development, Health and Wellness, Equality and Inclusion, Animal Welfare, Humanitarian Aid, Sustainable Development, Peace and Conflict Resolution, Digital Rights, Economic Empowerment, Policy Advocacy, Artistic Advocacy">
@@ -24,7 +18,6 @@
   <meta name="author" content="RallyNex">
   <meta name="language" content="English">
   <link rel="canonical" href="https://rallynex.onrender.com">
-
   <!-- Open Graph Meta Tags -->
   <meta property="og:title" content="RallyNex - Support Campaigns and Causes">
   <meta property="og:description" content="Join our community to create, share, and back projects that matter to you.">
@@ -34,7 +27,6 @@
   <meta property="og:image:alt" content="RallyNex platform image">
   <meta property="og:site_name" content="RallyNex">
   <meta property="og:locale" content="en_US">
-
   <!-- Twitter Card Meta Tags -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="RallyNex - Support Campaigns and Causes">
@@ -42,7 +34,6 @@
   <meta name="twitter:image" content="https://rallynex.onrender.com/static/main/files/og-image.png">
   <meta name="twitter:image:alt" content="RallyNex platform image">
   <meta name="twitter:site" content="@RallyNex">
-
   <!-- Schema Markup for SEO -->
   <script type="application/ld+json">
   {
@@ -57,7 +48,6 @@
     ]
   }
   </script>
-
   <!-- Stylesheets -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <title>RallyNex - Support Campaigns and Causes</title>
@@ -175,63 +165,96 @@
     .social-links a:hover {
       color: #3742fa;
     }
+
+    /* Preloader styles */
+    #preloader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+    }
+
+    .spinner {
+      border: 8px solid #f3f3f3; /* Light grey */
+      border-top: 8px solid #1e90ff; /* Blue */
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header class="header">
-      <h1 class="title">RallyNex</h1>
-      <p class="tagline">"Join the Movement, Empower Change with Your Knowledge"</p>
-      <a href="{% url 'account_login' %}" class="btn-primary">Get Started</a>
-    </header>
+  <!-- Preloader -->
+  <div id="preloader">
+    <div class="spinner"></div>
+  </div>
 
-    <section class="features">
+  <!-- Main Content -->
+  <div class="header">
+    <h1 class="title">Welcome to RallyNex</h1>
+    <p class="tagline">Support campaigns and causes that matter to you.</p>
+    <a href="#features" class="btn-primary">Learn More</a>
+  </div>
+
+  <div class="container">
+    <section id="features" class="features">
       <div class="feature">
-        <img src="{% static 'main/files/diverse.jpg' %}" alt="Diverse Campaigns">
-        <h2>Diverse Campaigns</h2>
-        <p>From awareness to fundraising, explore a variety of campaign types tailored to your goals.</p>
+        <h2>Features</h2>
+        <img src="{% static 'main/files/feature1.jpg' %}" alt="Feature 1">
+        <p>Description of feature 1.</p>
       </div>
       <div class="feature">
-        <img src="{% static 'main/files/suppo.jpg' %}" alt="Community Support">
-        <h2>Community Support</h2>
-        <p>Connect with like-minded individuals and grow your network of supporters and followers.</p>
+        <h2>Feature 2</h2>
+        <img src="{% static 'main/files/feature2.jpg' %}" alt="Feature 2">
+        <p>Description of feature 2.</p>
       </div>
       <div class="feature">
-        <img src="{% static 'main/files/tools.jpg' %}" alt="Powerful Tools">
-        <h2>Powerful Tools</h2>
-        <p>Use our intuitive tools to create compelling campaigns and track their success.</p>
+        <h2>Feature 3</h2>
+        <img src="{% static 'main/files/feature3.jpg' %}" alt="Feature 3">
+        <p>Description of feature 3.</p>
       </div>
     </section>
 
-    <section class="success-stories">
+    <section id="success-stories" class="success-stories">
       <h2>Success Stories</h2>
       <div class="story">
-        <img src="{% static 'main/files/fund.jpg' %}" alt="Success Story 1">
-        <p>“RallyNex helped me raise awareness and funds for my community project. The support I received was overwhelming!” - Kai Kenji, Changemaker</p>
+        <img src="{% static 'main/files/story1.jpg' %}" alt="Story 1">
+        <p>Story description 1.</p>
       </div>
       <div class="story">
-        <img src="{% static 'main/files/advo.jpg' %}" alt="Success Story 2">
-        <p>“The platform’s tools were instrumental in advocating for our cause, making it easy to launch and manage our advocacy campaign. This led to a highly successful campaign launch." - Calista Isla</p>
+        <img src="{% static 'main/files/story2.jpg' %}" alt="Story 2">
+        <p>Story description 2.</p>
       </div>
     </section>
 
     <footer class="footer">
-      <p>Stay Connected</p>
-      <div class="social-links">
-        <a href="{% url 'privacy_policy' %}">Privacy Policy</a> |
-        <a href="{% url 'terms_of_service' %}">Terms of Service</a> |
-        <a href="{% url 'project_support' %}">Support</a>
+      <div class="container">
+        <p>&copy; 2024 RallyNex. All rights reserved.</p>
+        <div class="social-links">
+          <a href="https://www.facebook.com/RallyNex" target="_blank">Facebook</a>
+          <a href="https://twitter.com/RallyNex" target="_blank">Twitter</a>
+        </div>
       </div>
-      <p>© 2024 RallyNex. All rights reserved.</p>
     </footer>
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const primaryButton = document.querySelector('.btn-primary');
-      primaryButton.addEventListener('click', () => {
-        alert('Welcome to RallyNex! Get ready to make an impact.');
-      });
+    window.addEventListener('load', () => {
+      const preloader = document.getElementById('preloader');
+      preloader.style.display = 'none';
     });
   </script>
 </body>
