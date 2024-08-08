@@ -163,13 +163,12 @@ MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
 
 
 
-
-
-
 AUTHENTICATION_BACKENDS = [
-    # other authentication backends
-    'allauth.account.auth_backends.AuthenticationBackend',
+    'django.contrib.auth.backends.ModelBackend',  # Added this line to ensure standard authentication works
+    'allauth.account.auth_backends.AuthenticationBackend',  # Ensure this is included for social authentication
 ]
+
+
 
 SITE_ID = 2  # Required for django-allauth
 
