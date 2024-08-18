@@ -5,15 +5,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  <title>RallyNex - Support Campaigns and Causes</title>
+  
   <!-- Meta Tags for SEO -->
   <meta name="description" content="Support campaigns and causes on RallyNex. Join our community to create, share, and back projects that matter to you.">
-    <meta name="keywords" content="crowdfunding, campaigns, community support, fundraising, donate, social impact, nonprofit, projects, backers, creators, charity,Environmental Conservation,Community Development,Health and Wellness,        Equality and Inclusion,Animal Welfare,Humanitarian Aid
-    Sustainable Development,Peace and Conflict Resolution
-    Digital Rights,Economic Empowerment,Policy Advocacy,Artistic Advocacy">
+  <meta name="keywords" content="crowdfunding, campaigns, community support, fundraising, donate, social impact, nonprofit, projects, backers, creators, charity, Environmental Conservation, Community Development, Health and Wellness, Equality and Inclusion, Animal Welfare, Humanitarian Aid, Sustainable Development, Peace and Conflict Resolution, Digital Rights, Economic Empowerment, Policy Advocacy, Artistic Advocacy">
   <meta name="robots" content="index, follow">
   <meta name="author" content="RallyNex">
-  <meta name="language" content="English">
   <link rel="canonical" href="https://rallynex.onrender.com">
 
   <!-- Open Graph Meta Tags -->
@@ -35,210 +33,257 @@
   <meta name="twitter:site" content="@RallyNex">
 
   <!-- Stylesheets -->
- <!-- bing Site Verification Meta Tag -->
-  <meta name="msvalidate.01" content="2DF73531AC8292B0D47E7DEAE6EEF4CF" />
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <title>RallyNex - Support Campaigns and Causes</title>
+  <style>
+    /* Global Styles */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to right, #00b09b, #96c93d);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
 
-   <!-- Schema Markup for SEO -->
-  <script type="application/ld+json">
-  {
-    "@context": "http://schema.org",
-    "@type": "Organization",
-    "name": "RallyNex",
-    "url": "https://rallynex.onrender.com",
-    "logo": "https://rallynex.onrender.com/static/main/files/logo.png",
-    "sameAs": [
-      "https://www.facebook.com/RallyNex",
-      "https://twitter.com/RallyNex"
-    ]
-  }
-</script>
-    <style type="text/css">
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f4f9;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .login-container {
-            max-width: 400px;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            background-color: #fff;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        .login-container img {
-            border-radius: 50%;
-            margin-bottom: 10px;
-        }
-        h2 {
-            text-align: center;
-            color: #333;
-        }
-        form {
-            margin-top: 20px;
-        }
-        .form-field {
-            margin-bottom: 15px;
-        }
-        input {
-            width: 100%;
-            padding: 10px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-        .btn-signin {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background-color: #3498db;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            box-sizing: border-box;
-        }
-        .btn-signin:hover {
-            background-color: #5dade2;
-        }
-        .additional-links {
-            text-align: center;
-            margin-top: 15px;
-            font-size: 14px;
-            color: #777;
-        }
-        .btn-third-party {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            padding: 10px;
-            margin-top: 10px;
-            background-color: whitesmoke;
-            color: gray;
-            text-align: center;
-            text-decoration: none;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            box-sizing: border-box;
-        }
-        .btn-third-party i {
-            margin-right: 10px;
-        }
-        .btn-third-party:hover {
-            background-color: silver;
-            color: white;
-        }
-        .text-danger {
-            color: red;
-        }
-        .logo-initials {
-            color: limegreen; /* Lime text color */
-            display: inline-block;
-            font-size: 60px; /* Adjust size as needed */
-            font-weight: bold;
-            letter-spacing: 2px; /* Spacing between letters */
-            text-transform: uppercase; /* Uppercase text */
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font */
-            position: relative; /* Positioning context for pseudo-element */
-            text-shadow: 
-                3px 3px 0 limegreen, /* Lime green shadow */
-                -3px -3px 0 limegreen, /* Lime green shadow */
-                3px -3px 0 limegreen, /* Lime green shadow */
-                -3px 3px 0 limegreen, /* Lime green shadow */
-                5px 5px 0 black, /* Black shadow */
-                -5px -5px 0 black, /* Black shadow */
-                5px -5px 0 black, /* Black shadow */
-                -5px 5px 0 black; /* Black shadow */
-        }
+    .login-container {
+      background-color: rgba(0, 0, 0, 0.75);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      animation: fadeIn 1s ease-in-out;
+    }
 
-        .logo-initials::after {
-            content: 'R'; /* Ensures the letter is displayed */
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: -1; /* Behind the main letter */
-            text-shadow: 
-                3px 3px 0 limegreen, /* Lime green shadow */
-                -3px -3px 0 limegreen, /* Lime green shadow */
-                3px -3px 0 limegreen, /* Lime green shadow */
-                -3px 3px 0 limegreen, /* Lime green shadow */
-                5px 5px 0 black, /* Black shadow */
-                -5px -5px 0 black, /* Black shadow */
-                5px -5px 0 black, /* Black shadow */
-                -5px 5px 0 black; /* Black shadow */
-        }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
 
-        .logo-container {
-            text-align: center;
-            padding: 2px;
-          
-           
-        }
+    .login-container img {
+      width: 100px;
+      margin-bottom: 20px;
+    }
 
-     
+    h2 {
+      margin-bottom: 20px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #f1f1f1;
+    }
 
-        .logo-name {
-            display: block;
-            font-size: 24px; /* Adjust size as needed */
-            margin-top: 5px; /* Space between initials and name */
-            opacity: 0.8; /* Slightly transparent */
-        }
+    form {
+      margin-top: 20px;
+    }
 
-        .tagline {
-            display: block;
-            font-size: 18px; /* Adjust size as needed */
-            margin-top: 10px; /* Space between name and tagline */
-            opacity: 0.7; /* Slightly transparent */
-        }
-    </style>
+    .form-field {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    input {
+      width: 100%;
+      padding: 15px;
+      border-radius: 8px;
+      border: none;
+      box-sizing: border-box;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .btn-signin {
+      display: inline-block;
+      width: 100%;
+      padding: 15px;
+      background-color: #3498db;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-signin:hover {
+      background-color: #2980b9;
+    }
+
+    .additional-links {
+      margin-top: 20px;
+      font-size: 14px;
+    }
+
+    .additional-links a {
+      color: #00c3ff;
+      text-decoration: none;
+    }
+
+    .additional-links a:hover {
+      text-decoration: underline;
+    }
+
+    .btn-third-party {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 15px;
+      background-color: #ffffff;
+      color: #444;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .btn-third-party i {
+      margin-right: 10px;
+    }
+
+    .btn-third-party:hover {
+      background-color: #f1f1f1;
+      color: #000;
+    }
+
+    .logo-initials {
+      font-size: 48px;
+      font-weight: bold;
+      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .logo-container {
+      margin-bottom: 20px;
+    }
+
+    .logo-initials {
+      color: limegreen;
+      display: inline-block;
+      font-size: 60px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      position: relative;
+      text-shadow: 
+          3px 3px 0 limegreen,
+          -3px -3px 0 limegreen,
+          3px -3px 0 limegreen,
+          -3px 3px 0 limegreen,
+          5px 5px 0 black,
+          -5px -5px 0 black,
+          5px -5px 0 black,
+          -5px 5px 0 black;
+    }
+
+    .logo-initials::after {
+      content: 'R';
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      text-shadow: 
+          3px 3px 0 limegreen,
+          -3px -3px 0 limegreen,
+          3px -3px 0 limegreen,
+          -3px 3px 0 limegreen,
+          5px 5px 0 black,
+          -5px -5px 0 black,
+          5px -5px 0 black,
+          -5px 5px 0 black;
+    }
+
+    .logo-container {
+      text-align: center;
+      padding: 2px;
+    }
+
+    .logo-name {
+      display: block;
+      font-size: 24px;
+      margin-top: 5px;
+      opacity: 0.8;
+    }
+
+    .tagline {
+      display: block;
+      font-size: 18px;
+      margin-top: 10px;
+      opacity: 0.7;
+    }
+
+    /* Mobile Styles */
+    @media (max-width: 600px) {
+      body {
+        padding: 20px;
+        height: auto;
+      }
+
+      .login-container {
+        padding: 20px;
+        box-shadow: none;
+        border-radius: 0;
+        max-width: 100%;
+      }
+
+      h2 {
+        font-size: 22px;
+      }
+
+      .logo-initials {
+        font-size: 50px;
+      }
+
+      .btn-signin, .btn-third-party {
+        padding: 12px;
+        font-size: 14px;
+      }
+
+      input {
+        padding: 12px;
+        font-size: 14px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="login-container">
-        <div class="logo-container">
-            <div class="logo">
-                <span class="logo-initials">R</span>
-                <span class="logo-name">RallyNex</span>
-            </div>
-        </div>
-        <h2>Sign In To RallyNex</h2>
-        <form method="post" action="{% url 'account_login' %}">
-            {% csrf_token %}
-            {% for field in form %}
-                <div class="form-field">
-                    {{ field.label_tag }}
-                    {{ field }}
-                    {% if field.errors %}
-                        <p class="text-danger">{{ field.errors.as_text }}</p>
-                    {% endif %}
-                </div>
-            {% endfor %}
-            <div class="form-field">
-                <label for="agree_terms">I agree to the <a href="{% url 'terms_of_service' %}">Terms of Service</a> and <a href="{% url 'privacy_policy' %}">Privacy Policy</a></label>
-                <input type="checkbox" id="agree_terms" name="agree_terms">
-            </div>
-            <button type="submit" class="btn-signin">Sign In</button>
-        </form>
-        <p class="additional-links">
-            <a href="{% url 'account_reset_password' %}">Forgot password?</a><br>
-            Don't have an account? <a href="{% url 'account_signup' %}">Sign up here</a>.<br>
-        </p>
-        <hr>
-        <h2>Or use a third-party</h2>
-        <a href="{% provider_login_url 'google' %}" class="btn-third-party" aria-label="Sign in with Google">
-            <i class="fab fa-google"></i> Sign in with Google
-        </a>
+  <div class="login-container">
+    <div class="logo-container">
+      <span class="logo-initials">R</span>
     </div>
+    <h2>Sign In To RallyNex</h2>
+    <form method="post" action="{% url 'account_login' %}">
+      {% csrf_token %}
+      {% for field in form %}
+      <div class="form-field">
+        {{ field.label_tag }}
+        {{ field }}
+        {% if field.errors %}
+        <p class="text-danger">{{ field.errors.as_text }}</p>
+        {% endif %}
+      </div>
+      {% endfor %}
+      <button type="submit" class="btn-signin">Sign In</button>
+    </form>
+
+    <div class="additional-links">
+      <p>Don't have an account? <a href="{% url 'account_signup' %}">Sign Up</a></p>
+      <p><a href="{% url 'account_reset_password' %}">Forgot password?</a></p>
+    </div>
+    <div>
+      <a href="{% provider_login_url 'google' %}" class="btn-third-party">
+        <i class="fab fa-google"></i> Sign in with Google
+      </a>
+    </div>
+  </div>
 </body>
 </html>

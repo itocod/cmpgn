@@ -117,21 +117,8 @@
 </head>
 <body>
 
-    <!-- Action Items -->
-    <div class="action-item">
-        <a href="#" onclick="uploadAudio()">
-            <i class="fas fa-volume-up"></i> VibeVent
-        </a>
-    </div>
-    
-    <div class="action-item">
-        <a href="#" onclick="switchColor()">
-            <i class="fas fa-sync-alt"></i>
-        </a>
-    </div>
-    
-    <audio id="bgAudio" autoplay loop></audio>
 
+   
     <!-- Search Results -->
     <h2 style="padding:10px; font-size:19px;">Search Results</h2>
     {% if campaigns or profiles or quran_verses or adhkar or hadiths %}
@@ -397,9 +384,13 @@ function switchColor() {
 
 
 
+    </script>
+    <script type="text/javascript">
+        
 document.addEventListener("DOMContentLoaded", function() {
     const navbarToggle = document.getElementById("navbarToggle");
     const navbar = document.getElementById("navbar");
+    const popupClose = document.getElementById("popupClose");
 
     // Toggle navbar visibility
     navbarToggle.addEventListener("click", function() {
@@ -408,6 +399,11 @@ document.addEventListener("DOMContentLoaded", function() {
         } else {
             navbar.style.display = "block";
         }
+    });
+
+    // Close popup when clicking the close button
+    popupClose.addEventListener("click", function() {
+        navbar.style.display = "none";
     });
 
     // Adjust navbar display on window resize
@@ -428,8 +424,6 @@ document.addEventListener("DOMContentLoaded", function() {
         navbar.style.display = "none"; // or "block" based on your initial requirement
     }
 });
-
-
     </script>
 </body>
 </html>

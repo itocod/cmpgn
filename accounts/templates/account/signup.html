@@ -1,156 +1,287 @@
-
 {% load static %}
 {% load socialaccount %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RallyNex - Sign Up</title>
 
+  <!-- Meta Tags for SEO -->
+  <meta name="description" content="Sign up on RallyNex to support campaigns and causes. Join our community to create, share, and back projects that matter to you.">
+  <meta name="keywords" content="crowdfunding, campaigns, community support, fundraising, donate, social impact, nonprofit, projects, backers, creators, charity">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="RallyNex">
+  <link rel="canonical" href="https://rallynex.onrender.com">
 
-{% block content %}
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="RallyNex - Sign Up">
+  <meta property="og:description" content="Join RallyNex to create, share, and back projects that matter to you. Sign up now to get started.">
+  <meta property="og:url" content="https://rallynex.onrender.com">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://rallynex.onrender.com/static/main/files/og-image.png">
+  <meta property="og:image:alt" content="RallyNex platform image">
+  <meta property="og:site_name" content="RallyNex">
+  <meta property="og:locale" content="en_US">
 
-<style type="text/css">
-  /* Add this to your existing CSS or create a new stylesheet */
-  .login-container {
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="RallyNex - Sign Up">
+  <meta name="twitter:description" content="Sign up on RallyNex to support campaigns and causes. Join our community to get started.">
+  <meta name="twitter:image" content="https://rallynex.onrender.com/static/main/files/og-image.png">
+  <meta name="twitter:image:alt" content="RallyNex platform image">
+  <meta name="twitter:site" content="@RallyNex">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <style>
+    /* Global Styles */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(to right, #00b09b, #96c93d);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .signup-container {
+      background-color: rgba(0, 0, 0, 0.75);
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
       max-width: 400px;
-      margin: auto;
-      padding: 20px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      background-color: #fff;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      text-align: center; /* Center align content within the container */
-  }
-
-  .login-container img {
-      border-radius: 50%; /* Apply a small-radius border to the image */
-      margin-bottom: 10px; /* Add some space below the image */
-  }
-
-  h2 {
+      width: 100%;
       text-align: center;
-      color: #333;
-  }
+      animation: fadeIn 1s ease-in-out;
+    }
 
-  form {
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .signup-container img {
+      width: 100px;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #f1f1f1;
+    }
+
+    form {
       margin-top: 20px;
-  }
+    }
 
-  .form-field {
-      margin-bottom: 15px;
-  }
+    .form-field {
+      margin-bottom: 20px;
+      text-align: left;
+    }
 
-  input {
+    input {
       width: 100%;
-      padding: 10px;
+      padding: 15px;
+      border-radius: 8px;
+      border: none;
       box-sizing: border-box;
-  }
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
 
-  .btn-signup {
-      display: block;
+    .btn-signup {
+      display: inline-block;
       width: 100%;
-      padding: 10px;
+      padding: 15px;
       background-color: #3498db;
       color: #fff;
       border: none;
-      border-radius: 4px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
       cursor: pointer;
-      box-sizing: border-box;
-  }
+      transition: background-color 0.3s ease;
+    }
 
-  .btn-signup:hover {
-      background-color: #b3d9ff; /* Darker shade of lime green on hover */
-  }
+    .btn-signup:hover {
+      background-color: #2980b9;
+    }
 
-  .text-danger {
-      color: red;
-  }
+    .additional-links {
+      margin-top: 20px;
+      font-size: 14px;
+    }
 
-          .logo-initials {
-            color: limegreen; /* Lime text color */
-            display: inline-block;
-            font-size: 60px; /* Adjust size as needed */
-            font-weight: bold;
-            letter-spacing: 2px; /* Spacing between letters */
-            text-transform: uppercase; /* Uppercase text */
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font */
-            position: relative; /* Positioning context for pseudo-element */
-            text-shadow: 
-                3px 3px 0 limegreen, /* Lime green shadow */
-                -3px -3px 0 limegreen, /* Lime green shadow */
-                3px -3px 0 limegreen, /* Lime green shadow */
-                -3px 3px 0 limegreen, /* Lime green shadow */
-                5px 5px 0 black, /* Black shadow */
-                -5px -5px 0 black, /* Black shadow */
-                5px -5px 0 black, /* Black shadow */
-                -5px 5px 0 black; /* Black shadow */
-        }
+    .additional-links a {
+      color: #00c3ff;
+      text-decoration: none;
+    }
 
-        .logo-initials::after {
-            content: 'R'; /* Ensures the letter is displayed */
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: -1; /* Behind the main letter */
-            text-shadow: 
-                3px 3px 0 limegreen, /* Lime green shadow */
-                -3px -3px 0 limegreen, /* Lime green shadow */
-                3px -3px 0 limegreen, /* Lime green shadow */
-                -3px 3px 0 limegreen, /* Lime green shadow */
-                5px 5px 0 black, /* Black shadow */
-                -5px -5px 0 black, /* Black shadow */
-                5px -5px 0 black, /* Black shadow */
-                -5px 5px 0 black; /* Black shadow */
-        }
+    .additional-links a:hover {
+      text-decoration: underline;
+    }
 
-        .logo-container {
-            text-align: center;
-            padding: 2px;
-          
-           
-        }
+    .btn-third-party {
+      margin-top: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 15px;
+      background-color: #ffffff;
+      color: #444;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
 
+    .btn-third-party i {
+      margin-right: 10px;
+    }
+
+    .btn-third-party:hover {
+      background-color: #f1f1f1;
+      color: #000;
+    }
+
+    .logo-initials {
+      font-size: 48px;
+      font-weight: bold;
+      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .logo-container {
+      margin-bottom: 20px;
+    }
+
+    .logo-initials {
+      color: limegreen;
+      display: inline-block;
+      font-size: 60px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      position: relative;
+      text-shadow: 
+          3px 3px 0 limegreen,
+          -3px -3px 0 limegreen,
+          3px -3px 0 limegreen,
+          -3px 3px 0 limegreen,
+          5px 5px 0 black,
+          -5px -5px 0 black,
+          5px -5px 0 black,
+          -5px 5px 0 black;
+    }
+
+    .logo-initials::after {
+      content: 'R';
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+      text-shadow: 
+          3px 3px 0 limegreen,
+          -3px -3px 0 limegreen,
+          3px -3px 0 limegreen,
+          -3px 3px 0 limegreen,
+          5px 5px 0 black,
+          -5px -5px 0 black,
+          5px -5px 0 black,
+          -5px 5px 0 black;
+    }
+
+    .logo-container {
+      text-align: center;
+      padding: 2px;
+    }
+
+    .logo-name {
+      display: block;
+      font-size: 24px;
+      margin-top: 5px;
+      opacity: 0.8;
+    }
+
+    .tagline {
+      display: block;
+      font-size: 18px;
+      margin-top: 10px;
+      opacity: 0.7;
+    }
+
+    /* Mobile Styles */
+    @media (max-width: 600px) {
+      body {
+        padding: 20px;
+        height: auto;
+      }
+
+      .signup-container {
+        padding: 20px;
+        box-shadow: none;
+        border-radius: 0;
+        max-width: 100%;
+      }
+
+      h2 {
+        font-size: 22px;
+      }
+
+      .logo-initials {
+        font-size: 50px;
+      }
+
+      .btn-signup, .btn-third-party {
+        padding: 12px;
+        font-size: 14px;
+      }
+
+      input {
+        padding: 12px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="signup-container">
+    <div class="logo-container">
      
-
-        .logo-name {
-            display: block;
-            font-size: 24px; /* Adjust size as needed */
-            margin-top: 5px; /* Space between initials and name */
-            opacity: 0.8; /* Slightly transparent */
-        }
-
-        .tagline {
-            display: block;
-            font-size: 18px; /* Adjust size as needed */
-            margin-top: 10px; /* Space between name and tagline */
-            opacity: 0.7; /* Slightly transparent */
-        }
-</style>
-
-<div class="login-container">
-           <div class="logo-container">
-            <div class="logo">
-                <span class="logo-initials">R</span>
-                <span class="logo-name">RallyNex</span>
-                
-            </div>
-        </div>
-
-    <h2>Sign Up To RallyNex</h2>
+    </div>
+    <h2>Sign Up for RallyNex</h2>
     <form method="post" action="{% url 'account_signup' %}">
-        {% csrf_token %}
-        {% for field in form %}
-            <div class="form-field">
-                {{ field.label_tag }}
-                {{ field }}
-                {% if field.errors %}
-                    <p class="text-danger">{{ field.errors.as_text }}</p>
-                {% endif %}
-            </div>
-        {% endfor %}
-                <div class="form-field">
-            
-            <label for="agree_terms">I agree to the <a href="{% url 'terms_of_service' %}">Terms of Service</a> and <a href="{% url 'privacy_policy' %}">Privacy Policy</a></label>
-            <input type="checkbox" id="agree_terms" name="agree_terms">
-        </div>
-        <button type="submit" class="btn-signup">Sign Up</button>
+      {% csrf_token %}
+      {% for field in form %}
+      <div class="form-field">
+        {{ field.label_tag }}
+        {{ field }}
+        {% if field.errors %}
+        <p class="text-danger">{{ field.errors.as_text }}</p>
+        {% endif %}
+      </div>
+      {% endfor %}
+      <button type="submit" class="btn-signup">Sign Up</button>
     </form>
-</div>
 
-{% endblock %}
+    <div class="additional-links">
+      <p>Already have an account? <a href="{% url 'account_login' %}">Log in</a></p>
+      <p>Or sign up using</p>
+      <a href="{% provider_login_url 'google' %}" class="btn-third-party">
+        <i class="fab fa-google"></i> Sign Up with Google
+      </a>
+    </div>
+  </div>
+</body>
+</html>

@@ -68,8 +68,23 @@
       margin: 0;
       padding: 0;
       background-color: white;
+      font-size: 18px; /* Increase base font size */
+      line-height: 1.6; /* Ensure comfortable line spacing */
+       overflow-x: hidden;
     }
+@media (max-width: 768px) {
+  .post-details h2 {
+    font-size: 22px;
+  }
 
+  .cm {
+    font-size: 14px;
+  }
+
+  .footer-bottom p {
+    font-size: 13px;
+  }
+}
     header {
       background-color: 
       color: grey;
@@ -89,14 +104,18 @@ main {
     }
 
 section {
-  flex: 3; /* Make the middle section wider */
+  flex: 3; /* Ensure it remains flexible within its parent */
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 100%; /* Make the width 100% */
+  width: 100%; /* Ensure it takes full width of its container */
+  max-width: 750px; /* Set the maximum width you desire */
   padding: 0; /* Remove padding */
   box-sizing: border-box; /* Include padding and border in the element's total width and height */
   border: 1px solid whitesmoke; /* Optional: Set border */
+  margin: 0 auto; /* Center the section horizontally within its container */
 }
+
+
 
 
 /* Media query for smaller screens */
@@ -789,13 +808,16 @@ section h2 {
     line-height: 1;
     color: black; /* Ensure the bullet color matches the text */
 }
+
+
+
 .navbar-toggle {
     cursor: pointer;
     font-size: 16px; /* Smaller font size */
     color: #888; /* Light grey color */
     background-color: #f5f5f5; /* Very light grey background */
     border: 1px solid #ccc; /* Light border */
-    padding: 6px 12px; /* Padding adjusted */
+    padding:5px; /* Padding adjusted */
     border-radius: 3px; /* Slight border radius */
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; /* Smooth transition */
     display: flex; /* Use flexbox for layout */
@@ -821,67 +843,66 @@ section h2 {
         display: flex; /* Ensure it's flex on smaller screens too */
        width: 100%;
         top: 10px;
-        left: 10px; /* Position on the left side */
+        left: 0; /* Position on the left side */
     }
 }
 
 
-.navbar {
-    display: none; /* Initially hidden, shown via JavaScript */
 
-  
+
+/* Overlay effect for the navbar */
+.navbar {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    backdrop-filter: blur(3px); /* Blur effect */
+    z-index: 1000; /* Ensure it appears above other content */
+    overflow-y: auto; /* Allow scrolling if content is too long */
 }
 
+/* Style for the popup (navbar) */
 .navbar ul {
+
     margin: 0;
     padding: 0;
+    list-style: none; /* Remove bullets */
     display: flex;
-  
-   
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
+    justify-content: center; /* Center items vertically */
+    height: 100%; /* Full height */
 }
 
 .navbar li {
-  /* Ensure the bullets are positioned relative to the list items */
-    padding-left: 10px; /* Add padding to the left of each list item */
-}
+    padding: 10px;
 
-.navbar li::before {
-    content: "•"; /* Unicode character for a bullet point */
-    
-    left: 0; /* Adjust the position as needed */
-    font-size: 20px; /* Adjust the size of the bullet point */
-    line-height: 1;
-     /* Ensure the bullet color matches the text */
 }
 
 .navbar a {
     text-decoration: none;
-    color: black;
-    padding-left: 10px; /* Ensure text starts after the bullet point */
+    color: white; /* Change text color for better visibility */
+    font-size: 18px; /* Adjust font size */
+    padding: 10px 20px;
+    display: block;
 }
 
-@media (max-width: 768px) {
-    .navbar-toggle {
-        display: block;
-    }
-
-    .navbar ul {
-        flex-direction: column;
-    }
-
-    .navbar li {
-  padding-left: 10px;
-  text-align: left;
-    }
+.navbar .popup-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+    z-index: 1001; /* Ensure close button is above other content */
 }
 
-/* Media query for larger screens */
-@media (min-width: 769px) {
-    #navbar {
-        display: none; /* Hide the navbar on larger screens */
-    }
+.navbar .popup-close:hover {
+    color: red; /* Change color on hover */
 }
-
 
 
  .action-item {
@@ -1096,11 +1117,11 @@ document.addEventListener('DOMContentLoaded', function() {
     handleMediaQueryChange(mediaQuery);
   });
 
-
-
+ 
 document.addEventListener("DOMContentLoaded", function() {
     const navbarToggle = document.getElementById("navbarToggle");
     const navbar = document.getElementById("navbar");
+    const popupClose = document.getElementById("popupClose");
 
     // Toggle navbar visibility
     navbarToggle.addEventListener("click", function() {
@@ -1109,6 +1130,11 @@ document.addEventListener("DOMContentLoaded", function() {
         } else {
             navbar.style.display = "block";
         }
+    });
+
+    // Close popup when clicking the close button
+    popupClose.addEventListener("click", function() {
+        navbar.style.display = "none";
     });
 
     // Adjust navbar display on window resize
@@ -1150,7 +1176,7 @@ document.addEventListener("DOMContentLoaded", function() {
 <div class="logo-container">
     <div class="logo">
         <span class="logo-initials">R</span>
-        <span class="logo-name">RallyNex</span>
+        
       
     </div>
 </div>
@@ -1178,10 +1204,10 @@ document.addEventListener("DOMContentLoaded", function() {
     
     <audio id="bgAudio" autoplay loop></audio>
         <nav id="navbar" class="navbar">
-         
+         <span id="popupClose" class="popup-close">&times;</span>
     <ul>
        <li>
-  <a href="{% url 'home' %}" style="color: black; position: relative;">
+  <a href="{% url 'home' %}" style="color: white; position: relative;">
     <i class="fas fa-home"></i> Home
     {% if new_campaigns_from_follows %}
         <span id="home-alert" class="alert-badge">{{ new_campaigns_from_follows.count }}</span> <!-- Red alert spot -->
@@ -1189,11 +1215,11 @@ document.addEventListener("DOMContentLoaded", function() {
 </a>
 
 </li>
-        <li><a href="{% url 'public_campaign' %}" style="color: black;"><i class="fas fa-globe"></i> Public Campaigns</a></li>
-        <li><a href="{% url 'private_campaign' %}" style="color: black;"><i class="fas fa-lock"></i> Private Campaigns</a></li>
-        <li><a href="{% url 'user_chats' %}" style="color: black;"><i class="fas fa-comment-alt"></i> Chat Table</a></li>
+        <li><a href="{% url 'public_campaign' %}" style="color: white;"><i class="fas fa-globe"></i> Public Campaigns</a></li>
+        <li><a href="{% url 'private_campaign' %}" style="color: white;"><i class="fas fa-lock"></i> Private Campaigns</a></li>
+        <li><a href="{% url 'user_chats' %}" style="color: white;"><i class="fas fa-comment-alt"></i> Chat Table</a></li>
         <li>
-    <a href="{% url 'notification_list' %}" style="color: black; position: relative;">
+    <a href="{% url 'notification_list' %}" style="color: white; position: relative;">
         <i class="fas fa-bell"></i>
         {% if unread_notifications %}
             <span id="notification-alert" class="alert-badge">{{ unread_notifications.count }}</span>
@@ -1202,11 +1228,11 @@ document.addEventListener("DOMContentLoaded", function() {
     </a>
 </li>
 
-        <li><a href="{% url 'suggest' %}" style="color: black;"><i class="fas fa-user-friends"></i> Suggested Users</a></li>
+        <li><a href="{% url 'suggest' %}" style="color: white;"><i class="fas fa-user-friends"></i> Suggested Users</a></li>
         <!-- Add logout link here -->
                 <li>
-          <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-    <i class="fas fa-sign-out-alt"></i> Logout
+          <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"  style="color:black;">
+    <i class="fas fa-sign-out-alt" style="color:red;"></i> Logout
 </a>
 
 <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
@@ -1306,7 +1332,7 @@ document.addEventListener("DOMContentLoaded", function() {
       </div></br>
 
     
-    <div style="border-left: 2px solid #3498db; height: 600px; overflow-y: auto; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+    <div style="border-left: 2px solid #3498db; height: 600px; overflow-y: auto;overflow-x: hidden; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
     <p style="padding: 15px">{% block content %} {% endblock %}</p>
     </div>
 </section>

@@ -4,6 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <!-- Google Site Verification Meta Tag -->
   <meta name="google-site-verification" content="2IjHwnbJp2eoJ42Ec2-vy5FHzwfpyA4qxZlA2Ct1lW8" />
 
@@ -86,13 +88,15 @@ main {
     }
 
 section {
-  flex: 3; /* Make the middle section wider */
+  flex: 3; /* Ensure it remains flexible within its parent */
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 100%; /* Make the width 100% */
+  width: 100%; /* Ensure it takes full width of its container */
+  max-width: 750px; /* Set the maximum width you desire */
   padding: 0; /* Remove padding */
   box-sizing: border-box; /* Include padding and border in the element's total width and height */
   border: 1px solid whitesmoke; /* Optional: Set border */
+  margin: 0 auto; /* Center the section horizontally within its container */
 }
 
 
@@ -368,7 +372,14 @@ border: 1px solid silver;
 
   }
 
-
+/* Mobile styles */
+@media only screen and (max-width: 600px) {
+    .reaction-count,
+    .comment-count {
+        font-size: 12px;
+        margin-left: 3px;
+    }
+}
 
 
 
@@ -464,32 +475,99 @@ border: 1px solid silver;
 
 
 
-    /* Add custom styles for the activities and support links */
+  /* Base styles for both activity and support links */
+.activity-link,
+.support-link {
+    position: absolute;
+    top: 10px;
+    padding: 16px;
+    border-radius: 50%;
+    z-index: 2;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 24px; /* Adjust font size for mobile if necessary */
+    display: inline-block;
+    text-align: center;
+}
+
+/* Specific styles for the Activities link (left side) */
+.activity-link {
+    left: 10px;
+    color: white;
+    background-color: black;
+}
+
+/* Specific styles for the Support link (right side) */
+.support-link {
+    right: 10px;
+    color: black;
+    background-color: white;
+}
+
+/* Shared styles for the labels below the icons */
+.icon-label {
+    visibility: hidden;
+    width: auto;
+    max-width: 150px; /* Adjusted maximum width for smaller screens */
+    background: linear-gradient(135deg, #f06, #f79);
+    color: white;
+    text-align: center;
+    border-radius: 12px;
+    padding: 8px 12px; /* Adjust padding for smaller screens */
+    position: absolute;
+    z-index: 1;
+    top: 100%; /* Position below the icon */
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s;
+    font-size: 12px; /* Adjust font size for mobile */
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    white-space: normal;
+    overflow-wrap: break-word;
+    box-sizing: border-box;
+    word-wrap: break-word;
+}
+
+/* Tooltip arrow pointing up, located below the icon */
+.icon-label::after {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 8px; /* Adjusted for smaller screens */
+    border-style: solid;
+    border-color: transparent transparent #f79 transparent;
+}
+
+/* Hover effect to show the label */
+.activity-link:hover .icon-label,
+.support-link:hover .icon-label {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-50%) translateY(5px);
+}
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
     .activity-link,
     .support-link {
-        position: absolute;
-        top: 10px;
-        padding: 10px;
-        border-radius: 10px;
-        z-index: 2;
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 12px;
+        font-size: 20px; /* Adjust icon size for smaller screens */
+        padding: 10px; /* Reduce padding for smaller screens */
     }
 
-    /* Style for the Activities link */
-    .activity-link {
-        left: 10px;
-        color: white;
-        background-color: black;
+    .icon-label {
+        max-width: 120px; /* Adjusted maximum width for even smaller screens */
+        padding: 6px 10px; /* Reduce padding for smaller screens */
+        font-size: 11px; /* Adjust font size for readability */
     }
 
-    /* Style for the Support link */
-    .support-link {
-        right: 10px;
-        color: black;
-        background-color: white;
+    .icon-label::after {
+        border-width: 6px; /* Smaller arrow size for mobile */
     }
+}
 
 
 
@@ -632,6 +710,21 @@ border: 1px solid silver;
     margin-right: 10px; /* Add space between the checkbox and label */
 }
 
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+    .not-interested-form {
+        display: flex; /* Display form items in a column */
+        flex-direction: column; /* Stack items vertically */
+        align-items: flex-start; /* Align items to the start */
+    }
+
+    /* Style for the checkbox label on mobile */
+    .not-interested-form label {
+        margin-right: 0; /* Remove right margin for mobile */
+        margin-bottom: 10px; /* Add space below each label for vertical stacking */
+    }
+}
 /* Style for the submit button */
 .submit-button {
     background-color: #007bff; /* Set button background color */
@@ -1017,7 +1110,7 @@ border: 1px solid silver;
     color: #888; /* Light grey color */
     background-color: #f5f5f5; /* Very light grey background */
     border: 1px solid #ccc; /* Light border */
-    padding: 6px 12px; /* Padding adjusted */
+    padding:5px; /* Padding adjusted */
     border-radius: 3px; /* Slight border radius */
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; /* Smooth transition */
     display: flex; /* Use flexbox for layout */
@@ -1043,66 +1136,67 @@ border: 1px solid silver;
         display: flex; /* Ensure it's flex on smaller screens too */
        width: 100%;
         top: 10px;
-        left: 10px; /* Position on the left side */
+        left: 0; /* Position on the left side */
     }
 }
 
 
-.navbar {
-    display: none; /* Initially hidden, shown via JavaScript */
 
-  
+
+/* Overlay effect for the navbar */
+.navbar {
+    display: none; /* Hidden by default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    backdrop-filter: blur(3px); /* Blur effect */
+    z-index: 1000; /* Ensure it appears above other content */
+    overflow-y: auto; /* Allow scrolling if content is too long */
 }
 
+/* Style for the popup (navbar) */
 .navbar ul {
+
     margin: 0;
     padding: 0;
+    list-style: none; /* Remove bullets */
     display: flex;
-  
-   
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
+    justify-content: center; /* Center items vertically */
+    height: 100%; /* Full height */
 }
 
 .navbar li {
-  /* Ensure the bullets are positioned relative to the list items */
-    padding-left: 10px; /* Add padding to the left of each list item */
-}
+    padding: 10px;
 
-.navbar li::before {
-    content: "•"; /* Unicode character for a bullet point */
-    
-    left: 0; /* Adjust the position as needed */
-    font-size: 20px; /* Adjust the size of the bullet point */
-    line-height: 1;
-     /* Ensure the bullet color matches the text */
 }
 
 .navbar a {
     text-decoration: none;
-    color: black;
-    padding-left: 10px; /* Ensure text starts after the bullet point */
+    color: white; /* Change text color for better visibility */
+    font-size: 18px; /* Adjust font size */
+    padding: 10px 20px;
+    display: block;
 }
 
-@media (max-width: 768px) {
-    .navbar-toggle {
-        display: block;
-    }
-
-    .navbar ul {
-        flex-direction: column;
-    }
-
-    .navbar li {
-  padding-left: 10px;
-  text-align: left;
-    }
+.navbar .popup-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+    z-index: 1001; /* Ensure close button is above other content */
 }
 
-/* Media query for larger screens */
-@media (min-width: 769px) {
-    #navbar {
-        display: none; /* Hide the navbar on larger screens */
-    }
+.navbar .popup-close:hover {
+    color: red; /* Change color on hover */
 }
+
 
   </style>
 
@@ -1314,7 +1408,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <div class="logo-container">
     <div class="logo">
         <span class="logo-initials">R</span>
-        <span class="logo-name">RallyNex</span>
+        
       
     </div>
 </div>
@@ -1342,12 +1436,11 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
     
     <audio id="bgAudio" autoplay loop></audio>
-
         <nav id="navbar" class="navbar">
-         
+         <span id="popupClose" class="popup-close">&times;</span>
     <ul>
        <li>
-  <a href="{% url 'home' %}" style="color: black; position: relative;">
+  <a href="{% url 'home' %}" style="color: white; position: relative;">
     <i class="fas fa-home"></i> Home
     {% if new_campaigns_from_follows %}
         <span id="home-alert" class="alert-badge">{{ new_campaigns_from_follows.count }}</span> <!-- Red alert spot -->
@@ -1355,11 +1448,11 @@ document.addEventListener('DOMContentLoaded', function() {
 </a>
 
 </li>
-        <li><a href="{% url 'public_campaign' %}" style="color: black;"><i class="fas fa-globe"></i> Public Campaigns</a></li>
-        <li><a href="{% url 'private_campaign' %}" style="color: black;"><i class="fas fa-lock"></i> Private Campaigns</a></li>
-        <li><a href="{% url 'user_chats' %}" style="color: black;"><i class="fas fa-comment-alt"></i> Chat Table</a></li>
+        <li><a href="{% url 'public_campaign' %}" style="color: white;"><i class="fas fa-globe"></i> Public Campaigns</a></li>
+        <li><a href="{% url 'private_campaign' %}" style="color: white;"><i class="fas fa-lock"></i> Private Campaigns</a></li>
+        <li><a href="{% url 'user_chats' %}" style="color: white;"><i class="fas fa-comment-alt"></i> Chat Table</a></li>
         <li>
-    <a href="{% url 'notification_list' %}" style="color: black; position: relative;">
+    <a href="{% url 'notification_list' %}" style="color: white; position: relative;">
         <i class="fas fa-bell"></i>
         {% if unread_notifications %}
             <span id="notification-alert" class="alert-badge">{{ unread_notifications.count }}</span>
@@ -1368,11 +1461,11 @@ document.addEventListener('DOMContentLoaded', function() {
     </a>
 </li>
 
-        <li><a href="{% url 'suggest' %}" style="color: black;"><i class="fas fa-user-friends"></i> Suggested Users</a></li>
+        <li><a href="{% url 'suggest' %}" style="color: white;"><i class="fas fa-user-friends"></i> Suggested Users</a></li>
         <!-- Add logout link here -->
                 <li>
-          <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-    <i class="fas fa-sign-out-alt"></i> Logout
+          <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"  style="color:black;">
+    <i class="fas fa-sign-out-alt" style="color:red;"></i> Logout
 </a>
 
 <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
@@ -1497,7 +1590,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       <h2 style="font-size:19px; padding-left: 20px;">Campaign_Detail</h2>
 
-    <div style="border-left: 2px solid #3498db; height: 600px; overflow-y: auto; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+    <div style="border-left: 2px solid #3498db; height: 600px; overflow-y: auto; overflow-x: hidden; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
 <div class="container-with-border">
     <div class="upper-post">
         <div class="profile-pic">
@@ -1528,9 +1621,12 @@ document.addEventListener('DOMContentLoaded', function() {
 <div class="file-container">
     <div style="position: relative;">
         <!-- Apply the custom classes to the links -->
-        <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="activity-link">Activities</a>
-        <a href="{% url 'support' campaign_id=campaign.id %}" class="support-link">Participate</a>
-
+        <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="activity-link"><i style='font-size:24px' class='fas'>&#xf6e3;</i> 
+            <span class="icon-label">Activities</span>
+            </a>
+            <a href="{% url 'support' campaign_id=campaign.id %}" class="support-link"><i class="material-icons"style="font-size:24px;">&#xe925;</i>
+             <span class="icon-label">Participate</span>
+            </a>
              
         {% if campaign.file %}
             <a href="{{ campaign.file.url }}">
@@ -1596,9 +1692,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 <div class="campaign-actions">
-    <a href="{% url 'report_campaign' campaign_id=campaign.id %}" class="report-link">🚨Report Campaign</a>
+    <a href="{% url 'report_campaign' campaign_id=campaign.id %}" class="report-link">🚨Report cmpgn</a>
      {% if request.user.is_authenticated and request.user.profile == campaign.user %}
-        <a href="{% url 'recreate_campaign' campaign.id %}" class="report-link">✏️Recreate Campaign</a>
+        <a href="{% url 'recreate_campaign' campaign.id %}" class="report-link">✏️Recreate cmpgn </a>
     {% endif %}
 
     <form action="{% url 'mark_not_interested' campaign_id=campaign.pk %}" method="post" class="not-interested-form">
@@ -1854,9 +1950,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
+</script>
+
+
+<script type="text/javascript">
+  
 document.addEventListener("DOMContentLoaded", function() {
     const navbarToggle = document.getElementById("navbarToggle");
     const navbar = document.getElementById("navbar");
+    const popupClose = document.getElementById("popupClose");
 
     // Toggle navbar visibility
     navbarToggle.addEventListener("click", function() {
@@ -1865,6 +1967,11 @@ document.addEventListener("DOMContentLoaded", function() {
         } else {
             navbar.style.display = "block";
         }
+    });
+
+    // Close popup when clicking the close button
+    popupClose.addEventListener("click", function() {
+        navbar.style.display = "none";
     });
 
     // Adjust navbar display on window resize
@@ -1886,8 +1993,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
-
 </script>
-
 </body>
 </html>

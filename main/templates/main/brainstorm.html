@@ -181,12 +181,7 @@
         </div>
 
         <h2 style="font-size:19px;">Brainstorm New Idea</h2>
-<ul class="nav-list">
-    <li><a href="{% url 'library_affiliates' %}"><i class="fas fa-book-open"></i> Discover In-Depth Knowledge</a></li>
-</ul>
-<ul class="nav-list">
-    <li><a href="{% url 'news_affiliates' %}"><i class="fas fa-newspaper"></i> Stay Informed with Latest News</a></li>
-</ul>
+
 
         <form method="post" class="custom-form">
             {% csrf_token %}
@@ -194,7 +189,12 @@
             <button type="submit" class="custom-button" style="margin-top: 10px;">Submit Idea</button>
         </form>
     </div>
-
+<ul class="nav-list">
+    <li><a href="{% url 'library_affiliates' %}"><i class="fas fa-book-open"></i> Discover In-Depth Knowledge</a></li>
+</ul>
+<ul class="nav-list">
+    <li><a href="{% url 'news_affiliates' %}"><i class="fas fa-newspaper"></i> Stay Informed with Latest News</a></li>
+</ul>
     <script src="{% static 'tinymce/tinymce.min.js' %}"></script>
     <script>
         tinymce.init({

@@ -222,9 +222,15 @@ function switchColor() {
 
 
 
+
+</script>
+
+<script type="text/javascript">
+    
 document.addEventListener("DOMContentLoaded", function() {
     const navbarToggle = document.getElementById("navbarToggle");
     const navbar = document.getElementById("navbar");
+    const popupClose = document.getElementById("popupClose");
 
     // Toggle navbar visibility
     navbarToggle.addEventListener("click", function() {
@@ -233,6 +239,11 @@ document.addEventListener("DOMContentLoaded", function() {
         } else {
             navbar.style.display = "block";
         }
+    });
+
+    // Close popup when clicking the close button
+    popupClose.addEventListener("click", function() {
+        navbar.style.display = "none";
     });
 
     // Adjust navbar display on window resize
@@ -253,12 +264,7 @@ document.addEventListener("DOMContentLoaded", function() {
         navbar.style.display = "none"; // or "block" based on your initial requirement
     }
 });
-
-
-
 </script>
-
-
   <div class="report-form-container">
     <h2 style="font-size: 19px;padding-left: 20px;">Report Campaign: {{ campaign.title }}</h2>
     <form method="post" class="report-form">

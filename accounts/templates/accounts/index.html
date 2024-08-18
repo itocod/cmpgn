@@ -76,7 +76,7 @@
       text-align: center;
       max-width: 1200px;
       margin: auto;
-      padding: 20px;
+      padding: 0;
     }
 
     .header {
@@ -87,6 +87,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      padding: 0;
     }
 
     .title {
@@ -175,66 +176,13 @@
       color: #3742fa;
     }
 
-    /* Skeleton screen styles */
-    .skeleton-wrapper {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
-      background: #f0f0f0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      transition: opacity 0.3s ease;
-    }
-    .skeleton {
-      width: 80%;
-      max-width: 1200px;
-      background: #e0e0e0;
-      border-radius: 4px;
-      overflow: hidden;
-    }
-    .skeleton-header {
-      height: 60px;
-      margin-bottom: 20px;
-      background: #d0d0d0;
-    }
-    .skeleton-content {
-      height: 200px;
-      margin-bottom: 20px;
-      background: #d0d0d0;
-    }
-    .skeleton-footer {
-      height: 40px;
-      background: #d0d0d0;
-    }
-    @keyframes pulse {
-      0% {
-        background-color: #e0e0e0;
-      }
-      50% {
-        background-color: #d0d0d0;
-      }
-      100% {
-        background-color: #e0e0e0;
-      }
-    }
-    .skeleton-header, .skeleton-content, .skeleton-footer {
-      animation: pulse 1.5s infinite ease-in-out;
-    }
+  
   </style>
 </head>
 <body>
-  <!-- Skeleton Screen -->
-  <div class="skeleton-wrapper" id="skeleton-screen">
-    <div class="skeleton">
-      <div class="skeleton-header"></div>
-      <div class="skeleton-content"></div>
-      <div class="skeleton-footer"></div>
-    </div>
+  <!-- Spinner -->
+  <div class="spinner-wrapper" id="spinner-screen">
+    <div class="spinner"></div>
   </div>
 
   <!-- Main Content -->
@@ -267,35 +215,24 @@
       <h2>Success Stories</h2>
       <div class="story">
         <img src="{% static 'main/files/advo.jpg' %}" alt="Success Story 1">
-        <p>Learn how individuals and communities have made an impact through our platform.</p>
+        <p>Learn how our community has achieved remarkable milestones through RallyNex.</p>
       </div>
       <div class="story">
         <img src="{% static 'main/files/fund.jpg' %}" alt="Success Story 2">
-        <p>See real examples of projects that have achieved their goals with RallyNex.</p>
+        <p>Explore inspiring stories of projects that made a significant impact.</p>
       </div>
     </section>
 
     <footer class="footer">
       <p>&copy; 2024 RallyNex. All rights reserved.</p>
       <div class="social-links">
-        <a href="https://facebook.com/RallyNex" target="_blank">Facebook</a>
-        <a href="https://twitter.com/RallyNex" target="_blank">Twitter</a>
+        <a href="https://www.facebook.com/RallyNex" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://twitter.com/RallyNex" target="_blank" rel="noopener noreferrer"><i class="fab fa-twitter"></i></a>
+        <a href="https://www.instagram.com/RallyNex" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
       </div>
     </footer>
   </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const skeletonScreen = document.getElementById('skeleton-screen');
-      window.addEventListener('load', () => {
-        setTimeout(() => {
-          skeletonScreen.style.opacity = '0';
-          setTimeout(() => {
-            skeletonScreen.style.display = 'none';
-          }, 300); // match the transition time
-        }, 100); // delay to ensure full page load
-      });
-    });
-  </script>
+ 
 </body>
 </html>

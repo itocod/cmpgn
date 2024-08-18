@@ -68,7 +68,7 @@
  <h2 style="font-size:19px; padding-left: 20px;">Activity_Detail</h2>
 
  
-    <div style="border-left: 2px solid #3498db; height: 300px; overflow-y: auto; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+    <div style="border-left: 2px solid #3498db; height: 300px; overflow-y: auto;overflow-x: hidden; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
     
     <div class="container">
         {% if activity.campaign %}
@@ -252,9 +252,14 @@ function switchColor() {
 
 
 
+
+</script>
+<script type="text/javascript">
+     
 document.addEventListener("DOMContentLoaded", function() {
     const navbarToggle = document.getElementById("navbarToggle");
     const navbar = document.getElementById("navbar");
+    const popupClose = document.getElementById("popupClose");
 
     // Toggle navbar visibility
     navbarToggle.addEventListener("click", function() {
@@ -263,6 +268,11 @@ document.addEventListener("DOMContentLoaded", function() {
         } else {
             navbar.style.display = "block";
         }
+    });
+
+    // Close popup when clicking the close button
+    popupClose.addEventListener("click", function() {
+        navbar.style.display = "none";
     });
 
     // Adjust navbar display on window resize
@@ -283,7 +293,6 @@ document.addEventListener("DOMContentLoaded", function() {
         navbar.style.display = "none"; // or "block" based on your initial requirement
     }
 });
-
 
 </script>
 </body>

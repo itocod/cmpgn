@@ -9,113 +9,154 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ campaign.title }} Comments</title>
+    <title >{{ campaign.title }} Comments</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emojionearea/dist/emojionearea.min.css">
-    <style>
-        /* Add your custom CSS styles here */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            color: #333;
-        }
-        h1, h2 {
-            text-align: center;
-            font-size: 19px;
-        }
-        #commentsList {
-            list-style-type: none;
-            padding: 0;
-        }
-        #commentsList li {
-            margin-bottom: 10px;
-            border: 1px solid grey;
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        #commentsList li strong {
-            color: #007bff;
-        }
-        #noCommentsMessage {
-            font-style: italic;
-        }
-        #successMessage {
-            text-align: center;
-            margin-bottom: 10px;
-            color: green;
-        }
-   #commentForm {
-        max-width: 600px;
-        margin: 0 auto;
-        padding: 30px;
-        background-color: #fff;
-        border-radius: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    #commentForm textarea {
-        width: 100%;
-        min-height: 100px;
-        padding: 10px;
-        margin-bottom: 20px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        resize: vertical;
-    }
-    #commentForm button {
-        display: block;
-        width: 100%;
-        padding: 10px;
-        border: none;
-        background-color: #007bff;
-        color: #fff;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-    #commentForm button:hover {
-        background-color: #0056b3;
-    }
+<style type="text/css">
+    /* Add your custom CSS styles here */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    color: #333;
+}
 
+h1, h2 {
+    text-align: center;
+    font-size: 19px;
+}
 
-     .action-item {
-            display: inline-block;
-            padding: 10px 20px;
-            margin-right: 10px;
-            border-radius: 5px;
-            text-align: center;
-            font-size: 12px; /* Adjust the font size as needed */
-        }
-        .action-item a {
-           color: #000;
-            text-decoration: none;
-            font-size: inherit;
-        }
-        .action-item i {
-            margin-right: 5px;
-        }
+#commentsList {
+    list-style-type: none;
+    padding: 0;
+}
 
-                .profile-pic {
-  flex-shrink: 0;
-  margin-right: 20px;
+#commentsList li {
+    margin-bottom: 10px;
+    border: 1px solid grey;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#commentsList li strong {
+    color: #007bff;
+}
+
+#noCommentsMessage {
+    font-style: italic;
+}
+
+#successMessage {
+    text-align: center;
+    margin-bottom: 10px;
+    color: green;
+}
+
+#commentForm {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#commentForm textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: vertical;
+}
+
+#commentForm button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#commentForm button:hover {
+    background-color: #0056b3;
+}
+
+.action-item {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-right: 10px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 12px;
+}
+
+.action-item a {
+    color: #000;
+    text-decoration: none;
+    font-size: inherit;
+}
+
+.action-item i {
+    margin-right: 5px;
+}
+
+.profile-pic {
+    flex-shrink: 0;
+    margin-right: 20px;
 }
 
 .profile-pic img {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  object-fit: cover;
-  
-  padding: 2px; /* Add padding here */
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  transition: border-color 0.3s ease;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    padding: 2px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease;
 }
 
 .profile-pic:hover img {
-  border-color: #00FF00;
+    border-color: #00FF00;
 }
 
-    </style>
+/* Mobile styles */
+@media (max-width: 600px) {
+    h1, h2 {
+        font-size: 16px;
+    }
+
+    #commentForm {
+        padding: 20px;
+    }
+
+    #commentForm textarea {
+        min-height: 80px;
+    }
+
+    .action-item {
+        display: block;
+        padding: 10px;
+        margin-bottom: 10px;
+        font-size: 14px;
+    }
+
+    .profile-pic {
+        margin-right: 10px;
+    }
+
+    .profile-pic img {
+        width: 36px;
+        height: 36px;
+    }
+}
+
+</style>
    
            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/emojionearea/dist/emojionearea.min.js"></script>
@@ -158,7 +199,7 @@
 
 
         <h2 style="font-size: 19px; padding-left: 20px;">Campaign_Comment</h2>
-    <h2 style="font-size: 19px;padding-left: 20px;">{{ campaign.title }} Comments</h2>
+    <h2 style="font-size: 19px;padding-left: 20px;text-decoration: underline;">{{ campaign.title }} Comments</h2>
     
     <ul id="commentsList">
               
@@ -183,9 +224,10 @@
             <li>No comments yet.</li>
         {% endfor %}
     </ul>
-    <h2>Add a Comment:</h2>
+    
     <div id="message" style="padding: 20px;"></div>
     <form id="commentForm">
+        <h4 style="color:blueviolet;">Add a Comment:</h4>
         {% csrf_token %}
         <textarea id="commentText" name="text"></textarea>
         <button type="submit">Submit</button>

@@ -4,171 +4,264 @@
     <!-- Include FontAwesome CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-*********" crossorigin="anonymous" />
     
-    <style>
-        /* Custom CSS styles */
+<style>
+    .activity-container {
+        flex: 3;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 750px;
+        padding: 0;
+        box-sizing: border-box;
+        border: 1px solid whitesmoke;
+        margin: 0 auto;
+    }
+
+    .activity-image, #activity-media {
+        max-width: 100%;
+        height: auto;
+        border-radius: 5px;
+        transition: transform 0.3s ease;
+    }
+
+    .create-activity-link {
+        display: inline-block;
+        text-align: center;
+        margin-bottom: 20px;
+        width: 100%;
+        color: #fff;
+        background-color: #007bff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+    .create-activity-link:hover {
+        background-color: #0056b3;
+    }
+
+    .activity-title {
+        font-size: 19px;
+        color: #333;
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .activity-list {
+        list-style-type: none;
+        padding: 0;
+        margin-top: 20px;
+    }
+
+    .activity-item {
+        margin-bottom: 40px;
+        border-radius: 10px;
+        border: 1px solid silver;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
+        padding-bottom: 40px;
+        position: relative;
+        width: 100%;
+    }
+
+    .activity-content {
+        margin-bottom: 20px;
+        padding: 20px;
+    }
+
+    .activity-media {
+        width: 100%;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .activity-timestamp {
+        color: #777;
+        font-style: italic;
+        font-size: 14px;
+        margin-top: 10px;
+        padding-left: 5px;
+        text-align: left;
+    }
+
+    .love-icon, .comment-icon {
+        padding: 10px;
+        position: absolute;
+        bottom: 5px;
+        color: #777;
+        font-size: 19px;
+        cursor: pointer;
+        transition: color 0.3s ease;
+        border: 0 solid silver;
+        border-radius: 10px;
+        background-color: #F5F5F5;
+        transition: box-shadow 0.3s;
+    }
+
+    .love-icon {
+        right: 10px;
+    }
+
+    .comment-icon {
+        right: 60px;
+    }
+
+    .love-icon:hover, .comment-icon:hover {
+        color: #ff4500;
+        border-color: #ff4500;
+        background-color: white;
+        box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .love-comment-count {
+        position: absolute;
+        bottom: 10px;
+        left: 10px;
+        font-size: 14px;
+        color: #777;
+    }
+
+    .no-activities {
+        text-align: center;
+        font-style: italic;
+        color: #777;
+        margin-top: 30px;
+    }
+
+    .see-more-button {
+        color: #fff;
+        cursor: pointer;
+        text-decoration: underline;
+        display: inline-block;
+        margin-top: 10px;
+    }
+
+    .file-container {
+        position: relative;
+        border: 1px solid silver;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    #activity-media {
+        max-width: 100%;
+        height: auto;
+        border-radius: 5px;
+        transition: transform 0.3s ease;
+    }
+
+    .activity-content-short, .activity-content-full {
+        margin-bottom: 10px;
+        font-size: 16px;
+        line-height: 1.5;
+    }
+
+    .see-more-text {
+        color: #3498db;
+        cursor: pointer;
+    }
+
+    .see-more-text:hover {
+        text-decoration: underline;
+    }
+
+    .action-item {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-right: 10px;
+        border-radius: 5px;
+        text-align: center;
+        font-size: 12px;
+    }
+
+    .action-item a {
+        color: #000;
+        text-decoration: none;
+        font-size: inherit;
+    }
+
+    .action-item i {
+        margin-right: 5px;
+    }
+
+    /* Mobile Responsive Styles */
+    @media (max-width: 768px) {
         .activity-container {
-            max-width: 1000px; /* Increased max-width for activity items */
-            margin: 20px auto;
             padding: 0;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Soft shadow */
+            max-width: 100%;
         }
-        .create-activity-link {
-            display: inline-block;
-            text-align: center;
-            margin-bottom: 20px;
-            width: 100%;
-            color: #fff;
-            background-color: #007bff; /* Blue button color */
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: background-color 0.3s ease;
-        }
-        .create-activity-link:hover {
-            background-color: #0056b3; /* Darker blue on hover */
-        }
+
         .activity-title {
-            font-size: 19px; /* Larger title */
-            color: #333; /* Dark gray title color */
-            text-align: center;
-            margin-bottom: 30px; /* More space below the title */
-        }
-        .activity-list {
-            list-style-type: none;
-            padding: 0;
-            margin-top: 20px;
-        }
-        .activity-item {
-            margin-bottom: 40px; /* Increased space between items */
-            border-radius: 10px;
-            border: 1px solid silver;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05); /* Soft shadow */
-            padding-bottom: 40px; /* Make space for icons */
-            position: relative; /* Ensure relative positioning for absolute positioning of icons */
-            width: 100%; /* Set width to 100% to expand to container width */
-        }
-        .activity-content {
+            font-size: 18px;
             margin-bottom: 20px;
-            padding: 20px;
         }
-        .activity-media {
-            width: 100%;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
+
+        .activity-item {
+            margin-bottom: 30px;
+            padding-bottom: 30px;
         }
-        .activity-timestamp {
-            color: #777;
-            font-style: italic;
-            font-size: 14px;
-            margin-top: 10px; /* Space above timestamp */
-            padding-left: 5px;
-            text-align: left; /* Left align timestamp */
-        }
-        .love-icon,
-        .comment-icon {
-            padding: 10px;
-            position: absolute; /* Position icons absolutely */
-            bottom: 5px; /* Distance from the bottom */
-            color: #777; /* Light gray icon color */
-            font-size: 19px;
-            cursor: pointer;
-            transition: color 0.3s ease;
-            border: 0 solid silver; /* Add a silver border */
-            border-radius: 10px;
-            background-color: #F5F5F5; /* Setting initial background color */
-            transition: box-shadow 0.3s; /* Adding transition for smoother hover effect */
-        }
-        .love-icon {
-            right: 10px;
-             /* Position the love icon */
-        }
-        .comment-icon {
-            right: 60px; /* Adjust position to separate from love icon */
-        }
-        .love-icon:hover,
-        .comment-icon:hover {
-            color: #ff4500; /* Orange on hover for both icons */
-            border-color: #ff4500;
-            background-color: white; /* Changing background color to a lighter shade of silver on hover or focus */
-            box-shadow: 0 0 8px rgba(0, 0, 0, 0.1); /* Adding box shadow on hover or focus */
-        }
-        .love-comment-count {
-            position: absolute;
+
+        .love-icon, .comment-icon {
+            font-size: 16px;
             bottom: 10px;
-            left: 10px;
-            font-size: 14px;
-            color: #777;
-        }
-        .no-activities {
-            text-align: center;
-            font-style: italic;
-            color: #777;
-            margin-top: 30px; /* Space above message */
-        }
-        /* Button styling */
-        .see-more-button {
-            color: #fff;
-            cursor: pointer;
-            text-decoration: underline;
-            display: inline-block;
-            margin-top: 10px;
-        }
-        .file-container {
-            position: relative;
-            border: 1px solid silver; /* Border color */
-            border-radius: 5px;
-            overflow: hidden; /* Ensure the border doesn't overflow */
-        }
-        #activity-media {
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px; /* Border radius for the image */
-            transition: transform 0.3s ease; /* Add transition for smooth transformation */
-        }
-        .activity-image {
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px; /* Border radius for the image */
-            transition: transform 0.3s ease; /* Add transition for smooth transformation */
-        }
-        /* Apply styles when hovering over the image */
-        #activity-image:hover {
-            transform: scale(1.05); /* Scale the image slightly on hover */
-        }
-        .activity-content-short,
-        .activity-content-full {
-            margin-bottom: 10px; /* Add margin for spacing */
-            font-size: 16px; /* Adjust font size */
-            line-height: 1.5; /* Adjust line height */
-        }
-        .see-more-text {
-            color: #3498db; /* Set color for clickable text */
-            cursor: pointer;
-        }
-        .see-more-text:hover {
-            text-decoration: underline; /* Underline on hover */
         }
 
+        .love-comment-count {
+            font-size: 13px;
+            bottom: 5px;
+        }
 
-     .action-item {
-            display: inline-block;
-            padding: 10px 20px;
-            margin-right: 10px;
-            border-radius: 5px;
-            text-align: center;
-            font-size: 12px; /* Adjust the font size as needed */
+        .create-activity-link {
+            font-size: 16px;
+            padding: 8px 16px;
         }
-        .action-item a {
-           color: #000;
-            text-decoration: none;
-            font-size: inherit;
+
+        .activity-content {
+            padding: 15px;
         }
-        .action-item i {
+
+        .action-item {
+            padding: 8px 15px;
+            font-size: 11px;
             margin-right: 5px;
         }
-    </style>
+    }
+
+    @media (max-width: 480px) {
+        .activity-title {
+            font-size: 16px;
+        }
+
+        .love-icon, .comment-icon {
+            font-size: 14px;
+            right: 8px;
+        }
+
+        .comment-icon {
+            right: 50px;
+        }
+
+        .love-comment-count {
+            font-size: 12px;
+        }
+
+        .create-activity-link {
+            font-size: 14px;
+            padding: 6px 12px;
+        }
+
+        .action-item {
+            padding: 6px 10px;
+            font-size: 10px;
+        }
+
+        .activity-content {
+            padding: 10px;
+        }
+    }
+</style>
+
 
     <script>
         // Function to handle loving an activity
@@ -286,7 +379,13 @@
                             </div>
                         {% endif %}
 
-                        <div class="activity-timestamp">Posted: {{ activity.timestamp|timesince }} ago</div>
+                        <div class="activity-timestamp">
+
+
+                            Posted: {{ activity.timestamp|timesince }} ago.
+
+<a href="{% url 'activity_detail' activity_id=activity.id %}" style="padding-left: 5px; font-size: 15px; color: gray;">View Activity Details</a>
+                        </div>
                         <div class="file-container">
                             <div style="position: relative;">
                                 {% if activity.file %}
@@ -313,11 +412,12 @@
                         
                         <!-- Social media sharing buttons -->
                         <div style="padding-left: 5px;">
+
                             Share on:
                             <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a>
                             <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}" target="_blank" rel="noopener noreferrer"><i class="fab fa-twitter"></i></a>
                             <a href="https://www.linkedin.com/shareArticle?url={{ request.build_absolute_uri }}" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i></a>
-                            <a href="{% url 'activity_detail' activity_id=activity.id %}" style="padding-left: 5px; font-size: 15px; color: gray;">View Activity Details</a>
+                            
                             <!-- Add more social media sharing buttons as needed -->
                         </div>
                     </li>
