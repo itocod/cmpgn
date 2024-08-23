@@ -178,21 +178,19 @@ class ProfileForm(forms.ModelForm):
         }
 
 
-
-
 class CampaignForm(forms.ModelForm):
     emoji_shortcode = forms.CharField(max_length=50, required=False, label='Emoji Shortcut')
-
+   
     class Meta:
         model = Campaign
-        fields = ['title', 'content', 'file', 'visibility', 'category']
+        fields = ['title', 'content', 'poster', 'visibility', 'category']
         labels = {
             'title': 'Title:',
             'content': 'Content:',
-            'file': 'File:',
+            'poster': 'poster:',
             'visibility': 'Visibility:',
             'category': 'Category:',
-            
+           
         }
 
 

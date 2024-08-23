@@ -1,15 +1,23 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <!-- Google Site Verification Meta Tag -->
+  <meta name="google-site-verification" content="2IjHwnbJp2eoJ42Ec2-vy5FHzwfpyA4qxZlA2Ct1lW8" />
+
+  <!-- bing Site Verification Meta Tag -->
+  <meta name="msvalidate.01" content="2DF73531AC8292B0D47E7DEAE6EEF4CF" />
+
+  <!-- yandex Site Verification Meta Tag -->
+  <meta name="yandex-verification" content="27149014e6b080dd" />
+
   <!-- Meta Tags for SEO -->
   <meta name="description" content="Support campaigns and causes on RallyNex. Join our community to create, share, and back projects that matter to you.">
-    <meta name="keywords" content="crowdfunding, campaigns, community support, fundraising, donate, social impact, nonprofit, projects, backers, creators, charity,Environmental Conservation,Community Development,Health and Wellness,        Equality and Inclusion,Animal Welfare,Humanitarian Aid
-    Sustainable Development,Peace and Conflict Resolution
-    Digital Rights,Economic Empowerment,Policy Advocacy,Artistic Advocacy">
+  <meta name="keywords" content="crowdfunding, campaigns, community support, fundraising, donate, social impact, nonprofit, projects, backers, creators, charity, Environmental Conservation, Community Development, Health and Wellness, Equality and Inclusion, Animal Welfare, Humanitarian Aid, Sustainable Development, Peace and Conflict Resolution, Digital Rights, Economic Empowerment, Policy Advocacy, Artistic Advocacy">
   <meta name="robots" content="index, follow">
   <meta name="author" content="RallyNex">
   <meta name="language" content="English">
@@ -20,7 +28,7 @@
   <meta property="og:description" content="Join our community to create, share, and back projects that matter to you.">
   <meta property="og:url" content="https://rallynex.onrender.com">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="https://rallynex.onrender.com/static/images/og-image.jpg">
+  <meta property="og:image" content="https://rallynex.onrender.com/static/main/files/og-image.png">
   <meta property="og:image:alt" content="RallyNex platform image">
   <meta property="og:site_name" content="RallyNex">
   <meta property="og:locale" content="en_US">
@@ -29,287 +37,202 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="RallyNex - Support Campaigns and Causes">
   <meta name="twitter:description" content="Join our community to create, share, and back projects that matter to you.">
-  <meta name="twitter:image" content="https://rallynex.onrender.com/static/images/twitter-card.jpg">
+  <meta name="twitter:image" content="https://rallynex.onrender.com/static/main/files/og-image.png">
   <meta name="twitter:image:alt" content="RallyNex platform image">
   <meta name="twitter:site" content="@RallyNex">
 
+  <!-- Schema Markup for SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "http://schema.org",
+    "@type": "Organization",
+    "name": "RallyNex",
+    "url": "https://rallynex.onrender.com",
+    "logo": "https://rallynex.onrender.com/static/main/files/og-image.png",
+    "sameAs": [
+      "https://www.facebook.com/RallyNex",
+      "https://twitter.com/RallyNex"
+    ]
+  }
+  </script>
+
   <!-- Stylesheets -->
-
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <title>RallyNex - Support Campaigns and Causes</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
+    /* Existing styles */
+    body, html {
       margin: 0;
       padding: 0;
-      background-color: white;
+      width: 100%;
+      height: 100%;
+      font-family: 'Arial', sans-serif;
+      background: #000;
+      color: #fff;
+      overflow-x: hidden;
     }
 
-    header {
-      background-color: 
-      color: grey;
-      padding: 10px;
+    .container {
       text-align: center;
-    }
-main {
-  display: flex;
-  justify-content: space-around;
-  padding: 20px;
-}
-
-
-    .upper-post,
-    .lower-post {
-      padding: 10px;
+      max-width: 1200px;
+      margin: auto;
+      padding: 0;
     }
 
-section {
-  flex: 3; /* Make the middle section wider */
-  background-color: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 100%; /* Make the width 100% */
-  padding:0; /* Adjust padding if needed */
-  box-sizing: border-box; /* Include padding and border in the element's total width and height */
-  border: 1px solid whitesmoke; /* Set border */
-}
+    .header {
+      position: relative;
+      background: url('{% static 'main/files/vp.jpg' %}') no-repeat center center/cover;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
 
-/* Optional: Adjust margin for better spacing */
-section h2 {
-  padding: 20px;
-  margin-top: 0;
-}
+    .title {
+      font-size: 4rem;
+      margin: 0;
+    }
 
-.left-aside, .right-aside {
-  flex: 1; /* Keep the asides smaller */
-  background-color: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-}
+    .tagline {
+      font-size: 1.5rem;
+      margin: 20px 0;
+      color: #fff;
+    }
 
+    .btn-primary {
+      background-color: #1e90ff;
+      color: #fff;
+      padding: 10px 20px;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
 
-    .search-container {
-      text-align: center;
+    .btn-primary:hover {
+      background-color: #3742fa;
+    }
+
+    .features {
+      background: #111;
+      padding: 50px 20px;
+    }
+
+    .feature {
+      margin-bottom: 30px;
+    }
+
+    .feature h2 {
+      color: #1e90ff;
+      font-size: 2rem;
+    }
+
+    .feature img {
+      width: 100%;
+      max-width: 300px;
+      margin-bottom: 10px;
+    }
+
+    .success-stories {
+      background: #222;
+      padding: 50px 20px;
+    }
+
+    .success-stories h2 {
+      color: #1e90ff;
+      font-size: 2.5rem;
       margin-bottom: 20px;
     }
 
-    input[type="text"] {
-      width: calc(100% - 20px);
-      padding: 15px;
-      margin: 8px 0;
-      box-sizing: border-box;
-      border: 2px solid #32CD32; /* Blue border */
-      border-radius: 25px; /* Rounded corners */
-      outline: none; /* Remove default input focus outline */
+    .story {
+      margin-bottom: 30px;
     }
 
-    input[type="submit"] {
-      background-color: #32CD32;/* Blue shade */
-      color: white;
-      padding: 15px 20px;
-      border: none;
-      border-radius: 25px;
-      cursor: pointer;
+    .story img {
+      width: 100%;
+      max-width: 800px;
+      margin-bottom: 10px;
     }
 
-    input[type="submit"]:hover {
-      background-color: #228B22; /* Slightly darker blue shade on hover */
+    .footer {
+      background: #000;
+      padding: 20px 0;
+      border-top: 1px solid #333;
     }
 
-    nav {
-      margin-top: 20px;
-      border: 1px solid #808080;
-      border-radius: 5px;
-      overflow: hidden;
+    .social-links {
+      margin-bottom: 10px;
     }
 
-    nav a {
+    .social-links a {
+      color: #1e90ff;
+      margin: 0 10px;
       text-decoration: none;
-      font-weight: bold;
-      padding: 8px 10px;
-      display: block;
-      transition: background-color 0.3s ease;
-      border-bottom: 1px solid #e6e6e6;
+      transition: color 0.3s ease;
     }
 
-    nav a:hover {
-      background-color: #32CD32; /* Light lime green on hover */
+    .social-links a:hover {
+      color: #3742fa;
     }
 
-    /* Beautiful upload button styles */
-    .upload-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-top: 20px;
-    }
-
-    .upload-btn-wrapper {
-      position: relative;
-      overflow: hidden;
-      display: inline-block;
-    }
-
-    .btn {
-      border: 2px solid gray;
-      color: gray;
-      background-color: white;
-      padding: 8px 20px;
-      border-radius: 8px;
-      font-size: 20px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-
-    .btn:hover {
-      background-color: #eee; /* Change the color on hover */
-    }
-    .upload-btn-wrapper input[type=file] {
-      font-size: 100px;
-      position: absolute;
-      left: 0;
-      top: 0;
-      opacity: 0;
-      cursor: pointer;
-    }
-
-
-    hr {
-      border: 1px solid whitesmoke; /* Set border to 1px solid silver for a silver color */
-      margin: 10px 0; /* Add some margin for spacing */
-    }
-
-
-
-
-
+  
   </style>
-
-<script>
-  function switchColor() {
-    var body = document.body;
-    var header = document.querySelector('header');
-    var footer = document.querySelector('footer');
-    var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, p,  li, nav a,.upper-post,.lower-post,.reaction');
-
-    // Define the color sequence (white, #32CD32, #3498db)
-    var colors = ["white", "black"];
-
-    // Find the index of the current color in the sequence
-    var currentIndex = colors.indexOf(body.style.backgroundColor);
-
-    // Set the next color in the sequence
-    var nextColor = colors[(currentIndex + 1) % colors.length];
-
-    // Apply the new color to the body, header, footer, and sections
-    body.style.backgroundColor = nextColor;
-    header.style.backgroundColor = nextColor;
-    footer.style.backgroundColor = nextColor;
-
-    sections.forEach(function(section) {
-      section.style.backgroundColor = nextColor;
-    });
-
-    // Change text color to white if the background color is black, otherwise set it to black
-    var textColor = nextColor === "black" ? "white" : "black";
-    header.style.color = textColor;
-    footer.style.color = textColor;
-
-    // Set text color to white for various elements
-    textElements.forEach(function(element) {
-      element.style.color = textColor;
-    });
-  }
-
-
-
-</script>
-
-
 </head>
-<body id="mainBody" style="background-color:limegreen;">
+<body>
+  <!-- Spinner -->
+  <div class="spinner-wrapper" id="spinner-screen">
+    <div class="spinner"></div>
+  </div>
 
-  <header>
-    <img src="{% static 'accounts/files/log3.png' %}" alt="Image Description" width="50" height="50">
-    <h1 >campaigna</h1>
+  <!-- Main Content -->
+  <div class="container">
+    <header class="header">
+      <h1 class="title">RallyNex</h1>
+      <p class="tagline">"Join the Movement, Empower Change with Your Knowledge"</p>
+      <a href="{% url 'account_login' %}" class="btn-primary">Get Started</a>
+    </header>
 
-    <div class="search-container">
-      <form action="#" method="get">
-        <input type="text" placeholder="Search..." name="search1">
-        <input type="submit" value="Search">
-      </form>
-    </div>
-  </header>
-<hr>
-  <main>
-
-    <aside class="left-aside">
-      <nav>
-        <ul>
-          <li><a href="#" style="color: black;">Home</a></li>
-           <li><a href="#" style="color: black;">Activities</a></li>
-          <li><a href="#" style="color: black;">Notification</a></li>
-          <li><a href="#" style="color: black;">Edit Profile</a></li>
-          <li><a href="" style="color: black;">Followers</a></li>
-          <li><a href="#" style="color: black;">Following</a></li>
-          <li><a href="#" style="color: black;">Chat</a></li>
-          <li><a href="#" style="color: black;">Group</a></li>
-          <li><a href="#" style="color: black;">Recent Activities</a></li>
-          <li><a href="#" style="color: black;" onclick="switchColor()">Switch Color</a></li>
-        </ul>
-      </nav>
-    </aside>
-
-    <section>
-      <!-- Beautiful upload button -->
-      <div class="upload-container">
-        <div class="upload-btn-wrapper">
-          <button class="btn">Compaign</button>
-        </div>
-      </div></br>
-
-      <h2 style=" text-decoration:underline;">User-profile</h2>
-       <div  style="border-left: 2px solid #3498db; height: 500px; overflow-y: auto; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-
-
-
-<p style="padding: 20px;">{% block content %} {% endblock %}</p>
-
-<p> Sustainable Development,Peace and Conflict Resolution
-    Digital Rights,Economic Empowerment</p>
-
-
-    </div>
-
-
+    <section class="features">
+      <div class="feature">
+        <img src="{% static 'main/files/diverse.jpg' %}" alt="Diverse Campaigns">
+        <h2>Diverse Campaigns</h2>
+        <p>From awareness to fundraising, explore a variety of campaign types tailored to your goals.</p>
+      </div>
+      <div class="feature">
+        <img src="{% static 'main/files/suppo.jpg' %}" alt="Community Support">
+        <h2>Community Support</h2>
+        <p>Connect with like-minded individuals and organizations to support meaningful causes.</p>
+      </div>
+      <div class="feature">
+        <img src="{% static 'main/files/tools.jpg' %}" alt="Fun Features">
+        <h2>Fun Features</h2>
+        <p>Discover interactive tools and features that enhance your crowdfunding experience.</p>
+      </div>
     </section>
 
-<aside class="right-aside">
-  <div style="border: 1px solid #808080; padding: 20px; text-align: center; border-radius: 10px;">
-    <h2 style="margin-bottom: 10px;">Profile Name</h2>
-    <img src="{{ user_profile.image.url }}" alt="Profile Image" width="150" height="150" style="
-      object-fit: cover;
-      border: 4px solid #32CD32;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      transition: border-color 0.3s ease;
-      border-radius: 50%; margin-bottom: 15px;
-    " onmouseover="this.style.borderColor='#00FF00';" onmouseout="this.style.borderColor='#32CD32';">
-    <p style="font-size: 16px; color: #555;">Changemaker</p>
-    <hr style="border-color: #ccc; margin: 20px 0;">
-    <p style="font-size: 14px; color: #777; line-height: 1.6;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-    <div style="margin-top: 20px;">
-      <a href="#" style="text-decoration: none; color: #007bff; margin-right: 15px;">Visit Profile</a>
-    </div>
+    <section class="success-stories">
+      <h2>Success Stories</h2>
+      <div class="story">
+        <img src="{% static 'main/files/advo.jpg' %}" alt="Success Story 1">
+        <p>Learn how our community has achieved remarkable milestones through RallyNex.</p>
+      </div>
+      <div class="story">
+        <img src="{% static 'main/files/fund.jpg' %}" alt="Success Story 2">
+        <p>Explore inspiring stories of projects that made a significant impact.</p>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <p>&copy; 2024 RallyNex. All rights reserved.</p>
+      <div class="social-links">
+        <a href="https://www.facebook.com/RallyNex" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
+        <a href="https://twitter.com/RallyNex" target="_blank" rel="noopener noreferrer"><i class="fab fa-twitter"></i></a>
+        <a href="https://www.instagram.com/RallyNex" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
+      </div>
+    </footer>
   </div>
-</aside>
 
-
-  </main>
-<hr>
-  <footer style="background-color: limegreen; color: white; text-align: center; padding: 10px;">
-    <p>&copy; 2024 Your Website Name. All rights reserved.</p>
-  </footer>
+ 
 </body>
 </html>

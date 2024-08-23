@@ -12,7 +12,7 @@ from tinymce.models import HTMLField
 from django.urls import reverse
 from io import BytesIO
 from django.core.files.base import ContentFile
-
+import base64
 
 
 User = get_user_model()
@@ -164,8 +164,8 @@ class Campaign(models.Model):
     title = models.CharField(max_length=200)
     timestamp = models.DateTimeField(auto_now_add=True)
     content = models.TextField()
-    file = models.FileField(upload_to='campaign_files/', null=True, blank=True)
-
+    poster = models.ImageField(upload_to='campaign_posters/', null=True, blank=True)  # Add this line
+    
     CATEGORY_CHOICES = (
         ('Environmental Conservation', 'Environmental Conservation'),
         ('Community Development', 'Community Development'),
@@ -198,6 +198,9 @@ class Campaign(models.Model):
     @property
     def love_count(self):
         return self.loves.count()
+        
+
+
 
     def get_objective_and_activities(self):
         objectives_activities = {

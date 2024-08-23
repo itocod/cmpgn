@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mysterious Poster Designer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style type="text/css">body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    color: #ecf0f1;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.container {
+    width: 100%;
+    height: auto;
+    max-width: 95vw;
+    max-height: 95vh;
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
+    background-color: #1a1a1a;
+    position: relative;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.toolbar {
+    display: flex;
+    flex-direction: row; /* Horizontal layout */
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    border-bottom: 2px solid #ecf0f1;
+    color: #ecf0f1;
+    position: relative;
+    height: auto;
+    align-items: center; /* Centering items vertically */
+    justify-content: space-between; /* Evenly distribute the space between toolbar sections */
+}
+
+.toolbar-icons {
+    display: flex;
+    gap: 10px;
+}
+
+.toolbar-icons i {
+    font-size: 20px;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.toolbar-icons i:hover {
+    color: #3498db;
+    transform: scale(1.1);
+}
+
+.toolbar-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.toolbar-size {
+    display: flex;
+    align-items: center;
+}
+
+.toolbar-size input {
+    margin-right: 10px;
+    padding: 8px;
+    font-size: 0.9rem;
+    width: 100%;
+    max-width: 100px;
+    border-radius: 8px;
+    border: 1px solid #34495e;
+    background: #2c3e50;
+    color: #ecf0f1;
+}
+
+.toolbar-size i {
+    font-size: 20px;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.toolbar-size i:hover {
+    color: #e67e22;
+    transform: scale(1.1);
+}
+
+.color-palette {
+    display: flex;
+    align-items: center;
+}
+
+.color-palette label {
+    margin-right: 10px;
+    font-size: 0.9rem;
+}
+
+.color-palette input[type="color"] {
+    border: none;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    padding: 0;
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.font-selector, .font-size-selector {
+    display: flex;
+    align-items: center;
+}
+
+.font-selector label, .font-size-selector label {
+    margin-right: 10px;
+    font-size: 0.9rem;
+}
+
+.font-selector select, .font-size-selector input {
+    padding: 8px;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    border: 1px solid #34495e;
+    background: #2c3e50;
+    color: #ecf0f1;
+}
+
+.canvas-container {
+    flex: 1;
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5);
+    margin-top: 10px;
+    box-sizing: border-box;
+}
+
+#posterCanvas {
+    width: 100%;
+    height: 100%;
+    border: 3px solid #34495e;
+    background-color: #ffffff;
+}
+
+.affiliate-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.affiliate-link a {
+    background-color: #3498db;
+    color: #ecf0f1;
+    padding: 10px 20px;
+    text-decoration: none;
+    font-size: 1rem;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.affiliate-link a:hover {
+    background-color: #2980b9;
+    transform: scale(1.05);
+}
+
+/* Media Queries for Responsiveness */
+
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+        max-width: 100vw;
+        max-height: 90vh;
+    }
+
+    .toolbar {
+        padding: 8px;
+        flex-direction: row; /* Keep horizontal layout */
+        flex-wrap: wrap; /* Allow items to wrap to the next line if needed */
+    }
+
+    .toolbar-icons i,
+    .toolbar-size i {
+        font-size: 18px;
+    }
+
+    .toolbar-size input,
+    .color-palette label,
+    .font-selector label,
+    .font-size-selector label,
+    .font-selector select,
+    .font-size-selector input {
+        font-size: 0.8rem;
+    }
+
+    .affiliate-link a {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 8px;
+        max-width: 100vw;
+        max-height: 85vh;
+    }
+
+    .toolbar {
+        padding: 6px;
+        flex-direction: row; /* Keep horizontal layout */
+        flex-wrap: wrap; /* Allow items to wrap to the next line if needed */
+    }
+
+    .toolbar-icons i,
+    .toolbar-size i {
+        font-size: 16px;
+    }
+
+    .toolbar-size input,
+    .color-palette label,
+    .font-selector label,
+    .font-size-selector label,
+    .font-selector select,
+    .font-size-selector input {
+        font-size: 0.7rem;
+    }
+
+    .affiliate-link a {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+}
+</style>
+
+</head>
+<body>
+    <div class="container">
+
+        <div class="affiliate-link">
+            <a href="https://partner.canva.com/your-affiliate-link" target="_blank">Create a More Advanced Poster on Canva</a>
+        </div>
+        <div class="toolbar">
+
+            <div class="toolbar-icons">
+                <i id="addText" class="fa fa-text-height" title="Add Text"></i>
+                <i id="addImage" class="fa fa-image" title="Add Image"></i>
+                <i id="addRectangle" class="fa fa-square" title="Add Rectangle"></i>
+                <i id="addCircle" class="fa fa-circle" title="Add Circle"></i>
+                <i id="addTriangle" class="fa fa-caret-up" title="Add Triangle"></i>
+                <i id="addLine" class="fa fa-minus" title="Add Line"></i>
+                <i id="addHexagon" class="fa fa-hexagon" title="Add Hexagon"></i>
+                <i id="addStar" class="fa fa-star" title="Add Star"></i>
+                <i id="penTool" class="fa fa-pencil-alt" title="Pen Tool"></i>
+                <i id="eraserTool" class="fa fa-eraser" title="Eraser Tool"></i>
+                <i id="save" class="fa fa-download" title="Save Poster"></i>
+            </div>
+            <div class="toolbar-size">
+                <input type="number" id="canvasWidth" placeholder="Width" min="100" value="800">
+                <input type="number" id="canvasHeight" placeholder="Height" min="100" value="600">
+                <i id="resizeCanvas" class="fa fa-arrows-alt" title="Resize Canvas"></i>
+            </div>
+            <div class="color-palette">
+                <label for="colorPicker">Color:</label>
+                <input type="color" id="colorPicker" value="#ecf0f1">
+            </div>
+            <div class="font-selector">
+                <label for="fontSelector">Font:</label>
+                <select id="fontSelector">
+                    <option value="Arial">Arial</option>
+                    <option value="Verdana">Verdana</option>
+                    <option value="Helvetica">Helvetica</option>
+                    <option value="Georgia">Georgia</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                    <option value="Courier New">Courier New</option>
+                    <option value="Brush Script MT">Brush Script MT</option>
+                </select>
+            </div>
+            <div class="font-size-selector">
+                <label for="fontSizeSelector">Font Size:</label>
+                <input type="number" id="fontSizeSelector" min="8" value="24">
+            </div>
+        </div>
+        <div class="canvas-container">
+            <canvas id="posterCanvas"></canvas>
+        </div>
+    </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const canvas = new fabric.Canvas('posterCanvas', {
+            width: parseInt(document.querySelector('#canvasWidth').value) || 800,
+            height: parseInt(document.querySelector('#canvasHeight').value) || 600,
+            preserveObjectStacking: true
+        });
+
+        canvas.setBackgroundColor('#ffffff', canvas.renderAll.bind(canvas));
+
+        const colorPicker = document.getElementById('colorPicker');
+        const fontSelector = document.getElementById('fontSelector');
+        const fontSizeSelector = document.getElementById('fontSizeSelector');
+
+        function disableDrawingMode() {
+            canvas.isDrawingMode = false;
+        }
+
+        function updateObjectColor() {
+            const activeObject = canvas.getActiveObject();
+            if (!activeObject) return;
+
+            const newColor = colorPicker.value;
+            if (activeObject.type === 'textbox') {
+                activeObject.set({ fill: newColor });
+            } else if (['rect', 'circle', 'triangle', 'polygon'].includes(activeObject.type)) {
+                activeObject.set({ fill: newColor });
+            } else if (activeObject.type === 'line') {
+                activeObject.set({ stroke: newColor });
+            }
+            canvas.renderAll();
+        }
+        // Add text to the canvas with current font settings
+        document.getElementById('addText').addEventListener('click', () => {
+            disableDrawingMode();
+
+            const selectedFont = document.getElementById('fontSelector').value;
+            const selectedFontSize = parseInt(document.getElementById('fontSizeSelector').value);
+
+            const text = new fabric.Textbox('New Text', {
+                left: 100,
+                top: 100,
+                width: 200,
+                fontSize: selectedFontSize,
+                fill: '#000000',
+                fontFamily: selectedFont,
+                editable: true,
+            });
+
+            canvas.add(text);
+            canvas.setActiveObject(text);
+            text.bringToFront();
+            canvas.requestRenderAll();
+        });
+
+        // Update font family of selected text object when selector changes
+        document.getElementById('fontSelector').addEventListener('change', function () {
+            const activeObject = canvas.getActiveObject();
+            if (activeObject && activeObject.type === 'textbox') {
+                activeObject.set({ fontFamily: this.value });
+                canvas.requestRenderAll();
+            }
+        });
+
+        // Update font size of selected text object when selector changes
+        document.getElementById('fontSizeSelector').addEventListener('change', function () {
+            const activeObject = canvas.getActiveObject();
+            if (activeObject && activeObject.type === 'textbox') {
+                activeObject.set({ fontSize: parseInt(this.value) });
+                canvas.requestRenderAll();
+            }
+        });
+
+        // Synchronize the UI selectors with the selected object's properties
+        function syncUIWithActiveObject(activeObject) {
+            document.getElementById('fontSelector').value = activeObject.fontFamily;
+            document.getElementById('fontSizeSelector').value = activeObject.fontSize;
+            document.getElementById('colorPicker').value = activeObject.fill;
+        }
+
+        // Handle object selection event
+        canvas.on('selection:created', function () {
+            const activeObject = canvas.getActiveObject();
+            if (activeObject && activeObject.type === 'textbox') {
+                syncUIWithActiveObject(activeObject);
+            }
+        });
+
+        // Handle object modification event
+        canvas.on('object:modified', function () {
+            const activeObject = canvas.getActiveObject();
+            if (activeObject && activeObject.type === 'textbox') {
+                syncUIWithActiveObject(activeObject);
+            }
+        });
+
+        // Change text color of selected object
+        document.getElementById('colorPicker').addEventListener('input', function () {
+            const activeObject = canvas.getActiveObject();
+            if (activeObject && activeObject.type === 'textbox') {
+                activeObject.set({ fill: this.value });
+                canvas.requestRenderAll();
+            }
+        });
+
+
+        document.getElementById('addRectangle').addEventListener('click', () => {
+            disableDrawingMode();
+            const rect = new fabric.Rect({
+                left: 100,
+                top: 100,
+                fill: colorPicker.value,
+                width: 100,
+                height: 100,
+            });
+            canvas.add(rect);
+            canvas.setActiveObject(rect);
+            rect.bringToFront();
+        });
+
+        document.getElementById('addCircle').addEventListener('click', () => {
+            disableDrawingMode();
+            const circle = new fabric.Circle({
+                left: 100,
+                top: 100,
+                fill: colorPicker.value,
+                radius: 50,
+            });
+            canvas.add(circle);
+            canvas.setActiveObject(circle);
+            circle.bringToFront();
+        });
+
+        document.getElementById('addTriangle').addEventListener('click', () => {
+            disableDrawingMode();
+            const triangle = new fabric.Triangle({
+                left: 100,
+                top: 100,
+                fill: colorPicker.value,
+                width: 100,
+                height: 100,
+            });
+            canvas.add(triangle);
+            canvas.setActiveObject(triangle);
+            triangle.bringToFront();
+        });
+
+        document.getElementById('addLine').addEventListener('click', () => {
+            disableDrawingMode();
+            const line = new fabric.Line([50, 100, 200, 100], {
+                left: 100,
+                top: 100,
+                stroke: colorPicker.value,
+                strokeWidth: 5,
+            });
+            canvas.add(line);
+            canvas.setActiveObject(line);
+            line.bringToFront();
+        });
+
+        document.getElementById('addHexagon').addEventListener('click', () => {
+            disableDrawingMode();
+            const hexagon = new fabric.Polygon([
+                { x: 0, y: 50 },
+                { x: 43.3, y: 15.3 },
+                { x: 86.6, y: 15.3 },
+                { x: 129.9, y: 50 },
+                { x: 86.6, y: 84.7 },
+                { x: 43.3, y: 84.7 }
+            ], {
+                left: 100,
+                top: 100,
+                fill: colorPicker.value,
+                scaleX: 1.5,
+                scaleY: 1.5,
+            });
+            canvas.add(hexagon);
+            canvas.setActiveObject(hexagon);
+            hexagon.bringToFront();
+        });
+
+        document.getElementById('addStar').addEventListener('click', () => {
+            disableDrawingMode();
+            const star = new fabric.Polygon([
+                { x: 50, y: 0 },
+                { x: 61, y: 35 },
+                { x: 98, y: 35 },
+                { x: 68, y: 57 },
+                { x: 79, y: 91 },
+                { x: 50, y: 70 },
+                { x: 21, y: 91 },
+                { x: 32, y: 57 },
+                { x: 2, y: 35 },
+                { x: 39, y: 35 },
+            ], {
+                left: 100,
+                top: 100,
+                fill: colorPicker.value,
+                scaleX: 1.5,
+                scaleY: 1.5,
+            });
+            canvas.add(star);
+            canvas.setActiveObject(star);
+            star.bringToFront();
+        });
+
+        document.getElementById('penTool').addEventListener('click', () => {
+            disableDrawingMode();
+            canvas.isDrawingMode = true;
+            canvas.freeDrawingBrush.color = colorPicker.value;
+            canvas.freeDrawingBrush.width = 2; // Adjust as needed
+            canvas.freeDrawingBrush.style = 'round';
+        });
+
+        document.getElementById('eraserTool').addEventListener('click', () => {
+            disableDrawingMode();
+            canvas.isDrawingMode = true;
+            canvas.freeDrawingBrush.color = '#ffffff';
+            canvas.freeDrawingBrush.width = 10;
+        });
+
+        document.getElementById('addImage').addEventListener('click', () => {
+            disableDrawingMode();
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            fileInput.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        const imgElement = document.createElement('img');
+                        imgElement.src = e.target.result;
+                        imgElement.onload = () => {
+                            const imgInstance = new fabric.Image(imgElement, {
+                                left: 100,
+                                top: 100,
+                                scaleX: 0.5,
+                                scaleY: 0.5,
+                            });
+                            canvas.add(imgInstance);
+                            canvas.setActiveObject(imgInstance);
+                            imgInstance.bringToFront();
+                        };
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            fileInput.click();
+        });
+
+        document.getElementById('save').addEventListener('click', () => {
+            disableDrawingMode();
+            const dataURL = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.href = dataURL;
+            link.download = 'poster.png';
+            link.click();
+        });
+
+        document.getElementById('resizeCanvas').addEventListener('click', () => {
+            const width = parseInt(document.querySelector('#canvasWidth').value);
+            const height = parseInt(document.querySelector('#canvasHeight').value);
+            canvas.setWidth(width);
+            canvas.setHeight(height);
+            canvas.calcOffset();
+        });
+
+        colorPicker.addEventListener('change', updateObjectColor);
+
+        canvas.on('object:selected', (e) => {
+            const activeObject = e.target;
+            if (activeObject) {
+                if (activeObject.type === 'textbox') {
+                    colorPicker.value = activeObject.fill;
+                } else if (['rect', 'circle', 'triangle', 'polygon'].includes(activeObject.type)) {
+                    colorPicker.value = activeObject.fill;
+                } else if (activeObject.type === 'line') {
+                    colorPicker.value = activeObject.stroke;
+                }
+            }
+        });
+
+        canvas.on('object:modified', updateObjectColor);
+    });
+document.addEventListener('DOMContentLoaded', () => {
+    const canvas = new fabric.Canvas('posterCanvas', {
+        width: parseInt(document.querySelector('#canvasWidth').value) || 800,
+        height: parseInt(document.querySelector('#canvasHeight').value) || 600,
+        preserveObjectStacking: true
+    });
+
+    canvas.setBackgroundColor('#ffffff', canvas.renderAll.bind(canvas));
+
+    const colorPicker = document.getElementById('colorPicker');
+    const fontSelector = document.getElementById('fontSelector');
+    const fontSizeSelector = document.getElementById('fontSizeSelector');
+
+    let undoStack = [];
+    let redoStack = [];
+
+    function saveState() {
+        const canvasState = JSON.stringify(canvas.toJSON());
+        undoStack.push(canvasState);
+        redoStack = []; // Clear redo stack on new action
+    }
+
+    function undo() {
+        if (undoStack.length > 0) {
+            redoStack.push(undoStack.pop());
+            const previousState = undoStack.length > 0 ? undoStack[undoStack.length - 1] : '{}';
+            canvas.loadFromJSON(previousState, canvas.renderAll.bind(canvas));
+        }
+    }
+
+    function redo() {
+        if (redoStack.length > 0) {
+            const nextState = redoStack.pop();
+            undoStack.push(nextState);
+            canvas.loadFromJSON(nextState, canvas.renderAll.bind(canvas));
+        }
+    }
+
+    // Save the state after the initial load
+    saveState();
+
+    canvas.on('object:added', saveState);
+    canvas.on('object:modified', saveState);
+    canvas.on('object:removed', saveState);
+
+    // Undo button
+    document.getElementById('undo').addEventListener('click', undo);
+
+    // Redo button
+    document.getElementById('redo').addEventListener('click', redo);
+
+    // Remaining code for adding shapes, text, and other functionalities
+    // ...
+
+    function disableDrawingMode() {
+        canvas.isDrawingMode = false;
+    }
+
+    function updateObjectColor() {
+        const activeObject = canvas.getActiveObject();
+        if (!activeObject) return;
+
+        const newColor = colorPicker.value;
+        if (activeObject.type === 'textbox') {
+            activeObject.set({ fill: newColor });
+        } else if (['rect', 'circle', 'triangle', 'polygon'].includes(activeObject.type)) {
+            activeObject.set({ fill: newColor });
+        } else if (activeObject.type === 'line') {
+            activeObject.set({ stroke: newColor });
+        }
+        canvas.renderAll();
+    }
+
+    document.getElementById('addText').addEventListener('click', () => {
+        disableDrawingMode();
+
+        const selectedFont = fontSelector.value;
+        const selectedFontSize = parseInt(fontSizeSelector.value);
+
+        const text = new fabric.Textbox('New Text', {
+            left: 100,
+            top: 100,
+            width: 200,
+            fontSize: selectedFontSize,
+            fill: '#000000',
+            fontFamily: selectedFont,
+            editable: true,
+        });
+
+        canvas.add(text);
+        canvas.setActiveObject(text);
+        text.bringToFront();
+        canvas.requestRenderAll();
+        saveState();
+    });
+
+    // Additional functionalities for adding shapes, images, and other interactions
+    // ...
+
+    colorPicker.addEventListener('change', updateObjectColor);
+
+    canvas.on('object:selected', (e) => {
+        const activeObject = e.target;
+        if (activeObject) {
+            if (activeObject.type === 'textbox') {
+                colorPicker.value = activeObject.fill;
+            } else if (['rect', 'circle', 'triangle', 'polygon'].includes(activeObject.type)) {
+                colorPicker.value = activeObject.fill;
+            } else if (activeObject.type === 'line') {
+                colorPicker.value = activeObject.stroke;
+            }
+        }
+    });
+
+    canvas.on('object:modified', updateObjectColor);
+});
+
+</script>
+
+</body>
+</html>

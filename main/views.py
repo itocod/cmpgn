@@ -5,7 +5,7 @@ import time  # Import the time module
 
 import logging
 import json
-
+import base64
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -1491,6 +1491,11 @@ def create_campaign(request):
     user_profile.save() 
     ads = NativeAd.objects.all()  
     return render(request, 'main/campaign_form.html', {'ads':ads,'form': form, 'categories': categories, 'user_profile': user_profile,'unread_notifications':unread_notifications,'new_campaigns_from_follows':new_campaigns_from_follows})
+
+def poster_canva(request):
+    return render(request, 'main/poster_canva.html')
+
+
 
 
 def follower_list(request, username):
