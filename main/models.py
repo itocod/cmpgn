@@ -37,7 +37,7 @@ class Profile(models.Model):
     )
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='profile_pics', default='profile_pics/pp.png')
+    image = models.ImageField(upload_to='profile_pics/', default='profile_pics/pp.png')
     bio = models.TextField(default='No bio available')
     contact = models.CharField(max_length=15, blank=True)
     location = models.CharField(max_length=100, blank=True)
