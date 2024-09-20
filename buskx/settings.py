@@ -130,10 +130,11 @@ EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
 
 # Django-Allauth settings
-AUTHENTICATION_BACKENDS = [
+AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
-]
+    'allauth.socialaccount.auth.GoogleOAuth2',  # Adjust for your provider
+)
+
 
 SITE_ID = 1
 SOCIALACCOUNT_PROVIDERS = {
@@ -156,7 +157,6 @@ LOGOUT_REDIRECT_URL = 'index'
 SOCIALACCOUNT_AUTO_SIGNUP = True
 SOCIALACCOUNT_LOGIN_ON_GET = True
 
-SOCIALACCOUNT_ADAPTER = 'accounts.adapters.MySocialAccountAdapter'
 
 
 
