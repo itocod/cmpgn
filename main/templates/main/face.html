@@ -140,33 +140,157 @@ section h2 {
 }
 
 
-    .search-container {
-      text-align: center;
-      margin-bottom: 20px;
+/* Header container */
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px; /* Increased padding for a more spacious look */
+    margin: 0 auto;
+    box-sizing: border-box;
+    background-color: #f8f9fa; /* Light background for contrast */
+    border-bottom: 1px solid #e1e1e1; /* Subtle border for separation */
+}
+
+/* Logo container */
+.logo-container {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+/* Logo styling */
+.logo {
+    margin-right: 15px; /* Increased space between logo and name */
+    background: none;
+    border: none;
+    box-shadow: none;
+}
+
+/* Logo initials styling */
+.logo-initials {
+    color: #28a745; /* Updated color for a fresher look */
+    font-size: 60px; /* Increased font size for prominence */
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-shadow: 
+        2px 2px 0 #28a745,
+        -2px -2px 0 #28a745,
+        2px -2px 0 #28a745,
+        -2px 2px 0 #28a745,
+        4px 4px 0 black,
+        -4px -4px 0 black,
+        4px -4px 0 black,
+        -4px 4px 0 black;
+}
+
+/* Logo name styling */
+.logo-name {
+    font-size: 24px; /* Increased font size */
+    margin-top: 5px; /* Slightly increased space */
+    color: #333; /* Darker color for better contrast */
+    opacity: 0.9;
+}
+
+/* Search container */
+.search-container {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+/* Search wrapper */
+.search-wrapper {
+    display: flex;
+    border: 2px solid #ced4da; /* Updated border color */
+    border-radius: 25px; /* Rounded corners for a modern look */
+    overflow: hidden;
+    width: 100%;
+    max-width: 600px; /* Restrict max width for better appearance */
+    box-sizing: border-box;
+}
+
+/* Input field */
+input[type="text"] {
+    flex: 1;
+    padding: 12px 20px; /* Increased padding for a more comfortable input */
+    border: none;
+    font-size: 16px; /* Larger font size for readability */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+/* Input field focus */
+input[type="text"]:focus {
+    outline: none;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+    border-color: #007bff; /* Add border color on focus */
+}
+
+/* Submit button (search icon) */
+.btn-submit {
+    border: none;
+    background: #007bff; /* Primary button color */
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    padding: 12px; /* Increased size for better click area */
+}
+
+/* Submit button hover */
+.btn-submit:hover {
+    background: #0056b3;
+    transform: scale(1.05); /* Slightly scale up on hover */
+}
+
+/* Clear button */
+.btn-clear {
+    border: none;
+    background: transparent;
+    color: #888;
+    font-size: 18px;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease;
+    padding: 12px; /* Increased size for better click area */
+}
+
+/* Clear button hover */
+.btn-clear:hover {
+    color: #333;
+    transform: scale(1.05); /* Slightly scale up on hover */
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 15px; /* Adjusted padding for smaller screens */
+    }
+
+    .logo-container {
+        margin-bottom: 15px; /* Increased space between logo and search bar */
+    }
+
+    .search-wrapper {
+        border-radius: 20px; /* Adjusted border radius for mobile */
+    }
+
+    .btn-submit, .btn-clear {
+        padding: 10px; /* Adjusted padding for mobile */
+        font-size: 16px; /* Adjusted font size */
     }
 
     input[type="text"] {
-      width: calc(100% - 20px);
-      padding: 15px;
-      margin: 8px 0;
-      box-sizing: border-box;
-      border: 2px solid #32CD32; /* Blue border */
-      border-radius: 25px; /* Rounded corners */
-      outline: none; /* Remove default input focus outline */
+        padding: 10px 15px; /* Adjusted padding */
+        font-size: 14px; /* Smaller font size for mobile */
     }
+}
 
-    input[type="submit"] {
-      background-color: #32CD32;/* Blue shade */
-      color: white;
-      padding: 15px 20px;
-      border: none;
-      border-radius: 25px;
-      cursor: pointer;
-    }
-
-    input[type="submit"]:hover {
-      background-color: #228B22; /* Slightly darker blue shade on hover */
-    }
 
     nav {
       margin-top: 20px;
@@ -606,64 +730,6 @@ section h2 {
   margin-right: -10px; /* Adjust this value as needed */
   transform: rotate(-45deg);
 }
-.logo-initials {
-    color: limegreen; /* Lime text color */
-    display: inline-block;
-    font-size: 60px; /* Adjust size as needed */
-    font-weight: bold;
-    letter-spacing: 2px; /* Spacing between letters */
-    text-transform: uppercase; /* Uppercase text */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font */
-    position: relative; /* Positioning context for pseudo-element */
-       text-shadow: 
-        3px 3px 0 limegreen, /* Lime green shadow */
-        -3px -3px 0 limegreen, /* Lime green shadow */
-        3px -3px 0 limegreen, /* Lime green shadow */
-        -3px 3px 0 limegreen, /* Lime green shadow */
-        5px 5px 0 black, /* Black shadow */
-        -5px -5px 0 black, /* Black shadow */
-        5px -5px 0 black, /* Black shadow */
-        -5px 5px 0 black; /* Black shadow */
-}
-}
-
-.logo-initials::after {
-    content: 'R'; /* Ensures the letter is displayed */
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: -1; /* Behind the main letter */
-    text-shadow: 
-        3px 3px 0 limegreen, /* Lime green shadow */
-        -3px -3px 0 limegreen, /* Lime green shadow */
-        3px -3px 0 limegreen, /* Lime green shadow */
-        -3px 3px 0 limegreen, /* Lime green shadow */
-        5px 5px 0 black, /* Black shadow */
-        -5px -5px 0 black, /* Black shadow */
-        5px -5px 0 black, /* Black shadow */
-        -5px 5px 0 black; /* Black shadow */
-}
-
-        .logo-container {
-          
-            text-align: center;
-            padding: 10px; /* Reduced padding for a smaller container */
-            border-radius: 8px; /* Rounded corners */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow */
-            transition: all 0.3s ease; /* Smooth transition */
-            max-width: 120px; /* Adjust the maximum width as needed */
-            margin: 0 auto; /* Center align the container */
-        }
-
-
-.logo-name {
-    display: block;
-    font-size: 24px; /* Adjust size as needed */
-    margin-top: 5px; /* Space between initials and name */
-    opacity: 0.8; /* Slightly transparent */
-    
-}
-
 .tagline {
     display: block;
     font-size: 18px; /* Adjust size as needed */
@@ -922,17 +988,38 @@ section h2 {
             margin-right: 5px;
         }
 
+.subscribe-link {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.subscribe-link:hover {
+    text-decoration: underline;
+}
+
+
+
 </style>
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+
 <script>
-
-
-
-
-
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('search-input');
+    const clearBtn = document.getElementById('clear-btn');
     
+    clearBtn.addEventListener('click', function() {
+        searchInput.value = '';
+        searchInput.focus(); // Optional: Focus the input field after clearing
+    });
+});
+</script>
+
+<script>
 function switchColor() {
     var body = document.body;
     var logoContainer = document.querySelector('.logo-container');
@@ -951,10 +1038,8 @@ function switchColor() {
 
     // Change background color and border of logo-container based on nextColor
     if (nextColor === "black") {
-        logoContainer.style.backgroundColor = "#262626";
-        logoContainer.style.border = ""; 
-        logoContainer.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)"; 
-         // Add white border
+        logoContainer.style.backgroundColor = "";
+        logoContainer.style.border = "none"; 
     } else {
         logoContainer.style.backgroundColor = ""; // or "transparent"
         logoContainer.style.border = "none";  // Remove border
@@ -964,14 +1049,20 @@ function switchColor() {
     var header = document.querySelector('header');
     var footer = document.querySelector('footer');
     var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, p, li, nav a, .btn,.upper-post, .reaction, .campaign-content, .action-item, .action-item a,.custom-form,.custom-button');
+    var textElements = document.querySelectorAll('h1, h2, p, li, nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
     var buttons = document.querySelectorAll('button');
     var reactDivs = document.querySelectorAll('.react div');
     var loveCounts = document.querySelectorAll('[id^="love-count-"]');
     var viewCounts = document.querySelectorAll('#view-count');
     var commentCounts = document.querySelectorAll('.comment-count');
 
-    header.style.backgroundColor = nextColor;
+    // Update header background color based on nextColor
+    if (nextColor === "black") {
+        header.style.backgroundColor = "#333333";  // Darker gray when background is black
+    } else {
+        header.style.backgroundColor = nextColor;
+    }
+
     footer.style.backgroundColor = nextColor;
 
     sections.forEach(function(section) {
@@ -1023,8 +1114,6 @@ function switchColor() {
         element.style.color = countTextColor;
     });
 }
-
-
 
 function toggleCommentForm() {
     var popup = document.getElementById("commentFormPopup");
@@ -1096,28 +1185,25 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('scroll', handleScroll);
 });
 
-
-
-  document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {
     var mediaQuery = window.matchMedia('(max-width: 768px)');
     var leftAside = document.querySelector('.left-aside');
     var rightAside = document.querySelector('.right-aside');
 
     function handleMediaQueryChange(e) {
-      if (e.matches) {
-        leftAside.style.display = 'none';
-        rightAside.style.display = 'none';
-      } else {
-        leftAside.style.display = 'block';
-        rightAside.style.display = 'block';
-      }
+        if (e.matches) {
+            leftAside.style.display = 'none';
+            rightAside.style.display = 'none';
+        } else {
+            leftAside.style.display = 'block';
+            rightAside.style.display = 'block';
+        }
     }
 
     mediaQuery.addListener(handleMediaQueryChange);
     handleMediaQueryChange(mediaQuery);
-  });
+});
 
- 
 document.addEventListener("DOMContentLoaded", function() {
     const navbarToggle = document.getElementById("navbarToggle");
     const navbar = document.getElementById("navbar");
@@ -1155,8 +1241,6 @@ document.addEventListener("DOMContentLoaded", function() {
         navbar.style.display = "none"; // or "block" based on your initial requirement
     }
 });
-
-
 </script>
 
 
@@ -1173,21 +1257,30 @@ document.addEventListener("DOMContentLoaded", function() {
 <header>
             <span id="navbarToggle" class="navbar-toggle">☰</span></br>
 
-<div class="logo-container">
-    <div class="logo">
-        <span class="logo-initials">R</span>
-        
-      
+<div class="header-container">
+    <div class="logo-container">
+        <div class="logo">
+            <span class="logo-initials">R</span>
+        </div>
+        <span class="logo-name">Rallynex</span>
+    </div>
+
+    <div class="search-container">
+        <form action="{% url 'search_campaign' %}" method="get">
+            <div class="search-wrapper">
+                <input type="text" placeholder="Search..." name="search_query" id="search-input">
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-search"></i>
+                </button>
+                <button type="button" class="btn-clear" id="clear-btn">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 
 
-<div class="search-container">
-    <form action="{% url 'search_campaign' %}" method="get">
-        <input type="text" placeholder="Search..." name="search_query">
-        <button type="submit">Search</button>
-    </form>
-</div><br>
 
 
     <div class="action-item">
@@ -1215,8 +1308,20 @@ document.addEventListener("DOMContentLoaded", function() {
 </a>
 
 </li>
-        <li><a href="{% url 'public_campaign' %}" style="color: white;"><i class="fas fa-globe"></i> Public Campaigns</a></li>
-        <li><a href="{% url 'private_campaign' %}" style="color: white;"><i class="fas fa-lock"></i> Private Campaigns</a></li>
+        <li><a href="{% url 'manage_campaigns' %}" style="color: white;"><i class="fas fa-cog"></i> Manage </a></li>
+<li>
+    <a href="{% url 'private_campaign' %}" style="color: black; position: relative;">
+        <i class="fas fa-lock"></i> Private
+        {% if new_private_campaigns_count > 0 %}
+            <span id="private-alert" class="alert-badge">{{ new_private_campaigns_count }}</span>
+        {% endif %}
+    </a>
+</li>
+
+
+
+
+
         <li><a href="{% url 'user_chats' %}" style="color: white;"><i class="fas fa-comment-alt"></i> Chat Table</a></li>
         <li>
     <a href="{% url 'notification_list' %}" style="color: white; position: relative;">
@@ -1229,6 +1334,10 @@ document.addEventListener("DOMContentLoaded", function() {
 </li>
 
         <li><a href="{% url 'suggest' %}" style="color: white;"><i class="fas fa-user-friends"></i> Suggested Users</a></li>
+
+           <li><a href="{% url 'profile_view' username=user.username %}" style="color: white; margin-right: 15px;">
+            <i class="fas fa-user"></i> Visit Profile
+        </a></li>
         <!-- Add logout link here -->
                 <li>
           <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"  style="color:black;">
@@ -1267,8 +1376,21 @@ document.addEventListener("DOMContentLoaded", function() {
 </a>
 
 </li>
-        <li><a href="{% url 'public_campaign' %}" style="color: black;"><i class="fas fa-globe"></i> Public Campaigns</a></li>
-        <li><a href="{% url 'private_campaign' %}" style="color: black;"><i class="fas fa-lock"></i> Private Campaigns</a></li>
+        <li><a href="{% url 'manage_campaigns' %}" style="color: black;"><i class="fas fa-cog"></i> Manage </a></li>
+<li>
+    <a href="{% url 'private_campaign' %}" style="color: black; position: relative;">
+        <i class="fas fa-lock"></i> Private
+        {% if new_private_campaigns_count > 0 %}
+            <span id="private-alert" class="alert-badge">{{ new_private_campaigns_count }}</span>
+        {% endif %}
+    </a>
+</li>
+
+
+
+
+
+
         <li><a href="{% url 'user_chats' %}" style="color: black;"><i class="fas fa-comment-alt"></i> Chat Table</a></li>
         <li>
     <a href="{% url 'notification_list' %}" style="color: black; position: relative;">
@@ -1333,7 +1455,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
     
     <div style="border-left: 2px solid #3498db; height: 600px; overflow-y: auto;overflow-x: hidden; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-    <p style="padding: 15px">{% block content %} {% endblock %}</p>
+    <p style="padding: 15px">{% block content %}
+ {% endblock %}</p>
     </div>
 </section>
 
@@ -1395,18 +1518,13 @@ document.addEventListener("DOMContentLoaded", function() {
 <hr>
 <footer class="footer">
     <div class="footer-content">
-       <!-- <div class="footer-section">
-            <h2>Quick Links</h2>
-           
-            <a href="{% url 'jobs' %}">Jobs|</a>
-            <a href="{% url 'events' %}">Events</a>
-        </div>-->
+        <!-- Existing footer sections -->
         <div class="footer-section">
             <h2>Contact Us</h2>
             <p>Email: rallynex1@gmail.com</p>
             <p style="display:none;">Address: 123 Networking St, Net City</p>
         </div>
-        <div class="footer-section" style=" display: none;">
+        <div class="footer-section" style="display: none;">
             <h2>Follow Us</h2>
             <div class="social-icons">
                 <a href="#"><i class="fab fa-facebook-f"></i></a>
@@ -1418,14 +1536,15 @@ document.addEventListener("DOMContentLoaded", function() {
         </div>
         <div class="footer-section">
             <h2>Subscribe</h2>
-                     {% include "revenue/subscribe.html" %}
+            <!-- Include subscription form -->
+        
+            <p><a href="{% url 'subscribe' %}" class="subscribe-link">Subscribe Now</a></p>
         </div>
         <div class="footer-section">
             <h2>Legal</h2>
             <a href="{% url 'privacy_policy' %}">Privacy Policy|</a>
             <a href="{% url 'terms_of_service' %}">Terms of Service|</a>
             <a href="{% url 'project_support' %}">Support</a>
-
         </div>
     </div>
     <div class="footer-bottom">
@@ -1433,6 +1552,7 @@ document.addEventListener("DOMContentLoaded", function() {
         <p class="mystery-text"></p>
     </div>
 </footer>
+
 <script type="text/javascript">
         const lides = document.querySelector('.lides');
         const lideCount = document.querySelectorAll('.lide').length;

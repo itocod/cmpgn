@@ -81,7 +81,7 @@
 
     .header {
       position: relative;
-      background: url('{% static 'main/files/kd.jpg' %}') no-repeat center center/cover;
+      background: url('{% static 'main/files/vb.avif' %}') no-repeat center center/cover;
       height: 100vh;
       display: flex;
       flex-direction: column;
@@ -175,7 +175,16 @@
     .social-links a:hover {
       color: #3742fa;
     }
+.subscribe-link {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 1em;
+}
 
+.subscribe-link:hover {
+    text-decoration: underline;
+}
   
   </style>
 </head>
@@ -223,14 +232,15 @@
       </div>
     </section>
 
-    <footer class="footer">
-      <p>&copy; 2024 RallyNex. All rights reserved.</p>
-      <div class="social-links">
+ <footer class="footer">
+    <p>&copy; 2024 RallyNex. All rights reserved.</p>
+    <div class="social-links">
         <a href="https://www.facebook.com/RallyNex" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook-f"></i></a>
         <a href="https://twitter.com/RallyNex" target="_blank" rel="noopener noreferrer"><i class="fab fa-twitter"></i></a>
         <a href="https://www.instagram.com/RallyNex" target="_blank" rel="noopener noreferrer"><i class="fab fa-instagram"></i></a>
-      </div>
-    </footer>
+    </div>
+    <p><a href="{% url 'subscribe' %}" class="subscribe-link">Subscribe Now</a></p>
+</footer>
   </div>
 
  

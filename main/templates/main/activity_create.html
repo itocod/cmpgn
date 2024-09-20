@@ -113,6 +113,73 @@ select:focus {
         padding: 6px;
     }
 }
+
+
+/* Container for the activities */
+.campaign-activities-container {
+    max-width: 100%;
+    margin: 10px auto;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+/* Header styling */
+.campaign-activities-header {
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 18px;
+}
+
+/* Wrapper for the activities list */
+.campaign-activities-list {
+    max-height: 120px;
+    overflow: hidden;
+    transition: max-height 0.5s ease, padding 0.5s ease;
+    padding: 0 5px;
+}
+
+/* Expanded list styling */
+.campaign-activities-expanded {
+    max-height: none;
+    padding: 0 5px;
+}
+
+/* Styling for the custom activity-text element */
+activity-text.campaign-activity-item {
+    display: block; /* Ensures it behaves like a paragraph */
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #555;
+}
+
+/* Toggle button for activities */
+.campaign-toggle-button {
+    display: inline-block;
+    padding: 8px 12px;
+    margin-top: 10px;
+    cursor: pointer;
+    color: #007bff;
+    background-color: #e7f0ff;
+    border: 1px solid #007bff;
+    border-radius: 4px;
+    text-align: center;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-size: 14px;
+}
+
+/* Hover effect on the toggle button */
+.campaign-toggle-button:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+/* Focus outline removal for the toggle button */
+.campaign-toggle-button:focus {
+    outline: none;
+}
+
 </style>
 
 <h2 style="font-size:22px; padding-left: 20px; color:#333;">Campaign Activities Form</h2>
@@ -146,14 +213,40 @@ select:focus {
                     <button type="button" class="custom-emoji-button" onclick="addEmoji('🔧', '{{ form.content.auto_id }}')">🔧</button>
                     <button type="button" class="custom-emoji-button" onclick="addEmoji('🛠️', '{{ form.content.auto_id }}')">🛠️</button>
                 </div>
-                <label class="custom-label">Activities:</label>
-                <div>{{ campaign.get_objective_and_activities.Activities }}</div>
+                
+                    <div>
+
+       <div class="campaign-activities-container">
+    <h4 class="campaign-activities-header">Examples of Activities to Post</h4>
+    <div id="campaignActivitiesList" class="campaign-activities-list">
+        {% for activity in campaign.get_objective_and_activities.Activities %}
+            <activity-text class="campaign-activity-item">{{ activity }}</activity-text>
+        {% endfor %}
+    </div>
+    <span id="toggleActivitiesButton" class="campaign-toggle-button">See More</span>
+</div>
+
+    </div>
             </div>
+            <hr>
         {% endfor %}
         <button type="submit" class="custom-submit-button">Submit</button>
     </form>
 </div>
+<script>
+        document.getElementById('toggleButton').addEventListener('click', function() {
+            var container = document.getElementById('activitiesContainer');
+            var button = document.getElementById('toggleButton');
 
+            if (container.classList.contains('activities-content-expanded')) {
+                container.classList.remove('activities-content-expanded');
+                button.textContent = 'See More';
+            } else {
+                container.classList.add('activities-content-expanded');
+                button.textContent = 'See Less';
+            }
+        });
+    </script>
 <script>
     function addEmoji(emoji, fieldId) {
         var contentField = document.getElementById(fieldId);

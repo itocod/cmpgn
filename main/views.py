@@ -60,6 +60,8 @@ from .forms import CampaignProductForm
 from django.urls import reverse
 from django.utils import timezone
 
+from django.db.models import Case, When, Value, BooleanField
+
 from django.core.files.uploadedfile import SimpleUploadedFile
 from mimetypes import guess_type
 from .models import  Report
@@ -85,6 +87,98 @@ import mimetypes
 
 from .models import AffiliateLibrary, AffiliateNewsSource
 from .models import NativeAd
+from django.views.generic.edit import DeleteView
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+
+
+
+
+
+class CampaignDeleteView(LoginRequiredMixin, DeleteView):
+    model = Campaign
+    template_name = 'main/campaign_confirm_delete.html'
+    success_url = reverse_lazy('manage_campaigns')
+
+    def get_queryset(self):
+        # Ensure the profile exists and use it for filtering
+        user_profile = get_object_or_404(Profile, user=self.request.user)
+        return super().get_queryset().filter(user=user_profile)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Fetch unread notifications for the user
+        unread_notifications = Notification.objects.filter(user=self.request.user, viewed=False)
+        context['unread_notifications'] = unread_notifications
+
+        # Fetch unread messages for the user
+        user_chats = Chat.objects.filter(participants=self.request.user)
+        unread_messages_count = Message.objects.filter(chat__in=user_chats, sender__id=self.request.user.id).exclude(sender=self.request.user).count()
+        context['unread_messages_count'] = unread_messages_count
+
+        # Get user profile and add to context
+        user_profile = get_object_or_404(Profile, user=self.request.user)
+        context['user_profile'] = user_profile
+
+        # Check if there are new campaigns from follows
+        following_users = user_profile.following.all()  # Assuming a following relationship
+        new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
+        context['new_campaigns_from_follows'] = new_campaigns_from_follows
+
+        # Update last_campaign_check for the user's profile
+        user_profile.last_campaign_check = timezone.now()
+        user_profile.save()
+
+        # Add ads to the context
+        ads = NativeAd.objects.all()
+        context['ads'] = ads
+        
+        return context
+
+
+
+
+def user_campgn(request):
+    campaign = Campaign.objects.last()
+    
+    form = SubscriptionForm()
+    user_profile = get_object_or_404(Profile, user=request.user)
+    following_users = [follow.followed for follow in request.user.following.all()]
+    
+    # Filter public campaigns from users that the current user follows
+    followed_public_campaigns = Campaign.objects.filter(user__user__in=following_users, visibility='public').distinct().order_by('-timestamp')
+
+    # Filter public campaigns from the current user
+    user_public_campaigns = Campaign.objects.filter(user=user_profile, visibility='public').distinct().order_by('-timestamp')
+
+    # Combine both querysets
+    public_campaigns = followed_public_campaigns | user_public_campaigns
+
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    user_chats = Chat.objects.filter(participants=request.user)
+    unread_messages_count = Message.objects.filter(chat__in=user_chats, sender__id=request.user.id).exclude(sender=request.user).count()
+
+    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
+    user_profile.last_campaign_check = timezone.now()
+    user_profile.save()
+    ads = NativeAd.objects.all()
+    return render(request, 'main/user_campgn.html', {
+        'ads': ads,
+        'public_campaigns': public_campaigns,
+        'campaign': campaign,
+        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'unread_messages_count': unread_messages_count,
+        'new_campaigns_from_follows': new_campaigns_from_follows,
+        'form': form,
+    })
+
+
+
+
+
+
 
 def native_ad_list(request):
     ads = NativeAd.objects.all()
@@ -568,6 +662,8 @@ def donate(request, campaign_id):
         'new_campaigns_from_follows': new_campaigns_from_follows,  # Pass donations to the template context
     }
     return render(request, 'revenue/donation.html', context)
+
+
 
 
 
@@ -1158,88 +1254,133 @@ def create_activity(request, campaign_id):
     ads = NativeAd.objects.all()
     return render(request, 'main/activity_create.html', {'ads':ads,'formset': formset, 'campaign': campaign,'user_profile':user_profile,'unread_notifications':unread_notifications,'new_campaigns_from_follows':new_campaigns_from_follows})
 
-
-
-
 @login_required
-def public_campaign(request):
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
+def manage_campaigns(request):
     # Get the user's profile
     user_profile = get_object_or_404(Profile, user=request.user)
-    # Filter public campaigns for the current user's profile
-    public_campaigns = Campaign.objects.filter(visibility='public', user=user_profile).order_by('-timestamp')
+    
+    # Fetch all campaigns (both public and private) for the current user's profile
+    all_campaigns = Campaign.objects.filter(user=user_profile).order_by('-timestamp')
+    
     # Fetch unread notifications for the user
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    
     # Check if there are new campaigns from follows
+    following_users = [follow.followed for follow in request.user.following.all()]
     new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
 
     # Update last_campaign_check for the user's profile
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
+    
     ads = NativeAd.objects.all()
-    return render(request, 'main/public_campaign.html', {'ads':ads,'public_campaigns': public_campaigns,  'user_profile': user_profile,'unread_notifications':unread_notifications,'new_campaigns_from_follows':new_campaigns_from_follows})
-
-
+    return render(request, 'main/manage_campaigns.html', {
+        'ads': ads,
+        'campaigns': all_campaigns,
+        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'new_campaigns_from_follows': new_campaigns_from_follows
+    })
 
 
 
 @login_required
 def private_campaign(request):
+    # Get the current user's profile
     user_profile = get_object_or_404(Profile, user=request.user)
-    following_users = [follow.followed for follow in request.user.following.all()]
-    private_campaigns = Campaign.objects.filter(visibility='private', user=user_profile).order_by('-timestamp')
+
+    # Get the users that the current user is following
+    following_users = request.user.following.values_list('followed', flat=True)
+
+    # Get all private campaigns and annotate whether the current user marked them as "not interested"
+    campaigns = Campaign.objects.annotate(
+        is_not_interested=Case(
+            When(not_interested_by__user=user_profile, then=Value(True)),
+            default=Value(False),
+            output_field=BooleanField(),
+        )
+    )
+
+    # Filter to show only private campaigns from followed users or the current user's own private campaigns
+    visible_campaigns = campaigns.filter(
+        Q(user__user__in=following_users) | Q(user=user_profile),
+        visibility='private',
+        is_not_interested=False
+    ).order_by('-timestamp')
+
+    # Additional filter to include campaigns where the current user is in the 'visible_to_followers' list
+    visible_campaigns = visible_campaigns.filter(
+        Q(visible_to_followers=user_profile) | Q(user=user_profile)
+    )
+
+    # Fetch unread notifications, chats, and unread messages
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    user_chats = Chat.objects.filter(participants=request.user)
+    unread_messages_count = Message.objects.filter(chat__in=user_chats).exclude(sender=request.user).count()
+
+    # Fetch new campaigns from followed users that were added after the user's last check
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__in=following_users, visibility='private', timestamp__gt=user_profile.last_campaign_check
+    ).exclude(id__in=NotInterested.objects.filter(user=user_profile).values_list('campaign_id', flat=True)).order_by('-timestamp')
+
+    # Update the user's last campaign check time
+    user_profile.last_campaign_check = timezone.now()
+    user_profile.save()
+
+    # Fetch native ads for display on the page
+    ads = NativeAd.objects.all()
+
+    return render(request, 'main/private_campaign.html', {
+        'ads': ads,
+        'private_campaigns': visible_campaigns,  # Filtered private campaigns to display
+        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'new_campaigns_from_follows': new_campaigns_from_follows,
+        'unread_messages_count': unread_messages_count,
+    })
+
+
+
+import time
+
+@login_required
+def update_visibilit(request, campaign_id):
+    start_time = time.time()  # Start timing
+
+    user_profile = get_object_or_404(Profile, user=request.user)
+    followers = Profile.objects.filter(user__in=Follow.objects.filter(followed=request.user).values('follower'))
+    campaign = get_object_or_404(Campaign, pk=campaign_id, user=user_profile)
+
+    if request.method == 'POST':
+        form = UpdateVisibilityForm(request.POST, instance=campaign, followers=followers)
+        if form.is_valid():
+            campaign = form.save(commit=False)
+            if campaign.visibility == 'private':
+                campaign.visible_to_followers.set(form.cleaned_data['followers_visibility'])
+            campaign.save()
+            return redirect('private_campaign')
+    else:
+        form = UpdateVisibilityForm(instance=campaign, followers=followers)
+
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    following_users = [follow.followed for follow in request.user.following.all()]
     new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
-    
 
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
     ads = NativeAd.objects.all()
-    return render(request, 'main/private_campaign.html', {
-        'ads':ads,
-        'private_campaigns': private_campaigns,
-        'user_profile': user_profile,
-        'unread_notifications': unread_notifications,
-        'new_campaigns_from_follows': new_campaigns_from_follows,
-      
-    })
 
+    end_time = time.time()  # End timing
+    print(f"Form processing took {end_time - start_time} seconds")
 
-
-
-
-@login_required
-def update_visibilit(request, campaign_id):
-    user_profile = get_object_or_404(Profile, user=request.user)
-    following_users = [follow.followed for follow in request.user.following.all()]
-    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
-    
-
-    user_profile.last_campaign_check = timezone.now()
-    user_profile.save()
-    ads = NativeAd.objects.all()  
-    campaign = get_object_or_404(Campaign, pk=campaign_id, user=request.user.profile)
-    if request.method == 'POST':
-        form = UpdateVisibilityForm(request.POST, instance=campaign)
-        if form.is_valid():
-            form.save()
-            return redirect('private_campaign')  # Redirect to the appropriate view
-    else:
-        form = UpdateVisibilityForm(instance=campaign)
- 
-    return render(request, 'main/update_visibilit.html', {
-        'ads':ads,
+    return render(request, 'main/manage_campaign_visibility.html', {
         'form': form,
         'campaign': campaign,
+        'ads': ads,
         'user_profile': user_profile,
         'unread_notifications': unread_notifications,
-        'new_campaigns_from_follows': new_campaigns_from_follows,
-      
+        'new_campaigns_from_follows': new_campaigns_from_follows
     })
-
-
-
 
 
 
@@ -1273,32 +1414,45 @@ def success_page(request):
 
 
 
-
-
-
 @login_required
 def face(request):
     form = SubscriptionForm()
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
-    # Retrieve the latest campaign
-    campaign = Campaign.objects.last()
+    following_users = [follow.followed for follow in request.user.following.all()]
 
-    # Get the user's profile if the user is authenticated
+    campaign = Campaign.objects.last()
     user_profile = None
+
     if request.user.is_authenticated:
         user_profile = get_object_or_404(Profile, user=request.user)
 
-    # Fetch unread notifications for the user
-    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    # Include user_profile and campaign in the render function
-    # Check if there are new campaigns from follows
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
+        if user_profile.last_campaign_check is None:
+            user_profile.last_campaign_check = timezone.now()
+            user_profile.save()
 
-    # Update last_campaign_check for the user's profile
+        new_private_campaigns_count = Campaign.objects.filter(
+            visibility='private',
+            timestamp__gt=user_profile.last_campaign_check
+        ).count()
+
+        # Debugging output
+        print(f"Last Campaign Check: {user_profile.last_campaign_check}")
+        print(f"New Private Campaigns Count: {new_private_campaigns_count}")
+
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
+
     ads = NativeAd.objects.all()
-    return render(request, 'main/face.html', {'ads':ads,'campaign': campaign, 'user_profile': user_profile,' unread_notifications': unread_notifications,'unread_notifications':new_campaigns_from_follows,'form':form,'ads':ads})
+    return render(request, 'main/face.html', {
+        'ads': ads,
+        'campaign': campaign,
+        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'form': form,
+        'new_private_campaigns_count': new_private_campaigns_count
+    })
+
 
 
 def toggle_love(request, campaign_id):
@@ -1323,39 +1477,60 @@ def toggle_love(request, campaign_id):
     return JsonResponse({}, status=404)
 
 
+
 @login_required
 def home(request):
-    campaign = Campaign.objects.last()
-    form = SubscriptionForm()
+    # Get the current user's profile
     user_profile = get_object_or_404(Profile, user=request.user)
-    following_users = [follow.followed for follow in request.user.following.all()]
 
-    # Filter public campaigns from users that the current user follows
-    followed_public_campaigns = Campaign.objects.filter(user__user__in=following_users, visibility='public').distinct().order_by('-timestamp')
+    # Get all campaigns, annotate whether the current user marked them as "not interested"
+    campaigns = Campaign.objects.annotate(
+        is_not_interested=Case(
+            When(not_interested_by__user=user_profile, then=Value(True)),
+            default=Value(False),
+            output_field=BooleanField(),
+        )
+    )
 
-    # Filter public campaigns from the current user
-    user_public_campaigns = Campaign.objects.filter(user=user_profile, visibility='public').distinct().order_by('-timestamp')
+    # Exclude campaigns that the current user has marked as "not interested"
+    visible_campaigns = campaigns.filter(is_not_interested=False, visibility='public').order_by('-timestamp')
 
-    # Combine both querysets
-    public_campaigns = followed_public_campaigns | user_public_campaigns
+    # Fetch followed users' campaigns
+    following_users = request.user.following.values_list('followed', flat=True)
+    followed_campaigns = visible_campaigns.filter(user__user__in=following_users)
 
+    # Include the current user's own public campaigns
+    own_campaigns = visible_campaigns.filter(user=user_profile)
+
+    # Combine followed campaigns and own campaigns
+    campaigns_to_display = followed_campaigns | own_campaigns
+
+    # Fetch unread notifications, chats, and unread messages
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
     user_chats = Chat.objects.filter(participants=request.user)
-    unread_messages_count = Message.objects.filter(chat__in=user_chats, sender__id=request.user.id).exclude(sender=request.user).count()
+    unread_messages_count = Message.objects.filter(chat__in=user_chats).exclude(sender=request.user).count()
 
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
+    # Fetch new campaigns from followed users added after the user's last check
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check
+    ).exclude(id__in=NotInterested.objects.filter(user=user_profile).values_list('campaign_id', flat=True)).order_by('-timestamp')
+
+    # Update the user's last campaign check time
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
+
+    # Fetch native ads for display on the page
     ads = NativeAd.objects.all()
+
+    # Render the home page
     return render(request, 'main/home.html', {
         'ads': ads,
-        'public_campaigns': public_campaigns,
-        'campaign': campaign,
+        'public_campaigns': campaigns_to_display,  # Filtered campaigns to display
+        'campaign': Campaign.objects.last(),
         'user_profile': user_profile,
         'unread_notifications': unread_notifications,
         'unread_messages_count': unread_messages_count,
-        'new_campaigns_from_follows': new_campaigns_from_follows,
-        'form': form,
+        'new_campaigns_from_follows': new_campaigns_from_follows,  # New campaigns ordered by latest
     })
 
 
@@ -1439,7 +1614,7 @@ def recreate_campaign(request, campaign_id):
             # Update the existing campaign with the new data from the form
             existing_campaign.title = form.cleaned_data['title']
             existing_campaign.content = form.cleaned_data['content']
-            existing_campaign.file = form.cleaned_data['file']
+            existing_campaign.poster = form.cleaned_data['poster']
             existing_campaign.visibility = form.cleaned_data['visibility']
 
             existing_campaign.save()
@@ -1608,6 +1783,7 @@ def profile_edit(request, username):
     }
     return render(request, 'main/edit_profile.html', context)
 
+from django.utils import timezone
 
 @login_required
 def profile_view(request, username):
@@ -1616,7 +1792,8 @@ def profile_view(request, username):
 
     followers_count = Follow.objects.filter(followed=user_profile.user).count()
     following_count = Follow.objects.filter(follower=user_profile.user).count()
-    public_campaigns_count = user_profile.user_campaigns.filter(visibility='public').count()
+    public_campaigns = user_profile.user_campaigns.filter(visibility='public').order_by('-timestamp')  # Sort by latest timestamp
+    public_campaigns_count = public_campaigns.count()  # Get the count of public campaigns
 
     following_profile = False
     if request.user != user_profile.user:
@@ -1635,16 +1812,19 @@ def profile_view(request, username):
         user_profile.save(update_fields=['is_verified'])
 
     context = {
-        'ads':ads,
+        'ads': ads,
         'user_profile': user_profile,
         'following_profile': following_profile,
         'followers_count': followers_count,
         'following_count': following_count,
-        'public_campaigns_count': public_campaigns_count,
+        'public_campaigns': public_campaigns,  # Pass sorted campaigns
+        'public_campaigns_count': public_campaigns_count,  # Pass count of campaigns
         'unread_notifications': unread_notifications,
         'new_campaigns_from_follows': new_campaigns_from_follows,
         'has_blue_tick': has_blue_tick,  # This is just for display purposes
     }
+    return render(request, 'main/user_profile.html', context)
+
 
     if 'search_query' in request.GET:
         form = ProfileSearchForm(request.GET)

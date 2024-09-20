@@ -6,27 +6,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
   <!-- Google Site Verification Meta Tag -->
   <meta name="google-site-verification" content="2IjHwnbJp2eoJ42Ec2-vy5FHzwfpyA4qxZlA2Ct1lW8" />
 
-<script src='https://kit.fontawesome.com/a076d05399.js' crossorigin='anonymous'></script>
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
- <!-- bing Site Verification Meta Tag -->
-  <meta name="msvalidate.01" content="2DF73531AC8292B0D47E7DEAE6EEF4CF" />
+  <!-- bing Site Verification Meta Tag -->
+<meta name="msvalidate.01" content="9BD94EF9A2933498D736572C8C2B73B0" />
 
 
  <!-- yandex Site Verification Meta Tag -->
 <meta name="yandex-verification" content="27149014e6b080dd" />
 
+
   <!-- Meta Tags for SEO -->
   <meta name="description" content="Support campaigns and causes on RallyNex. Join our community to create, share, and back projects that matter to you.">
-   <meta name="keywords" content="crowdfunding, campaigns, community support, fundraising, donate, social impact, nonprofit, projects, backers, creators, charity,Environmental Conservation,Community Development,Health and Wellness,        Equality and Inclusion,Animal Welfare,Humanitarian Aid
+  <meta name="keywords" content="crowdfunding, campaigns, community support, fundraising, donate, social impact, nonprofit, projects, backers, creators, charity,Environmental Conservation,Community Development,Health and Wellness,        Equality and Inclusion,Animal Welfare,Humanitarian Aid
     Sustainable Development,Peace and Conflict Resolution
     Digital Rights,Economic Empowerment,Policy Advocacy,Artistic Advocacy">
   <meta name="robots" content="index, follow">
   <meta name="author" content="RallyNex">
   <meta name="language" content="English">
   <link rel="canonical" href="https://rallynex.onrender.com">
+
 <!-- Open Graph Meta Tags -->
   <meta property="og:title" content="RallyNex - Support Campaigns and Causes">
   <meta property="og:description" content="Join our community to create, share, and back projects that matter to you.">
@@ -45,9 +50,7 @@
   <meta name="twitter:image:alt" content="RallyNex platform image">
   <meta name="twitter:site" content="@RallyNex">
 
-  <!-- Stylesheets -->
-
-<!-- Schema Markup for SEO -->
+ <!-- Schema Markup for SEO -->
   <script type="application/ld+json">
   {
     "@context": "http://schema.org",
@@ -64,6 +67,7 @@
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <title>RallyNex - Support Campaigns and Causes</title>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -89,6 +93,7 @@ main {
     .lower-post {
       padding: 10px;
     }
+
 section {
   flex: 3; /* Ensure it remains flexible within its parent */
   background-color: #fff;
@@ -99,6 +104,7 @@ section {
   box-sizing: border-box; /* Include padding and border in the element's total width and height */
   border: 1px solid whitesmoke; /* Optional: Set border */
   margin: 0 auto; /* Center the section horizontally within its container */
+  
 }
 
 
@@ -117,34 +123,157 @@ section {
   padding: 20px;
 }
 
+/* Header container */
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px; /* Increased padding for a more spacious look */
+    margin: 0 auto;
+    box-sizing: border-box;
+    background-color: #f8f9fa; /* Light background for contrast */
+    border-bottom: 1px solid #e1e1e1; /* Subtle border for separation */
+}
 
-    .search-container {
-      text-align: center;
-      margin-bottom: 20px;
+/* Logo container */
+.logo-container {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+/* Logo styling */
+.logo {
+    margin-right: 15px; /* Increased space between logo and name */
+    background: none;
+    border: none;
+    box-shadow: none;
+}
+
+/* Logo initials styling */
+.logo-initials {
+    color: #28a745; /* Updated color for a fresher look */
+    font-size: 60px; /* Increased font size for prominence */
+    font-weight: bold;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-shadow: 
+        2px 2px 0 #28a745,
+        -2px -2px 0 #28a745,
+        2px -2px 0 #28a745,
+        -2px 2px 0 #28a745,
+        4px 4px 0 black,
+        -4px -4px 0 black,
+        4px -4px 0 black,
+        -4px 4px 0 black;
+}
+
+/* Logo name styling */
+.logo-name {
+    font-size: 24px; /* Increased font size */
+    margin-top: 5px; /* Slightly increased space */
+    color: #333; /* Darker color for better contrast */
+    opacity: 0.9;
+}
+
+/* Search container */
+.search-container {
+    flex: 2;
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+/* Search wrapper */
+.search-wrapper {
+    display: flex;
+    border: 2px solid #ced4da; /* Updated border color */
+    border-radius: 25px; /* Rounded corners for a modern look */
+    overflow: hidden;
+    width: 100%;
+    max-width: 600px; /* Restrict max width for better appearance */
+    box-sizing: border-box;
+}
+
+/* Input field */
+#query-field {
+    flex: 1;
+    padding: 12px 20px; /* Increased padding for a more comfortable input */
+    border: none;
+    font-size: 16px; /* Larger font size for readability */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+/* Input field focus */
+#query-field:focus {
+    outline: none;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+    border-color: #007bff; /* Add border color on focus */
+}
+
+/* Submit button (search icon) */
+.btn-search {
+    border: none;
+    background: #007bff; /* Primary button color */
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    padding: 12px; /* Increased size for better click area */
+}
+
+/* Submit button hover */
+.btn-search:hover {
+    background: #0056b3;
+    transform: scale(1.05); /* Slightly scale up on hover */
+}
+
+/* Reset button */
+.btn-reset {
+    border: none;
+    background: transparent;
+    color: #888;
+    font-size: 18px;
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease;
+    padding: 12px; /* Increased size for better click area */
+}
+
+/* Reset button hover */
+.btn-reset:hover {
+    color: #333;
+    transform: scale(1.05); /* Slightly scale up on hover */
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 15px; /* Adjusted padding for smaller screens */
     }
 
-    input[type="text"] {
-      width: calc(100% - 20px);
-      padding: 15px;
-      margin: 8px 0;
-      box-sizing: border-box;
-      border: 2px solid #32CD32; /* Blue border */
-      border-radius: 25px; /* Rounded corners */
-      outline: none; /* Remove default input focus outline */
+    .logo-container {
+        margin-bottom: 15px; /* Increased space between logo and search bar */
     }
 
-    input[type="submit"] {
-      background-color: #32CD32;/* Blue shade */
-      color: white;
-      padding: 15px 20px;
-      border: none;
-      border-radius: 25px;
-      cursor: pointer;
+    .search-wrapper {
+        border-radius: 20px; /* Adjusted border radius for mobile */
     }
 
-    input[type="submit"]:hover {
-      background-color: #228B22; /* Slightly darker blue shade on hover */
+    .btn-search, .btn-reset {
+        padding: 10px; /* Adjusted padding for mobile */
+        font-size: 16px; /* Adjusted font size */
     }
+
+    #query-field {
+        padding: 10px 15px; /* Adjusted padding */
+        font-size: 14px; /* Smaller font size for mobile */
+    }
+}
+
 
     nav {
       margin-top: 20px;
@@ -180,6 +309,27 @@ section {
       overflow: hidden;
       display: inline-block;
     }
+
+
+        .btn-submit {
+            display: block;
+            width: calc(100% - 20px);
+            padding: 10px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            background-color: #2980b9;
+        }
+
+
+
 
     .btn {
       border: 2px solid gray;
@@ -297,7 +447,6 @@ border: 1px solid silver;
   }
 }
 
-
 .comment-form-popup {
   display: none;
   position: fixed;
@@ -360,7 +509,7 @@ border: 1px solid silver;
 }
 
 .lower-post .react .reaction-count {
-  margin-right: 10px; /* Adjust as needed */
+  margin-right: 5px; /* Adjust as needed */
 }
 
 
@@ -375,7 +524,14 @@ border: 1px solid silver;
 
   }
 
-
+/* Mobile styles */
+@media only screen and (max-width: 600px) {
+    .reaction-count,
+    .comment-count {
+        font-size: 12px;
+        margin-left: 3px;
+    }
+}
 
 
 
@@ -468,7 +624,6 @@ border: 1px solid silver;
         text-decoration: none; /* Remove underline */
         color: gray; /* Inherit color from parent */
     }
-
 
 
 
@@ -567,6 +722,10 @@ border: 1px solid silver;
 }
 
 
+
+
+
+
 .sponsored-text {
     font-weight: bold;
     color: #3498db; /* You can adjust the color as needed */
@@ -613,8 +772,9 @@ border: 1px solid silver;
 
 
 .cm {
-  font-size: 12px;
+  font-size: 14px;
 }
+
 
 
 .container-with-border {
@@ -678,9 +838,78 @@ border: 1px solid silver;
 }
 
 
- 
 
- .action-item {
+
+.campaign-actions {
+    display: flex;
+    justify-content: space-between; /* Align items with space between */
+    align-items: center; /* Vertically center items */
+    margin-bottom: 20px; /* Add some space below the campaign actions */
+}
+
+/* Style for the "Report Campaign" link */
+.report-link {
+    color: #007bff; /* Set link color */
+    text-decoration: none; /* Remove default underline */
+    font-weight: bold; /* Make the text bold */
+}
+
+/* Style for the "Not Interested" form */
+.not-interested-form {
+    display: flex; /* Display form items in a row */
+    align-items: center; /* Vertically center items */
+}
+
+/* Style for the checkbox label */
+.not-interested-form label {
+    margin-right: 10px; /* Add space between the checkbox and label */
+}
+
+/* Style for the submit button */
+.submit-button {
+    background-color: #007bff; /* Set button background color */
+    color: #fff; /* Set button text color */
+    border: none; /* Remove default button border */
+    padding: 8px 16px; /* Add padding to the button */
+    border-radius: 5px; /* Add some border radius */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    transition: background-color 0.3s ease; /* Add smooth transition */
+}
+
+/* Hover effect for the submit button */
+.submit-button:hover {
+    background-color: #0056b3; /* Darken button background color on hover */
+}
+
+
+
+.share-buttons {
+    margin-top: 20px;
+}
+
+.share-buttons span {
+    margin-right: 10px;
+}
+
+.share-buttons a {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 40px;
+    margin-right: 10px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.share-buttons a:hover {
+    background-color: #0056b3;
+}
+
+       .action-item {
             display: inline-block;
             padding: 10px 20px;
             margin-right: 10px;
@@ -812,85 +1041,6 @@ border: 1px solid silver;
 
 
 
-        /* Add styles for the blue tick */
-        .blue-tick {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            background-color: blue;
-            border-radius: 50%;
-            position: absolute;
-            top: 10px;
-            right: 10px;
-        }
-
-        .objectives-activities {
-            display: none;
-        }
-        .campaign-category {
-            cursor: pointer;
-          
-           
-        }
-
-.logo-initials {
-    color: limegreen; /* Lime text color */
-    display: inline-block;
-    font-size: 60px; /* Adjust size as needed */
-    font-weight: bold;
-    letter-spacing: 2px; /* Spacing between letters */
-    text-transform: uppercase; /* Uppercase text */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Modern font */
-    position: relative; /* Positioning context for pseudo-element */
-       text-shadow: 
-        3px 3px 0 limegreen, /* Lime green shadow */
-        -3px -3px 0 limegreen, /* Lime green shadow */
-        3px -3px 0 limegreen, /* Lime green shadow */
-        -3px 3px 0 limegreen, /* Lime green shadow */
-        5px 5px 0 black, /* Black shadow */
-        -5px -5px 0 black, /* Black shadow */
-        5px -5px 0 black, /* Black shadow */
-        -5px 5px 0 black; /* Black shadow */
-}
-}
-
-.logo-initials::after {
-    content: 'R'; /* Ensures the letter is displayed */
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: -1; /* Behind the main letter */
-    text-shadow: 
-        3px 3px 0 limegreen, /* Lime green shadow */
-        -3px -3px 0 limegreen, /* Lime green shadow */
-        3px -3px 0 limegreen, /* Lime green shadow */
-        -3px 3px 0 limegreen, /* Lime green shadow */
-        5px 5px 0 black, /* Black shadow */
-        -5px -5px 0 black, /* Black shadow */
-        5px -5px 0 black, /* Black shadow */
-        -5px 5px 0 black; /* Black shadow */
-}
-
-        .logo-container {
-          
-            text-align: center;
-            padding: 10px; /* Reduced padding for a smaller container */
-            border-radius: 8px; /* Rounded corners */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Soft shadow */
-            transition: all 0.3s ease; /* Smooth transition */
-            max-width: 120px; /* Adjust the maximum width as needed */
-            margin: 0 auto; /* Center align the container */
-        }
-
-
-.logo-name {
-    display: block;
-    font-size: 24px; /* Adjust size as needed */
-    margin-top: 5px; /* Space between initials and name */
-    opacity: 0.8; /* Slightly transparent */
-    
-}
-
 .tagline {
     display: block;
     font-size: 18px; /* Adjust size as needed */
@@ -1006,18 +1156,6 @@ border: 1px solid silver;
     opacity: 1; /* Show on hover */
 }
 
-  .left-aside, .right-aside {
-    flex: 1;
-    background-color: #fff;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-  }
-
-  @media (max-width: 768px) {
-    .left-aside, .right-aside {
-      display: none;
-    }
-  }
 
 
   .left-aside, .right-aside {
@@ -1144,120 +1282,100 @@ border: 1px solid silver;
 
 
 
-/* Mobile styles */
-@media only screen and (max-width: 600px) {
-    .reaction-count,
-    .comment-count {
-        font-size: 12px;
-        margin-left: 3px;
-    }
+@media (max-width: 480px) {
+  .upper-post, .lower-post, .upload-container {
+    padding: 10px;
+  }
+}
+/* Container for campaign members */
+.campaign-members {
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+    max-height: 300px; /* Set a maximum height for the container */
+    overflow-y: auto;  /* Enable vertical scrolling if content overflows */
 }
 
+/* Heading for members section */
+.campaign-members h4 {
+    font-size: 1.5em;
+    color: #333;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
 
+/* List of members */
+.campaign-members ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Individual member item */
+.campaign-members li {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect for member items */
+.campaign-members li:hover {
+    background-color: #eaf1f8;
+}
+
+/* Member profile picture */
+.campaign-members .profile-pic {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 15px;
+}
+
+/* Profile picture image */
+.campaign-members .profile-pic img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Member username */
+.campaign-members .member-username {
+    font-size: 1em;
+    color: #007bff;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+/* Hover effect for username links */
+.campaign-members .member-username:hover {
+    color: #0056b3;
+}
 
 
   </style>
 
 
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-function switchColor() {
-    var body = document.body;
-    var logoContainer = document.querySelector('.logo-container');
+    document.addEventListener('DOMContentLoaded', function() {
+        const resetButton = document.getElementById('reset-field');
+        const queryField = document.getElementById('query-field');
 
-    // Define the color sequence (black, white)
-    var colors = ["black", "white"];
-
-    // Find the index of the current color in the sequence
-    var currentIndex = colors.indexOf(body.style.backgroundColor);
-
-    // Set the next color in the sequence
-    var nextColor = colors[(currentIndex + 1) % colors.length];
-
-    // Apply the new color to the body and other elements
-    body.style.backgroundColor = nextColor;
-
-    // Change background color and border of logo-container based on nextColor
-    if (nextColor === "black") {
-        logoContainer.style.backgroundColor = "#262626";
-        logoContainer.style.border = ""; 
-        logoContainer.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)"; 
-         // Add white border
-    } else {
-        logoContainer.style.backgroundColor = ""; // or "transparent"
-        logoContainer.style.border = "none";  // Remove border
-    }
-
-    // Other elements to be updated based on nextColor
-    var header = document.querySelector('header');
-    var footer = document.querySelector('footer');
-    var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, p, li, nav a, .btn,.upper-post, .reaction, .campaign-content, .action-item, .action-item a');
-    var buttons = document.querySelectorAll('button');
-    var reactDivs = document.querySelectorAll('.react div');
-    var loveCounts = document.querySelectorAll('[id^="love-count-"]');
-    var viewCounts = document.querySelectorAll('#view-count');
-    var commentCounts = document.querySelectorAll('.comment-count');
-
-    header.style.backgroundColor = nextColor;
-    footer.style.backgroundColor = nextColor;
-
-    sections.forEach(function(section) {
-        section.style.backgroundColor = nextColor;
+        resetButton.addEventListener('click', function() {
+            queryField.value = ''; // Clear the input field
+            queryField.focus(); // Optionally, refocus the input field
+        });
     });
+</script>
 
-    var textColor = nextColor === "black" ? "white" : "black";
-    header.style.color = textColor;
-    footer.style.color = textColor;
+<script>
 
-    textElements.forEach(function(element) {
-        element.style.color = textColor;
-    });
-
-    var buttonColor = nextColor === "black" ? "#262626" : "";
-    buttons.forEach(function(button) {
-        button.style.backgroundColor = buttonColor;
-
-        if (nextColor === "black") {
-            button.classList.add('button-hover');
-        } else {
-            button.classList.remove('button-hover');
-            button.style.backgroundColor = "";
-        }
-    });
-
-    reactDivs.forEach(function(reactDiv) {
-        reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
-
-        var reactTextColor = nextColor === "black" ? "white" : "black";
-        reactDiv.style.color = reactTextColor;
-
-        if (nextColor === "black") {
-            reactDiv.classList.add('react-hover');
-        } else {
-            reactDiv.classList.remove('react-hover');
-            reactDiv.style.backgroundColor = "";
-        }
-    });
-
-    var countTextColor = nextColor === "black" ? "white" : "black";
-    loveCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-    viewCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-    commentCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-}
-
-
-function toggleCommentForm() {
-    var popup = document.getElementById("commentFormPopup");
-    popup.style.display = "block";
-}
 
 function closeCommentForm() {
     var popup = document.getElementById("commentFormPopup");
@@ -1323,14 +1441,75 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('visibilitychange', handleVisibilityChange);
     document.addEventListener('scroll', handleScroll);
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    var mediaQuery = window.matchMedia('(max-width: 768px)');
+    var leftAside = document.querySelector('.left-aside');
+    var rightAside = document.querySelector('.right-aside');
+
+    function handleMediaQueryChange(e) {
+        if (e.matches) {
+            leftAside.style.display = 'none';
+            rightAside.style.display = 'none';
+        } else {
+            leftAside.style.display = 'block';
+            rightAside.style.display = 'block';
+        }
+    }
+
+    mediaQuery.addListener(handleMediaQueryChange);
+    handleMediaQueryChange(mediaQuery);
+});
+
+</script>
+
+<script type="text/javascript">
+  
+document.addEventListener("DOMContentLoaded", function() {
+    const navbarToggle = document.getElementById("navbarToggle");
+    const navbar = document.getElementById("navbar");
+    const popupClose = document.getElementById("popupClose");
+
+    // Toggle navbar visibility
+    navbarToggle.addEventListener("click", function() {
+        if (navbar.style.display === "block") {
+            navbar.style.display = "none";
+        } else {
+            navbar.style.display = "block";
+        }
+    });
+
+    // Close popup when clicking the close button
+    popupClose.addEventListener("click", function() {
+        navbar.style.display = "none";
+    });
+
+    // Adjust navbar display on window resize
+    window.addEventListener("resize", function() {
+        if (window.innerWidth > 768) {
+            navbar.style.display = "none";
+        } else if (navbar.style.display === "block") {
+            navbar.style.display = "block";
+        } else {
+            navbar.style.display = "none";
+        }
+    });
+
+    // Ensure the navbar is initially hidden on page load for larger screens
+    if (window.innerWidth > 768) {
+        navbar.style.display = "none";
+    } else {
+        navbar.style.display = "none"; // or "block" based on your initial requirement
+    }
+});
 </script>
 
 
-
-
 </head>
-<body id="mainBody" >
 
+
+
+<body id="mainBody" >
 
 
 
@@ -1339,21 +1518,29 @@ document.addEventListener('DOMContentLoaded', function() {
 <header>
             <span id="navbarToggle" class="navbar-toggle">☰</span></br>
 
-<div class="logo-container">
-    <div class="logo">
-        <span class="logo-initials">R</span>
-       
-      
+<div class="header-container">
+    <div class="logo-container">
+        <div class="logo">
+            <span class="logo-initials">R</span>
+        </div>
+        <span class="logo-name">Rallynex</span>
+    </div>
+
+    <div class="search-container">
+        <form action="{% url 'search_campaign' %}" method="get">
+            <div class="search-wrapper">
+                <input type="text" placeholder="Search..." name="query_field" id="query-field">
+                <button type="submit" class="btn-search">
+                    <i class="fas fa-search"></i>
+                </button>
+                <button type="button" class="btn-reset" id="reset-field">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 
-
-<div class="search-container">
-    <form action="{% url 'search_campaign' %}" method="get">
-        <input type="text" placeholder="Search..." name="search_query">
-        <button type="submit">Search</button>
-    </form>
-</div><br>
 
     <div class="action-item">
         <a href="#" onclick="uploadAudio()">
@@ -1361,10 +1548,15 @@ document.addEventListener('DOMContentLoaded', function() {
         </a>
     </div>
     
+    <div class="action-item">
+        <a href="#" onclick="switchColor()">
+            <i class="fas fa-sync-alt"></i>
+        </a>
+    </div>
     
     <audio id="bgAudio" autoplay loop></audio>
 
-           <nav id="navbar" class="navbar">
+         <nav id="navbar" class="navbar">
          <span id="popupClose" class="popup-close">&times;</span>
     <ul>
        <li>
@@ -1376,8 +1568,8 @@ document.addEventListener('DOMContentLoaded', function() {
 </a>
 
 </li>
-        <li><a href="{% url 'public_campaign' %}" style="color: white;"><i class="fas fa-globe"></i> Public Campaigns</a></li>
-        <li><a href="{% url 'private_campaign' %}" style="color: white;"><i class="fas fa-lock"></i> Private Campaigns</a></li>
+        <li><a href="{% url 'manage_campaigns' %}" style="color: white;"><i class="fas fa-cog"></i> Manage </a></li>
+        <li><a href="{% url 'private_campaign' %}" style="color: white;"><i class="fas fa-lock"></i> Private </a></li>
         <li><a href="{% url 'user_chats' %}" style="color: white;"><i class="fas fa-comment-alt"></i> Chat Table</a></li>
         <li>
     <a href="{% url 'notification_list' %}" style="color: white; position: relative;">
@@ -1390,6 +1582,10 @@ document.addEventListener('DOMContentLoaded', function() {
 </li>
 
         <li><a href="{% url 'suggest' %}" style="color: white;"><i class="fas fa-user-friends"></i> Suggested Users</a></li>
+
+                <li><a href="{% url 'profile_view' username=user.username %}" style="color: white; margin-right: 15px;">
+            <i class="fas fa-user"></i> Visit Profile
+        </a></li>
         <!-- Add logout link here -->
                 <li>
           <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"  style="color:black;">
@@ -1405,11 +1601,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         </nav>
 </header>
-
-
-
-
-
 
 
 
@@ -1434,8 +1625,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </li>
 
-        <li><a href="{% url 'public_campaign' %}" style="color: black;"><i class="fas fa-globe"></i> Public Campaigns</a></li>
-        <li><a href="{% url 'private_campaign' %}" style="color: black;"><i class="fas fa-lock"></i> Private Campaigns</a></li>
+        <li><a href="{% url 'manage_campaigns' %}" style="color: black;"><i class="fas fa-cog"></i> Manage </a></li>
+        <li><a href="{% url 'private_campaign' %}" style="color: black;"><i class="fas fa-lock"></i> Private </a></li>
       <!-- Chat Table link with red spot -->
 <li>
     <a href="{% url 'user_chats' %}" style="color: black; position: relative;">
@@ -1479,15 +1670,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 <p style="text-align: center;">
-  <a href="{% url 'platformfund' %}" class="donate-link">🌟 Help Us Grow! Support Our Mission with Your Generosity 🌟</a>
+ <!-- Assuming this is in a template file like base.html -->
+<a href="{% url 'platformfund' %}" class="donate-link">🌟 Help Us Grow! Support Our Mission with Your Generosity 🌟</a>
+
 </p>
     
+
+
 
                         <div class="square-with-arrow" style="font-size:14px;" >
                             <i class="fas fa-square"></i>
                             <i class="fas fa-arrow-right"></i>
                         </div>
-    
+
+
+
+
 
 </aside>
 
@@ -1495,158 +1693,204 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
+<section>
 
-
-    <section>
-
-
-
-
-      <!-- Beautiful upload button -->
-      <div class="upload-container">
-       <div class="upload-btn-wrapper">
-  <button class="btn">+ Upload
-     <a href="{% url 'create_campaign' %}" class="overlay-link"></a>
-
-  </button>
-</div>
-
-      </div></br>
-
-
-
-
-
-<h2 style="font-size:19px; padding-left: 20px;"> Private_campaigns</h2>
-
-{% if private_campaigns %}
-    <div style="border-left: 2px solid #3498db; height: 600px; overflow-y: auto;overflow-x: hidden; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-{% for campaign in private_campaigns %}
-<div class="container-with-border">
-    <div class="upper-post">
-        <div class="profile-pic">
-            <a href="{% url 'profile_view' username=campaign.user.user.username %}">
-                <img src="{{ campaign.user.image.url }}" alt="Profile Picture" class="profile-pic-hover">
-            </a>
-        </div>
-        <div class="post-details">
-            <h1>{{ campaign.user.user.username }}
-        {% if campaign.user.is_verified %}
-            <span class="verified-status" style="font-size:12px;">✅Verified</span>
-        {% endif %}
-
-             . <i class="cm"> cm</i></h1> 
-            {{ campaign.category }} Campaign
-            <h2 style="font-size:19px;"><a href="{% url 'view_campaign' campaign_id=campaign.pk %}" style="color:#3498db;"><span>{{ campaign.title }}</span></a></h2>
-            <sp class="time-location">{{ campaign.timestamp|timesince }} ago - {{ campaign.user.location }}</sp>
-            <div class="campaign-content" data-campaign-id="{{ campaign.id }}">
-                {{ campaign.content|safe }}
-            </div>
-            <!-- Render other activity details as needed -->
+    <!-- Beautiful upload button -->
+    <div class="upload-container">
+        <div class="upload-btn-wrapper">
+            <button class="btn">+ Upload
+                <a href="{% url 'create_campaign' %}" class="overlay-link"></a>
+            </button>
         </div>
     </div>
+    </br>
 
-    <div class="file-container">
-        <div style="position: relative;">
-                   <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="activity-link"><i style='font-size:24px' class='fas'>&#xf6e3;</i> 
-            <span class="icon-label">Activities</span>
-            </a>
-            <a href="{% url 'support' campaign_id=campaign.id %}" class="support-link"><i class="material-icons"style="font-size:24px;">&#xe925;</i>
-             <span class="icon-label">Participate</span>
-            </a>
-             
-            {% if campaign.file %}
-                <a href="{{ campaign.file.url }}">
-                    <img src="{{ campaign.file.url }}" alt="Image Description" id="campaign-image" style="max-width: 100%; height: auto;">
+    <h2 style="font-size:19px; padding-left: 20px;">Private Campaigns Shared With You.</h2>
+
+  {% if private_campaigns %}
+  </p>
+    <div style="border-left: 2px solid #3498db; height: 600px; overflow-y: auto; overflow-x: hidden; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+        {% for campaign in private_campaigns %}
+            <div class="container-with-border">
+                <div class="upper-post">
+                    <div class="profile-pic">
+                        <a href="{% url 'profile_view' username=campaign.user.user.username %}">
+                            <img src="{{ campaign.user.image.url }}" alt="Profile Picture" class="profile-pic-hover">
+                        </a>
+                    </div>
+                    <div class="post-details">
+                        <h1>{{ campaign.user.user.username }} 
+                            {% if campaign.user.is_verified %}
+                                <span class="verified-status" style="font-size:12px;">✅Verified</span>
+                            {% endif %}
+                            . <i class="cm"> cm</i>
+                        </h1> 
+
+                        <div class="campaign-category" style="cursor: pointer;">
+                            {{ campaign.category }} Campaign
+                        </div>
+
+                        <div class="objectives-activities"></br>
+                            <h3>Objective:</h3>
+                            <p>{{ campaign.get_objective_and_activities.Objectives }}</p>
+                        </div>
+
+                        <h2 style="font-size:19px;">
+                            <a href="{% url 'view_campaign' campaign_id=campaign.pk %}" style="color:#3498db;">
+                                <span>{{ campaign.title }}</span>
+                            </a>
+                        </h2>
+                        <sp class="time-location">{{ campaign.timestamp|timesince }} ago - {{ campaign.user.location }}</sp>
+                        <div class="campaign-content" data-campaign-id="{{ campaign.id }}">
+                            {{ campaign.content|safe }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="file-container">
+                    <div style="position: relative;">
+                        <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="activity-link">
+                            <i style='font-size:24px' class='fas'>&#xf6e3;</i>
+                            <span class="icon-label">Activities</span>
+                        </a>
+                        <a href="{% url 'support' campaign_id=campaign.id %}" class="support-link">
+                            <i class="material-icons" style="font-size:24px;">&#xe925;</i>
+                            <span class="icon-label">Participate</span>
+                        </a>
+
+                        <!-- Campaign poster -->
+                        {% if campaign.poster %}
+                            <a href="{{ campaign.poster.url }}">
+                                <img src="{{ campaign.poster.url }}" alt="Image Description" class="campaign-poster" style="max-width: 100%; height: auto;">
+                            </a>
+                        {% else %}
+                            <p>No file associated with this campaign.</p>
+                        {% endif %}
+
+                        <!-- Audio player -->
+                        {% if campaign.audio %}
+                            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                                <source src="{{ campaign.audio.url }}" type="audio/mpeg">
+                                Your browser does not support the audio element.
+                            </audio>
+                        {% else %}
+                            <div class="audio-player">
+                                {% if campaign.category == 'Environmental Conservation' %}
+                                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                                        <source src="{% static 'main/audio/environment.mp3' %}" type="audio/mpeg">
+                                    </audio>
+                                {% elif campaign.category == 'Community Development' %}
+                                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                                        <source src="{% static 'main/audio/community.mp3' %}" type="audio/mpeg">
+                                    </audio>
+                                {% elif campaign.category == 'Health and Wellness' %}
+                                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                                        <source src="{% static 'main/audio/health.mp3' %}" type="audio/mpeg">
+                                    </audio>
+                                {% elif campaign.category == 'Education and Literacy' %}
+                                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                                        <source src="{% static 'main/audio/education1.mp3' %}" type="audio/mpeg">
+                                    </audio>
+                                {% elif campaign.category == 'Equality and Inclusion' %}
+                                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                                        <source src="{% static 'main/audio/Equality1.mp3' %}" type="audio/mpeg">
+                                    </audio>
+                                {% elif campaign.category == 'Animal Welfare' %}
+                                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                                        <source src="{% static 'main/audio/animal.mp3' %}" type="audio/mpeg">
+                                    </audio>
+                                {% elif campaign.category == 'Humanitarian Aid' %}
+                                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                                        <source src="{% static 'main/audio/Humanitarian Aid.mp3' %}" type="audio/mpeg">
+                                    </audio>
+                                {% elif campaign.category == 'Sustainable Development' %}
+                                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                                        <source src="{% static 'main/audio/Sustainable.mp3' %}" type="audio/mpeg">
+                                    </audio>
+                                {% elif campaign.category == 'Peace and Conflict Resolution' %}
+                                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                                        <source src="{% static 'main/audio/peace.mp3' %}" type="audio/mpeg">
+                                    </audio>
+                                {% elif campaign.category == 'Digital Rights' %}
+                                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                                        <source src="{% static 'main/audio/digital.mp3' %}" type="audio/mpeg">
+                                    </audio>
+                                {% elif campaign.category == 'Economic Empowerment' %}
+                                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                                        <source src="{% static 'main/audio/economic.mp3' %}" type="audio/mpeg">
+                                    </audio>
+                                {% elif campaign.category == 'Policy Advocacy' %}
+                                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                                        <source src="{% static 'main/audio/Policy.mp3' %}" type="audio/mpeg">
+                                    </audio>
+                                {% elif campaign.category == 'Artistic Advocacy' %}
+                                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                                        <source src="{% static 'main/audio/art.mp3' %}" type="audio/mpeg">
+                                    </audio>
+                                {% else %}
+                                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                                        <source src="{% static 'main/audio/default.mp3' %}" type="audio/mpeg">
+                                    </audio>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="lower-post">
+                    <div class="react">
+                         <div class="love">
+            <span style="cursor: pointer; font-size: 19px;" id="love-icon-{{ campaign.id }}" class="love-icon {% if user.is_authenticated and already_loved %}loved{% endif %}" onclick="toggleLove({{ campaign.id }})">
+                <i class="far fa-heart"></i>
+            </span>
+            <span style="color:gray; font-size:14px;" id="love-count-{{ campaign.id }}">{{ campaign.love_count }}</span>
+        </div>
+        <div class="view">
+            <i class="far fa-eye" style="font-size: 19px;"></i>
+            <span class="reaction-count" id="view-count">{{ campaign.campaignview_set.count }} views</span>
+        </div>
+        <div class="comment">
+            <span>
+                <i class="far fa-comment" style="font-size:19px;"></i>
+            </span>
+            <a href="{% url 'campaign_comments' campaign_id=campaign.id %}" class="comment-count">comments</a>
+
+
+        </div>
+                       
+                    </div>
+
+                   <div class="campaign-members">
+    <!-- Display campaign followers (visible_to_followers members) -->
+    <h3>Visible to:</h3>
+    <ul>
+        {% for follower in campaign.visible_to_followers.all %}
+            <li>
+                <a href="{% url 'profile_view' follower.user.username %}">
+                    {{ follower.user.username }}
                 </a>
-            {% else %}
-                <p>No file associated with this campaign.</p>
-            {% endif %}
-        </div>
-    </div>
-
-    <div class="lower-post">
-        <div class="react">
-            <div class="love">
-                <span style="cursor: pointer; font-size: 19px;" id="love-icon-{{ campaign.id }}" class="love-icon {% if user.is_authenticated and already_loved %}loved{% endif %}" onclick="toggleLove({{ campaign.id }})">
-                    <i class="far fa-heart"></i>
-                </span>
-                <span style="color:gray; font-size:14px;" id="love-count-{{ campaign.id }}">{{ campaign.love_count|format_count  }}</span>
-            </div>
-            <div class="view">
-                <i class="far fa-eye" style="font-size: 19px;"></i>
-                <span class="reaction-count" id="view-count">{{ campaign.campaignview_set.count|format_count  }} views</span>
-            </div>
-            <div class="comment">
-                <span>
-                    <i class="far fa-comment" style="font-size:19px;"></i>
-                </span>
-                <a href="{% url 'campaign_comments' campaign_id=campaign.id %}" class="comment-count">comments</a>
-            </div>
-
-             <a href="{% url 'update_visibilit' campaign.id %}" class="update-visibility-link">Update Visibility</a>
-        </div>
-        <!-- Report campaign link -->
-
-      
-    </div>
+            </li>
+        {% empty %}
+            <li>No followers for this campaign</li>
+        {% endfor %}
+    </ul>
 </div>
-{% endfor %}
+
+                    
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% else %}
-<!-- Default campaign display for when there are no public campaigns -->
-<div class="container-with-border">
-    <div class="upper-post">
-        <div class="profile-pic">
-            <img src="{% static 'main/files/am.jpg' %}" alt="Default Profile Picture" class="profile-pic-hover">
-        </div>
-        <div class="post-details">
-            <h1>Default User</h1>
-            Default Category Campaign
-            <h2><a href="#" style="color:#3498db; font-size:19px ;"><span>Default Campaign Title</span></a></h2>
-            <sp class="time-location">Just now - Default Location</sp>
-            <div class="campaign-content">
-                This is a default campaign content. It will give you an idea of how your real campaign will look like.
-            </div>
-        </div>
-    </div>
-    <div class="file-container">
-        <div style="position: relative;">
-                    <a href="#" class="activity-link"><i style='font-size:24px' class='fas'>&#xf6e3;</i> 
-            <span class="icon-label">Activities</span>
-            </a>
-            <a href="#" class="support-link"><i class="material-icons"style="font-size:24px;">&#xe925;</i>
-             <span class="icon-label">Participate</span>
-            </a>
-             
-            <img src="{% static 'main/files/defo.png' %}" alt="Default Campaign Image" id="campaign-image" style="max-width: 100%; height: auto;">
-        </div>
-    </div>
-    <div class="lower-post">
-        <div class="react">
-            <div class="love">
-                <span style="cursor: pointer; font-size: 19px;">
-                    <i class="far fa-heart"></i>
-                </span>
-                <span style="color:gray; font-size:14px;" id="love-count-{{ campaign.id }}">0</span>
-            </div>
-            <div class="view">
-                <i class="far fa-eye" style="font-size: 19px;"></i>
-                <span class="reaction-count" id="view-count">0 views</span>
-            </div>
-            <div class="comment">
-                <span>
-                    <i class="far fa-comment" style="font-size:19px;"></i>
-                </span>
-                <a href="#" class="comment-count">comments</a>
-            </div>
-        </div>
-    </div>
-</div>
+    <p style="padding:20px;">No private campaigns available.</p>
 {% endif %}
+
 </section>
 
 
 <aside class="right-aside">
+
+
   <nav  style="display:none;">
 
     <ul>
@@ -1656,7 +1900,11 @@ document.addEventListener('DOMContentLoaded', function() {
 </nav><br>
   <div style="border: 1px solid #808080; padding: 20px; text-align: center; border-radius: 10px;">
      
-    <h2 style="margin-bottom: 10px;">{{ user_profile.user.username }} . <i class="cm"> changemaker(cm)</i></h2>
+    <h2 style="margin-bottom: 10px;">{{ user_profile.user.username }} 
+      . <i class="cm"> changemaker(cm)</i></h2>
+               {% if user_profile.is_verified %}
+        <p><strong>Status:</strong> ✅Verified</p>
+    {% endif %}
    <img src="{{ user_profile.image.url }}"  alt="Profile Image" width="150" height="150" style="
       object-fit: cover;
       border: 4px solid #32CD32;
@@ -1673,10 +1921,9 @@ document.addEventListener('DOMContentLoaded', function() {
 <div style="margin-top: 20px;">
     <a href="{% url 'profile_view' username=user.username %}" style="text-decoration: none; color: #007bff; margin-right: 15px;">Visit Profile</a>
 </div>
-  </div>
+  </div></br>
 
-    </br>
-  <!-- Display Ads -->
+<!-- Display Ads -->
 <!-- Carousel for Ads -->
 <div class="carousel">
     <div class="slides">
@@ -1694,25 +1941,27 @@ document.addEventListener('DOMContentLoaded', function() {
         {% endfor %}
     </div>
 </div>
+
+
 </aside>
   </main>
+
+
+
+
+
 <hr>
 
 <footer class="footer">
     <div class="footer-content">
-       <!-- <div class="footer-section">
-            <h2>Quick Links</h2>
-           
-            <a href="{% url 'jobs' %}">Jobs|</a>
-            <a href="{% url 'events' %}">Events</a>
-        </div>-->
+        <!-- Existing footer sections -->
         <div class="footer-section">
             <h2>Contact Us</h2>
             <p>Email: rallynex1@gmail.com</p>
             <p style="display:none;">Address: 123 Networking St, Net City</p>
         </div>
-        <div class="footer-section"style=" display: none;">
-            <h2>Follow Us</h2 >
+        <div class="footer-section" style="display: none;">
+            <h2>Follow Us</h2>
             <div class="social-icons">
                 <a href="#"><i class="fab fa-facebook-f"></i></a>
                 <a href="#"><i class="fab fa-twitter"></i></a>
@@ -1723,14 +1972,15 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
         <div class="footer-section">
             <h2>Subscribe</h2>
-                     {% include "revenue/subscribe.html" %}
+            <!-- Include subscription form -->
+        
+            <p><a href="{% url 'subscribe' %}" class="subscribe-link">Subscribe Now</a></p>
         </div>
         <div class="footer-section">
             <h2>Legal</h2>
             <a href="{% url 'privacy_policy' %}">Privacy Policy|</a>
             <a href="{% url 'terms_of_service' %}">Terms of Service|</a>
-           <a href="{% url 'project_support' %}">Support</a>
-
+            <a href="{% url 'project_support' %}">Support</a>
         </div>
     </div>
     <div class="footer-bottom">
@@ -1739,58 +1989,113 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
 </footer>
 
+<style>
+.subscribe-link {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.subscribe-link:hover {
+    text-decoration: underline;
+}
+
+.subscribe-link {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.subscribe-link:hover {
+    text-decoration: underline;
+}
+
+</style>
+
+
    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    
+
+
 <script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function () {
+    const posters = document.querySelectorAll('.campaign-poster'); // Select all campaign posters
+    const audios = document.querySelectorAll('.campaign-audio');   // Select all campaign audios
+    let activeAudio = null;  // Track currently playing audio
 
+    // Function to check if an element is in the viewport
+    const isElementInViewport = (el) => {
+        const rect = el.getBoundingClientRect();
+        return rect.top >= 0 && rect.bottom <= (window.innerHeight || document.documentElement.clientHeight);
+    };
 
+    // Function to play the audio associated with the visible poster
+    const playAudioForVisiblePoster = () => {
+        posters.forEach((poster, index) => {
+            const audio = audios[index]; // Get the corresponding audio for this poster
 
-
-
-
-
-
-
-
-
-document.addEventListener('DOMContentLoaded', function() {
-    const campaigns = document.querySelectorAll('.campaign-content');
-    
-    campaigns.forEach(campaign => {
-        const content = campaign.textContent.trim().split(' ');
-        if (content.length > 30) {
-            const excessWords = content.slice(30).join(' ');
-            const truncatedContent = content.slice(0, 30).join(' ');
-            campaign.innerHTML = truncatedContent + '...' +
-                '<span class="hidden-content" style="display: none;">' + excessWords + '</span>';
-            const seeMoreBtn = document.createElement('li');
-            seeMoreBtn.textContent = 'See More';
-            seeMoreBtn.classList.add('see-more-btn');
-            // Add pointer cursor style
-            seeMoreBtn.style.cursor = 'pointer';
-            campaign.parentNode.appendChild(seeMoreBtn);
-
-            seeMoreBtn.addEventListener('click', function() {
-                const hiddenContent = this.previousElementSibling.querySelector('.hidden-content');
-                if (hiddenContent.style.display === 'none') {
-                    hiddenContent.style.display = 'inline';
-                    this.textContent = 'See Less';
-                } else {
-                    hiddenContent.style.display = 'none';
-                    this.textContent = 'See More';
+            if (isElementInViewport(poster) && audio) { // Check if audio exists
+                // Pause any other active audio before playing this one
+                if (activeAudio && activeAudio !== audio) {
+                    activeAudio.pause();
                 }
-            });
-        }
+
+                audio.muted = false; // Unmute the audio
+                audio.play().catch(err => {
+                    console.log("Autoplay failed: ", err);
+                });
+                activeAudio = audio; // Set the active audio
+            } else if (audio) { // Only pause if the audio element exists
+                audio.pause(); // Pause if the poster is out of the viewport
+            }
+        });
+    };
+
+    // Automatically play the main campaign audio
+    audios.forEach(audio => {
+        // Set autoplay and mute initially to bypass browser restrictions
+        audio.muted = true; // Start muted
+        audio.autoplay = true;
+        audio.loop = true;
+        audio.preload = 'auto';
+
+        // Play the audio and unmute it
+        audio.play().then(() => {
+            audio.muted = false; // Unmute after autoplay starts
+        }).catch(err => {
+            console.log("Autoplay failed: ", err);
+        });
+    });
+
+    // IntersectionObserver to track when posters enter or leave the viewport
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            const index = [...posters].indexOf(entry.target);
+            const audio = audios[index];
+
+            if (entry.isIntersecting && audio) { // Check if audio exists
+                if (activeAudio && activeAudio !== audio) {
+                    activeAudio.pause(); // Pause the currently playing audio
+                }
+                audio.muted = false; // Unmute the audio
+                audio.play().catch(err => {
+                    console.log("Autoplay failed: ", err);
+                });
+                activeAudio = audio; // Set the new active audio
+            } else if (audio) { // Only pause if the audio element exists
+                audio.pause(); // Pause the audio if the poster is out of the viewport
+            }
+        });
+    });
+
+    // Observe each campaign poster element
+    posters.forEach(poster => {
+        observer.observe(poster);
     });
 });
+</script>
 
 
-
-
-
-
-
-
+<script type="text/javascript">
 
 
  function toggleLove(campaignId) {
@@ -1904,6 +2209,52 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 
 
+    document.querySelector('.campaign-category').addEventListener('click', function() {
+        const objectivesActivities = document.querySelector('.objectives-activities');
+        if (objectivesActivities.style.display === 'none' || objectivesActivities.style.display === '') {
+            objectivesActivities.style.display = 'block';
+        } else {
+            objectivesActivities.style.display = 'none';
+        }
+    });
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const campaigns = document.querySelectorAll('.campaign-content');
+    
+    campaigns.forEach(campaign => {
+        const content = campaign.textContent.trim().split(' ');
+        if (content.length > 30) {
+            const excessWords = content.slice(30).join(' ');
+            const truncatedContent = content.slice(0, 30).join(' ');
+            campaign.innerHTML = truncatedContent + '...' +
+                '<span class="hidden-content" style="display: none;">' + excessWords + '</span>';
+            const seeMoreBtn = document.createElement('li');
+            seeMoreBtn.textContent = 'See More';
+            seeMoreBtn.classList.add('see-more-btn');
+            // Add pointer cursor style
+            seeMoreBtn.style.cursor = 'pointer';
+            campaign.parentNode.appendChild(seeMoreBtn);
+
+            seeMoreBtn.addEventListener('click', function() {
+                const hiddenContent = this.previousElementSibling.querySelector('.hidden-content');
+                if (hiddenContent.style.display === 'none') {
+                    hiddenContent.style.display = 'inline';
+                    this.textContent = 'See Less';
+                } else {
+                    hiddenContent.style.display = 'none';
+                    this.textContent = 'See More';
+                }
+            });
+        }
+    });
+});
+
+
+
+
+
         const slides = document.querySelector('.slides');
         const slideCount = document.querySelectorAll('.slide').length;
         const slideWidth = document.querySelector('.slide').clientWidth;
@@ -1916,70 +2267,131 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-  document.addEventListener('DOMContentLoaded', function() {
-    var mediaQuery = window.matchMedia('(max-width: 768px)');
-    var leftAside = document.querySelector('.left-aside');
-    var rightAside = document.querySelector('.right-aside');
-
-    function handleMediaQueryChange(e) {
-      if (e.matches) {
-        leftAside.style.display = 'none';
-        rightAside.style.display = 'none';
-      } else {
-        leftAside.style.display = 'block';
-        rightAside.style.display = 'block';
-      }
-    }
-
-    mediaQuery.addListener(handleMediaQueryChange);
-    handleMediaQueryChange(mediaQuery);
-  });
 
 
+  $(document).ready(function() {
+            // Example: Preventing navigation link from refreshing the page
+            $('a.nav-link').click(function(event) {
+                event.preventDefault(); // Prevent default action (e.g., page refresh)
+                
+                // Get the href attribute of the clicked link
+                var href = $(this).attr('href');
+                
+                // Perform your custom logic here
+                console.log('Navigation link clicked! Performing custom action...');
+                
+                // Optionally, load new content or update UI dynamically here
+                // Example: Load content using AJAX or manipulate DOM elements
+                
+                // For demonstration, you can simulate navigation
+                // window.location.href = href;
+            });
+        });
 
 </script>
 
 
+
 <script type="text/javascript">
-  
-document.addEventListener("DOMContentLoaded", function() {
-    const navbarToggle = document.getElementById("navbarToggle");
-    const navbar = document.getElementById("navbar");
-    const popupClose = document.getElementById("popupClose");
+  function switchColor() {
+    var body = document.body;
+    var logoContainer = document.querySelector('.logo-container');
 
-    // Toggle navbar visibility
-    navbarToggle.addEventListener("click", function() {
-        if (navbar.style.display === "block") {
-            navbar.style.display = "none";
-        } else {
-            navbar.style.display = "block";
-        }
-    });
+    // Define the color sequence (black, white)
+    var colors = ["black", "white"];
 
-    // Close popup when clicking the close button
-    popupClose.addEventListener("click", function() {
-        navbar.style.display = "none";
-    });
+    // Find the index of the current color in the sequence
+    var currentIndex = colors.indexOf(body.style.backgroundColor);
 
-    // Adjust navbar display on window resize
-    window.addEventListener("resize", function() {
-        if (window.innerWidth > 768) {
-            navbar.style.display = "none";
-        } else if (navbar.style.display === "block") {
-            navbar.style.display = "block";
-        } else {
-            navbar.style.display = "none";
-        }
-    });
+    // Set the next color in the sequence
+    var nextColor = colors[(currentIndex + 1) % colors.length];
 
-    // Ensure the navbar is initially hidden on page load for larger screens
-    if (window.innerWidth > 768) {
-        navbar.style.display = "none";
+    // Apply the new color to the body and other elements
+    body.style.backgroundColor = nextColor;
+
+    // Change background color and border of logo-container based on nextColor
+    if (nextColor === "black") {
+        logoContainer.style.backgroundColor = "";
+        logoContainer.style.border = "none"; 
     } else {
-        navbar.style.display = "none"; // or "block" based on your initial requirement
+        logoContainer.style.backgroundColor = ""; // or "transparent"
+        logoContainer.style.border = "none";  // Remove border
     }
-});
 
+    // Other elements to be updated based on nextColor
+    var header = document.querySelector('header');
+    var footer = document.querySelector('footer');
+    var sections = document.querySelectorAll('section, .left-aside, .right-aside');
+    var textElements = document.querySelectorAll('h1, h2, p, li, nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
+    var buttons = document.querySelectorAll('button');
+    var reactDivs = document.querySelectorAll('.react div');
+    var loveCounts = document.querySelectorAll('[id^="love-count-"]');
+    var viewCounts = document.querySelectorAll('#view-count');
+    var commentCounts = document.querySelectorAll('.comment-count');
+
+    // Update header background color based on nextColor
+    if (nextColor === "black") {
+        header.style.backgroundColor = "#333333";  // Darker gray when background is black
+    } else {
+        header.style.backgroundColor = nextColor;
+    }
+
+    footer.style.backgroundColor = nextColor;
+
+    sections.forEach(function(section) {
+        section.style.backgroundColor = nextColor;
+    });
+
+    var textColor = nextColor === "black" ? "white" : "black";
+    header.style.color = textColor;
+    footer.style.color = textColor;
+
+    textElements.forEach(function(element) {
+        element.style.color = textColor;
+    });
+
+    var buttonColor = nextColor === "black" ? "#262626" : "";
+    buttons.forEach(function(button) {
+        button.style.backgroundColor = buttonColor;
+
+        if (nextColor === "black") {
+            button.classList.add('button-hover');
+        } else {
+            button.classList.remove('button-hover');
+            button.style.backgroundColor = "";
+        }
+    });
+
+    reactDivs.forEach(function(reactDiv) {
+        reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
+
+        var reactTextColor = nextColor === "black" ? "white" : "black";
+        reactDiv.style.color = reactTextColor;
+
+        if (nextColor === "black") {
+            reactDiv.classList.add('react-hover');
+        } else {
+            reactDiv.classList.remove('react-hover');
+            reactDiv.style.backgroundColor = "";
+        }
+    });
+
+    var countTextColor = nextColor === "black" ? "white" : "black";
+    loveCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+    viewCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+    commentCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+}
+
+function toggleCommentForm() {
+    var popup = document.getElementById("commentFormPopup");
+    popup.style.display = "block";
+}
 </script>
 </body>
 </html>

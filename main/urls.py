@@ -1,8 +1,11 @@
 from django.urls import path, include
 from . import views
 from .views import CustomLoginView
+from .views import CampaignDeleteView
 
 urlpatterns = [
+    path('campaign/delete/<int:pk>/', CampaignDeleteView.as_view(), name='campaign-delete'),
+    path('user-campgn/', views.user_campgn, name='user_campgn'), 
     path('libraries/', views.library_affiliates, name='library_affiliates'),
     path('news/', views.news_affiliates, name='news_affiliates'),
     path('poster-canva/', views.poster_canva, name='poster_canva'),
@@ -64,7 +67,7 @@ urlpatterns = [
     path('campaign/<int:campaign_id>/support-campaign/', views.campaign_support, name='campaign_support'),
     path('thank-you/', views.thank_you, name='thank_you'),
     path('home', views.home, name='home'),
-    path('public-campaigns/', views.public_campaign, name='public_campaign'),
+    path('manage_campaigns/', views.manage_campaigns, name='manage_campaigns'),
     path('face', views.face, name='face'),
     path('create_campaign/', views.create_campaign, name='create_campaign'),
     path('edit-profile/<str:username>/', views.profile_edit, name='edit_profile'),

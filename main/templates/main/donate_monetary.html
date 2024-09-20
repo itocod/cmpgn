@@ -81,6 +81,41 @@
             </li>
         </ul>
     </div>
+    <script type="text/javascript">
+           function uploadAudio() {
+        var input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'audio/*, video/*';
+
+        input.onchange = function(e) {
+            var file = e.target.files[0];
+            var audio = document.getElementById('bgAudio');
+            audio.pause();
+            localStorage.setItem('bgAudioFile', URL.createObjectURL(file));
+            localStorage.setItem('bgAudioPosition', audio.currentTime);
+            audio.src = localStorage.getItem('bgAudioFile');
+            audio.play();
+        };
+
+        input.click();
+    }
+
+    window.onload = function() {
+        var audio = document.getElementById('bgAudio');
+        var bgAudioFile = localStorage.getItem('bgAudioFile');
+        var audioPosition = parseFloat(localStorage.getItem('bgAudioPosition'));
+
+        if (bgAudioFile) {
+            audio.src = bgAudioFile;
+            audio.addEventListener('loadedmetadata', function() {
+                if (!isNaN(audioPosition)) {
+                    audio.currentTime = audioPosition;
+                }
+                audio.play();
+            });
+        }
+    }
+    </script>
 </body>
 
 </html>

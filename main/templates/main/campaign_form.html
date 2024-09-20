@@ -8,30 +8,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Campaign</title>
     <style type="text/css">
-        /* Your existing CSS styles */
-        #campaign_form {
+        /* Custom CSS Styles */
+        .campaign-form-container {
             border: 2px solid white;
-            padding: 20px;
+            padding: 30px; /* Increased padding for the form */
+           
+            border-radius: 10px; /* Optional: Rounded corners for a better look */
+            margin: 20px auto; /* Center the form horizontally with margin */
+            max-width: 800px; /* Optional: Set a max width for the form */
         }
 
-        h3 {   
+        .heading-primary {   
             color: #333;
+            margin-bottom: 20px; /* Space below the heading */
         }
 
-        .form-group {
+        .input-group {
             margin-bottom: 20px;
         }
 
-        label {
+        .input-group label {
             font-weight: bold;
             color: #555;
         }
 
-        input[type="text"],
-        input[type="email"],
-        input[type="image"],
-        textarea,
-        select {
+        .input-group input[type="text"],
+        .input-group input[type="email"],
+        .input-group input[type="image"],
+        .input-group textarea,
+        .input-group select {
             width: calc(100% - 20px);
             padding: 15px;   
             border: 1px solid #ccc;
@@ -41,22 +46,22 @@
             transition: border-color 0.3s ease;
         }
 
-        input[type="text"]:focus,
-        input[type="email"]:focus,
-        input[type="file"]:focus,
-        textarea:focus,
-        select:focus {
+        .input-group input[type="text"]:focus,
+        .input-group input[type="email"]:focus,
+        .input-group input[type="file"]:focus,
+        .input-group textarea:focus,
+        .input-group select:focus {
             outline: none;
             border-color: #007bff;
         }
 
-        textarea {
+        .input-group textarea {
             resize: none;
             height: 200px;
             overflow-y: auto;
         }
 
-        select {
+        .input-group select {
             appearance: none;
             -webkit-appearance: none;
             -moz-appearance: none;
@@ -66,7 +71,7 @@
             background-size: 12px;
         }
 
-        .btn-submit {
+        .primary-btn {
             display: block;
             width: calc(100% - 20px);
             padding: 10px;
@@ -79,31 +84,29 @@
             transition: background-color 0.3s ease;
         }
 
-        .btn-submit:hover {
+        .primary-btn:hover {
             background-color: #2980b9;
         }
 
-        .form-text {
+        .form-help-text {
             color: #777;
         }
 
+        /* Emoji buttons styling */
+        .emoji-btn {
+            background-color: transparent;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            margin-right: 5px;
+        }
 
-        /* Add this CSS code to your existing styles */
+        .emoji-btn:hover {
+            transform: scale(1.2); /* Scale up the button on hover */
+        }
 
-/* Emoji buttons styling */
-button[type="button"] {
-    background-color: transparent;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-    margin-right: 5px;
-}
-
-button[type="button"]:hover {
-    transform: scale(1.2); /* Scale up the button on hover */
-}
-     .action-item {
+        .action-box {
             display: inline-block;
             padding: 10px 20px;
             margin-right: 10px;
@@ -111,96 +114,143 @@ button[type="button"]:hover {
             text-align: center;
             font-size: 12px; /* Adjust the font size as needed */
         }
-        .action-item a {
-           color: #000;
+
+        .action-box a {
+            color: #000;
             text-decoration: none;
             font-size: inherit;
         }
-        .action-item i {
+
+        .action-box i {
             margin-right: 5px;
         }
+
+        .create-poster-link {
+    display: inline-block;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 50px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+}
+
+.create-poster-link::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    height: 300%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: translate(-50%, -50%) rotate(30deg);
+    transition: opacity 0.3s ease;
+    z-index: 0;
+}
+
+.create-poster-link:hover {
+    transform: scale(1.1);
+    background: linear-gradient(135deg, #2575fc, #6a11cb);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.create-poster-link:hover::before {
+    opacity: 0;
+}
+
+.create-poster-link span {
+    position: relative;
+    z-index: 1;
+}
+
     </style>
 </head>
 <body>
 
- 
-        <h2 style="font-size: 19px; padding-left: 20px;">Campaign_Form</h2>
-
-   <form method="post" enctype="multipart/form-data" id="campaign_form">
-        {% csrf_token %}
-        <h3>Create your Campaign</h3>
-        
-        <p>
-            <label for="id_title">Title:</label><br>
-            <input type="text" id="id_title" name="title" required><br>
-            <span>Provide a concise title for your campaign.</span>
-        </p>
-     
+    <div class="campaign-form-container">
     
-        <p>
-            <label for="id_category">Category:</label><br>
-            <select id="id_category" name="category">
-                {% for category in categories %}
-                    <option value="{{ category.0 }}">{{ category.1 }}</option>
-                {% endfor %}
-            </select><br>
-            <span>Choose the category of your campaign.</span>
-        </p>
-        <p>
-            <label for="id_poster">Poster:</label><br>
-            <input type="file" id="id_poster" name="poster"><br>
-            <span>Upload any related poster for your campaign.</span>
-                     <a href="{% url 'poster_canva' %}" target="_blank" style="display: inline-block; margin-top: 10px; color: #3498db; text-decoration: none; font-weight: bold; border: 1px solid #3498db; padding: 8px 16px;font-size: 16px; border-radius: 4px; background-color: #f1f8ff;">Create a poster with Canva</a>
-        </p>
-        <p>
-            <label for="id_visibility">Visibility:</label><br>
-            <select id="id_visibility" name="visibility">
-                <option value="public">Public</option>
-                <option value="private">Private</option>
-            </select><br>
-            <span>Choose how to display your campaign.</span>
+<form method="post" enctype="multipart/form-data" id="campaignForm">
+    {% csrf_token %}
+    <h3 class="heading-primary"> Create Campaign Form</h3>
 
-        </p>       
-  
+    <p class="input-group">
+        <label for="id_title">Title:</label><br>
+        <input type="text" id="id_title" name="title" required><br>
+        <span class="form-help-text">Provide a concise title for your campaign.</span>
+    </p>
 
-        
-        <p>  
-         
-            <label for="id_content">Content:</label><br>
-            <textarea id="id_content" name="content" required></textarea><br>
-            <!-- Emoji buttons related to campaigns -->
-             <div style="border-left: 2px solid #3498db; height: 100px; overflow-y: auto; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-    <p style="padding: 15px">
-            <button type="button" onclick="insertEmoji('💼')">💼</button> <!-- Briefcase -->
-            <button type="button" onclick="insertEmoji('📋')">📋</button> <!-- Clipboard -->
-            <button type="button" onclick="insertEmoji('📈')">📈</button> <!-- Chart Increasing -->
-            <button type="button" onclick="insertEmoji('🚀')">🚀</button> <!-- Rocket -->
-            <button type="button" onclick="insertEmoji('💡')">💡</button> <!-- Lightbulb -->
-            <!-- Add more buttons for other campaign-related emojis as needed -->
-            <button type="button" onclick="insertEmoji('🔍')">🔍</button> <!-- Magnifying Glass Tilted Left -->
-            <button type="button" onclick="insertEmoji('📣')">📣</button> <!-- Megaphone -->
-            <button type="button" onclick="insertEmoji('🎯')">🎯</button> <!-- Bullseye -->
-            <button type="button" onclick="insertEmoji('🎉')">🎉</button> <!-- Party Popper -->
-            <button type="button" onclick="insertEmoji('🔔')">🔔</button> <!-- Bell -->
-            <!-- Add more buttons with other campaign-related emojis as needed -->
-            <button type="button" onclick="insertEmoji('📱')">📱</button> <!-- Smartphone -->
-            <button type="button" onclick="insertEmoji('💸')">💸</button> <!-- Money With Wings -->
-            <button type="button" onclick="insertEmoji('🔑')">🔑</button> <!-- Key -->
-            <button type="button" onclick="insertEmoji('🔦')">🔦</button> <!-- Flashlight -->
-            <button type="button" onclick="insertEmoji('🎁')">🎁</button> <!-- Wrapped Gift -->
-            <!-- Add more buttons with other campaign-related emojis as needed -->
-            <button type="button" onclick="insertEmoji('📆')">📆</button> <!-- Calendar -->
-            <button type="button" onclick="insertEmoji('💻')">💻</button> <!-- Laptop -->
-            <button type="button" onclick="insertEmoji('📝')">📝</button> <!-- Memo -->
-            <button type="button" onclick="insertEmoji('🔧')">🔧</button> <!-- Wrench -->
-            <button type="button" onclick="insertEmoji('🛠️')">🛠️</button> <!-- Hammer and Wrench -->
-            <!-- Add more buttons with other campaign-related emojis as needed -->
-       </div>    
-        </p>
-    
-        <button type="submit" class="btn-submit">Submit</button>
-    </form>
+    <p class="input-group">
+        <label for="id_category">Category:</label><br>
+        <select id="id_category" name="category">
+            {% for category in categories %}
+                <option value="{{ category.0 }}">{{ category.1 }}</option>
+            {% endfor %}
+        </select><br>
+        <span class="form-help-text">Choose the category of your campaign.</span>
+    </p>
 
+    <p class="input-group">
+        <label for="id_poster">Poster:</label><br>
+        <input type="file" id="id_poster" name="poster"><br>
+        <span class="form-help-text">Upload any related poster for your campaign.</span>
+        <a href="{% url 'poster_canva' %}" target="_blank" class="create-poster-link">Create a poster with Canva</a>
+    </p>
+
+    <p class="input-group">
+        <label for="id_audio">Audio:</label><br>
+        <input type="file" id="id_audio" name="audio"><br>
+        <span class="form-help-text">Upload an audio file for your campaign.</span>
+    </p>
+
+    <p class="input-group">
+        <label for="id_visibility">Visibility:</label><br>
+        <select id="id_visibility" name="visibility">
+            <option value="public">Public</option>
+            <option value="private">Private</option>
+        </select><br>
+        <span class="form-help-text">Choose how to display your campaign.</span>
+    </p>
+
+    <p class="input-group">  
+        <label for="id_content">Content:</label><br>
+        <textarea id="id_content" name="content" required></textarea><br>
+        <!-- Emoji buttons related to campaigns -->
+        <div class="emoji-container">
+            <p>
+                <button class="emoji-btn" type="button" onclick="insertEmoji('💼')">💼</button>
+                <button class="emoji-btn" type="button" onclick="insertEmoji('📋')">📋</button>
+                <button class="emoji-btn" type="button" onclick="insertEmoji('📈')">📈</button>
+                <button class="emoji-btn" type="button" onclick="insertEmoji('🚀')">🚀</button>
+                <button class="emoji-btn" type="button" onclick="insertEmoji('💡')">💡</button>
+                <button class="emoji-btn" type="button" onclick="insertEmoji('🔍')">🔍</button>
+                <button class="emoji-btn" type="button" onclick="insertEmoji('📣')">📣</button>
+                <button class="emoji-btn" type="button" onclick="insertEmoji('🎯')">🎯</button>
+                <button class="emoji-btn" type="button" onclick="insertEmoji('🎉')">🎉</button>
+                <button class="emoji-btn" type="button" onclick="insertEmoji('🔔')">🔔</button>
+                <button class="emoji-btn" type="button" onclick="insertEmoji('📱')">📱</button>
+                <button class="emoji-btn" type="button" onclick="insertEmoji('💸')">💸</button>
+                <button class="emoji-btn" type="button" onclick="insertEmoji('🔑')">🔑</button>
+                <button class="emoji-btn" type="button" onclick="insertEmoji('🔦')">🔦</button>
+                <button class="emoji-btn" type="button" onclick="insertEmoji('🎁')">🎁</button>
+                <button class="emoji-btn" type="button" onclick="insertEmoji('📆')">📆</button>
+                <button class="emoji-btn" type="button" onclick="insertEmoji('💻')">💻</button>
+                <button class="emoji-btn" type="button" onclick="insertEmoji('📝')">📝</button>
+                <button class="emoji-btn" type="button" onclick="insertEmoji('🔧')">🔧</button>
+                <button class="emoji-btn" type="button" onclick="insertEmoji('🛠️')">🛠️</button>
+            </p>    
+        </div>    
+    </p>
+
+    <button type="submit" class="primary-btn">Submit</button>
+</form>
+
+    </div>
     <script>
 // Function to insert emoji into textarea
 function insertEmoji(emoji) {
@@ -215,6 +265,7 @@ function insertEmoji(emoji) {
 function submitForm() {
     document.getElementById('campaign_form').submit();
 }
+
 
 function switchColor() {
     var body = document.body;
@@ -234,10 +285,8 @@ function switchColor() {
 
     // Change background color and border of logo-container based on nextColor
     if (nextColor === "black") {
-        logoContainer.style.backgroundColor = "#262626";
-        logoContainer.style.border = ""; 
-        logoContainer.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)"; 
-         // Add white border
+        logoContainer.style.backgroundColor = "";
+        logoContainer.style.border = "none"; 
     } else {
         logoContainer.style.backgroundColor = ""; // or "transparent"
         logoContainer.style.border = "none";  // Remove border
@@ -247,14 +296,20 @@ function switchColor() {
     var header = document.querySelector('header');
     var footer = document.querySelector('footer');
     var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, p, li, nav a, .btn,.upper-post, .reaction, .campaign-content, .action-item, .action-item a');
+    var textElements = document.querySelectorAll('h1, h2, p, li, nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
     var buttons = document.querySelectorAll('button');
     var reactDivs = document.querySelectorAll('.react div');
     var loveCounts = document.querySelectorAll('[id^="love-count-"]');
     var viewCounts = document.querySelectorAll('#view-count');
     var commentCounts = document.querySelectorAll('.comment-count');
 
-    header.style.backgroundColor = nextColor;
+    // Update header background color based on nextColor
+    if (nextColor === "black") {
+        header.style.backgroundColor = "#333333";  // Darker gray when background is black
+    } else {
+        header.style.backgroundColor = nextColor;
+    }
+
     footer.style.backgroundColor = nextColor;
 
     sections.forEach(function(section) {
@@ -306,7 +361,6 @@ function switchColor() {
         element.style.color = countTextColor;
     });
 }
-
 
 
         // Function to handle file upload and playback

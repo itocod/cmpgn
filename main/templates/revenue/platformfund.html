@@ -98,6 +98,177 @@
             </li>
         {% endfor %}
     </ul>
+    <script type="text/javascript">
+ function switchColor() {
+    var body = document.body;
+    var logoContainer = document.querySelector('.logo-container');
+
+    // Define the color sequence (black, white)
+    var colors = ["black", "white"];
+
+    // Find the index of the current color in the sequence
+    var currentIndex = colors.indexOf(body.style.backgroundColor);
+
+    // Set the next color in the sequence
+    var nextColor = colors[(currentIndex + 1) % colors.length];
+
+    // Apply the new color to the body and other elements
+    body.style.backgroundColor = nextColor;
+
+    // Change background color and border of logo-container based on nextColor
+    if (nextColor === "black") {
+        logoContainer.style.backgroundColor = "";
+        logoContainer.style.border = "none"; 
+    } else {
+        logoContainer.style.backgroundColor = ""; // or "transparent"
+        logoContainer.style.border = "none";  // Remove border
+    }
+
+    // Other elements to be updated based on nextColor
+    var header = document.querySelector('header');
+    var footer = document.querySelector('footer');
+    var sections = document.querySelectorAll('section, .left-aside, .right-aside');
+    var textElements = document.querySelectorAll('h1, h2, p, li, nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
+    var buttons = document.querySelectorAll('button');
+    var reactDivs = document.querySelectorAll('.react div');
+    var loveCounts = document.querySelectorAll('[id^="love-count-"]');
+    var viewCounts = document.querySelectorAll('#view-count');
+    var commentCounts = document.querySelectorAll('.comment-count');
+
+    // Update header background color based on nextColor
+    if (nextColor === "black") {
+        header.style.backgroundColor = "#333333";  // Darker gray when background is black
+    } else {
+        header.style.backgroundColor = nextColor;
+    }
+
+    footer.style.backgroundColor = nextColor;
+
+    sections.forEach(function(section) {
+        section.style.backgroundColor = nextColor;
+    });
+
+    var textColor = nextColor === "black" ? "white" : "black";
+    header.style.color = textColor;
+    footer.style.color = textColor;
+
+    textElements.forEach(function(element) {
+        element.style.color = textColor;
+    });
+
+    var buttonColor = nextColor === "black" ? "#262626" : "";
+    buttons.forEach(function(button) {
+        button.style.backgroundColor = buttonColor;
+
+        if (nextColor === "black") {
+            button.classList.add('button-hover');
+        } else {
+            button.classList.remove('button-hover');
+            button.style.backgroundColor = "";
+        }
+    });
+
+    reactDivs.forEach(function(reactDiv) {
+        reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
+
+        var reactTextColor = nextColor === "black" ? "white" : "black";
+        reactDiv.style.color = reactTextColor;
+
+        if (nextColor === "black") {
+            reactDiv.classList.add('react-hover');
+        } else {
+            reactDiv.classList.remove('react-hover');
+            reactDiv.style.backgroundColor = "";
+        }
+    });
+
+    var countTextColor = nextColor === "black" ? "white" : "black";
+    loveCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+    viewCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+    commentCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+}
+
+
+</script>
+<script type="text/javascript">    function uploadAudio() {
+        var input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'audio/*, video/*';
+
+        input.onchange = function(e) {
+            var file = e.target.files[0];
+            var audio = document.getElementById('bgAudio');
+            audio.pause();
+            localStorage.setItem('bgAudioFile', URL.createObjectURL(file));
+            localStorage.setItem('bgAudioPosition', audio.currentTime);
+            audio.src = localStorage.getItem('bgAudioFile');
+            audio.play();
+        };
+
+        input.click();
+    }
+
+    window.onload = function() {
+        var audio = document.getElementById('bgAudio');
+        var bgAudioFile = localStorage.getItem('bgAudioFile');
+        var audioPosition = parseFloat(localStorage.getItem('bgAudioPosition'));
+
+        if (bgAudioFile) {
+            audio.src = bgAudioFile;
+            audio.addEventListener('loadedmetadata', function() {
+                if (!isNaN(audioPosition)) {
+                    audio.currentTime = audioPosition;
+                }
+                audio.play();
+            });
+        }
+    }</script>
+      <script type="text/javascript">
+        
+document.addEventListener("DOMContentLoaded", function() {
+    const navbarToggle = document.getElementById("navbarToggle");
+    const navbar = document.getElementById("navbar");
+    const popupClose = document.getElementById("popupClose");
+
+    // Toggle navbar visibility
+    navbarToggle.addEventListener("click", function() {
+        if (navbar.style.display === "block") {
+            navbar.style.display = "none";
+        } else {
+            navbar.style.display = "block";
+        }
+    });
+
+    // Close popup when clicking the close button
+    popupClose.addEventListener("click", function() {
+        navbar.style.display = "none";
+    });
+
+    // Adjust navbar display on window resize
+    window.addEventListener("resize", function() {
+        if (window.innerWidth > 768) {
+            navbar.style.display = "none";
+        } else if (navbar.style.display === "block") {
+            navbar.style.display = "block";
+        } else {
+            navbar.style.display = "none";
+        }
+    });
+
+    // Ensure the navbar is initially hidden on page load for larger screens
+    if (window.innerWidth > 768) {
+        navbar.style.display = "none";
+    } else {
+        navbar.style.display = "none"; // or "block" based on your initial requirement
+    }
+});
+    </script>
 </body>
 </html>
 

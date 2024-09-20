@@ -3,16 +3,15 @@ import uuid
 from django.conf import settings
 from django.db import models
 from django.contrib.auth import get_user_model
-from datetime import date
 from django.utils import timezone
-from django.db.models.signals import post_save, m2m_changed
-from django.dispatch import receiver
 from PIL import Image
-from tinymce.models import HTMLField  
-from django.urls import reverse
 from io import BytesIO
 from django.core.files.base import ContentFile
-import base64
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from tinymce.models import HTMLField
+from django.db.models.signals import m2m_changed
+from django.urls import reverse
 
 
 User = get_user_model()
@@ -45,42 +44,33 @@ class Profile(models.Model):
     date_of_birth = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=True)
     campaigns = models.ManyToManyField('Campaign', related_name='user_profiles', blank=True)
-    following = models.ManyToManyField(User, related_name='following_profiles')
-    followers = models.ManyToManyField(User, related_name='follower_profiles')
+    following = models.ManyToManyField(User, related_name='following_profiles', blank=True)
+    followers = models.ManyToManyField(User, related_name='follower_profiles', blank=True)
     last_campaign_check = models.DateTimeField(default=timezone.now)
     last_chat_check = models.DateTimeField(default=timezone.now)
     is_verified = models.BooleanField(default=False)
 
     def followers_count(self):
-        return self.followers.all().count()
+        return self.followers.count()
 
     def following_count(self):
-        return self.following.all().count()
+        return self.following.count()
 
     def has_exactly_two_followers(self):
         return self.followers_count() == 2
 
-        
     def age(self):
         if self.date_of_birth:
             today = timezone.now().date()
             age = today.year - self.date_of_birth.year - ((today.month, today.day) < (self.date_of_birth.month, self.date_of_birth.day))
             return age
-            return None
-
+        return None
 
     def update_verification_status(self):
         self.is_verified = self.followers_count() >= 2
         self.save(update_fields=['is_verified'])
 
-        
-    def followers_count(self):
-        return self.user.followers.count()
-
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-
-        # Handle image processing
         if self.image:
             img = Image.open(self.image)
             if img.height > 300 or img.width > 300:
@@ -92,24 +82,19 @@ class Profile(models.Model):
                 img.save(buffer, format=img.format)
                 buffer.seek(0)
                 self.image.save(self.image.name, ContentFile(buffer.read()), save=False)
-
         super().save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.user.username} Profile'
 
 
-
-
-
 @receiver(post_save, sender=User)
-def create_user_profile(sender, instance, created, **kwargs):
+def create_or_update_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
+    else:
+        instance.profile.save()
 
-@receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save()
 
 
 
@@ -124,17 +109,11 @@ class Follow(models.Model):
         is_new = self.pk is None
         super().save(*args, **kwargs)
         if is_new:
-            # Update the followed user's profile verification status
             self.followed.profile.update_verification_status()
-            
-            # Create the notification message
             follower_username = self.follower.username
             followed_username = self.followed.username
             message = f"{follower_username} started following you. <a href='{reverse('profile_view', kwargs={'username': follower_username})}'>View Profile</a>"
-            # Create the notification
             Notification.objects.create(user=self.followed, message=message)
-
-
 
 def default_content():
     return 'Default content'
@@ -159,13 +138,18 @@ class Brainstorming(models.Model):
             Notification.objects.create(user=self.campaign.user.user, message=message, campaign=self.campaign)
 
 
+from django.db import models
+from django.utils import timezone
+from django.urls import reverse
+
 class Campaign(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='user_campaigns')
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=300)
     timestamp = models.DateTimeField(auto_now_add=True)
     content = models.TextField()
-    poster = models.ImageField(upload_to='campaign_posters/', null=True, blank=True)  # Add this line
-    
+    poster = models.ImageField(upload_to='campaign_files', null=True, blank=True)
+    audio = models.FileField(upload_to='campaign_audio', null=True, blank=True)
+
     CATEGORY_CHOICES = (
         ('Environmental Conservation', 'Environmental Conservation'),
         ('Community Development', 'Community Development'),
@@ -183,17 +167,54 @@ class Campaign(models.Model):
         ('Other', 'Other'),
     )
     category = models.CharField(max_length=30, choices=CATEGORY_CHOICES, default='Environmental Conservation')
-    
+
     VISIBILITY_CHOICES = (
         ('public', 'Public'),
         ('private', 'Private'),
     )
     visibility = models.CharField(max_length=10, choices=VISIBILITY_CHOICES, default='public')
-    
-    allowed_viewers = models.ManyToManyField(Profile, related_name='allowed_campaigns', blank=True)
-    
+
+    # Followers who can see the campaign when it's private
+    visible_to_followers = models.ManyToManyField(Profile, blank=True, related_name='visible_campaigns')
+
+
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        # Check if the campaign is new or if visibility has changed
+        is_new = self.pk is None
+        if not is_new:
+            old_instance = Campaign.objects.get(pk=self.pk)
+            visibility_changed = old_instance.visibility != self.visibility
+        else:
+            visibility_changed = False
+
+        # Save the campaign
+        super().save(*args, **kwargs)
+
+        # Notify followers if the campaign has become private or if it's a new campaign
+        if self.visibility == 'private' or is_new:
+            if is_new or visibility_changed:
+                self.notify_visible_to_followers()
+
+    def notify_visible_to_followers(self):
+        for profile in self.visible_to_followers.all():
+            user = profile.user  # Ensure this relationship is correctly set
+            message = (
+                f'You have been granted access to a private campaign: {self.title}. '
+                f'<a href="{reverse("view_campaign", kwargs={"campaign_id": self.pk})}">View Campaign</a>'
+            )
+            Notification.objects.create(
+                user=user,
+                message=message,
+                timestamp=timezone.now(),
+                campaign_notification=True,
+                campaign=self,
+                redirect_link=f'/campaigns/{self.pk}/'
+            )
+
+
 
     @property
     def love_count(self):
@@ -204,158 +225,263 @@ class Campaign(models.Model):
 
     def get_objective_and_activities(self):
         objectives_activities = {
-            'Environmental Conservation': {
-                'Objectives': [
-                    'Promote environmental conservation and sustainability practices.',
-                    'Protect endangered species or ecosystems.',
-                ],
-                'Activities': [
-                    'Organize clean-up events for beaches, parks, or urban areas.',
-                    'Plant trees or establish community gardens.',
-                    'Advocate for environmental legislation or initiatives.',
-                ]
-            },
-            'Community Development': {
-                'Objectives': [
-                    'Improve infrastructure and amenities within a community.',
-                    'Foster social cohesion and civic engagement.',
-                ],
-                'Activities': [
-                    'Organize community clean-up or beautification projects.',
-                    'Advocate for improvements in housing or public spaces.',
-                    'Establish community centers or hubs for social activities.',
-                ]
-            },
-            'Health and Wellness': {
-                'Objectives': [
-                    'Promote health and wellness initiatives.',
-                    'Raise awareness about healthcare issues or conditions.',
-                ],
-                'Activities': [
-                    'Organize health screenings or vaccination drives.',
-                    'Fundraise for medical treatments or equipment.',
-                    'Advocate for healthcare policy changes.',
-                ]
-            },
-            'Education and Literacy': {
-                'Objectives': [
-                    'Promote and facilitate learning opportunities within a community.',
-                    'Improve access to education resources and support.',
-                ],
-                'Activities': [
-                    'Offer tutoring or mentoring programs for students.',
-                    'Organize workshops or conferences on educational topics.',
-                ]
-            },
-            'Equality and Inclusion': {
-                'Objectives': [
-                    'Promote equality, diversity, and inclusion.',
-                    'Advocate for the rights of marginalized communities.',
-                ],
-                'Activities': [
-                    'Organize awareness campaigns and educational seminars.',
-                    'Support social justice initiatives and advocacy efforts.',
-                ]
-            },
-            'Animal Welfare': {
-                'Objectives': [
-                    'Promote the welfare and rights of animals.',
-                    'Rescue and provide care for animals in need.',
-                ],
-                'Activities': [
-                    'Fundraise for animal shelters or rescue organizations.',
-                    'Advocate for animal protection laws or policies.',
-                    'Organize adoption events or pet care workshops.',
-                ]
-            },
-            'Humanitarian Aid': {
-                'Objectives': [
-                    'Provide humanitarian assistance to communities in need.',
-                    'Respond to humanitarian crises and emergencies.',
-                ],
-                'Activities': [
-                    'Fundraise for humanitarian relief efforts.',
-                    'Coordinate aid distribution and relief operations.',
-                    'Provide medical care and essential supplies.',
-                ]
-            },
-            'Sustainable Development': {
-                'Objectives': [
-                    'Promote sustainable development practices.',
-                    'Support initiatives for long-term environmental and social sustainability.',
-                ],
-                'Activities': [
-                    'Implement renewable energy projects.',
-                    'Advocate for sustainable agriculture and resource management.',
-                    'Educate communities about sustainable living practices.',
-                ]
-            },
-            'Peace and Conflict Resolution': {
-                'Objectives': [
-                    'Promote peacebuilding and conflict resolution.',
-                    'Support reconciliation and peace initiatives.',
-                ],
-                'Activities': [
-                    'Organize peacebuilding workshops and dialogues.',
-                    'Support mediation and dialogue processes.',
-                    'Advocate for peace and disarmament policies.',
-                ]
-            },
-            'Digital Rights': {
-                'Objectives': [
-                    'Advocate for digital rights and online privacy protection.',
-                    'Promote internet freedom and access to information.',
-                ],
-                'Activities': [
-                    'Campaign for digital rights legislation and policies.',
-                    'Raise awareness about online security and data privacy issues.',
-                    'Provide digital literacy training and resources.',
-                ]
-            },
-            'Economic Empowerment': {
-                'Objectives': [
-                    'Promote economic empowerment and entrepreneurship.',
-                    'Support initiatives for job creation and financial inclusion.',
-                ],
-                'Activities': [
-                    'Offer business development training and mentorship.',
-                    'Facilitate access to microloans or small business grants.',
-                    'Organize networking events and economic forums.',
-                ]
-            },
-            'Policy Advocacy': {
-                'Objectives': [
-                    'Advocate for policy changes and legislative reform.',
-                    'Promote public awareness and engagement in policy issues.',
-                ],
-                'Activities': [
-                    'Develop policy briefs and position papers.',
-                    'Engage with policymakers and government officials.',
-                    'Mobilize grassroots advocacy campaigns.',
-                ]
-            },
-            'Artistic Advocacy': {
-                'Objectives': [
-                    'Promote and support artistic expression and creativity for social causes.',
-                    'Provide platforms for artists to advocate for their causes through art.',
-                ],
-                'Activities': [
-                    'Organize art exhibitions and galleries focused on social issues.',
-                    'Conduct art workshops and classes that highlight advocacy.',
-                    'Fundraise for art supplies and resources for advocacy projects.',
-                    'Advocate for the importance of art in education and society.',
-                ]
-            },
-            'Other': {
-                'Objectives': [
-                    'Support miscellaneous causes or initiatives not covered by other categories.',
-                ],
-                'Activities': [
-                    'Tailor activities based on the specific nature of the campaign.',
-                ]
+         'Environmental Conservation': {
+    'Objectives': [
+        'Promote environmental conservation and sustainability practices.',
+        'Protect endangered species or ecosystems.',
+    ],
+    'Activities': [
+        'Organize clean-up events for beaches, parks, or urban areas.',
+        'Plant trees or establish community gardens.',
+        'Advocate for environmental legislation or initiatives.',
+        'Fundraise for conservation efforts or endangered species programs.',
+        'Host workshops or events on sustainable living practices.',
+        'Collaborate with wildlife experts or organizations to protect endangered species.',
+        'Initiate habitat restoration projects for ecosystems in danger.',
+        'Raise awareness about conservation issues through  campaigns.',
+        'Organize petition campaigns to support environmental laws and policies.',
+        'Partner with local environmental organizations to scale conservation efforts.',
+    ]
+},
+         'Community Development': {
+    'Objectives': [
+        'Improve infrastructure and amenities within a community.',
+        'Foster social cohesion and civic engagement.',
+    ],
+    'Activities': [
+        'Organize community clean-up or beautification projects.',
+        'Advocate for improvements in housing or public spaces.',
+        'Establish community centers or hubs for social activities.',
+        'Create programs to support local businesses or entrepreneurs.',
+        'Organize neighborhood safety initiatives or watch groups.',
+        'Host cultural or social events to strengthen community bonds.',
+        'Develop mentorship or educational programs for youth or underprivileged groups.',
+        'Raise funds for infrastructure projects, such as parks or playgrounds.',
+        'Promote volunteerism within the community to address local issues.',
+        'Collaborate with local government to address specific community needs.',
+    ]
+},
+'Health and Wellness': {
+    'Objectives': [
+        'Promote health and wellness initiatives.',
+        'Raise awareness about healthcare issues or conditions.',
+    ],
+    'Activities': [
+        'Organize health screenings or vaccination drives.',
+        'Fundraise for medical treatments or equipment.',
+        'Advocate for healthcare policy changes.',
+        'Host workshops or seminars on healthy living and disease prevention.',
+        'Collaborate with local health professionals to provide free medical consultations.',
+        'Raise awareness about mental health through campaigns or workshops.',
+        'Organize fitness challenges or community exercise programs.',
+        'Establish support groups for individuals dealing with chronic illnesses or conditions.',
+        'Promote nutritional education and healthy eating habits.',
+        'Partner with healthcare providers to offer discounted or free services for underserved populations.',
+    ]
+},
+
+'Education and Literacy': {
+    'Objectives': [
+        'Promote and facilitate learning opportunities within a community.',
+        'Improve access to education resources and support.',
+    ],
+    'Activities': [
+        'Offer tutoring or mentoring programs for students.',
+        'Organize workshops or conferences on educational topics.',
+        'Raise funds to provide educational materials or scholarships for underprivileged students.',
+        'Establish community libraries or book donation drives.',
+        'Collaborate with educators to create after-school programs or learning clubs.',
+        'Host literacy campaigns aimed at reducing illiteracy rates in underserved areas.',
+        'Promote digital literacy and access to technology through training programs.',
+        'Create parent education initiatives to help families support their children’s learning.',
+        'Develop vocational training programs to improve job readiness.',
+        'Partner with local schools or educational institutions to expand learning resources.',
+    ]
+},
+
+  'Equality and Inclusion': {
+    'Objectives': [
+        'Promote equality, diversity, and inclusion.',
+        'Advocate for the rights of marginalized communities.',
+    ],
+    'Activities': [
+        'Organize awareness campaigns and educational seminars.',
+        'Support social justice initiatives and advocacy efforts.',
+        'Host diversity training programs for organizations and community groups.',
+        'Create safe spaces for marginalized communities to share their experiences.',
+        'Collaborate with legal experts to provide pro bono services for marginalized individuals.',
+        'Launch mentorship programs aimed at empowering underrepresented groups.',
+        'Advocate for policy changes that address inequality and discrimination.',
+        'Promote inclusive hiring practices through partnerships with businesses.',
+        'Raise funds for organizations that support equality and inclusion initiatives.',
+        'Host cultural exchange events to celebrate diversity and foster understanding.',
+    ]
+},
+
+'Animal Welfare': {
+    'Objectives': [
+        'Promote the welfare and rights of animals.',
+        'Rescue and provide care for animals in need.',
+    ],
+    'Activities': [
+        'Fundraise for animal shelters or rescue organizations.',
+        'Advocate for animal protection laws or policies.',
+        'Organize adoption events or pet care workshops.',
+        'Create and distribute educational materials on responsible pet ownership.',
+        'Collaborate with veterinarians to offer free or low-cost medical services.',
+        'Host spay and neuter clinics to control pet overpopulation.',
+        'Develop outreach programs to educate the public about animal welfare issues.',
+        'Establish a network of foster homes for animals awaiting adoption.',
+        'Organize volunteer opportunities to support animal shelters and rescue groups.',
+        'Promote and support wildlife conservation efforts to protect endangered species.',
+    ]
+},
+
+'Humanitarian Aid': {
+    'Objectives': [
+        'Provide humanitarian assistance to communities in need.',
+        'Respond to humanitarian crises and emergencies.',
+    ],
+    'Activities': [
+        'Fundraise for humanitarian relief efforts.',
+        'Coordinate aid distribution and relief operations.',
+        'Provide medical care and essential supplies.',
+        'Organize and support emergency response teams for disaster relief.',
+        'Partner with local organizations to deliver targeted aid in affected areas.',
+        'Conduct needs assessments to identify and address critical gaps in aid.',
+        'Host community workshops to educate on disaster preparedness and response.',
+        'Develop and maintain emergency preparedness plans for future crises.',
+        'Raise awareness and advocate for support for humanitarian causes.',
+        'Collaborate with international agencies to coordinate global relief efforts.',
+    ]
+},
+
+'Sustainable Development': {
+    'Objectives': [
+        'Promote sustainable development practices.',
+        'Support initiatives for long-term environmental and social sustainability.',
+    ],
+    'Activities': [
+        'Implement renewable energy projects.',
+        'Advocate for sustainable agriculture and resource management.',
+        'Educate communities about sustainable living practices.',
+        'Develop and support green building projects or energy-efficient infrastructure.',
+        'Organize community workshops on waste reduction and recycling.',
+        'Support initiatives for water conservation and management.',
+        'Promote sustainable transportation options, such as biking and public transit.',
+        'Partner with local businesses to adopt sustainable practices.',
+        'Raise awareness about climate change and its impacts through campaigns or events.',
+        'Facilitate collaborations between stakeholders to advance sustainability goals.',
+    ]
+},
+
+'Peace and Conflict Resolution': {
+    'Objectives': [
+        'Promote peacebuilding and conflict resolution.',
+        'Support reconciliation and peace initiatives.',
+    ],
+    'Activities': [
+        'Organize peacebuilding workshops and dialogues.',
+        'Support mediation and dialogue processes.',
+        'Advocate for peace and disarmament policies.',
+        'Facilitate community-led conflict resolution programs.',
+        'Partner with local and international organizations to support peace initiatives.',
+        'Host educational events on conflict resolution skills and techniques.',
+        'Develop and implement reconciliation programs for post-conflict communities.',
+        'Promote cross-cultural exchange programs to foster understanding and tolerance.',
+        'Raise awareness about the impacts of conflict and the benefits of peace through campaigns.',
+        'Support initiatives that address the root causes of conflict, such as poverty or inequality.',
+    ]
+},
+'Digital Rights': {
+    'Objectives': [
+        'Advocate for digital rights and online privacy protection.',
+        'Promote internet freedom and access to information.',
+    ],
+    'Activities': [
+        'Campaign for digital rights legislation and policies.',
+        'Raise awareness about online security and data privacy issues.',
+        'Provide digital literacy training and resources.',
+        'Organize workshops on safe online practices and cyber hygiene.',
+        'Advocate for the protection of freedom of expression online.',
+        'Support initiatives to improve access to the internet in underserved areas.',
+        'Collaborate with tech companies to promote ethical data handling practices.',
+        'Host events to educate the public on their digital rights and how to protect them.',
+        'Promote tools and resources for secure communication and data protection.',
+        'Engage in research and policy advocacy to address emerging digital rights issues.',
+    ]
+},
+
+'Economic Empowerment': {
+    'Objectives': [
+        'Promote economic empowerment and entrepreneurship.',
+        'Support initiatives for job creation and financial inclusion.',
+    ],
+    'Activities': [
+        'Offer business development training and mentorship.',
+        'Facilitate access to microloans or small business grants.',
+        'Organize networking events and economic forums.',
+        'Provide financial literacy workshops to enhance personal and business finance management.',
+        'Support initiatives that promote women and minority entrepreneurship.',
+        'Create and support incubators or accelerators for startups and small businesses.',
+        'Partner with local businesses to offer apprenticeships or job placement programs.',
+        'Advocate for policies that support economic development and job creation.',
+        'Host career fairs and job readiness workshops to connect individuals with employment opportunities.',
+        'Facilitate access to technology and resources for underserved entrepreneurs.',
+    ]
+},
+
+'Policy Advocacy': {
+    'Objectives': [
+        'Advocate for policy changes and legislative reform.',
+        'Promote public awareness and engagement in policy issues.',
+    ],
+    'Activities': [
+        'Develop policy briefs and position papers.',
+        'Engage with policymakers and government officials.',
+        'Mobilize grassroots advocacy campaigns.',
+        'Organize public forums and town hall meetings to discuss policy issues.',
+        'Conduct research and analysis to support advocacy efforts.',
+        'Create and disseminate educational materials to inform the public about policy issues.',
+        'Build coalitions with other organizations to strengthen advocacy efforts.',
+        'Host workshops and training sessions on effective advocacy strategies.',
+        'Track and report on legislative developments and policy changes.'
+    ]
+},
+
+
+'Artistic Advocacy': {
+    'Objectives': [
+        'Promote and support artistic expression and creativity for social causes.',
+        'Provide platforms for artists to advocate for their causes through art.',
+    ],
+    'Activities': [
+        'Organize art exhibitions and galleries focused on social issues.',
+        'Conduct art workshops and classes that highlight advocacy.',
+        'Fundraise for art supplies and resources for advocacy projects.',
+        'Advocate for the importance of art in education and society.',
+        'Host art-based fundraising events to support social causes.',
+        'Collaborate with artists to create public art installations addressing social issues.',
+        'Create and distribute art that raises awareness about specific causes.',
+        'Support artist-in-residence programs that focus on community engagement and advocacy.',
+        'Promote art as a tool for social change through public talks and panels.',
+        'Develop partnerships with schools and community organizations to integrate art into social advocacy.'
+    ]
+},
+
+
+
+    'Other': {
+        'Objectives': [
+        'Support miscellaneous causes or initiatives not covered by other categories.',
+        ],
+        'Activities': [
+            'Tailor activities based on the specific nature of the campaign.',
+        ]
             },
         }
         return objectives_activities.get(self.category, {})
+
 
 
 
@@ -425,7 +551,6 @@ class CampaignProduct(models.Model):
     description = models.TextField(blank=True)
     url = models.URLField(max_length=200)
     image = models.ImageField(upload_to='campaign_product_images/', blank=True, null=True)
-    sku = models.CharField(max_length=100, unique=True)
     category = models.CharField(max_length=100, default='default_category')
     price = models.DecimalField(max_digits=10, decimal_places=2)
     stock_quantity = models.PositiveIntegerField(default=0)
@@ -622,7 +747,7 @@ class AffiliateLink(models.Model):
 
 class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    message = models.CharField(max_length=255)
+    message = models.CharField()
     timestamp = models.DateTimeField(auto_now_add=True)
     viewed = models.BooleanField(default=False)
     campaign_notification = models.BooleanField(default=False)

@@ -13,17 +13,6 @@ from .models import Subscriber
 
 
 
-class UpdateVisibilityForm(forms.ModelForm):
-    class Meta:
-        model = Campaign
-        fields = ['visibility']
-        labels = {
-            'visibility': 'Visibility:',
-        }
-
-
-
-
 
 class SubscriptionForm(forms.ModelForm):
     class Meta:
@@ -77,7 +66,7 @@ class ReportForm(forms.ModelForm):
 class CampaignProductForm(forms.ModelForm):
     class Meta:
         model = CampaignProduct
-        fields = ['name', 'description', 'url', 'image', 'sku', 'category', 'price', 'stock_quantity', 'is_active']
+        fields = ['name', 'description', 'url', 'image',  'category', 'price', 'stock_quantity', 'is_active']
 
 
 
@@ -183,11 +172,12 @@ class CampaignForm(forms.ModelForm):
    
     class Meta:
         model = Campaign
-        fields = ['title', 'content', 'poster', 'visibility', 'category']
+        fields = ['title', 'content', 'poster','audio', 'visibility', 'category']
         labels = {
             'title': 'Title:',
             'content': 'Content:',
             'poster': 'poster:',
+            'audio':   'audio',
             'visibility': 'Visibility:',
             'category': 'Category:',
            
@@ -232,3 +222,22 @@ class MessageForm(forms.ModelForm):
             if attached_file.size > max_size:
                 raise forms.ValidationError("File size too large. Please keep it under 10MB.")
         return attached_file
+
+class UpdateVisibilityForm(forms.ModelForm):
+    followers_visibility = forms.ModelMultipleChoiceField(
+        queryset=Profile.objects.none(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+        label="Select followers to view"
+    )
+
+    class Meta:
+        model = Campaign
+        fields = ['visibility', 'followers_visibility']
+
+    def __init__(self, *args, **kwargs):
+        followers = kwargs.pop('followers', None)
+        super().__init__(*args, **kwargs)
+
+        if followers:
+            self.fields['followers_visibility'].queryset = followers

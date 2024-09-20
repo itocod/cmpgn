@@ -184,8 +184,7 @@
             var audio = document.getElementById('bgAudio');
             localStorage.setItem('bgAudioPosition', audio.currentTime);
         });
-
-    function switchColor() {
+function switchColor() {
     var body = document.body;
     var logoContainer = document.querySelector('.logo-container');
 
@@ -203,10 +202,8 @@
 
     // Change background color and border of logo-container based on nextColor
     if (nextColor === "black") {
-        logoContainer.style.backgroundColor = "#262626";
-        logoContainer.style.border = ""; 
-        logoContainer.style.boxShadow = "0 4px 6px rgba(0, 0, 0, 0.1)"; 
-         // Add white border
+        logoContainer.style.backgroundColor = "";
+        logoContainer.style.border = "none"; 
     } else {
         logoContainer.style.backgroundColor = ""; // or "transparent"
         logoContainer.style.border = "none";  // Remove border
@@ -216,14 +213,20 @@
     var header = document.querySelector('header');
     var footer = document.querySelector('footer');
     var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, p, li, nav a, .btn,.upper-post, .reaction, .campaign-content, .action-item, .action-item a');
+    var textElements = document.querySelectorAll('h1, h2, p, li, nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
     var buttons = document.querySelectorAll('button');
     var reactDivs = document.querySelectorAll('.react div');
     var loveCounts = document.querySelectorAll('[id^="love-count-"]');
     var viewCounts = document.querySelectorAll('#view-count');
     var commentCounts = document.querySelectorAll('.comment-count');
 
-    header.style.backgroundColor = nextColor;
+    // Update header background color based on nextColor
+    if (nextColor === "black") {
+        header.style.backgroundColor = "#333333";  // Darker gray when background is black
+    } else {
+        header.style.backgroundColor = nextColor;
+    }
+
     footer.style.backgroundColor = nextColor;
 
     sections.forEach(function(section) {
@@ -275,6 +278,7 @@
         element.style.color = countTextColor;
     });
 }
+
 
   document.addEventListener('DOMContentLoaded', function() {
     var mediaQuery = window.matchMedia('(max-width: 768px)');
