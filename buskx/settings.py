@@ -3,22 +3,23 @@ from pathlib import Path
 from dotenv import load_dotenv
 import environ
 
+# Load environment variables
 env = environ.Env()
 
-# Load environment variables from .env file
+# Load .env file
 env_file = Path(__file__).resolve().parent.parent / '.env'
 if env_file.exists():
     load_dotenv(env_file)
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# BASE_DIR configuration
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
+# Security settings
 SECRET_KEY = env('SECRET_KEY', default='unsafe-secret-key')
 DEBUG = env.bool('DEBUG', default=True)
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['localhost', '127.0.0.1'])
 
-# Application definition
+# Application definitions
 INSTALLED_APPS = [
     'tinymce',
     'django.contrib.admin',
@@ -53,6 +54,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'buskx.urls'
 
+# Templates configuration
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -69,9 +71,10 @@ TEMPLATES = [
     },
 ]
 
+# WSGI application
 WSGI_APPLICATION = 'buskx.wsgi.application'
 
-# Database
+# Database configuration
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -83,23 +86,20 @@ DATABASES = {
     }
 }
 
-# settings.py
+# Authentication and password validators
 AUTH_PASSWORD_VALIDATORS = [
-    # ... your existing validators ...
     {
         'NAME': 'accounts.validators.AnyPasswordValidator',
     },
 ]
 
-
-# Internationalization
+# Localization settings
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-
-# AWS S3 settings
+# AWS S3 configurations for static and media files
 AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
 AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
@@ -107,18 +107,13 @@ AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME', default='us-east-1')
 AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
 AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 
-# Static files (CSS, JavaScript, images)
+# Static files settings
 STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
 
-# Media files
+# Media files settings
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
-
-
-
-
-
 
 # Email settings
 EMAIL_BACKEND = env('EMAIL_BACKEND')
@@ -129,13 +124,15 @@ EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
 
+# Authentication backends
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',  # Enables allauth
+    'allauth.account.auth_backends.AuthenticationBackend',
 )
 
-
 SITE_ID = 1
+
+# Google social account provider settings
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'SCOPE': ['profile', 'email'],
@@ -148,18 +145,14 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-# Additional Django-Allauth settings
+# Allauth additional settings
 ACCOUNT_EMAIL_VERIFICATION = env('ACCOUNT_EMAIL_VERIFICATION', default='mandatory')
 ACCOUNT_EMAIL_REQUIRED = env.bool('ACCOUNT_EMAIL_REQUIRED', default=True)
 LOGIN_REDIRECT_URL = '/rallynex-logo/'
 LOGOUT_REDIRECT_URL = 'index'
-SOCIALACCOUNT_AUTO_SIGNUP = True
 SOCIALACCOUNT_LOGIN_ON_GET = True
 
-
-
-
-# TinyMCE settings
+# TinyMCE configuration
 TINYMCE_DEFAULT_CONFIG = {
     'height': 360,
     'width': 800,
@@ -182,12 +175,12 @@ TINYMCE_DEFAULT_CONFIG = {
     'contextmenu': True,
 }
 
-# Increase the maximum size of request data that can be stored in memory
+# File upload size limit
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10 MB
 
-# Legal links middleware (if you have your own middleware for these)
+# Legal links settings
 PRIVACY_POLICY_LINK = env('PRIVACY_POLICY_LINK')
 TERMS_OF_SERVICE_LINK = env('TERMS_OF_SERVICE_LINK')
 
-# Default primary key field type
+# Default auto field setting
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
