@@ -129,10 +129,9 @@ EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
 
-# Django-Allauth settings
 AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.socialaccount.auth.GoogleOAuth2',  # Adjust for your provider
+    'allauth.account.auth_backends.AuthenticationBackend',  # Enables allauth
 )
 
 
@@ -150,7 +149,7 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 # Additional Django-Allauth settings
-ACCOUNT_EMAIL_VERIFICATION = env('ACCOUNT_EMAIL_VERIFICATION', default='none')
+ACCOUNT_EMAIL_VERIFICATION = env('ACCOUNT_EMAIL_VERIFICATION', default='mandatory')
 ACCOUNT_EMAIL_REQUIRED = env.bool('ACCOUNT_EMAIL_REQUIRED', default=True)
 LOGIN_REDIRECT_URL = '/rallynex-logo/'
 LOGOUT_REDIRECT_URL = 'index'
