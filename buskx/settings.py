@@ -43,7 +43,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    #'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -151,6 +151,25 @@ ACCOUNT_EMAIL_REQUIRED = env.bool('ACCOUNT_EMAIL_REQUIRED', default=True)
 LOGIN_REDIRECT_URL = '/rallynex-logo/'
 LOGOUT_REDIRECT_URL = 'index'
 SOCIALACCOUNT_LOGIN_ON_GET = True
+# Ensure email is required for allauth
+
+# Make sure email verification is handled properly
+ACCOUNT_EMAIL_VERIFICATION = 'optional'  # Set this depending on your preference ('mandatory' or 'none')
+
+# Automatically link social accounts to existing email accounts
+SOCIALACCOUNT_AUTO_SIGNUP = True
+
+# Connect social accounts to existing users with the same email address
+SOCIALACCOUNT_QUERY_EMAIL = True
+
+# Add this to point to your custom adapter
+SOCIALACCOUNT_ADAPTER = 'accounts.adapter.CustomSocialAccountAdapter'
+# Optional: Require users to provide a username
+ACCOUNT_USERNAME_REQUIRED = False
+
+
+
+
 
 # TinyMCE configuration
 TINYMCE_DEFAULT_CONFIG = {
