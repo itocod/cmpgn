@@ -1,6 +1,7 @@
 from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
-from .models import Campaign
+from django.conf import settings
+from .models import Campaign  # Make sure Campaign model is imported
 
 class StaticViewSitemap(Sitemap):
     priority = 0.5
@@ -10,7 +11,8 @@ class StaticViewSitemap(Sitemap):
         return ['index', 'privacy_policy', 'terms_of_service', 'project_support']  # Static view names
 
     def location(self, item):
-        return reverse(item)  # Remove SITE_URL, reverse() will handle relative URLs
+        # Manually append the domain for absolute URL generation
+        return settings.SITE_URL + reverse(item)
 
 class CampaignSitemap(Sitemap):
     changefreq = 'weekly'
@@ -23,4 +25,5 @@ class CampaignSitemap(Sitemap):
         return obj.timestamp
 
     def location(self, obj):
-        return reverse('view_campaign', args=[obj.id])  # No need for SITE_URL here either
+        # Manually append the domain for absolute URL generation
+        return settings.SITE_URL + reverse('view_campaign', args=[obj.id])
