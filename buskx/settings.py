@@ -204,3 +204,8 @@ TERMS_OF_SERVICE_LINK = env('TERMS_OF_SERVICE_LINK')
 
 # Default auto field setting
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# settings.py
+
+SITE_URL = 'https://rallynex.onrender.com'
