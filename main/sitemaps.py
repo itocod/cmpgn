@@ -7,10 +7,10 @@ class StaticViewSitemap(Sitemap):
     changefreq = 'daily'
 
     def items(self):
-        return ['index', 'privacy_policy', 'terms_of_service', 'project_support']  # Static view names
+        return ['index', 'privacy_policy', 'terms_of_service', 'project_support']
 
     def location(self, item):
-        return reverse(item)
+        return reverse(item)  # This will ensure the URLs are correctly formed.
 
 class CampaignSitemap(Sitemap):
     changefreq = 'weekly'
@@ -23,4 +23,4 @@ class CampaignSitemap(Sitemap):
         return obj.timestamp
 
     def location(self, obj):
-        return reverse('view_campaign', args=[obj.id])  # Adjusted to use IDs
+        return reverse('view_campaign', args=[obj.id])
