@@ -562,14 +562,23 @@ class CampaignProduct(models.Model):
 
 
 
-
 class Donation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     donation_link = models.URLField(max_length=200)
     campaign = models.ForeignKey(Campaign, on_delete=models.SET_NULL, null=True, blank=True)
-    
+    target_amount = models.DecimalField(max_digits=10, decimal_places=2)  # Set target amount
+    current_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)  # Amount donated so far
+    is_goal_met = models.BooleanField(default=False)  # Track if the goal has been met
+
     def __str__(self):
         return f"Donation to {self.donation_link} by {self.user}"
+
+    def check_goal(self):
+        """Check if the donation goal has been met and update status."""
+        if self.current_amount >= self.target_amount:
+            self.is_goal_met = True
+            self.save()
+
 
 
 

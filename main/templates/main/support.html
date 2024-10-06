@@ -285,7 +285,7 @@
         <ul class="support-list">
             {% if support_campaign.donate_monetary_visible %}
                 <li id="donate-monetary-link-li" class="support-list-item">
-                    <a href="{% url 'donate_monetary' campaign_id=campaign.id %}" class="support-link">⚪ <svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                    <a href="{% url 'donate_monetary' campaign_id=campaign.id %}" class="support-link">* <svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
         <!-- Heart -->
         <path class="heart" d="M32 56s-12-6-20-16c-7-9-9-15-9-21 0-9 6-14 14-14 7 0 10 6 10 6s3-6 10-6c8 0 14 5 14 14 0 6-2 12-9 21-8 10-20 16-20 16z"/>
         <!-- Dollar Sign -->
@@ -296,13 +296,13 @@
             {% endif %}
             {% if support_campaign.attend_event_visible %}
                 <li id="attend-event-link-li" class="support-list-item">
-                    <a href="{% url 'attend_event' campaign_id=campaign.id %}" class="support-link">⚪ Virtual Events</a> 
+                    <a href="{% url 'attend_event' campaign_id=campaign.id %}" class="support-link">* Virtual Events</a> 
                     {% if not support_campaign.attend_event_visible %}<span class="hidden-link">(Hidden)</span>{% endif %}
                 </li>
             {% endif %}
             {% if support_campaign.brainstorm_idea_visible %}
                 <li id="brainstorm-idea-link-li" class="support-list-item">
-                    <a href="{% url 'brainstorm_idea' campaign_id=campaign.id %}" class="support-link">⚪ <svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                    <a href="{% url 'brainstorm_idea' campaign_id=campaign.id %}" class="support-link">* <svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
         <!-- Light Bulb -->
         <path class="lightbulb" d="M32 2C24.3 2 18 8.3 18 16c0 8.7 7 11 7 20h10c0-9 7-11.3 7-20 0-7.7-6.3-14-14-14z"/>
         <!-- Base of the Light Bulb -->
@@ -317,7 +317,7 @@
             {% endif %}
             {% if support_campaign.campaign_product_visible %}
                 <li id="campaign-product-visiblelink-li" class="support-list-item">
-                    <a href="{% url 'product_manage' campaign_id=campaign.id %}" class="support-link">⚪ <svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                    <a href="{% url 'product_manage' campaign_id=campaign.id %}" class="support-link">* <svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
         <!-- Shopping cart -->
         <path d="M20 54c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4zm28 0c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4zm-32-6h24c1.1 0 2-.9 2-2v-3H18v3c0 1.1.9 2 2 2zM46 16H22L21.2 12H7c-1.1 0-2 .9-2 2 0 1 0 1 1 1h0.1L10 26h28l3-7H30c-1.1 0-2-.9-2-2s.9-2 2-2h24c1.1 0 2 .9 2 2v2c0 1.1-.9 2-2 2zm-2-10H20c-1.1 0-2 .9-2 2v0c0 1.1.9 2 2 2h24c1.1 0 2-.9 2-2v0c0-1.1-.9-2-2-2z"/>
         <!-- Goods inside the cart -->
@@ -337,7 +337,7 @@
     {% if support_campaign.donate_monetary_visible or support_campaign.attend_event_visible or support_campaign.brainstorm_idea_visible or support_campaign.campaign_product_visible %}
         <ul class="support-list">
             {% if support_campaign.donate_monetary_visible %}
-                <li class="support-list-item"><a href="{% url 'donate_monetary' campaign_id=campaign.id %}" class="support-link">⚪  <svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                <li class="support-list-item"><a href="{% url 'donate_monetary' campaign_id=campaign.id %}" class="support-link">*  <svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
         <!-- Heart -->
         <path class="heart" d="M32 56s-12-6-20-16c-7-9-9-15-9-21 0-9 6-14 14-14 7 0 10 6 10 6s3-6 10-6c8 0 14 5 14 14 0 6-2 12-9 21-8 10-20 16-20 16z"/>
         <!-- Dollar Sign -->
@@ -345,10 +345,10 @@
     </svg>Donate to this Campaign</a></li>
             {% endif %}
             {% if support_campaign.attend_event_visible %}
-                <li class="support-list-item"><a href="{% url 'attend_event' campaign_id=campaign.id %}" class="support-link">⚪ Virtual Events</a></li>
+                <li class="support-list-item"><a href="{% url 'attend_event' campaign_id=campaign.id %}" class="support-link">* Virtual Events</a></li>
             {% endif %}
             {% if support_campaign.brainstorm_idea_visible %}
-                <li class="support-list-item"><a href="{% url 'brainstorm_idea' campaign_id=campaign.id %}" class="support-link">⚪       <svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                <li class="support-list-item"><a href="{% url 'brainstorm_idea' campaign_id=campaign.id %}" class="support-link">*       <svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
         <!-- Light Bulb -->
         <path class="lightbulb" d="M32 2C24.3 2 18 8.3 18 16c0 8.7 7 11 7 20h10c0-9 7-11.3 7-20 0-7.7-6.3-14-14-14z"/>
         <!-- Base of the Light Bulb -->
@@ -360,7 +360,7 @@
     </svg>Brainstorm ideas for this Campaign</a></li>
             {% endif %}
             {% if support_campaign.campaign_product_visible %}
-                <li class="support-list-item"><a href="{% url 'product_manage' campaign_id=campaign.id %}" class="support-link">⚪     <svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                <li class="support-list-item"><a href="{% url 'product_manage' campaign_id=campaign.id %}" class="support-link">*     <svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
         <!-- Shopping cart -->
         <path d="M20 54c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4zm28 0c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4zm-32-6h24c1.1 0 2-.9 2-2v-3H18v3c0 1.1.9 2 2 2zM46 16H22L21.2 12H7c-1.1 0-2 .9-2 2 0 1 0 1 1 1h0.1L10 26h28l3-7H30c-1.1 0-2-.9-2-2s.9-2 2-2h24c1.1 0 2 .9 2 2v2c0 1.1-.9 2-2 2zm-2-10H20c-1.1 0-2 .9-2 2v0c0 1.1.9 2 2 2h24c1.1 0 2-.9 2-2v0c0-1.1-.9-2-2-2z"/>
         <!-- Goods inside the cart -->
