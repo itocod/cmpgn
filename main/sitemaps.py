@@ -20,8 +20,8 @@ class CampaignSitemap(Sitemap):
         return Campaign.objects.all()
 
     def lastmod(self, obj):
-        return obj.updated_at  # Replace with your actual date field
-
+        return obj.timestamp
+        
     def location(self, obj):
         # Adjust this to return the URL of the campaign object
         return f"https://rallynex.onrender.com{reverse('view_campaign', args=[obj.id])}"  # Adjust 'campaign_detail' as necessary
