@@ -24,4 +24,4 @@ class CampaignSitemap(Sitemap):
 
     def location(self, obj):
         # Adjust this to return the URL of the campaign object
-        return f"https://rallynex.onrender.com{reverse('campaign_detail', args=[obj.id])}"  # Adjust 'campaign_detail' as necessary
+        return f"https://rallynex.onrender.com{reverse('view_campaign', args=[obj.id])}"  # Adjust 'campaign_detail' as necessary
