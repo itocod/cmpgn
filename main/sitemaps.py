@@ -23,5 +23,5 @@ class CampaignSitemap(Sitemap):
         return obj.timestamp
         
     def location(self, obj):
-        # Adjust this to return the URL of the campaign object
-        return f"https://rallynex.onrender.com{reverse('view_campaign', args=[obj.id])}"  # Adjust 'campaign_detail' as necessary
+        # No need to manually add the domain; let Django handle it
+        return reverse('view_campaign', args=[obj.id])  # Adjust 'view_campaign' as necessary
