@@ -3,24 +3,25 @@ from django.urls import reverse
 from .models import Campaign
 
 class StaticViewSitemap(Sitemap):
+    changefreq = "daily"
     priority = 0.5
-    changefreq = 'daily'
 
     def items(self):
         return ['index', 'privacy_policy', 'terms_of_service', 'project_support']
 
     def location(self, item):
-        return reverse(item)  # This will ensure the URLs are correctly formed.
+        return reverse(item)
 
 class CampaignSitemap(Sitemap):
-    changefreq = 'weekly'
+    changefreq = "weekly"
     priority = 0.8
 
     def items(self):
         return Campaign.objects.all()
 
     def lastmod(self, obj):
-        return obj.timestamp
+        return obj.updated_at  # Replace with your actual date field
 
     def location(self, obj):
-        return reverse('view_campaign', args=[obj.id])
+        # Adjust this to return the URL of the campaign object
+        return f"https://rallynex.onrender.com{reverse('campaign_detail', args=[obj.id])}"  # Adjust 'campaign_detail' as necessary
