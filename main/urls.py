@@ -4,6 +4,12 @@ from .views import CustomLoginView
 from .views import CampaignDeleteView
 
 urlpatterns = [
+    path('verify/', views.verify_profile, name='verify_profile'),
+    path('campaign/<int:campaign_id>/join_leave/', views.join_leave_campaign, name='join_leave_campaign'),
+    path('campaign/<int:campaign_id>/joiners/', views.campaign_joiners, name='campaign_joiners'),
+    path('donate/<int:campaign_id>/', views.donate, name='donate'),
+    path('payment-success/<int:campaign_id>/', views.payment_success, name='payment_success'),
+    path('payment-cancel/', views.payment_cancel, name='payment_cancel'),
     path('campaign/delete/<int:pk>/', CampaignDeleteView.as_view(), name='campaign-delete'),
     path('user-campgn/', views.user_campgn, name='user_campgn'), 
     path('libraries/', views.library_affiliates, name='library_affiliates'),
@@ -35,7 +41,7 @@ urlpatterns = [
     path('campaign/<int:campaign_id>/product/', views.product_manage, name='product_manage'),
     path('campaign/<int:campaign_id>/product/<int:product_id>/', views.product_manage, name='product_edit'),
     # Other URL patterns.
- 
+     path('changemakers/', views.changemakers_view, name='changemakers_view'),
     path('love_activity/<int:activity_id>/', views.love_activity, name='love_activity'),
    path('activity/<int:activity_id>/', views.activity_detail, name='activity_detail'),
 

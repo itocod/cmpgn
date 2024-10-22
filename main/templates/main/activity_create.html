@@ -1,3 +1,4 @@
+
 {% extends 'main/face.html' %}
 
 {% block content %}
@@ -233,21 +234,28 @@ activity-text.campaign-activity-item {
         <button type="submit" class="custom-submit-button">Submit</button>
     </form>
 </div>
-<script>
-        document.getElementById('toggleButton').addEventListener('click', function() {
-            var container = document.getElementById('activitiesContainer');
-            var button = document.getElementById('toggleButton');
 
-            if (container.classList.contains('activities-content-expanded')) {
-                container.classList.remove('activities-content-expanded');
-                button.textContent = 'See More';
-            } else {
-                container.classList.add('activities-content-expanded');
-                button.textContent = 'See Less';
-            }
-        });
-    </script>
 <script>
+
+
+
+
+document.getElementById('toggleActivitiesButton').addEventListener('click', function() {
+    var container = document.getElementById('campaignActivitiesList');
+    var button = document.getElementById('toggleActivitiesButton');
+
+    if (container.classList.contains('campaign-activities-expanded')) {
+        container.classList.remove('campaign-activities-expanded');
+        button.textContent = 'See More';
+    } else {
+        container.classList.add('campaign-activities-expanded');
+        button.textContent = 'See Less';
+    }
+});
+
+
+
+    
     function addEmoji(emoji, fieldId) {
         var contentField = document.getElementById(fieldId);
         contentField.value += emoji;
@@ -286,7 +294,13 @@ activity-text.campaign-activity-item {
             });
         }
     }
+
+
+
 </script>
+
+
+
 
 <a href="{% url 'view_campaign' campaign_id=campaign.pk %}" class="custom-back-button"> 
     <i class="fa fa-arrow-left"></i> Back 

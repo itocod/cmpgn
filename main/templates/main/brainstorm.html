@@ -44,6 +44,10 @@
   <meta name="twitter:image" content="https://rallynex.onrender.com/static/main/files/og-image.png">
   <meta name="twitter:image:alt" content="RallyNex platform image">
   <meta name="twitter:site" content="@RallyNex">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 
  <!-- Schema Markup for SEO -->
   <script type="application/ld+json">
@@ -1002,7 +1006,6 @@ input[type="text"]:focus {
     .container {
             max-width: 800px;
             margin: 20px auto;
-            padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
@@ -1573,7 +1576,7 @@ document.addEventListener("DOMContentLoaded", function() {
       </div></br>
 
     
-    <div style="border-left: 2px solid #3498db; height: 600px; overflow-y: auto;overflow-x: hidden; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+   
     <p style="padding: 15px">    <hr>
 
         <h2 style="font-size: 19px; padding-left: 20px;">Brainstorm Ideas</h2>
@@ -1591,15 +1594,15 @@ document.addEventListener("DOMContentLoaded", function() {
                             <a href="{% url 'profile_view' username=idea.supporter.username %}">
                                 <img src="{{ idea.supporter.profile.image.url }}" alt="Profile Picture">
                             </a>
-                        </div>- Submitted by {{ idea.supporter.username }}</br></br>
+                        </div>- Submitted by {{ idea.supporter.username }}   {% if idea.supporter.profile.is_verified %}
+                            <span class="verified-status" style="font-size: 12px;"><span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></span></span>
+                        {% endif %}</br></br>
                       
                         <div class="idea-content">
                             {{ idea.idea | safe }}
                         </div>
 
-                        {% if idea.supporter.profile.is_verified %}
-                            <span class="verified-status" style="font-size: 12px;">✅Verified</span>
-                        {% endif %}
+                     
                     </li>
                 {% empty %}
                     <li>No brainstormed ideas yet.</li>
@@ -1636,10 +1639,10 @@ document.addEventListener("DOMContentLoaded", function() {
   <div style="border: 1px solid #808080; padding: 20px; text-align: center; border-radius: 10px;">
     <h2 style="margin-bottom: 10px;">{{ user_profile.user.username }} 
 
-     . <i class="cm"> changemaker(cm)</i></h2>
+     . <i class="cm">activist</i></h2>
 
          {% if user_profile.is_verified %}
-        <p><strong>Status:</strong> ✅Verified</p>
+        <p><strong>Status:</strong> <span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></span></p>
     {% endif %}
    <img src="{{ user_profile.image.url }}"  alt="Profile Image" width="150" height="150" style="
       object-fit: cover;
@@ -1648,7 +1651,7 @@ document.addEventListener("DOMContentLoaded", function() {
       transition: border-color 0.3s ease;
       border-radius: 50%; margin-bottom: 15px;
     " onmouseover="this.style.borderColor='#00FF00';" onmouseout="this.style.borderColor='#32CD32';">
-    <p style="font-size: 16px; color: #555;">Changemaker</p>
+    <p style="font-size: 16px; color: #555;">Activist</p>
     <hr style="border-color: #ccc; margin: 20px 0;">
       <p style="font-size: 14px; color: #777; line-height: 1.6;">
     {{ user_profile.bio|truncatewords:50 }}
@@ -1676,7 +1679,7 @@ document.addEventListener("DOMContentLoaded", function() {
             </div>
         {% endfor %}
     </div>
-</div>
+
 
 </aside>
   </main>

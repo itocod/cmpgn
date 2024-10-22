@@ -181,12 +181,13 @@ document.addEventListener("DOMContentLoaded", function() {
     </script>
 </head>
 <body>
-    <h2 style="font-size:19px; padding-left: 20px;">Activity_Comments</h2>
+    
     <div style="border-left: 2px solid #3498db; height: 400px; overflow-y: auto; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+        <h2 style="font-size:19px;padding-bottom: 0;">Activity_Comments</h2>
 
-          <h3 style="color: blueviolet; font-size: 18px; font-weight: bold; margin-bottom: 10px;">
+          <h4 style="color: blueviolet; font-size: 16px; font-weight: bold; margin-bottom: 10px;">
     Total Comments: {{ comments.count }}
-</h3>
+</h4>
         <ul id="commentsList">
             {% for comment in comments %}
                 <li>
@@ -200,7 +201,7 @@ document.addEventListener("DOMContentLoaded", function() {
                   
                     <strong>{{ comment.user.username }}
                     {% if comment.user.profile.is_verified %}
-                        <span class="verified-status" style="font-size: 12px;">✅Verified</span>
+                        <span class="verified-status" style="font-size: 12px;"><span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></span></span>
                     {% endif %}
                     </strong> <span style="font-size:14px;">commented  - {{ comment.timestamp|timesince }} ago -</span>
                     <p style="font-size:16px;">{{ comment.content }}</p>

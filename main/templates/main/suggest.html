@@ -88,12 +88,12 @@
     </style>
 </head>
 <body>
-     
-    <h2 style="font-size: 19px;padding-left: 20px;">Suggested_Users</h2>
+     <h2 style="font-size: 19px;padding-left: 20px;">Suggested_Users</h2>
+    
 
     <div class="container-profiles">
-      
-            <div style="border-left: 2px solid #3498db; height: 400px; overflow-y: auto; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+        
+    
     
         <ul class="profile-list">
             {% if suggested_users %}
@@ -108,8 +108,8 @@
             </div>
             <div class="profile-details">
                 <h2 class="profile-name"><a href="{% url 'profile_view' user.username %}" class="profile-link" style="font-size:16px;">{{ user.username }}         {% if user.profile.is_verified %}
-            <span class="verified-status" style="font-size: 12px;">✅Verified</span>
-        {% endif %}. <i class="cm"style="font-size:16px;">(cm)</i></a></h2>
+            <span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></span>
+        {% endif %}. <i class="cm"style="font-size:16px;"></i></a></h2>
                 {% if user.profile.bio %}
                     <p class="profile-info"style="font-size:16px;">{{ user.profile.bio|truncatewords:20|safe }}</p>
                 {% endif %}
@@ -131,7 +131,7 @@
             {% endif %}
         </ul>
     </div>
-    </div>
+    
     <script type="text/javascript">
         
 

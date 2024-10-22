@@ -1,4 +1,3 @@
-
 import paypalrestsdk
 
 import time  # Import the time module
@@ -20,9 +19,9 @@ from .forms import (
 
 from .models import (
     Profile, Campaign, Comment, Follow, Activity, SupportCampaign,Brainstorming,
-    User, Love, CampaignView, Chat, Notification,Message, Donation
+    User, Love, CampaignView, Chat, Notification,Message,CampaignFund
 )
-from .forms import   BrainstormingForm
+from .forms import   BrainstormingForm,CampaignFundForm
 from django.http import JsonResponse
 from django.core.exceptions import MultipleObjectsReturned
 from django.http import HttpResponseServerError
@@ -44,7 +43,7 @@ from django.core import exceptions
 from django.conf import settings
 from .models import Campaign
 from django.http import HttpRequest
-from .forms import DonationForm
+
 import paypalrestsdk
 from decimal import Decimal
 from .models import AffiliateLink
@@ -71,8 +70,8 @@ from django.contrib.admin.views.decorators import staff_member_required
 from .models import QuranVerse,Surah
 from .models import Adhkar
 from .models import Hadith
-from .models import PlatformFund
-from .forms import SubscriptionForm
+from .models import PlatformFund,Donation
+from .forms import SubscriptionForm,DonationForm
 from django.views.decorators.http import require_POST
 from .forms import UpdateVisibilityForm
 
@@ -89,7 +88,83 @@ from .models import AffiliateLibrary, AffiliateNewsSource
 from .models import NativeAd
 from django.views.generic.edit import DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import UserVerificationForm
 
+
+def changemakers_view(request):
+    # Get all profiles and filter those who are changemakers
+    changemakers = [profile for profile in Profile.objects.all() if profile.is_changemaker()]
+
+    return render(request, 'revenue/changemakers.html', {'changemakers': changemakers})
+
+
+@login_required
+def verify_profile(request):
+    user_profile = get_object_or_404(Profile, user=request.user)
+    user_profile.last_campaign_check = timezone.now()
+    user_profile.save()
+
+    # Other data to pass to the template (e.g., unread notifications, ads, etc.)
+    form = SubscriptionForm()
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    user_chats = Chat.objects.filter(participants=request.user)
+    unread_messages_count = Message.objects.filter(chat__in=user_chats).exclude(sender=request.user).count()
+    ads = NativeAd.objects.all()
+    if request.method == 'POST':
+        form = UserVerificationForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save(user=request.user)  # Pass the logged-in user to the save method
+            
+            # Clear existing messages before adding the new one
+            storage = messages.get_messages(request)
+            storage.used = True  # Clear all previous messages
+
+            messages.success(request, 'Your verification request has been submitted successfully.')
+            return redirect('verify_profile')  # Redirect to the same page
+    else:
+        form = UserVerificationForm()
+              
+    return render(request, 'main/verify_profile.html', {'form': form,  'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'unread_messages_count': unread_messages_count,
+        'form': form,
+        'ads': ads,})
+
+
+@login_required
+def join_leave_campaign(request, campaign_id):
+    campaign = get_object_or_404(Campaign, id=campaign_id)
+    profile = request.user.profile
+
+    if campaign in profile.campaigns.all():
+        # If the user has already joined the campaign, they leave
+        profile.campaigns.remove(campaign)
+    else:
+        # Otherwise, they join the campaign
+        profile.campaigns.add(campaign)
+
+    return redirect('view_campaign', campaign_id=campaign.id)  # Redirect to the campaign detail page
+
+@login_required
+def campaign_joiners(request, campaign_id):
+    user_profile = get_object_or_404(Profile, user=request.user)
+    campaign = get_object_or_404(Campaign, id=campaign_id)
+    joiners = campaign.user_profiles.all()  # Fetch all profiles that joined the campaign
+    # Optional: If you want to track the last time the user viewed their campaigns
+    user_profile.last_campaign_check = timezone.now()
+    user_profile.save()
+
+    # Other data to pass to the template (e.g., unread notifications, ads, etc.)
+    form = SubscriptionForm()
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    user_chats = Chat.objects.filter(participants=request.user)
+    unread_messages_count = Message.objects.filter(chat__in=user_chats).exclude(sender=request.user).count()
+    ads = NativeAd.objects.all()
+    return render(request, 'main/joiners.html', {'campaign': campaign, 'joiners': joiners,        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'unread_messages_count': unread_messages_count,
+        'form': form,
+        'ads': ads,})
 
 
 
@@ -138,43 +213,32 @@ class CampaignDeleteView(LoginRequiredMixin, DeleteView):
 
 
 
-
 def user_campgn(request):
-    campaign = Campaign.objects.last()
-    
-    form = SubscriptionForm()
+    # Get the user's profile
     user_profile = get_object_or_404(Profile, user=request.user)
-    following_users = [follow.followed for follow in request.user.following.all()]
-    
-    # Filter public campaigns from users that the current user follows
-    followed_public_campaigns = Campaign.objects.filter(user__user__in=following_users, visibility='public').distinct().order_by('-timestamp')
 
-    # Filter public campaigns from the current user
-    user_public_campaigns = Campaign.objects.filter(user=user_profile, visibility='public').distinct().order_by('-timestamp')
+    # Filter only public campaigns that the current user has created
+    user_public_campaigns = Campaign.objects.filter(user=user_profile, visibility='public').order_by('-timestamp')
 
-    # Combine both querysets
-    public_campaigns = followed_public_campaigns | user_public_campaigns
-
-    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    user_chats = Chat.objects.filter(participants=request.user)
-    unread_messages_count = Message.objects.filter(chat__in=user_chats, sender__id=request.user.id).exclude(sender=request.user).count()
-
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
+    # Optional: If you want to track the last time the user viewed their campaigns
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
+
+    # Other data to pass to the template (e.g., unread notifications, ads, etc.)
+    form = SubscriptionForm()
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    user_chats = Chat.objects.filter(participants=request.user)
+    unread_messages_count = Message.objects.filter(chat__in=user_chats).exclude(sender=request.user).count()
     ads = NativeAd.objects.all()
+
     return render(request, 'main/user_campgn.html', {
-        'ads': ads,
-        'public_campaigns': public_campaigns,
-        'campaign': campaign,
+        'public_campaigns': user_public_campaigns,
         'user_profile': user_profile,
         'unread_notifications': unread_notifications,
         'unread_messages_count': unread_messages_count,
-        'new_campaigns_from_follows': new_campaigns_from_follows,
         'form': form,
+        'ads': ads,
     })
-
-
 
 
 
@@ -617,51 +681,184 @@ def affiliate_links(request):
 
 
 
-def donate(request, campaign_id):
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
-    user_profile = get_object_or_404(Profile, user=request.user)
-    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    # Check if there are new campaigns from follows
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
 
-    # Update last_campaign_check for the user's profile
+
+
+
+
+import paypalrestsdk
+from django.conf import settings
+from django.shortcuts import redirect
+
+paypalrestsdk.configure({
+    "mode": settings.PAYPAL_MODE,  # Sandbox or live
+    "client_id": settings.PAYPAL_CLIENT_ID,
+    "client_secret": settings.PAYPAL_CLIENT_SECRET
+})
+
+def donate(request, campaign_id):
+    campaign = get_object_or_404(Campaign, id=campaign_id)
+
+    # Attempt to retrieve the CampaignFund or create one with a default target_amount
+    fund, created = CampaignFund.objects.get_or_create(campaign=campaign, defaults={'target_amount': 0.00, 'paypal_email': 'default_email@example.com'})
+
+    target_reached = fund.progress_percentage() >= 100
+
+    if request.method == 'POST':
+        donation_form = DonationForm(request.POST)
+        fund_form = CampaignFundForm(request.POST, instance=fund)
+
+        if 'donate' in request.POST and not target_reached:
+            if donation_form.is_valid():
+                # Create PayPal payment
+                donation_amount = request.POST.get('amount')
+                
+                payment = paypalrestsdk.Payment({
+                    "intent": "sale",
+                    "payer": {"payment_method": "paypal"},
+                    "redirect_urls": {
+                        "return_url": request.build_absolute_uri(reverse('payment_success', args=[campaign_id])),
+                        "cancel_url": request.build_absolute_uri(reverse('payment_cancel')),
+                    },
+                    "transactions": [{
+                        "item_list": {"items": [{
+                            "name": f"Donation for {campaign.title}",
+                            "sku": "donation",
+                            "price": donation_amount,
+                            "currency": "USD",
+                            "quantity": 1
+                        }]},
+                        "amount": {"total": donation_amount, "currency": "USD"},
+                        "description": f"Donation for {campaign.title}",
+                        "payee": {
+                            "email": fund.paypal_email
+                        }
+                    }]
+                })
+
+                if payment.create():
+                    for link in payment.links:
+                        if link.rel == "approval_url":
+                            return redirect(link.href)
+                else:
+                    messages.error(request, 'Error creating PayPal payment.')
+
+        elif 'update_campaign' in request.POST:
+            if fund_form.is_valid():
+                fund_form.save()
+                messages.success(request, 'Donation info updated successfully.')
+            else:
+                messages.error(request, 'Error updating donation info.')
+
+    else:
+        donation_form = DonationForm()
+        fund_form = CampaignFundForm(instance=fund)
+
+    user_profile = get_object_or_404(Profile, user=request.user)
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
-    
-    campaign = get_object_or_404(Campaign, id=campaign_id)
-    
-    # Retrieve donations for the current campaign
-    donations = Donation.objects.filter(campaign=campaign)
-    ads = NativeAd.objects.all()  
-    if request.method == 'POST':
-        # Handle donation deletion
-        if 'delete_donation' in request.POST:
-            donation_id = request.POST.get('delete_donation')
-            donation = get_object_or_404(Donation, id=donation_id)
-            if donation.user == request.user:  # Check if the user owns the donation
-                donation.delete()
-                return redirect('donate', campaign_id=campaign_id)
-        
-        form = DonationForm(request.POST)
-        if form.is_valid():
-            donation = form.save(commit=False)
-            donation.user = request.user
-            donation.campaign = campaign
-            donation.save()
-            return redirect('donate', campaign_id=campaign_id)  # Redirect to a thank you page or any other page you desire
-    else:
-        form = DonationForm()
-    
-    context = {
-        'ads':ads,
-        'form': form,
+
+    return render(request, 'revenue/donation.html', {
         'campaign': campaign,
-        'donations': donations, 
+        'form': donation_form,
+        'fund_form': fund_form,
+        'fund': fund,
+        'target_reached': target_reached,
         'user_profile': user_profile,
-        'unread_notifications': unread_notifications,
-        'new_campaigns_from_follows': new_campaigns_from_follows,  # Pass donations to the template context
-    }
-    return render(request, 'revenue/donation.html', context)
+    })
+
+
+
+from django.urls import reverse
+from decimal import Decimal
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+import paypalrestsdk
+
+@login_required
+def payment_success(request, campaign_id):
+    # Extract PayPal payment information
+    payment_id = request.GET.get('paymentId')
+    payer_id = request.GET.get('PayerID')
+
+    # Check if this payment has already been processed
+    if Donation.objects.filter(transaction_id=payment_id).exists():
+        messages.warning(request, 'This payment has already been processed.')
+        return redirect('donate', campaign_id=campaign_id)
+
+    payment = paypalrestsdk.Payment.find(payment_id)
+
+    if payment.execute({"payer_id": payer_id}):
+        # Payment was successful, update campaign fund
+        campaign = get_object_or_404(Campaign, id=campaign_id)
+        fund = CampaignFund.objects.get(campaign=campaign)
+        amount = Decimal(payment.transactions[0].amount.total)
+
+        # Deduct commission fee (fixed amount)
+        commission_fee = Decimal('0.30')  # Example commission fee
+        net_amount = amount - commission_fee
+
+        # Update the amount raised
+        fund.amount_raised += net_amount
+        fund.save()
+
+        # Create the donation record (with transaction ID to avoid duplicates)
+        Donation.objects.create(
+            campaign=campaign,
+            amount=net_amount,  # Store the net amount after deductions
+            donor_name=request.user.username,  # or anonymous if you allow it
+            transaction_id=payment_id  # Store the PayPal payment ID
+        )
+
+        # Send commission to your PayPal account
+        payout = paypalrestsdk.Payout({
+            "sender_batch_header": {
+                "sender_batch_id": str(payment_id),
+                "email_subject": "Commission Payment"
+            },
+            "items": [{
+                "recipient_type": "EMAIL",
+                "amount": {
+                    "value": str(commission_fee),
+                    "currency": "USD"
+                },
+                "receiver": "kcollino39@gmail.com",  # Your PayPal email
+                "note": f"Commission for donation {payment_id}",
+                "sender_item_id": str(payment_id)
+            }]
+        })
+
+        # Create payout with asynchronous mode
+        if payout.create(sync_mode=False):
+            messages.success(request, 'Thank you for your donation! A commission has been processed.')
+        else:
+            messages.error(request, f'Failed to process commission. Error: {payout.error}')
+
+        # Calculate the updated progress percentage
+        if fund.target_amount > 0:
+            fund.progress_percentage = (fund.amount_raised / fund.target_amount) * 100
+        else:
+            fund.progress_percentage = 100  # Avoid division by zero
+
+        fund.save()  # Save the updated progress percentage
+
+        return redirect('donate', campaign_id=campaign_id)
+
+    # If payment execution failed
+    messages.error(request, 'Payment failed. Please try again.')
+    return redirect('donate', campaign_id=campaign_id)
+
+
+@login_required
+def payment_cancel(request):
+    messages.warning(request, 'Payment was cancelled.')
+    return redirect('donate')
+
+
+
+
+
 
 
 
@@ -1478,6 +1675,7 @@ def toggle_love(request, campaign_id):
 
 
 
+
 @login_required
 def home(request):
     # Get the current user's profile
@@ -1747,7 +1945,6 @@ def unfollow_user(request, username):
 
 
 
-
 @login_required
 def profile_edit(request, username):
     following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
@@ -1761,30 +1958,37 @@ def profile_edit(request, username):
     user_profile.save()
     new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
     ads = NativeAd.objects.all()  
+    
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=user)
         profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
+        
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            return redirect('profile_view', username=username)
+            return redirect('home')  # Redirect to the home page after successful edit
+            
     else:
         user_form = UserForm(instance=user)
         profile_form = ProfileForm(instance=profile)
+
     context = {
-        'ads':ads,
+        'ads': ads,
         'user_form': user_form,
         'profile_form': profile_form,
         'profile': profile,
         'username': username,
-        'user_profile':user_profile,  # Pass the username to the context
-        'unread_notifications':unread_notifications,
-        'new_campaigns_from_follows':new_campaigns_from_follows
+        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'new_campaigns_from_follows': new_campaigns_from_follows
     }
     return render(request, 'main/edit_profile.html', context)
 
-from django.utils import timezone
 
+
+
+
+from django.utils import timezone
 @login_required
 def profile_view(request, username):
     following_users = [follow.followed for follow in request.user.following.all()]
@@ -1805,11 +2009,9 @@ def profile_view(request, username):
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
     ads = NativeAd.objects.all()  
-    # Check if the user has more than 2 followers and update the is_verified field
-    has_blue_tick = followers_count >= 2
-    if user_profile.is_verified != has_blue_tick:
-        user_profile.is_verified = has_blue_tick
-        user_profile.save(update_fields=['is_verified'])
+
+    # Pass the verification status
+    is_verified = user_profile.is_verified
 
     context = {
         'ads': ads,
@@ -1821,10 +2023,9 @@ def profile_view(request, username):
         'public_campaigns_count': public_campaigns_count,  # Pass count of campaigns
         'unread_notifications': unread_notifications,
         'new_campaigns_from_follows': new_campaigns_from_follows,
-        'has_blue_tick': has_blue_tick,  # This is just for display purposes
+        'is_verified': is_verified,  # Add this line
     }
     return render(request, 'main/user_profile.html', context)
-
 
     if 'search_query' in request.GET:
         form = ProfileSearchForm(request.GET)

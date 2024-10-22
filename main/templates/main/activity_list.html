@@ -324,9 +324,9 @@
                     </a>
 
                             {% if campaign.user.is_verified %}
-            <span class="verified-status" style="font-size: 12px;">(✅Verified)</span>
+            <span class="verified-status" style="font-size: 12px;"><span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></span>
         {% endif %}
-                    <h3>{{ campaign.user.user.username }} . <i class="cm">cm</i></h3>
+                    <h3>{{ campaign.user.user.username }} . <i class="cm"></i></h3>
                 </div>
             </b>
             <span > Activities for "</span>
@@ -352,9 +352,9 @@
                             </a>
                             <h3>{{ campaign.user.user.username }} 
           {% if campaign.user.is_verified %}
-            <span class="verified-status" style="font-size: 12px;">(✅Verified)</span>
+            <span class="verified-status" style="font-size: 12px;"><span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></span>
         {% endif %}
-                                . <i class="cm">cm</i></h3>
+                                . <i class="cm"></i></h3>
                         </div>
                         
 

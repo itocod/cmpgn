@@ -85,10 +85,10 @@
         </div>
         <li>{{ followed.followed.username }} 
       {% if followed.followed.profile.is_verified %}
-            <span class="verified-status" style="font-size: 12px;">✅Verified</span>
+            <span class="verified-status" style="font-size: 12px;"><span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></span>
         {% endif %}
 
-            . <i class="cm">(cm)</li>
+            . <i class="cm"></li>
         {% endfor %}
     </ul>
 </div>

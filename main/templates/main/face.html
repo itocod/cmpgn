@@ -46,7 +46,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <!-- Default Title -->
     <title>{% block title %}RallyNex - Together for Change: Support Global Campaigns and Transform Lives{% endblock %}</title>
@@ -1043,7 +1046,7 @@ function switchColor() {
     var header = document.querySelector('header');
     var footer = document.querySelector('footer');
     var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, p, li, nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
+    var textElements = document.querySelectorAll('h1, h2, p, li, nav a, .btn, .upper-post, .reaction, .joiners-section h2, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
     var buttons = document.querySelectorAll('button');
     var reactDivs = document.querySelectorAll('.react div');
     var loveCounts = document.querySelectorAll('[id^="love-count-"]');
@@ -1465,10 +1468,10 @@ document.addEventListener("DOMContentLoaded", function() {
   <div style="border: 1px solid #808080; padding: 20px; text-align: center; border-radius: 10px;">
     <h2 style="margin-bottom: 10px;">{{ user_profile.user.username }} 
 
-     . <i class="cm"> changemaker(cm)</i></h2>
+     . <i class="cm">activist</i></h2>
 
          {% if user_profile.is_verified %}
-        <p><strong>Status:</strong> ✅Verified</p>
+        <p><strong>Status:</strong> <span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></p>
     {% endif %}
    <img src="{{ user_profile.image.url }}"  alt="Profile Image" width="150" height="150" style="
       object-fit: cover;
@@ -1477,7 +1480,7 @@ document.addEventListener("DOMContentLoaded", function() {
       transition: border-color 0.3s ease;
       border-radius: 50%; margin-bottom: 15px;
     " onmouseover="this.style.borderColor='#00FF00';" onmouseout="this.style.borderColor='#32CD32';">
-    <p style="font-size: 16px; color: #555;">Changemaker</p>
+    <p style="font-size: 16px; color: #555;">Activist</p>
     <hr style="border-color: #ccc; margin: 20px 0;">
       <p style="font-size: 14px; color: #777; line-height: 1.6;">
     {{ user_profile.bio|truncatewords:50 }}

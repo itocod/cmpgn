@@ -48,6 +48,10 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 
     <!-- Default Title -->
@@ -476,47 +480,78 @@ border: 1px solid silver;
 
 }
 
+         .join-leave-btn {
+        position: relative;
+        text-decoration: none;
+    }
+    
+    .tooltip-text {
+        visibility: hidden;
+        position: absolute;
+        bottom: 100%; /* Position above the button */
+        left: 50%;
+        transform: translateX(-50%); /* Center the text */
+        background-color: #333;
+        color: #fff;
+        padding: 5px;
+        border-radius: 4px;
+        white-space: nowrap;
+        margin-bottom: 5px; /* Space between the button and label */
+        font-size: 12px;
+        z-index: 1; /* Ensure it's above the button */
+    }
 
+    .join-leave-btn:hover .tooltip-text {
+        visibility: visible;
+    }
 
 
 .lower-post {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap; /* Allows wrapping on small devices */
 }
 
 .lower-post .react {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .lower-post .react > div {
-  margin-right: 20px; /* Adjust as needed */
+  margin-right: 10px; /* Reduced for better spacing on small devices */
 }
 
 .lower-post .react .reaction-count {
-  margin-right: 5px; /* Adjust as needed */
+  margin-right: 5px;
 }
 
-
-
-
-
-  .reaction-count,
-  .comment-count {
-    font-size: 14px;
-    color: grey;
-    margin-left: 5px;
-
-  }
+.reaction-count,
+.comment-count {
+  font-size: 14px;
+  color: grey;
+  margin-left: 5px;
+}
 
 /* Mobile styles */
 @media only screen and (max-width: 600px) {
-    .reaction-count,
-    .comment-count {
-        font-size: 12px;
-        margin-left: 3px;
-    }
+  .reaction-count,
+  .comment-count {
+    font-size: 12px; /* Smaller font size on mobile */
+    margin-left: 3px;
+  }
+  
+  .lower-post .react > div {
+    margin-right: 5px; /* Further reduce margin for smaller screens */
+  }
+
+  .lower-post .love-icon,
+  .lower-post .fa-eye,
+  .lower-post .fa-comment {
+    font-size: 16px; /* Reduce the icon size */
+  }
 }
+
 
 
 
@@ -1273,6 +1308,21 @@ border: 1px solid silver;
   }
 }
 
+
+
+  .changemaker-text {
+        visibility: hidden; /* Initially hide the text */
+        font-size: 16px;
+        color: #333;
+        position: absolute;
+        margin-left: 5px; /* Adjust positioning next to the star */
+    }
+
+    .cm:hover .changemaker-text {
+        visibility: visible; /* Show text on hover */
+    }
+
+
   </style>
 
 
@@ -1729,9 +1779,12 @@ document.addEventListener("DOMContentLoaded", function() {
                         <div class="post-details">
                             <h1>{{ campaign.user.user.username }} 
                                 {% if campaign.user.is_verified %}
-                                    <span class="verified-status" style="font-size:12px;">✅Verified</span>
+                                    <span class="verified-status" style="font-size:12px;"><span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></span>
                                 {% endif %}
-                                . <i class="cm"> cm</i>
+                                . <i class="cm">    {% if campaign.is_changemaker %}
+        <span class="glyphicon glyphicon-star changemaker-star" style="color:red; font-size: 20px;"></span>
+        <span class="changemaker-text">Changemaker</span>
+    {% endif %}</i>
                             </h1> 
 
                             <div class="campaign-category" style="cursor: pointer;">
@@ -1757,14 +1810,21 @@ document.addEventListener("DOMContentLoaded", function() {
 
                     <div class="file-container">
                         <div style="position: relative;">
-                            <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="activity-link">
-                                <i style='font-size:24px' class='fas'>&#xf6e3;</i>
-                                <span class="icon-label">Activities</span>
-                            </a>
-                            <a href="{% url 'support' campaign_id=campaign.id %}" class="support-link">
-                                <i class="material-icons" style="font-size:24px;">&#xe925;</i>
-                                <span class="icon-label">Participate</span>
-                            </a>
+                          {% if user.profile in campaign.user_profiles.all %}
+    <!-- Display the links if the user has joined the campaign -->
+    <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="activity-link">
+        <i style='font-size:24px' class='fas'>&#xf6e3;</i>
+        <span class="icon-label">Activities</span>
+    </a>
+
+    <a href="{% url 'support' campaign_id=campaign.id %}" class="support-link">
+        <i class="material-icons" style="font-size:24px;">&#xe925;</i>
+        <span class="icon-label">Participate</span>
+    </a>
+{% else %}
+    <!-- Optionally, show a message if the user hasn't joined -->
+    <p>You need to join this campaign to view activities and participate.</p>
+{% endif %}
 
                             <!-- Campaign poster -->
                             {% if campaign.poster %}
@@ -1863,6 +1923,27 @@ document.addEventListener("DOMContentLoaded", function() {
                                 </span>
                                 <a href="{% url 'campaign_comments' campaign_id=campaign.id %}" class="comment-count">comments</a>
                             </div>
+                                <div>
+    {% if user.profile in campaign.user_profiles.all %}
+        <a href="{% url 'join_leave_campaign' campaign.id %}" class="join-leave-btn">
+            <i class="fas fa-user-minus"></i> Leave
+            <span class="tooltip-text">Leave Campaign</span>
+        </a>
+    {% else %}
+        <a href="{% url 'join_leave_campaign' campaign.id %}" class="join-leave-btn">
+            <i class="fas fa-user-plus"></i> Join
+            <span class="tooltip-text">Join Campaign</span>
+        </a>
+    {% endif %}
+</div>
+
+                            <div>
+                              
+<!-- Link to the joiners list -->
+<a href="{% url 'campaign_joiners' campaign.id %}">
+    Joiners ({{ campaign.user_profiles.count|format_count }})
+</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1938,9 +2019,9 @@ document.addEventListener("DOMContentLoaded", function() {
   <div style="border: 1px solid #808080; padding: 20px; text-align: center; border-radius: 10px;">
      
     <h2 style="margin-bottom: 10px;">{{ user_profile.user.username }} 
-      . <i class="cm"> changemaker(cm)</i></h2>
+      . <i class="cm">activist</i></h2>
                {% if user_profile.is_verified %}
-        <p><strong>Status:</strong> ✅Verified</p>
+        <p><strong>Status:</strong><span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></p>
     {% endif %}
    <img src="{{ user_profile.image.url }}"  alt="Profile Image" width="150" height="150" style="
       object-fit: cover;

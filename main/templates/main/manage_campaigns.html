@@ -48,7 +48,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <!-- Default Title -->
     <title>RallyNex - Together for Change: Support Global Campaigns and Transform Lives</title>
@@ -1289,6 +1291,21 @@ border: 1px solid silver;
   }
 }
 
+
+
+  .changemaker-text {
+        visibility: hidden; /* Initially hide the text */
+        font-size: 16px;
+        color: #333;
+        position: absolute;
+        margin-left: 5px; /* Adjust positioning next to the star */
+    }
+
+    .cm:hover .changemaker-text {
+        visibility: visible; /* Show text on hover */
+    }
+
+
   </style>
 
 
@@ -1651,9 +1668,12 @@ document.addEventListener("DOMContentLoaded", function() {
                         <div class="post-details">
                             <h1>{{ campaign.user.user.username }} 
                                 {% if campaign.user.is_verified %}
-                                    <span class="verified-status" style="font-size:12px;">✅Verified</span>
+                                    <span class="verified-status" style="font-size:12px;"><span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></span>
                                 {% endif %}
-                                . <i class="cm"> cm</i>
+                                . <i class="cm">    {% if campaign.is_changemaker %}
+        <span class="glyphicon glyphicon-star changemaker-star" style="color:red; font-size: 20px;"></span>
+        <span class="changemaker-text">Changemaker</span>
+    {% endif %}</i>
                             </h1> 
 
                             <div class="campaign-category" style="cursor: pointer;">
@@ -1773,7 +1793,7 @@ document.addEventListener("DOMContentLoaded", function() {
             <span style="cursor: pointer; font-size: 19px;" id="love-icon-{{ campaign.id }}" class="love-icon {% if user.is_authenticated and already_loved %}loved{% endif %}" onclick="toggleLove({{ campaign.id }})">       
                 <i class="far fa-heart"></i>
             </span>
-            <span style="color: gray; font-size: 14px;" id="love-count-{{ campaign.id }}">{{ campaign.love_count|format_count }}</span>
+            <span style="color: gray; font-size: 14px;" id="love-count-{{ campaign.id }}"> {{ campaign.love_count|format_count }}</span>
         </div>
         <div class="view">
             <i class="far fa-eye" style="font-size: 19px;"></i>
@@ -1783,7 +1803,7 @@ document.addEventListener("DOMContentLoaded", function() {
             <span>
                 <i class="far fa-comment" style="font-size: 19px;"></i>
             </span>
-            <a href="{% url 'campaign_comments' campaign_id=campaign.id %}" class="comment-count">comments</a>
+            <a href="{% url 'campaign_comments' campaign_id=campaign.id %}" class="comment-count"> comments</a>
         </div>
         {% if request.user.is_authenticated and request.user.profile == campaign.user %}
         <div class="recreate">
@@ -1791,7 +1811,7 @@ document.addEventListener("DOMContentLoaded", function() {
         </div>
         <div class="visibility">
           <a href="{% url 'update_visibilit' campaign.pk %}" style="
-    color: blue; /* Adjust color as needed */
+    color: #007bff; /* Adjust color as needed */
     text-decoration: none; /* Remove underline */
     font-weight: bold; /* Make the text bold */
     display: inline-flex; /* Align icon and text */
@@ -1846,9 +1866,9 @@ document.addEventListener("DOMContentLoaded", function() {
   <div style="border: 1px solid #808080; padding: 20px; text-align: center; border-radius: 10px;">
      
     <h2 style="margin-bottom: 10px;">{{ user_profile.user.username }} 
-      . <i class="cm"> changemaker(cm)</i></h2>
+      . <i class="cm">activist</i></h2>
                {% if user_profile.is_verified %}
-        <p><strong>Status:</strong> ✅Verified</p>
+        <p><strong>Status:</strong><span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></p>
     {% endif %}
    <img src="{{ user_profile.image.url }}"  alt="Profile Image" width="150" height="150" style="
       object-fit: cover;
@@ -1858,7 +1878,7 @@ document.addEventListener("DOMContentLoaded", function() {
       transition: border-color 0.3s ease;
       border-radius: 50%; margin-bottom: 15px;
     " onmouseover="this.style.borderColor='#00FF00';" onmouseout="this.style.borderColor='#32CD32';">
-    <p style="font-size: 16px; color: #555;">Changemaker</p>
+    <p style="font-size: 16px; color: #555;">Activist</p>
     <hr style="border-color: #ccc; margin: 20px 0;">
       <sp style="font-size: 14px; color: #777; line-height: 1.6;">
     {{ user_profile.bio|truncatewords:50 }}

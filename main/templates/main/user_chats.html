@@ -101,7 +101,7 @@
                     <a href="{% url 'chat_detail' chat.id %}">
                         Chat - {{ chat.title }} (Manager: {{ chat.manager.username }}
       {% if chat.manager.profile.is_verified %}
-            <span class="verified-status" style="font-size: 12px;">✅Verified</span>
+            <span class="verified-status" style="font-size: 12px;"><span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></span>
         {% endif %}
 
                         )

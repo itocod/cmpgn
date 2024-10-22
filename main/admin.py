@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import Profile, Follow, Campaign, Comment, Activity, SupportCampaign, Love, CampaignView, Chat, Message
-from .models import  Brainstorming, Donation, AffiliateLink
+from .models import Profile, Follow, Comment, Activity, SupportCampaign, Love, CampaignView, Chat, Message
+from .models import  Brainstorming,  AffiliateLink
 from .models import ActivityLove, ActivityComment,CampaignProduct
 from .models import Notification,Report,NotInterested 
 from django.contrib import messages
@@ -14,6 +14,78 @@ from .models import Subscriber
 
 from .models import AffiliateLibrary, AffiliateNewsSource
 from .models import NativeAd
+
+from .models import Campaign, CampaignFund
+from .models import Donation  # Adjust the import based on your project structure
+
+from .models import  ChangemakerAward,UserVerification
+
+from django.contrib import admin
+from .models import UserVerification, Notification
+
+class UserVerificationAdmin(admin.ModelAdmin):
+    list_display = ('user', 'document_type', 'status', 'submission_date')
+    search_fields = ('user__username', 'document_type', 'status')
+    
+    def save_model(self, request, obj, form, change):
+        """Override save_model to notify the user when their verification status changes."""
+        super().save_model(request, obj, form, change)  # Save the instance
+
+        # Check if the verification has been approved or rejected
+        if obj.status == 'Rejected':
+            message = f"Your verification for {obj.document_type} has been rejected. Reason: {obj.rejection_reason}."
+            Notification.objects.create(user=obj.user, message=message)
+        elif obj.status == 'Approved':
+            message = f"Your verification for {obj.document_type} has been approved."
+            Notification.objects.create(user=obj.user, message=message)
+
+admin.site.register(UserVerification, UserVerificationAdmin)
+
+
+
+
+class ChangemakerAwardAdmin(admin.ModelAdmin):
+    list_display = ('user', 'campaign', 'award', 'timestamp')
+    search_fields = ('user__username', 'campaign__title', 'award')
+    list_filter = ('award', 'timestamp')
+    ordering = ('-timestamp',)
+
+admin.site.register(ChangemakerAward, ChangemakerAwardAdmin)
+
+
+
+
+class DonationAdmin(admin.ModelAdmin):
+    list_display = ('id', 'campaign', 'amount', 'donor_name', 'transaction_id')  # Exclude created_at
+    search_fields = ('donor_name', 'transaction_id')  # Enable search by donor name and transaction ID
+    list_filter = ('campaign',)  # Allow filtering by campaign
+
+    # Optional: Add any additional configurations like ordering, etc.
+    ordering = ('-id',)  # Order by ID, descending
+
+admin.site.register(Donation, DonationAdmin) 
+
+@admin.register(Campaign)
+class CampaignAdmin(admin.ModelAdmin):
+    list_display = ('user', 'title', 'timestamp')
+    search_fields = ('user__user__username', 'title')
+    list_filter = ('timestamp',)
+
+    # Add the inline for CampaignFund
+    class CampaignFundInline(admin.StackedInline):
+        model = CampaignFund
+        extra = 1  # Number of empty forms to display
+
+    inlines = [CampaignFundInline]
+
+# Register the CampaignFund model separately if you want to manage it independently
+@admin.register(CampaignFund)
+class CampaignFundAdmin(admin.ModelAdmin):
+    list_display = ('campaign', 'target_amount', 'amount_raised')
+    search_fields = ('campaign__title', )
+
+
+
 
 @admin.register(NativeAd)
 class NativeAdAdmin(admin.ModelAdmin):
@@ -80,9 +152,12 @@ class QuranVerseAdmin(admin.ModelAdmin):
     list_filter = ('surah',)
 
 
+from django.contrib import admin
+from .models import Profile
+
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'bio', 'location')  # Display a custom method for verification status
-    search_fields = ('user__username', 'bio', 'location')  # Add search functionality for user's username, bio, and location
+    list_display = ('user', 'bio', 'location', 'is_verified')  # Added 'is_verified' for display
+    search_fields = ('user__username', 'bio', 'location')  # Search functionality
     readonly_fields = ('user',)  # Make user field read-only
 
     def has_delete_permission(self, request, obj=None):
@@ -91,7 +166,20 @@ class ProfileAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return False  # Disable add permission in admin
 
+    actions = ['verify_users']  # Add custom action for verifying users
+
+    def verify_users(self, request, queryset):
+        # Verify selected users
+        for profile in queryset:
+            profile.is_verified = True
+            profile.save()
+        self.message_user(request, "Selected profiles have been verified.")
+
+    verify_users.short_description = "Verify selected users"  # Action description
+
+# Register the Profile model with the customized ProfileAdmin
 admin.site.register(Profile, ProfileAdmin)
+
 
 
 
@@ -118,7 +206,7 @@ admin.site.register(Report, ReportAdmin)
 # Register the Notification model
 admin.site.register(Notification)
 admin.site.register(NotInterested)
-admin.site.register(Donation)
+
 admin.site.register(AffiliateLink)
 
 admin.site.register(ActivityLove)
@@ -161,12 +249,6 @@ class BrainstormingAdmin(admin.ModelAdmin):
 class FollowAdmin(admin.ModelAdmin):
     list_display = ('follower', 'followed')
     search_fields = ('follower__username', 'followed__username')
-
-@admin.register(Campaign)
-class CampaignAdmin(admin.ModelAdmin):
-    list_display = ('user', 'title', 'timestamp')
-    search_fields = ('user__user__username', 'title')
-    list_filter = ('timestamp',)
 
 @admin.register(Comment)
 class CommentAdmin(admin.ModelAdmin):
@@ -213,3 +295,19 @@ class MessageAdmin(admin.ModelAdmin):
     list_display = ('id', 'chat', 'sender', 'timestamp', 'content')
     search_fields = ('chat__id', 'sender__username', 'content')
     list_filter = ('timestamp',)
+
+
+class CampaignInline(admin.TabularInline):
+    model = Campaign
+    extra = 0  # No extra empty rows
+
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ['user', 'location', 'followers_count', 'is_verified', 'is_changemaker']
+    search_fields = ['user__username', 'location']
+    list_filter = ['is_verified']
+    inlines = [CampaignInline]
+
+    def is_changemaker(self, obj):
+        return any(campaign.is_changemaker for campaign in obj.user_campaigns.all())
+    is_changemaker.boolean = True
+    is_changemaker.short_description = 'Changemaker'

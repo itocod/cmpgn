@@ -102,3 +102,25 @@
     </div>
 </body>
 </html>
+
+
+
+<div class="progress">
+    {% if fund.progress_percentage < 50 %}
+        <div class="progress-bar progress-bar-low" role="progressbar" style="width: {{ fund.progress_percentage }}%;" aria-valuenow="{{ fund.progress_percentage }}" aria-valuemin="0" aria-valuemax="100">
+            {{ fund.progress_percentage|floatformat:2 }}%
+        </div>
+    {% elif fund.progress_percentage < 100 %}
+        <div class="progress-bar progress-bar-medium" role="progressbar" style="width: {{ fund.progress_percentage }}%;" aria-valuenow="{{ fund.progress_percentage }}" aria-valuemin="0" aria-valuemax="100">
+            {{ fund.progress_percentage|floatformat:2 }}%
+        </div>
+    {% else %}
+        <div class="progress-bar progress-bar-high" role="progressbar" style="width: {{ fund.progress_percentage }}%;" aria-valuenow="{{ fund.progress_percentage }}" aria-valuemin="0" aria-valuemax="100">
+            {{ fund.progress_percentage|floatformat:2 }}%
+        </div>
+    {% endif %}
+</div>
+<div>
+    <span>Amount Raised: ${{ fund.amount_raised }} / ${{ fund.target_amount }}</span>
+</div>
+

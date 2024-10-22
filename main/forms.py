@@ -3,14 +3,42 @@ from django.contrib.auth.models import User
 from .models import Profile, Campaign, Comment, Activity, SupportCampaign, Chat, Message, Follow
 from .models import   Brainstorming
 from django.forms import inlineformset_factory
-from .models import Donation
+
 from .models import ActivityComment,CampaignProduct
 
 from tinymce.widgets import TinyMCE
 from .models import Report
 from .models import NotInterested
-from .models import Subscriber
+from .models import Subscriber,Donation,CampaignFund
 
+from django import forms
+from .models import UserVerification
+
+
+class UserVerificationForm(forms.ModelForm):
+    class Meta:
+        model = UserVerification
+        fields = ['document_type', 'document']  # Exclude the user field
+
+        widgets = {
+            'document_type': forms.Select(attrs={'class': 'custom-select'}),
+            'document': forms.ClearableFileInput(attrs={'class': 'custom-file-input'}),
+        }
+    def clean_document(self):
+        document = self.cleaned_data.get('document')
+        if document:
+            # You can add validation logic here, e.g., checking file type or size
+            if document.size > 5 * 1024 * 1024:  # Example: limit file size to 5 MB
+                raise forms.ValidationError("File size must be under 5 MB.")
+        return document
+
+    def save(self, commit=True, user=None):
+        instance = super().save(commit=False)
+        if user:
+            instance.user = user  # Set the user from the view
+        if commit:
+            instance.save()
+        return instance
 
 
 
@@ -77,20 +105,6 @@ class ActivityCommentForm(forms.ModelForm):
     class Meta:
         model = ActivityComment
         fields = ['content']
-
-
-
-
-
-
-class DonationForm(forms.ModelForm):
-    class Meta:
-        model = Donation
-        fields = ['donation_link']
-        widgets = {
-            'donation_link': forms.TextInput(attrs={'style': 'width: 100%;', 'placeholder': 'Paste your link here'})
-        }
-
 
 
 
@@ -167,21 +181,63 @@ class ProfileForm(forms.ModelForm):
         }
 
 
+
+
 class CampaignForm(forms.ModelForm):
     emoji_shortcode = forms.CharField(max_length=50, required=False, label='Emoji Shortcut')
-   
+    
     class Meta:
         model = Campaign
-        fields = ['title', 'content', 'poster','audio', 'visibility', 'category']
+        fields = ['title', 'content', 'poster', 'audio', 'visibility', 'category']
         labels = {
             'title': 'Title:',
             'content': 'Content:',
-            'poster': 'poster:',
-            'audio':   'audio',
+            'poster': 'Poster:',
+            'audio': 'Audio:',
             'visibility': 'Visibility:',
             'category': 'Category:',
-           
+
         }
+    
+
+class CampaignFundForm(forms.ModelForm):
+    class Meta:
+        model = CampaignFund
+        fields = ['target_amount', 'paypal_email']
+        labels = {
+            'target_amount': 'Target Amount:',
+            'paypal_email': 'PayPal Email:'
+        }
+        widgets = {
+            'target_amount': forms.TextInput(attrs={
+                'class': 'form-control',  
+                'placeholder': 'Enter target amount'
+            }),
+            'paypal_email': forms.EmailInput(attrs={
+                'class': 'form-control', 
+                'placeholder': 'Enter PayPal email'
+            })
+        }
+
+
+
+
+class DonationForm(forms.ModelForm):
+    class Meta:
+        model = Donation
+        fields = ['donor_name', 'amount']
+        labels = {
+            'donor_name': 'Your Name (optional):',
+            'amount': 'Donation Amount:',
+        }
+        widgets = {
+            'donor_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your name'}),
+            'amount': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter donation amount'}),
+        }
+
+
+
+
 
 
 

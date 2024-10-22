@@ -1,0 +1,138 @@
+{% extends 'main/face.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Verification</title>
+    <style>
+        /* General container styles */
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+
+        .custom-form-container {
+            background-color: #fff;
+            border: 1px solid #d0d0d0;
+            border-radius: 8px;
+            padding: 25px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1.custom-title {
+            text-align: center;
+            color: #4a90e2;  /* Blue title */
+            font-size: 2rem;  /* Increased font size */
+            margin-bottom: 20px;
+        }
+
+        /* Custom form styles */
+        form.custom-form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label.custom-label {
+            font-size: 1.1rem;  /* Increased font size for labels */
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .custom-input, 
+        .custom-select, 
+        .custom-file-input {
+            padding: 10px;
+            font-size: 1rem;  /* Increased font size for inputs */
+            border: 1px solid #d0d0d0;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        /* Custom button styles */
+        button.custom-submit-btn {
+            background-color: #4a90e2;
+            color: white;
+            padding: 12px 25px;
+            font-size: 1.1rem;  /* Larger button text */
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button.custom-submit-btn:hover {
+            background-color: #357ab7;
+        }
+
+        /* Custom message styles */
+        .custom-messages {
+            list-style: none;
+            padding: 0;
+            text-align: center;
+        }
+
+        .custom-messages li {
+            background-color: #dff0d8;
+            color: #3c763d;
+            border: 1px solid #d6e9c6;
+            padding: 12px;
+            border-radius: 4px;
+            margin-bottom: 15px;
+            font-size: 1rem;  /* Slightly larger message text */
+        }
+
+        /* Custom notification styles */
+        .verification-note {
+            font-size: 1.2rem;  /* Increase font size for the notification */
+            color: #4a90e2;  /* Blue text color */
+            background-color: #f5f5f5;  /* Light gray background */
+            padding: 10px;
+            border: 1px solid #d0d0d0;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="custom-form-container">
+        <h1 class="custom-title">User Verification</h1>
+
+        <p class="verification-note">
+            Please note: Verification documents will take between 1 to 2 weeks as Rallynex reviews them.
+        </p>
+
+        {% if messages %}
+          <ul class="custom-messages">
+            {% for message in messages %}
+              <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+        <form method="post" enctype="multipart/form-data" class="custom-form">
+            {% csrf_token %}
+            
+            <!-- Manually adding classes to form fields -->
+            <div>
+                <label for="id_document_type" class="custom-label">Document Type</label>
+                {{ form.document_type }}
+            </div>
+            <div>
+                <label for="id_document" class="custom-label">Upload Document</label>
+                {{ form.document }}
+            </div>
+
+            <button type="submit" class="custom-submit-btn">Submit</button>
+        </form>
+    </div>
+
+</body>
+</html>
+{% endblock %}

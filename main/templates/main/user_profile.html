@@ -51,6 +51,11 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   
 
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+ <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
 
     <!-- Default Title -->
     <title>RallyNex - Together for Change: Support Global Campaigns and Transform Lives</title>
@@ -878,7 +883,7 @@ input[type="text"]:focus {
     color: #888; /* Light grey color */
     background-color: #f5f5f5; /* Very light grey background */
     border: 1px solid #ccc; /* Light border */
-    padding:5px; /* Padding adjusted */
+    padding:0; /* Padding adjusted */
     border-radius: 3px; /* Slight border radius */
     transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; /* Smooth transition */
     display: flex; /* Use flexbox for layout */
@@ -905,6 +910,7 @@ input[type="text"]:focus {
        width: 100%;
         top: 10px;
         left: 0; /* Position on the left side */
+        right: 0;
     }
 }
 
@@ -954,7 +960,7 @@ input[type="text"]:focus {
 .navbar .popup-close {
     position: absolute;
     top: 10px;
-    right: 10px;
+    right: 0;
     font-size: 24px;
     color: white;
     cursor: pointer;
@@ -996,64 +1002,94 @@ input[type="text"]:focus {
 
 
 
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
 
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
+.rectangle-container {
+    width: 100%;
+    height: 200px;
+    margin-bottom: 15px;
+    border: 1px solid limegreen;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+}
 
-        .rectangle-container {
-            width: 100%;
-            height: 200px;
-            margin-bottom: 15px;
-            border: 1px solid limegreen;
-            border-radius: 20px;
-            overflow: hidden;
-            position: relative;
-        }
+.rectangle-container img {
+    width: 100%;
+    height: auto;
+}
 
-        .rectangle-container img {
-            width: 100%;
-            height: auto;
-        }
+.profile-img-container img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s ease;
+}
 
-        .profile-img-container img {
-            width: 200px;
-            height: 200px;
-            border-radius: 50%;
-            object-fit: cover;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            transition: border-color 0.3s ease;
-        }
+.profile-img-container:hover img {
+    border-color: #00FF00;
+}
 
-        .profile-img-container:hover img {
-            border-color: #00FF00;
-        }
+.profile-info {
+    flex: 1;
+    max-width: 400px;
+    text-align: left;
+    padding-left: 10px;
+}
 
-        .profile-info {
-            flex: 1;
-            max-width: 400px;
-            text-align: left;
-            padding-left: 10px;
-        }
+.profile-info h2 {
+    margin-top: 0;
+    font-size: 30px;
+    color: #333;
+}
 
-        .profile-info h2 {
-            margin-top: 0;
-            font-size: 30px;
-            color: #333;
-        }
+.profile-info p {
+    margin: 5px 0;
+    color: #777;
+}
 
-        .profile-info p {
-            margin: 5px 0;
-            color: #777;
-        }
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .container {
+        padding: 0;  /* Remove padding on mobile */
+    }
+
+    .rectangle-container {
+        width: 100vw;  /* Full viewport width */
+        margin: 0;     /* Remove side margins */
+        border-radius: 0;  /* Remove border radius to fill screen edge */
+        height: 250px;  /* Increase height slightly */
+    }
+
+    .profile-info {
+        text-align: center;  /* Center the text for better mobile appearance */
+        padding-left: 0;  /* No padding */
+    }
+
+    .profile-info h2 {
+        font-size: 24px;  /* Adjust font size for mobile */
+    }
+}
+
+
+
+
+
+
+
+
 
         .button {
             background-color: limegreen;
@@ -1190,10 +1226,91 @@ input[type="text"]:focus {
             color: #444; /* Slightly lighter gray for the strong element text */
         }
 
+
+.custom-btn {
+    color: black;
+    background-color: transparent;
+    border: 2px solid silver;
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.custom-btn:hover {
+    background-color: #C0C0C0; /* Silver white */
+    color: black;
+    border-color: #C0C0C0;
+    cursor: pointer;
+}
+
+.verification-link {
+    display: inline-block;
+    margin-top: 10px;
+}
+
+.category-keyboard {
+    color: #000080;
+    font-size: 0.85em; /* Makes the font smaller */
+    background-color: #f0f0f0; /* Light grey background for the keyboard look */
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: 'Courier New', Courier, monospace; /* Use a monospace font to simulate keyboard text */
+    border: 1px solid #dcdcdc; /* Adds a border to enhance the keyboard effect */
+}
+
+
 </style>
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function() {
+    const navbarToggle = document.getElementById("navbarToggle");
+    const navbar = document.getElementById("navbar");
+    const popupClose = document.getElementById("popupClose");
+
+    // Toggle navbar visibility
+    navbarToggle.addEventListener("click", function() {
+        if (navbar.style.display === "block") {
+            navbar.style.display = "none";
+        } else {
+            navbar.style.display = "block";
+        }
+    });
+
+    // Close popup when clicking the close button
+    popupClose.addEventListener("click", function() {
+        navbar.style.display = "none";
+    });
+
+    // Adjust navbar display on window resize
+    window.addEventListener("resize", function() {
+        if (window.innerWidth > 768) {
+            navbar.style.display = "none";
+        } else if (navbar.style.display === "block") {
+            navbar.style.display = "block";
+        } else {
+            navbar.style.display = "none";
+        }
+    });
+
+    // Ensure the navbar is initially hidden on page load for larger screens
+    if (window.innerWidth > 768) {
+        navbar.style.display = "none";
+    } else {
+        navbar.style.display = "none"; // or "block" based on your initial requirement
+    }
+});
+</script>
+
+
+
+
 
 <script type="text/javascript">
     function switchColor() {
@@ -1396,48 +1513,15 @@ document.addEventListener('DOMContentLoaded', function() {
     handleMediaQueryChange(mediaQuery);
 });
 
-document.addEventListener("DOMContentLoaded", function() {
-    const navbarToggle = document.getElementById("navbarToggle");
-    const navbar = document.getElementById("navbar");
-    const popupClose = document.getElementById("popupClose");
 
-    // Toggle navbar visibility
-    navbarToggle.addEventListener("click", function() {
-        if (navbar.style.display === "block") {
-            navbar.style.display = "none";
-        } else {
-            navbar.style.display = "block";
-        }
-    });
-
-    // Close popup when clicking the close button
-    popupClose.addEventListener("click", function() {
-        navbar.style.display = "none";
-    });
-
-    // Adjust navbar display on window resize
-    window.addEventListener("resize", function() {
-        if (window.innerWidth > 768) {
-            navbar.style.display = "none";
-        } else if (navbar.style.display === "block") {
-            navbar.style.display = "block";
-        } else {
-            navbar.style.display = "none";
-        }
-    });
-
-    // Ensure the navbar is initially hidden on page load for larger screens
-    if (window.innerWidth > 768) {
-        navbar.style.display = "none";
-    } else {
-        navbar.style.display = "none"; // or "block" based on your initial requirement
-    }
-});
 </script>
 
 
 
     <script src="{% static 'js/common.js' %}" defer></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body id="mainBody">
 
@@ -1651,37 +1735,42 @@ document.addEventListener("DOMContentLoaded", function() {
   
 <h2 style="font-size: 19px; padding-left: 20px;">User_profile</h2>
 
-
 <div class="container">
     <div class="rectangle-container">
         <img src="{{ user_profile.image.url }}" alt="Profile Picture">
-               {% if has_blue_tick %}
-            <div class="blue-tick"><i class="fas fa-check" style="color:limegreen;"></i>
-
-            <span style="            writing-mode: vertical-rl;
-            text-orientation: mixed;
-            color: green; padding-left: 5px;padding-top: 8px;"> Verified_cm</span>
-            </div>
-
-        {% endif %}
     </div>
     <div class="profile-img-container">
         <img src="{{ user_profile.image.url }}" alt="Profile Picture">
-       
     </div>
     <div class="profile-info">
-        <h2>{{ user_profile.user.username }} . <i class="cm"> cm</i></h2>
-        <p>Changemaker From {{ user_profile.location }}</p>
-
+        <h2>{{ user_profile.user.username }} 
+            <i class="cm"> 
+            {% if not user_profile.is_verified %}
+            {% if user_profile.user == request.user %}
+                <div class="verification-link">
+                    <a href="{% url 'verify_profile' %}" class="custom-btn">Verify Your Account</a>
+                </div>
+            {% endif %}
+            {% else %}
+                <span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i>
+            {% endif %}
+            </i>
+        </h2>
+        <p>Activist From {{ user_profile.location }}</p>
         <p style="font-size: 14px; color: #777; line-height: 1.6;">
             {{ user_profile.bio|truncatewords:20 }}
         </p>
+        <div class="more-profile-info">
+            <a href="{% url 'follower_list' user_profile.user.username %}">Followers: ({{ followers_count|format_count }})</a> |
+            <a href="{% url 'following_list' user_profile.user.username %}">Following: ({{ following_count|format_count }})</a> |
+            <strong><a href="{% url 'user_campgn' %}">User Public Campaigns:</a></strong> ({{ public_campaigns_count|format_count }}) | Loves: ({{ user_profile.total_loves|format_count }}) | 
+            {% for campaign in public_campaigns %}
+                {% if campaign.is_changemaker %}
+                    Changemaker <span class="glyphicon glyphicon-star" style="color:red;">.</span> <p>for <span class="category-keyboard">{{ campaign.get_category_display }}</span></p>
+                {% endif %}
+            {% endfor %}
 
-         <div class="more-profile-info">
-        <a href="{% url 'follower_list' user_profile.user.username %}">Followers: ({{ followers_count|format_count }})</a> |
-        <a href="{% url 'following_list' user_profile.user.username %}">Following: ({{ following_count|format_count }})</a> |
-        <strong><a href="{% url 'user_campgn' %}">User Public Campaigns:</a></strong> ({{ public_campaigns_count|format_count }})
-    </div></br>
+
 
         {% if not user_profile.user == request.user %}
             {% if not following_profile %}
@@ -1697,7 +1786,23 @@ document.addEventListener("DOMContentLoaded", function() {
             {% endif %}
         {% endif %}
 
+
+
+
+        </div>
+
+
+
+
+
     </div>
+
+
+
+
+  
+
+    
 <div class="details">
     <hr>
     <h3 style="font-size:19px;">User Details:</h3>
@@ -1712,7 +1817,7 @@ document.addEventListener("DOMContentLoaded", function() {
     <p><strong>Date of Birth:</strong> {{ user_profile.date_of_birth }} 🎉</p>
     <p><strong>Highest level of education:</strong>{{ user_profile.highest_level_of_education }} 🎓</p>
     {% if user_profile.is_verified %}
-        <p><strong>Status:</strong> ✅Verified</p>
+        <p><strong>Status:</strong>   <span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></p>
     {% endif %}
 </div>
 
@@ -1778,10 +1883,10 @@ document.addEventListener("DOMContentLoaded", function() {
   <div style="border: 1px solid #808080; padding: 20px; text-align: center; border-radius: 10px;">
     <h2 style="margin-bottom: 10px;">{{ user_profile.user.username }} 
 
-     . <i class="cm"> changemaker(cm)</i></h2>
+     . <i class="cm">activist</i></h2>
 
          {% if user_profile.is_verified %}
-        <p><strong>Status:</strong> ✅Verified</p>
+        <p><strong>Status:</strong>   <span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></p>
     {% endif %}
    <img src="{{ user_profile.image.url }}"  alt="Profile Image" width="150" height="150" style="
       object-fit: cover;
@@ -1790,7 +1895,7 @@ document.addEventListener("DOMContentLoaded", function() {
       transition: border-color 0.3s ease;
       border-radius: 50%; margin-bottom: 15px;
     " onmouseover="this.style.borderColor='#00FF00';" onmouseout="this.style.borderColor='#32CD32';">
-    <p style="font-size: 16px; color: #555;">Changemaker</p>
+    <p style="font-size: 16px; color: #555;">Activist</p>
     <hr style="border-color: #ccc; margin: 20px 0;">
       <p style="font-size: 14px; color: #777; line-height: 1.6;">
     {{ user_profile.bio|truncatewords:50 }}

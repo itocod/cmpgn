@@ -13,7 +13,6 @@ from tinymce.models import HTMLField
 from django.db.models.signals import m2m_changed
 from django.urls import reverse
 
-
 User = get_user_model()
 
 class Profile(models.Model):
@@ -48,7 +47,8 @@ class Profile(models.Model):
     followers = models.ManyToManyField(User, related_name='follower_profiles', blank=True)
     last_campaign_check = models.DateTimeField(default=timezone.now)
     last_chat_check = models.DateTimeField(default=timezone.now)
-    is_verified = models.BooleanField(default=False)
+    is_verified = models.BooleanField(default=False)  # Keep this field
+    # Other fields...
 
     def followers_count(self):
         return self.followers.count()
@@ -67,7 +67,8 @@ class Profile(models.Model):
         return None
 
     def update_verification_status(self):
-        self.is_verified = self.followers_count() >= 2
+        # This can be called after UserVerification is approved
+        self.is_verified = True  # Mark the user as verified
         self.save(update_fields=['is_verified'])
 
     def save(self, *args, **kwargs):
@@ -83,9 +84,25 @@ class Profile(models.Model):
                 buffer.seek(0)
                 self.image.save(self.image.name, ContentFile(buffer.read()), save=False)
         super().save(*args, **kwargs)
+ 
+
 
     def __str__(self):
         return f'{self.user.username} Profile'
+
+    @property
+    def total_loves(self):
+        # Sum the loves for all campaigns owned by the user
+        return Love.objects.filter(campaign__user=self).count()
+
+    def is_changemaker(self):
+    # Correct the query to reflect the relationship with the Campaign model
+        activity_count = Activity.objects.filter(campaign__user=self).count()  # `campaign__user` references the Profile
+        activity_love_count = ActivityLove.objects.filter(activity__campaign__user=self).count()
+
+        return activity_count >= 10 and activity_love_count >= 50
+
+
 
 
 @receiver(post_save, sender=User)
@@ -94,6 +111,72 @@ def create_or_update_user_profile(sender, instance, created, **kwargs):
         Profile.objects.create(user=instance)
     else:
         instance.profile.save()
+
+
+class UserVerification(models.Model):
+    VERIFICATION_STATUS_CHOICES = (
+        ('Pending', 'Pending'),
+        ('Approved', 'Approved'),
+        ('Rejected', 'Rejected'),
+    )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='verifications')
+    document_type = models.CharField(max_length=100, choices=(
+        ('National ID', 'National ID'),
+        ('Business Certificate', 'Business Certificate'),
+    ))
+    document = models.FileField(upload_to='verification_docs/')
+    submission_date = models.DateTimeField(default=timezone.now)
+    status = models.CharField(max_length=10, choices=VERIFICATION_STATUS_CHOICES, default='Pending')
+    rejection_reason = models.TextField(blank=True, null=True)
+    verified_on = models.DateTimeField(blank=True, null=True)
+
+    def approve(self):
+        """Approve the verification and set the verified date."""
+        self.status = 'Approved'
+        self.verified_on = timezone.now()
+        self.save()
+        # Create a notification for the user
+        Notification.objects.create(user=self.user, message=f"Your verification for {self.document_type} has been approved.")
+
+    def reject(self, reason):
+        """Reject the verification and set the rejection reason."""
+        self.status = 'Rejected'
+        self.rejection_reason = reason
+        self.save()
+        self.notify_user()  # Notify the user upon rejection
+
+    def notify_user(self):
+        """Notify the user about the rejection."""
+        message = f"Your verification for {self.document_type} has been rejected. Reason: {self.rejection_reason}."
+        Notification.objects.create(user=self.user, message=message)
+
+    def __str__(self):
+        return f"Verification of {self.user.username} - {self.document_type}"
+
+    class Meta:
+        verbose_name = 'User Verification'
+        verbose_name_plural = 'User Verifications'
+        ordering = ['-submission_date']
+
+
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+@receiver(post_save, sender=Profile)
+def update_user_verification_status(sender, instance, created, **kwargs):
+    if instance.is_verified:
+        # Get the user verification instance associated with the user
+        verification = UserVerification.objects.filter(user=instance.user).first()
+        
+        if verification:
+            # If the verification exists and is not already approved
+            if verification.status != 'Approved':
+                verification.approve()  # Approve the verification
+                verification.verified_on = timezone.now()  # Set the verified_on timestamp
+                verification.save()
+
+
 
 
 
@@ -109,11 +192,13 @@ class Follow(models.Model):
         is_new = self.pk is None
         super().save(*args, **kwargs)
         if is_new:
-            self.followed.profile.update_verification_status()
+            self.followed.profile.update_verification_status()  # Check/update verification status on follow
+            # Notify the followed user
             follower_username = self.follower.username
             followed_username = self.followed.username
             message = f"{follower_username} started following you. <a href='{reverse('profile_view', kwargs={'username': follower_username})}'>View Profile</a>"
             Notification.objects.create(user=self.followed, message=message)
+
 
 def default_content():
     return 'Default content'
@@ -141,6 +226,11 @@ class Brainstorming(models.Model):
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
+
+
+
+
+
 
 class Campaign(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='user_campaigns')
@@ -176,7 +266,7 @@ class Campaign(models.Model):
 
     # Followers who can see the campaign when it's private
     visible_to_followers = models.ManyToManyField(Profile, blank=True, related_name='visible_campaigns')
-
+    
 
     def __str__(self):
         return self.title
@@ -216,12 +306,50 @@ class Campaign(models.Model):
 
 
 
+
     @property
     def love_count(self):
         return self.loves.count()
         
 
+    @property
+    def is_changemaker(self):
+        """Check if the user qualifies as a changemaker."""
+        activity_count = self.activity_set.count()
+        activity_love_count = ActivityLove.objects.filter(activity__campaign=self).count()
+        return activity_count >= 10 and activity_love_count >= 50
 
+    def save(self, *args, **kwargs):
+        is_new = self.pk is None
+        super().save(*args, **kwargs)
+
+        # Automatically award changemaker status if criteria are met
+        if self.is_changemaker:
+            self.award_changemaker_status()
+
+    def award_changemaker_status(self):
+        """Award changemaker status and assign the correct award type."""
+        # Check if the user already has an award for this campaign
+        if not ChangemakerAward.objects.filter(user=self.user, campaign=self).exists():
+            # Determine the number of campaigns with changemaker status
+            changemaker_campaigns = Campaign.objects.filter(user=self.user, activity__isnull=False).distinct()
+
+            # Assign the award based on the number of changemaker campaigns
+            campaign_count = changemaker_campaigns.count()
+            if campaign_count >= 3:
+                award_type = 'Gold'
+            elif campaign_count >= 2:
+                award_type = 'Silver'
+            else:
+                award_type = 'Bronze'
+
+            # Create the award entry
+            ChangemakerAward.objects.create(
+                user=self.user,
+                campaign=self,
+                award=award_type,
+                timestamp=timezone.now()
+            )
 
     def get_objective_and_activities(self):
         objectives_activities = {
@@ -562,23 +690,31 @@ class CampaignProduct(models.Model):
 
 
 
+class CampaignFund(models.Model):
+    campaign = models.OneToOneField(Campaign, on_delete=models.CASCADE)
+    target_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    amount_raised = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    paypal_email = models.EmailField(default="paypal_email")
+
+    def progress_percentage(self):
+        if self.target_amount > 0:
+            return (self.amount_raised / self.target_amount) * 100
+        return 0
+
+
+
+
 class Donation(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    donation_link = models.URLField(max_length=200)
-    campaign = models.ForeignKey(Campaign, on_delete=models.SET_NULL, null=True, blank=True)
-    target_amount = models.DecimalField(max_digits=10, decimal_places=2)  # Set target amount
-    current_amount = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)  # Amount donated so far
-    is_goal_met = models.BooleanField(default=False)  # Track if the goal has been met
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    donor_name = models.CharField(max_length=255, default="Anonymous")  # Set a default value
+    transaction_id = models.CharField(max_length=255, unique=True, null=True)
+    created_at = models.DateTimeField(default=timezone.now)  # Automatically set the field to now when the donation is created
 
-    def __str__(self):
-        return f"Donation to {self.donation_link} by {self.user}"
-
-    def check_goal(self):
-        """Check if the donation goal has been met and update status."""
-        if self.current_amount >= self.target_amount:
-            self.is_goal_met = True
-            self.save()
-
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        # Remove the fund update from here
+        # This will prevent double counting
 
 
 
@@ -610,7 +746,6 @@ class Love(models.Model):
             # Create the notification
             Notification.objects.create(user=self.campaign.user.user, message=message)
         super().save(*args, **kwargs)
-
 
 
 
@@ -860,3 +995,56 @@ class NativeAd(models.Model):
 
     def __str__(self):
         return self.title
+
+
+
+class ChangemakerAward(models.Model):
+    BRONZE = 'bronze'
+    SILVER = 'silver'
+    GOLD = 'gold'
+
+    AWARD_CHOICES = (
+        (BRONZE, 'Bronze'),
+        (SILVER, 'Silver'),
+        (GOLD, 'Gold'),
+    )
+
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='changemaker_awards')
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='related_awards')
+    award = models.CharField(max_length=6, choices=AWARD_CHOICES, default=BRONZE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.user} - {self.award}'
+
+    @staticmethod
+    def assign_award(user):
+        """
+        Assigns the appropriate award based on the number of campaigns the user has completed.
+        """
+        campaign_count = Campaign.objects.filter(user=user).count()
+        
+        if campaign_count >= 3:
+            award = ChangemakerAward.GOLD
+        elif campaign_count == 2:
+            award = ChangemakerAward.SILVER
+        else:
+            award = ChangemakerAward.BRONZE
+
+        # Get the most recent campaign for this user
+        latest_campaign = Campaign.objects.filter(user=user).latest('timestamp')
+
+        # Check if this user already has an award for this campaign
+        if not ChangemakerAward.objects.filter(user=user, campaign=latest_campaign).exists():
+            ChangemakerAward.objects.create(user=user, campaign=latest_campaign, award=award)
+
+    @staticmethod
+    def get_awards(user):
+        """
+        Returns the list of awards earned by the user.
+        """
+        return ChangemakerAward.objects.filter(user=user)
+
+
+
+

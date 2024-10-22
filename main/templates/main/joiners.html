@@ -1,0 +1,99 @@
+{% extends 'main/face.html' %}
+{% load static %}
+
+{% block content %}
+
+<!-- HTML -->
+<div class="joiners-section">
+    <h2>Users who joined the campaign: {{ campaign.title }}</h2>
+    <ul class="joiners-list">
+        {% for profile in joiners %}
+            <li>
+                <a href="{% url 'profile_view' username=profile.user.username %}">
+                    {{ profile.user.username }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<!-- CSS -->
+<style>
+.joiners-section {
+    
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    margin-bottom: 20px;
+    max-height: 450px; /* Limit the height */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+/* Style the scroll bar for better appearance */
+.joiners-section::-webkit-scrollbar {
+    width: 8px;
+}
+
+.joiners-section::-webkit-scrollbar-thumb {
+    background-color: #ced4da; /* Gray color for the scrollbar */
+    border-radius: 4px;
+}
+
+.joiners-section h2 {
+    font-size: 1.8rem; /* Larger heading */
+    color: #495057; /* Dark gray title */
+    margin-bottom: 20px;
+    border-bottom: 2px solid #dee2e6; /* Light gray underline */
+    padding-bottom: 12px;
+}
+
+.joiners-list {
+    list-style-type: none; /* Remove bullet points */
+    padding: 0;
+    margin: 0;
+}
+
+.joiners-list li {
+    font-size: 1.2rem; /* Larger font for list items */
+    color: #6c757d; /* Medium gray for list items */
+    background-color: #ffffff; /* White background for items */
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* Light shadow */
+    transition: background-color 0.2s ease; /* Hover effect transition */
+}
+
+.joiners-list li:hover {
+    background-color: #e9ecef; /* Slightly darker gray on hover */
+}
+
+.joiners-list a {
+    color: #007bff; /* Blue color for links */
+    font-weight: bold; /* Make links bolder */
+    text-decoration: none;
+}
+
+.joiners-list a:hover {
+    text-decoration: underline; /* Underline on hover for links */
+}
+
+/* Mobile styles */
+@media only screen and (max-width: 600px) {
+    .joiners-section {
+        padding: 20px;
+        max-height: 350px; /* Adjust height for smaller screens */
+    }
+
+    .joiners-section h2 {
+        font-size: 1.6rem; /* Slightly smaller font for the heading */
+    }
+
+    .joiners-list li {
+        font-size: 1.1rem; /* Adjusted list item font for mobile */
+        padding: 10px;
+    }
+}
+</style>
+
+{% endblock %}

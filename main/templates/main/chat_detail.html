@@ -14,6 +14,11 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
 
 
     <!-- Default Title -->
@@ -1696,14 +1701,16 @@ document.addEventListener('DOMContentLoaded', function() {
             
         </div>
         <div class="chat-details">
-            <h2>Chat Name: {{ chat.title }}</h2>
-            <hr>
-            <h2>Chat Manager: {{ chat.manager }}
-      {% if chat.manager.profile.is_verified %}
-            <span class="verified-status" style="font-size: 12px;">✅Verified</span>
+       <h2>Chat Manager: 
+    <a href="{% url 'profile_view' chat.manager.username %}">
+        {{ chat.manager }}
+    </a>
+    {% if chat.manager.profile.is_verified %}
+            <span class="verified-status" style="font-size: 12px;"><span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></span>
         {% endif %}
+</h2>
 
-            </h2>
+    
             <hr>
             <h2>Participants:</h2>
             <div style="border-left: 2px solid #3498db; height: 100px; overflow-y: auto; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
@@ -1728,7 +1735,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                         <p><strong>{{ message.sender.username }}
       {% if message.sender.profile.is_verified %}
-            <span class="verified-status" style="font-size: 12px;">✅Verified</span>
+            <span class="verified-status" style="font-size: 12px;"><span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></span>
         {% endif %}
 
                         </strong> ({{ message.timestamp|timesince }} ago)</p>
@@ -1824,10 +1831,10 @@ document.addEventListener('DOMContentLoaded', function() {
   <div style="border: 1px solid #808080; padding: 20px; text-align: center; border-radius: 10px;">
     <h2 style="margin-bottom: 10px;">{{ user_profile.user.username }} 
 
-     . <i class="cm"> changemaker(cm)</i></h2>
+     . <i class="cm">activist</i></h2>
 
          {% if user_profile.is_verified %}
-        <p><strong>Status:</strong> ✅Verified</p>
+        <p><strong>Status:</strong><span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></p>
     {% endif %}
    <img src="{{ user_profile.image.url }}"  alt="Profile Image" width="150" height="150" style="
       object-fit: cover;
@@ -1836,7 +1843,7 @@ document.addEventListener('DOMContentLoaded', function() {
       transition: border-color 0.3s ease;
       border-radius: 50%; margin-bottom: 15px;
     " onmouseover="this.style.borderColor='#00FF00';" onmouseout="this.style.borderColor='#32CD32';">
-    <p style="font-size: 16px; color: #555;">Changemaker</p>
+    <p style="font-size: 16px; color: #555;">Activist</p>
     <hr style="border-color: #ccc; margin: 20px 0;">
       <p style="font-size: 14px; color: #777; line-height: 1.6;">
     {{ user_profile.bio|truncatewords:50 }}
