@@ -1387,21 +1387,7 @@ border: 1px solid silver;
         padding: 0;
     }
 }
-/* Responsive adjustments */
-@media (max-width: 767px) {
-    .campaign-container {
-        padding: 15px;
-    }
 
-    .campaign-category,
-    .campaign-title,
-    .time-location,
-    .objectives-activities h3,
-    .objectives-activities p,
-    .campaign-content {
-        font-size: 1rem;
-    }
-}
 
   </style>
 
@@ -2218,67 +2204,76 @@ document.addEventListener("DOMContentLoaded", function() {
     text-decoration: underline;
 }
 
-
+/* Default styles for larger screens */
 .campaign-content {
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    background-color: #fff;
-    max-width: 900px;
-    margin: 20px auto;
-    font-size: 1.1rem;
-    line-height: 1.8;
+    font-size: 16px; /* Default font size for larger screens */
+    padding: 20px; /* Default padding */
+    margin: 10px; /* Default margin */
+    /* Add any other default styles here */
 }
 
-/* Larger screens */
-@media (min-width: 768px) {
+/* Mobile styles */
+@media (max-width: 768px) { /* Adjust the max-width as needed */
     .campaign-content {
-        padding: 40px;               /* Spacious padding for large screens */
-        border-radius: 12px;         /* More pronounced border radius */
-        font-size: 1.2rem;           /* Larger font for readability */
-        line-height: 1.9;            /* Comfortable line height */
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Slightly bigger shadow */
-        max-width: 70%;              /* Width scaling for desktop */
-        background-color: #fefefe;   /* Subtle background shade */
-    }
-
-    .campaign-content h1, .campaign-content h2 {
-        font-size: 1.6rem;           /* Larger headings for desktop */
-        margin-bottom: 15px;         /* Spacing below headings */
-        color: #2c3e50;              /* Slightly darker color for contrast */
-    }
-
-    .campaign-content p {
-        margin-bottom: 16px;         /* Consistent paragraph spacing */
-        color: #333;                 /* Dark color for body text */
+        font-size: 14px; /* Increased font size for better readability */
+        padding: 15px; /* Slightly smaller padding */
+        margin: 8px; /* Slightly smaller margin */
+        transform: translateY(12px); /* Move down by 12px */
+        transition: transform 0.3s ease; /* Smooth transition */
+        max-width: 95%; /* Ensures the content fits well on smaller screens */
     }
 }
+/* Default styles for larger screens */
+.campaign-content {
+    font-size: 16px; /* Default font size for larger screens */
+    padding: 20px; /* Default padding */
+    margin: 10px; /* Default margin */
+}
 
-/* Mobile version */
-@media (max-width: 767px) {
+/* Mobile styles */
+@media (max-width: 768px) {
+    .container-with-border {
+        padding: 0; /* Adjust padding for mobile */
+        border-radius: 8px; /* Rounded corners for a softer look */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+    }
+
     .campaign-content {
-        padding: 15px;                /* Compact padding for mobile */
-        border-radius: 8px;           /* Rounded corners */
-        font-size: 1.1rem;            /* Slightly larger text on mobile */
-        line-height: 1.6;             /* Relaxed line height */
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-        background-color: #f9f9f9;    /* Light background */
-        width: 95%;                   /* Full-width on mobile */
-        margin: 15px auto;            /* Centered margin */
+        font-size: 15px; /* Slightly larger text for readability */
+        padding: 10px; /* Adjust padding for mobile */
+        margin: 8px 0; /* Adjust margin for better spacing */
+        transform: translateY(12px); /* Keep the vertical shift */
+        max-width: 95%; /* Ensures the content fits well on smaller screens */
     }
 
-    .campaign-content h1, .campaign-content h2 {
-        font-size: 1.4rem;            /* Big headings for readability */
-        margin-bottom: 10px;          /* Spacing below headings */
-        color: #3498db;               /* Highlighted color */
+    h1, h2, h3 {
+        font-weight: bold; /* Make headings bold for emphasis */
+        line-height: 1.2; /* Improve line spacing for readability */
     }
 
-    .campaign-content p {
-        margin-bottom: 12px;          /* Comfortable spacing */
-        color: #333;                  /* Darker color */
+    .post-details {
+        margin-bottom: 15px; /* Spacing between elements */
+    }
+
+    .upper-post {
+        flex-direction: column; /* Stack elements vertically */
+        align-items: flex-start; /* Align to start */
+    }
+
+    .profile-pic img {
+        width: 50px; /* Adjust profile picture size */
+        height: auto; /* Maintain aspect ratio */
+    }
+
+    .react div {
+        font-size: 14px; /* Adjust reaction font size */
+    }
+
+    .tooltip-text {
+        font-size: 10px; /* Smaller tooltip text */
+        padding: 5px; /* Padding for tooltip */
     }
 }
-
 
 </style>
 
