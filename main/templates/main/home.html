@@ -49,7 +49,9 @@
   
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   
-  
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <!-- Default Title -->
     <title>RallyNex - Together for Change: Support Global Campaigns and Transform Lives</title>
@@ -1363,6 +1365,44 @@ border: 1px solid silver;
     opacity: 1;
 }
 
+
+.sidebar-box {
+    border-left: 2px solid #3498db;
+    height: 600px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 0; /* Optional, for spacing inside the box */
+}
+
+/* On small devices, remove styling but keep the content visible */
+@media (max-width: 767px) {
+    .sidebar-box {
+        border: none;
+        height: auto;
+        overflow: visible;
+        border-radius: 0;
+        box-shadow: none;
+        padding: 0;
+    }
+}
+/* Responsive adjustments */
+@media (max-width: 767px) {
+    .campaign-container {
+        padding: 15px;
+    }
+
+    .campaign-category,
+    .campaign-title,
+    .time-location,
+    .objectives-activities h3,
+    .objectives-activities p,
+    .campaign-content {
+        font-size: 1rem;
+    }
+}
+
   </style>
 
 
@@ -1808,7 +1848,7 @@ document.addEventListener("DOMContentLoaded", function() {
     <h2 style="font-size:19px; padding-left: 20px;">Home</h2>
 
     {% if public_campaigns %}
-        <div style="border-left: 2px solid #3498db; height: 600px; overflow-y: auto; overflow-x: hidden; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+       <div class="sidebar-box">
             {% for campaign in public_campaigns %}
                 <div class="container-with-border">
                     <div class="upper-post">
@@ -1968,8 +2008,17 @@ document.addEventListener("DOMContentLoaded", function() {
                                 </span>
                                 <a href="{% url 'campaign_comments' campaign_id=campaign.id %}" class="comment-count">comments</a>
                             </div>
-                       <div>
-    {% if user.profile in campaign.user_profiles.all %}
+                       
+  
+
+                            <div>
+                              
+<a href="{% url 'campaign_joiners' campaign.id %}" style="color:#495057; font-size: 12px;">
+    Joiners ({{ campaign.user_profiles.count|format_count }})
+</a>
+
+                            </div>
+  {% if user.profile in campaign.user_profiles.all %}
         <a href="{% url 'join_leave_campaign' campaign.id %}" class="join-leave-btn">
             <i class="fas fa-user-minus"></i> Leave
             <span class="tooltip-text">Leave Campaign</span>
@@ -1980,15 +2029,9 @@ document.addEventListener("DOMContentLoaded", function() {
             <span class="tooltip-text">Join Campaign</span>
         </a>
     {% endif %}
-</div>
 
-                            <div>
-                              
-<a href="{% url 'campaign_joiners' campaign.id %}" style="color:#495057;">
-    Joiners ({{ campaign.user_profiles.count|format_count }})
-</a>
 
-                            </div>
+                            
                         </div>
                     </div>
 
@@ -2174,6 +2217,68 @@ document.addEventListener("DOMContentLoaded", function() {
 .subscribe-link:hover {
     text-decoration: underline;
 }
+
+
+.campaign-content {
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    max-width: 900px;
+    margin: 20px auto;
+    font-size: 1.1rem;
+    line-height: 1.8;
+}
+
+/* Larger screens */
+@media (min-width: 768px) {
+    .campaign-content {
+        padding: 40px;               /* Spacious padding for large screens */
+        border-radius: 12px;         /* More pronounced border radius */
+        font-size: 1.2rem;           /* Larger font for readability */
+        line-height: 1.9;            /* Comfortable line height */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Slightly bigger shadow */
+        max-width: 70%;              /* Width scaling for desktop */
+        background-color: #fefefe;   /* Subtle background shade */
+    }
+
+    .campaign-content h1, .campaign-content h2 {
+        font-size: 1.6rem;           /* Larger headings for desktop */
+        margin-bottom: 15px;         /* Spacing below headings */
+        color: #2c3e50;              /* Slightly darker color for contrast */
+    }
+
+    .campaign-content p {
+        margin-bottom: 16px;         /* Consistent paragraph spacing */
+        color: #333;                 /* Dark color for body text */
+    }
+}
+
+/* Mobile version */
+@media (max-width: 767px) {
+    .campaign-content {
+        padding: 15px;                /* Compact padding for mobile */
+        border-radius: 8px;           /* Rounded corners */
+        font-size: 1.1rem;            /* Slightly larger text on mobile */
+        line-height: 1.6;             /* Relaxed line height */
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        background-color: #f9f9f9;    /* Light background */
+        width: 95%;                   /* Full-width on mobile */
+        margin: 15px auto;            /* Centered margin */
+    }
+
+    .campaign-content h1, .campaign-content h2 {
+        font-size: 1.4rem;            /* Big headings for readability */
+        margin-bottom: 10px;          /* Spacing below headings */
+        color: #3498db;               /* Highlighted color */
+    }
+
+    .campaign-content p {
+        margin-bottom: 12px;          /* Comfortable spacing */
+        color: #333;                  /* Darker color */
+    }
+}
+
 
 </style>
 
