@@ -1846,12 +1846,12 @@ document.addEventListener("DOMContentLoaded", function() {
                         <div class="post-details">
                             <h1>{{ campaign.user.user.username }} 
                                 {% if campaign.user.is_verified %}
-                                    <span class="verified-status" style="font-size:12px;"><span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></span>
+                                    <span class="verified-status" style="font-size:12px;"><span>verified</span><i class="material-icons" style="font-size:12px;color:green">verified_user</i></span>
                                 {% endif %}
                                 .  <i class="cm">
     {% if campaign.is_changemaker %}
         <span  class="far fa-star"
- style="color:red; font-size: 20px;"></span>
+ style="color:red; font-size: 12px;"></span>
         <span class="changemaker-text">Changemaker</span>
     {% endif %}
 </i>
@@ -1893,7 +1893,7 @@ document.addEventListener("DOMContentLoaded", function() {
     </a>
 {% else %}
     <!-- Optionally, show a message if the user hasn't joined -->
-    <p>You need to join this campaign to view activities and participate.</p>
+    <p style="padding-left:8px;"> You need to join this campaign to view activities and participate.</p>
 {% endif %}
 
 

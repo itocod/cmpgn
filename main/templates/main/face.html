@@ -1013,6 +1013,27 @@ input[type="text"]:focus {
     text-decoration: underline;
 }
 
+.sidebar-box {
+    border-left: 2px solid #3498db;
+    height: 600px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 0; /* Optional, for spacing inside the box */
+}
+
+/* On small devices, remove styling but keep the content visible */
+@media (max-width: 767px) {
+    .sidebar-box {
+        border: none;
+        height: auto;
+        overflow: visible;
+        border-radius: 0;
+        box-shadow: none;
+        padding: 0;
+    }
+}
 
 
 </style>
@@ -1470,7 +1491,7 @@ document.addEventListener("DOMContentLoaded", function() {
       </div></br>
 
     
-    <div style="border-left: 2px solid #3498db; height: 600px; overflow-y: auto;overflow-x: hidden; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+   <div class="sidebar-box">
     <p style="padding: 15px">{% block content %}
  {% endblock %}</p>
     </div>

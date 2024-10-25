@@ -48,7 +48,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <!-- Default Title -->
     <title>RallyNex - Together for Change: Support Global Campaigns and Transform Lives</title>
@@ -1382,6 +1384,27 @@ border: 1px solid silver;
     transform: rotate(20deg);
     opacity: 1;
 }
+.sidebar-box {
+    border-left: 2px solid #3498db;
+    height: 600px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 0; /* Optional, for spacing inside the box */
+}
+
+/* On small devices, remove styling but keep the content visible */
+@media (max-width: 767px) {
+    .sidebar-box {
+        border: none;
+        height: auto;
+        overflow: visible;
+        border-radius: 0;
+        box-shadow: none;
+        padding: 0;
+    }
+}
 
 
   </style>
@@ -1829,7 +1852,7 @@ document.addEventListener("DOMContentLoaded", function() {
     <h2 style="font-size:19px; padding-left: 20px;">User Public Campaigns</h2>
 
     {% if public_campaigns %}
-        <div style="border-left: 2px solid #3498db; height: 600px; overflow-y: auto; overflow-x: hidden; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+         <div class="sidebar-box">
             {% for campaign in public_campaigns %}
                 <div class="container-with-border">
                     <div class="upper-post">
@@ -1841,11 +1864,11 @@ document.addEventListener("DOMContentLoaded", function() {
                         <div class="post-details">
                             <h1>{{ campaign.user.user.username }} 
                                 {% if campaign.user.is_verified %}
-                                    <span class="verified-status" style="font-size:12px;"><span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></span>
+                                    <span class="verified-status" style="font-size:12px;"><span>verified</span><i class="material-icons" style="font-size:12px;color:green">verified_user</i></span>
                                 {% endif %}
                                 . <i class="cm">    {% if campaign.is_changemaker %}
          <span  class="far fa-star"
- style="color:red; font-size: 20px;"></span>
+ style="color:red; font-size: 12px;"></span>
         <span class="changemaker-text">Changemaker</span>
     {% endif %}</i>
                             </h1> 
@@ -1886,7 +1909,7 @@ document.addEventListener("DOMContentLoaded", function() {
     </a>
 {% else %}
     <!-- Optionally, show a message if the user hasn't joined -->
-    <p>You need to join this campaign to view activities and participate.</p>
+    <p style="padding-left:8px;">You need to join this campaign to view activities and participate.</p>
 {% endif %}
 
                             <!-- Campaign poster -->
@@ -1986,8 +2009,19 @@ document.addEventListener("DOMContentLoaded", function() {
                                 </span>
                                 <a href="{% url 'campaign_comments' campaign_id=campaign.id %}" class="comment-count">comments</a>
                             </div>
-                                <div>
-    {% if user.profile in campaign.user_profiles.all %}
+                                
+  
+
+
+                            <div>
+                              
+<!-- Link to the joiners list -->
+<a href="{% url 'campaign_joiners' campaign.id %}" style="color:#495057;">
+    Joiners ({{ campaign.user_profiles.count|format_count }})
+</a>
+
+                            </div>
+                              {% if user.profile in campaign.user_profiles.all %}
         <a href="{% url 'join_leave_campaign' campaign.id %}" class="join-leave-btn">
             <i class="fas fa-user-minus"></i> Leave
             <span class="tooltip-text">Leave Campaign</span>
@@ -1998,16 +2032,6 @@ document.addEventListener("DOMContentLoaded", function() {
             <span class="tooltip-text">Join Campaign</span>
         </a>
     {% endif %}
-</div>
-
-                            <div>
-                              
-<!-- Link to the joiners list -->
-<a href="{% url 'campaign_joiners' campaign.id %}" style="color:#495057;">
-    Joiners ({{ campaign.user_profiles.count|format_count }})
-</a>
-
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -2192,6 +2216,76 @@ document.addEventListener("DOMContentLoaded", function() {
     text-decoration: underline;
 }
 
+/* Default styles for larger screens */
+.campaign-content {
+    font-size: 16px; /* Default font size for larger screens */
+    padding: 20px; /* Default padding */
+    margin: 10px; /* Default margin */
+    /* Add any other default styles here */
+}
+
+/* Mobile styles */
+@media (max-width: 768px) { /* Adjust the max-width as needed */
+    .campaign-content {
+        font-size: 14px; /* Increased font size for better readability */
+        padding: 15px; /* Slightly smaller padding */
+        margin: 8px; /* Slightly smaller margin */
+        transform: translateY(12px); /* Move down by 12px */
+        transition: transform 0.3s ease; /* Smooth transition */
+        max-width: 95%; /* Ensures the content fits well on smaller screens */
+    }
+}
+/* Default styles for larger screens */
+.campaign-content {
+    font-size: 16px; /* Default font size for larger screens */
+    padding: 20px; /* Default padding */
+    margin: 10px; /* Default margin */
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+    .container-with-border {
+        padding: 0; /* Adjust padding for mobile */
+        border-radius: 8px; /* Rounded corners for a softer look */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+    }
+
+    .campaign-content {
+        font-size: 15px; /* Slightly larger text for readability */
+        padding: 10px; /* Adjust padding for mobile */
+        margin: 8px 0; /* Adjust margin for better spacing */
+        transform: translateY(12px); /* Keep the vertical shift */
+        max-width: 95%; /* Ensures the content fits well on smaller screens */
+    }
+
+    h1, h2, h3 {
+        font-weight: bold; /* Make headings bold for emphasis */
+        line-height: 1.2; /* Improve line spacing for readability */
+    }
+
+    .post-details {
+        margin-bottom: 15px; /* Spacing between elements */
+    }
+
+    .upper-post {
+        flex-direction: column; /* Stack elements vertically */
+        align-items: flex-start; /* Align to start */
+    }
+
+    .profile-pic img {
+        width: 50px; /* Adjust profile picture size */
+        height: auto; /* Maintain aspect ratio */
+    }
+
+    .react div {
+        font-size: 14px; /* Adjust reaction font size */
+    }
+
+    .tooltip-text {
+        font-size: 10px; /* Smaller tooltip text */
+        padding: 5px; /* Padding for tooltip */
+    }
+}
 </style>
 
 
