@@ -100,7 +100,7 @@ class Profile(models.Model):
         activity_count = Activity.objects.filter(campaign__user=self).count()  # `campaign__user` references the Profile
         activity_love_count = ActivityLove.objects.filter(activity__campaign__user=self).count()
 
-        return activity_count >= 10 and activity_love_count >= 50
+        return activity_count >= 1 and activity_love_count >= 1
 
 
 
@@ -317,7 +317,7 @@ class Campaign(models.Model):
         """Check if the user qualifies as a changemaker."""
         activity_count = self.activity_set.count()
         activity_love_count = ActivityLove.objects.filter(activity__campaign=self).count()
-        return activity_count >= 10 and activity_love_count >= 50
+        return activity_count >= 1 and activity_love_count >= 1
 
     def save(self, *args, **kwargs):
         is_new = self.pk is None

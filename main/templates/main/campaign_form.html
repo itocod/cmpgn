@@ -165,6 +165,9 @@
             }
         }
     </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emojionearea/dist/emojionearea.min.css">
+<script src="https://cdn.jsdelivr.net/npm/emojionearea/dist/emojionearea.min.js"></script>
+
 </head>
 <body>
 
@@ -212,32 +215,11 @@
                 <span class="form-help-text">Choose how to display your campaign.</span>
             </div>
 
-            <div class="input-group">
-                <label for="id_content">Content:</label>
-                <textarea id="id_content" name="content" required></textarea>
-                <div class="emoji-container">
-                <button class="emoji-btn" type="button" onclick="insertEmoji('💼')">💼</button>
-                <button class="emoji-btn" type="button" onclick="insertEmoji('📋')">📋</button>
-                <button class="emoji-btn" type="button" onclick="insertEmoji('📈')">📈</button>
-                <button class="emoji-btn" type="button" onclick="insertEmoji('🚀')">🚀</button>
-                <button class="emoji-btn" type="button" onclick="insertEmoji('💡')">💡</button>
-                <button class="emoji-btn" type="button" onclick="insertEmoji('🔍')">🔍</button>
-                <button class="emoji-btn" type="button" onclick="insertEmoji('📣')">📣</button>
-                <button class="emoji-btn" type="button" onclick="insertEmoji('🎯')">🎯</button>
-                <button class="emoji-btn" type="button" onclick="insertEmoji('🎉')">🎉</button>
-                <button class="emoji-btn" type="button" onclick="insertEmoji('🔔')">🔔</button>
-                <button class="emoji-btn" type="button" onclick="insertEmoji('📱')">📱</button>
-                <button class="emoji-btn" type="button" onclick="insertEmoji('💸')">💸</button>
-                <button class="emoji-btn" type="button" onclick="insertEmoji('🔑')">🔑</button>
-                <button class="emoji-btn" type="button" onclick="insertEmoji('🔦')">🔦</button>
-                <button class="emoji-btn" type="button" onclick="insertEmoji('🎁')">🎁</button>
-                <button class="emoji-btn" type="button" onclick="insertEmoji('📆')">📆</button>
-                <button class="emoji-btn" type="button" onclick="insertEmoji('💻')">💻</button>
-                <button class="emoji-btn" type="button" onclick="insertEmoji('📝')">📝</button>
-                <button class="emoji-btn" type="button" onclick="insertEmoji('🔧')">🔧</button>
-                <button class="emoji-btn" type="button" onclick="insertEmoji('🛠️')">🛠️</button>
-                </div>
-            </div>
+           <div class="input-group">
+    <label for="id_content">Content:</label>
+    <textarea id="id_content" name="content" required></textarea>
+</div>
+
 
             <button type="submit" class="primary-btn">Submit</button>
         </form>
@@ -472,15 +454,16 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
     </script>
-    <script>
-        function insertEmoji(emoji) {
-            var textarea = document.getElementById('id_content');
-            var cursorPos = textarea.selectionStart;
-            var textBefore = textarea.value.substring(0, cursorPos);
-            var textAfter = textarea.value.substring(cursorPos, textarea.value.length);
-            textarea.value = textBefore + emoji + textAfter;
-        }
-    </script>
+<script>
+    $(document).ready(function () {
+        // Initialize emojionearea on your message input field
+        $('#id_content').emojioneArea({
+            pickerPosition: "bottom", // Display emoji picker at the bottom
+            tones: false // Disable skin tones if not required
+        });
+    });
+</script>
+
 </body>
 </html>
 {% endblock %}

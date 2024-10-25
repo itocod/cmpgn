@@ -7,111 +7,108 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Chat</title>
-    <style>
-        /* Add your custom CSS styles here */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+   <style>
+    /* Add your custom CSS styles here */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
 
-        h1 {
-            text-align: center;
-            color: #343a40;
-            margin-bottom: 30px;
-           
-            font-weight: bold;
-        }
+    h1 {
+        text-align: center;
+        color: #343a40;
+        margin-bottom: 30px;
+        font-weight: bold;
+    }
 
-        .custom-form {
-            width: 80%;
-            margin: 0 auto;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
+    .custom-form {
+        width: 80%;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
 
-        label {
-            display: block;
-            margin-bottom: 10px;
-            color: #495057;
-            font-size: 16px;
-        }
+    label {
+        display: block;
+        margin-bottom: 10px;
+        color: #495057;
+        font-size: 16px;
+    }
 
-        input[type="text"] {
-            width: calc(100% - 20px);
-            padding: 10px;
-            border: 1px solid #ced4da;
-            border-radius: 5px;
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
+    .unique-input {
+        width: calc(100% - 20px);
+        padding: 10px;
+        border: 1px solid #ced4da;
+        border-radius: 5px;
+        margin-bottom: 20px;
+        font-size: 14px;
+    }
 
-        .custom-button {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            padding: 10px 20px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s ease;
-            width: 100%;
-        }
+    .custom-button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+        width: 100%;
+    }
 
-        .custom-button:hover {
-            background-color: #0056b3;
-        }
+    .custom-button:hover {
+        background-color: #0056b3;
+    }
 
-        /* Custom style for participants section */
-        .participants-section {
-            border-left: 2px solid #3498db;
-            height: 80px;
-            overflow-y: auto;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 10px;
-            margin-top: 20px;
-        }
+    /* Custom style for participants section */
+    .participants-section {
+        border-left: 2px solid #3498db;
+        height: 80px;
+        overflow-y: auto;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+        margin-top: 20px;
+    }
 
-        /* Style for participant labels */
-        .participant-label {
-            margin-bottom: 5px;
-            display: block;
-        }
+    /* Style for participant labels */
+    .participant-label {
+        margin-bottom: 5px;
+        display: block;
+    }
 
+    .action-item {
+        display: inline-block;
+        padding: 10px 20px;
+        margin-right: 10px;
+        border-radius: 5px;
+        text-align: center;
+        font-size: 12px;
+    }
 
+    .action-item a {
+        color: #000;
+        text-decoration: none;
+        font-size: inherit;
+    }
 
-     .action-item {
-            display: inline-block;
-            padding: 10px 20px;
-            margin-right: 10px;
-            border-radius: 5px;
-            text-align: center;
-            font-size: 12px; /* Adjust the font size as needed */
-        }
-        .action-item a {
-           color: #000;
-            text-decoration: none;
-            font-size: inherit;
-        }
-        .action-item i {
-            margin-right: 5px;
-        }
-    </style>
+    .action-item i {
+        margin-right: 5px;
+    }
+</style>
 
 </head>
 <body>
-        
-   
 
-    <h2 style="font-size: 19px;padding-left: 20px;">Create_Chat_Table (CT)</h2>
+    <h2 style="font-size: 19px; padding-left: 20px;">Create_Chat_Table (CT)</h2>
     <form class="custom-form" method="post">
         {% csrf_token %}
         {{ form.title.errors }}
         <label for="{{ form.title.id_for_label }}">Title:</label>
-        {{ form.title }}
+        <input class="unique-input" type="text" id="{{ form.title.id_for_label }}" name="{{ form.title.name }}" value="{{ form.title.value }}">
         <br>
         {{ form.participants.errors }}
         <label for="{{ form.participants.id_for_label }}">Participants:</label>
@@ -122,8 +119,10 @@
             {% endfor %}
         </div>
         <br>
-        <button class="custom-button" type="submit">Create CT </button>
+        <button class="custom-button" type="submit">Create CT</button>
     </form>
+
+
     <script type="text/javascript">
         
 

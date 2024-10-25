@@ -92,7 +92,7 @@
     header {
       background-color: 
       color: grey;
-      padding: 10px;
+      padding: 0;
       text-align: center;
     }
 main {
@@ -239,6 +239,7 @@ input[type="text"]:focus {
     border: none;
     background: #007bff; /* Primary button color */
     color: white;
+
     font-size: 20px;
     cursor: pointer;
     transition: background 0.3s ease, transform 0.2s ease;
@@ -247,15 +248,16 @@ input[type="text"]:focus {
 
 /* Submit button hover */
 .btn-submit:hover {
-    background: #0056b3;
+  color: white;
+    background: #0069d9;
     transform: scale(1.05); /* Slightly scale up on hover */
 }
 
 /* Clear button */
 .btn-clear {
     border: none;
-    background: transparent;
-    color: #888;
+    background: #007bff;
+    color: white;
     font-size: 18px;
     cursor: pointer;
     transition: color 0.3s ease, transform 0.2s ease;
@@ -264,10 +266,10 @@ input[type="text"]:focus {
 
 /* Clear button hover */
 .btn-clear:hover {
-    color: #333;
+  background-color: #0069d9;
+    color: white;
     transform: scale(1.05); /* Slightly scale up on hover */
 }
-
 /* Mobile styles */
 @media (max-width: 768px) {
     .header-container {
@@ -293,6 +295,10 @@ input[type="text"]:focus {
         padding: 10px 15px; /* Adjusted padding */
         font-size: 14px; /* Smaller font size for mobile */
     }
+        .logo-initials {
+        font-size: 40px; /* Smaller font size for small devices */
+    }
+
 }
 
 
@@ -881,39 +887,39 @@ input[type="text"]:focus {
 
 
 
+/* Navbar toggle (hidden by default) */
 .navbar-toggle {
+    display: none; /* Hidden by default */
     cursor: pointer;
-    font-size: 16px; /* Smaller font size */
+    font-size: 16px;
     color: #888; /* Light grey color */
     background-color: #f5f5f5; /* Very light grey background */
     border: 1px solid #ccc; /* Light border */
-    padding:5px; /* Padding adjusted */
+    padding: 0; /* Set padding to 0 as required */
     border-radius: 3px; /* Slight border radius */
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; /* Smooth transition */
-    display: flex; /* Use flexbox for layout */
-   
-    justify-content: center; /* Center align items horizontally */
-    display: none;
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    justify-content: center; /* Center horizontally */
+    width: 100%; /* Full width for mobile view */
+    position: fixed;
+    bottom: 0; /* Fix to the bottom of the screen */
+    left: 0; /* Align to the left */
+    z-index: 1000; /* Ensure it's above other elements */
+    background-color: #f5f5f5; /* Background color */
 }
 
+/* Navbar toggle hover effects */
 .navbar-toggle:hover {
-    background-color: #f7f7f7; /* Even lighter grey background on hover */
+    background-color: #f7f7f7; /* Lighter background on hover */
     color: #777; /* Slightly darker text on hover */
-    border-color: #ddd; /* Lighter border on hover */
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Subtle shadow on hover */
-    /* Green accent */
-    border-color: #4CAF50; /* Green border bottom */
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, border-bottom-color 0.3s ease; /* Transition for border color */
+    border-color: #4CAF50; /* Green border on hover */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Subtle shadow */
     border-radius: 10px;
-
 }
 
+/* Show navbar toggle only on smaller screens */
 @media (max-width: 768px) {
     .navbar-toggle {
-        display: flex; /* Ensure it's flex on smaller screens too */
-       width: 100%;
-        top: 10px;
-        left: 0; /* Position on the left side */
+        display: flex; /* Show the toggle button on smaller screens */
     }
 }
 
@@ -1395,12 +1401,13 @@ document.addEventListener("DOMContentLoaded", function() {
         <form action="{% url 'search_campaign' %}" method="get">
             <div class="search-wrapper">
                 <input type="text" placeholder="Search..." name="search_query" id="search-input">
+                              <button type="button" class="btn-clear" id="clear-btn">
+                    <i class="fas fa-times"></i>
+                </button>
                 <button type="submit" class="btn-submit">
                     <i class="fas fa-search"></i>
                 </button>
-                <button type="button" class="btn-clear" id="clear-btn">
-                    <i class="fas fa-times"></i>
-                </button>
+
             </div>
         </form>
     </div>
