@@ -13,85 +13,120 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+             /* Light background for better contrast */
         }
-        h1.chat-list-heading {
-            text-align: center;
-            margin-top: 50px;
+
+        .header-container {
+            display: flex;
+            justify-content: space-between; /* Space between title and button */
+            align-items: center; /* Center items vertically */
+            margin: 30px 10px; /* Margin around header */
         }
+
+        h2.chat-list-heading {
+            font-size: 22px; /* Larger font size */
+            color: #333; /* Dark color for better readability */
+            margin: 0; /* Remove default margin */
+        }
+
+        .new-chat-button {
+            background-color: #007bff; /* Button background */
+            color: #ffffff; /* White text */
+            padding: 10px 15px; /* Padding for the button */
+            border-radius: 5px; /* Rounded corners */
+            font-size: 14px; /* Font size for button */
+            text-decoration: none; /* Remove underline */
+            transition: background-color 0.3s ease, transform 0.3s ease; /* Transition effects */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+            border: none; /* Remove border */
+        }
+
+        .new-chat-button:hover {
+            background-color: #0056b3; /* Darker button color on hover */
+            transform: translateY(-2px); /* Lift effect on hover */
+        }
+
         ul.chat-list {
             list-style-type: none;
             padding: 0;
-            margin: 20px auto;
-            max-width: 600px;
-        }
-        li.chat-list-item {
-            background-color: #fff;
-            padding: 10px 20px;
-            border-radius: 5px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        li.chat-list-item a {
-            text-decoration: none;
-            color: #333;
-            font-weight: bold;
-        }
-        li.chat-list-item a:hover {
-            color: #007bff;
-        }
-     
-        .new-chat-link {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-        }
-        .new-chat-link a {
-            text-decoration: none;
-            background-color: #007bff;
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 5px;
-        }
-        .new-chat-link a:hover {
-            background-color: #0056b3;
+            margin: 20px auto; /* Center the list */
+            max-width: 600px; /* Maximum width for the chat list */
         }
 
+        li.chat-list-item {
+            background-color: #ffffff; /* White background for chat items */
+            padding: 10px 15px; /* Padding for items */
+            border-radius: 5px; /* Rounded corners */
+            margin-bottom: 10px; /* Spacing between items */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Shadow effect */
+            transition: box-shadow 0.3s ease; /* Transition effect */
+        }
+
+        li.chat-list-item:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect on hover */
+        }
+
+        li.chat-list-item a {
+            text-decoration: none; /* No underline */
+            color: #007bff; /* Blue color for links */
+            font-weight: bold; /* Bold text */
+            font-size: 14px; /* Font size */
+        }
+
+        li.chat-list-item a:hover {
+            color: #0056b3; /* Darker blue on hover */
+        }
 
         .red-spot {
-    width: 10px;
-    height: 10px;
-    background-color: red;
-    border-radius: 50%;
-    display: inline-block;
-    margin-right: 5px; /* Adjust this value as needed to position the spot */
-}
-
-
-     .action-item {
+            width: 10px;
+            height: 10px;
+            background-color: red; /* Red color for unread message indicator */
+            border-radius: 50%; /* Circle shape */
             display: inline-block;
-            padding: 10px 20px;
-            margin-right: 10px;
-            border-radius: 5px;
-            text-align: center;
-            font-size: 12px; /* Adjust the font size as needed */
+            margin-right: 5px; /* Space between spot and text */
         }
-        .action-item a {
-           color: #000;
-            text-decoration: none;
-            font-size: inherit;
+
+        .verified-status {
+            font-size: 12px; /* Font size for verified status */
+            color: green; /* Green color for verified status */
         }
-        .action-item i {
-            margin-right: 5px;
+
+        /* Mobile Styles */
+        @media (max-width: 768px) {
+            h2.chat-list-heading {
+                font-size: 18px; /* Smaller font size for mobile */
+            }
+
+            .new-chat-button {
+                font-size: 12px; /* Smaller font size for mobile button */
+                padding: 8px 12px; /* Adjust button padding */
+            }
+
+            ul.chat-list {
+                max-width: 100%; /* Full width on mobile */
+                padding: 0 10px; /* Side padding for mobile */
+            }
+
+            li.chat-list-item {
+                padding: 10px; /* Slightly more padding for touch targets */
+            }
+        }
+
+        @media (max-width: 480px) {
+            h2.chat-list-heading {
+                font-size: 16px; /* Even smaller font size for very small screens */
+            }
+        }
     </style>
 </head>
 
-      
-
-
 <body class="chat-list-body">
-    <h2 class="chat-list-heading" style="font-size: 19px; padding-left: 20px;">{{ user.username }}'s Chat Tables</h2>
+    <div class="header-container">
+        <h3 class="chat-list-heading">{{ user.username }}'s Chat Tables</h3>
+        <a href="{% url 'create_chat' %}" class="new-chat-button">Create a New Chat Table</a>
+    </div>
     <hr>
-    <div style="border-left: 2px solid #3498db; height: 200px; overflow-y: auto; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+    <div style="border-left: 2px solid #3498db; height: 300px; overflow-y: auto; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
         <ul class="chat-list">
             {% for chat in user_chats %}
                 <li class="chat-list-item">
@@ -100,22 +135,17 @@
                     {% endif %}
                     <a href="{% url 'chat_detail' chat.id %}">
                         Chat - {{ chat.title }} (Manager: {{ chat.manager.username }}
-      {% if chat.manager.profile.is_verified %}
-            <span class="verified-status" style="font-size: 12px;"><span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></span>
-        {% endif %}
-
+                        {% if chat.manager.profile.is_verified %}
+                            <span class="verified-status"><span>verified</span><i class="material-icons" style="font-size:16px;color:green">verified_user</i></span>
+                        {% endif %}
                         )
                     </a>
                 </li>
             {% endfor %}
-
-
         </ul>
     </div>
-    <!-- Link to create a new chat -->
-    <div class="new-chat-link">
-        <a href="{% url 'create_chat' %}">Create a New Chat Table</a>
-    </div>
+
+
     <script type="text/javascript">
         
 

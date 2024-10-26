@@ -2,12 +2,12 @@
 {% load static %}
 
 {% block content %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>Suggested Users to Follow</title>
     <style>
         body {
@@ -15,61 +15,81 @@
             margin: 0;
             padding: 0;
         }
+
         .container-profiles {
             max-width: 800px;
             margin: auto;
             padding: 20px;
         }
+
         .profile-header {
             text-align: center;
             margin-bottom: 30px;
             color: #333;
         }
+
         .profile-list {
             list-style-type: none;
             padding: 0;
             margin: 0;
         }
+
         .profile-card {
-            
             margin-bottom: 20px;
             border-radius: 5px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             overflow: hidden;
+            display: flex; /* Use flexbox for alignment */
+            flex-direction: column; /* Stack items vertically */
         }
+
         .profile-content {
             display: flex;
             align-items: center;
             padding: 20px;
         }
 
+        .profile-pic {
+            flex-shrink: 0; /* Prevent image from shrinking */
+            margin-right: 15px; /* Space between image and text */
+        }
+
+        .profile-picture {
+            width: 50px; /* Set a fixed width for the profile picture */
+            height: 50px; /* Set a fixed height for the profile picture */
+            border-radius: 50%; /* Make the profile picture circular */
+        }
+
         .profile-details {
             flex-grow: 1;
         }
+
         .profile-name {
             margin-top: 0;
             margin-bottom: 10px;
             color: #333;
             font-size: 19px;
         }
+
         .profile-info {
             margin: 5px 0;
-           font-size: 16px;
+            font-size: 16px;
         }
+
         .profile-link {
             text-decoration: none;
             color: #007bff;
         }
+
         .profile-link:hover {
             text-decoration: underline;
         }
 
-
         .cm {
-  font-size: 12px;
-}
+            font-size: 12px;
+        }
 
-     .action-item {
+        .action-item {
             display: inline-block;
             padding: 10px 20px;
             margin-right: 10px;
@@ -77,61 +97,102 @@
             text-align: center;
             font-size: 12px; /* Adjust the font size as needed */
         }
+
         .action-item a {
-           color: #000;
+            color: #000;
             text-decoration: none;
             font-size: inherit;
         }
+
         .action-item i {
             margin-right: 5px;
+        }
+
+        /* Styling for the "No suggested users yet" message */
+        .no-suggested-users {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f8ff; /* Light blue background */
+            border-radius: 5px;
+            color: #0056b3; /* Dark blue text */
+            font-size: 14px;
+            border: 1px solid #007bff; /* Blue border */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 600px) {
+            .profile-content {
+                flex-direction: column; /* Stack elements vertically on mobile */
+                align-items: flex-start; /* Align items to the left */
+            }
+
+            .profile-pic {
+                margin-bottom: 10px; /* Add space below profile picture */
+                margin-right: 0; /* Remove right margin */
+            }
+
+            .profile-name {
+                font-size: 18px; /* Slightly smaller font size */
+            }
+
+            .profile-info {
+                font-size: 14px; /* Smaller font size for profile info */
+            }
+
+            .no-suggested-users {
+                font-size: 12px; /* Adjust font size for mobile */
+            }
         }
     </style>
 </head>
 <body>
-     <h2 style="font-size: 19px;padding-left: 20px;">Suggested_Users</h2>
+    <h2 style="font-size: 19px; padding-left: 20px;">Suggested Users</h2>
     
-
     <div class="container-profiles">
-        
-    
-    
         <ul class="profile-list">
             {% if suggested_users %}
-          {% for user in suggested_users %}
-    <li class="profile-card">
-        <div class="profile-content">
-            <div class="profile-pic">
-                <a href="{% url 'profile_view' username=user.username %}">
-                    <!-- Display user's profile picture -->
-                    <img src="{{ user.profile.image.url }}" alt="{{ user.username }}'s Profile Picture" class="profile-picture">
-                </a>
-            </div>
-            <div class="profile-details">
-                <h2 class="profile-name"><a href="{% url 'profile_view' user.username %}" class="profile-link" style="font-size:16px;">{{ user.username }}         {% if user.profile.is_verified %}
-            <span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></span>
-        {% endif %}. <i class="cm"style="font-size:16px;"></i></a></h2>
-                {% if user.profile.bio %}
-                    <p class="profile-info"style="font-size:16px;">{{ user.profile.bio|truncatewords:20|safe }}</p>
-                {% endif %}
-                {% if user.profile.location %}
-                    <p class="profile-info">Location: {{ user.profile.location }}</p>
-                {% endif %}
-                {% if user.profile.highest_level_of_education %}
-                    <p class="profile-info">Education: {{ user.profile.highest_level_of_education }}</p>
-                {% endif %}
-                <hr>
-                <!-- Add more profile information as needed -->
-                <!-- Add follow button or link here -->
-            </div>
-        </div>
-    </li>
-{% endfor %}
+                {% for user in suggested_users %}
+                    <li class="profile-card">
+                        <div class="profile-content">
+                            <div class="profile-pic">
+                                <a href="{% url 'profile_view' username=user.username %}">
+                                    <img src="{{ user.profile.image.url }}" alt="{{ user.username }}'s Profile Picture" class="profile-picture">
+                                </a>
+                            </div>
+                            <div class="profile-details">
+                                <h2 class="profile-name">
+                                    <a href="{% url 'profile_view' user.username %}" class="profile-link" style="font-size: 16px;">
+                                        {{ user.username }}
+                                        {% if user.profile.is_verified %}
+                                            <span>verified</span><i class="material-icons" style="font-size: 20px; color: green;">verified_user</i>
+                                        {% endif %}
+                                        <i class="cm" style="font-size: 16px;"></i>
+                                    </a>
+                                </h2>
+                                {% if user.profile.bio %}
+                                    <p class="profile-info" style="font-size: 16px;">{{ user.profile.bio|truncatewords:20|safe }}</p>
+                                {% endif %}
+                                {% if user.profile.location %}
+                                    <p class="profile-info">Location: {{ user.profile.location }}</p>
+                                {% endif %}
+                                {% if user.profile.highest_level_of_education %}
+                                    <p class="profile-info">Education: {{ user.profile.highest_level_of_education }}</p>
+                                {% endif %}
+                                <hr>
+                            </div>
+                        </div>
+                    </li>
+                {% endfor %}
             {% else %}
-                <p style="padding:10px;">No suggested_users yet.</p>
+                <span class="no-suggested-users">No suggested users yet.</span>
             {% endif %}
         </ul>
     </div>
-    
+
+
+
     <script type="text/javascript">
         
 

@@ -7,99 +7,148 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create Chat</title>
-   <style>
-    /* Add your custom CSS styles here */
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-    }
+    <style type="text/css">
+        /* Add your custom CSS styles here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
 
-    h1 {
-        text-align: center;
-        color: #343a40;
-        margin-bottom: 30px;
-        font-weight: bold;
-    }
+        h1 {
+            text-align: center;
+            color: #343a40;
+            margin-bottom: 20px; /* Reduced margin for mobile */
+            font-weight: bold;
+            font-size: 24px; /* Smaller font size */
+        }
 
-    .custom-form {
-        width: 80%;
-        margin: 0 auto;
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
+        .custom-form {
+            width: 90%; /* Wider for mobile */
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 15px; /* Reduced padding */
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* Reduced shadow */
+        }
 
-    label {
-        display: block;
-        margin-bottom: 10px;
-        color: #495057;
-        font-size: 16px;
-    }
+        label {
+            display: block;
+            margin-bottom: 8px; /* Reduced margin */
+            color: #495057;
+            font-size: 14px; /* Smaller font size */
+        }
 
-    .unique-input {
-        width: calc(100% - 20px);
-        padding: 10px;
-        border: 1px solid #ced4da;
-        border-radius: 5px;
-        margin-bottom: 20px;
-        font-size: 14px;
-    }
+        .unique-input {
+            width: calc(100% - 20px);
+            padding: 8px; /* Reduced padding */
+            border: 2px solid #007bff; /* Increased border thickness and color */
+            border-radius: 5px;
+            margin-bottom: 15px; /* Reduced margin */
+            font-size: 12px; /* Smaller font size */
+            background-color: #f8f9fa; /* Light background for visibility */
+            transition: border-color 0.3s ease; /* Transition for focus effect */
+        }
 
-    .custom-button {
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        border-radius: 5px;
-        padding: 10px 20px;
-        cursor: pointer;
-        font-size: 16px;
-        transition: background-color 0.3s ease;
-        width: 100%;
-    }
+        .unique-input:focus {
+            border-color: #0056b3; /* Darker border on focus */
+            outline: none; /* Remove default outline */
+        }
 
-    .custom-button:hover {
-        background-color: #0056b3;
-    }
+        .custom-button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 6px 12px; /* Reduced padding */
+            cursor: pointer;
+            font-size: 12px; /* Smaller font size */
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
 
-    /* Custom style for participants section */
-    .participants-section {
-        border-left: 2px solid #3498db;
-        height: 80px;
-        overflow-y: auto;
-        border-radius: 5px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        padding: 10px;
-        margin-top: 20px;
-    }
+        .custom-button:hover {
+            background-color: #0056b3;
+        }
 
-    /* Style for participant labels */
-    .participant-label {
-        margin-bottom: 5px;
-        display: block;
-    }
+        /* Custom style for participants section */
+        .participants-section {
+            border-left: 2px solid #3498db;
+            height: 50px; /* Reduced height */
+            overflow-y: auto;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 6px; /* Smaller padding */
+            margin-top: 15px; /* Reduced margin */
+        }
 
-    .action-item {
-        display: inline-block;
-        padding: 10px 20px;
-        margin-right: 10px;
-        border-radius: 5px;
-        text-align: center;
-        font-size: 12px;
-    }
+        /* Style for participant labels */
+        .participant-label {
+            margin-bottom: 5px;
+            display: block;
+            font-size: 10px; /* Smaller font size */
+        }
 
-    .action-item a {
-        color: #000;
-        text-decoration: none;
-        font-size: inherit;
-    }
+        /* Adjust action items */
+        .action-item {
+            display: inline-block;
+            padding: 6px 10px; /* Smaller padding */
+            margin-right: 5px; /* Reduced margin */
+            border-radius: 5px;
+            text-align: center;
+            font-size: 10px; /* Smaller font size */
+        }
 
-    .action-item i {
-        margin-right: 5px;
-    }
-</style>
+        .action-item a {
+            color: #000;
+            text-decoration: none;
+            font-size: inherit;
+        }
 
+        .action-item i {
+            margin-right: 3px; /* Reduced margin */
+        }
+
+        /* Responsive styles for smaller screens */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 20px; /* Further reduce font size */
+            }
+
+            .custom-form {
+                width: 95%; /* Make form width almost full */
+                padding: 10px; /* Reduce padding for compactness */
+            }
+
+            label {
+                font-size: 12px; /* Smaller label font size */
+            }
+
+            .unique-input {
+                padding: 6px; /* Smaller input padding */
+                font-size: 10px; /* Smaller font size */
+            }
+
+            .custom-button {
+                padding: 5px 10px; /* Smaller button padding */
+                font-size: 10px; /* Smaller button font size */
+            }
+
+            .participants-section {
+                height: 40px; /* Further reduce height */
+                padding: 6px; /* Smaller padding */
+            }
+
+            .participant-label {
+                font-size: 8px; /* Smaller participant label font size */
+            }
+
+            .action-item {
+                padding: 5px 8px; /* Smaller action item padding */
+                font-size: 8px; /* Smaller action item font size */
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -108,7 +157,7 @@
         {% csrf_token %}
         {{ form.title.errors }}
         <label for="{{ form.title.id_for_label }}">Title:</label>
-        <input class="unique-input" type="text" id="{{ form.title.id_for_label }}" name="{{ form.title.name }}" value="{{ form.title.value }}">
+        <input class="unique-input" type="text" id="{{ form.title.id_for_label }}" name="{{ form.title.name }}" value="{{ form.title.value }}" placeholder="Enter chat title here..."> <!-- Added placeholder -->
         <br>
         {{ form.participants.errors }}
         <label for="{{ form.participants.id_for_label }}">Participants:</label>
@@ -121,6 +170,7 @@
         <br>
         <button class="custom-button" type="submit">Create CT</button>
     </form>
+
 
 
     <script type="text/javascript">
