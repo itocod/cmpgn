@@ -1457,7 +1457,26 @@ border: 1px solid silver;
         padding: 0;
     }
 }
+            /* Styling for the "No suggested users yet" message */
+        .no-suggested-users {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #e0f7e0; /* Light green background */
+            border-radius: 5px;
+            color: #228b22; /* Forest green text */
+            font-size: 14px;
+            border: 1px solid #2e8b57; /* Green border */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
 
+        /* Responsive Styles */
+        @media (max-width: 600px) {
+
+            .no-suggested-users {
+                font-size: 12px; /* Adjust font size for mobile */
+            }
+        }
   </style>
 
 
@@ -2017,9 +2036,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 </div>
             </div>
         {% endfor %}
-    </div>
+    </div><br>
 {% else %}
-    <p style="padding:20px;">No private campaigns available.</p>
+    <span class="no-suggested-users" style="padding-top:10px;padding-left: 10px;">No private campaigns available.</span>
 {% endif %}
 
 </section>
