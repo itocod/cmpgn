@@ -49,6 +49,15 @@
   <!-- Stylesheets -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+   <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
 
     <!-- Default Title -->
@@ -1019,111 +1028,177 @@ input[type="text"]:focus {
     text-decoration: underline;
 }
 
-        .edit-profile-form {
-            max-width: 500px;
-            margin: 20px auto;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
-            background: #FFFFFF; /* White background for the form */
-        }
+/* General styles for the form */
+.edit-profile-form {
+    max-width: 100%; /* Make form responsive */
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+    background: #FFFFFF;
+}
 
-        h1 {
-            text-align: center;
-            color: #37474F; /* Dark grey for the header */
-            font-size: 2em;
-            margin-bottom: 20px;
-        }
+h1 {
+    text-align: center;
+    color: #37474F;
+    font-size: 1.8em; /* Slightly smaller font size */
+    margin-bottom: 15px;
+}
 
-        .form-section {
-            margin-bottom: 20px;
-        }
+.form-section {
+    margin-bottom: 15px;
+}
 
-        .form-label {
-            font-weight: bold;
-            color: #546E7A; /* Blue-grey for labels */
-            font-size: 1.2em;
-        }
+.form-label {
+    font-weight: bold;
+    color: #546E7A;
+    font-size: 1.1em;
+}
 
-        .form-input,
-        .form-textarea,
-        .form-select {
-            width: 100%;
-            padding: 15px;
-            border: 1px solid #90A4AE; /* Light blue-grey for input borders */
-            border-radius: 25px; /* Rounded corners */
-            box-sizing: border-box;
-            margin-top: 5px;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Added transition */
-            background-color: #F1F1F1; /* Light background for inputs */
-            font-size: 1em; /* Consistent font size */
-        }
+.form-input,
+.form-textarea,
+.form-select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #90A4AE;
+    border-radius: 10px;
+    box-sizing: border-box;
+    margin-top: 5px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background-color: #F1F1F1;
+    font-size: 1em;
+}
 
-        .form-input:focus,
-        .form-textarea:focus,
-        .form-select:focus {
-            outline: none;
-            border-color: #2196F3; /* Blue highlight border on focus */
-            box-shadow: 0 0 5px rgba(33, 150, 243, 0.5); /* Shadow effect on focus */
-        }
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+    outline: none;
+    border-color: #2196F3;
+    box-shadow: 0 0 5px rgba(33, 150, 243, 0.5);
+}
 
-        .form-textarea {
-            resize: none; /* Fixed size for text area */
-            height: 100px; /* Set a fixed height for the textarea */
-        }
+.form-textarea {
+    resize: none;
+    height: 80px; /* Slightly smaller height */
+}
 
-        .form-select {
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            background-image: url('data:image/svg+xml;utf8,<svg fill="black" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/><path fill="none" d="M0 0h24v24H0z"/></svg>');
-            background-position: right 10px top 50%;
-            background-repeat: no-repeat;
-            background-size: 12px;
-        }
+.form-select {
+    appearance: none;
+    background-position: right 10px top 50%;
+    background-repeat: no-repeat;
+    background-size: 12px;
+}
 
-        .submit-button {
-            display: block;
-            width: 100%;
-            padding: 15px;
-            background-color: #2196F3; /* Blue for button background */
-            color: #fff;
-            border: none;
-            border-radius: 25px; /* Rounded corners for button */
-            cursor: pointer;
-            margin-top: 20px;
-            transition: background-color 0.3s ease, transform 0.3s ease; /* Added transform */
-            font-size: 1.2em; /* Larger font for button */
-        }
+.submit-button {
+    display: block;
+    width: 100%;
+    padding: 12px;
+    background-color: #2196F3;
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    font-size: 1.1em;
+}
 
-        .submit-button:hover {
-            background-color: #1976D2; /* Darker blue shade on hover */
-            transform: translateY(-2px); /* Lift effect on hover */
-        }
+.submit-button:hover {
+    background-color: #1976D2;
+    transform: translateY(-2px);
+}
 
-        .form-helper-text {
-            color: #757575; /* Grey for helper text */
-            font-size: 0.9em; /* Smaller font size for helper text */
-        }
+.form-helper-text {
+    color: #757575;
+    font-size: 0.8em;
+}
 
-        .action-button {
-            display: inline-block;
-            padding: 10px 20px;
-            margin-right: 10px;
-            border-radius: 5px;
-            text-align: center;
-            font-size: 12px; /* Adjust the font size as needed */
-        }
+.action-button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin-right: 10px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 12px;
+}
 
-        .action-button a {
-            color: #37474F; /* Dark grey for action button text */
-            text-decoration: none;
-            font-size: inherit;
-        }
+.action-button a {
+    color: #37474F;
+    text-decoration: none;
+    font-size: inherit;
+}
 
-        .action-button i {
-            margin-right: 5px;
-        }
+.action-button i {
+    margin-right: 5px;
+}
+
+/* Media queries for mobile responsiveness */
+@media (max-width: 768px) {
+    .edit-profile-form {
+        padding: 15px;
+    }
+
+    h1 {
+        font-size: 1.5em;
+    }
+
+    .form-label {
+        font-size: 1em;
+    }
+
+    .form-input,
+    .form-textarea,
+    .form-select {
+        font-size: 0.9em;
+        padding: 10px;
+    }
+
+    .submit-button {
+        padding: 10px;
+        font-size: 1em;
+    }
+
+    .form-helper-text {
+        font-size: 0.75em;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.3em;
+    }
+
+    .form-label {
+        font-size: 0.9em;
+    }
+
+    .submit-button {
+        font-size: 0.9em;
+    }
+}
+
+.sidebar-box {
+    border-left: 2px solid #3498db;
+    height: 600px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 0; /* Optional, for spacing inside the box */
+}
+
+/* On small devices, remove styling but keep the content visible */
+@media (max-width: 767px) {
+    .sidebar-box {
+        border: none;
+        height: auto;
+        overflow: visible;
+        border-radius: 0;
+        box-shadow: none;
+        padding: 0;
+    }
+}
+
 
 </style>
 
@@ -1449,83 +1524,71 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
   <main>
-
 <aside class="left-aside">
    <div>
-    <a href="{% url 'affiliate_links' %}" class="affiliate-link"><i class="fas fa-tools"></i> Campaign Advancement Tools</a>
+    <a href="{% url 'affiliate_links' %}" class="affiliate-link" style="font-size: 14px;"><i class="fas fa-tools" style="font-size: 12px;"></i> Campaign Advancement Tools</a>
   </div>
 <nav>
     <ul>
        <li>
-  <a href="{% url 'home' %}" style="color: black; position: relative;">
-    <i class="fas fa-home"></i> Home
+  <a href="{% url 'home' %}" style="color: black; font-size: 14px; position: relative;">
+    <i class="fas fa-home" style="font-size: 12px;"></i> Home
     {% if new_campaigns_from_follows %}
         <span id="home-alert" class="alert-badge">{{ new_campaigns_from_follows.count }}</span> <!-- Red alert spot -->
     {% endif %}
-</a>
-
+  </a>
 </li>
-        <li><a href="{% url 'manage_campaigns' %}" style="color: black;"><i class="fas fa-cog"></i> Manage </a></li>
-<li>
-    <a href="{% url 'private_campaign' %}" style="color: black; position: relative;">
-        <i class="fas fa-lock"></i> Private
-        {% if new_private_campaigns_count > 0 %}
-            <span id="private-alert" class="alert-badge">{{ new_private_campaigns_count }}</span>
-        {% endif %}
-    </a>
-</li>
-
-
-
-
-
-
-        <li><a href="{% url 'user_chats' %}" style="color: black;"><i class="fas fa-comment-alt"></i> Chat Table</a></li>
         <li>
-    <a href="{% url 'notification_list' %}" style="color: black; position: relative;">
-        <i class="fas fa-bell"></i>
-        {% if unread_notifications %}
-            <span id="notification-alert" class="alert-badge">{{ unread_notifications.count }}</span>
-        {% endif %}
-        Notification
-    </a>
-</li>
-
-        <li><a href="{% url 'suggest' %}" style="color: black;"><i class="fas fa-user-friends"></i> Suggested Users</a></li>
-        <!-- Add logout link here -->
-                <li>
-          <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-    <i class="fas fa-sign-out-alt"></i> Logout
-</a>
-
-<form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
-    {% csrf_token %}
-</form>
-
+            <a href="{% url 'manage_campaigns' %}" style="color: black; font-size: 14px;">
+                <i class="fas fa-cog" style="font-size: 12px;"></i> Manage
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'private_campaign' %}" style="color: black; font-size: 14px; position: relative;">
+                <i class="fas fa-lock" style="font-size: 12px;"></i> Private
+                {% if new_private_campaigns_count > 0 %}
+                    <span id="private-alert" class="alert-badge">{{ new_private_campaigns_count }}</span>
+                {% endif %}
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'user_chats' %}" style="color: black; font-size: 14px;">
+                <i class="fas fa-comment-alt" style="font-size: 12px;"></i> Chat Table
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'notification_list' %}" style="color: black; font-size: 14px; position: relative;">
+                <i class="fas fa-bell" style="font-size: 12px;"></i>
+                {% if unread_notifications %}
+                    <span id="notification-alert" class="alert-badge">{{ unread_notifications.count }}</span>
+                {% endif %}
+                Notification
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'suggest' %}" style="color: black; font-size: 14px;">
+                <i class="fas fa-user-friends" style="font-size: 12px;"></i> Suggested Users
+            </a>
+        </li>
+        <li>
+          <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" style="font-size: 14px;">
+              <i class="fas fa-sign-out-alt" style="font-size: 12px;"></i> Logout
+          </a>
+          <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+              {% csrf_token %}
+          </form>
         </li>
     </ul>
 </nav>
 
-
-
-
-
-
-<p style="text-align: center;">
- <!-- Assuming this is in a template file like base.html -->
-<a href="{% url 'platformfund' %}" class="donate-link">🌟 Help Us Grow! Support Our Mission with Your Generosity 🌟</a>
-
+<p style="text-align: center; font-size: 14px;">
+    <a href="{% url 'platformfund' %}" class="donate-link">🌟 Help Us Grow! Support Our Mission with Your Generosity 🌟</a>
 </p>
 
-
-
-
-
-                        <div class="square-with-arrow" style="font-size:14px;" >
-                            <i class="fas fa-square"></i>
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-
+<div class="square-with-arrow" style="font-size:12px;">
+    <i class="fas fa-square"></i>
+    <i class="fas fa-arrow-right"></i>
+</div>
 
 </aside>
 
@@ -1534,16 +1597,14 @@ document.addEventListener('DOMContentLoaded', function() {
       <!-- Beautiful upload button -->
       <div class="upload-container">
         <div class="upload-btn-wrapper">
-           <button class="btn">+ Upload
-     <a href="{% url 'create_campaign' %}" class="overlay-link"></a>
-
-  </button>
+           <button class="btn" style="font-size: 14px;">+ Upload
+              <a href="{% url 'create_campaign' %}" class="overlay-link"></a>
+           </button>
 
         </div>
       </div></br>
 
-    
-    <div style="border-left: 2px solid #3498db; height: 600px; overflow-y: auto;overflow-x: hidden; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+    <div class="sidebar-box">
     <p style="padding: 15px">
     <h2 style="font-size: 19px; padding-left: 20px; text-align: center;">Edit Profile</h2>
    

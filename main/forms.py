@@ -164,20 +164,17 @@ class UserForm(forms.ModelForm):
 
 
 
-
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['image', 'bio', 'contact', 'location', 'date_of_birth', 'gender', 'highest_level_of_education']
-        labels = {
-            'image': 'Profile Picture:',
-            'bio': 'Bio:',
-            'contact': 'Contact:',
-            'location': 'Location:',
-            'date_of_birth': 'Date of Birth:',
-            'gender': 'Gender:',
-            'highest_level_of_education': 'Highest Level of Education:',
-            
+        widgets = {
+            'bio': forms.Textarea(attrs={'class': 'form-textarea'}),
+            'contact': forms.TextInput(attrs={'class': 'form-input'}),
+            'location': forms.TextInput(attrs={'class': 'form-input'}),
+            'date_of_birth': forms.DateInput(attrs={'class': 'form-input', 'type': 'date'}),
+            'gender': forms.Select(attrs={'class': 'form-select'}),
+            'highest_level_of_education': forms.Select(attrs={'class': 'form-select'}),
         }
 
 

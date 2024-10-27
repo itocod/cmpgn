@@ -1818,9 +1818,9 @@ document.addEventListener("DOMContentLoaded", function() {
     <!-- Beautiful upload button -->
     <div class="upload-container">
         <div class="upload-btn-wrapper">
-            <button class="btn">+ Upload
-                <a href="{% url 'create_campaign' %}" class="overlay-link"></a>
-            </button>
+           <button class="btn" style="font-size: 14px;">+ Upload
+              <a href="{% url 'create_campaign' %}" class="overlay-link"></a>
+           </button>
         </div>
     </div>
     </br>
@@ -2036,9 +2036,9 @@ document.addEventListener("DOMContentLoaded", function() {
                 </div>
             </div>
         {% endfor %}
-    </div><br>
+    </div>
 {% else %}
-    <span class="no-suggested-users" style="padding-top:10px;padding-left: 10px;">No private campaigns available.</span>
+    <span class="no-suggested-users" style="padding-top:10px;">No private campaigns available.</span>
 {% endif %}
 
 </section>
