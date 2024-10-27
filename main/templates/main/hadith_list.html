@@ -33,6 +33,26 @@
             color: #007bff;
             text-decoration: none;
         }
+                    /* Styling for the "No suggested users yet" message */
+        .no-suggested-users {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #e0f7e0; /* Light green background */
+            border-radius: 5px;
+            color: #228b22; /* Forest green text */
+            font-size: 14px;
+            border: 1px solid #2e8b57; /* Green border */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 600px) {
+
+            .no-suggested-users {
+                font-size: 12px; /* Adjust font size for mobile */
+            }
+        }
     </style>
 
     <div class="hadith-list-container">
@@ -47,7 +67,7 @@
                     <a href="{% url 'hadith_detail' hadith.id %}" class="hadith-detail-link">View Details</a>
                 </li>
             {% empty %}
-                <li>No Hadith available.</li>
+                <li class="no-suggested-users">No Hadith available.</li>
             {% endfor %}
         </ul>
     </div>

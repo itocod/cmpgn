@@ -5,6 +5,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+ 
     <title>{% if product %}Edit Product{% else %}Add Product{% endif %}</title>
     <style>
         body {
@@ -171,6 +172,26 @@
   margin-right: -10px; /* Adjust this value as needed */
   transform: rotate(-45deg);
 }
+            /* Styling for the "No suggested users yet" message */
+        .no-suggested-users {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #e0f7e0; /* Light green background */
+            border-radius: 5px;
+            color: #228b22; /* Forest green text */
+            font-size: 14px;
+            border: 1px solid #2e8b57; /* Green border */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 600px) {
+
+            .no-suggested-users {
+                font-size: 12px; /* Adjust font size for mobile */
+            }
+        }
     </style>
 </head>
 <body>
@@ -217,7 +238,7 @@
                 </div>
             </div>
         {% empty %}
-            <p>No products found.</p>
+            <span class="no-suggested-users">No products found.</span>
         {% endfor %}
     </div>
 <script type="text/javascript">

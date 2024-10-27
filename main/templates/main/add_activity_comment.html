@@ -9,6 +9,7 @@
     <meta charset="UTF-8">
     <title>Activity Comments</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emojionearea/dist/emojionearea.min.css">
+ 
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -78,6 +79,27 @@
         }
         .profile-pic:hover img {
             border-color: #00FF00;
+        }
+
+                    /* Styling for the "No suggested users yet" message */
+        .no-suggested-users {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #e0f7e0; /* Light green background */
+            border-radius: 5px;
+            color: #228b22; /* Forest green text */
+            font-size: 14px;
+            border: 1px solid #2e8b57; /* Green border */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 600px) {
+
+            .no-suggested-users {
+                font-size: 12px; /* Adjust font size for mobile */
+            }
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -207,7 +229,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     <p style="font-size:16px;">{{ comment.content }}</p>
                 </li>
             {% empty %}
-                <li id="noCommentsMessage">No comments yet.</li>
+                <li  class="no-suggested-users">No comments yet.</li>
             {% endfor %}
 
         </ul>
