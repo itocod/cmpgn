@@ -1009,234 +1009,225 @@ input[type="text"]:focus {
     text-decoration: underline;
 }
 
+/* Main chat container */
+.chat-container {
+    max-width: 700px;
+    margin: 20px auto;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    background-color: #1a1a1a;
+    color: #ddd;
+}
+
+/* Header styling */
+.chat-header {
+    background-color: #28a745; /* Green header */
+    color: #fff;
+    padding: 10px; /* Reduced padding */
+    text-align: center;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.chat-header h1 {
+    margin: 0;
+    font-size: 18px; /* Reduced font size */
+    letter-spacing: 1px;
+}
+
+/* Chat details and participants */
+.chat-details {
+    padding: 15px; /* Reduced padding */
+}
+
+.chat-details h2 {
+    color: #98FB98; /* Light green */
+    margin-bottom: 8px; /* Reduced margin */
+    font-size: 16px; /* Reduced font size */
+    font-weight: bold;
+}
+
+.participants-list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.participants-list li {
+    color: #ddd;
+    margin-bottom: 6px; /* Reduced margin */
+    font-size: 13px; /* Reduced font size */
+}
+
+/* Manage participants section */
+.manage-participants-section {
+    background-color: #333;
+    padding: 15px; /* Reduced padding */
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.manage-participants-section h3 {
+    color: #98FB98; /* Light green */
+    font-size: 14px; /* Reduced font size */
+    margin-bottom: 8px; /* Reduced margin */
+}
+
+/* Messages section */
+.messages-section {
+    padding: 12px; /* Reduced padding */
+    background: #0f0f0f;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.messages-section h3 {
+    color: #98FB98; /* Light green */
+    font-size: 16px; /* Reduced font size */
+    margin-bottom: 12px; /* Reduced margin */
+}
+
+.message-container {
+    border-left: 3px solid #98FB98; /* Light green border */
+    height: 400px;
+    overflow-y: auto;
+    border-radius: 8px;
+    padding: 12px; /* Reduced padding */
+    background-color: #1a1a1a;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.messages-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.messages-list li {
+    margin-bottom: 10px; /* Reduced margin */
+}
+
+/* Styling for messages */
+.own-message {
+    background: #333;
+    color: #98FB98; /* Light green */
+    border: 1px solid #28a745; /* Green border */
+    padding: 10px; /* Reduced padding */
+    border-radius: 10px;
+    max-width: 70%;
+    margin-left: auto;
+    font-size: 13px; /* Reduced font size */
+}
+
+.other-user-message {
+    background: #2b2b2b;
+    color: #ddd;
+    border: 1px solid #98FB98; /* Light green */
+    padding: 10px; /* Reduced padding */
+    border-radius: 10px;
+    max-width: 70%;
+    margin-right: auto;
+    font-size: 13px; /* Reduced font size */
+}
+
+.message-content {
+    transition: background 0.3s, box-shadow 0.3s;
+}
+
+.own-message:hover, .other-user-message:hover {
+    background: rgba(40, 167, 69, 0.2); /* Green hover effect */
+    box-shadow: 0 6px 15px rgba(40, 167, 69, 0.6); /* Green shadow */
+}
+
+/* Sender information */
+.sender-name {
+    font-size: 11px; /* Reduced font size */
+    color: #ccc;
+    margin-bottom: 5px;
+}
+
+.timestamp {
+    font-size: 9px; /* Reduced font size */
+    color: #999;
+    margin-left: auto;
+}
+
+/* Profile picture */
+.profile-pic {
+    width: 30px; /* Reduced size */
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+    border: 2px solid #98FB98; /* Light green border */
+}
+
+/* Send message form */
+.send-message-section {
+    padding: 12px; /* Reduced padding */
+    background-color: #1c1c1c;
+    border-top: 2px solid #28a745; /* Green border */
+}
+
+.message-form input[type="text"], .message-form textarea {
+    width: calc(100% - 20px);
+    padding: 6px; /* Reduced padding */
+    border: 1px solid #A9A9A9;
+    background-color: #333;
+    color: #fff;
+    border-radius: 8px;
+    margin-bottom: 8px; /* Reduced margin */
+    font-size: 13px; /* Reduced font size */
+}
+
+.msg-form-btn {
+    background-color: #28a745; /* Green button */
+    color: #fff;
+    border: none;
+    padding: 6px 12px; /* Reduced padding */
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px; /* Reduced font size */
+}
+
+.msg-form-btn:hover {
+    background-color: #218838; /* Darker green on hover */
+}
 
 
+/* Sidebar for chat-related actions */
+.sidebar-box {
+    border-left: 2px solid #28a745; /* Green border */
+    height: 600px;
+    overflow-y: auto;
+    padding: 10px;
+    background-color: #1a1a1a;
+    border-radius: 5px;
+}
 
-        .chat-container {
-            max-width: 700px;
-            margin: 20px auto;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
+.action-item {
+    display: inline-block;
+    padding: 8px 16px; /* Reduced padding */
+    margin-right: 10px;
+    border-radius: 5px;
+    background-color: #28a745; /* Green for action buttons */
+    color: #fff;
+    text-align: center;
+    font-size: 11px; /* Reduced font size */
+    cursor: pointer;
+}
 
-        .chat-header {
-            background-color: #007bff;
-            color: #fff;
-            padding: 20px 0;
-            text-align: center;
-            border-top-left-radius: 10px;
-            border-top-right-radius: 10px;
-        }
+.action-item:hover {
+    background-color: #218838; /* Darker green hover for action items */
+}
 
-        .chat-header h1 {
-            margin: 0;
-            font-size: 19px;
-        }
-
-        .chat-details {
-            padding: 20px;
-        }
-
-        .chat-details h2 {
-            color: #007bff;
-            margin: 0 0 10px;
-            font-size: 16px;
-        }
-
-        .participants-list {
-            padding-left: 20px;
-            margin: 0;
-        }
-
-        .participants-list li {
-            margin-bottom: 5px;
-            color: #333;
-        }
-
-        .manage-participants-section {
-            padding: 20px;
-            background-color: #f0f0f0;
-            border-bottom-left-radius: 10px;
-            border-bottom-right-radius: 10px;
-        }
-
-        .manage-participants-section h3 {
-            margin-top: 0;
-            font-size: 16px;
-            color: #333;
-        }
-
-        .participants-form label {
-            display: block;
-            margin-bottom: 5px;
-        }
-
-        .participants-form input[type="checkbox"] {
-            margin-right: 5px;
-        }
-
-        .delete-chat-form button {
-            background-color: #dc3545;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .delete-chat-form button:hover {
-            background-color: #c82333;
-        }
-
-        .messages-section {
-            padding: 20px;
-        }
-
-        .messages-section h3 {
-            margin: 0 0 10px;
-            color: #007bff;
-            font-size: 16px;
-        }
-
-        .messages-list {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .messages-list li {
-            margin-bottom: 10px;
-        }
-
-        .messages-list li:last-child {
-            margin-bottom: 0;
-        }
-
-        .messages-list li .message-content {
-            padding: 10px;
-            border-radius: 5px;
-        }
-
-        .messages-list li .message-content p {
-            margin: 0;
-        }
-
-        .send-message-section {
-            padding: 20px;
-            background-color: #f8f9fa;
-        }
-
-        .message-form input[type="text"],
-        .message-form textarea {
-            width: calc(100% - 20px);
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            resize: none;
-        }
-
-        .message-form button {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            align-self: flex-end;
-        }
-
-        .message-form button:hover {
-            background-color: #0056b3;
-        }
-
-        .own-message {
-            
-            color: #008000;
-            border-radius: 10px;
-            border: 1px solid lime;
-            padding: 10px;
-            margin-left: auto;
-            max-width: 70%;
-        }
-
-        .own-message .message-content {
-            background-color: black;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-        }
-
-        .other-user-message {
-          
-            color: #000;
-            border-radius: 10px;
-            border: 1px solid #ADD8E6;
-            padding: 10px;
-            margin-right: auto;
-            max-width: 70%;
-        }
-
-        .other-user-message .message-content {
-            background-color: black;
-            color: white;
-            padding: 10px;
-            border-radius: 5px;
-        }
-
-        .message-content img {
-            max-width: 100%;
-            max-height: 100%;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-
-        .profile-pic {
-            width: 40px;
-            height: 40px;
-            border: 2px solid #fff;
-            border-radius: 50%;
-            margin-right: 10px;
-        }
-
-        .cm {
-            font-size: 12px;
-        }
-
-        /* Style for the toggle button */
-        #toggleInputType {
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        /* Style for the icon inside the button */
-        #toggleInputType i {
-            margin-right: 5px;
-        }
-
-        .action-item {
-            display: inline-block;
-            padding: 10px 20px;
-            margin-right: 10px;
-            border-radius: 5px;
-            text-align: center;
-            font-size: 12px;
-        }
-
-        .action-item a {
-            color: #000;
-            text-decoration: none;
-            font-size: inherit;
-        }
-
-        .action-item i {
-            margin-right: 5px;
-        }
-
+@media (max-width: 767px) {
+    .sidebar-box {
+        border: none;
+        height: auto;
+        overflow: visible;
+        border-radius: 0;
+    }
+}
 
 
 </style>
@@ -1605,103 +1596,87 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
   <main>
-
 <aside class="left-aside">
    <div>
-    <a href="{% url 'affiliate_links' %}" class="affiliate-link"><i class="fas fa-tools"></i> Campaign Advancement Tools</a>
+    <a href="{% url 'affiliate_links' %}" class="affiliate-link" style="font-size: 14px;"><i class="fas fa-tools" style="font-size: 12px;"></i> Campaign Advancement Tools</a>
   </div>
 <nav>
     <ul>
        <li>
-  <a href="{% url 'home' %}" style="color: black; position: relative;">
-    <i class="fas fa-home"></i> Home
+  <a href="{% url 'home' %}" style="color: black; font-size: 14px; position: relative;">
+    <i class="fas fa-home" style="font-size: 12px;"></i> Home
     {% if new_campaigns_from_follows %}
         <span id="home-alert" class="alert-badge">{{ new_campaigns_from_follows.count }}</span> <!-- Red alert spot -->
     {% endif %}
-</a>
-
+  </a>
 </li>
-        <li><a href="{% url 'manage_campaigns' %}" style="color: black;"><i class="fas fa-cog"></i> Manage </a></li>
-<li>
-    <a href="{% url 'private_campaign' %}" style="color: black; position: relative;">
-        <i class="fas fa-lock"></i> Private
-        {% if new_private_campaigns_count > 0 %}
-            <span id="private-alert" class="alert-badge">{{ new_private_campaigns_count }}</span>
-        {% endif %}
-    </a>
-</li>
-
-
-
-
-
-
-        <li><a href="{% url 'user_chats' %}" style="color: black;"><i class="fas fa-comment-alt"></i> Chat Table</a></li>
         <li>
-    <a href="{% url 'notification_list' %}" style="color: black; position: relative;">
-        <i class="fas fa-bell"></i>
-        {% if unread_notifications %}
-            <span id="notification-alert" class="alert-badge">{{ unread_notifications.count }}</span>
-        {% endif %}
-        Notification
-    </a>
-</li>
-
-        <li><a href="{% url 'suggest' %}" style="color: black;"><i class="fas fa-user-friends"></i> Suggested Users</a></li>
-        <!-- Add logout link here -->
-                <li>
-          <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-    <i class="fas fa-sign-out-alt"></i> Logout
-</a>
-
-<form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
-    {% csrf_token %}
-</form>
-
+            <a href="{% url 'manage_campaigns' %}" style="color: black; font-size: 14px;">
+                <i class="fas fa-cog" style="font-size: 12px;"></i> Manage
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'private_campaign' %}" style="color: black; font-size: 14px; position: relative;">
+                <i class="fas fa-lock" style="font-size: 12px;"></i> Private
+                {% if new_private_campaigns_count > 0 %}
+                    <span id="private-alert" class="alert-badge">{{ new_private_campaigns_count }}</span>
+                {% endif %}
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'user_chats' %}" style="color: black; font-size: 14px;">
+                <i class="fas fa-comment-alt" style="font-size: 12px;"></i> Chat Table
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'notification_list' %}" style="color: black; font-size: 14px; position: relative;">
+                <i class="fas fa-bell" style="font-size: 12px;"></i>
+                {% if unread_notifications %}
+                    <span id="notification-alert" class="alert-badge">{{ unread_notifications.count }}</span>
+                {% endif %}
+                Notification
+            </a>
+        </li>
+        <li>
+            <a href="{% url 'suggest' %}" style="color: black; font-size: 14px;">
+                <i class="fas fa-user-friends" style="font-size: 12px;"></i> Suggested Users
+            </a>
+        </li>
+        <li>
+          <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" style="font-size: 14px;">
+              <i class="fas fa-sign-out-alt" style="font-size: 12px;"></i> Logout
+          </a>
+          <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+              {% csrf_token %}
+          </form>
         </li>
     </ul>
 </nav>
 
-
-
-
-
-
-<p style="text-align: center;">
- <!-- Assuming this is in a template file like base.html -->
-<a href="{% url 'platformfund' %}" class="donate-link">🌟 Help Us Grow! Support Our Mission with Your Generosity 🌟</a>
-
+<p style="text-align: center; font-size: 14px;">
+    <a href="{% url 'platformfund' %}" class="donate-link">🌟 Help Us Grow! Support Our Mission with Your Generosity 🌟</a>
 </p>
 
-
-
-
-
-                        <div class="square-with-arrow" style="font-size:14px;" >
-                            <i class="fas fa-square"></i>
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
-
+<div class="square-with-arrow" style="font-size:12px;">
+    <i class="fas fa-square"></i>
+    <i class="fas fa-arrow-right"></i>
+</div>
 
 </aside>
-
 
     <section>
       <!-- Beautiful upload button -->
       <div class="upload-container">
         <div class="upload-btn-wrapper">
-           <button class="btn">+ Upload
-     <a href="{% url 'create_campaign' %}" class="overlay-link"></a>
-
-  </button>
+           <button class="btn" style="font-size: 14px;">+ Upload
+              <a href="{% url 'create_campaign' %}" class="overlay-link"></a>
+           </button>
 
         </div>
       </div></br>
 
-    
-    <div style="border-left: 2px solid #3498db; height: 600px; overflow-y: auto;overflow-x: hidden; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-    <p style="padding: 15px">   <h2 style="font-size: 19px; padding-left: 20px;">Chat_Table</h2>
-
+      <div class="sidebar-box">
+  
     <div class="chat-container">
         <div class="chat-header">
             <h1>⭐️ Chat Table ⭐️</h1>
@@ -1723,7 +1698,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <div style="border-left: 2px solid #3498db; height: 100px; overflow-y: auto; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
                 <ul class="participants-list">
                     {% for participant in chat.participants.all %}
-                        <li>{{ participant.username }}</li>
+                        <li style="padding-left: 8px;"> {{ participant.username }}</li>
                     {% endfor %}
                 </ul>
             </div>
@@ -1778,7 +1753,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
 
     <!-- Submit button -->
-    <button type="submit" id="sendButton">Send Message</button>
+    <!-- Submit button -->
+<button type="submit" id="sendButton" class="msg-form-btn">Send Message</button>
+
 </form>
 
 </div>
