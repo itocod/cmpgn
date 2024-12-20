@@ -5,7 +5,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   
     <title>Update Visibility</title>
     <style>
         /* Custom checkbox styles */
@@ -15,10 +14,16 @@
             padding-left: 35px;
             margin-bottom: 15px;
             cursor: pointer;
-            font-size: 18px;
+            font-size: 1.2em; /* Default font size for web */
             color: #333;
             font-family: 'Arial', sans-serif;
             transition: color 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .checkbox-label {
+                font-size: 1rem; /* Font size for mobile */
+            }
         }
 
         .checkbox-label input {

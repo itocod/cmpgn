@@ -1,5 +1,5 @@
 {% extends 'main/face.html' %}
-{%load static %}
+{% load static %}
 
 {% block content %}
 
@@ -8,92 +8,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-       <title>Follower List</title>
-    <style type="text/css">
-                body {
+    <title>Follower List</title>
+    <style>
+        body {
             font-family: Arial, sans-serif;
-           
             margin: 0;
             padding: 0;
+           
         }
 
-        .design {
+        .follower-container {
             max-width: 500px;
             margin: 20px auto;
-            padding: 30px;
+            padding: 20px;
             border-radius: 10px;
-            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-
-
-
-.profile-pic {
-  flex-shrink: 0;
-  margin-right: 20px;
-}
-
-.profile-pic img {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  object-fit: cover;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  transition: border-color 0.3s ease;
-}
-
-
-
-.cm {
-  font-size: 12px;
-}
-     .action-item {
-            display: inline-block;
-            padding: 10px 20px;
-            margin-right: 10px;
-            border-radius: 5px;
+        .follower-title, .follower-header {
+            font-size: 16px;
+            color: #333;
+            margin: 10px 0;
             text-align: center;
-            font-size: 12px; /* Adjust the font size as needed */
-        }
-        .action-item a {
-           color: #000;
-            text-decoration: none;
-            font-size: inherit;
-        }
-        .action-item i {
-            margin-right: 5px;
         }
 
+        .follower-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .follower-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 14px;
+        }
+
+        .follower-profile-pic {
+            flex-shrink: 0;
+            margin-right: 10px;
+        }
+
+        .follower-profile-pic img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .verified-badge {
+            font-size: 12px;
+            color: green;
+            display: flex;
+            align-items: center;
+            margin-left: 5px;
+        }
+
+        .verified-badge i {
+            font-size: 16px;
+            margin-left: 2px;
+        }
+
+        .scrollable-followers {
+            border-left: 2px solid #3498db;
+            height: 300px;
+            overflow-y: auto;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: #f7faff;
+        }
+
+        .no-followers-message {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            padding: 20px;
+            font-style: italic;
+        }
+
+
+        .no-suggested-users {
+    text-align: center;
+    margin: 20px 0;
+    padding: 15px;
+    background-color: rgba(76, 175, 80, 0.3); /* Semi-transparent green background */
+    border-radius: 5px;
+    color: #000000; /* Black text by default */
+    font-size: 14px;
+    border: 1px solid #4CAF50; /* Green border */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: color 0.3s, background-color 0.3s; /* Smooth transition for color changes */
+}
+
+/* Change text color to white when the background color is dark */
+.no-suggested-users.dark-text {
+    color: #ffffff; /* White text */
+    background-color: rgba(56, 142, 108, 0.7); /* Darker semi-transparent green background */
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+    .no-suggested-users {
+        font-size: 12px; /* Adjust font size for mobile */
+    }
+}
     </style>
 </head>
 <body>
-      
-
-        <h2 style="font-size: 19px; padding-left: 20px;">User_Followers</h2>
-
-    <div class="design">
-    <h1>Follower List for {{ user.username }}</h1>
-     <div style="border-left: 2px solid #3498db; height: 400px; overflow-y: auto; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-    
-    <ul>
-
-        {% for follower in followers %}
-                <div class="profile-pic">
+    <h2 class="follower-header">User Followers</h2>
+    <div class="follower-container">
+        <h1 class="follower-title">Follower List for {{ user.username }}</h1>
+        {% if followers %}
+        <div class="scrollable-followers">
+            <ul class="follower-list">
+                {% for follower in followers %}
+                <li class="follower-item">
+                    <div class="follower-profile-pic">
                         <a href="{% url 'profile_view' username=follower.follower.username %}">
-                <!-- Display campaign owner's profile picture -->
-                <img src="{{ follower.follower.profile.image.url }}" alt="{{ user.username }}'s Profile Picture" class="profile-picture">
-            </a>
+                            <img src="{{ follower.follower.profile.image.url }}" alt="{{ follower.follower.username }}'s Profile Picture">
+                        </a>
+                    </div>
+                    <span>{{ follower.follower.username }}</span>
+                    {% if follower.follower.profile.is_verified %}
+                    <span class="verified-badge">
+                        verified
+                        <i class="material-icons">verified_user</i>
+                    </span>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
         </div>
-       
-        <li>{{ follower.follower.username }}
-      {% if follower.follower.profile.is_verified %}
-            <span class="verified-status" style="font-size: 12px;"><span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></span>
+        {% else %}
+        <li class="no-suggested-users">No followers yet.</li>
         {% endif %}
-         . <i class="cm"></i></li>
-        {% endfor %}
-    </ul>
-</div>
-     </div>
+    </div>
+
      <script type="text/javascript">
          
 
@@ -152,101 +207,6 @@
             var audio = document.getElementById('bgAudio');
             localStorage.setItem('bgAudioPosition', audio.currentTime);
         });
-function switchColor() {
-    var body = document.body;
-    var logoContainer = document.querySelector('.logo-container');
-
-    // Define the color sequence (black, white)
-    var colors = ["black", "white"];
-
-    // Find the index of the current color in the sequence
-    var currentIndex = colors.indexOf(body.style.backgroundColor);
-
-    // Set the next color in the sequence
-    var nextColor = colors[(currentIndex + 1) % colors.length];
-
-    // Apply the new color to the body and other elements
-    body.style.backgroundColor = nextColor;
-
-    // Change background color and border of logo-container based on nextColor
-    if (nextColor === "black") {
-        logoContainer.style.backgroundColor = "";
-        logoContainer.style.border = "none"; 
-    } else {
-        logoContainer.style.backgroundColor = ""; // or "transparent"
-        logoContainer.style.border = "none";  // Remove border
-    }
-
-    // Other elements to be updated based on nextColor
-    var header = document.querySelector('header');
-    var footer = document.querySelector('footer');
-    var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, p, li, nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
-    var buttons = document.querySelectorAll('button');
-    var reactDivs = document.querySelectorAll('.react div');
-    var loveCounts = document.querySelectorAll('[id^="love-count-"]');
-    var viewCounts = document.querySelectorAll('#view-count');
-    var commentCounts = document.querySelectorAll('.comment-count');
-
-    // Update header background color based on nextColor
-    if (nextColor === "black") {
-        header.style.backgroundColor = "#333333";  // Darker gray when background is black
-    } else {
-        header.style.backgroundColor = nextColor;
-    }
-
-    footer.style.backgroundColor = nextColor;
-
-    sections.forEach(function(section) {
-        section.style.backgroundColor = nextColor;
-    });
-
-    var textColor = nextColor === "black" ? "white" : "black";
-    header.style.color = textColor;
-    footer.style.color = textColor;
-
-    textElements.forEach(function(element) {
-        element.style.color = textColor;
-    });
-
-    var buttonColor = nextColor === "black" ? "#262626" : "";
-    buttons.forEach(function(button) {
-        button.style.backgroundColor = buttonColor;
-
-        if (nextColor === "black") {
-            button.classList.add('button-hover');
-        } else {
-            button.classList.remove('button-hover');
-            button.style.backgroundColor = "";
-        }
-    });
-
-    reactDivs.forEach(function(reactDiv) {
-        reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
-
-        var reactTextColor = nextColor === "black" ? "white" : "black";
-        reactDiv.style.color = reactTextColor;
-
-        if (nextColor === "black") {
-            reactDiv.classList.add('react-hover');
-        } else {
-            reactDiv.classList.remove('react-hover');
-            reactDiv.style.backgroundColor = "";
-        }
-    });
-
-    var countTextColor = nextColor === "black" ? "white" : "black";
-    loveCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-    viewCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-    commentCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-}
-
 
   document.addEventListener('DOMContentLoaded', function() {
     var mediaQuery = window.matchMedia('(max-width: 768px)');
@@ -301,6 +261,112 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
+
+
+     </script>
+     <script type="text/javascript">
+         
+function switchColor() {
+    var body = document.body;
+    var logoContainer = document.querySelector('.logo-container');
+
+    // Define the color sequence (black, white)
+    var colors = ["black", "white"];
+
+    // Find the index of the current color in the sequence
+    var currentIndex = colors.indexOf(body.style.backgroundColor);
+
+    // Set the next color in the sequence
+    var nextColor = colors[(currentIndex + 1) % colors.length];
+
+    // Apply the new color to the body and other elements
+    body.style.backgroundColor = nextColor;
+
+    // Change background color and border of logo-container based on nextColor
+    if (nextColor === "black") {
+        logoContainer.style.backgroundColor = "";
+        logoContainer.style.border = "none"; 
+    } else {
+        logoContainer.style.backgroundColor = ""; // or "transparent"
+        logoContainer.style.border = "none";  // Remove border
+    }
+
+    // Other elements to be updated based on nextColor
+    var header = document.querySelector('header');
+    var footer = document.querySelector('footer');
+    var sections = document.querySelectorAll('section, .left-aside, .right-aside');
+    var textElements = document.querySelectorAll('h2,h4, p, .campaign-nav, .campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a,.explore-link');
+    var reactDivs = document.querySelectorAll('.react div');
+    var loveCounts = document.querySelectorAll('[id^="love-count-"]');
+    var viewCounts = document.querySelectorAll('#view-count');
+    var commentCounts = document.querySelectorAll('.comment-count');
+    var exploreLinks = document.querySelectorAll('.explore-link i'); // Select all compass icons
+
+    // Update header background color based on nextColor
+    if (nextColor === "black") {
+        header.style.backgroundColor = "#333333";  // Darker gray when background is black
+    } else {
+        header.style.backgroundColor = nextColor;
+    }
+
+    footer.style.backgroundColor = nextColor;
+
+    sections.forEach(function(section) {
+        section.style.backgroundColor = nextColor;
+    });
+
+    var textColor = nextColor === "black" ? "white" : "black";
+    header.style.color = textColor;
+    footer.style.color = textColor;
+
+    textElements.forEach(function(element) {
+        element.style.color = textColor;
+    });
+
+    // Change the color of the compass icon based on the background color
+    exploreLinks.forEach(function(icon) {
+        icon.style.color = nextColor === "black" ? "white" : "black";
+    });
+
+    // Skip changing button colors
+    var buttonColor = nextColor === "black" ? "#262626" : ""; // If you want to change button colors based on background, adjust this accordingly
+    var buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)'); // Exclude specific buttons
+    buttons.forEach(function(button) {
+        button.style.backgroundColor = buttonColor;
+
+        if (nextColor === "black") {
+            button.classList.add('button-hover');
+        } else {
+            button.classList.remove('button-hover');
+            button.style.backgroundColor = "";
+        }
+    });
+
+    reactDivs.forEach(function(reactDiv) {
+        reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
+
+        var reactTextColor = nextColor === "black" ? "white" : "black";
+        reactDiv.style.color = reactTextColor;
+
+        if (nextColor === "black") {
+            reactDiv.classList.add('react-hover');
+        } else {
+            reactDiv.classList.remove('react-hover');
+            reactDiv.style.backgroundColor = "";
+        }
+    });
+
+    var countTextColor = nextColor === "black" ? "white" : "black";
+    loveCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+    viewCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+    commentCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+}
 
 
      </script>

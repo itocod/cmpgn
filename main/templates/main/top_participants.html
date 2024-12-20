@@ -1,106 +1,171 @@
-<!-- hadith_list.html -->
 {% extends 'main/face.html' %}
 
 {% block content %}
-    <style>
-  /* Unique and appealing styles */
-.hadith-list-container {
-    background-color: #f7f7f7;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    margin: 10px;
+<style type="text/css">
+/* General Styling */
+.top-participants {
+    font-size: 1.3rem; /* Web font size increased */
+    color: #555; /* Grey text */
+    background-color: #fff; /* White background for container */
+    border: 1px solid #ccc; /* Light grey border for container */
+    border-radius: 8px; /* Rounded corners for container */
+    padding: 0;
+    max-width: 600px; /* Limit width for a smaller layout */
+    margin: 0 auto; /* Center the container */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow */
 }
 
-.hadith-item {
-    margin-bottom: 15px;
-    padding: 15px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease;
+@media (max-width: 768px) {
+    .top-participants {
+        font-size: 1.1rem; /* Mobile font size slightly increased */
+    }
 }
 
-.hadith-item:hover {
-    background-color: #f9f9f9;
+/* Title Styling based on provided style */
+.cc-header {
+    background-color: #ffffff; /* Clean white background */
+    border-bottom: 2px solid #007bff; /* Blue underline for emphasis */
+    padding: 15px 20px; /* Adjusted padding for a better appearance */
+    text-align: center; /* Center align the text */
 }
 
-.hadith-text {
-    color: #333;
-    font-size: 16px;
-    line-height: 1.6;
+.cc-header .activity-title {
+    font-size: 1.5rem; /* Title font size */
+    color: #666; /* Subtle grey for secondary text */
+    margin: 8px 0; /* Adjusted spacing */
+    font-weight: bold; /* Make it more prominent */
 }
 
-.hadith-detail-link {
-    color: #007bff;
-    text-decoration: none;
-    font-weight: bold;
-    margin-top: 10px;
-    display: inline-block;
+.cc-header .activity-title a {
+    color: #3498db; /* Blue for the link */
+    text-decoration: none; /* No underline */
 }
 
-.hadith-detail-link:hover {
-    text-decoration: underline;
+.cc-header .activity-title a:hover {
+    text-decoration: underline; /* Add underline on hover */
 }
 
-/* Styling for the "No suggested users yet" message */
-.no-suggested-users {
+.cc-header .activity-count {
+    color: gray; /* Subtle grey for total activities */
+    padding-left: 20px; /* Indented slightly */
+    font-size: 1.2rem; /* Font size for total activities */
+    margin: 5px 0; /* Adjusted margin */
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+    .cc-header {
+        padding: 10px 15px; /* Compact padding for smaller screens */
+    }
+
+    .cc-header .activity-title {
+        font-size: 1.3rem; /* Slightly smaller font size */
+    }
+
+    .cc-header .activity-count {
+        font-size: 1rem; /* Adjusted size for smaller screens */
+        padding-left: 10px; /* Reduced padding */
+    }
+}
+
+/* Smaller mobile devices (e.g., phones) */
+@media (max-width: 480px) {
+    .cc-header {
+        padding: 8px 12px; /* Further compact padding */
+    }
+
+    .cc-header .activity-title {
+        font-size: 1.2rem; /* Smaller font for better fit */
+    }
+
+    .cc-header .activity-count {
+        font-size: 1rem; /* Smaller size for comment count */
+        padding-left: 8px; /* Reduced padding */
+    }
+}
+
+/* Table Styling */
+.participants-table {
+    background-color: #f8f9fa; /* Light grey background */
+    border: 1px solid #dee2e6; /* Light border */
+    font-size: 1.1rem; /* Slightly larger font for table content */
+}
+
+.participants-table th {
+    background-color: #0044cc; /* Blue header */
+    color: white;
     text-align: center;
-    margin: 20px 0;
-    padding: 15px;
-    background-color: #e0f7e0; /* Light green background */
-    border-radius: 5px;
-    color: #228b22; /* Forest green text */
-    font-size: 14px;
-    border: 1px solid #2e8b57; /* Green border */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    font-size: 1.1rem; /* Slightly larger font for table headers */
 }
 
-/* Responsive Styles */
-@media (max-width: 600px) {
-    .hadith-list-container {
-        padding: 10px;
-        margin: 5px;
-    }
-
-    .hadith-item {
-        margin-bottom: 10px;
-        padding: 10px;
-    }
-
-    .hadith-text {
-        font-size: 14px;
-    }
-
-    .hadith-detail-link {
-        font-size: 13px;
-    }
-
-    .no-suggested-users {
-        font-size: 12px;
-        padding: 10px;
-    }
+.participants-table td {
+    text-align: center;
+    vertical-align: middle;
+    color: #333; /* Darker grey for content */
 }
 
-    </style>
+/* Participant Link */
+.participant-link {
+    text-decoration: none;
+    color: #0044cc; /* Blue for links */
+    font-weight: bold;
+}
 
-    <div class="hadith-list-container">
-        <h1 style="font-size:19px;  text-align:center;">Collection of Hadith</h1>
-        <ul>
-            {% for hadith in hadiths %}
+.participant-link:hover {
+    text-decoration: underline;
+    color: #002b80; /* Darker blue on hover */
+}
 
-                <li class="hadith-item">
-                    
-                    <p class="hadith-text">{{ hadith.text }}</p>
-                    <span class="hadith-reference">Reference: {{ hadith.reference }}</span><br>
-                    <a href="{% url 'hadith_detail' hadith.id %}" class="hadith-detail-link">View Details</a>
-                </li>
-            {% empty %}
-                <li class="no-suggested-users">No Hadith available.</li>
-            {% endfor %}
-        </ul>
+/* Participant Image */
+.participant-img {
+    margin-right: 10px;
+    border: 1px solid #ddd;
+    padding: 2px;
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+}
+</style>
+
+<div class="container mt-4 top-participants">
+    <div class="cc-header">
+        <h2 class="activity-title">
+            <hr>
+            <span>
+                Top Participants for "
+                <a href="{% url 'view_campaign' campaign_id=campaign.pk %}" class="campaign-link">
+                    {{ campaign.title }}
+                </a>
+                "
+            </span>
+        </h2>
     </div>
-    <script type="text/javascript">
+    <table class="table table-bordered mt-3 participants-table">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Participant</th>
+                <th>Engagement Score</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for participant in top_participants %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>
+                    <a href="{% url 'profile_view' participant.user.username %}" class="participant-link">
+                        <img src="{{ participant.user.profile.image.url }}" alt="{{ participant.user.username }}" class="participant-img rounded-circle">
+                        {{ participant.user.username }}
+                    </a>
+                </td>
+                <td>{{ participant.score }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script type="text/javascript">
     
         // Function to handle file upload and playback
         function uploadAudio() {

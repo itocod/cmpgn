@@ -1,7 +1,7 @@
-
 {% extends 'main/face.html' %}
 
 {% block content %}
+
 <style type="text/css">
 /* Container style */
 .custom-form-container {
@@ -10,7 +10,6 @@
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-   
     box-sizing: border-box;
     color: #333;
 }
@@ -23,6 +22,7 @@
     margin-bottom: 6px;
 }
 
+
 /* Input, textarea, and select styles */
 .custom-input[type="text"],
 .custom-input[type="email"],
@@ -34,16 +34,39 @@ select {
     margin-top: 8px;
     border: 1px solid #ccc;
     border-radius: 8px;
-    background-color: #fff;
-    transition: border-color 0.3s ease;
+    background-color: #f0f0f0; /* Light background for white text */
+    color: #333; /* Black text for readability */
+    transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
+/* Focus styles for interactive elements */
 .custom-input:focus,
 textarea:focus,
 select:focus {
     outline: none;
-    border-color: #007bff;
+    border-color: #007bff; /* Highlight border on focus */
+    background-color: #fff; /* Ensure focus state has white background */
 }
+
+/* Dark theme for accessibility in specific sections (e.g., modal, dark backgrounds) */
+.dark-mode .custom-input[type="text"],
+.dark-mode .custom-input[type="email"],
+.dark-mode .custom-input[type="file"],
+.dark-mode textarea,
+.dark-mode select {
+    background-color: #333; /* Dark background for white text */
+    color: #fff; /* White text for dark theme */
+    border: 1px solid #555; /* Softer borders for dark theme */
+}
+
+/* Dark theme focus */
+.dark-mode .custom-input:focus,
+.dark-mode textarea:focus,
+.dark-mode select:focus {
+    border-color: #00c853; /* Highlight with green for a sense of help or growth */
+}
+
+
 
 /* Emoji button style */
 .custom-emoji-button {
@@ -60,6 +83,35 @@ select:focus {
 
 .custom-emoji-button:hover {
     background-color: #ced4da;
+}
+
+/* Emoji container with overflow */
+.emoji-container {
+    max-height: 200px; /* Set max height for the container */
+    overflow-y: auto; /* Enable vertical scrolling */
+    display: flex;
+    flex-wrap: wrap; /* Allow emojis to wrap into new lines */
+    padding: 10px 0;
+}
+
+.emoji-container.hidden {
+    max-height: 50px; /* Set a smaller height when the container is hidden */
+    overflow: hidden; /* Hide the rest of the emojis */
+}
+
+.show-more-button {
+    display: inline-block;
+    padding: 6px 12px;
+    margin-top: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.show-more-button:hover {
+    background-color: #0056b3;
 }
 
 /* Submit button style */
@@ -114,77 +166,81 @@ select:focus {
         padding: 6px;
     }
 }
-
-
-/* Container for the activities */
+/* Container for the campaign activities */
 .campaign-activities-container {
-    max-width: 100%;
-    margin: 10px auto;
+    background-color: #f8f9fa;
     padding: 15px;
-    border: 1px solid #ddd;
     border-radius: 8px;
-    background-color: #f9f9f9;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
 }
 
-/* Header styling */
+/* Header for campaign activities */
 .campaign-activities-header {
-    margin-bottom: 10px;
+    font-size: 22px;
+    font-weight: bold;
     color: #333;
-    font-size: 18px;
+    margin-bottom: 12px;
 }
 
-/* Wrapper for the activities list */
+/* List of campaign activities */
 .campaign-activities-list {
-    max-height: 120px;
-    overflow: hidden;
-    transition: max-height 0.5s ease, padding 0.5s ease;
-    padding: 0 5px;
+    max-height: 200px; /* Limit height initially */
+    overflow-y: hidden; /* Hide overflow */
+    transition: max-height 0.3s ease; /* Smooth transition */
 }
 
-/* Expanded list styling */
-.campaign-activities-expanded {
-    max-height: none;
-    padding: 0 5px;
-}
-
-/* Styling for the custom activity-text element */
-activity-text.campaign-activity-item {
-    display: block; /* Ensures it behaves like a paragraph */
-    margin-bottom: 8px;
-    font-size: 14px;
+/* Individual campaign activity item */
+.campaign-activity-item {
+    font-size: 16px;
     color: #555;
+    padding: 6px 0;
+    line-height: 1.5;
+    display: block;
 }
 
-/* Toggle button for activities */
+/* Button to toggle visibility of extra activities */
 .campaign-toggle-button {
     display: inline-block;
-    padding: 8px 12px;
+    padding: 8px 16px;
     margin-top: 10px;
-    cursor: pointer;
-    color: #007bff;
-    background-color: #e7f0ff;
-    border: 1px solid #007bff;
-    border-radius: 4px;
-    text-align: center;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    font-size: 14px;
-}
-
-/* Hover effect on the toggle button */
-.campaign-toggle-button:hover {
     background-color: #007bff;
-    color: #fff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
 }
 
-/* Focus outline removal for the toggle button */
-.campaign-toggle-button:focus {
-    outline: none;
+/* Hover effect for the toggle button */
+.campaign-toggle-button:hover {
+    background-color: #0056b3;
+}
+
+/* Expanded state for activities list */
+.campaign-activities-expanded {
+    max-height: 1000px; /* Larger height for smooth expansion */
+}
+
+/* Responsive styles */
+@media (max-width: 600px) {
+    .campaign-activities-header {
+        font-size: 18px;
+    }
+
+    .campaign-activity-item {
+        font-size: 14px;
+    }
+
+    .campaign-toggle-button {
+        font-size: 14px;
+    }
 }
 
 </style>
 
-<h2 style="font-size:22px; padding-left: 20px; color:#333;">Campaign Activities Form</h2>
-
+<h2 style="font-size:19px; padding-left: 20px; color:#333;">Campaign Activities Form</h2>
 <div class="custom-form-container">
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
@@ -193,116 +249,65 @@ activity-text.campaign-activity-item {
             <div>
                 {{ form.as_p }}
                 <label class="custom-label">Emoji:</label>
-                <div>
-                    <button type="button" class="custom-emoji-button" onclick="addEmoji('📢', '{{ form.content.auto_id }}')">📢</button>
-                    <button type="button" class="custom-emoji-button" onclick="addEmoji('🎉', '{{ form.content.auto_id }}')">🎉</button>
-                    <button type="button" class="custom-emoji-button" onclick="addEmoji('💼', '{{ form.content.auto_id }}')">💼</button>
-                    <button type="button" class="custom-emoji-button" onclick="addEmoji('📊', '{{ form.content.auto_id }}')">📊</button>
-                    <button type="button" class="custom-emoji-button" onclick="addEmoji('💡', '{{ form.content.auto_id }}')">💡</button>
-                    <button type="button" class="custom-emoji-button" onclick="addEmoji('🔍', '{{ form.content.auto_id }}')">🔍</button>
-                    <button type="button" class="custom-emoji-button" onclick="addEmoji('📣', '{{ form.content.auto_id }}')">📣</button>
-                    <button type="button" class="custom-emoji-button" onclick="addEmoji('🎯', '{{ form.content.auto_id }}')">🎯</button>
-                    <button type="button" class="custom-emoji-button" onclick="addEmoji('🔔', '{{ form.content.auto_id }}')">🔔</button>
-                    <button type="button" class="custom-emoji-button" onclick="addEmoji('📱', '{{ form.content.auto_id }}')">📱</button>
-                    <button type="button" class="custom-emoji-button" onclick="addEmoji('💸', '{{ form.content.auto_id }}')">💸</button>
-                    <button type="button" class="custom-emoji-button" onclick="addEmoji('🔑', '{{ form.content.auto_id }}')">🔑</button>
-                    <button type="button" class="custom-emoji-button" onclick="addEmoji('🔦', '{{ form.content.auto_id }}')">🔦</button>
-                    <button type="button" class="custom-emoji-button" onclick="addEmoji('🎁', '{{ form.content.auto_id }}')">🎁</button>
-                    <button type="button" class="custom-emoji-button" onclick="addEmoji('📆', '{{ form.content.auto_id }}')">📆</button>
-                    <button type="button" class="custom-emoji-button" onclick="addEmoji('💻', '{{ form.content.auto_id }}')">💻</button>
-                    <button type="button" class="custom-emoji-button" onclick="addEmoji('📝', '{{ form.content.auto_id }}')">📝</button>
-                    <button type="button" class="custom-emoji-button" onclick="addEmoji('🔧', '{{ form.content.auto_id }}')">🔧</button>
-                    <button type="button" class="custom-emoji-button" onclick="addEmoji('🛠️', '{{ form.content.auto_id }}')">🛠️</button>
+                <div class="emoji-container" id="emojiContainer{{ form.content.auto_id }}">
+                    {% for emoji in initial_emojis %}
+                        <button type="button" class="custom-emoji-button" onclick="addEmoji('{{ emoji }}', '{{ form.content.auto_id }}')">{{ emoji }}</button>
+                    {% endfor %}
+                    <div class="emoji-container hidden" id="extraEmojis{{ form.content.auto_id }}">
+                        {% for emoji in additional_emojis %}
+                            <button type="button" class="custom-emoji-button" onclick="addEmoji('{{ emoji }}', '{{ form.content.auto_id }}')">{{ emoji }}</button>
+                        {% endfor %}
+                    </div>
                 </div>
-                
-                    <div>
-
-       <div class="campaign-activities-container">
-    <h4 class="campaign-activities-header">Examples of Activities to Post</h4>
-    <div id="campaignActivitiesList" class="campaign-activities-list">
-        {% for activity in campaign.get_objective_and_activities.Activities %}
-            <activity-text class="campaign-activity-item">{{ activity }}</activity-text>
-        {% endfor %}
-    </div>
-    <span id="toggleActivitiesButton" class="campaign-toggle-button">See More</span>
-</div>
-
-    </div>
+                <button type="button" class="show-more-button" onclick="toggleEmojiOverflow('{{ form.content.auto_id }}')">Show More</button>
+                <div>
+                    
+                </div>
             </div>
             <hr>
         {% endfor %}
         <button type="submit" class="custom-submit-button">Submit</button>
-    </form>
+    </form><br>    <div class="campaign-activities-container">
+                        <h4 class="campaign-activities-header">Examples of Activities to Post</h4>
+                        <div id="campaignActivitiesList" class="campaign-activities-list">
+                            {% for activity in campaign.get_objective_and_activities.Activities %}
+                                <activity-text class="campaign-activity-item">{{ activity }}</activity-text>
+                            {% endfor %}
+                        </div>
+                        <span id="toggleActivitiesButton" class="campaign-toggle-button">See More</span>
+                    </div>
 </div>
 
 <script>
-
-
-
-
-document.getElementById('toggleActivitiesButton').addEventListener('click', function() {
-    var container = document.getElementById('campaignActivitiesList');
-    var button = document.getElementById('toggleActivitiesButton');
-
-    if (container.classList.contains('campaign-activities-expanded')) {
-        container.classList.remove('campaign-activities-expanded');
-        button.textContent = 'See More';
-    } else {
-        container.classList.add('campaign-activities-expanded');
-        button.textContent = 'See Less';
+    // Toggle emoji container visibility
+    function toggleEmojiOverflow(fieldId) {
+        var container = document.getElementById('extraEmojis' + fieldId);
+        container.classList.toggle('hidden');
     }
-});
 
-
-
-    
+    // Add emoji to the form content field
     function addEmoji(emoji, fieldId) {
         var contentField = document.getElementById(fieldId);
         contentField.value += emoji;
     }
 
-    function uploadAudio() {
-        var input = document.createElement('input');
-        input.type = 'file';
-        input.accept = 'audio/*, video/*';
+    document.getElementById('toggleActivitiesButton').addEventListener('click', function() {
+        var container = document.getElementById('campaignActivitiesList');
+        var button = document.getElementById('toggleActivitiesButton');
 
-        input.onchange = function(e) {
-            var file = e.target.files[0];
-            var audio = document.getElementById('bgAudio');
-            audio.pause();
-            localStorage.setItem('bgAudioFile', URL.createObjectURL(file));
-            localStorage.setItem('bgAudioPosition', audio.currentTime);
-            audio.src = localStorage.getItem('bgAudioFile');
-            audio.play();
-        };
-
-        input.click();
-    }
-
-    window.onload = function() {
-        var audio = document.getElementById('bgAudio');
-        var bgAudioFile = localStorage.getItem('bgAudioFile');
-        var audioPosition = parseFloat(localStorage.getItem('bgAudioPosition'));
-
-        if (bgAudioFile) {
-            audio.src = bgAudioFile;
-            audio.addEventListener('loadedmetadata', function() {
-                if (!isNaN(audioPosition)) {
-                    audio.currentTime = audioPosition;
-                }
-                audio.play();
-            });
+        if (container.classList.contains('campaign-activities-expanded')) {
+            container.classList.remove('campaign-activities-expanded');
+            button.textContent = 'See More';
+        } else {
+            container.classList.add('campaign-activities-expanded');
+            button.textContent = 'See Less';
         }
-    }
-
-
-
+    });
 </script>
 
 
-
-
-<a href="{% url 'view_campaign' campaign_id=campaign.pk %}" class="custom-back-button"> 
-    <i class="fa fa-arrow-left"></i> Back 
+<a href="{% url 'view_campaign' campaign_id=campaign.pk %}" class="custom-back-button" style="font-size:12px;">
+    <i class="fa fa-arrow-left"></i> Back
 </a>
+
 {% endblock %}

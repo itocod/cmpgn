@@ -181,6 +181,8 @@ def update_user_verification_status(sender, instance, created, **kwargs):
 
 
 
+
+
 class Follow(models.Model):
     follower = models.ForeignKey(User, related_name='following', on_delete=models.CASCADE)
     followed = models.ForeignKey(User, related_name='followers', on_delete=models.CASCADE)
@@ -874,13 +876,12 @@ class Message(models.Model):
 
 
 
-
-
 class AffiliateLink(models.Model):
     title = models.CharField(max_length=200)
     link = models.URLField()
     description = models.TextField(blank=True, null=True)
     image = models.ImageField(upload_to='affiliate_images/', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)  # Automatically set when an instance is created
 
     def __str__(self):
         return self.title
@@ -891,7 +892,7 @@ class AffiliateLink(models.Model):
 
 class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    message = models.CharField()
+    message = models.CharField(max_length=255)
     timestamp = models.DateTimeField(auto_now_add=True)
     viewed = models.BooleanField(default=False)
     campaign_notification = models.BooleanField(default=False)

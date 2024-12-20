@@ -44,6 +44,10 @@ admin.site.register(UserVerification, UserVerificationAdmin)
 
 
 
+
+
+
+
 class ChangemakerAwardAdmin(admin.ModelAdmin):
     list_display = ('user', 'campaign', 'award', 'timestamp')
     search_fields = ('user__username', 'campaign__title', 'award')

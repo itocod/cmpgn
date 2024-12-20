@@ -1,0 +1,158 @@
+{% extends 'main/face.html' %}
+
+{% block content %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campaign Engagement</title>
+    <style type="text/css">
+        /* Base styles */
+.cc-header {
+    background-color: #ffffff; /* Clean white background */
+    border-bottom: 2px solid #007bff; /* Blue underline for emphasis */
+    padding: 15px 20px; /* Adjusted padding for a better appearance */
+    text-align: center; /* Center align the text */
+}
+
+.cc-header .activity-title {
+    font-size: 1.5rem; /* Title font size */
+    color: #666; /* Subtle grey for secondary text */
+    margin: 8px 0; /* Adjusted spacing */
+    font-weight: bold; /* Make it more prominent */
+}
+
+.cc-header .activity-title a {
+    color: #3498db; /* Blue for the link */
+    text-decoration: none; /* No underline */
+}
+
+.cc-header .activity-title a:hover {
+    text-decoration: underline; /* Add underline on hover */
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+    .cc-header {
+        padding: 10px 15px; /* Compact padding for smaller screens */
+    }
+
+    .cc-header .activity-title {
+        font-size: 1.3rem; /* Slightly smaller font size */
+    }
+}
+
+/* Smaller mobile devices (e.g., phones) */
+@media (max-width: 480px) {
+    .cc-header {
+        padding: 8px 12px; /* Further compact padding */
+    }
+
+    .cc-header .activity-title {
+        font-size: 1.2rem; /* Smaller font for better fit */
+    }
+}
+
+/* Link styles */
+.cc-header .campaign-link {
+    color: #3498db; /* Default link color */
+    text-decoration: none; /* Remove underline by default */
+    font-weight: bold; /* Optional: make it stand out */
+}
+
+.cc-header .campaign-link:hover {
+    color: #3498db; /* Retain the blue color on hover */
+    text-decoration: underline; /* Add underline */
+    text-decoration-color: black; /* Make the underline black */
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="cc-header">
+    <h3 class="activity-title">
+        Engagement Metrics for
+        <a href="{% url 'view_campaign' campaign_id=campaign.pk %}" class="campaign-link">
+            {{ campaign.title }}
+        </a>
+    </h3>
+</div>
+
+    <canvas id="engagementChart" width="400" height="200"></canvas>
+
+  <script>
+    // Data passed from Django
+    const engagementData = {{ engagement_data|safe }};
+
+    // Chart.js configuration
+    const ctx = document.getElementById('engagementChart').getContext('2d');
+    const engagementChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [
+                'Donations', 
+                'Views', 
+                'Loves', 
+                'Comments', 
+                'Activities', 
+                'Activity Loves', 
+                'Brainstorming Ideas', 
+                'Active Products',
+                'Activity Comments'  // New label for Activity Comments
+            ],
+            datasets: [{
+                label: 'Engagement Metrics',
+                data: [
+                    engagementData.donations,
+                    engagementData.views,
+                    engagementData.loves,
+                    engagementData.comments,
+                    engagementData.activities,
+                    engagementData.activity_loves,
+                    engagementData.brainstorms,
+                    engagementData.active_products,
+                    engagementData.activity_comments  // New data point for Activity Comments
+                ],
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(231, 233, 237, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(201, 203, 207, 0.2)',
+                    'rgba(255, 159, 64, 0.2)'  // Color for Activity Comments
+                ],
+                borderColor: [
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(231, 233, 237, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(201, 203, 207, 1)',
+                    'rgba(255, 159, 64, 1)'  // Border color for Activity Comments
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+
+</body>
+</html>
+{% endblock %}

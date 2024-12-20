@@ -90,6 +90,172 @@ from django.views.generic.edit import DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import UserVerificationForm
 
+from django.db.models import Count
+
+
+
+
+from django.db.models import Count, Sum
+from django.shortcuts import render
+from .models import Campaign, ActivityLove, ActivityComment, Brainstorming, Donation
+
+
+
+def campaign_engagement_data(request, campaign_id):
+    campaign = Campaign.objects.get(id=campaign_id)
+
+    # Aggregating engagement metrics
+    donations = Donation.objects.filter(campaign=campaign).aggregate(total=Sum('amount'))['total'] or 0
+    views = CampaignView.objects.filter(campaign=campaign).count()
+    loves = campaign.loves.count()
+    comments = Comment.objects.filter(campaign=campaign).count()
+    activities = Activity.objects.filter(campaign=campaign).count()
+    activity_loves = ActivityLove.objects.filter(activity__campaign=campaign).count()
+    brainstorms = Brainstorming.objects.filter(campaign=campaign).count()
+    active_products = CampaignProduct.objects.filter(campaign=campaign, is_active=True).count()
+    activity_comments = ActivityComment.objects.filter(activity__campaign=campaign).count()
+
+    # Prepare data
+    engagement_data = {
+        "donations": donations,
+        "views": views,
+        "loves": loves,
+        "comments": comments,
+        "activities": activities,
+        "activity_loves": activity_loves,
+        "brainstorms": brainstorms,
+        "active_products": active_products,
+        "activity_comments": activity_comments,  # New data point for Activity Comments
+    }
+
+    # Optionally, return as JSON for dynamic updates
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse(engagement_data)
+
+    user_profile = get_object_or_404(Profile, user=request.user)
+    
+    user_profile.last_campaign_check = timezone.now()
+    user_profile.save()
+
+    # Other data to pass to the template (e.g., unread notifications, ads, etc.)
+    form = SubscriptionForm()
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    user_chats = Chat.objects.filter(participants=request.user)
+    unread_messages_count = Message.objects.filter(chat__in=user_chats).exclude(sender=request.user).count()
+    ads = NativeAd.objects.all()
+    # Pass data to the template
+    return render(request, 'revenue/engagement_graph.html', {"campaign": campaign, "engagement_data": engagement_data,'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'unread_messages_count': unread_messages_count,
+        'form': form,
+        'ads': ads,})
+
+
+
+
+
+
+
+
+
+
+
+
+def top_participants_view(request, campaign_id):
+    # Fetch the campaign
+    campaign = Campaign.objects.get(pk=campaign_id)
+    
+    # Aggregate engagement metrics
+    loves = ActivityLove.objects.filter(activity__campaign=campaign).values('user').annotate(total=Count('id'))
+    comments = ActivityComment.objects.filter(activity__campaign=campaign).values('user').annotate(total=Count('id'))
+    brainstorms = Brainstorming.objects.filter(campaign=campaign).values('supporter').annotate(total=Count('id'))
+    donations = Donation.objects.filter(campaign=campaign).values('donor_name').annotate(total=Sum('amount'))
+
+    # Combine all scores for each user
+    participant_scores = {}
+    for love in loves:
+        participant_scores[love['user']] = participant_scores.get(love['user'], 0) + love['total']
+    for comment in comments:
+        participant_scores[comment['user']] = participant_scores.get(comment['user'], 0) + comment['total']
+    for brainstorm in brainstorms:
+        participant_scores[brainstorm['supporter']] = participant_scores.get(brainstorm['supporter'], 0) + brainstorm['total']
+    for donation in donations:
+        participant_scores[donation['donor_name']] = participant_scores.get(donation['donor_name'], 0) + donation['total']
+
+    # Sort participants by score
+    sorted_participants = sorted(participant_scores.items(), key=lambda x: x[1], reverse=True)
+    
+    # Fetch user profiles for the top participants
+    top_participants = [
+        {
+            'user': User.objects.get(pk=participant[0]),
+            'score': participant[1]
+        } for participant in sorted_participants[:10]  # Limit to top 10
+    ]
+    user_profile = get_object_or_404(Profile, user=request.user)
+    campaign = get_object_or_404(Campaign, id=campaign_id)
+    
+    # Optional: If you want to track the last time the user viewed their campaigns
+    user_profile.last_campaign_check = timezone.now()
+    user_profile.save()
+
+    # Other data to pass to the template (e.g., unread notifications, ads, etc.)
+    form = SubscriptionForm()
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    user_chats = Chat.objects.filter(participants=request.user)
+    unread_messages_count = Message.objects.filter(chat__in=user_chats).exclude(sender=request.user).count()
+    ads = NativeAd.objects.all()
+
+    return render(request, 'main/top_participants.html', {
+        'campaign': campaign,
+        'top_participants': top_participants,
+        'campaign': campaign,        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'unread_messages_count': unread_messages_count,
+        'form': form,
+        'ads': ads,
+    })
+
+
+
+
+
+
+
+
+
+
+def explore_campaigns(request):
+    user_profile = get_object_or_404(Profile, user=request.user)
+    # Optional: If you want to track the last time the user viewed their campaigns
+    user_profile.last_campaign_check = timezone.now()
+    user_profile.save()
+
+    # Other data to pass to the template (e.g., unread notifications, ads, etc.)
+    form = SubscriptionForm()
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    user_chats = Chat.objects.filter(participants=request.user)
+    unread_messages_count = Message.objects.filter(chat__in=user_chats).exclude(sender=request.user).count()
+    ads = NativeAd.objects.all()
+    # Fetch public campaigns with 2 or more loves
+    campaigns = (
+        Campaign.objects.filter(visibility='public')  # Only public campaigns
+        .annotate(love_count_annotated=Count('loves'))  # Add love count annotation
+        .filter(love_count_annotated__gte=2)  # Exclude campaigns with less than 2 loves
+        .order_by('-love_count_annotated')  # Sort by love count in descending order
+    )
+    context = {
+        'campaigns': campaigns,
+         'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'unread_messages_count': unread_messages_count,
+        'form': form,
+        'ads': ads
+    }
+    return render(request, 'revenue/explore.html', context)
+
+
+
 
 def changemakers_view(request):
     # Get all profiles and filter those who are changemakers
@@ -393,34 +559,99 @@ def platformfund_view(request):
 
 
 def hadith_list(request):
+    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
+    user_profile = get_object_or_404(Profile, user=request.user)
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    # Check if there are new campaigns from follows
+    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
+
+    # Update last_campaign_check for the user's profile
+    user_profile.last_campaign_check = timezone.now()
+    user_profile.save()
+    ads = NativeAd.objects.all() 
     hadiths = Hadith.objects.all()
-    return render(request, 'main/hadith_list.html', {'hadiths': hadiths})
+    return render(request, 'main/hadith_list.html', {'hadiths': hadiths,'ads':ads,'user_profile': user_profile,
+                                               'unread_notifications': unread_notifications,
+    
+                                               'new_campaigns_from_follows': new_campaigns_from_follows})
 
 
 def hadith_detail(request, hadith_id):
+    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
+    user_profile = get_object_or_404(Profile, user=request.user)
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    # Check if there are new campaigns from follows
+    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
+
+    # Update last_campaign_check for the user's profile
+    user_profile.last_campaign_check = timezone.now()
+    user_profile.save()
+    ads = NativeAd.objects.all() 
     # Retrieve the specific Hadith object or return a 404 error if not found
     hadith = get_object_or_404(Hadith, pk=hadith_id)
-    return render(request, 'main/hadith_detail.html', {'hadith': hadith})
+    return render(request, 'main/hadith_detail.html', {'hadith': hadith,'ads':ads,'user_profile': user_profile,
+                                               'unread_notifications': unread_notifications,
+    
+                                               'new_campaigns_from_follows': new_campaigns_from_follows})
 
 
 def adhkar_list(request):
+    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
+    user_profile = get_object_or_404(Profile, user=request.user)
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    # Check if there are new campaigns from follows
+    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
+
+    # Update last_campaign_check for the user's profile
+    user_profile.last_campaign_check = timezone.now()
+    user_profile.save()
+    ads = NativeAd.objects.all() 
     adhkars = Adhkar.objects.all()
-    return render(request, 'main/adhkar_list.html', {'adhkars': adhkars})
+    return render(request, 'main/adhkar_list.html', {'adhkars': adhkars,'ads':ads,'user_profile': user_profile,
+                                               'unread_notifications': unread_notifications,
+    
+                                               'new_campaigns_from_follows': new_campaigns_from_follows})
 
 def adhkar_detail(request, adhkar_id):
+    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
+    user_profile = get_object_or_404(Profile, user=request.user)
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    # Check if there are new campaigns from follows
+    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
+
+    # Update last_campaign_check for the user's profile
+    user_profile.last_campaign_check = timezone.now()
+    user_profile.save()
+    ads = NativeAd.objects.all()      
     adhkar = get_object_or_404(Adhkar, id=adhkar_id)
-    return render(request, 'main/adhkar_detail.html', {'adhkar': adhkar})
+    return render(request, 'main/adhkar_detail.html', {'adhkar': adhkar,'ads':ads,'user_profile': user_profile,
+                                               'unread_notifications': unread_notifications,
+    
+                                               'new_campaigns_from_follows': new_campaigns_from_follows})
 
 
 
 @login_required
 def quran_view(request):
+    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
+    user_profile = get_object_or_404(Profile, user=request.user)
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    # Check if there are new campaigns from follows
+    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
+
+    # Update last_campaign_check for the user's profile
+    user_profile.last_campaign_check = timezone.now()
+    user_profile.save()
+    ads = NativeAd.objects.all() 
     surahs = Surah.objects.all()
     quran_verses = QuranVerse.objects.all()
 
     return render(request, 'main/quran.html', {
         'surahs': surahs,
-        'quran_verses': quran_verses
+        'quran_verses': quran_verses ,'ads':ads,'user_profile': user_profile,
+                                               'unread_notifications': unread_notifications,
+    
+                                               'new_campaigns_from_follows': new_campaigns_from_follows
     })
 
 
@@ -492,23 +723,27 @@ def upload_image(request):
     return JsonResponse({'success': False})
 
 
+
+
 def product_manage(request, campaign_id=None, product_id=None):
     campaign = None
     product = None
 
+    # Fetch campaign and product if IDs are provided
     if campaign_id:
         campaign = get_object_or_404(Campaign, pk=campaign_id)
 
     if product_id:
         product = get_object_or_404(CampaignProduct, pk=product_id)
 
+    # Handle form submission
     if request.method == 'POST':
         form = CampaignProductForm(request.POST, request.FILES, instance=product)
         if form.is_valid():
             product = form.save(commit=False)
             product.campaign = campaign
             product.save()
-            # Redirect back to product_manage view
+            # Redirect to manage products
             if campaign:
                 return redirect('product_manage', campaign_id=campaign.id)
             else:
@@ -516,20 +751,47 @@ def product_manage(request, campaign_id=None, product_id=None):
     else:
         form = CampaignProductForm(instance=product)
     
-    products = CampaignProduct.objects.filter(campaign=campaign) if campaign else None
-        # Fetch unread notifications for the user
+    # Fetch all products for the campaign, ordered by newest first
+    products = CampaignProduct.objects.filter(campaign=campaign).order_by('-date_added') if campaign else None
+    product_count = products.count() if products else 0  # Total products in the campaign
+
+    # Fetch unread notifications for the user
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
 
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
+    # Fetch user profile and new campaigns from followed users
+    following_users = [follow.followed for follow in request.user.following.all()]
     user_profile = get_object_or_404(Profile, user=request.user)
-    # Check if there are new campaigns from follows
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__in=following_users, 
+        visibility='public', 
+        timestamp__gt=user_profile.last_campaign_check
+    )
 
-    # Update last_campaign_check for the user's profile
+    # Update the last campaign check timestamp for the user
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
-    ads = NativeAd.objects.all()  
-    return render(request, 'main/product_manage.html', {'ads':ads,'form': form, 'product': product, 'campaign': campaign, 'products': products,'unread_notifications':unread_notifications,'user_profile': user_profile,'new_campaigns_from_follows': new_campaigns_from_follows})
+
+    # Fetch native ads
+    ads = NativeAd.objects.all()
+
+    # Render the template with the updated context
+    return render(request, 'main/product_manage.html', {
+        'ads': ads,
+        'form': form,
+        'product': product,
+        'campaign': campaign,
+        'products': products,  # Products ordered by newest first
+        'product_count': product_count,
+        'unread_notifications': unread_notifications,
+        'user_profile': user_profile,
+        'new_campaigns_from_follows': new_campaigns_from_follows,
+    })
+
+
+
+
+
+
 
 def love_activity(request, activity_id):
     if request.method == 'POST' and request.user.is_authenticated:
@@ -659,24 +921,32 @@ def suggest(request):
 
 
 
-
-
 def affiliate_links(request):
     following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
     user_profile = get_object_or_404(Profile, user=request.user)
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    
     # Check if there are new campaigns from follows
     new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
 
     # Update last_campaign_check for the user's profile
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
-    affiliate_links = AffiliateLink.objects.all()
+
+    # Get all affiliate links sorted by the newest first
+    affiliate_links = AffiliateLink.objects.all().order_by('-created_at')
+
+    # Fetch ads if necessary
     ads = NativeAd.objects.all()  
-    return render(request, 'revenue/affiliate_links.html', {'ads':ads,'affiliate_links': affiliate_links,'user_profile': user_profile,
-                                               'unread_notifications': unread_notifications,
     
-                                               'new_campaigns_from_follows': new_campaigns_from_follows})
+    # Return the rendered response
+    return render(request, 'revenue/affiliate_links.html', {
+        'ads': ads,
+        'affiliate_links': affiliate_links,
+        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'new_campaigns_from_follows': new_campaigns_from_follows
+    })
 
 
 
@@ -757,7 +1027,7 @@ def donate(request, campaign_id):
     user_profile = get_object_or_404(Profile, user=request.user)
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
-
+    ads = NativeAd.objects.all() 
     return render(request, 'revenue/donation.html', {
         'campaign': campaign,
         'form': donation_form,
@@ -765,6 +1035,7 @@ def donate(request, campaign_id):
         'fund': fund,
         'target_reached': target_reached,
         'user_profile': user_profile,
+        'ads':ads,
     })
 
 
@@ -1008,7 +1279,7 @@ def brainstorm_idea(request, campaign_id):
     
     # Retrieve all ideas for the current campaign before displaying the form
     ideas_for_campaign = Brainstorming.objects.filter(campaign=campaign).order_by('-pk')  # Order by creation timestamp in descending order
-    return render(request, 'main/brainstorm.html', {'form': form, 'ideas_for_campaign': ideas_for_campaign,'user_profile':user_profile, 'campaign': campaign,'unread_notifications':unread_notifications,'new_campaigns_from_follows':new_campaigns_from_follows})
+    return render(request, 'main/brainstorm.html', {'ads':ads,'form': form, 'ideas_for_campaign': ideas_for_campaign,'user_profile':user_profile, 'campaign': campaign,'unread_notifications':unread_notifications,'new_campaigns_from_follows':new_campaigns_from_follows})
 
 
 
@@ -1364,6 +1635,19 @@ def campaign_detail(request, pk):
     return render(request, 'main/campaign_detail.html', {'campaign': campaign,'form':form})
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 def thank_you(request):
     
     return render(request, 'main/thank_you.html')
@@ -1433,6 +1717,7 @@ def create_activity(request, campaign_id):
     user_profile = get_object_or_404(Profile, user=request.user)
     campaign = Campaign.objects.get(id=campaign_id)
 
+
     if request.method == 'POST':
         formset = ActivityFormSet(request.POST, request.FILES, instance=campaign)
         if formset.is_valid():
@@ -1449,7 +1734,36 @@ def create_activity(request, campaign_id):
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
     ads = NativeAd.objects.all()
-    return render(request, 'main/activity_create.html', {'ads':ads,'formset': formset, 'campaign': campaign,'user_profile':user_profile,'unread_notifications':unread_notifications,'new_campaigns_from_follows':new_campaigns_from_follows})
+ # Expanded list of 200 emojis for activities
+    emojis = [
+    '📢', '🎉', '💼', '📊', '💡', '🔍', '📣', '🎯', '🔔', '📱', '💸', '⭐', '💥', '🌟', 
+    '🌳', '🌍', '🌱', '🌲', '🌿', '🍃', '🏞️', '🦋', '🐝', '🐞', '🦜', '🐢', '🐘', '🐆', '🐅', '🐬',  # Environmental and wildlife
+    '💉', '❤️', '🩺', '🚑', '🏥', '🧬', '💊', '🩹', '🧑‍⚕️', '👨‍⚕️', '🩸', '🫁', '🫀', '🧠', '🦷', '👁️',  # Health and wellness
+    '📚', '🎓', '🏫', '🖊️', '📖', '✍️', '🧑‍🏫', '👨‍🏫', '📜', '🔖', '📕', '📝', '📋', '📑', '🧮', '🎒',  # Education and literacy
+    '🤝', '🗣️', '💬', '🏘️', '🏠', '👩‍🏫', '👨‍🏫', '🧑‍🎓', '👩‍🎓', '👨‍🎓', '🏘️', '🏡', '🏙️', '🚪', '🛠️', '🛏️',  # Community development
+    '⚖️', '🕊️', '🏳️‍🌈', '🔒', '🛡️', '📜', '📛', '🤲', '✌️', '👐', '🙏', '🧑‍⚖️', '👨‍⚖️', '📝', '🪧', '🎗️',  # Equality and inclusion
+    '🐾', '🐕', '🐈', '🐅', '🐆', '🐘', '🐄', '🐑', '🐇', '🐿️', '🐦', '🦢', '🦉', '🐠', '🦑', '🦓', '🐅',  # Animal welfare
+    '🌐', '💻', '📱', '🖥️', '⌨️', '🔐', '🛡️', '📡', '🛰️', '🌐', '💾', '🖱️', '🖨️', '📂', '🗄️', '📧', '🛠️',  # Digital rights and tech
+    '🌍', '🛠️', '📜', '🌱', '💡', '🏡', '🏘️', '🏭', '🚜', '🚲', '🌾', '💧', '🌊', '☀️', '⚡', '💨', '🌋',  # Sustainable development
+    '🕊️', '🔫', '💣', '⚔️', '🛡️', '🕵️‍♂️', '🕵️‍♀️', '🚨', '🚔', '🧑‍✈️', '👮‍♂️', '👮‍♀️', '🧑‍✈️', '🎯', '✌️', '☮️', '📜',  # Peace and conflict resolution
+    '📱', '📡', '🌐', '💻', '🔐', '🔒', '🛡️', '📊', '📈', '🖥️', '🗂️', '📂', '🖱️', '🖨️', '📞', '💡', '🔍',  # Economic empowerment and digital advocacy
+    '💸', '💰', '🏦', '🏛️', '🧑‍💼', '👨‍💼', '📈', '🧾', '📜', '💼', '📊', '🧑‍💻', '👨‍💻', '🏦', '💳', '💱',  # Economic empowerment
+    '🎨', '🎭', '🎬', '🎤', '🎻', '🎷', '🎺', '🎸', '🎹', '🎧', '📸', '📹', '🎥', '🖼️', '🧑‍🎨', '👨‍🎨',  # Artistic advocacy and creatives
+    '🛠️', '🧑‍🔧', '👨‍🔧', '🏗️', '🧑‍🏭', '🚜', '⚙️', '🔩', '🔧', '🪛', '🛢️', '🏭', '🚇', '🚉', '🛠️', '🔧',  # Infrastructure and development
+    '🏆', '🎯', '📜', '🎗️', '🎖️', '🏅', '🥇', '🥈', '🥉', '📣', '🚀', '⚡', '🌟', '⭐', '🔔', '💡',  # Recognition, achievement, and awards
+    '🎡', '🎢', '🎪', '🎬', '🎤', '🎧', '📽️', '📺', '🎭', '🎨', '🖼️', '🎷', '🎸', '🎹', '🎤', '🎬',  # Creative, events, and entertainment
+    '📝', '📄', '📊', '📈', '🗣️', '🗳️', '📋', '🧾', '🧑‍⚖️', '👨‍⚖️', '🏛️', '📜', '✍️', '📝', '📋', '✏️',  # Policy advocacy, legal, and campaigns
+    '🖋️', '🖊️', '🖌️', '🧑‍🎨', '👨‍🎨', '🎨', '📸', '🎥', '🎤', '📹', '🖼️', '🎭', '🎬', '🎤', '🎹', '🎨',  # Creative activities
+    '🏗️', '🚜', '🛠️', '🔧', '⚙️', '📊', '📈', '💡', '🛠️', '🏛️', '🏦', '💼', '🧑‍💻', '🧑‍⚖️', '📜', '📋',  # Development and advocacy
+    '🎗️', '🚩', '🏁', '📢', '🎯', '🎉', '💼', '📊', '💡', '🔍', '📣', '🎯', '🔔', '📱', '💸', '⭐', '💥',  # Miscellaneous activities and objectives
+    '🧑‍🚒', '👨‍🚒', '🚒', '🧑‍🚒', '🚨', '🚑', '🏥', '💉', '❤️', '🩸', '🩺', '👩‍⚕️', '👨‍⚕️', '🏥', '🚨', '🧑‍⚕️',  # Emergency and humanitarian aid
+    ]
+
+    # Split the emojis into two parts: first 10 and the rest
+    initial_emojis = emojis[:10]
+    additional_emojis = emojis[10:]
+    return render(request, 'main/activity_create.html', {'ads':ads,'formset': formset, 'campaign': campaign,'user_profile':user_profile,'unread_notifications':unread_notifications,'new_campaigns_from_follows':new_campaigns_from_follows,'initial_emojis': initial_emojis,
+        'additional_emojis': additional_emojis,})
 
 @login_required
 def manage_campaigns(request):
@@ -1680,6 +1994,19 @@ def toggle_love(request, campaign_id):
 def home(request):
     # Get the current user's profile
     user_profile = get_object_or_404(Profile, user=request.user)
+    # Try to get the campaign ID from request parameters; if not, fetch a default campaign
+    campaign_id = request.GET.get('campaign_id')
+    if campaign_id:
+        campaign = get_object_or_404(Campaign, pk=campaign_id)
+    else:
+        campaign = Campaign.objects.first()  # Get the first campaign or handle as needed
+
+    user = request.user
+    
+    # Check if the user has loved the campaign only if they are not the owner
+    already_loved = False
+    if campaign and user != campaign.user:  # Check if the user is not the owner
+        already_loved = Love.objects.filter(campaign=campaign, user=user).exists()
 
     # Get all campaigns, annotate whether the current user marked them as "not interested"
     campaigns = Campaign.objects.annotate(
@@ -1725,6 +2052,7 @@ def home(request):
         'ads': ads,
         'public_campaigns': campaigns_to_display,  # Filtered campaigns to display
         'campaign': Campaign.objects.last(),
+        'already_loved': already_loved,
         'user_profile': user_profile,
         'unread_notifications': unread_notifications,
         'unread_messages_count': unread_messages_count,

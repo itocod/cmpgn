@@ -20,21 +20,19 @@
     box-sizing: border-box;
 }
 
-.container {
-    width: 100%;
-    height: auto;
-    max-width: 95vw;
-    max-height: 95vh;
-    display: flex;
-    flex-direction: column;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 6px 30px rgba(0, 0, 0, 0.5);
-    background-color: #1a1a1a;
+.canvas-container {
+    flex: 1;
     position: relative;
-    padding: 15px;
+    overflow: hidden;
+    border-radius: 20px;
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5);
+    margin-top: 10px;
     box-sizing: border-box;
+    max-width: 1080px; /* Optional: ensure no overflow */
+    max-height: 1080px; /* Optional: ensure no overflow */
 }
+
+
 
 .toolbar {
     display: flex;
@@ -150,11 +148,12 @@
 }
 
 #posterCanvas {
-    width: 100%;
+    width: 100%; /* Adjust this if you want to set a fixed width, like 1200px */
     height: 100%;
     border: 3px solid #34495e;
     background-color: #ffffff;
 }
+
 
 .affiliate-link {
     text-align: center;
@@ -267,11 +266,7 @@
                 <i id="eraserTool" class="fa fa-eraser" title="Eraser Tool"></i>
                 <i id="save" class="fa fa-download" title="Save Poster"></i>
             </div>
-            <div class="toolbar-size">
-                <input type="number" id="canvasWidth" placeholder="Width" min="100" value="800">
-                <input type="number" id="canvasHeight" placeholder="Height" min="100" value="600">
-                <i id="resizeCanvas" class="fa fa-arrows-alt" title="Resize Canvas"></i>
-            </div>
+          
             <div class="color-palette">
                 <label for="colorPicker">Color:</label>
                 <input type="color" id="colorPicker" value="#ecf0f1">
@@ -299,12 +294,14 @@
     </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.0/fabric.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const canvas = new fabric.Canvas('posterCanvas', {
-            width: parseInt(document.querySelector('#canvasWidth').value) || 800,
-            height: parseInt(document.querySelector('#canvasHeight').value) || 600,
-            preserveObjectStacking: true
-        });
+document.addEventListener('DOMContentLoaded', () => {
+ const canvas = new fabric.Canvas('posterCanvas', {
+    width: 1080,
+    height: 1080,
+    preserveObjectStacking: true
+});
+
+
 
         canvas.setBackgroundColor('#ffffff', canvas.renderAll.bind(canvas));
 

@@ -4,6 +4,8 @@ from .views import CustomLoginView
 from .views import CampaignDeleteView
 
 urlpatterns = [
+   path('campaign/<int:campaign_id>/engagement/', views.campaign_engagement_data, name='campaign_engagement'),
+    path('explore/', views.explore_campaigns, name='explore_campaigns'),
     path('verify/', views.verify_profile, name='verify_profile'),
     path('campaign/<int:campaign_id>/join_leave/', views.join_leave_campaign, name='join_leave_campaign'),
     path('campaign/<int:campaign_id>/joiners/', views.campaign_joiners, name='campaign_joiners'),
@@ -27,7 +29,7 @@ urlpatterns = [
     path('terms-of-service/', views.terms_of_service, name='terms_of_service'),
     path('project_support/', views.project_support, name='project_support'),
 
-
+    path('campaign/<int:campaign_id>/top-participants/', views.top_participants_view, name='top_participants'),
      path('quran/', views.quran_view, name='quran_view'),
     path('adhkar/', views.adhkar_list, name='adhkar_list'),
     path('adhkar/<int:adhkar_id>/', views.adhkar_detail, name='adhkar_detail'),

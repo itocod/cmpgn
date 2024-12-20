@@ -2,7 +2,8 @@
 {% load static %}
 
 {% block content %}
-  <style>
+<style>
+/* General styles */
 .manage-visibility-container {
     max-width: 600px;
     margin: 50px auto;
@@ -16,7 +17,7 @@
 .manage-visibility-container h4 {
     text-align: center;
     color: #333;
-    font-size: 22px; /* Increased font size for better readability */
+    font-size: 18px; /* Reduced font size */
     margin-bottom: 20px;
 }
 
@@ -38,10 +39,10 @@
 .manage-visibility-form input[type="text"],
 .manage-visibility-form textarea {
     width: 100%;
-    padding: 12px; /* Slightly increased padding for better touch */
+    padding: 10px; /* Adjusted padding */
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-size: 16px;
+    font-size: 14px; /* Reduced font size */
 }
 
 .manage-visibility-form select:focus,
@@ -52,68 +53,94 @@
 }
 
 .btn-manage-visibility {
-    padding: 12px 20px; /* Slightly increased padding for better touch */
+    padding: 10px 15px; /* Adjusted padding */
     background-color: #3498db;
     color: #fff;
     border: none;
     border-radius: 4px;
-    font-size: 16px;
+    font-size: 14px; /* Reduced font size */
     cursor: pointer;
     text-align: center;
     margin-top: 20px;
-    transition: background-color 0.3s; /* Smooth transition effect */
+    transition: background-color 0.3s;
 }
 
 .btn-manage-visibility:hover {
     background-color: #2980b9;
 }
 
-/* New CSS to add overflow behavior for the followers checkboxes */
+/* Followers container */
 .followers-container {
-    max-height: 300px;  /* Set the max height */
-    overflow-y: auto;   /* Enable vertical scrolling */
-    border: 1px solid #ddd; /* Lighter border for better integration */
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
     padding: 10px;
     border-radius: 4px;
     background-color: #fff;
-    margin-top: 10px; /* Space between the heading and container */
+    margin-top: 10px;
 }
 
-/* New heading style for visibility instructions */
 .followers-container h5 {
-    font-size: 18px; /* Adjust the font size for the heading */
-    color: #555; /* Slightly lighter color for the heading */
-    margin-bottom: 10px; /* Space below the heading */
+    font-size: 16px; /* Reduced font size */
+    color: #555;
+    margin-bottom: 10px;
 }
 
-/* Description styling */
 .visibility-description {
-    font-size: 14px; /* Font size for description text */
-    color: #666; /* Color for description text */
-    margin-bottom: 15px; /* Space below the description */
-    line-height: 1.5; /* Line height for better readability */
+    font-size: 12px; /* Reduced font size */
+    color: #666;
+    margin-bottom: 15px;
+    line-height: 1.5;
 }
 
-  </style>
+/* Responsive styles for mobile devices */
+@media (max-width: 768px) {
+    .manage-visibility-container {
+        margin: 20px 10px;
+        padding: 15px;
+    }
 
-  <div class="manage-visibility-container">
+    .manage-visibility-container h4 {
+        font-size: 16px;
+    }
+
+    .manage-visibility-form select,
+    .manage-visibility-form input[type="text"],
+    .manage-visibility-form textarea {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .btn-manage-visibility {
+        font-size: 12px;
+        padding: 8px 12px;
+    }
+
+    .followers-container h5 {
+        font-size: 14px;
+    }
+
+    .visibility-description {
+        font-size: 10px;
+    }
+}
+</style>
+
+<div class="manage-visibility-container">
     <h4>Manage Campaign Visibility</h4>
-<form method="post" class="manage-visibility-form">
-    {% csrf_token %}
-    {{ form.visibility }}
-    
-    <div class="followers-container">
-        <h5>This section applies to private campaigns only:</h5> <!-- Heading for the section -->
-        <div class="visibility-description">
-            Select the followers who should have access to your private campaigns. Only these followers will be able to view the private campaigns you create.
+    <form method="post" class="manage-visibility-form">
+        {% csrf_token %}
+        {{ form.visibility }}
+        
+        <div class="followers-container">
+            <h5>This section applies to private campaigns only:</h5>
+            <div class="visibility-description">
+                Select the followers who should have access to your private campaigns. Only these followers will be able to view the private campaigns you create.
+            </div>
+            {{ form.followers_visibility }}
         </div>
-        {{ form.followers_visibility }}
-    </div>
-    
-    <button type="submit" class="btn-manage-visibility">Update Visibility</button>
-</form>
-
-
-
-  </div>
+        
+        <button type="submit" class="btn-manage-visibility">Update Visibility</button>
+    </form>
+</div>
 {% endblock %}

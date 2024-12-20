@@ -10,7 +10,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title></title>
-    <style>
+<style>
     /* General styles for the notification container */
     .notification-container {
         max-width: 600px;
@@ -32,6 +32,7 @@
         border-radius: 5px;
         margin-bottom: 10px;
         padding: 15px;
+        font-size: 12px; /* Reduced font size for notifications */
     }
 
     /* Style for notification title */
@@ -39,13 +40,13 @@
         margin-bottom: 5px;
         font-weight: bold;
         color: #333;
-        font-size: 14px; /* Slightly smaller font size for mobile */
+        font-size: 13px; /* Reduced title font size */
     }
 
     /* Style for notification date/time */
     .notification-item small {
         color: #888;
-        font-size: 12px; /* 12px for the date/time display */
+        font-size: 11px; /* Slightly smaller text for date/time */
     }
 
     /* Style for action items */
@@ -55,7 +56,7 @@
         margin-right: 10px;
         border-radius: 5px;
         text-align: center;
-        font-size: 12px; /* Keep text size small for mobile */
+        font-size: 11px; /* Reduced font size for action items */
     }
 
     .action-item a {
@@ -76,42 +77,44 @@
 
         .notification-item {
             padding: 10px;
+            font-size: 10px; /* Reduced font size for mobile */
         }
 
         .notification-item h5 {
-            font-size: 12px; /* Reduce the title font size for mobile */
+            font-size: 11px; /* Reduce title font size for mobile */
         }
 
         .notification-item small {
-            font-size: 10px; /* Slightly smaller text for date/time */
+            font-size: 9px; /* Smaller text for date/time on mobile */
         }
 
         .action-item {
-            font-size: 10px; /* Reduce font size for action items on mobile */
+            font-size: 9px; /* Reduce font size for action items on mobile */
             padding: 8px 15px; /* Adjust padding for smaller screens */
         }
     }
-            /* Styling for the "No suggested users yet" message */
+
+    /* Styling for the "No suggested users yet" message */
+    .no-suggested-users {
+        text-align: center;
+        margin: 20px 0;
+        padding: 15px;
+        background-color: #e0f7e0; /* Light green background */
+        border-radius: 5px;
+        color: #228b22; /* Forest green text */
+        font-size: 12px; /* Reduced font size */
+        border: 1px solid #2e8b57; /* Green border */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 600px) {
         .no-suggested-users {
-            text-align: center;
-            margin: 20px 0;
-            padding: 15px;
-            background-color: #e0f7e0; /* Light green background */
-            border-radius: 5px;
-            color: #228b22; /* Forest green text */
-            font-size: 14px;
-            border: 1px solid #2e8b57; /* Green border */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            font-size: 10px; /* Adjust font size for mobile */
         }
-
-        /* Responsive Styles */
-        @media (max-width: 600px) {
-
-            .no-suggested-users {
-                font-size: 12px; /* Adjust font size for mobile */
-            }
-        }
+    }
 </style>
+
 
 </head>
 <body>
@@ -196,7 +199,14 @@
             localStorage.setItem('bgAudioPosition', audio.currentTime);
         });
 
-function switchColor() {
+
+
+
+    </script>
+
+
+    <script type="text/javascript">
+        function switchColor() {
     var body = document.body;
     var logoContainer = document.querySelector('.logo-container');
 
@@ -214,25 +224,24 @@ function switchColor() {
 
     // Change background color and border of logo-container based on nextColor
     if (nextColor === "black") {
-        logoContainer.style.backgroundColor = "";
+        logoContainer.style.backgroundColor = "transparent";
         logoContainer.style.border = "none"; 
     } else {
-        logoContainer.style.backgroundColor = ""; // or "transparent"
-        logoContainer.style.border = "none";  // Remove border
+        logoContainer.style.backgroundColor = "transparent";
+        logoContainer.style.border = "none"; 
     }
 
-    // Other elements to be updated based on nextColor
+    // Elements to update based on nextColor
     var header = document.querySelector('header');
     var footer = document.querySelector('footer');
     var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, p, li, nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
-    var buttons = document.querySelectorAll('button');
+    var textElements = document.querySelectorAll('h1, h2, p, li, .campaign-nav,.campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
     var reactDivs = document.querySelectorAll('.react div');
     var loveCounts = document.querySelectorAll('[id^="love-count-"]');
     var viewCounts = document.querySelectorAll('#view-count');
     var commentCounts = document.querySelectorAll('.comment-count');
 
-    // Update header background color based on nextColor
+    // Update header and footer background color based on nextColor
     if (nextColor === "black") {
         header.style.backgroundColor = "#333333";  // Darker gray when background is black
     } else {
@@ -245,6 +254,7 @@ function switchColor() {
         section.style.backgroundColor = nextColor;
     });
 
+    // Adjust text color based on nextColor
     var textColor = nextColor === "black" ? "white" : "black";
     header.style.color = textColor;
     footer.style.color = textColor;
@@ -253,7 +263,9 @@ function switchColor() {
         element.style.color = textColor;
     });
 
-    var buttonColor = nextColor === "black" ? "#262626" : "";
+    // Skip changing specific button colors (e.g., .btn-search, .btn-reset)
+    var buttonColor = nextColor === "black" ? "#262626" : ""; 
+    var buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)'); // Exclude specific buttons
     buttons.forEach(function(button) {
         button.style.backgroundColor = buttonColor;
 
@@ -265,6 +277,7 @@ function switchColor() {
         }
     });
 
+    // Update colors for .react divs
     reactDivs.forEach(function(reactDiv) {
         reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
 
@@ -279,6 +292,7 @@ function switchColor() {
         }
     });
 
+    // Adjust colors for counts (love, view, comment counts)
     var countTextColor = nextColor === "black" ? "white" : "black";
     loveCounts.forEach(function(element) {
         element.style.color = countTextColor;
@@ -290,7 +304,6 @@ function switchColor() {
         element.style.color = countTextColor;
     });
 }
-
 
 
     </script>
@@ -340,7 +353,6 @@ document.addEventListener("DOMContentLoaded", function() {
 </html>
 
 {% endblock %}
-
 
 
 

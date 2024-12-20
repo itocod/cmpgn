@@ -82,25 +82,59 @@
         }
 
                     /* Styling for the "No suggested users yet" message */
-        .no-suggested-users {
-            text-align: center;
-            margin: 20px 0;
-            padding: 15px;
-            background-color: #e0f7e0; /* Light green background */
-            border-radius: 5px;
-            color: #228b22; /* Forest green text */
-            font-size: 14px;
-            border: 1px solid #2e8b57; /* Green border */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-        }
 
-        /* Responsive Styles */
-        @media (max-width: 600px) {
+.no-suggested-users {
+    text-align: center;
+    margin: 20px 0;
+    padding: 15px;
+    background-color: rgba(76, 175, 80, 0.3); /* Semi-transparent green background */
+    border-radius: 5px;
+    color: #000000; /* Black text by default */
+    font-size: 14px;
+    border: 1px solid #4CAF50; /* Green border */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: color 0.3s, background-color 0.3s; /* Smooth transition for color changes */
+}
 
-            .no-suggested-users {
-                font-size: 12px; /* Adjust font size for mobile */
-            }
-        }
+/* Change text color to white when the background color is dark */
+.no-suggested-users.dark-text {
+    color: #ffffff; /* White text */
+    background-color: rgba(56, 142, 108, 0.7); /* Darker semi-transparent green background */
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+    .no-suggested-users {
+        font-size: 12px; /* Adjust font size for mobile */
+    }
+}
+
+
+
+         /* Default for desktop */
+  .activity-comments-heading {
+      color: #3498db;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+      letter-spacing: 0.5px;
+  }
+
+  /* Mobile-specific styles */
+  @media (max-width: 768px) {
+      .activity-comments-heading {
+          font-size: 14px;  /* Slightly smaller font for mobile */
+          margin-bottom: 10px;
+      }
+  }
+
+  @media (max-width: 480px) {
+      .activity-comments-heading {
+          font-size: 12px;  /* Even smaller font for very small screens */
+          margin-bottom: 8px;
+      }
+  }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/emojionearea/dist/emojionearea.min.js"></script>
@@ -204,12 +238,14 @@ document.addEventListener("DOMContentLoaded", function() {
 </head>
 <body>
     
-    <div style="border-left: 2px solid #3498db; height: 400px; overflow-y: auto; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-        <h2 style="font-size:19px;padding-bottom: 0;">Activity_Comments</h2>
+    <div style="border-left: 2px solid #3498db; height: 250px; overflow-y: auto; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
 
-          <h4 style="color: blueviolet; font-size: 16px; font-weight: bold; margin-bottom: 10px;">
-    Total Comments: {{ comments.count }}
+<h4 style="padding-left: 10px;" 
+    class="activity-comments-heading">
+    Total Activity Comments: {{ comments.count }}
 </h4>
+
+
         <ul id="commentsList">
             {% for comment in comments %}
                 <li>
@@ -223,7 +259,7 @@ document.addEventListener("DOMContentLoaded", function() {
                   
                     <strong>{{ comment.user.username }}
                     {% if comment.user.profile.is_verified %}
-                        <span class="verified-status" style="font-size: 12px;"><span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></span></span>
+                        <span class="verified-status" style="font-size: 12px;"><span> . verified</span><i class="material-icons" style="font-size:12px;color:green">verified_user</i></span></span>
                     {% endif %}
                     </strong> <span style="font-size:14px;">commented  - {{ comment.timestamp|timesince }} ago -</span>
                     <p style="font-size:16px;">{{ comment.content }}</p>
@@ -236,7 +272,21 @@ document.addEventListener("DOMContentLoaded", function() {
         <hr>
     </div>
     <div id="successMessage"></div>
+
     <form id="commentForm" action="{% url 'add_activity_comment' activity.id %}" method="post">
+         <h4 style="
+    font-size: 16px;
+    color: #007BFF;
+    font-family: 'Arial', sans-serif;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    margin: 10px 0;
+    padding: 5px;
+    border-bottom: 2px solid #007BFF;
+    display: inline-block;
+">
+    Comment to activity
+</h4>
+
         {% csrf_token %}
         {{ form }}
         <button type="submit">Submit Comment</button>
@@ -271,7 +321,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var header = document.querySelector('header');
     var footer = document.querySelector('footer');
     var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, p, li, nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
+    var textElements = document.querySelectorAll('h1, h2, p, li,.campaign-nav,.campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
     var buttons = document.querySelectorAll('button');
     var reactDivs = document.querySelectorAll('.react div');
     var loveCounts = document.querySelectorAll('[id^="love-count-"]');

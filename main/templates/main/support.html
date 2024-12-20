@@ -8,405 +8,290 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
    
     <title>Support Campaign</title>
-    <style>
+  
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .support-container {
+        padding: 20px;
+    }
+
+    .cc-header {
+        text-align: center;
+        background-color: #ffffff;
+        border: 1px solid #ddd;
+        padding: 15px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .cc-header .activity-title {
+        font-size: 1.5rem;
+        color: #333;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .cc-header .activity-title a {
+        color: #3498db;
+        text-decoration: none;
+    }
+
+    .cc-header .activity-title a:hover {
+        text-decoration: underline;
+    }
+
+    .cc-header .activity-count {
+        font-size: 1.2rem;
+        color: #666;
+    }
+
+    .support-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px auto;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    .support-table th, .support-table td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: left;
+    }
+
+    .support-table th {
+        background-color: #007bff;
+        color: #ffffff;
+        font-weight: bold;
+    }
+
+    .support-table td a {
+        color: #007bff;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .support-table td a:hover {
+        text-decoration: underline;
+        color: #0056b3;
+    }
+
+    .no-support-links {
+        text-align: center;
+        background-color: #fbe4e4;
+        color: #d9534f;
+        padding: 15px;
+        border-radius: 8px;
+        margin: 20px 0;
+        border: 1px solid #f5c6cb;
+        font-size: 1rem;
+    }
+
+    .create-activity-link, 
+    .update-visibility-link {
+        display: inline-block;
+        text-align: center;
+        margin-bottom: 20px;
+        width: 100%; /* Full-width buttons */
+        color: #fff;
+        background-color: #4CAF50;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .create-activity-link:hover,
+    .update-visibility-link:hover {
+        background-color: #45a049;
+        color: #fff;
+    }
+
+    .icon {
+        width: 20px;
+        height: 20px;
+    }
+
+    /* Mobile Styles */
+    @media (max-width: 768px) {
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
+            font-size: 1rem; /* Set font size to 1rem for better readability */
         }
 
         .support-container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .support-heading {
-            color: #333;
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 19px;
-        }
-
-        .support-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .support-list-item {
-            margin-bottom: 10px;
-        }
-
-        .support-link {
-            text-decoration: none;
-            color: #007bff;
-            transition: color 0.3s;
-        }
-
-        .support-link:hover {
-            color: #0056b3;
-        }
-
-        .hidden-link {
-            color: #999;
-        }
-
-        .update-visibility-link {
-            display: block; /* Ensures the link takes up full width */
-            background-color: #007bff; /* Background color */
-            color: #fff; /* Text color */
-            text-align: center; /* Center align text */
-            padding: 10px; /* Add padding for better appearance */
-            margin-bottom: 20px; /* Add some space below the link */
-            text-decoration: none; /* Remove default underline */
-            border-radius: 5px; /* Rounded corners */
-            transition: background-color 0.3s, color 0.3s; /* Smooth transition effect */
-        }
-
-        .update-visibility-link:hover {
-            background-color: #0056b3; /* Darker background color on hover */
-        }
-
-        .action-item {
-            display: inline-block;
-            padding: 10px 20px;
-            margin-right: 10px;
-            border-radius: 5px;
-            text-align: center;
-            font-size: 12px; /* Adjust the font size as needed */
-        }
-        .action-item a {
-            color: #000;
-            text-decoration: none;
-            font-size: inherit;
-        }
-        .action-item i {
-            margin-right: 5px;
-        }
-
-
-
-    </style>
-
-
-        <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-
-        .container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            padding: 20px;
-        }
-
-        .card {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            width: 300px;
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        .image-container {
-            height: 200px;
-            overflow: hidden;
-        }
-
-        .placeholder-image {
-            background-color: #ccc;
-            height: 100%;
-        }
-
-        .image-container img {
-            width: 100%;
-            height: auto;
-            object-fit: cover;
-        }
-
-        .content {
-            padding: 20px;
-        }
-
-        .title {
-            margin-top: 0;
-            margin-bottom: 10px;
-            color: #333;
-            word-wrap: break-word;
-        }
-
-        .description {
-            color: #666;
-            margin-bottom: 20px;
-            word-wrap: break-word;
-        }
-
-        .affiliate-btn, .access-btn {
-            display: inline-block;
-            background-color: #007bff;
-            color: #fff;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-
-        .affiliate-btn:hover, .access-btn:hover {
-            background-color: #0056b3;
-        }
-
-        .heading {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .product-form {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            max-width: 400px;
-            margin: 20px auto;
-        }
-
-        .product-form label {
-            display: block;
-            margin-bottom: 5px;
-            color: #333;
-        }
-
-        .product-form input[type="text"],
-        .product-form input[type="number"],
-        .product-form input[type="file"],
-        .product-form select,
-        .product-form textarea {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        .product-form button {
-            background-color: #28a745;
-            color: #fff;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        .product-form button:hover {
-            background-color: #218838;
-        }
-
-        /* Responsive Styles */
-        @media (max-width: 768px) {
-            .container {
-                padding: 10px;
-            }
-
-            .card {
-                width: calc(50% - 20px);
-            }
-
-            .product-form {
-                padding: 15px;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .card {
-                width: calc(100% - 20px);
-            }
-
-            .product-form {
-                padding: 10px;
-            }
-        }
-
-
-.square-with-arrow {
-  position: relative;
-  display: inline-block;
-}
-
-.square-with-arrow .fa-square {
-  position: relative;
-  display: inline-block;
-}
-
-.square-with-arrow .fa-arrow-right {
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin-top: -5px; /* Adjust this value as needed */
-  margin-right: -10px; /* Adjust this value as needed */
-  transform: rotate(-45deg);
-}
-
-
-        .icon {
-            width: 25px; /* Adjust size as needed */
-            height: 20px; /* Adjust size as needed */
-            fill: gray; /* Icon color */
-        }
-
-                    /* Styling for the "No suggested users yet" message */
-        .no-suggested-users {
-            text-align: center;
-            margin: 20px 0;
             padding: 15px;
-            background-color: #e0f7e0; /* Light green background */
-            border-radius: 5px;
-            color: #228b22; /* Forest green text */
-            font-size: 14px;
-            border: 1px solid #2e8b57; /* Green border */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
         }
 
-        /* Responsive Styles */
-        @media (max-width: 600px) {
-
-            .no-suggested-users {
-                font-size: 12px; /* Adjust font size for mobile */
-            }
+        .cc-header {
+            padding: 12px;
         }
-    </style>
+
+        .cc-header .activity-title {
+            font-size: 1.2rem; /* Ensure titles are slightly larger for clarity */
+        }
+
+        .cc-header .activity-count {
+            font-size: 1rem; /* Adjust count size for mobile */
+        }
+
+        .support-table {
+            font-size: 1rem; /* Set table text to 1rem */
+            margin: 10px auto;
+        }
+
+        .support-table th, .support-table td {
+            padding: 10px;
+        }
+
+        .no-support-links {
+            font-size: 1rem;
+            padding: 12px;
+        }
+
+        .create-activity-link, 
+        .update-visibility-link {
+            margin-bottom: 15px; 
+            padding: 10px 20px;
+            font-size: 1rem; /* Use 1rem font size */
+            width: 100%; 
+        }
+    }
+
+    /* Extra Small Screens */
+    @media (max-width: 480px) {
+        .cc-header .activity-title {
+            font-size: 1.2rem;
+        }
+
+        .cc-header .activity-count {
+            font-size: 1rem;
+        }
+
+        .support-table th, .support-table td {
+            font-size: 1rem;
+            padding: 8px;
+        }
+
+        .no-support-links {
+            font-size: 1rem;
+            padding: 10px;
+        }
+
+        .create-activity-link, 
+        .update-visibility-link {
+            font-size: 1rem;
+            padding: 8px 15px;
+        }
+    }
+</style>
+
 </head>
 <body>
 
+<div class="support-container">
+    <div class="cc-header">
+        <div class="activity-title">
+            Participate in,
+            <a href="{% url 'view_campaign' campaign_id=campaign.pk %}" class="campaign-link">
+                {{ campaign.title }}
+            </a>
+        </div>
+        <div class="activity-count">Participate Below:</div>
+    </div>
+
+    <hr>
+
+    {% if request.user == campaign.user.user %}
+        {% if not support_campaign.donate_monetary_visible and not support_campaign.attend_event_visible and not support_campaign.brainstorm_idea_visible and not support_campaign.campaign_product_visible %}
+            <div class="no-support-links">No support links available yet.</div>
+        {% else %}
+            <table class="support-table">
+                <thead>
+                    <tr>
+                        <th>Participation Choices</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if support_campaign.donate_monetary_visible %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'donate_monetary' campaign_id=campaign.id %}" class="support-link">
+                                    <svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height: 20px;">
+                                        <path d="M32 56s-12-6-20-16c-7-9-9-15-9-21 0-9 6-14 14-14 7 0 10 6 10 6s3-6 10-6c8 0 14 5 14 14 0 6-2 12-9 21-8 10-20 16-20 16z"></path>
+                                        <text x="24" y="38" font-size="14" font-weight="bold" font-family="Arial">$</text>
+                                    </svg>
+                                    Donate to this Campaign
+                                </a>
+                            </td>
+                            <td>Visible</td>
+                        </tr>
+                    {% endif %}
+                    {% if support_campaign.attend_event_visible %}
+                        <tr>
+                            <td>
+                                <a href="#" class="support-link">
+                                    <svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height: 20px;">
+                                        <circle cx="32" cy="32" r="30" fill="blue"></circle>
+                                        <text x="18" y="38" font-size="12" font-weight="bold" fill="white" font-family="Arial">🎫</text>
+                                    </svg>
+                                    Attend Event
+                                </a>
+                            </td>
+                            <td>Visible</td>
+                        </tr>
+                    {% endif %}
+                    {% if support_campaign.brainstorm_idea_visible %}
+                        <tr>
+                            <td>
+                                <a href="#" class="support-link">
+                                    <svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height: 20px;">
+                                        <circle cx="32" cy="32" r="30" fill="yellow"></circle>
+                                        <text x="16" y="38" font-size="12" font-weight="bold" fill="black" font-family="Arial">💡</text>
+                                    </svg>
+                                    Brainstorm Idea
+                                </a>
+                            </td>
+                            <td>Visible</td>
+                        </tr>
+                    {% endif %}
+                    {% if support_campaign.campaign_product_visible %}
+                        <tr>
+                            <td>
+                                <a href="#" class="support-link">
+                                    <svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height: 20px;">
+                                        <rect x="10" y="20" width="44" height="24" fill="green"></rect>
+                                        <text x="16" y="38" font-size="12" font-weight="bold" fill="white" font-family="Arial">📦</text>
+                                    </svg>
+                                    Campaign Product
+                                </a>
+                            </td>
+                            <td>Visible</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        {% endif %}
+    {% endif %}
+
+    <p>Participating is good.</p>
+
+    {% if request.user == campaign.user.user %}
+        <a href="{% url 'update_visibility' campaign_id=campaign.id %}" class="update-visibility-link">Update Visibility</a>
+    {% endif %}
+</div>
+
   
 
-    <div class="support-container">
-        <h1 class="support-heading">Participate in this Campaign</h1>
-       
-{% if user == campaign.user.user %}
-    <a href="{% url 'update_visibility' campaign_id=campaign.id %}" class="update-visibility-link">Update Visibility</a>
-{% endif %}
-
-<hr>
-
-{% if request.user == campaign.user.user %}
-    <!-- Links visible to the campaign owner -->
-    {% if not support_campaign.donate_monetary_visible and not support_campaign.attend_event_visible and not support_campaign.brainstorm_idea_visible and not support_campaign.campaign_product_visible %}
-        <p>No support links available yet.</p>
-    {% else %}
-        <!-- Display support links if available -->
-        <ul class="support-list">
-            {% if support_campaign.donate_monetary_visible %}
-                <li id="donate-monetary-link-li" class="support-list-item">
-                    <a href="{% url 'donate_monetary' campaign_id=campaign.id %}" class="support-link">* <svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-        <!-- Heart -->
-        <path class="heart" d="M32 56s-12-6-20-16c-7-9-9-15-9-21 0-9 6-14 14-14 7 0 10 6 10 6s3-6 10-6c8 0 14 5 14 14 0 6-2 12-9 21-8 10-20 16-20 16z"/>
-        <!-- Dollar Sign -->
-        <text class="dollar" x="24" y="38" font-size="18" font-weight="bold" font-family="Arial">$</text>
-    </svg>Donate to this Campaign</a> 
-                    {% if not support_campaign.donate_monetary_visible %}<span class="hidden-link">(Hidden)</span>{% endif %}
-                </li>
-            {% endif %}
-            {% if support_campaign.attend_event_visible %}
-                <li id="attend-event-link-li" class="support-list-item">
-                    <a href="{% url 'attend_event' campaign_id=campaign.id %}" class="support-link">* Virtual Events</a> 
-                    {% if not support_campaign.attend_event_visible %}<span class="hidden-link">(Hidden)</span>{% endif %}
-                </li>
-            {% endif %}
-            {% if support_campaign.brainstorm_idea_visible %}
-                <li id="brainstorm-idea-link-li" class="support-list-item">
-                    <a href="{% url 'brainstorm_idea' campaign_id=campaign.id %}" class="support-link">* <svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-        <!-- Light Bulb -->
-        <path class="lightbulb" d="M32 2C24.3 2 18 8.3 18 16c0 8.7 7 11 7 20h10c0-9 7-11.3 7-20 0-7.7-6.3-14-14-14z"/>
-        <!-- Base of the Light Bulb -->
-        <rect x="30" y="38" width="8" height="8" rx="2" class="lightbulb"/>
-        <!-- Ideas - Spark -->
-        <circle class="idea" cx="16" cy="28" r="3"/>
-        <circle class="idea" cx="48" cy="28" r="3"/>
-        <circle class="idea" cx="32" cy="42" r="3"/>
-    </svg>Brainstorm ideas for this Campaign</a> 
-                    {% if not support_campaign.brainstorm_idea_visible %}<span class="hidden-link">(Hidden)</span>{% endif %}
-                </li>
-            {% endif %}
-            {% if support_campaign.campaign_product_visible %}
-                <li id="campaign-product-visiblelink-li" class="support-list-item">
-                    <a href="{% url 'product_manage' campaign_id=campaign.id %}" class="support-link">* <svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-        <!-- Shopping cart -->
-        <path d="M20 54c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4zm28 0c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4zm-32-6h24c1.1 0 2-.9 2-2v-3H18v3c0 1.1.9 2 2 2zM46 16H22L21.2 12H7c-1.1 0-2 .9-2 2 0 1 0 1 1 1h0.1L10 26h28l3-7H30c-1.1 0-2-.9-2-2s.9-2 2-2h24c1.1 0 2 .9 2 2v2c0 1.1-.9 2-2 2zm-2-10H20c-1.1 0-2 .9-2 2v0c0 1.1.9 2 2 2h24c1.1 0 2-.9 2-2v0c0-1.1-.9-2-2-2z"/>
-        <!-- Goods inside the cart -->
-        <g class="goods">
-            <rect x="15" y="16" width="4" height="4" rx="1"/>
-            <rect x="22" y="12" width="6" height="6" rx="1"/>
-            <rect x="30" y="18" width="5" height="5" rx="1"/>
-        </g>
-    </svg>Buy Products from the Campaign</a> 
-                    {% if not support_campaign.campaign_product_visible %}<span class="hidden-link">(Hidden)</span>{% endif %}
-                </li>
-            {% endif %}
-        </ul>
-    {% endif %}
-{% else %}
-    <!-- Links visible to other users -->
-    {% if support_campaign.donate_monetary_visible or support_campaign.attend_event_visible or support_campaign.brainstorm_idea_visible or support_campaign.campaign_product_visible %}
-        <ul class="support-list">
-            {% if support_campaign.donate_monetary_visible %}
-                <li class="support-list-item"><a href="{% url 'donate_monetary' campaign_id=campaign.id %}" class="support-link">*  <svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-        <!-- Heart -->
-        <path class="heart" d="M32 56s-12-6-20-16c-7-9-9-15-9-21 0-9 6-14 14-14 7 0 10 6 10 6s3-6 10-6c8 0 14 5 14 14 0 6-2 12-9 21-8 10-20 16-20 16z"/>
-        <!-- Dollar Sign -->
-        <text class="dollar" x="24" y="38" font-size="18" font-weight="bold" font-family="Arial">$</text>
-    </svg>Donate to this Campaign</a></li>
-            {% endif %}
-            {% if support_campaign.attend_event_visible %}
-                <li class="support-list-item"><a href="{% url 'attend_event' campaign_id=campaign.id %}" class="support-link">* Virtual Events</a></li>
-            {% endif %}
-            {% if support_campaign.brainstorm_idea_visible %}
-                <li class="support-list-item"><a href="{% url 'brainstorm_idea' campaign_id=campaign.id %}" class="support-link">*       <svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-        <!-- Light Bulb -->
-        <path class="lightbulb" d="M32 2C24.3 2 18 8.3 18 16c0 8.7 7 11 7 20h10c0-9 7-11.3 7-20 0-7.7-6.3-14-14-14z"/>
-        <!-- Base of the Light Bulb -->
-        <rect x="30" y="38" width="8" height="8" rx="2" class="lightbulb"/>
-        <!-- Ideas - Spark -->
-        <circle class="idea" cx="16" cy="28" r="3"/>
-        <circle class="idea" cx="48" cy="28" r="3"/>
-        <circle class="idea" cx="32" cy="42" r="3"/>
-    </svg>Brainstorm ideas for this Campaign</a></li>
-            {% endif %}
-            {% if support_campaign.campaign_product_visible %}
-                <li class="support-list-item"><a href="{% url 'product_manage' campaign_id=campaign.id %}" class="support-link">*     <svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-        <!-- Shopping cart -->
-        <path d="M20 54c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4zm28 0c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4zm-32-6h24c1.1 0 2-.9 2-2v-3H18v3c0 1.1.9 2 2 2zM46 16H22L21.2 12H7c-1.1 0-2 .9-2 2 0 1 0 1 1 1h0.1L10 26h28l3-7H30c-1.1 0-2-.9-2-2s.9-2 2-2h24c1.1 0 2 .9 2 2v2c0 1.1-.9 2-2 2zm-2-10H20c-1.1 0-2 .9-2 2v0c0 1.1.9 2 2 2h24c1.1 0 2-.9 2-2v0c0-1.1-.9-2-2-2z"/>
-        <!-- Goods inside the cart -->
-        <g class="goods">
-            <rect x="15" y="16" width="4" height="4" rx="1"/>
-            <rect x="22" y="12" width="6" height="6" rx="1"/>
-            <rect x="30" y="18" width="5" height="5" rx="1"/>
-        </g>
-    </svg>Buy Products from the Campaign</a></li>
-            {% endif %}
-        </ul>
-    {% else %}
-        <span class="no-suggested-users">No support links available yet.</span>
-    {% endif %}
-{% endif %}
-
-<p>Participating is good.</p>
-
-
-   
-   
-    </div>
-
-    </div>
     <hr>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
@@ -538,7 +423,7 @@ function switchColor() {
     var header = document.querySelector('header');
     var footer = document.querySelector('footer');
     var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, p, li, nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
+    var textElements = document.querySelectorAll('h1, h2, p, li,.campaign-nav,.campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
     var buttons = document.querySelectorAll('button');
     var reactDivs = document.querySelectorAll('.react div');
     var loveCounts = document.querySelectorAll('[id^="love-count-"]');

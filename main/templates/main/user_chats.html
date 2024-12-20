@@ -24,7 +24,7 @@
         }
 
         h2.chat-list-heading {
-            font-size: 22px; /* Larger font size */
+            font-size: 16px; /* Larger font size */
             color: #333; /* Dark color for better readability */
             margin: 0; /* Remove default margin */
         }
@@ -42,8 +42,10 @@
         }
 
         .new-chat-button:hover {
-            background-color: #0056b3; /* Darker button color on hover */
             transform: translateY(-2px); /* Lift effect on hover */
+            text-decoration: underline;
+            color: #ffffff; /* White text */
+
         }
 
         ul.chat-list {
@@ -95,6 +97,7 @@
         @media (max-width: 768px) {
             h2.chat-list-heading {
                 font-size: 18px; /* Smaller font size for mobile */
+                margin-bottom: 10px;
             }
 
             .new-chat-button {
@@ -122,7 +125,7 @@
 
 <body class="chat-list-body">
     <div class="header-container">
-        <h3 class="chat-list-heading">{{ user.username }}'s Chat Tables</h3>
+        <h2 class="chat-list-heading">{{ user.username }}'s Chat Tables</h2>
         <a href="{% url 'create_chat' %}" class="new-chat-button">Create a New Chat Table</a>
     </div>
     <hr>
@@ -136,7 +139,7 @@
                     <a href="{% url 'chat_detail' chat.id %}">
                         Chat - {{ chat.title }} (Manager: {{ chat.manager.username }}
                         {% if chat.manager.profile.is_verified %}
-                            <span class="verified-status"><span>verified</span><i class="material-icons" style="font-size:16px;color:green">verified_user</i></span>
+                            <span class="verified-status"><span>verified</span><i class="material-icons" style="font-size:12px;color:green">verified_user</i></span>
                         {% endif %}
                         )
                     </a>

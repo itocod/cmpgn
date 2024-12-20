@@ -167,7 +167,7 @@
                                     <a href="{% url 'profile_view' user.username %}" class="profile-link" style="font-size: 16px;">
                                         {{ user.username }}
                                         {% if user.profile.is_verified %}
-                                            <span>verified</span><i class="material-icons" style="font-size: 20px; color: green;">verified_user</i>
+                                            <span>verified</span><i class="material-icons" style="font-size: 12px; color: green;">verified_user</i>
                                         {% endif %}
                                         <i class="cm" style="font-size: 16px;"></i>
                                     </a>
@@ -187,7 +187,7 @@
                     </li>
                 {% endfor %}
             {% else %}
-                <span class="no-suggested-users">No suggested users yet.</span>
+                <li class="no-suggested-users">No suggested users yet.</li>
             {% endif %}
         </ul>
     </div>
@@ -282,7 +282,7 @@ function switchColor() {
     var header = document.querySelector('header');
     var footer = document.querySelector('footer');
     var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, p, li, nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
+    var textElements = document.querySelectorAll('h1, h2, p,.campaign-nav,.campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
     var buttons = document.querySelectorAll('button');
     var reactDivs = document.querySelectorAll('.react div');
     var loveCounts = document.querySelectorAll('[id^="love-count-"]');

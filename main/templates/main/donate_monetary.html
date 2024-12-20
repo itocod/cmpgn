@@ -6,25 +6,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   
     <title>Links</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
+            font-size: 1.3rem; /* Default size for larger screens */
+            
         }
 
         .links-container {
-            max-width: 800px;
-            margin: 0 auto;
+            max-width: 600px;
+            margin: 50px auto;
             padding: 20px;
+            background-color: #fff; /* White background for the container */
+            border: 1px solid #ddd; /* Subtle border */
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Slight shadow for depth */
         }
 
         .links-title {
             text-align: center;
             margin-bottom: 20px;
             color: #007bff;
+            font-size: 1.5rem; /* Larger title size */
         }
 
         .link-list {
@@ -44,82 +50,99 @@
             padding: 10px 20px;
             border-radius: 5px;
             transition: background-color 0.3s;
+            text-align: center;
+            font-size: 1.1rem;
         }
 
         .donate-btn:hover {
             background-color: #0056b3;
         }
 
-        
- .action-item {
-            display: inline-block;
-            padding: 10px 20px;
-            margin-right: 10px;
-            border-radius: 5px;
-            text-align: center;
-            font-size: 12px; /* Adjust the font size as needed */
+        /* Media query for mobile devices */
+        @media (max-width: 768px) {
+            body {
+                font-size: 1rem; /* Smaller size for mobile screens */
+            }
+            .links-container {
+                margin: 20px;
+                padding: 15px;
+            }
+            .links-title {
+                font-size: 1.2rem; /* Adjust title size for smaller screens */
+            }
+            .donate-btn {
+                font-size: 1rem;
+                padding: 8px 16px;
+            }
         }
-        .action-item a {
-           color: #000;
-            text-decoration: none;
-            font-size: inherit;
-        }
-        .action-item i {
-            margin-right: 5px;
-        }
+
+        .donate-btn {
+    display: inline-block;
+    text-align: center;
+    margin-bottom: 20px;
+    width: 100%; /* Full width */
+    color: #fff;
+    background-color: #4CAF50; /* Green background */
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transitions */
+    font-size: 12px;
+}
+
+.donate-btn:hover {
+    background-color: #45a049; /* Darker green on hover */
+    color: #fff; /* Ensures white text on hover */
+}
 
     </style>
 </head>
 <body>
-    <div class="links-container">
-        <h1 class="links-title" style="font-size: 19px;">Click on the button below to continue</h1>
-        <ul class="link-list">
-            <li class="link-list-item"><!-- Assuming you are in a template displaying information about a specific campaign -->
-                <!-- Replace 'campaign.id' with the variable holding the ID of the current campaign -->
-                <!-- Link to donation form -->
-                <!-- Example of linking to the donation process page for a campaign -->
-                <a href="{% url 'donate' campaign.id %}" class="donate-btn">Donate to {{ campaign.title }}</a>
-            </li>
-        </ul>
-    </div>
+   <div class="links-container">
+    <h3 class="links-title">Click on the button below to continue</h3>
+    <ul class="link-list">
+        <li class="link-list-item">
+            <a href="{% url 'donate' campaign.id %}" class="donate-btn">Donate to {{ campaign.title }}</a>
+        </li>
+    </ul>
+</div>
+
     <script type="text/javascript">
-           function uploadAudio() {
-        var input = document.createElement('input');
-        input.type = 'file';
-        input.accept = 'audio/*, video/*';
+        function uploadAudio() {
+            var input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'audio/*, video/*';
 
-        input.onchange = function(e) {
-            var file = e.target.files[0];
-            var audio = document.getElementById('bgAudio');
-            audio.pause();
-            localStorage.setItem('bgAudioFile', URL.createObjectURL(file));
-            localStorage.setItem('bgAudioPosition', audio.currentTime);
-            audio.src = localStorage.getItem('bgAudioFile');
-            audio.play();
-        };
-
-        input.click();
-    }
-
-    window.onload = function() {
-        var audio = document.getElementById('bgAudio');
-        var bgAudioFile = localStorage.getItem('bgAudioFile');
-        var audioPosition = parseFloat(localStorage.getItem('bgAudioPosition'));
-
-        if (bgAudioFile) {
-            audio.src = bgAudioFile;
-            audio.addEventListener('loadedmetadata', function() {
-                if (!isNaN(audioPosition)) {
-                    audio.currentTime = audioPosition;
-                }
+            input.onchange = function(e) {
+                var file = e.target.files[0];
+                var audio = document.getElementById('bgAudio');
+                audio.pause();
+                localStorage.setItem('bgAudioFile', URL.createObjectURL(file));
+                localStorage.setItem('bgAudioPosition', audio.currentTime);
+                audio.src = localStorage.getItem('bgAudioFile');
                 audio.play();
-            });
+            };
+
+            input.click();
         }
-    }
+
+        window.onload = function() {
+            var audio = document.getElementById('bgAudio');
+            var bgAudioFile = localStorage.getItem('bgAudioFile');
+            var audioPosition = parseFloat(localStorage.getItem('bgAudioPosition'));
+
+            if (bgAudioFile) {
+                audio.src = bgAudioFile;
+                audio.addEventListener('loadedmetadata', function() {
+                    if (!isNaN(audioPosition)) {
+                        audio.currentTime = audioPosition;
+                    }
+                    audio.play();
+                });
+            }
+        }
     </script>
 </body>
-
 </html>
 {% endblock %}
-
-

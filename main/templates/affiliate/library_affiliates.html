@@ -66,7 +66,7 @@
         }
     </style>
     <script>
-function switchColor() {
+        function switchColor() {
     var body = document.body;
     var logoContainer = document.querySelector('.logo-container');
 
@@ -84,25 +84,24 @@ function switchColor() {
 
     // Change background color and border of logo-container based on nextColor
     if (nextColor === "black") {
-        logoContainer.style.backgroundColor = "";
+        logoContainer.style.backgroundColor = "transparent";
         logoContainer.style.border = "none"; 
     } else {
-        logoContainer.style.backgroundColor = ""; // or "transparent"
-        logoContainer.style.border = "none";  // Remove border
+        logoContainer.style.backgroundColor = "transparent";
+        logoContainer.style.border = "none"; 
     }
 
-    // Other elements to be updated based on nextColor
+    // Elements to update based on nextColor
     var header = document.querySelector('header');
     var footer = document.querySelector('footer');
     var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, p, li, nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
-    var buttons = document.querySelectorAll('button');
+    var textElements = document.querySelectorAll('h1, h2, p, li, .campaign-nav,.campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
     var reactDivs = document.querySelectorAll('.react div');
     var loveCounts = document.querySelectorAll('[id^="love-count-"]');
     var viewCounts = document.querySelectorAll('#view-count');
     var commentCounts = document.querySelectorAll('.comment-count');
 
-    // Update header background color based on nextColor
+    // Update header and footer background color based on nextColor
     if (nextColor === "black") {
         header.style.backgroundColor = "#333333";  // Darker gray when background is black
     } else {
@@ -115,6 +114,7 @@ function switchColor() {
         section.style.backgroundColor = nextColor;
     });
 
+    // Adjust text color based on nextColor
     var textColor = nextColor === "black" ? "white" : "black";
     header.style.color = textColor;
     footer.style.color = textColor;
@@ -123,7 +123,9 @@ function switchColor() {
         element.style.color = textColor;
     });
 
-    var buttonColor = nextColor === "black" ? "#262626" : "";
+    // Skip changing specific button colors (e.g., .btn-search, .btn-reset)
+    var buttonColor = nextColor === "black" ? "#262626" : ""; 
+    var buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)'); // Exclude specific buttons
     buttons.forEach(function(button) {
         button.style.backgroundColor = buttonColor;
 
@@ -135,6 +137,7 @@ function switchColor() {
         }
     });
 
+    // Update colors for .react divs
     reactDivs.forEach(function(reactDiv) {
         reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
 
@@ -149,6 +152,7 @@ function switchColor() {
         }
     });
 
+    // Adjust colors for counts (love, view, comment counts)
     var countTextColor = nextColor === "black" ? "white" : "black";
     loveCounts.forEach(function(element) {
         element.style.color = countTextColor;
@@ -160,6 +164,7 @@ function switchColor() {
         element.style.color = countTextColor;
     });
 }
+
 
 </script>
 

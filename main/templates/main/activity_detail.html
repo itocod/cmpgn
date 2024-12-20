@@ -8,84 +8,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>{{ activity.content }}</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-           
             margin: 0;
             padding: 0;
         }
-        .container {
+
+        .content-container {
             max-width: 800px;
-            margin: 20px auto;
-            padding: 20px;
-           
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin: 30px auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        h1 {
+
+        .heading {
             color: #333;
-            font-size: 19px;
+            font-size: 18px;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            padding-right: 20px;
         }
-        p {
+
+        .text-body {
             color: #666;
-            font-size: 16px;
-            margin-bottom: 10px;
+            font-size: 15px;
+            margin-bottom: 15px;
         }
+
         .download-link {
             color: #007bff;
             text-decoration: none;
         }
+
         .download-link:hover {
             text-decoration: underline;
         }
 
-
-
-     .action-item {
+        .action-button {
             display: inline-block;
-            padding: 10px 20px;
-            margin-right: 10px;
-            border-radius: 5px;
+            padding: 12px 25px;
+            margin-right: 15px;
+            border-radius: 8px;
             text-align: center;
-            font-size: 12px; /* Adjust the font size as needed */
+            font-size: 12px;
         }
-        .action-item a {
-           color: #000;
+
+        .action-button a {
+            color: #000;
             text-decoration: none;
             font-size: inherit;
         }
-        .action-item i {
-            margin-right: 5px;
+
+        .action-button i {
+            margin-right: 8px;
         }
+
+        .timestamp {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .sub-header {
+            font-size: 16px;
+            padding-left: 20px;
+            margin-bottom: 20px;
+        }
+
+        @media screen and (max-width: 600px) {
+            .content-container {
+                max-width: 100%;
+                padding: 20px;
+                margin: 20px auto;
+            }
+
+            .heading {
+                font-size: 16px;
+            }
+
+            .text-body {
+                font-size: 14px;
+            }
+
+            .action-button {
+                display: block;
+                margin: 10px 0;
+                font-size: 14px;
+            }
+
+            .sub-header {
+                font-size: 14px;
+            }
+        }
+
+        /* Base styles */
+.cc-header {
+    background-color: #ffffff; /* Clean white background */
+    border-bottom: 2px solid #007bff; /* Blue underline for emphasis */
+    padding: 15px 20px; /* Adjusted padding for a better appearance */
+    text-align: center; /* Center align the text */
+}
+
+.cc-header .campaign-link {
+    color: #3498db; /* Default link color */
+    text-decoration: none; /* Remove underline by default */
+    font-weight: bold; /* Make the link stand out */
+}
+
+.cc-header .campaign-link:hover {
+    text-decoration: underline; /* Add underline on hover */
+    text-decoration-color: black; /* Make the underline black */
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+    .cc-header {
+        padding: 10px 15px; /* Compact padding for smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .cc-header {
+        padding: 8px 12px; /* Further compact padding for smaller screens */
+    }
+}
+
     </style>
 </head>
 <body>
 
- <h2 style="font-size:19px; padding-left: 20px;">Activity_Detail</h2>
+    <h2 class="sub-header">Activity Detail</h2>
 
- 
-    <div style="border-left: 2px solid #3498db; height: 300px; overflow-y: auto;overflow-x: hidden; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
-    
-    <div class="container">
+    <div class="content-container">
         {% if activity.campaign %}
-    <h1>Related Campaign: <a href="{% url 'view_campaign' campaign_id=activity.campaign.pk %}" style="color:#3498db;">{{ activity.campaign.title }}</a></h1>
-{% else %}
-    <h1>No Related Campaign</h1>
-{% endif %}
+          <h5 class="cc-header">
+    Related Campaign: 
+    <a href="{% url 'view_campaign' campaign_id=activity.campaign.pk %}" class="campaign-link">
+        {{ activity.campaign.title }}
+    </a>
+</h5>
 
-        <span style="font-size: 14px;"> {{ activity.timestamp|timesince }} ago </span>
-        {% if activity.file %}
-           <p><a href="{{ activity.file.url }}" class="download-link" download>Download File</a></p>
-
+        {% else %}
+            <h1 class="heading">No Related Campaign</h1>
         {% endif %}
-        <p>{{ activity.content|safe }}</p>
+
+        <span class="timestamp">{{ activity.timestamp|timesince }} ago</span>
+
+        {% if activity.file %}
+            <p><a href="{{ activity.file.url }}" class="download-link" download>Download File</a></p>
+        {% endif %}
+
+        <p class="text-body">{{ activity.content|safe }}</p>
     </div>
-</div>
+
+
+
 <script type="text/javascript">
     
         // Function to handle file upload and playback
@@ -271,6 +350,8 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 <script type="text/javascript">
     
+
+
 function switchColor() {
     var body = document.body;
     var logoContainer = document.querySelector('.logo-container');
@@ -289,25 +370,24 @@ function switchColor() {
 
     // Change background color and border of logo-container based on nextColor
     if (nextColor === "black") {
-        logoContainer.style.backgroundColor = "";
+        logoContainer.style.backgroundColor = "transparent";
         logoContainer.style.border = "none"; 
     } else {
-        logoContainer.style.backgroundColor = ""; // or "transparent"
-        logoContainer.style.border = "none";  // Remove border
+        logoContainer.style.backgroundColor = "transparent";
+        logoContainer.style.border = "none"; 
     }
 
-    // Other elements to be updated based on nextColor
+    // Elements to update based on nextColor
     var header = document.querySelector('header');
     var footer = document.querySelector('footer');
     var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, p, li, nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
-    var buttons = document.querySelectorAll('button');
+    var textElements = document.querySelectorAll('h1, h2, p,.campaign-nav,.campaign-nav a,.activity-content-short,.activity-content-full,.activity-content-hence,.username, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
     var reactDivs = document.querySelectorAll('.react div');
     var loveCounts = document.querySelectorAll('[id^="love-count-"]');
     var viewCounts = document.querySelectorAll('#view-count');
     var commentCounts = document.querySelectorAll('.comment-count');
 
-    // Update header background color based on nextColor
+    // Update header and footer background color based on nextColor
     if (nextColor === "black") {
         header.style.backgroundColor = "#333333";  // Darker gray when background is black
     } else {
@@ -320,6 +400,7 @@ function switchColor() {
         section.style.backgroundColor = nextColor;
     });
 
+    // Adjust text color based on nextColor
     var textColor = nextColor === "black" ? "white" : "black";
     header.style.color = textColor;
     footer.style.color = textColor;
@@ -328,7 +409,9 @@ function switchColor() {
         element.style.color = textColor;
     });
 
-    var buttonColor = nextColor === "black" ? "#262626" : "";
+    // Skip changing specific button colors (e.g., .btn-search, .btn-reset)
+    var buttonColor = nextColor === "black" ? "#262626" : ""; 
+    var buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)'); // Exclude specific buttons
     buttons.forEach(function(button) {
         button.style.backgroundColor = buttonColor;
 
@@ -340,6 +423,7 @@ function switchColor() {
         }
     });
 
+    // Update colors for .react divs
     reactDivs.forEach(function(reactDiv) {
         reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
 
@@ -354,6 +438,7 @@ function switchColor() {
         }
     });
 
+    // Adjust colors for counts (love, view, comment counts)
     var countTextColor = nextColor === "black" ? "white" : "black";
     loveCounts.forEach(function(element) {
         element.style.color = countTextColor;

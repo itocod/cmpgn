@@ -1,22 +1,30 @@
-
-
 {% block content %}
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
- 
     <title>Thank You</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .message-text {
+            font-size: 0.9rem; /* Small font size */
+            color: grey;      /* Grey font color */
+        }
+        .homepage-link {
+            color: blue;      /* Blue color for the link */
+            text-decoration: none; /* Optional: Remove underline */
+        }
+        .homepage-link:hover {
+            text-decoration: underline; /* Add underline on hover */
+        }
+    </style>
 </head>
 <body>
-  <p>Your Donation Link Is Created Successfully</p>
-    <a href="{% url 'home' %}">Go to Homepage</a>
-
-
-    
+    <p class="message-text">Your Donation Link Is Created Successfully</p>
+    <a href="{% url 'home' %}" class="homepage-link">Go to Homepage</a>
 </body>
 </html>
 {% endblock %}

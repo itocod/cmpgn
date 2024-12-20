@@ -12,11 +12,11 @@
         /* CSS Styles */
         .action-item {
             display: inline-block;
-            padding: 10px 20px;
+            padding: 8px 15px; /* Adjusted padding */
             margin-right: 10px;
             border-radius: 5px;
             text-align: center;
-            font-size: 12px; /* Adjust the font size as needed */
+            font-size: 11px; /* Reduced font size */
         }
         .action-item a {
             color: #000;
@@ -28,7 +28,7 @@
         }
         .campaign-list, .profile-list, .quran-list, .adhkar-list {
             list-style-type: none;
-            padding: 0;
+            padding: 10px; /* Added padding */
             display: flex;
             flex-wrap: wrap;
             gap: 20px;
@@ -37,7 +37,7 @@
             border: 1px solid #cccccc;
             border-radius: 8px;
             overflow: hidden;
-            width: 300px;
+            width: 280px; /* Slightly reduced width */
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s;
         }
@@ -49,15 +49,16 @@
             height: auto;
         }
         .campaign-details, .profile-details, .quran-details, .adhkar-details {
-            padding: 15px;
+            padding: 12px; /* Adjusted padding */
         }
         .campaign-details h2, .profile-details h2, .quran-details h2, .adhkar-details h2 {
-            margin: 0 0 10px;
+            margin: 0 0 8px;
             color: #333333;
+            font-size: 14px; /* Reduced font size */
         }
         .campaign-details p, .profile-details p, .quran-details p, .adhkar-details p {
             color: #555555;
-            font-size: 0.9em;
+            font-size: 0.85em; /* Adjusted font size */
         }
         a {
             color: #007bff;
@@ -67,8 +68,6 @@
             color: #0056b3;
             text-decoration: underline;
         }
-
-
 
         /* Additional styles for Hadith section */
         .hadith-list {
@@ -83,7 +82,7 @@
             border: 1px solid #cccccc;
             border-radius: 8px;
             overflow: hidden;
-            width: 300px;
+            width: 280px; /* Slightly reduced width */
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s;
         }
@@ -93,18 +92,18 @@
         }
 
         .hadith-details {
-            padding: 15px;
+            padding: 12px; /* Adjusted padding */
         }
 
         .hadith-details h2 {
-            margin: 0 0 10px;
+            margin: 0 0 8px;
             color: #333333;
-            font-size: 16px;
+            font-size: 14px; /* Reduced font size */
         }
 
         .hadith-details p {
             color: #555555;
-            font-size: 0.9em;
+            font-size: 0.85em; /* Adjusted font size */
         }
 
         .hadith-details strong {
@@ -114,24 +113,24 @@
         .hadith-details em {
             font-style: italic;
         }
-                    /* Styling for the "No suggested users yet" message */
+
+        /* Styling for the "No suggested users yet" message */
         .no-suggested-users {
             text-align: center;
             margin: 20px 0;
-            padding: 15px;
+            padding: 12px; /* Adjusted padding */
             background-color: #e0f7e0; /* Light green background */
             border-radius: 5px;
             color: #228b22; /* Forest green text */
-            font-size: 14px;
+            font-size: 13px; /* Adjusted font size */
             border: 1px solid #2e8b57; /* Green border */
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
         }
 
         /* Responsive Styles */
         @media (max-width: 600px) {
-
             .no-suggested-users {
-                font-size: 12px; /* Adjust font size for mobile */
+                font-size: 11px; /* Adjust font size for mobile */
             }
         }
     </style>
@@ -141,17 +140,17 @@
 
    
     <!-- Search Results -->
-    <h2 style="padding:10px; font-size:19px;">Search Results</h2>
+    <h2 style="padding:10px; font-size:18px;">Search Results</h2>
     {% if campaigns or profiles or quran_verses or adhkar or hadiths %}
         {% if campaigns %}
             <!-- Display Campaigns -->
-            <h2>Campaigns</h2>
+            <h2 style="padding:10px; font-size:16px;">Campaigns</h2>
             <ul class="campaign-list">
                 {% for campaign in campaigns %}
                 <li class="campaign-item">
-                    {% if campaign.file %}
-                    <a href="{{ campaign.file.url }}">
-                        <img src="{{ campaign.file.url }}" alt="Image Description" id="campaign-image" style="max-width: 50%; height: auto;">
+                    {% if campaign.poster %}
+                    <a href="{{ campaign.poster.url }}">
+                        <img src="{{ campaign.poster.url }}" alt="Image Description" id="campaign-image" style="max-width: 50%; height: auto;">
                     </a>
                     {% else %}
                     <p style="padding: 20px;">No file associated with this campaign.</p>
@@ -167,7 +166,7 @@
         
         {% if profiles %}
             <!-- Display Profiles -->
-            <h2>Profiles</h2>
+            <h2 style="padding:10px; font-size:16px;">Profiles</h2>
             <ul class="profile-list">
                 {% for profile in profiles %}
                 <li class="profile-item">
@@ -185,7 +184,7 @@
 
         {% if quran_verses %}
             <!-- Display Quran Verses -->
-            <h2>Quran Verses</h2>
+            <h2 style="padding:10px; font-size:16px;">Quran Verses</h2>
             <ul class="quran-list">
                 {% for verse in quran_verses %}
                 <li class="quran-item">
@@ -200,12 +199,12 @@
                 </li>
                 {% endfor %}
             </ul>
-            <p>For more Quran verses, <a href="{% url 'quran_view' %}">click here</a>.</p>
+            <p style="padding:10px; font-size:16px;">For more Quran verses, <a href="{% url 'quran_view' %}">click here</a>.</p>
         {% endif %}
 
         {% if adhkar %}
             <!-- Display Adhkar -->
-            <h2>Adhkar</h2>
+            <h2 style="padding:10px; font-size:16px;">Adhkar</h2>
             <ul class="adhkar-list">
                 {% for dhikr in adhkar %}
                 <li class="adhkar-item">
@@ -224,7 +223,7 @@
 
 {% if hadiths %}
     <!-- Display Hadiths -->
-    <h2>Hadiths</h2>
+    <h2 style="padding:10px; font-size:16px;">Hadiths</h2>
     <ul class="hadith-list">
         {% for hadith in hadiths %}
         <li class="hadith-item">
@@ -244,9 +243,111 @@
     </ul>
 {% endif %}
     {% else %}
-        <span class="no-suggested-users" >No results found matching your query.</span>
+        <li class="no-suggested-users" >No results found matching your query.</li>
     {% endif %}
 
+
+<script type="text/javascript">
+    function switchColor() {
+    var body = document.body;
+    var logoContainer = document.querySelector('.logo-container');
+
+    // Define the color sequence (black, white)
+    var colors = ["black", "white"];
+
+    // Find the index of the current color in the sequence
+    var currentIndex = colors.indexOf(body.style.backgroundColor);
+
+    // Set the next color in the sequence
+    var nextColor = colors[(currentIndex + 1) % colors.length];
+
+    // Apply the new color to the body and other elements
+    body.style.backgroundColor = nextColor;
+
+    // Change background color and border of logo-container based on nextColor
+    if (nextColor === "black") {
+        logoContainer.style.backgroundColor = "transparent";
+        logoContainer.style.border = "none"; 
+    } else {
+        logoContainer.style.backgroundColor = "transparent";
+        logoContainer.style.border = "none"; 
+    }
+
+    // Elements to update based on nextColor
+    var header = document.querySelector('header');
+    var footer = document.querySelector('footer');
+    var sections = document.querySelectorAll('section, .left-aside, .right-aside');
+    var textElements = document.querySelectorAll('h1, h2, p, li, .campaign-nav,.campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
+    var reactDivs = document.querySelectorAll('.react div');
+    var loveCounts = document.querySelectorAll('[id^="love-count-"]');
+    var viewCounts = document.querySelectorAll('#view-count');
+    var commentCounts = document.querySelectorAll('.comment-count');
+
+    // Update header and footer background color based on nextColor
+    if (nextColor === "black") {
+        header.style.backgroundColor = "#333333";  // Darker gray when background is black
+    } else {
+        header.style.backgroundColor = nextColor;
+    }
+
+    footer.style.backgroundColor = nextColor;
+
+    sections.forEach(function(section) {
+        section.style.backgroundColor = nextColor;
+    });
+
+    // Adjust text color based on nextColor
+    var textColor = nextColor === "black" ? "white" : "black";
+    header.style.color = textColor;
+    footer.style.color = textColor;
+
+    textElements.forEach(function(element) {
+        element.style.color = textColor;
+    });
+
+    // Skip changing specific button colors (e.g., .btn-search, .btn-reset)
+    var buttonColor = nextColor === "black" ? "#262626" : ""; 
+    var buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)'); // Exclude specific buttons
+    buttons.forEach(function(button) {
+        button.style.backgroundColor = buttonColor;
+
+        if (nextColor === "black") {
+            button.classList.add('button-hover');
+        } else {
+            button.classList.remove('button-hover');
+            button.style.backgroundColor = "";
+        }
+    });
+
+    // Update colors for .react divs
+    reactDivs.forEach(function(reactDiv) {
+        reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
+
+        var reactTextColor = nextColor === "black" ? "white" : "black";
+        reactDiv.style.color = reactTextColor;
+
+        if (nextColor === "black") {
+            reactDiv.classList.add('react-hover');
+        } else {
+            reactDiv.classList.remove('react-hover');
+            reactDiv.style.backgroundColor = "";
+        }
+    });
+
+    // Adjust colors for counts (love, view, comment counts)
+    var countTextColor = nextColor === "black" ? "white" : "black";
+    loveCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+    viewCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+    commentCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+}
+
+</script>
     <script type="text/javascript">
         // JavaScript Functions
         function uploadAudio() {
@@ -292,100 +393,7 @@
             var audio = document.getElementById('bgAudio');
             localStorage.setItem('bgAudioPosition', audio.currentTime);
         });
-function switchColor() {
-    var body = document.body;
-    var logoContainer = document.querySelector('.logo-container');
 
-    // Define the color sequence (black, white)
-    var colors = ["black", "white"];
-
-    // Find the index of the current color in the sequence
-    var currentIndex = colors.indexOf(body.style.backgroundColor);
-
-    // Set the next color in the sequence
-    var nextColor = colors[(currentIndex + 1) % colors.length];
-
-    // Apply the new color to the body and other elements
-    body.style.backgroundColor = nextColor;
-
-    // Change background color and border of logo-container based on nextColor
-    if (nextColor === "black") {
-        logoContainer.style.backgroundColor = "";
-        logoContainer.style.border = "none"; 
-    } else {
-        logoContainer.style.backgroundColor = ""; // or "transparent"
-        logoContainer.style.border = "none";  // Remove border
-    }
-
-    // Other elements to be updated based on nextColor
-    var header = document.querySelector('header');
-    var footer = document.querySelector('footer');
-    var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, p, li, nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
-    var buttons = document.querySelectorAll('button');
-    var reactDivs = document.querySelectorAll('.react div');
-    var loveCounts = document.querySelectorAll('[id^="love-count-"]');
-    var viewCounts = document.querySelectorAll('#view-count');
-    var commentCounts = document.querySelectorAll('.comment-count');
-
-    // Update header background color based on nextColor
-    if (nextColor === "black") {
-        header.style.backgroundColor = "#333333";  // Darker gray when background is black
-    } else {
-        header.style.backgroundColor = nextColor;
-    }
-
-    footer.style.backgroundColor = nextColor;
-
-    sections.forEach(function(section) {
-        section.style.backgroundColor = nextColor;
-    });
-
-    var textColor = nextColor === "black" ? "white" : "black";
-    header.style.color = textColor;
-    footer.style.color = textColor;
-
-    textElements.forEach(function(element) {
-        element.style.color = textColor;
-    });
-
-    var buttonColor = nextColor === "black" ? "#262626" : "";
-    buttons.forEach(function(button) {
-        button.style.backgroundColor = buttonColor;
-
-        if (nextColor === "black") {
-            button.classList.add('button-hover');
-        } else {
-            button.classList.remove('button-hover');
-            button.style.backgroundColor = "";
-        }
-    });
-
-    reactDivs.forEach(function(reactDiv) {
-        reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
-
-        var reactTextColor = nextColor === "black" ? "white" : "black";
-        reactDiv.style.color = reactTextColor;
-
-        if (nextColor === "black") {
-            reactDiv.classList.add('react-hover');
-        } else {
-            reactDiv.classList.remove('react-hover');
-            reactDiv.style.backgroundColor = "";
-        }
-    });
-
-    var countTextColor = nextColor === "black" ? "white" : "black";
-    loveCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-    viewCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-    commentCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-}
 
 
   document.addEventListener('DOMContentLoaded', function() {

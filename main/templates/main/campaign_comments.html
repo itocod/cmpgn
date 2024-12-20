@@ -3,263 +3,291 @@
 <!-- main/campaign_comments.html -->
 
 {% block content %}
-<!-- campaign_comments.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title >{{ campaign.title }} Comments</title>
+    <title>{{ campaign.title }} Comments</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emojionearea/dist/emojionearea.min.css">
- 
-<style type="text/css">
-    /* Add your custom CSS styles here */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    color: #333;
+    <style type="text/css">
+        /* Custom CSS for campaign comments */
+        .cc-body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+/* Base styles */
+.cc-header {
+    background-color: #ffffff; /* Clean white background */
+    border-bottom: 2px solid #007bff; /* Blue underline for emphasis */
+    padding: 15px 20px; /* Adjusted padding for a better appearance */
+    text-align: center; /* Center align the text */
 }
 
-h1, h2 {
-    text-align: center;
-    font-size: 19px;
+.cc-header h2 {
+    font-size: 2rem; /* Increased font size for better readability */
+    color: #333; /* Dark grey for better readability */
+    margin: 10px 0; /* Adjusted spacing */
 }
 
-#commentsList {
-    list-style-type: none;
-    padding: 0;
+.cc-header h3 {
+    font-size: 1.7rem; /* Increased size for campaign title */
+    color: #007bff; /* Blue for the campaign title */
+    margin: 8px 0; /* Adjusted spacing */
 }
 
-#commentsList li {
-    margin-bottom: 10px;
-    border: 1px solid grey;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+.cc-header h4 {
+    font-size: 1.2rem; /* Increased size for comment count */
+    color: #666; /* Subtle grey for secondary text */
+    margin: 8px 0; /* Adjusted spacing */
 }
-
-#commentsList li strong {
-    color: #007bff;
+.cc-header h5 {
+    font-size: 1.5rem; /* Increased size for comment count */
+    color: #666; /* Subtle grey for secondary text */
+    margin: 8px 0; /* Adjusted spacing */
 }
-
-#noCommentsMessage {
-    font-style: italic;
-}
-
-#successMessage {
-    text-align: center;
-    margin-bottom: 10px;
-    color: green;
-}
-
-#commentForm {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 30px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-#commentForm textarea {
-    width: 100%;
-    min-height: 100px;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    resize: vertical;
-}
-
-#commentForm button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    border: none;
-    background-color: #007bff;
-    color: #fff;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-#commentForm button:hover {
-    background-color: #0056b3;
-}
-
-.action-item {
-    display: inline-block;
-    padding: 10px 20px;
-    margin-right: 10px;
-    border-radius: 5px;
-    text-align: center;
-    font-size: 12px;
-}
-
-.action-item a {
-    color: #000;
-    text-decoration: none;
-    font-size: inherit;
-}
-
-.action-item i {
-    margin-right: 5px;
-}
-
-.profile-pic {
-    flex-shrink: 0;
-    margin-right: 20px;
-}
-
-.profile-pic img {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    object-fit: cover;
-    padding: 2px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    transition: border-color 0.3s ease;
-}
-
-.profile-pic:hover img {
-    border-color: #00FF00;
-}
-
 /* Mobile styles */
-@media (max-width: 600px) {
-    h1, h2 {
-        font-size: 16px;
+@media (max-width: 768px) {
+    .cc-header {
+        padding: 10px 15px; /* Compact padding for smaller screens */
     }
 
-    #commentForm {
-        padding: 20px;
+    .cc-header h2 {
+        font-size: 1.8rem; /* Slightly reduced size for smaller screens */
     }
 
-    #commentForm textarea {
-        min-height: 80px;
+    .cc-header h3 {
+        font-size: 1.5rem; /* Adjusted size for campaign title */
     }
 
-    .action-item {
-        display: block;
-        padding: 10px;
-        margin-bottom: 10px;
-        font-size: 14px;
+    .cc-header h4 {
+        font-size: 1rem; /* Adjusted size for comment count */
     }
 
-    .profile-pic {
-        margin-right: 10px;
-    }
-
-    .profile-pic img {
-        width: 36px;
-        height: 36px;
+    .cc-header h5 {
+        font-size: 1.2rem; /* Adjusted size for comment count */
     }
 }
 
-            /* Styling for the "No suggested users yet" message */
-        .no-suggested-users {
+
+
+/* Smaller mobile devices (e.g., phones) */
+@media (max-width: 480px) {
+    .cc-header {
+        padding: 8px 12px; /* Further compact padding */
+    }
+
+    .cc-header h2 {
+        font-size: 1.6rem; /* Smaller size for better fit */
+    }
+
+    .cc-header h3 {
+        font-size: 1.3rem; /* Smaller campaign title */
+    }
+
+    .cc-header h4 {
+        font-size: 0.9rem; /* Smaller comment count text */
+    }
+    .cc-header h5 {
+        font-size: 1rem; /* Adjusted size for comment count */
+    }
+}
+
+        .cc-comments-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .cc-comments-list li {
+            margin-bottom: 10px;
+            border: 1px solid grey;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .cc-comments-list li strong {
+            color: #007bff;
+        }
+
+        .cc-no-comments {
+            font-style: italic;
+        }
+
+        .cc-success-message {
+            text-align: center;
+            margin-bottom: 10px;
+            color: green;
+        }
+
+        .cc-comment-form {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .cc-comment-form textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: vertical;
+        }
+
+        .cc-comment-form button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background-color: #007bff;
+            color: #fff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .cc-comment-form button:hover {
+            background-color: #0056b3;
+        }
+
+        .cc-profile-pic {
+            flex-shrink: 0;
+            margin-right: 20px;
+        }
+
+        .cc-profile-pic img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            object-fit: cover;
+            padding: 2px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s ease;
+        }
+
+        .cc-profile-pic img:hover {
+            border-color: #00FF00;
+        }
+
+        .cc-no-suggested-users {
             text-align: center;
             margin: 20px 0;
             padding: 15px;
-            background-color: #e0f7e0; /* Light green background */
+            background-color: rgba(76, 175, 80, 0.3);
             border-radius: 5px;
-            color: #228b22; /* Forest green text */
+            color: #000000;
             font-size: 14px;
-            border: 1px solid #2e8b57; /* Green border */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            border: 1px solid #4CAF50;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: color 0.3s, background-color 0.3s;
+        }
+
+        .cc-no-suggested-users.dark-text {
+            color: #ffffff;
+            background-color: rgba(56, 142, 108, 0.7);
         }
 
         /* Responsive Styles */
         @media (max-width: 600px) {
+     
 
-            .no-suggested-users {
-                font-size: 12px; /* Adjust font size for mobile */
+            .cc-comment-form {
+                padding: 20px;
+            }
+
+            .cc-comment-form textarea {
+                min-height: 80px;
+            }
+
+            .cc-profile-pic img {
+                width: 36px;
+                height: 36px;
+            }
+
+            .cc-no-suggested-users {
+                font-size: 12px;
             }
         }
-</style>
-   
-           <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/emojionearea/dist/emojionearea.min.js"></script>
     <script>
-   $(document).ready(function() {
-    // Initialize emojionearea on your message input field
-    $('#commentText').emojioneArea({
-        pickerPosition: "bottom",
-        tones: false // Disable emoji tones if not needed
-    });
+        $(document).ready(function() {
+            $('#commentText').emojioneArea({
+                pickerPosition: "bottom",
+                tones: false
+            });
 
-    $('#commentForm').submit(function(e) {
-        e.preventDefault();
-        console.log("Form submitted"); // Debug statement to check if form submission is triggered
-        $.ajax({
-            type: 'POST',
-            url: '{% url "campaign_comments" campaign_id=campaign.id %}',
-            data: $('#commentForm').serialize(),
-            success: function(response) {
-                console.log("AJAX success"); // Debug statement to check if AJAX request is successful
-                if (response.success) {
-                    $('#message').text('Comment sent successfully!');
-                    $('#commentsList').load(location.href + ' #commentsList>*'); // Reload comments dynamically
-                } else {
-                    // Handle form validation errors
-                    // For simplicity, just displaying the first error message
-                    $('#message').text('Error: ' + response.errors.text[0]);
-                }
-            },
-            error: function(xhr, errmsg, err) {
-                console.log("AJAX error:", errmsg); // Debug statement to check AJAX error
-                $('#message').text('Error: ' + xhr.status + ': ' + xhr.responseText);
-            }
+            $('#commentForm').submit(function(e) {
+                e.preventDefault();
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "campaign_comments" campaign_id=campaign.id %}',
+                    data: $('#commentForm').serialize(),
+                    success: function(response) {
+                        if (response.success) {
+                            $('#message').text('Comment sent successfully!');
+                            $('#commentsList').load(location.href + ' #commentsList>*');
+                        } else {
+                            $('#message').text('Error: ' + response.errors.text[0]);
+                        }
+                    },
+                    error: function(xhr, errmsg, err) {
+                        $('#message').text('Error: ' + xhr.status + ': ' + xhr.responseText);
+                    }
+                });
+            });
         });
-    });
-});
     </script>
 </head>
-<body>
-
-
-        <h2 style="font-size: 19px; padding-left: 20px;">Campaign_Comment</h2>
-    <h2 style="font-size: 19px;padding-left: 20px;text-decoration: underline;">{{ campaign.title }} Comments</h2>
-  <h3 style="color: blueviolet; font-size: 18px; font-weight: bold; margin-bottom: 10px;">
-    Total Comments: {{ comments.count }}
-</h3>
-
-
-    <ul id="commentsList">
-              
-        {% for comment in comments %}
-                
-            <li>
-<div class="profile-pic">
-    <a href="{% url 'profile_view' username=comment.user.user.username %}">
-        <img src="{{ comment.user.user.profile.image.url }}" alt="Profile Picture" class="profile-pic-hover">
-    </a>
-</div>
-
-
-                {{ comment.user }}- {% if comment.user.user.profile.is_verified %}
-                        <span class="verified-status" style="font-size: 12px;"><span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></span>
-                    {% endif %} - {{ comment.timestamp|timesince }} ago -
-                 <p>{{ comment.text|safe }}</p>
-            </li>
-           
-        {% empty %}
+<body class="cc-body">
+    <div class="cc-header">
        
-            <li class="no-suggested-users">No comments yet.</li>
+         Campaign Comments:<a href="{% url 'view_campaign' campaign_id=campaign.pk %}">
+    <h3>{{ campaign.title }}</h3>
+</a>
+
+        <h4>Total Comments: {{ comments.count }}</h4>
+    </div><br>
+    <ul id="commentsList" class="cc-comments-list">
+        {% for comment in comments %}
+            <li>
+                <div class="cc-profile-pic">
+                    <a href="{% url 'profile_view' username=comment.user.user.username %}">
+                        <img src="{{ comment.user.user.profile.image.url }}" alt="Profile Picture">
+                    </a>
+                </div>
+                {{ comment.user }} - 
+                {% if comment.user.user.profile.is_verified %}
+                    <span class="verified-status"><i class="material-icons" style="color: green; font-size:12px;">verified_user</i></span>
+                {% endif %}
+                - {{ comment.timestamp|timesince }} ago
+                <p>{{ comment.text|safe }}</p>
+            </li>
+        {% empty %}
+            <li class="cc-no-suggested-users">No comments yet.</li>
         {% endfor %}
     </ul>
-    
-    <div id="message" style="padding: 20px;"></div>
-    <form id="commentForm">
-        <h4 style="color:blueviolet;">Add a Comment:</h4>
+    <div id="message" class="cc-success-message"></div>
+    <form id="commentForm" class="cc-comment-form">
+        <h4>Add a Comment:</h4>
         {% csrf_token %}
         <textarea id="commentText" name="text"></textarea>
         <button type="submit">Submit</button>
     </form>
-    
+
+
 
     <script>
+
+
 function switchColor() {
     var body = document.body;
     var logoContainer = document.querySelector('.logo-container');
@@ -278,25 +306,24 @@ function switchColor() {
 
     // Change background color and border of logo-container based on nextColor
     if (nextColor === "black") {
-        logoContainer.style.backgroundColor = "";
+        logoContainer.style.backgroundColor = "transparent";
         logoContainer.style.border = "none"; 
     } else {
-        logoContainer.style.backgroundColor = ""; // or "transparent"
-        logoContainer.style.border = "none";  // Remove border
+        logoContainer.style.backgroundColor = "transparent";
+        logoContainer.style.border = "none"; 
     }
 
-    // Other elements to be updated based on nextColor
+    // Elements to update based on nextColor
     var header = document.querySelector('header');
     var footer = document.querySelector('footer');
     var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, p, li, nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
-    var buttons = document.querySelectorAll('button');
+    var textElements = document.querySelectorAll('h1, h2, p,.campaign-nav,.campaign-nav a,.activity-content-short,.activity-content-full,.activity-content-hence,.username, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
     var reactDivs = document.querySelectorAll('.react div');
     var loveCounts = document.querySelectorAll('[id^="love-count-"]');
     var viewCounts = document.querySelectorAll('#view-count');
     var commentCounts = document.querySelectorAll('.comment-count');
 
-    // Update header background color based on nextColor
+    // Update header and footer background color based on nextColor
     if (nextColor === "black") {
         header.style.backgroundColor = "#333333";  // Darker gray when background is black
     } else {
@@ -309,6 +336,7 @@ function switchColor() {
         section.style.backgroundColor = nextColor;
     });
 
+    // Adjust text color based on nextColor
     var textColor = nextColor === "black" ? "white" : "black";
     header.style.color = textColor;
     footer.style.color = textColor;
@@ -317,7 +345,9 @@ function switchColor() {
         element.style.color = textColor;
     });
 
-    var buttonColor = nextColor === "black" ? "#262626" : "";
+    // Skip changing specific button colors (e.g., .btn-search, .btn-reset)
+    var buttonColor = nextColor === "black" ? "#262626" : ""; 
+    var buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)'); // Exclude specific buttons
     buttons.forEach(function(button) {
         button.style.backgroundColor = buttonColor;
 
@@ -329,6 +359,7 @@ function switchColor() {
         }
     });
 
+    // Update colors for .react divs
     reactDivs.forEach(function(reactDiv) {
         reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
 
@@ -343,6 +374,7 @@ function switchColor() {
         }
     });
 
+    // Adjust colors for counts (love, view, comment counts)
     var countTextColor = nextColor === "black" ? "white" : "black";
     loveCounts.forEach(function(element) {
         element.style.color = countTextColor;
@@ -354,6 +386,98 @@ function switchColor() {
         element.style.color = countTextColor;
     });
 }
+
+
+function toggleCommentForm() {
+    var popup = document.getElementById("commentFormPopup");
+    popup.style.display = "block";
+}
+
+function closeCommentForm() {
+    var popup = document.getElementById("commentFormPopup");
+    popup.style.display = "none";
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var campaignElement = document.querySelector('.campaign-details');
+    var campaignId = {{ campaign.id }};
+    var startTime;
+
+    function recordCampaignView() {
+        var endTime = Math.floor(Date.now() / 1000); // Get current time in seconds
+        var timeSpent = endTime - startTime;
+        
+        fetch(`/record_campaign_view/${campaignId}/`, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ time_spent: timeSpent })
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('View recorded successfully');
+            } else {
+                console.error('Failed to record view');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    function handleVisibilityChange() {
+        if (document.visibilityState === 'visible') {
+            startTime = Math.floor(Date.now() / 1000); // Get current time in seconds
+        } else {
+            recordCampaignView();
+        }
+    }
+
+    function isInViewport(element) {
+        var rect = element.getBoundingClientRect();
+        return (
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+        );
+    }
+
+    function handleScroll() {
+        if (isInViewport(campaignElement)) {
+            startTime = Math.floor(Date.now() / 1000); // Get current time in seconds
+        } else {
+            recordCampaignView();
+        }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    document.addEventListener('scroll', handleScroll);
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    var mediaQuery = window.matchMedia('(max-width: 768px)');
+    var leftAside = document.querySelector('.left-aside');
+    var rightAside = document.querySelector('.right-aside');
+
+    function handleMediaQueryChange(e) {
+        if (e.matches) {
+            leftAside.style.display = 'none';
+            rightAside.style.display = 'none';
+        } else {
+            leftAside.style.display = 'block';
+            rightAside.style.display = 'block';
+        }
+    }
+
+    mediaQuery.addListener(handleMediaQueryChange);
+    handleMediaQueryChange(mediaQuery);
+});
+
+
 
 
 
@@ -418,4 +542,3 @@ function switchColor() {
 </html>
 
 {% endblock %}
-

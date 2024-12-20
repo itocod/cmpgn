@@ -4,93 +4,179 @@
 {% block content %}
 
 <!-- HTML -->
+<div class="cc-header">
+    <h3 class="activity-title">
+        Users who joined the campaign: 
+        <a class="campaign-link" href="{% url 'view_campaign' campaign_id=campaign.pk %}">{{ campaign.title }}</a>
+    </h3>
+    <span class="activity-count">
+        {{ joiners|length }} Participants |
+        <a href="{% url 'top_participants' campaign_id=campaign.pk %}" class="top-supporters-link">
+    <i class="fas fa-trophy"></i> Top Participants
+</a>
+
+    </span>
+</div>
+
 <div class="joiners-section">
-    <h2>Users who joined the campaign: {{ campaign.title }}</h2>
     <ul class="joiners-list">
-        {% for profile in joiners %}
-            <li>
-                <a href="{% url 'profile_view' username=profile.user.username %}">
-                    {{ profile.user.username }}
-                </a>
-            </li>
-        {% endfor %}
+        {% if joiners %}
+            {% for profile in joiners %}
+                <li>
+                    <a href="{% url 'profile_view' username=profile.user.username %}">
+                        {{ profile.user.username }}
+                    </a>
+                </li>
+            {% endfor %}
+        {% else %}
+            <li>No participants yet.</li>
+        {% endif %}
     </ul>
 </div>
 
 <!-- CSS -->
 <style>
+/* Header Styles */
+.cc-header {
+    background-color: #ffffff;
+    border-bottom: 2px solid #007bff;
+    padding: 15px 20px;
+    text-align: center;
+}
+
+.cc-header .activity-title {
+    font-size: 1.5rem;
+    color: #495057;
+    margin: 8px 0;
+    font-weight: bold;
+}
+
+.cc-header .activity-title a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.cc-header .activity-title a:hover {
+    text-decoration: underline;
+}
+
+.cc-header .activity-count {
+    color: gray;
+    font-size: 1.2rem;
+    margin-top: 10px;
+}
+
+.cc-header .top-supporters-link {
+    font-size: 1.2rem; /* Smaller font for subtle emphasis */
+    color: #007bff;
+    text-decoration: none;
+    margin-left: 10px; /* Spacing from participant count */
+    display: inline-flex;
+    align-items: center;
+}
+
+.cc-header .top-supporters-link i {
+    font-size: 1rem; /* Adjust icon size */
+    color: #f1c40f; /* Gold color for the trophy */
+    margin-right: 4px; /* Spacing between icon and text */
+}
+
+.cc-header .top-supporters-link:hover {
+    text-decoration: underline;
+    color: #0056b3; /* Slightly darker blue on hover */
+}
+
+/* Joiners Section */
 .joiners-section {
     padding: 25px;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    margin-bottom: 20px;
-    max-height: 450px; /* Limit the height */
-    overflow-y: auto; /* Enable vertical scrolling */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    max-height: 450px;
+    overflow-y: auto;
 }
 
-/* Style the scroll bar for better appearance */
 .joiners-section::-webkit-scrollbar {
     width: 8px;
 }
 
 .joiners-section::-webkit-scrollbar-thumb {
-    background-color: #ced4da; /* Gray color for the scrollbar */
+    background-color: #ced4da;
     border-radius: 4px;
 }
 
-.joiners-section h2 {
-    font-size: 1.2rem; /* Smaller heading */
-    color: #495057; /* Dark gray title */
-    margin-bottom: 20px;
-    border-bottom: 2px solid #dee2e6; /* Light gray underline */
-    padding-bottom: 12px;
-}
-
 .joiners-list {
-    list-style-type: none; /* Remove bullet points */
+    list-style-type: none;
     padding: 0;
     margin: 0;
 }
 
 .joiners-list li {
-    font-size: 0.9rem; /* Smaller font for list items */
-    color: #6c757d; /* Medium gray for list items */
-    background-color: #ffffff; /* White background for items */
+    font-size: 1.2rem;
+    color: #6c757d;
+    background-color: #ffffff;
     padding: 10px;
     margin-bottom: 10px;
     border-radius: 4px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* Light shadow */
-    transition: background-color 0.2s ease; /* Hover effect transition */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: background-color 0.2s ease;
 }
 
 .joiners-list li:hover {
-    background-color: #e9ecef; /* Slightly darker gray on hover */
+    background-color: #e9ecef;
 }
 
 .joiners-list a {
-    color: #007bff; /* Blue color for links */
-    font-weight: bold; /* Make links bolder */
+    color: #007bff;
+    font-weight: bold;
     text-decoration: none;
 }
 
 .joiners-list a:hover {
-    text-decoration: underline; /* Underline on hover for links */
+    text-decoration: underline;
 }
 
 /* Mobile styles */
-@media only screen and (max-width: 600px) {
-    .joiners-section {
-        padding: 20px;
-        max-height: 350px; /* Adjust height for smaller screens */
+@media (max-width: 768px) {
+    .cc-header {
+        padding: 12px 18px;
     }
 
-    .joiners-section h2 {
-        font-size: 1.0rem; /* Smaller font for the heading on mobile */
+    .cc-header .activity-title {
+        font-size: 1.4rem;
+    }
+
+    .cc-header .activity-count {
+        font-size: 1.1rem;
+    }
+
+    .joiners-section {
+        padding: 22px;
+        max-height: 370px;
     }
 
     .joiners-list li {
-        font-size: 0.8rem; /* Adjusted list item font for mobile */
-        padding: 8px;
+        font-size: 1.1rem;
+        padding: 9px;
+    }
+}
+
+@media (max-width: 480px) {
+    .cc-header {
+        padding: 10px 14px;
+    }
+
+    .cc-header .activity-title {
+        font-size: 1.3rem;
+    }
+
+    .cc-header .activity-count {
+        font-size: 1rem;
+    }
+
+    .joiners-list li {
+        font-size: 1rem;
+        padding: 7px;
     }
 }
 </style>

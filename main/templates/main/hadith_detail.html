@@ -3,46 +3,77 @@
 
 {% block content %}
     <style>
-        /* Unique and appealing styles */
-        .hadith-detail-container {
-            background-color: #f7f7f7;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
-        }
+/* Unique and appealing styles */
+.hadith-detail-container {
+    background-color: #f7f7f7;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
 
-        .hadith-detail-title {
-            font-size: 19px;
-            color: #333;
-            text-decoration: underline;
-            margin-bottom: 10px;
-        }
+.hadith-detail-title {
+    font-size: 19px;
+    color: #333;
+    text-decoration: underline;
+    margin-bottom: 10px;
+    font-weight: bold;
+    text-align: center; /* Center the title for better mobile display */
+}
 
-        .hadith-details {
-            margin-bottom: 20px;
-        }
+.hadith-details {
+    margin-bottom: 20px;
+}
 
-        .hadith-info {
-            margin-bottom: 10px;
-        }
+.hadith-info {
+    margin-bottom: 10px;
+}
 
-        .hadith-info strong {
-            font-weight: bold;
-            color: #333;
-        }
+.hadith-info strong {
+    font-weight: bold;
+    color: #333;
+}
 
-        .hadith-info p {
-            margin: 5px 0;
-            font-size: 16px;
-            color: #555;
-        }
+.hadith-info p {
+    margin: 5px 0;
+    font-size: 16px;
+    color: #555;
+    line-height: 1.5;
+}
 
-        .back-to-list-link {
-            color: #007bff;
-            text-decoration: none;
-            font-size: 16px;
-        }
+.back-to-list-link {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 16px;
+    display: inline-block; /* Ensure proper spacing on mobile */
+    margin-top: 10px;
+}
+
+.back-to-list-link:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+    .hadith-detail-container {
+        padding: 15px;
+        margin: 10px;
+        border-radius: 8px;
+    }
+
+    .hadith-detail-title {
+        font-size: 16px;
+    }
+
+    .hadith-info p {
+        font-size: 14px;
+    }
+
+    .back-to-list-link {
+        font-size: 14px;
+    }
+}
+
     </style>
 
     <div class="hadith-detail-container">
@@ -57,4 +88,292 @@
             <a href="{% url 'hadith_list' %}" class="back-to-list-link">Back to Hadith List</a>
         </div>
     </div>
+
+    <script type="text/javascript">
+    
+        // Function to handle file upload and playback
+        function uploadAudio() {
+            var input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'audio/*, video/*'; // Limit file selection to audio files
+
+            // Listen for file selection
+            input.onchange = function(e) {
+                var file = e.target.files[0];
+                var audio = document.getElementById('bgAudio');
+
+                // Pause the current audio playback
+                audio.pause();
+
+                // Store the selected audio file and its playback position in local storage
+                localStorage.setItem('bgAudioFile', URL.createObjectURL(file));
+                localStorage.setItem('bgAudioPosition', audio.currentTime);
+
+                // Set the audio source to the selected file
+                audio.src = localStorage.getItem('bgAudioFile');
+
+                // Resume audio playback
+                audio.play();
+            };
+
+            // Trigger the file input
+            input.click();
+        }
+
+        // Function to set background audio on page load
+        window.onload = function() {
+            var audio = document.getElementById('bgAudio');
+            var bgAudioFile = localStorage.getItem('bgAudioFile');
+            var audioPosition = parseFloat(localStorage.getItem('bgAudioPosition'));
+
+            // Check if there's a stored audio file
+            if (bgAudioFile) {
+                // Set the audio source to the stored file
+                audio.src = bgAudioFile;
+
+                // Set the playback position if available
+                if (!isNaN(audioPosition)) {
+                    audio.currentTime = audioPosition;
+                }
+
+                // Autoplay the audio
+                audio.play();
+            }
+        };
+
+
+function toggleCommentForm() {
+    var popup = document.getElementById("commentFormPopup");
+    popup.style.display = "block";
+}
+
+function closeCommentForm() {
+    var popup = document.getElementById("commentFormPopup");
+    popup.style.display = "none";
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var campaignElement = document.querySelector('.campaign-details');
+    var campaignId = {{ campaign.id }};
+    var startTime;
+
+    function recordCampaignView() {
+        var endTime = Math.floor(Date.now() / 1000); // Get current time in seconds
+        var timeSpent = endTime - startTime;
+        
+        fetch(`/record_campaign_view/${campaignId}/`, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ time_spent: timeSpent })
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('View recorded successfully');
+            } else {
+                console.error('Failed to record view');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    function handleVisibilityChange() {
+        if (document.visibilityState === 'visible') {
+            startTime = Math.floor(Date.now() / 1000); // Get current time in seconds
+        } else {
+            recordCampaignView();
+        }
+    }
+
+    function isInViewport(element) {
+        var rect = element.getBoundingClientRect();
+        return (
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+        );
+    }
+
+    function handleScroll() {
+        if (isInViewport(campaignElement)) {
+            startTime = Math.floor(Date.now() / 1000); // Get current time in seconds
+        } else {
+            recordCampaignView();
+        }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    document.addEventListener('scroll', handleScroll);
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    var mediaQuery = window.matchMedia('(max-width: 768px)');
+    var leftAside = document.querySelector('.left-aside');
+    var rightAside = document.querySelector('.right-aside');
+
+    function handleMediaQueryChange(e) {
+        if (e.matches) {
+            leftAside.style.display = 'none';
+            rightAside.style.display = 'none';
+        } else {
+            leftAside.style.display = 'block';
+            rightAside.style.display = 'block';
+        }
+    }
+
+    mediaQuery.addListener(handleMediaQueryChange);
+    handleMediaQueryChange(mediaQuery);
+});
+
+
+</script>
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function() {
+    const navbarToggle = document.getElementById("navbarToggle");
+    const navbar = document.getElementById("navbar");
+    const popupClose = document.getElementById("popupClose");
+
+    // Toggle navbar visibility
+    navbarToggle.addEventListener("click", function() {
+        if (navbar.style.display === "block") {
+            navbar.style.display = "none";
+        } else {
+            navbar.style.display = "block";
+        }
+    });
+
+    // Close popup when clicking the close button
+    popupClose.addEventListener("click", function() {
+        navbar.style.display = "none";
+    });
+
+    // Adjust navbar display on window resize
+    window.addEventListener("resize", function() {
+        if (window.innerWidth > 768) {
+            navbar.style.display = "none";
+        } else if (navbar.style.display === "block") {
+            navbar.style.display = "block";
+        } else {
+            navbar.style.display = "none";
+        }
+    });
+
+    // Ensure the navbar is initially hidden on page load for larger screens
+    if (window.innerWidth > 768) {
+        navbar.style.display = "none";
+    } else {
+        navbar.style.display = "none"; // or "block" based on your initial requirement
+    }
+});
+</script>
+<script type="text/javascript">
+    
+
+
+function switchColor() {
+    var body = document.body;
+    var logoContainer = document.querySelector('.logo-container');
+
+    // Define the color sequence (black, white)
+    var colors = ["black", "white"];
+
+    // Find the index of the current color in the sequence
+    var currentIndex = colors.indexOf(body.style.backgroundColor);
+
+    // Set the next color in the sequence
+    var nextColor = colors[(currentIndex + 1) % colors.length];
+
+    // Apply the new color to the body and other elements
+    body.style.backgroundColor = nextColor;
+
+    // Change background color and border of logo-container based on nextColor
+    if (nextColor === "black") {
+        logoContainer.style.backgroundColor = "transparent";
+        logoContainer.style.border = "none"; 
+    } else {
+        logoContainer.style.backgroundColor = "transparent";
+        logoContainer.style.border = "none"; 
+    }
+
+    // Elements to update based on nextColor
+    var header = document.querySelector('header');
+    var footer = document.querySelector('footer');
+    var sections = document.querySelectorAll('section, .left-aside, .right-aside');
+    var textElements = document.querySelectorAll('.campaign-nav,.campaign-nav a,.activity-content-short,.activity-content-full,.activity-content-hence,.username, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
+    var reactDivs = document.querySelectorAll('.react div');
+    var loveCounts = document.querySelectorAll('[id^="love-count-"]');
+    var viewCounts = document.querySelectorAll('#view-count');
+    var commentCounts = document.querySelectorAll('.comment-count');
+
+    // Update header and footer background color based on nextColor
+    if (nextColor === "black") {
+        header.style.backgroundColor = "#333333";  // Darker gray when background is black
+    } else {
+        header.style.backgroundColor = nextColor;
+    }
+
+    footer.style.backgroundColor = nextColor;
+
+    sections.forEach(function(section) {
+        section.style.backgroundColor = nextColor;
+    });
+
+    // Adjust text color based on nextColor
+    var textColor = nextColor === "black" ? "white" : "black";
+    header.style.color = textColor;
+    footer.style.color = textColor;
+
+    textElements.forEach(function(element) {
+        element.style.color = textColor;
+    });
+
+    // Skip changing specific button colors (e.g., .btn-search, .btn-reset)
+    var buttonColor = nextColor === "black" ? "#262626" : ""; 
+    var buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)'); // Exclude specific buttons
+    buttons.forEach(function(button) {
+        button.style.backgroundColor = buttonColor;
+
+        if (nextColor === "black") {
+            button.classList.add('button-hover');
+        } else {
+            button.classList.remove('button-hover');
+            button.style.backgroundColor = "";
+        }
+    });
+
+    // Update colors for .react divs
+    reactDivs.forEach(function(reactDiv) {
+        reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
+
+        var reactTextColor = nextColor === "black" ? "white" : "black";
+        reactDiv.style.color = reactTextColor;
+
+        if (nextColor === "black") {
+            reactDiv.classList.add('react-hover');
+        } else {
+            reactDiv.classList.remove('react-hover');
+            reactDiv.style.backgroundColor = "";
+        }
+    });
+
+    // Adjust colors for counts (love, view, comment counts)
+    var countTextColor = nextColor === "black" ? "white" : "black";
+    loveCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+    viewCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+    commentCounts.forEach(function(element) {
+        element.style.color = countTextColor;
+    });
+}
+
+</script>
 {% endblock %}

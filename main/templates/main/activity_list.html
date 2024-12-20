@@ -5,9 +5,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-*********" crossorigin="anonymous" />
 
 <style>
+    /* Existing styles */
     .activity-container {
         flex: 3;
-       
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         width: 100%;
         padding: 0;
@@ -29,16 +29,17 @@
         margin-bottom: 20px;
         width: 100%;
         color: #fff;
-        background-color: #007bff;
+        background-color: #4CAF50;
         padding: 10px 20px;
         border-radius: 5px;
         text-decoration: none;
         font-weight: bold;
-        transition: background-color 0.3s ease;
+        transition: background-color 0.3s ease, color 0.3s ease;
     }
 
     .create-activity-link:hover {
-        background-color: #0056b3;
+        background-color:#45a049;
+        color: #fff;
     }
 
     .activity-title {
@@ -84,34 +85,40 @@
         text-align: left;
     }
 
-    .love-icon, .comment-icon {
-        padding: 10px;
-        position: absolute;
-        bottom: 5px;
-        color: #777;
-        font-size: 19px;
-        cursor: pointer;
-        transition: color 0.3s ease;
-        border: 0 solid silver;
-        border-radius: 10px;
-        background-color: #F5F5F5;
-        transition: box-shadow 0.3s;
-    }
+  .love-icon, .comment-icon {
+    padding: 12px;
+    position: absolute;
+    bottom: 10px;
+    color: #777;
+    font-size: 20px;
+    cursor: pointer;
+    transition: color 0.4s ease, transform 0.3s ease;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    background-color: rgba(245, 245, 245, 0.9);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
 
-    .love-icon {
-        right: 10px;
-    }
+.love-icon {
+    right: 15px;
+}
 
-    .comment-icon {
-        right: 60px;
-    }
+.comment-icon {
+    right: 75px;
+}
 
-    .love-icon:hover, .comment-icon:hover {
-        color: #ff4500;
-        border-color: #ff4500;
-        background-color: white;
-        box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-    }
+.love-icon:hover, .comment-icon:hover {
+    color: limegreen;
+    border-color: limegreen;
+    background-color: #ffffff;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+    transform: scale(1.1) rotate(2deg);
+}
+
+.love-icon:active, .comment-icon:active {
+    transform: scale(0.9) rotate(-2deg);
+}
+
 
     .love-comment-count {
         position: absolute;
@@ -184,102 +191,217 @@
         margin-right: 5px;
     }
 
-    /* Mobile Responsive Styles */
-    @media (max-width: 768px) {
-        .activity-container {
-            padding: 0;
-            max-width: 100%;
-        }
+    .profile-pic {
+        display: flex;
+        align-items: center;
+        padding-left: 20px;
+        padding-top: 20px;
+    }
+
+    .profile-pic img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .profile-pic-hover:hover {
+        transform: scale(1.1);
+    }
+
+    .user-info {
+        margin-left: 10px;
+    }
+
+    .username {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .verified-status {
+        display: inline-flex;
+        align-items: center;
+        font-size: 12px;
+        color: green;
+        margin-left: 5px;
+    }
+
+    .verified-icon {
+        font-size: 16px;
+        margin-left: 2px;
+    }
+
+
+.no-suggested-users {
+    text-align: center;
+    margin: 20px 0;
+    padding: 15px;
+    background-color: rgba(76, 175, 80, 0.3); /* Semi-transparent green background */
+    border-radius: 5px;
+    color: #000000; /* Black text by default */
+    font-size: 14px;
+    border: 1px solid #4CAF50; /* Green border */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: color 0.3s, background-color 0.3s; /* Smooth transition for color changes */
+}
+
+/* Change text color to white when the background color is dark */
+.no-suggested-users.dark-text {
+    color: #ffffff; /* White text */
+    background-color: rgba(56, 142, 108, 0.7); /* Darker semi-transparent green background */
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+    .no-suggested-users {
+        font-size: 12px; /* Adjust font size for mobile */
+    }
+}
+
+
+
+    /* Mobile optimizations */
+    @media (max-width: 600px) {
 
         .activity-title {
-            font-size: 18px;
-            margin-bottom: 20px;
-        }
-
-        .activity-item {
-            margin-bottom: 30px;
-            padding-bottom: 30px;
-        }
-
-        .love-icon, .comment-icon {
             font-size: 16px;
-            bottom: 10px;
         }
 
-        .love-comment-count {
-            font-size: 13px;
-            bottom: 5px;
+
+
+        .profile-pic {
+            padding-left: 10px;
+            padding-top: 10px;
+        }
+
+        .profile-pic img {
+            width: 30px;
+            height: 30px;
         }
 
         .create-activity-link {
-            font-size: 16px;
-            padding: 8px 16px;
+            padding: 12px;
+            font-size: 14px;
         }
 
-        .activity-content {
-            padding: 15px;
+        .activity-content-short, .activity-content-full {
+            font-size: 14px;
+            padding: 10px;
         }
 
         .action-item {
-            padding: 8px 15px;
-            font-size: 11px;
-            margin-right: 5px;
-        }
-    }
-
-    @media (max-width: 480px) {
-        .activity-title {
-            font-size: 16px;
+            font-size: 10px;
         }
 
         .love-icon, .comment-icon {
-            font-size: 14px;
-            right: 8px;
-        }
-
-        .comment-icon {
-            right: 50px;
+            font-size: 20px;
+            padding: 5px;
         }
 
         .love-comment-count {
             font-size: 12px;
         }
 
-        .create-activity-link {
-            font-size: 14px;
-            padding: 6px 12px;
-        }
-
-        .action-item {
-            padding: 6px 10px;
-            font-size: 10px;
-        }
-
-        .activity-content {
-            padding: 10px;
+        .no-suggested-users {
+            font-size: 12px;
         }
     }
-                /* Styling for the "No suggested users yet" message */
-        .no-suggested-users {
-            text-align: center;
-            margin: 20px 0;
-            padding: 15px;
-            background-color: #e0f7e0; /* Light green background */
-            border-radius: 5px;
-            color: #228b22; /* Forest green text */
-            font-size: 14px;
-            border: 1px solid #2e8b57; /* Green border */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-        }
+.activity-content-hence {
+    padding: 10px;
+    
+    font-size: 16px;
+}
 
-        /* Responsive Styles */
-        @media (max-width: 600px) {
+/* Mobile version (for screens smaller than 768px) */
+@media (max-width: 768px) {
+    .activity-content-hence {
+        padding: 10px;
+        
+        font-size: 14px; /* Smaller font size for mobile */
+    }
+}
 
-            .no-suggested-users {
-                font-size: 12px; /* Adjust font size for mobile */
-            }
-        }
+
+/* Base styles */
+.cc-header {
+    background-color: #ffffff; /* Clean white background */
+    border-bottom: 2px solid #007bff; /* Blue underline for emphasis */
+    padding: 15px 20px; /* Adjusted padding for a better appearance */
+    text-align: center; /* Center align the text */
+}
+
+.cc-header .activity-title {
+    font-size: 1.5rem; /* Title font size */
+    color: #666; /* Subtle grey for secondary text */
+    margin: 8px 0; /* Adjusted spacing */
+    font-weight: bold; /* Make it more prominent */
+}
+
+.cc-header .activity-title a {
+    color: #3498db; /* Blue for the link */
+    text-decoration: none; /* No underline */
+}
+
+.cc-header .activity-title a:hover {
+    text-decoration: underline; /* Add underline on hover */
+}
+
+.cc-header .activity-count {
+    color: gray; /* Subtle grey for total activities */
+    padding-left: 20px; /* Indented slightly */
+    font-size: 1.2rem; /* Font size for total activities */
+    margin: 5px 0; /* Adjusted margin */
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+    .cc-header {
+        padding: 10px 15px; /* Compact padding for smaller screens */
+    }
+
+    .cc-header .activity-title {
+        font-size: 1.3rem; /* Slightly smaller font size */
+    }
+
+    .cc-header .activity-count {
+        font-size: 1rem; /* Adjusted size for smaller screens */
+        padding-left: 10px; /* Reduced padding */
+    }
+}
+
+/* Smaller mobile devices (e.g., phones) */
+@media (max-width: 480px) {
+    .cc-header {
+        padding: 8px 12px; /* Further compact padding */
+    }
+
+    .cc-header .activity-title {
+        font-size: 1.2rem; /* Smaller font for better fit */
+    }
+
+    .cc-header .activity-count {
+        font-size: 1rem; /* Smaller size for comment count */
+        padding-left: 8px; /* Reduced padding */
+    }
+}
+
+/* Base styles */
+.cc-header .campaign-link {
+    color: #3498db; /* Default link color */
+    text-decoration: none; /* Remove underline by default */
+    font-weight: bold; /* Optional: make it stand out */
+}
+
+.cc-header .campaign-link:hover {
+    color: #3498db; /* Retain the blue color on hover */
+    text-decoration: underline; /* Add underline */
+    text-decoration-color: black; /* Make the underline black */
+}
+
 </style>
+
 
 
     <script>
@@ -332,51 +454,51 @@
         <a href="{% url 'create_activity' campaign_id=campaign.id %}" class="create-activity-link">Create Activity</a>
     {% endif %}
 
-    <h2 style="font-size:19px; padding-left: 20px;">Campaign_Activities</h2>
+  
     
     <div class="activity-container">
-        <h5 class="activity-title"><hr>
-            <b style="text-decoration:underline; color:limegreen;">
-                <div class="profile-pic" style="padding-top: 20px;">
-                    <a href="{% url 'profile_view' username=campaign.user.user.username %}">
-                        <!-- Display campaign owner's profile picture -->
-                        <img src="{{ campaign.user.image.url }}" alt="Profile Picture" class="profile-pic-hover">
-                    </a>
+<div class="cc-header">
+    <h5 class="activity-title">
+        <hr>
+        <span>
+            Activities for "
+            <a href="{% url 'view_campaign' campaign_id=campaign.pk %}" class="campaign-link">
+                {{ campaign.title }}
+            </a>
+            "
+        </span>
+    </h5>
 
-                            {% if campaign.user.is_verified %}
-            <span class="verified-status" style="font-size: 12px;"><span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></span>
-        {% endif %}
-                    <h3>{{ campaign.user.user.username }} . <i class="cm"></i></h3>
-                </div>
-            </b>
-            <span > Activities for "</span>
-            <span style="color:#3498db;">
-                <a href="{% url 'view_campaign' campaign_id=campaign.pk %}" style="color:#3498db;">{{ campaign.title }}</a>
-            </span>
-            <span style="color:black;">"</span>
+    <h4 class="activity-count">
+        Total Activities: ({{ activity_count }})
+    </h4>
+</div>
 
-            
-        </h5>
 
         <!-- Display activities -->
         {% if activities %}
-            <h4 style="color: gray; padding-left: 20px; font-size:15px">Total Activities: ({{ activity_count }})</h4>
+            
             <!-- Display the total activity count -->
             <ul class="activity-list">
                 {% for activity in activities %}
                     <li class="activity-item">
                         <div class="profile-pic" style="padding-left:20px;padding-top: 20px;">
-                            <a href="{% url 'profile_view' username=campaign.user.user.username %}">
-                                <!-- Display campaign owner's profile picture -->
-                                <img src="{{ campaign.user.image.url }}" alt="Profile Picture" class="profile-pic-hover">
-                            </a>
-                            <h3>{{ campaign.user.user.username }} 
-          {% if campaign.user.is_verified %}
-            <span class="verified-status" style="font-size: 12px;"><span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></span>
-        {% endif %}
-                                . <i class="cm"></i></h3>
-                        </div>
-                        
+    <a href="{% url 'profile_view' username=campaign.user.user.username %}">
+        <!-- Display campaign owner's profile picture -->
+        <img src="{{ campaign.user.image.url }}" alt="Profile Picture" class="profile-pic-hover">
+    </a>
+    <div class="user-info">
+        <h3 class="username">{{ campaign.user.user.username }}.
+            {% if campaign.user.is_verified %}
+                <span class="verified-status">
+                    <span>verified</span>
+                    <i class="material-icons verified-icon">verified_user</i>
+                </span>
+            {% endif %}
+        </h3>
+    </div>
+</div><br>
+
 
 
 
@@ -386,16 +508,17 @@
                                 <!-- Show "See More" text only when content exceeds 20 words -->
                                 <span class="see-more-text" onclick="toggleContent('{{ activity.id }}')">See More</span>
                             </div>
-                            <div id="activity-content-{{ activity.id }}-full" class="activity-content-full" style="display: none;">
+                            <div id="activity-content-{{ activity.id }}-full" class="activity-content-full" style="display: none; padding-left:10px;">
                                 {{ activity.content|safe }}
                                 <!-- Replace the button with clickable text -->
                                 <span class="see-more-text" onclick="toggleContent('{{ activity.id }}')">See Less</span>
                             </div>
                         {% else %}
                             <!-- If content length is 20 words or less, display full content -->
-                            <div id="activity-content-{{ activity.id }}-short" style="padding-left: 10px; padding-bottom: 10px;">
-                                {{ activity.content|safe }}
-                            </div>
+                        <div id="activity-content-{{ activity.id }}-short" class="activity-content-hence">
+    {{ activity.content|safe }}
+</div>
+
                         {% endif %}
 
                         <div class="activity-timestamp">
@@ -422,7 +545,7 @@
                         </div>
                         
                         <i class="far fa-heart love-icon" onclick="loveActivity('{{ activity.id }}')"></i>
-                        <span id="love-count-{{ activity.id }}" class="love-comment-count">Love: {{ activity.loves.count|format_count }}</span>
+                        <span id="love-count-{{ activity.id }}" class="love-comment-count">Love: {{ activity.loves.count|format_count }} </span>
                         <a href="{% url 'add_activity_comment' activity_id=activity.id %}">
                             <i class="far fa-comment comment-icon"></i>
                         </a>
@@ -443,7 +566,7 @@
                 {% endfor %}
             </ul>
         {% else %}
-            <span class="no-suggested-users">No activities yet.</span>
+            <li class="no-suggested-users">No activities yet.</li>
         {% endif %}
     </div>
 
@@ -545,6 +668,7 @@
         });
 
 
+
 function switchColor() {
     var body = document.body;
     var logoContainer = document.querySelector('.logo-container');
@@ -563,25 +687,24 @@ function switchColor() {
 
     // Change background color and border of logo-container based on nextColor
     if (nextColor === "black") {
-        logoContainer.style.backgroundColor = "";
+        logoContainer.style.backgroundColor = "transparent";
         logoContainer.style.border = "none"; 
     } else {
-        logoContainer.style.backgroundColor = ""; // or "transparent"
-        logoContainer.style.border = "none";  // Remove border
+        logoContainer.style.backgroundColor = "transparent";
+        logoContainer.style.border = "none"; 
     }
 
-    // Other elements to be updated based on nextColor
+    // Elements to update based on nextColor
     var header = document.querySelector('header');
     var footer = document.querySelector('footer');
     var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, p, li, nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
-    var buttons = document.querySelectorAll('button');
+    var textElements = document.querySelectorAll('h1, h2, p,.campaign-nav,.campaign-nav a,.activity-content-short,.activity-content-full,.activity-content-hence,.username, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
     var reactDivs = document.querySelectorAll('.react div');
     var loveCounts = document.querySelectorAll('[id^="love-count-"]');
     var viewCounts = document.querySelectorAll('#view-count');
     var commentCounts = document.querySelectorAll('.comment-count');
 
-    // Update header background color based on nextColor
+    // Update header and footer background color based on nextColor
     if (nextColor === "black") {
         header.style.backgroundColor = "#333333";  // Darker gray when background is black
     } else {
@@ -594,6 +717,7 @@ function switchColor() {
         section.style.backgroundColor = nextColor;
     });
 
+    // Adjust text color based on nextColor
     var textColor = nextColor === "black" ? "white" : "black";
     header.style.color = textColor;
     footer.style.color = textColor;
@@ -602,7 +726,9 @@ function switchColor() {
         element.style.color = textColor;
     });
 
-    var buttonColor = nextColor === "black" ? "#262626" : "";
+    // Skip changing specific button colors (e.g., .btn-search, .btn-reset)
+    var buttonColor = nextColor === "black" ? "#262626" : ""; 
+    var buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)'); // Exclude specific buttons
     buttons.forEach(function(button) {
         button.style.backgroundColor = buttonColor;
 
@@ -614,6 +740,7 @@ function switchColor() {
         }
     });
 
+    // Update colors for .react divs
     reactDivs.forEach(function(reactDiv) {
         reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
 
@@ -628,6 +755,7 @@ function switchColor() {
         }
     });
 
+    // Adjust colors for counts (love, view, comment counts)
     var countTextColor = nextColor === "black" ? "white" : "black";
     loveCounts.forEach(function(element) {
         element.style.color = countTextColor;
@@ -639,6 +767,7 @@ function switchColor() {
         element.style.color = countTextColor;
     });
 }
+
 
 function toggleCommentForm() {
     var popup = document.getElementById("commentFormPopup");

@@ -141,10 +141,13 @@ class ActivityForm(forms.ModelForm):
         model = Activity
         fields = ['content', 'file']
         widgets = {
-            'content': forms.Textarea(attrs={'rows': 3}),
+            'content': forms.Textarea(attrs={'class': 'custom-textarea-{{ form.content.auto_id }}', 'rows': 3}),
         }
 
 ActivityFormSet = inlineformset_factory(Campaign, Activity, form=ActivityForm, extra=1, can_delete=False)
+
+
+
 
 
 

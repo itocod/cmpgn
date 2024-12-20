@@ -1,3 +1,4 @@
+
 {% load custom_filters %}
 
 {% load static %}
@@ -373,59 +374,47 @@ border: 1px solid silver;
   /* Optional: Add hover effects if needed */
 }
 
-/* Profile Picture Container */
 .profile-pic {
   flex-shrink: 0; /* Prevent shrinking of the profile picture */
   margin-right: 20px;
-  width: 48px; /* Explicit width for a square container */
-  height: 48px; /* Explicit height for a square container */
-  border-radius: 50%; /* Ensures circular shape */
-  overflow: hidden; /* Prevents overflow of the image outside the container */
-  background-color: #f0f0f0; /* Optional background color for placeholder */
+  width: 48px; /* Set explicit width */
+  height: 48px; /* Set explicit height to maintain square shape */
 }
 
-
-
-/* Container: Ensures a circular boundary */
-.profile-pic {
-  flex-shrink: 0; /* Prevent shrinking */
-  width: 48px; /* Fixed size for the container */
-  height: 48px; /* Ensure a perfect square */
-  border-radius: 50%; /* Circular boundary */
-  overflow: hidden; /* Clip anything outside the circle */
-  display: inline-block; /* Keeps the shape consistent */
-  background-color: #e0e0e0; /* Optional placeholder background */
-  margin-right: 20px; /* Space around the circle */
-}
-
-/* Image: Ensures it fits within the circular container */
 .profile-pic img {
-  width: 100%; /* Scale width to fit container */
-  height: 100%; /* Scale height proportionally */
-  object-fit: contain; /* Display the entire image without cropping */
-  object-position: center; /* Center the image */
+  width: 100%; /* Ensure the image fills the container */
+  height: 100%; /* Ensure the image maintains its aspect ratio */
+  border-radius: 50%; /* Make the image circular */
+  object-fit: cover; /* Ensures the image covers the entire area without distorting */
+  object-position: center; /* Ensures the image is centered */
+  padding: 2px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease;
 }
 
-/* Mobile View Adjustments */
+.profile-pic:hover img {
+  border-color: #00FF00;
+}
+
 @media (max-width: 768px) {
-  .upper-post {
-    flex-direction: column; /* Stack items vertically */
-    align-items: flex-start;
-  }
+    .upper-post {
+        flex-direction: column; /* Stack elements vertically on smaller screens */
+        align-items: flex-start;
+    }
 
-  .profile-pic {
-    width: 50px; /* Adjust container size for mobile */
-    height: 50px; /* Keep it a square */
-    margin-bottom: 15px; /* Space below the profile pic */
-    margin-right: 0; /* Remove side margin for stacking */
-  }
+    .profile-pic {
+        margin-bottom: 15px;
+        margin-right: 0;
+        width: 50px; /* Adjust profile picture size for mobile */
+        height: 50px; /* Ensure a square container */
+    }
 
-  .profile-pic img {
-    width: 100%; /* Fit within container */
-    height: 100%; /* Maintain aspect ratio */
-    object-fit: contain; /* Ensure no part of the image is cut off */
-    object-position: center; /* Center the image inside the circle */
-  }
+    .profile-pic img {
+        width: 100%; /* Ensure image fills the container */
+        height: 100%; /* Ensure the image covers the container */
+        object-fit: cover;
+        object-position: center;
+    }
 }
 
 
@@ -1250,17 +1239,11 @@ border: 1px solid silver;
 }
 
 .ad .sponsored-by {
-    font-size: 1.2rem; /* Smaller font size */
+    font-size: 1rem; /* Smaller font size */
     color: #888;
     margin-bottom: 8px;
     text-align: center;
 }
-
-.ad .sponsored-by strong {
-    color: #444; /* Optional: Add a different color for the bold text */
-    font-weight: bold;
-}
-
 
 .ad a {
     display: block;
@@ -1677,67 +1660,28 @@ border: 1px solid silver;
 }
 
 
-/* For larger screens (desktop) */
-h4 {
-    font-size: 19px;
-    padding-left: 20px;
-    display: inline-flex;
-    align-items: center;
+.explore-link {
+    display: inline-block;
+    text-align: center;
+    color: #333; /* Change to your preferred color */
+    text-decoration: none;
+    margin: 10px;
 }
 
-.explore-link i {
-    font-size: 14px;  /* Smaller icon size */
-    color: black;  /* Default icon color is black */
-    transition: transform 0.3s ease, color 0.3s ease;  /* Smooth transition for hover and color change */
+.explore-link:hover {
+    color: #007bff; /* Change to hover color */
 }
-
-/* For smaller screens (mobile) */
-@media (max-width: 768px) {
-    h4 {
-        font-size: 16px;  /* Smaller text on mobile */
-        padding-left: 15px;  /* Reduced padding */
-    }
-
-    .explore-link i {
-        font-size: 12px;  /* Even smaller icon on mobile */
-    }
-}
-
-/* Hover effect for icon */
-.explore-link:hover i {
-    transform: scale(1.1);  /* Slightly enlarge the icon on hover */
-}
-
-/* Adjust the icon color depending on the background (for both light and dark backgrounds) */
-body.light-theme .explore-link i {
-    color: black;  /* Black icon for light backgrounds */
-}
-
-body.dark-theme .explore-link i {
-    color: white;  /* White icon for dark backgrounds */
-}
-
-
 
   </style>
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const resetButton = document.getElementById('reset-field');
-        const queryField = document.getElementById('query-field');
 
-        resetButton.addEventListener('click', function() {
-            queryField.value = ''; // Clear the input field
-            queryField.focus(); // Optionally, refocus the input field
-        });
-    });
-</script>
 
-<script>
 
-function switchColor() {
+
+<script type="text/javascript">
+    function switchColor() {
     var body = document.body;
     var logoContainer = document.querySelector('.logo-container');
 
@@ -1766,12 +1710,11 @@ function switchColor() {
     var header = document.querySelector('header');
     var footer = document.querySelector('footer');
     var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2,h4, p, li, .campaign-nav, .campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a,.explore-link');
+    var textElements = document.querySelectorAll('h1, h2, p, li, .campaign-nav,.campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
     var reactDivs = document.querySelectorAll('.react div');
     var loveCounts = document.querySelectorAll('[id^="love-count-"]');
     var viewCounts = document.querySelectorAll('#view-count');
     var commentCounts = document.querySelectorAll('.comment-count');
-    var exploreLinks = document.querySelectorAll('.explore-link i'); // Select all compass icons
 
     // Update header background color based on nextColor
     if (nextColor === "black") {
@@ -1792,11 +1735,6 @@ function switchColor() {
 
     textElements.forEach(function(element) {
         element.style.color = textColor;
-    });
-
-    // Change the color of the compass icon based on the background color
-    exploreLinks.forEach(function(icon) {
-        icon.style.color = nextColor === "black" ? "white" : "black";
     });
 
     // Skip changing button colors
@@ -1838,6 +1776,28 @@ function switchColor() {
         element.style.color = countTextColor;
     });
 }
+
+
+
+</script>
+
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const resetButton = document.getElementById('reset-field');
+        const queryField = document.getElementById('query-field');
+
+        resetButton.addEventListener('click', function() {
+            queryField.value = ''; // Clear the input field
+            queryField.focus(); // Optionally, refocus the input field
+        });
+    });
+</script>
+
+<script>
+
 
 
 
@@ -1932,7 +1892,11 @@ document.addEventListener('DOMContentLoaded', function() {
     handleMediaQueryChange(mediaQuery);
 });
 
-document.addEventListener("DOMContentLoaded", function() {
+
+</script>
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function() {
     const navbarToggle = document.getElementById("navbarToggle");
     const navbar = document.getElementById("navbar");
     const popupClose = document.getElementById("popupClose");
@@ -1970,8 +1934,6 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 </script>
-
-
 </head>
 
 
@@ -1995,16 +1957,17 @@ document.addEventListener("DOMContentLoaded", function() {
 
     <div class="search-container">
         <form action="{% url 'search_campaign' %}" method="get">
- <div class="search-wrapper">
-     <input type="text" placeholder="Search..." name="search_query" id="query-field">
-     <button type="button" class="btn-reset" id="reset-field">
-         <i class="fas fa-times"></i>
-     </button>
-     <button type="submit" class="btn-search">
-         <i class="fas fa-search"></i>
-     </button>
- </div>
-</form>
+            <div class="search-wrapper">
+                <input type="text" placeholder="Search..." name="query_field" id="query-field">
+                  <button type="button" class="btn-reset" id="reset-field">
+                    <i class="fas fa-times"></i>
+                </button>
+                <button type="submit" class="btn-search">
+                    <i class="fas fa-search"></i>
+                </button>
+              
+            </div>
+        </form>
     </div>
 </div>
 
@@ -2134,24 +2097,22 @@ document.addEventListener("DOMContentLoaded", function() {
 
     <br>
 
-<!-- Carousel for Ads -->
-<div class="carousel" onmouseover="pauseCarousel()" onmouseout="resumeCarousel()">
-    <div class="slides">
-        {% for ad in ads %}
-            <div class="slide">
-                <div class="ad">
-                    <a href="{{ ad.link }}">
-                        <img src="{{ ad.image.url }}" alt="{{ ad.title }}">
-                    </a>
-                    <h2>{{ ad.title }}</h2>
-                    <p class="content">{{ ad.content | truncatewords:30 }}</p>
-                    <p class="sponsored-by"><strong>Sponsored by:</strong> {{ ad.sponsored_by }}.</p>
+    <!-- Carousel for Ads -->
+    <div class="carousel" onmouseover="pauseCarousel()" onmouseout="resumeCarousel()">
+        <div class="slides">
+            {% for ad in ads %}
+                <div class="slide">
+                    <div class="ad">
+                        <a href="{{ ad.link }}">
+                            <img src="{{ ad.image.url }}" alt="{{ ad.title }}">
+                        </a>
+                        <h2>{{ ad.title }}</h2>
+                        <p class="content">{{ ad.content | truncatewords:30 }}</p>
+                        <p class="sponsored-by">Sponsored by: {{ ad.sponsored_by }}</p>
+                    </div>
                 </div>
-            </div>
-        {% endfor %}
-    </div>
-</div>
-
+            {% endfor %}
+        </div>
     </div>
 
 </aside>
@@ -2172,16 +2133,11 @@ document.addEventListener("DOMContentLoaded", function() {
     </div>
     </br>
 
-<h4 style="font-size: 19px; padding-left: 20px; display: inline-flex; align-items: center;">
-    User Public Campaigns
-    <a href="{% url 'explore_campaigns' %}" title="Explore" class="explore-link" style="margin-left: 10px;">
-        <i class="fas fa-compass" style="font-size: 14px;"></i>
-    </a>
-</h4>
+    <h2 style="font-size:19px; padding-left: 20px;">Explore</h2>
 
-    {% if public_campaigns %}
+
        <div class="sidebar-box">
-            {% for campaign in public_campaigns %}
+            {% for campaign in campaigns %}
                 <div class="container-with-border">
                     <div class="upper-post">
                         <div class="profile-pic">
@@ -2216,7 +2172,7 @@ document.addEventListener("DOMContentLoaded", function() {
                                 <a href="{% url 'view_campaign' campaign_id=campaign.pk %}" style="color:#3498db;">
                                     <span>{{ campaign.title }}</span>
                                 </a>
-                            </h2><br>
+                            </h2>
                             <sp class="time-location">{{ campaign.timestamp|timesince }} ago - {{ campaign.user.location }}</sp>
                             <div class="campaign-content" data-campaign-id="{{ campaign.id }}">
                                 {{ campaign.content|safe }}
@@ -2331,7 +2287,7 @@ document.addEventListener("DOMContentLoaded", function() {
         <i class="fas fa-heart"></i>
     </span>
     <span style="color:gray; font-size:14px;" id="love-count-{{ campaign.id }}">
-        {{ campaign.love_count|format_count }}
+         {{ campaign.love_count_annotated|format_count }}
     </span>
     <span class="tooltip-label"> love</span> <!-- Tooltip container -->
 </div>
@@ -2380,111 +2336,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 </div>
             {% endfor %}
         </div>
-    {% else %}
-<!-- Default campaign display for when there are no public campaigns -->
-<div class="container-with-border">
-    <div class="upper-post">
-        <div class="profile-pic">
-            <img src="{% static 'main/files/am.jpg' %}" alt="Default Profile Picture" class="profile-pic-hover">
-        </div>
-      <div class="post-details">
-                            <h1>USERName
-                               
-                                    <span class="verified-status" style="font-size:12px;"><span>verified</span><i class="material-icons" style="font-size:12px;color:green">verified_user</i></span>
-                               
 
-                            </h1> 
-
-                            <div class="campaign-category" style="cursor: pointer;">
-                                campaign.category 
-                            </div>
-
-                            <div class="objectives-activities"></br>
-                                <h3>Objective:</h3>
-                                <p>[objectives]</p>
-                            </div>
-
-                            <h2 style="font-size:19px;">
-                                <a href="{% url 'view_campaign' campaign_id=campaign.pk %}" style="color:#3498db;">
-                                    <span>default campaign.title </span>
-                                </a>
-                            </h2>
-                            <sp class="time-location"> times ago -  campaign-location </sp>
-                            <div class="campaign-content" data-campaign-id="{{ campaign.id }}">
-                                 campaign.content
-                            </div>
-                        </div>
-    </div>
-    <div class="file-container">
-        <div style="position: relative;">
-                 <!-- Display the links if the user has joined the campaign -->
-    <a href="#" class="activity-link">
-        <i style='font-size:18px' class='fas'>&#xf6e3;</i>
-        <span class="activity-label">Activities</span>
-    </a>
-
-    <a href="#" class="support-link">
-        <i class="material-icons" style="font-size:18px;">&#xe925;</i>
-        <span class="participate-label">Participate</span>
-    </a>
-            <img src="{% static 'main/files/defo.png' %}" alt="Default Campaign Image" id="campaign-image" style="max-width: 100%; height: auto;">
-        </div>
-    </div>
-               <div class="lower-post">
-    <div class="react">
-   <div class="love">
-    <span style="cursor: pointer; font-size: 19px;" id="love-icon-{{ campaign.id }}" 
-          class="love-icon {% if user.is_authenticated and already_loved %}loved{% endif %}" 
-          >
-        <i class="fas fa-heart"></i>
-    </span>
-    <span style="color:gray; font-size:14px;" id="love-count-{{ campaign.id }}">
-      0 Love
-    </span>
-    <span class="tooltip-label"> love</span> <!-- Tooltip container -->
-</div>
-
-
-        <div class="view">
-            <i class="far fa-eye" style="font-size: 19px;"></i>
-            <span class="reaction-count" id="view-count">
-                {{ campaign.campaignview_set.count|format_count }} views
-            </span>
-            <span class="tooltip-label">Campaign views </span> <!-- Tooltip container -->
-        </div>
-
-        <div class="comment">
-            <span>
-                <i class="far fa-comment" style="font-size:19px;"></i>
-            </span>
-            <a href="#" class="comment-count">comment</a>
-            <span class="tooltip-label">Comment to Campaign</span> <!-- Tooltip container -->
-        </div>
-<div class="joiners">
-    <a href="#" class="comment-count" aria-label="View joiners of this campaign">
-        <i class="fas fa-user-plus" style="font-size:19px;"></i> <!-- User Plus Icon -->
-        Joiners ({{ campaign.user_profiles.count|format_count }})
-    </a>
-    <span class="tooltip-label">Campaign Joiners</span> <!-- Tooltip container -->
-</div>
-
-
-        {% if user.profile in campaign.user_profiles.all %}
-            <a href="#"class="join-leave-btn">
-                <i class="fas fa-user-minus"></i> Leave
-                <span class="tooltip-text">Leave Campaign</span>
-            </a>
-        {% else %}
-            <a href="#" class="join-leave-btn">
-                <i class="fas fa-user-plus"></i> Join
-                <span class="tooltip-text">Join Campaign</span>
-            </a>
-        {% endif %}
-    </div>
-</div>
-
-</div>
-    {% endif %}
 </section>
 
 
