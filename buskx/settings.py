@@ -78,29 +78,17 @@ TEMPLATES = [
 WSGI_APPLICATION = 'buskx.wsgi.application'
 
 
-import dj_database_url
-
-# Database configuration using Railway's DATABASE_URL
-DATABASES = {
-    'default': dj_database_url.config(
-        default=env('DATABASE_URL'),  # Use Railway's DATABASE_URL
-        conn_max_age=600,             # Connection pooling
-        ssl_require=True              # Enforce SSL for secure connections
-    )
-}
-
-
 # Database configuration
-#DATABASES = {
-   # 'default': {
-    #    'ENGINE': 'django.db.backends.postgresql',
-    #    'NAME': env('DB_NAME'),
-   #     'USER': env('DB_USER'),
-   #     'PASSWORD': env('DB_PASSWORD'),
-  #      'HOST': env('DB_HOST'),
-  #      'PORT': env('DB_PORT', default='5432'),
-  #  }
-#}
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT', default='5432'),
+    }
+}
 
 
 # Authentication and password validators
