@@ -84,6 +84,12 @@ DATABASES = {
 }
 
 
+CSRF_TRUSTED_ORIGINS = [
+    'https://web-production-2347.up.railway.app',
+    'https://rallynex.onrender.com',
+]
+
+
 # Authentication and password validators
 AUTH_PASSWORD_VALIDATORS = [
     {
