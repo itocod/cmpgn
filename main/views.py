@@ -1989,7 +1989,6 @@ def toggle_love(request, campaign_id):
 
 
 
-
 @login_required
 def home(request):
     # Get the current user's profile
@@ -2058,6 +2057,7 @@ def home(request):
         'unread_messages_count': unread_messages_count,
         'new_campaigns_from_follows': new_campaigns_from_follows,  # New campaigns ordered by latest
     })
+
 
 
 

@@ -83,11 +83,13 @@ DATABASES = {
     'default': env.db('DATABASE_URL'),
 }
 
-
 CSRF_TRUSTED_ORIGINS = [
     'https://web-production-2347.up.railway.app',
     'https://rallynex.onrender.com',
+    'https://www.rallynex.com',
+    'https://rallynex.com',
 ]
+
 
 
 # Authentication and password validators
