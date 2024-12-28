@@ -273,27 +273,26 @@ section {
 }
 
 
-/* Updated the nav styles to .campaign-nav */
-.campaign-nav {
-    margin-top: 20px;
-    border: 1px solid #808080;
-    border-radius: 5px;
-    overflow: hidden;
-}
+    nav {
+      margin-top: 20px;
+      border: 1px solid #808080;
+      border-radius: 5px;
+      overflow: hidden;
+    }
 
-.campaign-nav a {
-    text-decoration: none;
-    font-weight: bold;
-    padding: 8px 10px;
-    display: block;
-    transition: background-color 0.3s ease;
-    border-bottom: 1px solid #e6e6e6;
-}
+    nav a {
+      text-decoration: none;
+      font-weight: bold;
+      padding: 8px 10px;
+      display: block;
+      transition: background-color 0.3s ease;
+      border-bottom: 1px solid #e6e6e6;
+    }
 
-.campaign-nav a:hover {
-    background-color: limegreen; /* Light lime green on hover */
-}
+    nav a:hover {
+      background-color:limegreen; /* Light lime green on hover */
 
+    }
 
     /* Beautiful upload button styles */
     .upload-container {
@@ -360,6 +359,384 @@ border: 1px solid silver;
       margin: 10px 0; /* Add some margin for spacing */
     }
 
+.upper-post {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.upper-post:hover {
+  /* Optional: Add hover effects if needed */
+}
+
+/* Profile Picture Container */
+.profile-pic {
+  flex-shrink: 0; /* Prevent shrinking of the profile picture */
+  margin-right: 20px;
+  width: 48px; /* Explicit width for a square container */
+  height: 48px; /* Explicit height for a square container */
+  border-radius: 50%; /* Ensures circular shape */
+  overflow: hidden; /* Prevents overflow of the image outside the container */
+  background-color: #f0f0f0; /* Optional background color for placeholder */
+}
+
+
+
+/* Container: Ensures a circular boundary */
+.profile-pic {
+  flex-shrink: 0; /* Prevent shrinking */
+  width: 48px; /* Fixed size for the container */
+  height: 48px; /* Ensure a perfect square */
+  border-radius: 50%; /* Circular boundary */
+  overflow: hidden; /* Clip anything outside the circle */
+  display: inline-block; /* Keeps the shape consistent */
+  background-color: #e0e0e0; /* Optional placeholder background */
+  margin-right: 20px; /* Space around the circle */
+}
+
+/* Image: Ensures it fits within the circular container */
+.profile-pic img {
+  width: 100%; /* Scale width to fit container */
+  height: 100%; /* Scale height proportionally */
+  object-fit: contain; /* Display the entire image without cropping */
+  object-position: center; /* Center the image */
+}
+
+/* Mobile View Adjustments */
+@media (max-width: 768px) {
+  .upper-post {
+    flex-direction: column; /* Stack items vertically */
+    align-items: flex-start;
+  }
+
+  .profile-pic {
+    width: 50px; /* Adjust container size for mobile */
+    height: 50px; /* Keep it a square */
+    margin-bottom: 15px; /* Space below the profile pic */
+    margin-right: 0; /* Remove side margin for stacking */
+  }
+
+  .profile-pic img {
+    width: 100%; /* Fit within container */
+    height: 100%; /* Maintain aspect ratio */
+    object-fit: contain; /* Ensure no part of the image is cut off */
+    object-position: center; /* Center the image inside the circle */
+  }
+}
+
+
+
+
+
+.post-details {
+
+  flex: 1;
+}
+
+.post-details h2 {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.post-details h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.time-location {
+  color: #888;
+  margin-bottom: 5px;
+}
+
+
+
+.description {
+  color: #555;
+}
+
+.tag {
+  font-weight: bold;
+  color: #32CD32;
+}
+
+.tag::before {
+  content: "#";
+}
+
+@media (max-width: 768px) {
+  .upper-post {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .profile-pic {
+    margin-bottom: 15px;
+    margin-right: 0;
+  }
+}
+
+.comment-form-popup {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+
+.comment-form {
+  background-color: #fefefe;
+  margin: 10% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+.comment-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.comment-form button {
+  background-color: #FF69B4;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.comment-form button:hover {
+  background-color: #FF1493;
+}
+
+
+
+
+}
+
+/* Default styles for larger screens */
+.campaign-content {
+    font-size: 16px; /* Default font size for larger screens */
+    padding: 20px; /* Default padding */
+    margin: 10px; /* Default margin */
+    /* Add any other default styles here */
+}
+
+/* Mobile styles */
+@media (max-width: 768px) { /* Adjust the max-width as needed */
+    .campaign-content {
+        font-size: 14px; /* Increased font size for better readability */
+        padding: 15px; /* Slightly smaller padding */
+        margin: 8px; /* Slightly smaller margin */
+        transform: translateY(12px); /* Move down by 12px */
+        transition: transform 0.3s ease; /* Smooth transition */
+        max-width: 95%; /* Ensures the content fits well on smaller screens */
+    }
+}
+/* Default styles for larger screens */
+.campaign-content {
+    font-size: 16px; /* Default font size for larger screens */
+    padding: 20px; /* Default padding */
+    margin: 10px; /* Default margin */
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+    .container-with-border {
+        padding: 0; /* Adjust padding for mobile */
+        border-radius: 8px; /* Rounded corners for a softer look */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+    }
+
+    .campaign-content {
+        font-size: 15px; /* Slightly larger text for readability */
+        padding: 10px; /* Adjust padding for mobile */
+        margin: 8px 0; /* Adjust margin for better spacing */
+        transform: translateY(12px); /* Keep the vertical shift */
+        max-width: 95%; /* Ensures the content fits well on smaller screens */
+    }
+
+    h1, h2, h3 {
+        font-weight: bold; /* Make headings bold for emphasis */
+        line-height: 1.2; /* Improve line spacing for readability */
+    }
+
+    .post-details {
+        margin-bottom: 15px; /* Spacing between elements */
+    }
+
+    .react div {
+        font-size: 14px; /* Adjust reaction font size */
+    }
+
+    .tooltip-text {
+        font-size: 10px; /* Smaller tooltip text */
+        padding: 5px; /* Padding for tooltip */
+    }
+}
+.lower-post {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap; /* Allows wrapping on small devices */
+}
+
+.lower-post .react {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.lower-post .react > div {
+    margin-right: 10px; /* Reduced for better spacing on small devices */
+}
+
+.lower-post .react .reaction-count {
+    margin-right: 5px;
+}
+
+.reaction-count,
+.comment-count {
+    font-size: 14px;
+    color: grey;
+    margin-left: 5px;
+}
+.love-icon {
+    color: silver; /* Default color for unloved heart */
+    cursor: pointer; /* Makes it clear it's clickable */
+    position: relative; /* Positioning context for fireworks */
+    transition: color 0.2s ease; /* Smooth color transition */
+}
+
+.loved {
+    color: red; /* Color for the loved state */
+}
+.firework {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none; /* Prevent clicks on fireworks */
+    opacity: 0;
+}
+
+.firework1 {
+    background: rgba(255, 165, 0, 0.8); /* Orange color */
+    animation: firework-animation 0.8s forwards;
+}
+
+.firework2 {
+    background: rgba(0, 255, 0, 0.8); /* Green color */
+    animation: firework-animation 0.8s forwards;
+}
+
+.firework3 {
+    background: rgba(0, 0, 255, 0.8); /* Blue color */
+    animation: firework-animation 0.8s forwards;
+}
+
+.firework4 {
+    background: rgba(255, 0, 255, 0.8); /* Purple color */
+    animation: firework-animation 0.8s forwards;
+}
+
+@keyframes firework-animation {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.5); /* Increase the final scale to make them bigger */
+        opacity: 0;
+    }
+}
+
+@keyframes firework-animation {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+
+.love {
+    position: relative; /* Necessary for the absolute positioning of .love-label */
+}
+
+.love-label {
+    display: none; /* Hide label by default */
+    position: absolute; /* Position it absolutely */
+    bottom: 25px; /* Adjust as needed to position the label */
+    left: 50%; /* Center it horizontally */
+    transform: translateX(-50%); /* Center it using transform */
+    background-color: rgba(0, 0, 0, 0.7); /* Background for contrast */
+    color: white; /* Text color */
+    padding: 5px 10px; /* Padding around text */
+    border-radius: 5px; /* Rounded corners */
+    z-index: 10; /* Ensure it appears above other elements */
+}
+
+/* Adjust this selector to target the love-label correctly */
+.love-icon:hover + .love-label {
+    display: block; /* Show the label when hovering over the love icon */
+}
+
+/* Mobile styles */
+@media only screen and (max-width: 600px) {
+    .reaction-count,
+    .comment-count {
+        font-size: 12px; /* Smaller font size on mobile */
+        margin-left: 3px;
+    }
+    
+    .lower-post .react > div {
+        margin-right: 5px; /* Further reduce margin for smaller screens */
+    }
+
+    .lower-post .love-icon,
+    .lower-post .fa-eye,
+    .lower-post .fa-comment {
+        font-size: 16px; /* Reduce the icon size */
+    }
+}
+
+.comments .comment {
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 5px;
+    display: flex;
+}
+
+.comments .comment .commenter-info {
+    margin-right: 10px;
+}
+
+.comments .comment .profile-pic-comment {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.comments .comment .commenter-name {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.comments .comment .comment-text {
+    flex: 1;
+}
 
 .overlay-link {
     position: absolute;
@@ -391,7 +768,82 @@ border: 1px solid silver;
     overflow: hidden; /* Ensure the border doesn't overflow */
   }
 
- 
+  #campaign-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px; /* Border radius for the image */
+    transition: transform 0.3s ease; /* Add transition for smooth transformation */
+  }
+
+  /* Apply styles when hovering over the image */
+  #campaign-image:hover {
+    transform: scale(1.05); /* Scale the image slightly on hover */
+  }
+
+
+
+
+
+
+   .comment-count {
+        text-decoration: none; /* Remove underline */
+        color: gray; /* Inherit color from parent */
+    }
+
+
+/* Base styles for both activity and support links */
+.activity-link, .support-link {
+    position: absolute;
+    top: 10px;
+    padding: 10px;
+    border-radius: 50%;
+    z-index: 2;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* Specific styles for the Activities link (left side) */
+.activity-link {
+    left: 10px;
+    color: white;
+    background-color: black;
+}
+
+/* Specific styles for the Support link (right side) */
+.support-link {
+    right: 10px;
+    color: black;
+    background-color: white;
+}
+
+
+
+
+/* Hover effect to show the label */
+.activity-link:hover .icon-label, .support-link:hover .icon-label {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-50%) translateY(5px);
+}
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+    .activity-link, .support-link {
+        padding: 8px;
+    }
+    .icon-label {
+        max-width: 100px;
+        font-size: 10px;
+        padding: 4px 8px;
+    }
+    .icon-label::after {
+        border-width: 5px;
+    }
+}
+
 
 
 
@@ -430,6 +882,23 @@ border: 1px solid silver;
     transition: background-color 0.3s ease;
   }
 
+  .donate-link:hover {
+    background-color: #228B22;
+  }
+
+.profile-pic-hover:hover {
+    transform: scale(1.5); /* Adjust the scale factor as needed */
+    transition: transform 0.2s ease-in-out; /* Smooth transition */
+}
+
+
+
+
+.cm {
+  font-size: 14px;
+}
+
+
 
 .container-with-border {
     border: 1px solid silver;
@@ -441,6 +910,56 @@ border: 1px solid silver;
 
 
 
+    .love-icon-size {
+        font-size: 30px !important; /* Ensure that the font size is at least 30px */
+    }
+
+
+    .alert-badge {
+        background-color: red;
+        color: white;
+        border-radius: 50%;
+        padding: 5px 8px;
+        position: absolute;
+        top: -5px;
+        right: 1px;
+        font-size: 10px;
+    }
+
+
+
+.react div {
+    background-color: #F5F5F5; /* Setting initial background color */
+    display: inline-block; /* Ensuring each element occupies its own line */
+    padding: 5px; /* Adding some padding for better appearance */
+    border: 0 solid silver; /* Adding a silver border */
+    border-radius: 10px; /* Adding border radius */
+    margin-right: 5px; /* Adding some space between elements */
+    transition: box-shadow 0.3s; /* Adding transition for smoother hover effect */
+}
+
+.react div:hover,
+.react div:focus {
+    background-color:white; /* Changing background color to a lighter shade of silver on hover or focus */
+   /* Changing border color on hover or focus */
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1); /* Adding box shadow on hover or focus */
+    outline: none; /* Removing default focus outline */
+    cursor: pointer; /* Changing cursor on hover */
+}
+
+
+.time-location {
+    font-size: 14px;
+    color: #999;
+    margin-bottom: 10px;
+}
+
+.campaign-content {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+}
+
 
 
 
@@ -451,6 +970,67 @@ border: 1px solid silver;
     margin-bottom: 20px; /* Add some space below the campaign actions */
 }
 
+/* Style for the "Report Campaign" link */
+.report-link {
+    color: #007bff; /* Set link color */
+    text-decoration: none; /* Remove default underline */
+    font-weight: bold; /* Make the text bold */
+}
+
+/* Style for the "Not Interested" form */
+.not-interested-form {
+    display: flex; /* Display form items in a row */
+    align-items: center; /* Vertically center items */
+}
+
+/* Style for the checkbox label */
+.not-interested-form label {
+    margin-right: 10px; /* Add space between the checkbox and label */
+}
+
+/* Style for the submit button */
+.submit-button {
+    background-color: #007bff; /* Set button background color */
+    color: #fff; /* Set button text color */
+    border: none; /* Remove default button border */
+    padding: 8px 16px; /* Add padding to the button */
+    border-radius: 5px; /* Add some border radius */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    transition: background-color 0.3s ease; /* Add smooth transition */
+}
+
+/* Hover effect for the submit button */
+.submit-button:hover {
+    background-color: #0056b3; /* Darken button background color on hover */
+}
+
+
+
+.share-buttons {
+    margin-top: 20px;
+}
+
+.share-buttons span {
+    margin-right: 10px;
+}
+
+.share-buttons a {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 40px;
+    margin-right: 10px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.share-buttons a:hover {
+    background-color: #0056b3;
+}
 
        .action-item {
             display: inline-block;
@@ -681,6 +1261,7 @@ border: 1px solid silver;
     font-weight: bold;
 }
 
+
 .ad a {
     display: block;
     width: 100%;
@@ -834,9 +1415,89 @@ border: 1px solid silver;
 
 
 
+@media (max-width: 480px) {
+  .upper-post, .lower-post, .upload-container {
+    padding: 10px;
+  }
+}
 
 
 
+  .changemaker-text {
+        visibility: hidden; /* Initially hide the text */
+        font-size: 16px;
+        color: #333;
+        position: absolute;
+        margin-left: 5px; /* Adjust positioning next to the star */
+    }
+
+    .cm:hover .changemaker-text {
+        visibility: visible; /* Show text on hover */
+    }
+
+
+.join-leave-btn {
+    position: relative;
+    text-decoration: none;
+    display: inline-block;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, #1a1a1a, #444);
+    color: #e0e0e0;
+    border: 2px solid transparent;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    cursor: pointer;
+}
+
+.join-leave-btn:hover {
+    background: linear-gradient(135deg, #333, #000);
+    color: #fff;
+    border: 2px solid #fff;
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
+}
+
+.tooltip-text {
+    visibility: hidden;
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    color: #e0e0e0;
+    padding: 8px 12px;
+    border-radius: 6px;
+    white-space: nowrap;
+    font-size: 12px;
+    opacity: 0;
+    transition: visibility 0.3s, opacity 0.3s;
+    text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.6);
+}
+
+.join-leave-btn:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+    bottom: 130%; /* Slightly moving upward */
+}
+
+.join-leave-btn::after {
+    content: '🌙';
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    font-size: 20px;
+    opacity: 0.6;
+    transition: all 0.3s ease;
+}
+
+.join-leave-btn:hover::after {
+    transform: rotate(20deg);
+    opacity: 1;
+}
 
 
 .sidebar-box {
@@ -860,21 +1521,202 @@ border: 1px solid silver;
         padding: 0;
     }
 }
-.cm {
-  font-size: 14px;
+/* Styles for the "Activities" label (left-centered) */
+.activity-label {
+    visibility: hidden;
+    max-width: 120px;
+    background: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
+    color: white;
+    text-align: center;
+    border-radius: 12px;
+    padding: 12px 12px 8px; /* Increased top padding */
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    left: 80%; /* Centered below the icon */
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+    font-size: 11px;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    word-wrap: break-word;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Styles for the "Participate" label (right-aligned) */
+.participate-label {
+    visibility: hidden;
+    max-width: 120px;
+    background: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
+    color: white;
+    text-align: center;
+    border-radius: 12px;
+    padding: 12px 12px 8px; /* Increased top padding */
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    right: 0; /* Positioned to the right */
+    transform: translateX(0); /* No centering needed */
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+    font-size: 11px;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    word-wrap: break-word;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Hover effect for the "Activities" label */
+.activity-link:hover .activity-label {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-50%) translateY(-10px); /* Slight upward motion */
+}
+
+/* Hover effect for the "Participate" label */
+.support-link:hover .participate-label {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(-10px); /* Slight upward motion */
+}
+
+/* Tooltip arrow pointing up, located below the "Activities" icon */
+.activity-label::after {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    right: 60%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: transparent transparent rgba(0, 0, 0, 0.7) transparent;
+}
+
+/* Tooltip arrow pointing up, located below the "Participate" icon */
+.participate-label::after {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 80%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: transparent transparent rgba(0, 0, 0, 0.7) transparent;
+}
+
+.react {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Adds space between the icons */
+}
+
+.love, .view, .comment, .joiners {
+    position: relative; /* Necessary for tooltip positioning */
+}
+
+.tooltip-label {
+    display: none; /* Hide by default */
+    position: absolute;
+    bottom: 100%; /* Position above the icon */
+    left: 50%; /* Center the tooltip */
+    transform: translateX(-50%);
+    background-color: #333; /* Dark background for the tooltip */
+    color: #fff; /* White text for contrast */
+    padding: 5px 10px; /* Padding around the text */
+    border-radius: 4px; /* Rounded corners */
+    font-size: 12px; /* Font size for the tooltip text */
+    white-space: nowrap; /* Prevent text from wrapping */
+    z-index: 10; /* Ensure tooltip is above other elements */
+    opacity: 0; /* Start hidden */
+    transition: opacity 0.3s; /* Fade in effect */
+}
+
+/* Show tooltip on hover */
+.love:hover .tooltip-label,
+.view:hover .tooltip-label,
+.comment:hover .tooltip-label,
+.joiners:hover .tooltip-label {
+    display: block; /* Show the tooltip */
+    opacity: 1; /* Make it fully visible */
+}
+
+/* Optional: styling for the icons */
+.love-icon, .far.fa-eye, .far.fa-comment {
+    cursor: pointer; /* Pointer cursor for clickable icons */
+    transition: color 0.2s; /* Smooth color transition */
+}
+
+.love-icon:hover {
+    color: red; /* Change color on hover for love icon */
+}
+
+.far.fa-eye:hover, .far.fa-comment:hover {
+    color: #555; /* Change color on hover for other icons */
+}
+
+/* Updated the nav styles to .campaign-nav */
+.campaign-nav {
+    margin-top: 20px;
+    border: 1px solid #808080;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.campaign-nav a {
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px 10px;
+    display: block;
+    transition: background-color 0.3s ease;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.campaign-nav a:hover {
+    background-color: limegreen; /* Light lime green on hover */
 }
 
 
-    .alert-badge {
-        background-color: red;
-        color: white;
-        border-radius: 50%;
-        padding: 5px 8px;
-        position: absolute;
-        top: -5px;
-        right: 1px;
-        font-size: 10px;
+/* For larger screens (desktop) */
+h4 {
+    font-size: 19px;
+    padding-left: 20px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.explore-link i {
+    font-size: 14px;  /* Smaller icon size */
+    color: black;  /* Default icon color is black */
+    transition: transform 0.3s ease, color 0.3s ease;  /* Smooth transition for hover and color change */
+}
+
+/* For smaller screens (mobile) */
+@media (max-width: 768px) {
+    h4 {
+        font-size: 16px;  /* Smaller text on mobile */
+        padding-left: 15px;  /* Reduced padding */
     }
+
+    .explore-link i {
+        font-size: 12px;  /* Even smaller icon on mobile */
+    }
+}
+
+/* Hover effect for icon */
+.explore-link:hover i {
+    transform: scale(1.1);  /* Slightly enlarge the icon on hover */
+}
+
+/* Adjust the icon color depending on the background (for both light and dark backgrounds) */
+body.light-theme .explore-link i {
+    color: black;  /* Black icon for light backgrounds */
+}
+
+body.dark-theme .explore-link i {
+    color: white;  /* White icon for dark backgrounds */
+}
+
 
 
   </style>
@@ -895,7 +1737,6 @@ border: 1px solid silver;
 
 <script>
 
-
 function switchColor() {
     var body = document.body;
     var logoContainer = document.querySelector('.logo-container');
@@ -914,24 +1755,25 @@ function switchColor() {
 
     // Change background color and border of logo-container based on nextColor
     if (nextColor === "black") {
-        logoContainer.style.backgroundColor = "transparent";
+        logoContainer.style.backgroundColor = "";
         logoContainer.style.border = "none"; 
     } else {
-        logoContainer.style.backgroundColor = "transparent";
-        logoContainer.style.border = "none"; 
+        logoContainer.style.backgroundColor = ""; // or "transparent"
+        logoContainer.style.border = "none";  // Remove border
     }
 
-    // Elements to update based on nextColor
+    // Other elements to be updated based on nextColor
     var header = document.querySelector('header');
     var footer = document.querySelector('footer');
     var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, p, li, .campaign-nav,.campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
+    var textElements = document.querySelectorAll('h1, h2,h4, p, li, .campaign-nav, .campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a,.explore-link');
     var reactDivs = document.querySelectorAll('.react div');
     var loveCounts = document.querySelectorAll('[id^="love-count-"]');
     var viewCounts = document.querySelectorAll('#view-count');
     var commentCounts = document.querySelectorAll('.comment-count');
+    var exploreLinks = document.querySelectorAll('.explore-link i'); // Select all compass icons
 
-    // Update header and footer background color based on nextColor
+    // Update header background color based on nextColor
     if (nextColor === "black") {
         header.style.backgroundColor = "#333333";  // Darker gray when background is black
     } else {
@@ -944,7 +1786,6 @@ function switchColor() {
         section.style.backgroundColor = nextColor;
     });
 
-    // Adjust text color based on nextColor
     var textColor = nextColor === "black" ? "white" : "black";
     header.style.color = textColor;
     footer.style.color = textColor;
@@ -953,8 +1794,13 @@ function switchColor() {
         element.style.color = textColor;
     });
 
-    // Skip changing specific button colors (e.g., .btn-search, .btn-reset)
-    var buttonColor = nextColor === "black" ? "#262626" : ""; 
+    // Change the color of the compass icon based on the background color
+    exploreLinks.forEach(function(icon) {
+        icon.style.color = nextColor === "black" ? "white" : "black";
+    });
+
+    // Skip changing button colors
+    var buttonColor = nextColor === "black" ? "#262626" : ""; // If you want to change button colors based on background, adjust this accordingly
     var buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)'); // Exclude specific buttons
     buttons.forEach(function(button) {
         button.style.backgroundColor = buttonColor;
@@ -967,7 +1813,6 @@ function switchColor() {
         }
     });
 
-    // Update colors for .react divs
     reactDivs.forEach(function(reactDiv) {
         reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
 
@@ -982,7 +1827,6 @@ function switchColor() {
         }
     });
 
-    // Adjust colors for counts (love, view, comment counts)
     var countTextColor = nextColor === "black" ? "white" : "black";
     loveCounts.forEach(function(element) {
         element.style.color = countTextColor;
@@ -994,6 +1838,8 @@ function switchColor() {
         element.style.color = countTextColor;
     });
 }
+
+
 
 
 
@@ -1160,8 +2006,6 @@ document.addEventListener("DOMContentLoaded", function() {
  </div>
 </form>
     </div>
-
-
 </div>
 
 
@@ -1211,7 +2055,7 @@ document.addEventListener("DOMContentLoaded", function() {
         </a></li>
         <!-- Add logout link here -->
                 <li>
-          <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"  style="color: white;">
+          <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"  style="color:black;">
     <i class="fas fa-sign-out-alt" style="color:red;"></i> Logout
 </a>
 
@@ -1308,8 +2152,8 @@ document.addEventListener("DOMContentLoaded", function() {
     </div>
 </div>
 
-
 </aside>
+
 
 
 
@@ -1327,11 +2171,8 @@ document.addEventListener("DOMContentLoaded", function() {
     </br>
 
 
-<div class="sidebar-box">
+
   {% block content %}{% endblock %}
-           
-</div>
-    
 </section>
 
 
@@ -1801,4 +2642,5 @@ function triggerFireworks(loveIcon) {
 </script>
 </body>
 </html>
-
+  
+           
