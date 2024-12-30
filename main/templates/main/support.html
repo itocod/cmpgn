@@ -6,9 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   
     <title>Support Campaign</title>
-  
 <style>
     body {
         font-family: Arial, sans-serif;
@@ -22,7 +20,7 @@
 
     .cc-header {
         text-align: center;
-        background-color: #ffffff;
+        background-color: #ffffff; /* White header */
         border: 1px solid #ddd;
         padding: 15px;
         margin-bottom: 20px;
@@ -32,13 +30,13 @@
 
     .cc-header .activity-title {
         font-size: 1.5rem;
-        color: #333;
+        color: #333333; /* Dark text for better contrast */
         margin-bottom: 5px;
         font-weight: bold;
     }
 
     .cc-header .activity-title a {
-        color: #3498db;
+        color: #2980b9; /* Blue link */
         text-decoration: none;
     }
 
@@ -48,40 +46,44 @@
 
     .cc-header .activity-count {
         font-size: 1.2rem;
-        color: #666;
+        color: #bbbbbb; /* Light gray text */
     }
 
     .support-table {
         width: 100%;
         border-collapse: collapse;
         margin: 20px auto;
-        background-color: #ffffff;
+        background-color: #f4f6f9; /* Light gray background for table */
         border-radius: 8px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        overflow: hidden;
     }
 
     .support-table th, .support-table td {
         border: 1px solid #ddd;
         padding: 12px;
         text-align: left;
+        color: #333; /* Darker text for better readability */
     }
 
     .support-table th {
-        background-color: #007bff;
-        color: #ffffff;
+        background-color: #2980b9; /* Dark blue for header */
+        color: white; /* White text */
         font-weight: bold;
     }
 
+    .support-table td {
+        background-color: #ffffff; /* White background for table rows */
+    }
+
     .support-table td a {
-        color: #007bff;
+        color: #2980b9; /* Dark blue links */
         text-decoration: none;
         font-weight: bold;
     }
 
     .support-table td a:hover {
         text-decoration: underline;
-        color: #0056b3;
+        color: #3498db; /* Lighter blue on hover */
     }
 
     .no-support-links {
@@ -102,7 +104,7 @@
         margin-bottom: 20px;
         width: 100%; /* Full-width buttons */
         color: #fff;
-        background-color: #4CAF50;
+        background-color: #4CAF50; /* Green button */
         padding: 10px 20px;
         border-radius: 5px;
         text-decoration: none;
@@ -196,359 +198,76 @@
 
 </head>
 <body>
-
-<div class="support-container">
-    <div class="cc-header">
-        <div class="activity-title">
-            Participate in,
-            <a href="{% url 'view_campaign' campaign_id=campaign.pk %}" class="campaign-link">
-                {{ campaign.title }}
-            </a>
+    <div class="support-container">
+        <div class="cc-header">
+            <div class="activity-title">
+                Participate in, 
+                <a href="{% url 'view_campaign' campaign_id=campaign.pk %}">
+                    {{ campaign.title }}
+                </a>
+            </div>
+            <div class="activity-count">Choose how to participate below:</div>
         </div>
-        <div class="activity-count">Participate Below:</div>
-    </div>
+        
+        {% if request.user == campaign.user.user %}
+            {% if not support_campaign.donate_monetary_visible and not support_campaign.attend_event_visible and not support_campaign.brainstorm_idea_visible and not support_campaign.campaign_product_visible %}
+                <div class="no-support-links">No support options available at the moment.</div>
+            {% else %}
+                <table class="support-table">
+                    <thead>
+                        <tr>
+                            <th>Participation Choices</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if support_campaign.donate_monetary_visible %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'donate_monetary' campaign_id=campaign.id %}">
+                                        💰 Donate to this Campaign
+                                    </a>
+                                </td>
+                                <td>Visible</td>
+                            </tr>
+                        {% endif %}
+                        {% if support_campaign.attend_event_visible %}
+                            <tr>
+                                <td>
+                                    <a href="#">🎟️ Attend Event</a>
+                                </td>
+                                <td>Visible</td>
+                            </tr>
+                        {% endif %}
+                        {% if support_campaign.brainstorm_idea_visible %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'brainstorm_idea' campaign_id=campaign.id %}">💡 Brainstorm Idea</a>
 
-    <hr>
+                                </td>
+                                <td>Visible</td>
+                            </tr>
+                        {% endif %}
+                        {% if support_campaign.campaign_product_visible %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'product_manage' campaign_id=campaign.id %}">📦 Campaign Product</a>
 
-    {% if request.user == campaign.user.user %}
-        {% if not support_campaign.donate_monetary_visible and not support_campaign.attend_event_visible and not support_campaign.brainstorm_idea_visible and not support_campaign.campaign_product_visible %}
-            <div class="no-support-links">No support links available yet.</div>
-        {% else %}
-            <table class="support-table">
-                <thead>
-                    <tr>
-                        <th>Participation Choices</th>
-                        <th>Status</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% if support_campaign.donate_monetary_visible %}
-                        <tr>
-                            <td>
-                                <a href="{% url 'donate_monetary' campaign_id=campaign.id %}" class="support-link">
-                                    <svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height: 20px;">
-                                        <path d="M32 56s-12-6-20-16c-7-9-9-15-9-21 0-9 6-14 14-14 7 0 10 6 10 6s3-6 10-6c8 0 14 5 14 14 0 6-2 12-9 21-8 10-20 16-20 16z"></path>
-                                        <text x="24" y="38" font-size="14" font-weight="bold" font-family="Arial">$</text>
-                                    </svg>
-                                    Donate to this Campaign
-                                </a>
-                            </td>
-                            <td>Visible</td>
-                        </tr>
-                    {% endif %}
-                    {% if support_campaign.attend_event_visible %}
-                        <tr>
-                            <td>
-                                <a href="#" class="support-link">
-                                    <svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height: 20px;">
-                                        <circle cx="32" cy="32" r="30" fill="blue"></circle>
-                                        <text x="18" y="38" font-size="12" font-weight="bold" fill="white" font-family="Arial">🎫</text>
-                                    </svg>
-                                    Attend Event
-                                </a>
-                            </td>
-                            <td>Visible</td>
-                        </tr>
-                    {% endif %}
-                    {% if support_campaign.brainstorm_idea_visible %}
-                        <tr>
-                            <td>
-                                <a href="#" class="support-link">
-                                    <svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height: 20px;">
-                                        <circle cx="32" cy="32" r="30" fill="yellow"></circle>
-                                        <text x="16" y="38" font-size="12" font-weight="bold" fill="black" font-family="Arial">💡</text>
-                                    </svg>
-                                    Brainstorm Idea
-                                </a>
-                            </td>
-                            <td>Visible</td>
-                        </tr>
-                    {% endif %}
-                    {% if support_campaign.campaign_product_visible %}
-                        <tr>
-                            <td>
-                                <a href="#" class="support-link">
-                                    <svg class="icon" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" style="width: 20px; height: 20px;">
-                                        <rect x="10" y="20" width="44" height="24" fill="green"></rect>
-                                        <text x="16" y="38" font-size="12" font-weight="bold" fill="white" font-family="Arial">📦</text>
-                                    </svg>
-                                    Campaign Product
-                                </a>
-                            </td>
-                            <td>Visible</td>
-                        </tr>
-                    {% endif %}
-                </tbody>
-            </table>
+                                </td>
+                                <td>Visible</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            {% endif %}
         {% endif %}
-    {% endif %}
-
-    <p>Participating is good.</p>
-
-    {% if request.user == campaign.user.user %}
-        <a href="{% url 'update_visibility' campaign_id=campaign.id %}" class="update-visibility-link">Update Visibility</a>
-    {% endif %}
-</div>
-
-  
-
-    <hr>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-
-    document.addEventListener('DOMContentLoaded', function() {
-        var supportList = document.querySelector('.support-list');
-        var supportItems = supportList.querySelectorAll('.support-list-item');
-        var hasVisibleItem = false;
-
-        supportItems.forEach(function(item) {
-            if (window.getComputedStyle(item).display !== 'none') {
-                hasVisibleItem = true;
-            }
-        });
-
-        if (hasVisibleItem) {
-            supportList.style.display = 'block';
-        }
-    });
-
-
-        function hideLink(link
-        function hideLink(linkName) {
-            // Send an AJAX request to the server to update the hidden links for the campaign
-            $.ajax({
-                type: 'POST',
-                url: '{% url "update_hidden_links" %}',
-                data: {
-                    link_name: linkName,
-                    campaign_id: {{ campaign.id }},
-                    csrfmiddlewaretoken: '{{ csrf_token }}'
-                },
-                success: function(response) {
-                    if (response.success) {
-                        // Hide the list item containing the link on success
-                        $('#' + linkName + '-link-li').hide();
-                    } else {
-                        alert('Failed to hide link.');
-                    }
-                },
-                error: function(xhr, status, error) {
-                    alert('AJAX request failed: ' + error);
-                }
-            });
-        }
-
-        // Function to handle file upload and playback
-        function uploadAudio() {
-            var input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'audio/*, video/*'; // Limit file selection to audio files
-
-            // Listen for file selection
-            input.onchange = function(e) {
-                var file = e.target.files[0];
-                var audio = document.getElementById('bgAudio');
-
-                // Pause the current audio playback
-                audio.pause();
-
-                // Store the selected audio file and its playback position in local storage
-                localStorage.setItem('bgAudioFile', URL.createObjectURL(file));
-                localStorage.setItem('bgAudioPosition', audio.currentTime);
-
-                // Set the audio source to the selected file
-                audio.src = localStorage.getItem('bgAudioFile');
-
-                // Resume audio playback
-                audio.play();
-            };
-
-            // Trigger the file input
-            input.click();
-        }
-
-        // Function to set background audio on page load
-        window.onload = function() {
-            var audio = document.getElementById('bgAudio');
-            var bgAudioFile = localStorage.getItem('bgAudioFile');
-            var audioPosition = parseFloat(localStorage.getItem('bgAudioPosition'));
-
-            // Check if there's a stored audio file
-            if (bgAudioFile) {
-                // Set the audio source to the stored file
-                audio.src = bgAudioFile;
-
-                // Set the playback position if available
-                if (!isNaN(audioPosition)) {
-                    audio.currentTime = audioPosition;
-                }
-
-                // Autoplay the audio
-                audio.play();
-            }
-        };
-
-        // Store current playback position before page refresh
-        window.addEventListener('beforeunload', function() {
-            var audio = document.getElementById('bgAudio');
-            localStorage.setItem('bgAudioPosition', audio.currentTime);
-        });
-
-function switchColor() {
-    var body = document.body;
-    var logoContainer = document.querySelector('.logo-container');
-
-    // Define the color sequence (black, white)
-    var colors = ["black", "white"];
-
-    // Find the index of the current color in the sequence
-    var currentIndex = colors.indexOf(body.style.backgroundColor);
-
-    // Set the next color in the sequence
-    var nextColor = colors[(currentIndex + 1) % colors.length];
-
-    // Apply the new color to the body and other elements
-    body.style.backgroundColor = nextColor;
-
-    // Change background color and border of logo-container based on nextColor
-    if (nextColor === "black") {
-        logoContainer.style.backgroundColor = "";
-        logoContainer.style.border = "none"; 
-    } else {
-        logoContainer.style.backgroundColor = ""; // or "transparent"
-        logoContainer.style.border = "none";  // Remove border
-    }
-
-    // Other elements to be updated based on nextColor
-    var header = document.querySelector('header');
-    var footer = document.querySelector('footer');
-    var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, p, li,.campaign-nav,.campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
-    var buttons = document.querySelectorAll('button');
-    var reactDivs = document.querySelectorAll('.react div');
-    var loveCounts = document.querySelectorAll('[id^="love-count-"]');
-    var viewCounts = document.querySelectorAll('#view-count');
-    var commentCounts = document.querySelectorAll('.comment-count');
-
-    // Update header background color based on nextColor
-    if (nextColor === "black") {
-        header.style.backgroundColor = "#333333";  // Darker gray when background is black
-    } else {
-        header.style.backgroundColor = nextColor;
-    }
-
-    footer.style.backgroundColor = nextColor;
-
-    sections.forEach(function(section) {
-        section.style.backgroundColor = nextColor;
-    });
-
-    var textColor = nextColor === "black" ? "white" : "black";
-    header.style.color = textColor;
-    footer.style.color = textColor;
-
-    textElements.forEach(function(element) {
-        element.style.color = textColor;
-    });
-
-    var buttonColor = nextColor === "black" ? "#262626" : "";
-    buttons.forEach(function(button) {
-        button.style.backgroundColor = buttonColor;
-
-        if (nextColor === "black") {
-            button.classList.add('button-hover');
-        } else {
-            button.classList.remove('button-hover');
-            button.style.backgroundColor = "";
-        }
-    });
-
-    reactDivs.forEach(function(reactDiv) {
-        reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
-
-        var reactTextColor = nextColor === "black" ? "white" : "black";
-        reactDiv.style.color = reactTextColor;
-
-        if (nextColor === "black") {
-            reactDiv.classList.add('react-hover');
-        } else {
-            reactDiv.classList.remove('react-hover');
-            reactDiv.style.backgroundColor = "";
-        }
-    });
-
-    var countTextColor = nextColor === "black" ? "white" : "black";
-    loveCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-    viewCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-    commentCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-}
-
-
-  document.addEventListener('DOMContentLoaded', function() {
-    var mediaQuery = window.matchMedia('(max-width: 768px)');
-    var leftAside = document.querySelector('.left-aside');
-    var rightAside = document.querySelector('.right-aside');
-
-    function handleMediaQueryChange(e) {
-      if (e.matches) {
-        leftAside.style.display = 'none';
-        rightAside.style.display = 'none';
-      } else {
-        leftAside.style.display = 'block';
-        rightAside.style.display = 'block';
-      }
-    }
-
-    mediaQuery.addListener(handleMediaQueryChange);
-    handleMediaQueryChange(mediaQuery);
-  });
-
-
-
-
-    </script>
-  
-    <script type="text/javascript">   function uploadAudio() {
-        var input = document.createElement('input');
-        input.type = 'file';
-        input.accept = 'audio/*, video/*';
-
-        input.onchange = function(e) {
-            var file = e.target.files[0];
-            var audio = document.getElementById('bgAudio');
-            audio.pause();
-            localStorage.setItem('bgAudioFile', URL.createObjectURL(file));
-            localStorage.setItem('bgAudioPosition', audio.currentTime);
-            audio.src = localStorage.getItem('bgAudioFile');
-            audio.play();
-        };
-
-        input.click();
-    }
-
-    window.onload = function() {
-        var audio = document.getElementById('bgAudio');
-        var bgAudioFile = localStorage.getItem('bgAudioFile');
-        var audioPosition = parseFloat(localStorage.getItem('bgAudioPosition'));
-
-        if (bgAudioFile) {
-            audio.src = bgAudioFile;
-            audio.addEventListener('loadedmetadata', function() {
-                if (!isNaN(audioPosition)) {
-                    audio.currentTime = audioPosition;
-                }
-                audio.play();
-            });
-        }
-    }</script>
-
+        
+        {% if request.user == campaign.user.user %}
+            <a href="{% url 'update_visibility' campaign_id=campaign.id %}" class="update-visibility-link">
+                Update Visibility
+            </a>
+        {% endif %}
+    </div>
 </body>
 </html>
-
 {% endblock %}

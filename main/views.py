@@ -1134,58 +1134,55 @@ def payment_cancel(request):
 
 
 
-
-
-
 @login_required
 def update_visibility(request, campaign_id):
     following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
-        # Fetch unread notifications for the user
-    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-                    # Get the user's profile
     user_profile = get_object_or_404(Profile, user=request.user)
-    if request.method == 'POST':
-        # Get all support campaigns associated with the specified campaign ID
-        try:
-            campaigns = SupportCampaign.objects.filter(campaign_id=campaign_id)
-        except ObjectDoesNotExist:
-            return HttpResponseServerError("Campaign not found")
-        except MultipleObjectsReturned:
-            # Handle the situation where multiple campaigns are found
-            return HttpResponseServerError("Multiple campaigns found for the same ID")
-        
-        # Update visibility settings for each support campaign
-        for campaign in campaigns:
-            campaign.donate_monetary_visible = request.POST.get('donate_monetary_visible', False) == 'on'
-            campaign.share_social_media_visible = request.POST.get('share_social_media_visible', False) == 'on'
-          
-            campaign.provide_resource_visible = request.POST.get('provide_resource_visible', False) == 'on'
-            campaign.brainstorm_idea_visible = request.POST.get('brainstorm_idea_visible', False) == 'on'
-            campaign.campaign_product_visible = request.POST.get('campaign_product_visible', False) == 'on'
-         
-            campaign.save()
-        
-        return redirect('support', campaign_id=campaign_id)
-    else:
-        try:
-            # Get the campaign for which visibility settings are being updated
-            campaign = Campaign.objects.get(pk=campaign_id)
-        except ObjectDoesNotExist:
-            return HttpResponseServerError("Campaign not found")
+    
     # Fetch unread notifications for the user
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    # Check if there are new campaigns from follows
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
+    
+    try:
+        # Get the campaign for which visibility settings are being updated
+        campaign = Campaign.objects.get(pk=campaign_id)
+    except ObjectDoesNotExist:
+        return HttpResponseServerError("Campaign not found")
 
-    # Update last_campaign_check for the user's profile
+    # Get all support campaigns associated with the specified campaign ID
+    support_campaigns = SupportCampaign.objects.filter(campaign_id=campaign_id)
+
+    if request.method == 'POST':
+        # Update visibility settings for each support campaign
+        for support_campaign in support_campaigns:
+            support_campaign.donate_monetary_visible = request.POST.get('donate_monetary_visible', False) == 'on'
+            support_campaign.share_social_media_visible = request.POST.get('share_social_media_visible', False) == 'on'
+            support_campaign.provide_resource_visible = request.POST.get('provide_resource_visible', False) == 'on'
+            support_campaign.brainstorm_idea_visible = request.POST.get('brainstorm_idea_visible', False) == 'on'
+            support_campaign.campaign_product_visible = request.POST.get('campaign_product_visible', False) == 'on'
+            support_campaign.save()
+
+        return redirect('support', campaign_id=campaign_id)
+
+    # Fetch additional data for notifications and new campaigns
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__in=following_users,
+        visibility='public',
+        timestamp__gt=user_profile.last_campaign_check
+    )
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
-    ads = NativeAd.objects.all()  
-    return render(request, 'main/update_visibility.html', {'ads':ads,'campaign': campaign,
-            'user_profile':user_profile,
-            'unread_notifications':unread_notifications,
-            'new_campaigns_from_follows':new_campaigns_from_follows
-            })
+
+    ads = NativeAd.objects.all()
+
+    # Pass support campaigns to the template
+    return render(request, 'main/update_visibility.html', {
+        'ads': ads,
+        'campaign': campaign,
+        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'new_campaigns_from_follows': new_campaigns_from_follows,
+        'support_campaigns': support_campaigns,  # Added this to the context
+    })
 
 
 @login_required
