@@ -35,7 +35,6 @@ sitemaps = {
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
-    path('accounts/', include('allauth.socialaccount.urls')),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('accounts/password/reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
     path('', include('accounts.urls')),
