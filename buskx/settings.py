@@ -213,7 +213,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # settings.py
 
-SITE_URL = 'https://rallynex.onrender.com'
+SITE_URL = 'https://www.rallynex.com'
 
 
 
