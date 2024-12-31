@@ -84,8 +84,6 @@ DATABASES = {
 }
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://web-production-2347.up.railway.app',
-    'https://rallynex.onrender.com',
     'https://www.rallynex.com',
     'https://rallynex.com',
 ]
