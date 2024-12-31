@@ -101,6 +101,19 @@ from .models import Campaign, ActivityLove, ActivityComment, Brainstorming, Dona
 
 
 
+from django.http import HttpResponse
+import logging
+
+logger = logging.getLogger(__name__)
+
+def your_view(request):
+    redirect_uri = request.build_absolute_uri()
+    logger.info(f'Redirect URI: {redirect_uri}')
+    return HttpResponse(f'Redirect URI: {redirect_uri}')
+
+
+
+
 def campaign_engagement_data(request, campaign_id):
     campaign = Campaign.objects.get(id=campaign_id)
 
