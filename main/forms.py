@@ -166,6 +166,7 @@ class UserForm(forms.ModelForm):
         }
 
 
+from PIL import Image, ExifTags
 
 class ProfileForm(forms.ModelForm):
     class Meta:
@@ -180,6 +181,33 @@ class ProfileForm(forms.ModelForm):
             'highest_level_of_education': forms.Select(attrs={'class': 'form-select'}),
         }
 
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+
+        # Check and correct the image orientation if it exists
+        if instance.image:
+            try:
+                image = Image.open(instance.image)
+                for orientation in ExifTags.TAGS.keys():
+                    if ExifTags.TAGS[orientation]=='Orientation':
+                        break
+                exif=dict(image._getexif())
+                if exif[orientation] == 3:
+                    image = image.rotate(180, expand=True)
+                elif exif[orientation] == 6:
+                    image = image.rotate(270, expand=True)
+                elif exif[orientation] == 8:
+                    image = image.rotate(90, expand=True)
+            except (AttributeError, KeyError, IndexError):
+                # cases: image doesn't have EXIF data or is not a valid image
+                pass
+
+            # Save the corrected image
+            image.save(instance.image.path)
+
+        if commit:
+            instance.save()
+        return instance
 
 
 

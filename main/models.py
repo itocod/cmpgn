@@ -40,7 +40,7 @@ class Profile(models.Model):
     )
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='profile_pics/', default='profile_pics/pp.png')
+    image = models.ImageField(upload_to='profile_pics/', default='profile_pics/pp.png', max_length=255)
     bio = models.TextField(default='No bio available')
     contact = models.CharField(max_length=15, blank=True)
     location = models.CharField(max_length=100, blank=True)
@@ -76,55 +76,6 @@ class Profile(models.Model):
         self.is_verified = True  # Mark the user as verified
         self.save(update_fields=['is_verified'])
 
-    def save(self, *args, **kwargs):
-        if self.image:
-            img = Image.open(self.image)
-            if img.height > 300 or img.width > 300:
-                output_size = (300, 300)
-                img.thumbnail(output_size)
-
-                # Save the processed image
-                buffer = BytesIO()
-                img.save(buffer, format=img.format)
-                buffer.seek(0)
-                self.image.save(self.image.name, ContentFile(buffer.read()), save=False)
-        super().save(*args, **kwargs)
- 
-
-    def save(self, *args, **kwargs):
-        if self.image:
-            img = Image.open(self.image)
-            
-            # Handle EXIF orientation
-            try:
-                for orientation in ExifTags.TAGS.keys():
-                    if ExifTags.TAGS[orientation] == 'Orientation':
-                        break
-                exif = img._getexif()
-                if exif is not None and orientation in exif:
-                    orientation_value = exif[orientation]
-                    if orientation_value == 3:
-                        img = img.rotate(180, expand=True)
-                    elif orientation_value == 6:
-                        img = img.rotate(270, expand=True)
-                    elif orientation_value == 8:
-                        img = img.rotate(90, expand=True)
-            except Exception as e:
-                # Handle cases where EXIF data is missing or processing fails
-                print(f"EXIF handling failed: {e}")
-
-            # Resize image if needed
-            if img.height > 300 or img.width > 300:
-                output_size = (300, 300)
-                img.thumbnail(output_size)
-
-            # Save the processed image
-            buffer = BytesIO()
-            img.save(buffer, format=img.format)
-            buffer.seek(0)
-            self.image.save(self.image.name, ContentFile(buffer.read()), save=False)
-        
-        super().save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.user.username} Profile'
