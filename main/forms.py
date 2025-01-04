@@ -167,11 +167,6 @@ class UserForm(forms.ModelForm):
 
 
 
-from PIL import Image, ExifTags
-from io import BytesIO
-from django.core.files.storage import default_storage
-from django.core.files.base import ContentFile
-
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
@@ -184,42 +179,6 @@ class ProfileForm(forms.ModelForm):
             'gender': forms.Select(attrs={'class': 'form-select'}),
             'highest_level_of_education': forms.Select(attrs={'class': 'form-select'}),
         }
-
-    def save(self, commit=True):
-        instance = super().save(commit=False)
-
-        # Check and correct the image orientation if it exists
-        if instance.image:
-            try:
-                image = Image.open(instance.image)
-                for orientation in ExifTags.TAGS.keys():
-                    if ExifTags.TAGS[orientation] == 'Orientation':
-                        break
-                exif = dict(image._getexif())
-                if exif.get(orientation) == 3:
-                    image = image.rotate(180, expand=True)
-                elif exif.get(orientation) == 6:
-                    image = image.rotate(270, expand=True)
-                elif exif.get(orientation) == 8:
-                    image = image.rotate(90, expand=True)
-            except (AttributeError, KeyError, IndexError):
-                # cases: image doesn't have EXIF data or is not a valid image
-                pass
-
-            # Save the corrected image to S3
-            image_io = BytesIO()
-            image.save(image_io, format='JPEG')  # Use the appropriate format (e.g., PNG, JPEG)
-            image_io.seek(0)
-
-            # Get the image name and upload to S3
-            file_name = instance.image.name
-            instance.image.save(file_name, ContentFile(image_io.read()), save=False)
-
-        if commit:
-            instance.save()
-        return instance
-
-
 
 
 
