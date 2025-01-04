@@ -12,6 +12,11 @@ from django.dispatch import receiver
 from tinymce.models import HTMLField
 from django.db.models.signals import m2m_changed
 from django.urls import reverse
+from PIL import Image, ExifTags
+from io import BytesIO
+from django.core.files.base import ContentFile
+
+
 
 User = get_user_model()
 
@@ -86,6 +91,40 @@ class Profile(models.Model):
         super().save(*args, **kwargs)
  
 
+    def save(self, *args, **kwargs):
+        if self.image:
+            img = Image.open(self.image)
+            
+            # Handle EXIF orientation
+            try:
+                for orientation in ExifTags.TAGS.keys():
+                    if ExifTags.TAGS[orientation] == 'Orientation':
+                        break
+                exif = img._getexif()
+                if exif is not None and orientation in exif:
+                    orientation_value = exif[orientation]
+                    if orientation_value == 3:
+                        img = img.rotate(180, expand=True)
+                    elif orientation_value == 6:
+                        img = img.rotate(270, expand=True)
+                    elif orientation_value == 8:
+                        img = img.rotate(90, expand=True)
+            except Exception as e:
+                # Handle cases where EXIF data is missing or processing fails
+                print(f"EXIF handling failed: {e}")
+
+            # Resize image if needed
+            if img.height > 300 or img.width > 300:
+                output_size = (300, 300)
+                img.thumbnail(output_size)
+
+            # Save the processed image
+            buffer = BytesIO()
+            img.save(buffer, format=img.format)
+            buffer.seek(0)
+            self.image.save(self.image.name, ContentFile(buffer.read()), save=False)
+        
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.user.username} Profile'
