@@ -372,7 +372,6 @@ border: 1px solid silver;
 .upper-post:hover {
   /* Optional: Add hover effects if needed */
 }
-
 /* Profile Picture Container */
 .profile-pic {
   flex-shrink: 0; /* Prevent shrinking of the profile picture */
@@ -381,10 +380,7 @@ border: 1px solid silver;
   height: 48px; /* Explicit height for a square container */
   border-radius: 50%; /* Ensures circular shape */
   overflow: hidden; /* Prevents overflow of the image outside the container */
-  background-color: #f0f0f0; /* Optional background color for placeholder */
 }
-
-
 
 /* Container: Ensures a circular boundary */
 .profile-pic {
@@ -394,16 +390,16 @@ border: 1px solid silver;
   border-radius: 50%; /* Circular boundary */
   overflow: hidden; /* Clip anything outside the circle */
   display: inline-block; /* Keeps the shape consistent */
-  background-color: #e0e0e0; /* Optional placeholder background */
   margin-right: 20px; /* Space around the circle */
 }
 
-/* Image: Ensures it fits within the circular container */
+/* Image: Makes the image circular */
 .profile-pic img {
   width: 100%; /* Scale width to fit container */
   height: 100%; /* Scale height proportionally */
-  object-fit: contain; /* Display the entire image without cropping */
+  object-fit: cover; /* Fill the circular container without distortion */
   object-position: center; /* Center the image */
+  border-radius: 50%; /* Ensures the image is circular */
 }
 
 /* Mobile View Adjustments */
@@ -421,13 +417,16 @@ border: 1px solid silver;
   }
 
   .profile-pic img {
+    image-rendering: auto; /* Browser decides best rendering */
+    width: auto; /* Use natural width */
+    height: auto; /* Use natural height */
     width: 100%; /* Fit within container */
     height: 100%; /* Maintain aspect ratio */
-    object-fit: contain; /* Ensure no part of the image is cut off */
-    object-position: center; /* Center the image inside the circle */
+    object-fit: cover; /* Ensure no part of the image is cut off */
+    object-position: center; /* Center the image */
+    border-radius: 50%; /* Circular shape for the image */
   }
 }
-
 
 
 

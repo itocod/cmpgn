@@ -5,271 +5,252 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-*********" crossorigin="anonymous" />
 
 <style>
-    /* Existing styles */
-    .activity-container {
-        flex: 3;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        width: 100%;
-        padding: 0;
-        box-sizing: border-box;
-        border: 1px solid whitesmoke;
-        margin: 0 auto;
-    }
-
-    .activity-image, #activity-media {
-        max-width: 100%;
-        height: auto;
-        border-radius: 5px;
-        transition: transform 0.3s ease;
-    }
-
-    .create-activity-link {
-        display: inline-block;
-        text-align: center;
-        margin-bottom: 20px;
-        width: 100%;
-        color: #fff;
-        background-color: #4CAF50;
-        padding: 10px 20px;
-        border-radius: 5px;
-        text-decoration: none;
-        font-weight: bold;
-        transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-    .create-activity-link:hover {
-        background-color:#45a049;
-        color: #fff;
-    }
-
-    .activity-title {
-        font-size: 19px;
-        color: #333;
-        text-align: center;
-        margin-bottom: 30px;
-    }
-
-    .activity-list {
-        list-style-type: none;
-        padding: 0;
-        margin-top: 20px;
-    }
-
-    .activity-item {
-        margin-bottom: 40px;
-        border-radius: 10px;
-        border: 1px solid silver;
-        box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
-        padding-bottom: 40px;
-        position: relative;
-        width: 100%;
-    }
-
-    .activity-content {
-        margin-bottom: 20px;
-        padding: 20px;
-    }
-
-    .activity-media {
-        width: 100%;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-    }
-
-    .activity-timestamp {
-        color: #777;
-        font-style: italic;
-        font-size: 14px;
-        margin-top: 10px;
-        padding-left: 5px;
-        text-align: left;
-    }
-
-  .love-icon, .comment-icon {
-    padding: 12px;
-    position: absolute;
-    bottom: 10px;
-    color: #777;
-    font-size: 20px;
-    cursor: pointer;
-    transition: color 0.4s ease, transform 0.3s ease;
-    border: 2px solid transparent;
-    border-radius: 50%;
-    background-color: rgba(245, 245, 245, 0.9);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+<style>
+/* Global reset for margin, padding and box-sizing */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.love-icon {
-    right: 15px;
+/* Body and general page layout */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f9f9f9;
+    color: #333;
+    padding:0;
+    margin: 0;
 }
 
-.comment-icon {
-    right: 75px;
+/* List of activities */
+.activity-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
 }
 
-.love-icon:hover, .comment-icon:hover {
-    color: limegreen;
-    border-color: limegreen;
+/* Each activity item */
+.activity-item {
     background-color: #ffffff;
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
-    transform: scale(1.1) rotate(2deg);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-.love-icon:active, .comment-icon:active {
-    transform: scale(0.9) rotate(-2deg);
+/* Profile picture container */
+.profile-pic-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px; /* space between profile and activity content */
 }
 
+.profile-pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 15px;
+}
 
-    .love-comment-count {
-        position: absolute;
-        bottom: 10px;
-        left: 10px;
-        font-size: 14px;
-        color: #777;
+.profile-pic img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* User info section */
+.user-info {
+    flex-grow: 1;
+}
+
+.username {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.verified-status {
+    font-size: 12px;
+    color: #4caf50;
+}
+
+.verified-icon {
+    margin-left: 5px;
+    font-size: 14px;
+}
+
+/* Divider between profile and activity content */
+.activity-content-divider {
+    width: 100%;
+    height: 1px;
+    background-color: #f0f0f0;
+    margin: 10px 0;
+}
+
+/* Activity content styling (short and full content) */
+.activity-content-short, .activity-content-hence {
+    font-size: 14px;
+    line-height: 1.6;
+    padding-left: 10px;
+    padding-bottom: 10px;
+}
+
+.activity-content-full {
+    display: block;
+    font-size: 14px;
+    line-height: 1.6;
+    padding-left: 10px;
+    padding-bottom: 10px;
+}
+
+.activity-content-short .see-more-text,
+.activity-content-full .see-more-text {
+    color: #007bff;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+/* Timestamp and activity link */
+.activity-timestamp {
+    font-size: 12px;
+    color: #777;
+    padding-left: 10px;
+    margin-top: 5px;
+}
+
+.activity-timestamp a {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 14px;
+    margin-left: 5px;
+}
+
+/* File media (image or video) */
+.file-container {
+    margin-top: 10px;
+    padding: 0;
+}
+
+.activity-media {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+}
+
+/* Love and comment section */
+.love-icon, .comment-icon {
+    cursor: pointer;
+    font-size: 18px;
+    color: #555;
+    margin-right: 10px;
+}
+
+.love-comment-count {
+    font-size: 14px;
+    color: #555;
+    margin-left: 5px;
+}
+
+/* Social media sharing */
+.social-share {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+    font-size: 16px;
+}
+
+.social-share a {
+    margin-right: 10px;
+    color: #555;
+}
+
+.social-share a:hover {
+    color: #007bff;
+}
+
+/* No activities message */
+.no-suggested-users {
+    font-size: 16px;
+    color: #777;
+    padding-left: 10px;
+}
+
+/* Mobile responsiveness */
+@media screen and (max-width: 768px) {
+    .activity-item {
+        padding: 10px;
     }
 
-    .no-activities {
-        text-align: center;
-        font-style: italic;
-        color: #777;
-        margin-top: 30px;
-    }
-
-    .see-more-button {
-        color: #fff;
-        cursor: pointer;
-        text-decoration: underline;
-        display: inline-block;
-        margin-top: 10px;
-    }
-
-    .file-container {
-        position: relative;
-        border: 1px solid silver;
-        border-radius: 5px;
-        overflow: hidden;
-    }
-
-    #activity-media {
-        max-width: 100%;
-        height: auto;
-        border-radius: 5px;
-        transition: transform 0.3s ease;
-    }
-
-    .activity-content-short, .activity-content-full {
-        margin-bottom: 10px;
-        font-size: 16px;
-        line-height: 1.5;
-    }
-
-    .see-more-text {
-        color: #3498db;
-        cursor: pointer;
-    }
-
-    .see-more-text:hover {
-        text-decoration: underline;
-    }
-
-    .action-item {
-        display: inline-block;
-        padding: 10px 20px;
-        margin-right: 10px;
-        border-radius: 5px;
-        text-align: center;
-        font-size: 12px;
-    }
-
-    .action-item a {
-        color: #000;
-        text-decoration: none;
-        font-size: inherit;
-    }
-
-    .action-item i {
-        margin-right: 5px;
+    .profile-pic-container {
+        flex-direction: column;
+        align-items: flex-start;
     }
 
     .profile-pic {
-        display: flex;
-        align-items: center;
-        padding-left: 20px;
-        padding-top: 20px;
-    }
-
-    .profile-pic img {
         width: 40px;
         height: 40px;
-        border-radius: 50%;
-        object-fit: cover;
-        transition: transform 0.3s ease;
-    }
-
-    .profile-pic-hover:hover {
-        transform: scale(1.1);
     }
 
     .user-info {
-        margin-left: 10px;
+        margin-left: 0;
+        margin-top: 10px;
     }
 
-    .username {
-        margin: 0;
-        font-size: 16px;
-        font-weight: 600;
+    .activity-content-short, .activity-content-hence {
+        font-size: 13px;
     }
 
-    .verified-status {
-        display: inline-flex;
-        align-items: center;
-        font-size: 12px;
-        color: green;
-        margin-left: 5px;
+    .activity-timestamp {
+        font-size: 11px;
     }
 
-    .verified-icon {
-        font-size: 16px;
-        margin-left: 2px;
+    .social-share {
+        flex-direction: column;
+        align-items: flex-start;
     }
 
-
-.no-suggested-users {
-    text-align: center;
-    margin: 20px 0;
-    padding: 15px;
-    background-color: rgba(76, 175, 80, 0.3); /* Semi-transparent green background */
-    border-radius: 5px;
-    color: #000000; /* Black text by default */
-    font-size: 14px;
-    border: 1px solid #4CAF50; /* Green border */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    transition: color 0.3s, background-color 0.3s; /* Smooth transition for color changes */
+    .social-share a {
+        margin-bottom: 10px;
+    }
 }
 
-/* Change text color to white when the background color is dark */
-.no-suggested-users.dark-text {
-    color: #ffffff; /* White text */
-    background-color: rgba(56, 142, 108, 0.7); /* Darker semi-transparent green background */
-}
 
-/* Responsive Styles */
-@media (max-width: 600px) {
+
+
     .no-suggested-users {
-        font-size: 12px; /* Adjust font size for mobile */
+        text-align: center;
+        margin: 20px 0;
+        padding: 15px;
+        background-color: rgba(76, 175, 80, 0.3); /* Semi-transparent green background */
+        border-radius: 5px;
+        color: #000000; /* Black text by default */
+        font-size: 14px;
+        border: 1px solid #4CAF50; /* Green border */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        transition: color 0.3s, background-color 0.3s; /* Smooth transition for color changes */
     }
-}
 
+    /* Change text color to white when the background color is dark */
+    .no-suggested-users.dark-text {
+        color: #ffffff; /* White text */
+        background-color: rgba(56, 142, 108, 0.7); /* Darker semi-transparent green background */
+    }
 
+    /* Responsive Styles */
+    @media (max-width: 600px) {
+        .no-suggested-users {
+            font-size: 12px; /* Adjust font size for mobile */
+        }
+    }
 
     /* Mobile optimizations */
     @media (max-width: 600px) {
-
         .activity-title {
             font-size: 16px;
         }
-
-
 
         .profile-pic {
             padding-left: 10px;
@@ -308,20 +289,8 @@
             font-size: 12px;
         }
     }
-.activity-content-hence {
-    padding: 10px;
-    
-    font-size: 16px;
-}
 
-/* Mobile version (for screens smaller than 768px) */
-@media (max-width: 768px) {
-    .activity-content-hence {
-        padding: 10px;
-        
-        font-size: 14px; /* Smaller font size for mobile */
-    }
-}
+
 
 
 /* Base styles */
@@ -400,6 +369,103 @@
     text-decoration-color: black; /* Make the underline black */
 }
 
+/* General Styles for Activity Interactions */
+/* General Horizontal Layout */
+.activity-interactions.horizontal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    border: 1px solid #ccc; /* Maintain existing border */
+    border-radius: 5px;
+}
+
+/* Icon and Text Group */
+.icon-text-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: #333; /* Neutral text color */
+}
+
+.icon-text-group i {
+    cursor: pointer;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.icon-text-group i:hover {
+    color: #007bff; /* Subtle hover color */
+    transform: scale(1.1); /* Slight hover zoom */
+}
+
+/* Love and Comment Counts */
+.love-comment-count {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Share Section */
+.social-share {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.social-share .share-label {
+    font-weight: 500;
+    margin-right: 5px;
+}
+
+.social-share a {
+    color: #555; /* Neutral icon color */
+    font-size: 18px;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.social-share a:hover {
+    color: #007bff; /* Hover color for share icons */
+    transform: scale(1.1); /* Subtle zoom effect */
+}
+
+/* Facebook, Twitter, LinkedIn Specific Colors */
+.social-share .fab {
+    transition: color 0.3s ease;
+}
+
+.social-share .fa-facebook:hover {
+    color: #3b5998;
+}
+
+.social-share .fa-twitter:hover {
+    color: #00acee;
+}
+
+.social-share .fa-linkedin:hover {
+    color: #0077b5;
+}
+
+
+    .create-activity-link {
+        display: inline-block;
+        text-align: center;
+        margin-bottom: 20px;
+        width: 100%;
+        color: #fff;
+        background-color: #4CAF50;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .create-activity-link:hover {
+        background-color:#45a049;
+        color: #fff;
+    }
+
 </style>
 
 
@@ -474,101 +540,112 @@
     </h4>
 </div>
 
+<!-- Display activities -->
+{% if activities %}
+    <!-- Display the total activity count -->
+    <ul class="activity-list">
+        {% for activity in activities %}
+            <li class="activity-item">
+                <div class="profile-pic-container">
+                    <a href="{% url 'profile_view' username=campaign.user.user.username %}">
+                        <!-- Display campaign owner's profile picture -->
+                        <div class="profile-pic">
+                            <img src="{{ campaign.user.image.url }}" alt="Profile Picture" class="profile-pic-hover">
+                        </div>
+                    </a>
+                    <div class="user-info">
+                        <h3 class="username">{{ campaign.user.user.username }}.
+                            {% if campaign.user.is_verified %}
+                                <span class="verified-status">
+                                    <span>verified</span>
+                                    <i class="material-icons verified-icon">verified_user</i>
+                                </span>
+                            {% endif %}
+                        </h3>
+                    </div>
+                </div>
 
-        <!-- Display activities -->
-        {% if activities %}
-            
-            <!-- Display the total activity count -->
-            <ul class="activity-list">
-                {% for activity in activities %}
-                    <li class="activity-item">
-                        <div class="profile-pic" style="padding-left:20px;padding-top: 20px;">
-    <a href="{% url 'profile_view' username=campaign.user.user.username %}">
-        <!-- Display campaign owner's profile picture -->
-        <img src="{{ campaign.user.image.url }}" alt="Profile Picture" class="profile-pic-hover">
-    </a>
-    <div class="user-info">
-        <h3 class="username">{{ campaign.user.user.username }}.
-            {% if campaign.user.is_verified %}
-                <span class="verified-status">
-                    <span>verified</span>
-                    <i class="material-icons verified-icon">verified_user</i>
-                </span>
-            {% endif %}
-        </h3>
+                <!-- Separate content with a paragraph -->
+                <p></p> <!-- Added empty paragraph to separate profile and activity content -->
+
+                <!-- Display activity content -->
+                {% if activity.content.split|length > 20 %}
+                    <div id="activity-content-{{ activity.id }}-short" class="activity-content-short" style="padding-left: 10px; padding-bottom: 10px;">
+                        {{ activity.content|truncatewords:20|safe }}
+                        <!-- Show "See More" text only when content exceeds 20 words -->
+                        <span class="see-more-text" onclick="toggleContent('{{ activity.id }}')">See More</span>
+                    </div>
+                    <div id="activity-content-{{ activity.id }}-full" class="activity-content-full" style="display: none; padding-left:10px;">
+                        {{ activity.content|safe }}
+                        <!-- Replace the button with clickable text -->
+                        <span class="see-more-text" onclick="toggleContent('{{ activity.id }}')">See Less</span>
+                    </div>
+                {% else %}
+                    <div id="activity-content-{{ activity.id }}-short" class="activity-content-hence">
+                        {{ activity.content|safe }}
+                    </div>
+                {% endif %}
+
+                <div class="activity-timestamp">
+                    Posted: {{ activity.timestamp|timesince }} ago.
+                    <a href="{% url 'activity_detail' activity_id=activity.id %}" style="padding-left: 5px; font-size: 15px; color: gray;">View Activity Details</a>
+                </div>
+                <div class="file-container">
+                    <div style="position: relative;">
+                        {% if activity.file %}
+                            {% if activity.file.name|lower|slice:'-4:' == '.mp4' %}
+                                <video src="{{ activity.file.url }}" alt="Video Description" class="activity-media" controls autoplay muted loop>
+                                    Your browser does not support the video tag.
+                                </video>
+                            {% elif activity.file.name|lower|slice:'-4:' in image_extensions %}
+                                <a href="{{ activity.file.url }}"> 
+                                    <img src="{{ activity.file.url }}" alt="Image Description" id="activity-image" style="max-width: 100%; height: auto;">
+                                </a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                </div>
+<div class="activity-interactions horizontal">
+    <!-- Love Section -->
+    <div class="icon-text-group">
+        <i class="far fa-heart love-icon" onclick="loveActivity('{{ activity.id }}')"></i>
+        <span id="love-count-{{ activity.id }}" class="love-comment-count">
+            Love: {{ activity.loves.count|format_count }}
+        </span>
     </div>
-</div><br>
 
+    <!-- Comment Section -->
+    <div class="icon-text-group">
+        <a href="{% url 'add_activity_comment' activity_id=activity.id %}">
+            <i class="far fa-comment comment-icon"></i>
+        </a>
+        <span class="love-comment-count">
+            Comments: {{ activity.comment_count|format_count }}
+        </span>
+    </div>
 
-
-
-                        {% if activity.content.split|length > 20 %}
-                            <div id="activity-content-{{ activity.id }}-short" class="activity-content-short" style="padding-left: 10px; padding-bottom: 10px;">
-                                {{ activity.content|truncatewords:20|safe }}
-                                <!-- Show "See More" text only when content exceeds 20 words -->
-                                <span class="see-more-text" onclick="toggleContent('{{ activity.id }}')">See More</span>
-                            </div>
-                            <div id="activity-content-{{ activity.id }}-full" class="activity-content-full" style="display: none; padding-left:10px;">
-                                {{ activity.content|safe }}
-                                <!-- Replace the button with clickable text -->
-                                <span class="see-more-text" onclick="toggleContent('{{ activity.id }}')">See Less</span>
-                            </div>
-                        {% else %}
-                            <!-- If content length is 20 words or less, display full content -->
-                        <div id="activity-content-{{ activity.id }}-short" class="activity-content-hence">
-    {{ activity.content|safe }}
+    <!-- Social Media Sharing -->
+    <div class="social-share">
+        <span class="share-label">Share on:</span>
+        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-facebook"></i>
+        </a>
+        <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-twitter"></i>
+        </a>
+        <a href="https://www.linkedin.com/shareArticle?url={{ request.build_absolute_uri }}" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-linkedin"></i>
+        </a>
+    </div>
 </div>
 
-                        {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <li class="no-suggested-users">No activities yet.</li>
+{% endif %}
 
-                        <div class="activity-timestamp">
-
-
-                            Posted: {{ activity.timestamp|timesince }} ago.
-
-<a href="{% url 'activity_detail' activity_id=activity.id %}" style="padding-left: 5px; font-size: 15px; color: gray;">View Activity Details</a>
-                        </div>
-                        <div class="file-container">
-                            <div style="position: relative;">
-                                {% if activity.file %}
-                                    {% if activity.file.name|lower|slice:'-4:' == '.mp4' %}
-                                        <video src="{{ activity.file.url }}" alt="Video Description" class="activity-media" controls autoplay muted loop>
-                                            Your browser does not support the video tag.
-                                        </video>
-                                    {% elif activity.file.name|lower|slice:'-4:' in image_extensions %}
-                                        <a href="{{ activity.file.url }}"> 
-                                            <img src="{{ activity.file.url }}" alt="Image Description" id="activity-image" style="max-width: 100%; height: auto;">
-                                        </a>
-                                    {% endif %}
-                                {% endif %}
-                            </div>
-                        </div>
-                        
-                        <i class="far fa-heart love-icon" onclick="loveActivity('{{ activity.id }}')"></i>
-                        <span id="love-count-{{ activity.id }}" class="love-comment-count">Love: {{ activity.loves.count|format_count }} </span>
-                        <a href="{% url 'add_activity_comment' activity_id=activity.id %}">
-                            <i class="far fa-comment comment-icon"></i>
-                        </a>
-                        <!-- Display the comment count -->
-                        <span class="love-comment-count" style="margin-left: 80px;">| Comments: {{ activity.comment_count|format_count }}</span>
-                        
-                        <!-- Social media sharing buttons -->
-                        <div style="padding-left: 5px;">
-
-                            Share on:
-                            <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" rel="noopener noreferrer"><i class="fab fa-facebook"></i></a>
-                            <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}" target="_blank" rel="noopener noreferrer"><i class="fab fa-twitter"></i></a>
-                            <a href="https://www.linkedin.com/shareArticle?url={{ request.build_absolute_uri }}" target="_blank" rel="noopener noreferrer"><i class="fab fa-linkedin"></i></a>
-                            
-                            <!-- Add more social media sharing buttons as needed -->
-                        </div>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <li class="no-suggested-users">No activities yet.</li>
-        {% endif %}
-    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
