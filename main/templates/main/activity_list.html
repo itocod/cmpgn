@@ -379,20 +379,19 @@ body {
     }
 
 
-
-
 /* Base styles */
 .cc-header {
     background-color: #ffffff; /* Clean white background */
     border-bottom: 2px solid #007bff; /* Blue underline for emphasis */
     padding: 15px 20px; /* Adjusted padding for a better appearance */
     text-align: center; /* Center align the text */
+    font-family: Arial, sans-serif; /* Standard font for consistency */
 }
 
 .cc-header .activity-title {
-    font-size: 1.5rem; /* Title font size */
-    color: #666; /* Subtle grey for secondary text */
-    margin: 8px 0; /* Adjusted spacing */
+    font-size: 1.6rem; /* Slightly larger title font size */
+    color: #444; /* Slightly darker grey for better contrast */
+    margin: 10px 0; /* Adjusted spacing */
     font-weight: bold; /* Make it more prominent */
 }
 
@@ -403,13 +402,27 @@ body {
 
 .cc-header .activity-title a:hover {
     text-decoration: underline; /* Add underline on hover */
+    text-decoration-color: #3498db; /* Match underline color to the link */
 }
 
 .cc-header .activity-count {
-    color: gray; /* Subtle grey for total activities */
-    padding-left: 20px; /* Indented slightly */
-    font-size: 1.2rem; /* Font size for total activities */
-    margin: 5px 0; /* Adjusted margin */
+    color: #555; /* Slightly darker grey for better readability */
+    padding-left: 15px; /* Reduced padding for better balance */
+    font-size: 1.4rem; /* Increased font size for clarity */
+    margin: 8px 0; /* Adjusted margin for consistent spacing */
+}
+
+/* Campaign link styles */
+.cc-header .campaign-link {
+    color: #3498db; /* Default link color */
+    text-decoration: none; /* Remove underline by default */
+    font-weight: bold; /* Optional: make it stand out */
+}
+
+.cc-header .campaign-link:hover {
+    color: #007bff; /* Slightly darker blue on hover */
+    text-decoration: underline; /* Add underline */
+    text-decoration-color: black; /* Make the underline black */
 }
 
 /* Mobile styles */
@@ -419,11 +432,11 @@ body {
     }
 
     .cc-header .activity-title {
-        font-size: 1.3rem; /* Slightly smaller font size */
+        font-size: 1.5rem; /* Maintain readability on smaller screens */
     }
 
     .cc-header .activity-count {
-        font-size: 1rem; /* Adjusted size for smaller screens */
+        font-size: 1.3rem; /* Adjusted size for better clarity */
         padding-left: 10px; /* Reduced padding */
     }
 }
@@ -435,27 +448,19 @@ body {
     }
 
     .cc-header .activity-title {
-        font-size: 1.2rem; /* Smaller font for better fit */
+        font-size: 1.4rem; /* Slightly smaller for better fit */
     }
 
     .cc-header .activity-count {
-        font-size: 1rem; /* Smaller size for comment count */
+        font-size: 1.2rem; /* Slightly smaller for consistency */
         padding-left: 8px; /* Reduced padding */
     }
 }
 
-/* Base styles */
-.cc-header .campaign-link {
-    color: #3498db; /* Default link color */
-    text-decoration: none; /* Remove underline by default */
-    font-weight: bold; /* Optional: make it stand out */
-}
 
-.cc-header .campaign-link:hover {
-    color: #3498db; /* Retain the blue color on hover */
-    text-decoration: underline; /* Add underline */
-    text-decoration-color: black; /* Make the underline black */
-}
+
+
+
 
 /* General Styles for Activity Interactions */
 /* General Horizontal Layout */
@@ -554,6 +559,22 @@ body {
         color: #fff;
     }
 
+
+.go-back-arrow {
+    cursor: pointer;
+    font-size: 32px; /* Bigger arrow size */
+    color: silver; /* Silver color for the arrow */
+    background-color: transparent; /* Transparent background */
+    border: none; /* No border */
+    margin: 0; /* No margin */
+    padding: 0; /* No padding */
+    transition: color 0.3s ease; /* Smooth color transition on hover */
+}
+
+.go-back-arrow:hover {
+    color: gray; /* Changes arrow color to gray on hover */
+}
+
 </style>
 
 
@@ -602,7 +623,9 @@ body {
     </script>
 
   
-
+<div class="go-back-arrow" onclick="goBack()">
+    &#8592; <!-- Unicode for left arrow -->
+</div>
 
     {% if user == campaign.user.user %}
         <a href="{% url 'create_activity' campaign_id=campaign.id %}" class="create-activity-link">Create Activity</a>
@@ -611,6 +634,7 @@ body {
   
     
     <div class="activity-container">
+
 <div class="cc-header">
     <h5 class="activity-title">
         <hr>
@@ -649,7 +673,7 @@ body {
                                     <i class="material-icons verified-icon">verified_user</i>
                                 </span>
                             {% endif %}
-                        </h3>
+                        </h3>.host
                     </div>
                 </div>
 
@@ -973,7 +997,9 @@ function switchColor() {
         element.style.color = textColor;
     });
 
-    var buttonColor = nextColor === "black" ? "#262626" : "";
+     // Skip changing button colors
+    var buttonColor = nextColor === "black" ? "#262626" : ""; // If you want to change button colors based on background, adjust this accordingly
+    var buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)'); // Exclude specific buttons
     buttons.forEach(function(button) {
         button.style.backgroundColor = buttonColor;
 
@@ -1011,5 +1037,9 @@ function switchColor() {
     });
 }
 </script>
-
+<script>
+    function goBack() {
+        window.history.back(); // Navigates to the previous page
+    }
+</script>
 {% endblock %}
