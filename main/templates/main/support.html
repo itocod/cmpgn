@@ -126,7 +126,7 @@
     /* Mobile Styles */
     @media (max-width: 768px) {
         body {
-            font-size: 1rem; /* Set font size to 1rem for better readability */
+            font-size: 1.3rem; /* Set font size to 1rem for better readability */
         }
 
         .support-container {
@@ -142,11 +142,11 @@
         }
 
         .cc-header .activity-count {
-            font-size: 1rem; /* Adjust count size for mobile */
+            font-size: 1.2rem; /* Adjust count size for mobile */
         }
 
         .support-table {
-            font-size: 1rem; /* Set table text to 1rem */
+            font-size: 1.2rem; /* Set table text to 1rem */
             margin: 10px auto;
         }
 
@@ -155,7 +155,7 @@
         }
 
         .no-support-links {
-            font-size: 1rem;
+            font-size: 1.2rem;
             padding: 12px;
         }
 
@@ -171,20 +171,20 @@
     /* Extra Small Screens */
     @media (max-width: 480px) {
         .cc-header .activity-title {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
         }
 
         .cc-header .activity-count {
-            font-size: 1rem;
+            font-size: 1.2rem;
         }
 
         .support-table th, .support-table td {
-            font-size: 1rem;
+            font-size: 1.2rem;
             padding: 8px;
         }
 
         .no-support-links {
-            font-size: 1rem;
+            font-size: 1.2rem;
             padding: 10px;
         }
 
@@ -194,10 +194,32 @@
             padding: 8px 15px;
         }
     }
+
+
+
+.go-back-arrow {
+    cursor: pointer;
+    font-size: 32px; /* Bigger arrow size */
+    color: silver; /* Silver color for the arrow */
+    background-color: transparent; /* Transparent background */
+    border: none; /* No border */
+    margin: 0; /* No margin */
+    padding: 0; /* No padding */
+    transition: color 0.3s ease; /* Smooth color transition on hover */
+}
+
+.go-back-arrow:hover {
+    color: gray; /* Changes arrow color to gray on hover */
+}
+
 </style>
 
 </head>
 <body>
+
+<div class="go-back-arrow" onclick="goBack()">
+    &#8592; <!-- Unicode for left arrow -->
+</div>
     <div class="support-container">
         <div class="cc-header">
             <div class="activity-title">
@@ -268,6 +290,11 @@
             </a>
         {% endif %}
     </div>
+    <script>
+    function goBack() {
+        window.history.back(); // Navigates to the previous page
+    }
+</script>
 </body>
 </html>
 {% endblock %}
