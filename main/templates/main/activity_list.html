@@ -461,8 +461,6 @@ body {
 
 
 
-
-/* General Styles for Activity Interactions */
 /* General Horizontal Layout */
 .activity-interactions.horizontal {
     display: flex;
@@ -471,6 +469,8 @@ body {
     padding: 10px 15px;
     border: 1px solid #ccc; /* Maintain existing border */
     border-radius: 5px;
+    background-color: #f8f9fa; /* Optional subtle background */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Light shadow for elevation */
 }
 
 /* Icon and Text Group */
@@ -484,11 +484,14 @@ body {
 
 .icon-text-group i {
     cursor: pointer;
-    transition: color 0.3s ease, transform 0.2s ease;
+    padding: 6px; /* Improved hover area */
+    border-radius: 50%; /* Circular hover effect */
+    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
 }
 
 .icon-text-group i:hover {
     color: #007bff; /* Subtle hover color */
+    background-color: rgba(0, 123, 255, 0.1); /* Highlight hover area */
     transform: scale(1.1); /* Slight hover zoom */
 }
 
@@ -496,6 +499,7 @@ body {
 .love-comment-count {
     font-size: 14px;
     font-weight: 500;
+    color: #444; /* Slightly darker color for emphasis */
 }
 
 /* Share Section */
@@ -514,30 +518,33 @@ body {
 .social-share a {
     color: #555; /* Neutral icon color */
     font-size: 18px;
-    transition: color 0.3s ease, transform 0.2s ease;
+    padding: 6px; /* Improved clickable area */
+    border-radius: 50%; /* Circular hover effect */
+    transition: color 0.3s ease, transform 0.2s ease, background-color 0.3s ease;
 }
 
 .social-share a:hover {
     color: #007bff; /* Hover color for share icons */
+    background-color: rgba(0, 123, 255, 0.1); /* Highlight hover area */
     transform: scale(1.1); /* Subtle zoom effect */
 }
 
 /* Facebook, Twitter, LinkedIn Specific Colors */
-.social-share .fab {
-    transition: color 0.3s ease;
-}
-
 .social-share .fa-facebook:hover {
     color: #3b5998;
+    background-color: rgba(59, 89, 152, 0.1); /* Optional */
 }
 
 .social-share .fa-twitter:hover {
     color: #00acee;
+    background-color: rgba(0, 172, 238, 0.1); /* Optional */
 }
 
 .social-share .fa-linkedin:hover {
     color: #0077b5;
+    background-color: rgba(0, 119, 181, 0.1); /* Optional */
 }
+
 
 
     .create-activity-link {
