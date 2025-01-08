@@ -1716,6 +1716,23 @@ body.dark-theme .explore-link i {
 }
 
 
+.go-back-arrow {
+    cursor: pointer;
+    font-size: 20px; /* Icon size */
+    color: silver; /* Silver color for the icon */
+    background-color: transparent; /* Transparent background */
+    border: none; /* No border */
+    margin: 0; /* No margin */
+    padding: 0; /* No padding */
+    padding-left: 10px;
+    transition: color 0.3s ease, transform 0.2s ease; /* Smooth transition */
+}
+
+.go-back-arrow:hover {
+    color: gray; /* Change color to gray on hover */
+    transform: scale(1.1); /* Slight zoom on hover */
+}
+
 
   </style>
 
@@ -1969,7 +1986,11 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 
-
+<script>
+    function goBack() {
+        window.history.back(); // Navigates to the previous page
+    }
+</script>
 </head>
 
 
@@ -2001,6 +2022,7 @@ document.addEventListener("DOMContentLoaded", function() {
      <button type="submit" class="btn-search">
          <i class="fas fa-search"></i>
      </button>
+
  </div>
 </form>
     </div>
@@ -2157,6 +2179,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 <section>
+<div class="go-back-arrow" onclick="goBack()">
+    <i class="fas fa-arrow-left"></i> <!-- Font Awesome left arrow icon -->
+</div>
 
     <!-- Beautiful upload button -->
     <div class="upload-container">
@@ -2169,7 +2194,9 @@ document.addEventListener("DOMContentLoaded", function() {
     </br>
 
 
-<div class="sidebar-box "> {% block content %}{% endblock %}</div>
+<div class="sidebar-box ">
+
+ {% block content %}{% endblock %}</div>
  
 
 </section>

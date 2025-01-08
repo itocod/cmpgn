@@ -458,92 +458,103 @@ body {
 }
 
 
-
-
-
-/* General Horizontal Layout */
+/* General Layout */
 .activity-interactions.horizontal {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 15px;
-    border: 1px solid #ccc; /* Maintain existing border */
-    border-radius: 5px;
-    background-color: #f8f9fa; /* Optional subtle background */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Light shadow for elevation */
+    justify-content: flex-start; /* Align to the left */
+    gap: 20px; /* Space between icons */
+    padding: 10px;
+    padding-left: 15px; /* Add padding on the left */
+    border-top: 1px solid #dbdbdb;
+    background-color: #ffffff;
+    flex-wrap: wrap; /* Handle wrapping on smaller screens */
 }
 
-/* Icon and Text Group */
-.icon-text-group {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 14px;
-    color: #333; /* Neutral text color */
+/* Icon Styling */
+.icon {
+    position: relative;
 }
 
-.icon-text-group i {
+.icon i {
+    font-size: 24px;
+    color: #8e8e8e;
     cursor: pointer;
-    padding: 6px; /* Improved hover area */
-    border-radius: 50%; /* Circular hover effect */
-    transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+    transition: color 0.3s ease, transform 0.2s ease;
 }
 
-.icon-text-group i:hover {
-    color: #007bff; /* Subtle hover color */
-    background-color: rgba(0, 123, 255, 0.1); /* Highlight hover area */
-    transform: scale(1.1); /* Slight hover zoom */
+.icon i:hover {
+    color: #333; /* Darker hover effect */
+    transform: scale(1.1); /* Slight zoom */
 }
 
-/* Love and Comment Counts */
-.love-comment-count {
-    font-size: 14px;
-    font-weight: 500;
-    color: #444; /* Slightly darker color for emphasis */
+/* Share Options */
+.share-wrapper {
+    display: inline-block;
+    position: relative; /* Ensure dropdown aligns with parent icon */
 }
 
-/* Share Section */
-.social-share {
+.share-options {
+    position: absolute;
+    top: 35px;
+    left: 0; /* Align the dropdown to the left of the icon */
+    display: none; /* Initially hidden */
+    flex-direction: column;
+    gap: 10px;
+    background-color: #fff;
+    padding: 10px;
+    border: 1px solid #dbdbdb;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    min-width: 120px; /* Ensure consistent dropdown width */
+}
+
+/* Share Options Links */
+.share-options a {
     display: flex;
+    justify-content: center;
     align-items: center;
-    gap: 8px;
-    font-size: 14px;
-}
-
-.social-share .share-label {
-    font-weight: 500;
-    margin-right: 5px;
-}
-
-.social-share a {
-    color: #555; /* Neutral icon color */
+    color: #8e8e8e;
     font-size: 18px;
-    padding: 6px; /* Improved clickable area */
-    border-radius: 50%; /* Circular hover effect */
-    transition: color 0.3s ease, transform 0.2s ease, background-color 0.3s ease;
+    transition: color 0.3s ease, transform 0.2s ease;
+    padding: 5px 0;
 }
 
-.social-share a:hover {
-    color: #007bff; /* Hover color for share icons */
-    background-color: rgba(0, 123, 255, 0.1); /* Highlight hover area */
-    transform: scale(1.1); /* Subtle zoom effect */
+.share-options a:hover {
+    color: #007bff; /* Highlight on hover */
 }
 
-/* Facebook, Twitter, LinkedIn Specific Colors */
-.social-share .fa-facebook:hover {
-    color: #3b5998;
-    background-color: rgba(59, 89, 152, 0.1); /* Optional */
+/* Facebook, Twitter, LinkedIn Specific Hover Colors */
+.share-options .fa-facebook:hover {
+    color: #4267b2;
 }
 
-.social-share .fa-twitter:hover {
-    color: #00acee;
-    background-color: rgba(0, 172, 238, 0.1); /* Optional */
+.share-options .fa-twitter:hover {
+    color: #1da1f2;
 }
 
-.social-share .fa-linkedin:hover {
+.share-options .fa-linkedin:hover {
     color: #0077b5;
-    background-color: rgba(0, 119, 181, 0.1); /* Optional */
 }
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .activity-interactions.horizontal {
+        gap: 15px;
+        padding: 8px;
+        padding-left: 10px; /* Adjust padding for smaller screens */
+    }
+
+    .icon i {
+        font-size: 20px; /* Slightly smaller icons for mobile */
+    }
+
+    .share-options {
+        top: 30px; /* Adjust position for smaller screens */
+        min-width: 100px; /* Reduce dropdown width for mobile */
+    }
+}
+
 
 
 
@@ -567,20 +578,20 @@ body {
     }
 
 
-.go-back-arrow {
-    cursor: pointer;
-    font-size: 32px; /* Bigger arrow size */
-    color: silver; /* Silver color for the arrow */
-    background-color: transparent; /* Transparent background */
-    border: none; /* No border */
-    margin: 0; /* No margin */
-    padding: 0; /* No padding */
-    transition: color 0.3s ease; /* Smooth color transition on hover */
+
+
+/* Count Styling */
+.count {
+    font-size: 14px;
+    color: #8e8e8e;
+    margin-left: 3x; /* Space between icon and count */
+    vertical-align: middle; /* Align count with icon */
 }
 
-.go-back-arrow:hover {
-    color: gray; /* Changes arrow color to gray on hover */
+.count:hover {
+    color: #333; /* Darker hover effect */
 }
+
 
 </style>
 
@@ -630,9 +641,7 @@ body {
     </script>
 
   
-<div class="go-back-arrow" onclick="goBack()">
-    &#8592; <!-- Unicode for left arrow -->
-</div>
+
 
     {% if user == campaign.user.user %}
         <a href="{% url 'create_activity' campaign_id=campaign.id %}" class="create-activity-link">Create Activity</a>
@@ -725,36 +734,35 @@ body {
                     </div>
                 </div>
 <div class="activity-interactions horizontal">
-    <!-- Love Section -->
-    <div class="icon-text-group">
+    <!-- Love Icon -->
+    <div class="icon">
         <i class="far fa-heart love-icon" onclick="loveActivity('{{ activity.id }}')"></i>
-        <span id="love-count-{{ activity.id }}" class="love-comment-count">
-            Love: {{ activity.loves.count|format_count }}
-        </span>
+        <span class="count love-count">{{ activity.loves.count|format_count }}</span>
     </div>
 
-    <!-- Comment Section -->
-    <div class="icon-text-group">
+    <!-- Comment Icon -->
+    <div class="icon">
         <a href="{% url 'add_activity_comment' activity_id=activity.id %}">
             <i class="far fa-comment comment-icon"></i>
         </a>
-        <span class="love-comment-count">
-            Comments: {{ activity.comment_count|format_count }}
-        </span>
+        <span class="count comment-count">{{ activity.comment_count|format_count }}</span>
     </div>
 
-    <!-- Social Media Sharing -->
-    <div class="social-share">
-        <span class="share-label">Share on:</span>
-        <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" rel="noopener noreferrer">
-            <i class="fab fa-facebook"></i>
-        </a>
-        <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}" target="_blank" rel="noopener noreferrer">
-            <i class="fab fa-twitter"></i>
-        </a>
-        <a href="https://www.linkedin.com/shareArticle?url={{ request.build_absolute_uri }}" target="_blank" rel="noopener noreferrer">
-            <i class="fab fa-linkedin"></i>
-        </a>
+    <!-- Share Icon -->
+    <div class="icon share-wrapper">
+        <i class="fas fa-share share-icon" onclick="toggleShareOptions()"></i>
+        <!-- Hidden Share Options -->
+        <div class="share-options" id="shareOptions">
+            <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-facebook"></i>
+            </a>
+            <a href="https://twitter.com/intent/tweet?url={{ request.build_absolute_uri }}" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="https://www.linkedin.com/shareArticle?url={{ request.build_absolute_uri }}" target="_blank" rel="noopener noreferrer">
+                <i class="fab fa-linkedin"></i>
+            </a>
+        </div>
     </div>
 </div>
 
@@ -765,6 +773,16 @@ body {
     <li class="no-suggested-users">No activities yet.</li>
 {% endif %}
 
+<script type="text/javascript">
+    function toggleShareOptions() {
+    const shareOptions = document.getElementById('shareOptions');
+    if (shareOptions.style.display === 'flex') {
+        shareOptions.style.display = 'none';
+    } else {
+        shareOptions.style.display = 'flex';
+    }
+}
+</script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -1044,9 +1062,5 @@ function switchColor() {
     });
 }
 </script>
-<script>
-    function goBack() {
-        window.history.back(); // Navigates to the previous page
-    }
-</script>
+
 {% endblock %}
