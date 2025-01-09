@@ -593,6 +593,33 @@ body {
 }
 
 
+.activity-interactions .icon {
+    position: relative;
+    display: inline-block;
+    margin-right: 15px;
+}
+
+.icon .label {
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    font-size: 12px;
+    padding: 5px 8px;
+    border-radius: 3px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-in-out;
+    white-space: nowrap;
+}
+
+.icon:hover .label {
+    opacity: 1;
+}
+
+
 </style>
 
 
@@ -737,6 +764,7 @@ body {
     <!-- Love Icon -->
     <div class="icon">
         <i class="far fa-heart love-icon" onclick="loveActivity('{{ activity.id }}')"></i>
+        <span class="label love-label">Love</span>
         <span class="count love-count">{{ activity.loves.count|format_count }}</span>
     </div>
 
@@ -745,14 +773,17 @@ body {
         <a href="{% url 'add_activity_comment' activity_id=activity.id %}">
             <i class="far fa-comment comment-icon"></i>
         </a>
+        <span class="label comment-label">Comment</span>
         <span class="count comment-count">{{ activity.comment_count|format_count }}</span>
     </div>
 
     <!-- Share Icon -->
     <div class="icon share-wrapper">
         <i class="fas fa-share share-icon" onclick="toggleShareOptions()"></i>
+        <span class="label share-label">Share</span>
         <!-- Hidden Share Options -->
         <div class="share-options" id="shareOptions">
+            <span style="text-align: center;">share.</span>
             <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" rel="noopener noreferrer">
                 <i class="fab fa-facebook"></i>
             </a>
@@ -774,14 +805,36 @@ body {
 {% endif %}
 
 <script type="text/javascript">
-    function toggleShareOptions() {
-    const shareOptions = document.getElementById('shareOptions');
-    if (shareOptions.style.display === 'flex') {
-        shareOptions.style.display = 'none';
-    } else {
-        shareOptions.style.display = 'flex';
-    }
-}
+document.addEventListener('DOMContentLoaded', () => {
+    // Use event delegation to handle click events for all share icons
+    document.body.addEventListener('click', (event) => {
+        if (event.target.classList.contains('share-icon')) {
+            const parent = event.target.closest('.activity-item');
+            const shareOptions = parent.querySelector('.share-options');
+            
+            // Toggle visibility of the share options
+            if (shareOptions.style.display === 'block') {
+                shareOptions.style.display = 'none';
+            } else {
+                // Hide other share popups before showing the current one
+                document.querySelectorAll('.share-options').forEach((options) => {
+                    options.style.display = 'none';
+                });
+                shareOptions.style.display = 'block';
+            }
+        }
+    });
+
+    // Close share options if clicked outside
+    document.addEventListener('click', (event) => {
+        if (!event.target.closest('.share-wrapper')) {
+            document.querySelectorAll('.share-options').forEach((options) => {
+                options.style.display = 'none';
+            });
+        }
+    });
+});
+
 </script>
 
     <script>
