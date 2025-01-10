@@ -4,7 +4,7 @@
 <style type="text/css">
 /* General Styling */
 .top-participants {
-    font-size: 1.3rem; /* Web font size increased */
+    font-size: 1.4rem; /* Web font size increased */
     color: #555; /* Grey text */
     background-color: #fff; /* White background for container */
     border: 1px solid #ccc; /* Light grey border for container */
@@ -17,7 +17,7 @@
 
 @media (max-width: 768px) {
     .top-participants {
-        font-size: 1.1rem; /* Mobile font size slightly increased */
+        font-size: 1.2rem; /* Mobile font size slightly increased */
     }
 }
 
@@ -129,7 +129,7 @@
 
 <div class="container mt-4 top-participants">
     <div class="cc-header">
-        <h2 class="activity-title">
+        <h3 class="activity-title">
             <hr>
             <span>
                 Top Participants for "
@@ -138,7 +138,7 @@
                 </a>
                 "
             </span>
-        </h2>
+        </h3>
     </div>
     <table class="table table-bordered mt-3 participants-table">
         <thead>
@@ -312,8 +312,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <script type="text/javascript">
     
-
-
 function switchColor() {
     var body = document.body;
     var logoContainer = document.querySelector('.logo-container');
@@ -332,24 +330,24 @@ function switchColor() {
 
     // Change background color and border of logo-container based on nextColor
     if (nextColor === "black") {
-        logoContainer.style.backgroundColor = "transparent";
+        logoContainer.style.backgroundColor = "";
         logoContainer.style.border = "none"; 
     } else {
-        logoContainer.style.backgroundColor = "transparent";
-        logoContainer.style.border = "none"; 
+        logoContainer.style.backgroundColor = ""; // or "transparent"
+        logoContainer.style.border = "none";  // Remove border
     }
 
-    // Elements to update based on nextColor
+    // Other elements to be updated based on nextColor
     var header = document.querySelector('header');
     var footer = document.querySelector('footer');
     var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('.campaign-nav,.campaign-nav a,.activity-content-short,.activity-content-full,.activity-content-hence,.username, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
-    var reactDivs = document.querySelectorAll('.react div');
-    var loveCounts = document.querySelectorAll('[id^="love-count-"]');
+    var textElements = document.querySelectorAll('h1, h2, p,.campaign-nav,.campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
+    var buttons = document.querySelectorAll('button');
+  
     var viewCounts = document.querySelectorAll('#view-count');
-    var commentCounts = document.querySelectorAll('.comment-count');
+    
 
-    // Update header and footer background color based on nextColor
+    // Update header background color based on nextColor
     if (nextColor === "black") {
         header.style.backgroundColor = "#333333";  // Darker gray when background is black
     } else {
@@ -362,7 +360,6 @@ function switchColor() {
         section.style.backgroundColor = nextColor;
     });
 
-    // Adjust text color based on nextColor
     var textColor = nextColor === "black" ? "white" : "black";
     header.style.color = textColor;
     footer.style.color = textColor;
@@ -371,8 +368,8 @@ function switchColor() {
         element.style.color = textColor;
     });
 
-    // Skip changing specific button colors (e.g., .btn-search, .btn-reset)
-    var buttonColor = nextColor === "black" ? "#262626" : ""; 
+     // Skip changing button colors
+    var buttonColor = nextColor === "black" ? "#262626" : ""; // If you want to change button colors based on background, adjust this accordingly
     var buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)'); // Exclude specific buttons
     buttons.forEach(function(button) {
         button.style.backgroundColor = buttonColor;
@@ -385,7 +382,6 @@ function switchColor() {
         }
     });
 
-    // Update colors for .react divs
     reactDivs.forEach(function(reactDiv) {
         reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
 
@@ -400,7 +396,6 @@ function switchColor() {
         }
     });
 
-    // Adjust colors for counts (love, view, comment counts)
     var countTextColor = nextColor === "black" ? "white" : "black";
     loveCounts.forEach(function(element) {
         element.style.color = countTextColor;
@@ -412,6 +407,5 @@ function switchColor() {
         element.style.color = countTextColor;
     });
 }
-
 </script>
 {% endblock %}

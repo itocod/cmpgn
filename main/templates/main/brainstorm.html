@@ -51,87 +51,34 @@
     </div>
 </div>
 
-<!-- Inline Styles -->
-<style>
-/* Background and general layout */
+<style type="text/css">/* Wrapper and Layout */
 .idea-exchange-wrapper {
     font-family: 'Poppins', sans-serif;
-    background: #2f2f2f; /* Dark grey background */
-    color: #ccc; /* Light grey text */
-    padding: 20px;
+    background-color: #ffffff; /* White background */
+    color: #333333; /* Dark gray text */
+    padding: 0;
 }
 
 .idea-exchange-container {
     max-width: 900px;
     margin: 0 auto;
-    background: #333; /* Dark grey container */
+    background-color: #ffffff; /* White background */
     border-radius: 20px;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); /* Slight shadow effect */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow */
     padding: 30px;
+    border: 1px solid #dddddd; /* Light gray border */
 }
 
+/* Title */
 .exchange-title {
     font-size: 2.5rem;
     text-align: center;
     margin-bottom: 25px;
-    color: #32CD32; /* Bright green header */
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.4); /* Darker shadow for header */
+    color: #32CD32; /* Bright green */
+    text-shadow: 0 1px 2px rgba(50, 205, 50, 0.4); /* Subtle green glow */
 }
 
-.ideas-list {
-    list-style: none;
-    padding: 0;
-    margin-top: 30px;
-}
-
-.idea-entry {
-    display: flex;
-    align-items: flex-start;
-    background: #444; /* Slightly lighter grey background for entries */
-    border: 1px solid #555; /* Soft border */
-    border-radius: 15px;
-    margin-bottom: 20px;
-    padding: 15px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.idea-entry:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-}
-
-.profile-section {
-    flex-shrink: 0;
-    margin-right: 15px;
-    border-radius: 50%;
-    overflow: hidden;
-    width: 60px;
-    height: 60px;
-    border: 3px solid #32CD32; /* Green border for profile */
-}
-
-.profile-pic {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.idea-details {
-    flex-grow: 1;
-}
-
-.verified-badge {
-    color: #32CD32; /* Green verified badge */
-}
-
-.idea-text {
-    margin-top: 5px;
-    font-size: 1.5rem;
-    line-height: 1.5;
-    color: #ccc; /* Light grey text */
-}
-
+/* Submission Form */
 .submission-form {
     text-align: center;
     margin-bottom: 40px;
@@ -141,53 +88,108 @@
     width: 100%;
     padding: 20px;
     border-radius: 10px;
-    border: 1px solid #555; /* Soft border for textarea */
-    background: #444; /* Dark background */
-    color: #ccc; /* Light grey text */
+    border: 1px solid #cccccc; /* Light gray */
+    background-color: #f9f9f9; /* Very light gray */
+    color: #333333; /* Dark gray text */
     font-size: 1.5rem;
     margin-bottom: 20px;
     resize: none;
 }
 
 .textarea-field::placeholder {
-    color: rgba(255, 255, 255, 0.6); /* Lighter placeholder text */
-    font-size: 1.1rem;
+    color: #aaaaaa; /* Muted gray placeholder */
 }
 
 .submit-btn {
-    background: #32CD32;
-    color: #fff;
+    background-color: #32CD32; /* Bright green */
+    color: #ffffff; /* White */
     border: none;
     padding: 15px 30px;
     border-radius: 10px;
     font-size: 1.2rem;
     font-weight: bold;
     cursor: pointer;
-    transition: background 0.3s ease;
+    transition: background-color 0.3s ease;
 }
 
 .submit-btn:hover {
-    background: #228B22; /* Darker green on hover */
+    background-color: #228B22; /* Darker green */
 }
 
-/* Mobile Responsiveness */
+/* Idea Entries */
+.ideas-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 30px;
+}
+
+.idea-entry {
+    display: flex;
+    align-items: flex-start;
+    background-color: #f9f9f9; /* Very light gray */
+    border: 1px solid #dddddd; /* Light gray border */
+    border-radius: 15px;
+    margin-bottom: 20px;
+    padding: 15px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.idea-entry:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Profile Section */
+.profile-section {
+    flex-shrink: 0;
+    margin-right: 15px;
+    border-radius: 50%;
+    overflow: hidden;
+    width: 60px;
+    height: 60px;
+    border: 3px solid #32CD32; /* Green border */
+}
+
+.profile-pic {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Idea Details */
+.idea-details {
+    flex-grow: 1;
+}
+
+.verified-badge {
+    color: #32CD32; /* Green verified badge */
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.idea-text {
+    margin-top: 5px;
+    font-size: 1.5rem;
+    line-height: 1.5;
+    color: #333333; /* Dark gray text */
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
     .idea-exchange-container {
-        padding: 15px;
+        padding:0;
         margin: 0 10px;
-        box-shadow: none;
         border-radius: 10px;
     }
 
     .exchange-title {
-        font-size: 1.8rem; /* Smaller title for mobile */
-        margin-bottom: 15px;
+        font-size: 1.8rem;
     }
 
     .idea-entry {
-        flex-direction: column; /* Stack items for mobile */
+        flex-direction: column;
         padding: 10px;
-        margin-bottom: 15px;
     }
 
     .profile-section {
@@ -197,21 +199,8 @@
         height: 50px;
     }
 
-    .idea-details {
-        width: 100%;
-    }
-
     .idea-text {
-        font-size: 1.3rem; /* Adjust font size for mobile */
-    }
-
-    .submission-form {
-        margin-bottom: 20px;
-    }
-
-    .textarea-field {
         font-size: 1.3rem;
-        padding: 15px;
     }
 
     .submit-btn {
@@ -222,11 +211,11 @@
 
 @media (max-width: 480px) {
     .exchange-title {
-        font-size: 1.6rem; /* Further reduce font size for very small screens */
+        font-size: 1.6rem;
     }
 
     .idea-text {
-        font-size: 1.2rem; /* Further reduce font size for very small screens */
+        font-size: 1.2rem;
     }
 
     .submit-btn {
@@ -234,38 +223,10 @@
         font-size: 1rem;
     }
 }
-
-.no-suggested-users {
-    text-align: center;
-    margin: 20px 0;
-    padding: 15px;
-    background-color: rgba(76, 175, 80, 0.3); /* Semi-transparent green background */
-    border-radius: 5px;
-    color: #D3D3D3; /* Black text by default */
-    font-size: 14px;
-    border: 1px solid #4CAF50; /* Green border */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    transition: color 0.3s, background-color 0.3s; /* Smooth transition for color changes */
-}
-
-/* Change text color to white when the background color is dark */
-.no-suggested-users.dark-text {
-    color: #ffffff; /* White text */
-    background-color: rgba(56, 142, 108, 0.7); /* Darker semi-transparent green background */
-}
-
-/* Responsive Styles */
-@media (max-width: 600px) {
-    .no-suggested-users {
-        font-size: 12px; /* Adjust font size for mobile */
-    }
-}
-
-
 </style>
 
-
 <script type="text/javascript">
+    
 function switchColor() {
     var body = document.body;
     var logoContainer = document.querySelector('.logo-container');
@@ -284,24 +245,24 @@ function switchColor() {
 
     // Change background color and border of logo-container based on nextColor
     if (nextColor === "black") {
-        logoContainer.style.backgroundColor = "transparent";
+        logoContainer.style.backgroundColor = "";
         logoContainer.style.border = "none"; 
     } else {
-        logoContainer.style.backgroundColor = "transparent";
-        logoContainer.style.border = "none"; 
+        logoContainer.style.backgroundColor = ""; // or "transparent"
+        logoContainer.style.border = "none";  // Remove border
     }
 
-    // Elements to update based on nextColor
+    // Other elements to be updated based on nextColor
     var header = document.querySelector('header');
     var footer = document.querySelector('footer');
     var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, .campaign-nav,.campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
-    var reactDivs = document.querySelectorAll('.react div');
-    var loveCounts = document.querySelectorAll('[id^="love-count-"]');
+    var textElements = document.querySelectorAll('h1, h2, p,.campaign-nav,.campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
+    var buttons = document.querySelectorAll('button');
+  
     var viewCounts = document.querySelectorAll('#view-count');
-    var commentCounts = document.querySelectorAll('.comment-count');
+    
 
-    // Update header and footer background color based on nextColor
+    // Update header background color based on nextColor
     if (nextColor === "black") {
         header.style.backgroundColor = "#333333";  // Darker gray when background is black
     } else {
@@ -314,7 +275,6 @@ function switchColor() {
         section.style.backgroundColor = nextColor;
     });
 
-    // Adjust text color based on nextColor
     var textColor = nextColor === "black" ? "white" : "black";
     header.style.color = textColor;
     footer.style.color = textColor;
@@ -323,9 +283,9 @@ function switchColor() {
         element.style.color = textColor;
     });
 
-    // Skip changing specific button colors (e.g., .btn-search, .btn-reset, .submit-btn)
-    var buttonColor = nextColor === "black" ? "#262626" : ""; 
-    var buttons = document.querySelectorAll('button:not(.btn-search):not(.btn-reset):not(.submit-btn)'); // Exclude specific buttons
+     // Skip changing button colors
+    var buttonColor = nextColor === "black" ? "#262626" : ""; // If you want to change button colors based on background, adjust this accordingly
+    var buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)'); // Exclude specific buttons
     buttons.forEach(function(button) {
         button.style.backgroundColor = buttonColor;
 
@@ -337,7 +297,6 @@ function switchColor() {
         }
     });
 
-    // Update colors for .react divs
     reactDivs.forEach(function(reactDiv) {
         reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
 
@@ -352,7 +311,6 @@ function switchColor() {
         }
     });
 
-    // Adjust colors for counts (love, view, comment counts)
     var countTextColor = nextColor === "black" ? "white" : "black";
     loveCounts.forEach(function(element) {
         element.style.color = countTextColor;
@@ -364,6 +322,5 @@ function switchColor() {
         element.style.color = countTextColor;
     });
 }
-
 </script>
 {% endblock %}

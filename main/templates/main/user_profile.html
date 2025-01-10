@@ -23,23 +23,53 @@
 
 .rectangle-container {
     width: 100%;
-    height: 100px;
+    height: 200px; /* Increased height for more prominence */
     margin-bottom: 15px;
     border: 1px solid #8FBC8F;
     border-radius: 20px;
     overflow: hidden;
     position: relative;
-    transition: box-shadow 0.3s ease;
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .rectangle-container:hover {
     box-shadow: 0 0 20px rgba(0, 0, 0, 0.2); /* Hover effect */
+    transform: scale(1.02); /* Slight zoom on hover */
 }
 
 .rectangle-container img {
     width: 100%;
-    height: auto;
+    height: 100%; /* Ensures the image covers the container */
+    object-fit: cover; /* Ensures proper aspect ratio */
+    opacity: 0.3; /* Semi-transparent */
+    transition: opacity 0.3s ease;
 }
+
+.rectangle-container:hover img {
+    opacity: 0.7; /* Slightly clearer on hover */
+}
+
+.rectangle-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6); /* Black overlay */
+    transition: background 0.3s ease;
+    z-index: 1;
+}
+
+.rectangle-container:hover::before {
+    background: rgba(0, 0, 0, 0.3); /* Lighter black on hover */
+}
+
+.rectangle-container a {
+    position: relative;
+    z-index: 2; /* Bring link above the overlay */
+}
+
 
 .profile-img-container img {
     width: 150px;
@@ -81,14 +111,18 @@
     font-size: 14px;
 }
 
-/* Mobile adjustments */
 @media (max-width: 768px) {
     .container {
-        padding: 5px;
+        padding: 0;
     }
 
     .rectangle-container {
-        height: 80px;
+        height: 150px; /* Increased height for better visibility on mobile */
+    }
+
+    .rectangle-container img {
+        height: 100%; /* Ensure the image covers the container */
+        object-fit: cover; /* Proper scaling for the image */
     }
 
     .profile-img-container img {
@@ -164,46 +198,7 @@
     margin-top: 20px;
 }
 
-.campaigns {
-    margin-top: 20px;
-    font-size: 14px;
-}
 
-.campaign-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    grid-gap: 20px;
-}
-
-.campaign-item {
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 15px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease; /* Added transition for hover effect */
-}
-
-.campaign-item:hover {
-    transform: translateY(-2px); /* Slight lift effect on hover */
-}
-
-.campaign-header h4 {
-    margin-top: 0;
-    margin-bottom: 10px;
-    font-size: 16px; /* Smaller font size */
-    color: #2C3E50; /* Darker color for better contrast */
-}
-
-.campaign-header p {
-    margin: 5px 0;
-    color: #7F8C8D; /* Lighter gray for a softer look */
-}
-
-.campaign-content img {
-    max-width: 100%;
-    height: auto;
-    margin-top: 10px;
-}
 
 /* Mobile styles */
 @media (max-width: 768px) {
@@ -225,27 +220,7 @@
         margin-top: 15px;
     }
 
-    .campaign-list {
-        grid-template-columns: 1fr;
-        grid-gap: 15px;
-    }
 
-    .campaign-item {
-        padding: 10px;
-    }
-
-    .campaign-header h4 {
-        font-size: 14px; /* Smaller font size */
-    }
-
-    .campaign-header p {
-        font-size: 12px; /* Smaller font size */
-        margin: 3px 0;
-    }
-
-    .campaign-content img {
-        margin-top: 8px;
-    }
 }
 
 
@@ -324,10 +299,11 @@
     gap: 10px; /* Space between badges */
     margin-top: 10px;
     padding: 10px;
-    background-color: #e7f1ff;
+    background-color: #f8f8f8; /* Uniform light silvery-white */
     border-radius: 5px;
-    border: 1px solid #0056b3;
+    border: 1px solid #dcdcdc; /* Subtle gray border for a clean look */
 }
+
 
 .changemaker-badge {
     display: flex;
@@ -342,21 +318,24 @@
     transition: background-color 0.3s ease;
 }
 
+.changemaker-badge .category-keyboard {
+    margin-left: 10px; /* Adds space between the "Changemaker" and the category */
+}
+
 .changemaker-badge:hover {
     background-color: #f0f8ff; /* Subtle highlight on hover */
 }
 
 .category-keyboard {
-    margin-left: 5px;
-    color: #007BFF;
-    font-size: 0.9em;
-    background-color: #f9f9f9;
-    padding: 4px 6px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    font-family: 'Courier New', Courier, monospace;
+    color: #32CD32; /* Lemon green text color */
+    font-size: 1em; /* Keeps the font smaller */
+    background-color: #f0f8e0; /* Light lemon green background */
+    padding: 4px 6px; /* Increased padding for a more comfortable look */
+    border-radius: 5px; /* Rounded corners */
+    font-family: 'Courier New', Courier, monospace; /* Monospace font */
+    border: 1px solid #228B22; /* Darker green border for contrast */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }
-
 
 
 
@@ -402,17 +381,6 @@
     background: linear-gradient(135deg, #0056b3, #003f7f); /* Darker gradient on hover */
 }
 
-/* Styles for the category keyboard */
-.category-keyboard {
-    color: #007BFF; /* Bright blue text color */
-    font-size: 1em; /* Keeps the font smaller */
-    background-color: #e7f1ff; /* Light blue background */
-    padding: 4px 6px; /* Increased padding for a more comfortable look */
-    border-radius: 5px; /* Rounded corners */
-    font-family: 'Courier New', Courier, monospace; /* Monospace font */
-    border: 1px solid #0056b3; /* Darker blue border */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-}
 
 
 .sidebar-box {
@@ -477,8 +445,113 @@
     color: black;              /* Keep text black */
 }
 
+/* Campaigns section */
+.campaigns {
+    padding: 0;
+    background-color: #f9f9f9;
+}
 
+.campaign-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Fixed 3 columns layout */
+    gap: 15px; /* Spacing between posters */
+    padding: 10px;
+    justify-items: center; /* Centers each campaign item */
+}
 
+.campaign-item {
+    position: relative; /* Enables positioning of child elements */
+    background-color: #333; /* Dark background for mystery */
+    border-radius: 8px;
+    overflow: hidden; /* Ensures rounded corners are maintained */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Adds shadow for depth */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.campaign-item:hover {
+    transform: scale(1.05); /* Slight zoom on hover */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5); /* Darker shadow on hover */
+}
+
+.campaign-poster {
+    display: block;
+    position: relative;
+}
+
+.campaign-poster img {
+    width: 100%;
+    height: 200px; /* Fixed height for consistency */
+    object-fit: cover;
+    border-radius: 8px;
+    transition: opacity 0.3s ease;
+}
+
+.campaign-poster:hover img {
+    opacity: 0.8; /* Slight fade on hover */
+}
+
+/* View count overlay inside poster */
+.view {
+    position: absolute;
+    bottom: 10px; /* Positions it at the bottom of the poster */
+    left: 10px; /* Adds some spacing from the edge */
+    display: flex;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.6); /* Transparent black background */
+    color: #fff; /* White text for contrast */
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.view i {
+    margin-right: 5px; /* Space between icon and text */
+    color: #f39c12; /* Gold color for eye icon */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .campaign-list {
+        grid-template-columns: repeat(2, 1fr); /* Two columns on smaller screens */
+    }
+
+    .campaign-poster img {
+        height: 150px; /* Smaller height for mobile view */
+    }
+
+    .view {
+        font-size: 12px; /* Smaller text on mobile */
+        padding: 3px 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .campaign-list {
+        grid-template-columns: repeat(2, 1fr); /* Ensure 2 columns even on very small screens */
+    }
+}
+
+/* Campaigns Section Title */
+.campaign-title {
+  padding-top: 10px;
+    font-size: 16px; /* Reduced font size */
+    font-family: 'Arial', sans-serif;
+    color: #2ecc71; /* Lemon green color */
+    text-align: center;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px; /* Slightly reduced spacing */
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+    .campaign-title {
+      padding-top: 10px;
+        font-size: 14px; /* Smaller font size for mobile */
+        margin-bottom: 15px; /* Reduced space below title */
+        letter-spacing: 0.5px; /* Compact spacing for smaller screens */
+    }
+}
 
 </style>
 
@@ -513,10 +586,12 @@
     <div class="changemakers">
         {% for campaign in public_campaigns %}
             {% if campaign.is_changemaker %}
-                <div class="changemaker-badge">
-                    Changemaker <span class="far fa-star" style="color:red; font-size: 12px;">•</span>
-                    <span class="category-keyboard">{{ campaign.get_category_display }}</span>
-                </div>
+             <div class="changemaker-badge">
+    Changemaker -
+    
+    <span class="category-keyboard">{{ campaign.get_category_display }}</span>
+</div>
+
             {% endif %}
         {% endfor %}
     </div>
@@ -587,29 +662,31 @@
 
 
 </div>
-
-
-<!-- Campaigns section -->
 <div class="campaigns">
-    <h3 style="padding-left: 10px; font-size:16px;">User Public Campaigns: ({{ public_campaigns_count|format_count }})</h3>
-<div class="campaign-list">
-    {% for campaign in public_campaigns %}
-        <div class="campaign-item">
-            <div class="campaign-header">
-                <h4><a href="{% url 'view_campaign' campaign_id=campaign.pk %}" style="color:#3498db;"><span>{{ campaign.title }}</span></a></h4>
-                <p><strong>Category:</strong> {{ campaign.get_category_display }}</p>
-                <p><strong>Timestamp:</strong> {{ campaign.timestamp|timesince }} ago.</p>
-            </div>
-            <div class="campaign-content">
-                <p>{{ campaign.content|truncatewords:20 }}</p>
+    <!-- Title for Campaigns Section -->
+    <h3 class="campaign-title">Public Campaigns</h3>
+
+    <div class="campaign-list">
+        {% for campaign in public_campaigns %}
+            <div class="campaign-item">
+                <!-- Campaign Poster -->
                 {% if campaign.poster %}
-                    <a href="{{ campaign.poster.url }}"><img src="{{ campaign.poster.url }}" alt="Campaign Image"></a>
+                    <a href="{% url 'view_campaign' campaign_id=campaign.pk %}" class="campaign-poster">
+                        <img src="{{ campaign.poster.url }}" alt="Campaign Image">
+                        <!-- View Count Overlay -->
+                        <div class="view">
+                            <i class="far fa-eye"></i>
+                            <span class="reaction-count">
+                                {{ campaign.campaignview_set.count|format_count }} views
+                            </span>
+                        </div>
+                    </a>
                 {% endif %}
             </div>
-        </div>
-    {% empty %}
-        <p style="padding:20px;">No public campaigns available.</p>
-    {% endfor %}
+        {% empty %}
+            <p style="padding:20px;">No public campaigns available.</p>
+        {% endfor %}
+    </div>
 </div>
 
       

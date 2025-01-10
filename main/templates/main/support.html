@@ -197,29 +197,14 @@
 
 
 
-.go-back-arrow {
-    cursor: pointer;
-    font-size: 32px; /* Bigger arrow size */
-    color: silver; /* Silver color for the arrow */
-    background-color: transparent; /* Transparent background */
-    border: none; /* No border */
-    margin: 0; /* No margin */
-    padding: 0; /* No padding */
-    transition: color 0.3s ease; /* Smooth color transition on hover */
-}
 
-.go-back-arrow:hover {
-    color: gray; /* Changes arrow color to gray on hover */
-}
 
 </style>
 
 </head>
 <body>
 
-<div class="go-back-arrow" onclick="goBack()">
-    &#8592; <!-- Unicode for left arrow -->
-</div>
+
     <div class="support-container">
         <div class="cc-header">
             <div class="activity-title">
@@ -285,16 +270,12 @@
         {% endif %}
         
         {% if request.user == campaign.user.user %}
-            <a href="{% url 'update_visibility' campaign_id=campaign.id %}" class="update-visibility-link">
+            <a href="{% url 'update_visibility' campaign_id=campaign.id %}" class="update-visibility-link" style="font-size:14px;">
                 Update Visibility
             </a>
         {% endif %}
     </div>
-    <script>
-    function goBack() {
-        window.history.back(); // Navigates to the previous page
-    }
-</script>
+   
 </body>
 </html>
 {% endblock %}

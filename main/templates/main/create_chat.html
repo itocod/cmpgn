@@ -234,6 +234,33 @@
             var audio = document.getElementById('bgAudio');
             localStorage.setItem('bgAudioPosition', audio.currentTime);
         });
+
+
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var mediaQuery = window.matchMedia('(max-width: 768px)');
+    var leftAside = document.querySelector('.left-aside');
+    var rightAside = document.querySelector('.right-aside');
+
+    function handleMediaQueryChange(e) {
+      if (e.matches) {
+        leftAside.style.display = 'none';
+        rightAside.style.display = 'none';
+      } else {
+        leftAside.style.display = 'block';
+        rightAside.style.display = 'block';
+      }
+    }
+
+    mediaQuery.addListener(handleMediaQueryChange);
+    handleMediaQueryChange(mediaQuery);
+  });
+
+
+
+    </script>
+    <script type="text/javascript">
+    
 function switchColor() {
     var body = document.body;
     var logoContainer = document.querySelector('.logo-container');
@@ -263,12 +290,11 @@ function switchColor() {
     var header = document.querySelector('header');
     var footer = document.querySelector('footer');
     var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, p, li, nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
+    var textElements = document.querySelectorAll('h1, h2, p,.campaign-nav,.campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
     var buttons = document.querySelectorAll('button');
-    var reactDivs = document.querySelectorAll('.react div');
-    var loveCounts = document.querySelectorAll('[id^="love-count-"]');
+  
     var viewCounts = document.querySelectorAll('#view-count');
-    var commentCounts = document.querySelectorAll('.comment-count');
+    
 
     // Update header background color based on nextColor
     if (nextColor === "black") {
@@ -291,7 +317,9 @@ function switchColor() {
         element.style.color = textColor;
     });
 
-    var buttonColor = nextColor === "black" ? "#262626" : "";
+     // Skip changing button colors
+    var buttonColor = nextColor === "black" ? "#262626" : ""; // If you want to change button colors based on background, adjust this accordingly
+    var buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)'); // Exclude specific buttons
     buttons.forEach(function(button) {
         button.style.backgroundColor = buttonColor;
 
@@ -328,30 +356,8 @@ function switchColor() {
         element.style.color = countTextColor;
     });
 }
+</script>
 
-
-  document.addEventListener('DOMContentLoaded', function() {
-    var mediaQuery = window.matchMedia('(max-width: 768px)');
-    var leftAside = document.querySelector('.left-aside');
-    var rightAside = document.querySelector('.right-aside');
-
-    function handleMediaQueryChange(e) {
-      if (e.matches) {
-        leftAside.style.display = 'none';
-        rightAside.style.display = 'none';
-      } else {
-        leftAside.style.display = 'block';
-        rightAside.style.display = 'block';
-      }
-    }
-
-    mediaQuery.addListener(handleMediaQueryChange);
-    handleMediaQueryChange(mediaQuery);
-  });
-
-
-
-    </script>
     <script type="text/javascript">
         
 document.addEventListener("DOMContentLoaded", function() {
