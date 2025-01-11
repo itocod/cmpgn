@@ -275,7 +275,6 @@ document.addEventListener('DOMContentLoaded', function() {
 <script type="text/javascript">
     
 
-
 function switchColor() {
     var body = document.body;
     var logoContainer = document.querySelector('.logo-container');
@@ -294,24 +293,25 @@ function switchColor() {
 
     // Change background color and border of logo-container based on nextColor
     if (nextColor === "black") {
-        logoContainer.style.backgroundColor = "transparent";
+        logoContainer.style.backgroundColor = "";
         logoContainer.style.border = "none"; 
     } else {
-        logoContainer.style.backgroundColor = "transparent";
-        logoContainer.style.border = "none"; 
+        logoContainer.style.backgroundColor = ""; // or "transparent"
+        logoContainer.style.border = "none";  // Remove border
     }
 
-    // Elements to update based on nextColor
+    // Other elements to be updated based on nextColor
     var header = document.querySelector('header');
     var footer = document.querySelector('footer');
     var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('.campaign-nav,.campaign-nav a,.activity-content-short,.activity-content-full,.activity-content-hence,.username, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
+    var textElements = document.querySelectorAll('h1, h2, h4, p, li, .campaign-nav, .campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link');
     var reactDivs = document.querySelectorAll('.react div');
     var loveCounts = document.querySelectorAll('[id^="love-count-"]');
     var viewCounts = document.querySelectorAll('#view-count');
     var commentCounts = document.querySelectorAll('.comment-count');
+    var exploreLinks = document.querySelectorAll('.explore-link i'); // Select all compass icons
 
-    // Update header and footer background color based on nextColor
+    // Update header background color based on nextColor
     if (nextColor === "black") {
         header.style.backgroundColor = "#333333";  // Darker gray when background is black
     } else {
@@ -324,7 +324,6 @@ function switchColor() {
         section.style.backgroundColor = nextColor;
     });
 
-    // Adjust text color based on nextColor
     var textColor = nextColor === "black" ? "white" : "black";
     header.style.color = textColor;
     footer.style.color = textColor;
@@ -333,8 +332,13 @@ function switchColor() {
         element.style.color = textColor;
     });
 
-    // Skip changing specific button colors (e.g., .btn-search, .btn-reset)
-    var buttonColor = nextColor === "black" ? "#262626" : ""; 
+    // Change the color of the compass icon based on the background color
+    exploreLinks.forEach(function(icon) {
+        icon.style.color = nextColor === "black" ? "white" : "black";
+    });
+
+    // Skip changing button colors
+    var buttonColor = nextColor === "black" ? "#262626" : ""; // If you want to change button colors based on background, adjust this accordingly
     var buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)'); // Exclude specific buttons
     buttons.forEach(function(button) {
         button.style.backgroundColor = buttonColor;
@@ -347,7 +351,6 @@ function switchColor() {
         }
     });
 
-    // Update colors for .react divs
     reactDivs.forEach(function(reactDiv) {
         reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
 
@@ -362,7 +365,6 @@ function switchColor() {
         }
     });
 
-    // Adjust colors for counts (love, view, comment counts)
     var countTextColor = nextColor === "black" ? "white" : "black";
     loveCounts.forEach(function(element) {
         element.style.color = countTextColor;
@@ -373,7 +375,22 @@ function switchColor() {
     commentCounts.forEach(function(element) {
         element.style.color = countTextColor;
     });
+
+    // Update the input field and reset button inside .search-container
+    var inputField = document.querySelector('.search-container input[type="text"]');
+    var inputResetButton = document.querySelector('.search-container .btn-reset');
+
+    if (nextColor === "black") {
+        inputField.style.backgroundColor = "#333333"; // Dark gray for black mode
+        inputField.style.color = "white";            // White text in black mode
+        inputResetButton.style.color = "#b0b0b0";      // White icon for reset button
+    } else {
+        inputField.style.backgroundColor = "white";  // Default white background
+        inputField.style.color = "black";            // Black text in white mode
+        inputResetButton.style.color = "#b0b0b0";      // Black icon for reset button
+    }
 }
+
 
 </script>
 {% endblock %}

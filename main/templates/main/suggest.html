@@ -253,6 +253,31 @@
             localStorage.setItem('bgAudioPosition', audio.currentTime);
         });
 
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var mediaQuery = window.matchMedia('(max-width: 768px)');
+    var leftAside = document.querySelector('.left-aside');
+    var rightAside = document.querySelector('.right-aside');
+
+    function handleMediaQueryChange(e) {
+      if (e.matches) {
+        leftAside.style.display = 'none';
+        rightAside.style.display = 'none';
+      } else {
+        leftAside.style.display = 'block';
+        rightAside.style.display = 'block';
+      }
+    }
+
+    mediaQuery.addListener(handleMediaQueryChange);
+    handleMediaQueryChange(mediaQuery);
+  });
+
+
+
+    </script>
+    <script type="text/javascript">
+        
 function switchColor() {
     var body = document.body;
     var logoContainer = document.querySelector('.logo-container');
@@ -282,12 +307,12 @@ function switchColor() {
     var header = document.querySelector('header');
     var footer = document.querySelector('footer');
     var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, p,.campaign-nav,.campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
-    var buttons = document.querySelectorAll('button');
+    var textElements = document.querySelectorAll('h1, h2, h4, p, li, .campaign-nav, .campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link');
     var reactDivs = document.querySelectorAll('.react div');
     var loveCounts = document.querySelectorAll('[id^="love-count-"]');
     var viewCounts = document.querySelectorAll('#view-count');
     var commentCounts = document.querySelectorAll('.comment-count');
+    var exploreLinks = document.querySelectorAll('.explore-link i'); // Select all compass icons
 
     // Update header background color based on nextColor
     if (nextColor === "black") {
@@ -310,7 +335,14 @@ function switchColor() {
         element.style.color = textColor;
     });
 
-    var buttonColor = nextColor === "black" ? "#262626" : "";
+    // Change the color of the compass icon based on the background color
+    exploreLinks.forEach(function(icon) {
+        icon.style.color = nextColor === "black" ? "white" : "black";
+    });
+
+    // Skip changing button colors
+    var buttonColor = nextColor === "black" ? "#262626" : ""; // If you want to change button colors based on background, adjust this accordingly
+    var buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)'); // Exclude specific buttons
     buttons.forEach(function(button) {
         button.style.backgroundColor = buttonColor;
 
@@ -346,28 +378,21 @@ function switchColor() {
     commentCounts.forEach(function(element) {
         element.style.color = countTextColor;
     });
-}
 
+    // Update the input field and reset button inside .search-container
+    var inputField = document.querySelector('.search-container input[type="text"]');
+    var inputResetButton = document.querySelector('.search-container .btn-reset');
 
-  document.addEventListener('DOMContentLoaded', function() {
-    var mediaQuery = window.matchMedia('(max-width: 768px)');
-    var leftAside = document.querySelector('.left-aside');
-    var rightAside = document.querySelector('.right-aside');
-
-    function handleMediaQueryChange(e) {
-      if (e.matches) {
-        leftAside.style.display = 'none';
-        rightAside.style.display = 'none';
-      } else {
-        leftAside.style.display = 'block';
-        rightAside.style.display = 'block';
-      }
+    if (nextColor === "black") {
+        inputField.style.backgroundColor = "#333333"; // Dark gray for black mode
+        inputField.style.color = "white";            // White text in black mode
+        inputResetButton.style.color = "#b0b0b0";      // White icon for reset button
+    } else {
+        inputField.style.backgroundColor = "white";  // Default white background
+        inputField.style.color = "black";            // Black text in white mode
+        inputResetButton.style.color = "#b0b0b0";      // Black icon for reset button
     }
-
-    mediaQuery.addListener(handleMediaQueryChange);
-    handleMediaQueryChange(mediaQuery);
-  });
-
+}
 
 
     </script>

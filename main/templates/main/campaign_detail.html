@@ -226,18 +226,18 @@ section {
 /* Reset button */
 .btn-reset {
     border: none;
-    background: limegreen; /* Primary button color */
-    color: white;
+    background: #f5f5f5; /* Smokewhite background */
+    color: #b0b0b0; /* Softer light silver text color */
     font-size: 18px;
     cursor: pointer;
-    transition: background 0.3s ease, transform 0.2s ease;
+    transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
     padding: 12px; /* Increased size for better click area */
 }
 
 /* Reset button hover */
 .btn-reset:hover {
-    background: #4CAF50; /* Darker lime green on hover */
-    color: white; /* Ensure text remains white */
+    background: #eeeeee; /* Very light gray for hover */
+    color: #a0a0a0; /* Slightly darker but still soft text color */
     transform: scale(1.05); /* Slightly scale up on hover */
 }
 
@@ -1669,6 +1669,15 @@ border: 1px solid silver;
     background-color: limegreen; /* Light lime green on hover */
 }
 
+.search-container input[type="text"] {
+    background-color: white;
+    color: black;
+    border: 1px solid #ccc;
+}
+
+.search-container {
+    color: black;
+}
 
   </style>
 
@@ -1717,11 +1726,12 @@ function switchColor() {
     var header = document.querySelector('header');
     var footer = document.querySelector('footer');
     var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, p, li,  .campaign-nav,.campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
+    var textElements = document.querySelectorAll('h1, h2, h4, p, li, .campaign-nav, .campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link');
     var reactDivs = document.querySelectorAll('.react div');
     var loveCounts = document.querySelectorAll('[id^="love-count-"]');
     var viewCounts = document.querySelectorAll('#view-count');
     var commentCounts = document.querySelectorAll('.comment-count');
+    var exploreLinks = document.querySelectorAll('.explore-link i'); // Select all compass icons
 
     // Update header background color based on nextColor
     if (nextColor === "black") {
@@ -1742,6 +1752,11 @@ function switchColor() {
 
     textElements.forEach(function(element) {
         element.style.color = textColor;
+    });
+
+    // Change the color of the compass icon based on the background color
+    exploreLinks.forEach(function(icon) {
+        icon.style.color = nextColor === "black" ? "white" : "black";
     });
 
     // Skip changing button colors
@@ -1782,9 +1797,21 @@ function switchColor() {
     commentCounts.forEach(function(element) {
         element.style.color = countTextColor;
     });
+
+    // Update the input field and reset button inside .search-container
+    var inputField = document.querySelector('.search-container input[type="text"]');
+    var inputResetButton = document.querySelector('.search-container .btn-reset');
+
+    if (nextColor === "black") {
+        inputField.style.backgroundColor = "#333333"; // Dark gray for black mode
+        inputField.style.color = "white";            // White text in black mode
+        inputResetButton.style.color = "#b0b0b0";      // White icon for reset button
+    } else {
+        inputField.style.backgroundColor = "white";  // Default white background
+        inputField.style.color = "black";            // Black text in white mode
+        inputResetButton.style.color = "#b0b0b0";      // Black icon for reset button
+    }
 }
-
-
 
 
 

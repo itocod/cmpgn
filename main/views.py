@@ -379,36 +379,6 @@ class CampaignDeleteView(LoginRequiredMixin, DeleteView):
 
 
 
-def user_campgn(request):
-    # Get the user's profile
-    user_profile = get_object_or_404(Profile, user=request.user)
-
-    # Filter only public campaigns that the current user has created
-    user_public_campaigns = Campaign.objects.filter(user=user_profile, visibility='public').order_by('-timestamp')
-
-    # Optional: If you want to track the last time the user viewed their campaigns
-    user_profile.last_campaign_check = timezone.now()
-    user_profile.save()
-
-    # Other data to pass to the template (e.g., unread notifications, ads, etc.)
-    form = SubscriptionForm()
-    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    user_chats = Chat.objects.filter(participants=request.user)
-    unread_messages_count = Message.objects.filter(chat__in=user_chats).exclude(sender=request.user).count()
-    ads = NativeAd.objects.all()
-
-    return render(request, 'main/user_campgn.html', {
-        'public_campaigns': user_public_campaigns,
-        'user_profile': user_profile,
-        'unread_notifications': unread_notifications,
-        'unread_messages_count': unread_messages_count,
-        'form': form,
-        'ads': ads,
-    })
-
-
-
-
 
 def native_ad_list(request):
     ads = NativeAd.objects.all()

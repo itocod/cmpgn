@@ -55,6 +55,7 @@
     <title>RallyNex - Together for Change: Support Global Campaigns and Transform Lives</title>
 
   <style>
+
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -65,7 +66,7 @@
     header {
       background-color: 
       color: grey;
-      padding:0;
+      padding: 0;
       text-align: center;
     }
 main {
@@ -108,7 +109,6 @@ section {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
 }
-
 
 
 .header-container {
@@ -224,18 +224,18 @@ section {
 /* Reset button */
 .btn-reset {
     border: none;
-    background: limegreen; /* Primary button color */
-    color: white;
+    background: #f5f5f5; /* Smokewhite background */
+    color: #b0b0b0; /* Softer light silver text color */
     font-size: 18px;
     cursor: pointer;
-    transition: background 0.3s ease, transform 0.2s ease;
+    transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
     padding: 12px; /* Increased size for better click area */
 }
 
 /* Reset button hover */
 .btn-reset:hover {
-    background: #4CAF50; /* Darker lime green on hover */
-    color: white; /* Ensure text remains white */
+    background: #eeeeee; /* Very light gray for hover */
+    color: #a0a0a0; /* Slightly darker but still soft text color */
     transform: scale(1.05); /* Slightly scale up on hover */
 }
 
@@ -269,7 +269,6 @@ section {
         font-size: 40px; /* Smaller font size for small devices */
     }
 }
-
 
 
     nav {
@@ -357,6 +356,7 @@ border: 1px solid silver;
       border: 1px solid silver; /* Set border to 1px solid silver for a silver color */
       margin: 10px 0; /* Add some margin for spacing */
     }
+
 .upper-post {
   display: flex;
   align-items: center;
@@ -425,9 +425,6 @@ border: 1px solid silver;
     border-radius: 50%; /* Circular shape for the image */
   }
 }
-
-
-
 
 
 .post-details {
@@ -522,104 +519,227 @@ border: 1px solid silver;
 
 }
 
+/* Default styles for larger screens */
+.campaign-content {
+    font-size: 16px; /* Default font size for larger screens */
+    padding: 20px; /* Default padding */
+    margin: 10px; /* Default margin */
+    /* Add any other default styles here */
+}
 
+/* Mobile styles */
+@media (max-width: 768px) { /* Adjust the max-width as needed */
+    .campaign-content {
+        font-size: 14px; /* Increased font size for better readability */
+        padding: 15px; /* Slightly smaller padding */
+        margin: 8px; /* Slightly smaller margin */
+        transform: translateY(12px); /* Move down by 12px */
+        transition: transform 0.3s ease; /* Smooth transition */
+        max-width: 95%; /* Ensures the content fits well on smaller screens */
+    }
+}
+/* Default styles for larger screens */
+.campaign-content {
+    font-size: 16px; /* Default font size for larger screens */
+    padding: 20px; /* Default padding */
+    margin: 10px; /* Default margin */
+}
 
+/* Mobile styles */
+@media (max-width: 768px) {
+    .container-with-border {
+        padding: 0; /* Adjust padding for mobile */
+        border-radius: 8px; /* Rounded corners for a softer look */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+    }
 
+    .campaign-content {
+        font-size: 15px; /* Slightly larger text for readability */
+        padding: 10px; /* Adjust padding for mobile */
+        margin: 8px 0; /* Adjust margin for better spacing */
+        transform: translateY(12px); /* Keep the vertical shift */
+        max-width: 95%; /* Ensures the content fits well on smaller screens */
+    }
 
+    h1, h2, h3 {
+        font-weight: bold; /* Make headings bold for emphasis */
+        line-height: 1.2; /* Improve line spacing for readability */
+    }
 
+    .post-details {
+        margin-bottom: 15px; /* Spacing between elements */
+    }
+
+    .react div {
+        font-size: 14px; /* Adjust reaction font size */
+    }
+
+    .tooltip-text {
+        font-size: 10px; /* Smaller tooltip text */
+        padding: 5px; /* Padding for tooltip */
+    }
+}
 .lower-post {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap; /* Allows wrapping on small devices */
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap; /* Allows wrapping on small devices */
 }
 
 .lower-post .react {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
 .lower-post .react > div {
-  margin-right: 10px; /* Reduced for better spacing on small devices */
+    margin-right: 10px; /* Reduced for better spacing on small devices */
 }
 
 .lower-post .react .reaction-count {
-  margin-right: 5px;
+    margin-right: 5px;
 }
 
 .reaction-count,
 .comment-count {
-  font-size: 14px;
-  color: grey;
-  margin-left: 5px;
+    font-size: 14px;
+    color: grey;
+    margin-left: 5px;
+}
+.love-icon {
+    color: silver; /* Default color for unloved heart */
+    cursor: pointer; /* Makes it clear it's clickable */
+    position: relative; /* Positioning context for fireworks */
+    transition: color 0.2s ease; /* Smooth color transition */
+}
+
+.loved {
+    color: red; /* Color for the loved state */
+}
+.firework {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none; /* Prevent clicks on fireworks */
+    opacity: 0;
+}
+
+.firework1 {
+    background: rgba(255, 165, 0, 0.8); /* Orange color */
+    animation: firework-animation 0.8s forwards;
+}
+
+.firework2 {
+    background: rgba(0, 255, 0, 0.8); /* Green color */
+    animation: firework-animation 0.8s forwards;
+}
+
+.firework3 {
+    background: rgba(0, 0, 255, 0.8); /* Blue color */
+    animation: firework-animation 0.8s forwards;
+}
+
+.firework4 {
+    background: rgba(255, 0, 255, 0.8); /* Purple color */
+    animation: firework-animation 0.8s forwards;
+}
+
+@keyframes firework-animation {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1.5); /* Increase the final scale to make them bigger */
+        opacity: 0;
+    }
+}
+
+@keyframes firework-animation {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 0;
+    }
+}
+
+.love {
+    position: relative; /* Necessary for the absolute positioning of .love-label */
+}
+
+.love-label {
+    display: none; /* Hide label by default */
+    position: absolute; /* Position it absolutely */
+    bottom: 25px; /* Adjust as needed to position the label */
+    left: 50%; /* Center it horizontally */
+    transform: translateX(-50%); /* Center it using transform */
+    background-color: rgba(0, 0, 0, 0.7); /* Background for contrast */
+    color: white; /* Text color */
+    padding: 5px 10px; /* Padding around text */
+    border-radius: 5px; /* Rounded corners */
+    z-index: 10; /* Ensure it appears above other elements */
+}
+
+/* Adjust this selector to target the love-label correctly */
+.love-icon:hover + .love-label {
+    display: block; /* Show the label when hovering over the love icon */
 }
 
 /* Mobile styles */
 @media only screen and (max-width: 600px) {
-  .reaction-count,
-  .comment-count {
-    font-size: 12px; /* Smaller font size on mobile */
-    margin-left: 3px;
-  }
-  
-  .lower-post .react > div {
-    margin-right: 5px; /* Further reduce margin for smaller screens */
-  }
+    .reaction-count,
+    .comment-count {
+        font-size: 12px; /* Smaller font size on mobile */
+        margin-left: 3px;
+    }
+    
+    .lower-post .react > div {
+        margin-right: 5px; /* Further reduce margin for smaller screens */
+    }
 
-  .lower-post .love-icon,
-  .lower-post .fa-eye,
-  .lower-post .fa-comment {
-    font-size: 16px; /* Reduce the icon size */
-  }
+    .lower-post .love-icon,
+    .lower-post .fa-eye,
+    .lower-post .fa-comment {
+        font-size: 16px; /* Reduce the icon size */
+    }
 }
 
-
-
-
-
-
-
-
-
-
-
-  .comments .comment {
+.comments .comment {
     margin-bottom: 10px;
     padding: 10px;
     border: 1px solid #e0e0e0;
     border-radius: 5px;
     display: flex;
-  }
+}
 
-  .comments .comment .commenter-info {
+.comments .comment .commenter-info {
     margin-right: 10px;
-  }
+}
 
-  .comments .comment .profile-pic-comment {
+.comments .comment .profile-pic-comment {
     width: 50px;
     height: 50px;
     border-radius: 50%;
     object-fit: cover;
-  }
+}
 
-  .comments .comment .commenter-name {
+.comments .comment .commenter-name {
     font-weight: bold;
     margin-bottom: 5px;
-  }
+}
 
-  .comments .comment .comment-text {
+.comments .comment .comment-text {
     flex: 1;
-  }
-
-
+}
 
 .overlay-link {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
 }
 
 
@@ -657,10 +777,7 @@ border: 1px solid silver;
 
 
 
-/* Add this style to make the love icon red */
-.love-red {
-    color: red;
-}
+
 
 
    .comment-count {
@@ -669,20 +786,18 @@ border: 1px solid silver;
     }
 
 
-
-  /* Base styles for both activity and support links */
-.activity-link,
-.support-link {
+/* Base styles for both activity and support links */
+.activity-link, .support-link {
     position: absolute;
     top: 10px;
-    padding: 16px;
+    padding: 10px;
     border-radius: 50%;
     z-index: 2;
     text-decoration: none;
     font-weight: bold;
-    font-size: 24px; /* Adjust font size for mobile if necessary */
     display: inline-block;
     text-align: center;
+    font-size: 14px;
 }
 
 /* Specific styles for the Activities link (left side) */
@@ -699,47 +814,11 @@ border: 1px solid silver;
     background-color: white;
 }
 
-/* Shared styles for the labels below the icons */
-.icon-label {
-    visibility: hidden;
-    width: auto;
-    max-width: 150px; /* Adjusted maximum width for smaller screens */
-    background: linear-gradient(135deg, #f06, #f79);
-    color: white;
-    text-align: center;
-    border-radius: 12px;
-    padding: 8px 12px; /* Adjust padding for smaller screens */
-    position: absolute;
-    z-index: 1;
-    top: 100%; /* Position below the icon */
-    left: 50%;
-    transform: translateX(-50%);
-    opacity: 0;
-    transition: opacity 0.3s, transform 0.3s;
-    font-size: 12px; /* Adjust font size for mobile */
-    font-weight: bold;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    white-space: normal;
-    overflow-wrap: break-word;
-    box-sizing: border-box;
-    word-wrap: break-word;
-}
 
-/* Tooltip arrow pointing up, located below the icon */
-.icon-label::after {
-    content: '';
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 8px; /* Adjusted for smaller screens */
-    border-style: solid;
-    border-color: transparent transparent #f79 transparent;
-}
+
 
 /* Hover effect to show the label */
-.activity-link:hover .icon-label,
-.support-link:hover .icon-label {
+.activity-link:hover .icon-label, .support-link:hover .icon-label {
     visibility: visible;
     opacity: 1;
     transform: translateX(-50%) translateY(5px);
@@ -747,20 +826,16 @@ border: 1px solid silver;
 
 /* Mobile-specific styles */
 @media (max-width: 768px) {
-    .activity-link,
-    .support-link {
-        font-size: 20px; /* Adjust icon size for smaller screens */
-        padding: 10px; /* Reduce padding for smaller screens */
+    .activity-link, .support-link {
+        padding: 8px;
     }
-
     .icon-label {
-        max-width: 120px; /* Adjusted maximum width for even smaller screens */
-        padding: 6px 10px; /* Reduce padding for smaller screens */
-        font-size: 11px; /* Adjust font size for readability */
+        max-width: 100px;
+        font-size: 10px;
+        padding: 4px 8px;
     }
-
     .icon-label::after {
-        border-width: 6px; /* Smaller arrow size for mobile */
+        border-width: 5px;
     }
 }
 
@@ -843,7 +918,7 @@ border: 1px solid silver;
         position: absolute;
         top: -5px;
         right: 1px;
-        font-size: 12px;
+        font-size: 10px;
     }
 
 
@@ -1096,8 +1171,8 @@ border: 1px solid silver;
 .carousel {
     position: relative;
     overflow: hidden;
-    width: 250px; /* Adjusted width */
-    height: 400px; /* Adjusted height */
+    width: 250px;
+    height: 400px;
     margin: 0 auto;
 }
 
@@ -1110,8 +1185,11 @@ border: 1px solid silver;
     min-width: 100%;
     flex: 1;
     text-align: center;
-    overflow: hidden; /* Hide overflow for slides */
+    overflow: hidden;
 }
+
+/* Your other CSS styles for the .ad, .ad:hover, and image behavior */
+
 
 .ad {
     
@@ -1133,7 +1211,7 @@ border: 1px solid silver;
 }
 
 .ad h2 {
-    font-size: 1rem; /* Smaller font size */
+    font-size: 1.5rem; /* Smaller font size */
     font-weight: 600;
     color: #333;
     margin: 10px 0 8px; /* Adjusted margin */
@@ -1237,6 +1315,7 @@ border: 1px solid silver;
     color: black; /* Ensure the bullet color matches the text */
 }
 
+
 /* Navbar toggle (hidden by default) */
 .navbar-toggle {
     display: none; /* Hidden by default */
@@ -1336,75 +1415,6 @@ border: 1px solid silver;
     padding: 10px;
   }
 }
-/* Container for campaign members */
-.campaign-members {
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    margin: 20px 0;
-    max-height: 300px; /* Set a maximum height for the container */
-    overflow-y: auto;  /* Enable vertical scrolling if content overflows */
-}
-
-/* Heading for members section */
-.campaign-members h4 {
-    font-size: 1.5em;
-    color: #333;
-    margin-bottom: 15px;
-    font-weight: bold;
-}
-
-/* List of members */
-.campaign-members ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-/* Individual member item */
-.campaign-members li {
-    display: flex;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
-    transition: background-color 0.3s ease;
-}
-
-/* Hover effect for member items */
-.campaign-members li:hover {
-    background-color: #eaf1f8;
-}
-
-/* Member profile picture */
-.campaign-members .profile-pic {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    overflow: hidden;
-    margin-right: 15px;
-}
-
-/* Profile picture image */
-.campaign-members .profile-pic img {
-    width: 100%;
-    height: auto;
-    display: block;
-}
-
-/* Member username */
-.campaign-members .member-username {
-    font-size: 1em;
-    color: #007bff;
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s ease;
-}
-
-/* Hover effect for username links */
-.campaign-members .member-username:hover {
-    color: #0056b3;
-}
 
 
 
@@ -1419,6 +1429,7 @@ border: 1px solid silver;
     .cm:hover .changemaker-text {
         visibility: visible; /* Show text on hover */
     }
+
 
 .join-leave-btn {
     position: relative;
@@ -1482,9 +1493,11 @@ border: 1px solid silver;
     transform: rotate(20deg);
     opacity: 1;
 }
+
+
 .sidebar-box {
     border-left: 2px solid #3498db;
-    height: 600px;
+    height: 700px;
     overflow-y: auto;
     overflow-x: hidden;
     border-radius: 5px;
@@ -1503,28 +1516,324 @@ border: 1px solid silver;
         padding: 0;
     }
 }
-            /* Styling for the "No suggested users yet" message */
-  /* Styling for the "No followers for this campaign" message */
+/* Styles for the "Activities" label (left-centered) */
+.activity-label {
+    visibility: hidden;
+    max-width: 120px;
+    background: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
+    color: white;
+    text-align: center;
+    border-radius: 12px;
+    padding: 12px 12px 8px; /* Increased top padding */
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    left: 80%; /* Centered below the icon */
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+    font-size: 11px;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    word-wrap: break-word;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Styles for the "Participate" label (right-aligned) */
+.participate-label {
+    visibility: hidden;
+    max-width: 120px;
+    background: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
+    color: white;
+    text-align: center;
+    border-radius: 12px;
+    padding: 12px 12px 8px; /* Increased top padding */
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    right: 0; /* Positioned to the right */
+    transform: translateX(0); /* No centering needed */
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+    font-size: 11px;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    word-wrap: break-word;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Hover effect for the "Activities" label */
+.activity-link:hover .activity-label {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-50%) translateY(-10px); /* Slight upward motion */
+}
+
+/* Hover effect for the "Participate" label */
+.support-link:hover .participate-label {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(-10px); /* Slight upward motion */
+}
+
+/* Tooltip arrow pointing up, located below the "Activities" icon */
+.activity-label::after {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    right: 60%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: transparent transparent rgba(0, 0, 0, 0.7) transparent;
+}
+
+/* Tooltip arrow pointing up, located below the "Participate" icon */
+.participate-label::after {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 80%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: transparent transparent rgba(0, 0, 0, 0.7) transparent;
+}
+
+.react {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* Adds space between the icons */
+}
+
+.love, .view, .comment, .joiners {
+    position: relative; /* Necessary for tooltip positioning */
+}
+
+.tooltip-label {
+    display: none; /* Hide by default */
+    position: absolute;
+    bottom: 100%; /* Position above the icon */
+    left: 50%; /* Center the tooltip */
+    transform: translateX(-50%);
+    background-color: #333; /* Dark background for the tooltip */
+    color: #fff; /* White text for contrast */
+    padding: 5px 10px; /* Padding around the text */
+    border-radius: 4px; /* Rounded corners */
+    font-size: 12px; /* Font size for the tooltip text */
+    white-space: nowrap; /* Prevent text from wrapping */
+    z-index: 10; /* Ensure tooltip is above other elements */
+    opacity: 0; /* Start hidden */
+    transition: opacity 0.3s; /* Fade in effect */
+}
+
+/* Show tooltip on hover */
+.love:hover .tooltip-label,
+.view:hover .tooltip-label,
+.comment:hover .tooltip-label,
+.joiners:hover .tooltip-label {
+    display: block; /* Show the tooltip */
+    opacity: 1; /* Make it fully visible */
+}
+
+/* Optional: styling for the icons */
+.love-icon, .far.fa-eye, .far.fa-comment {
+    cursor: pointer; /* Pointer cursor for clickable icons */
+    transition: color 0.2s; /* Smooth color transition */
+}
+
+.love-icon:hover {
+    color: red; /* Change color on hover for love icon */
+}
+
+.far.fa-eye:hover, .far.fa-comment:hover {
+    color: #555; /* Change color on hover for other icons */
+}
+
+/* Updated the nav styles to .campaign-nav */
+.campaign-nav {
+    margin-top: 20px;
+    border: 1px solid #808080;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.campaign-nav a {
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px 10px;
+    display: block;
+    transition: background-color 0.3s ease;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.campaign-nav a:hover {
+    background-color: limegreen; /* Light lime green on hover */
+}
+
+
+/* For larger screens (desktop) */
+h4 {
+    font-size: 19px;
+    padding-left: 20px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.explore-link i {
+    font-size: 14px;  /* Smaller icon size */
+    color: black;  /* Default icon color is black */
+    transition: transform 0.3s ease, color 0.3s ease;  /* Smooth transition for hover and color change */
+}
+
+/* For smaller screens (mobile) */
+@media (max-width: 768px) {
+    h4 {
+        font-size: 16px;  /* Smaller text on mobile */
+        padding-left: 15px;  /* Reduced padding */
+    }
+
+    .explore-link i {
+        font-size: 12px;  /* Even smaller icon on mobile */
+    }
+}
+
+/* Hover effect for icon */
+.explore-link:hover i {
+    transform: scale(1.1);  /* Slightly enlarge the icon on hover */
+}
+
+/* Adjust the icon color depending on the background (for both light and dark backgrounds) */
+body.light-theme .explore-link i {
+    color: black;  /* Black icon for light backgrounds */
+}
+
+body.dark-theme .explore-link i {
+    color: white;  /* White icon for dark backgrounds */
+}
+
+
+.go-back-arrow {
+    cursor: pointer;
+    font-size: 20px; /* Icon size */
+    color: silver; /* Silver color for the icon */
+    background-color: transparent; /* Transparent background */
+    border: none; /* No border */
+    margin: 0; /* No margin */
+    padding: 0; /* No padding */
+    padding-left: 10px;
+    transition: color 0.3s ease, transform 0.2s ease; /* Smooth transition */
+}
+
+.go-back-arrow:hover {
+    color: gray; /* Change color to gray on hover */
+    transform: scale(1.1); /* Slight zoom on hover */
+}
+
+.campaign-members {
+    background: linear-gradient(145deg, #ffffff, #f0f0f0); /* White to silver gradient */
+    border: 1px solid #cfcfcf; /* Silver border */
+    border-radius: 10px; /* Rounded corners */
+    padding: 20px;
+    max-width: 600px; /* Increased container width */
+    margin: 20px auto;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    font-family: 'Arial', sans-serif; /* Clean font style */
+}
+
+.campaign-members h3 {
+    font-size: 18px;
+    color: #0044cc; /* Bright blue */
+    border-bottom: 2px solid #cfcfcf; /* Silver line under heading */
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+}
+
+.campaign-members ul {
+    list-style: none;
+    padding: 0;
+    max-height: 200px; /* Set a height limit for the list */
+    overflow-y: auto; /* Enable vertical scrolling */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
+    margin: 0;
+    scrollbar-width: thin; /* For Firefox */
+    scrollbar-color: #0044cc #f0f0f0; /* Customize scrollbar color for Firefox */
+}
+
+.campaign-members ul::-webkit-scrollbar {
+    width: 8px; /* Width of the scrollbar */
+}
+
+.campaign-members ul::-webkit-scrollbar-thumb {
+    background-color: #0044cc; /* Blue scrollbar thumb */
+    border-radius: 5px;
+}
+
+.campaign-members ul::-webkit-scrollbar-track {
+    background: #f0f0f0; /* Light silver scrollbar track */
+}
+
+.campaign-members li {
+    margin-bottom: 10px;
+}
+
+.campaign-members a {
+    text-decoration: none;
+    color: #0044cc; /* Bright blue links */
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.campaign-members a:hover {
+    color: #0066ff; /* Slightly brighter blue on hover */
+}
+
+
+}
+
+.campaign-members li:hover {
+    background: #f0f8ff; /* Light blue background on hover */
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.search-container input[type="text"] {
+    background-color: white;
+    color: black;
+    border: 1px solid #ccc;
+}
+
+.search-container {
+    color: black;
+}
+
+
 .no-suggested-users {
-  text-align: center; /* Center the text horizontally */
-  margin: 20px 0; /* Vertical spacing above and below */
-  padding: 15px; /* Internal spacing */
-  background-color: #e0f7e0; /* Light green background */
-  border-radius: 5px; /* Rounded corners */
-  color: #228b22; /* Forest green text */
-  font-size: 14px; /* Default font size */
-  border: 1px solid #2e8b57; /* Green border */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-  width: 100%; /* Make the container span the full width */
-  box-sizing: border-box; /* Include padding and border in width calculation */
+    text-align: center;
+    margin: 20px 0;
+    padding: 15px;
+    background-color: rgba(76, 175, 80, 0.3); /* Semi-transparent green background */
+    border-radius: 5px;
+    color: #000000; /* Black text by default */
+    font-size: 14px;
+    border: 1px solid #4CAF50; /* Green border */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: color 0.3s, background-color 0.3s; /* Smooth transition for color changes */
+}
+
+/* Change text color to white when the background color is dark */
+.no-suggested-users.dark-text {
+    color: #ffffff; /* White text */
+    background-color: rgba(56, 142, 108, 0.7); /* Darker semi-transparent green background */
 }
 
 /* Responsive Styles */
 @media (max-width: 600px) {
-  .no-suggested-users {
-    font-size: 12px; /* Adjust font size for smaller screens */
-  }
+    .no-suggested-users {
+        font-size: 12px; /* Adjust font size for mobile */
+    }
 }
+
   </style>
 
 
@@ -1540,7 +1849,11 @@ border: 1px solid silver;
         });
     });
 </script>
-
+<script>
+    function goBack() {
+        window.history.back(); // Navigates to the previous page
+    }
+</script>
 <script>
 
 
@@ -1859,6 +2172,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 <section>
+<div class="go-back-arrow" onclick="goBack()">
+    <i class="fas fa-arrow-left"></i> <!-- Font Awesome left arrow icon -->
+</div>
 
     <!-- Beautiful upload button -->
     <div class="upload-container">
@@ -1920,21 +2236,24 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 <div class="file-container">
                     <div style="position: relative;">
-                      {% if user.profile in campaign.user_profiles.all %}
+                                <div style="position: relative;">
+{% if user.profile in campaign.user_profiles.all %}
     <!-- Display the links if the user has joined the campaign -->
     <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="activity-link">
-        <i style='font-size:24px' class='fas'>&#xf6e3;</i>
-        <span class="icon-label">Activities</span>
+        <i style='font-size:18px' class='fas'>&#xf6e3;</i>
+        <span class="activity-label">Activities</span>
     </a>
 
     <a href="{% url 'support' campaign_id=campaign.id %}" class="support-link">
-        <i class="material-icons" style="font-size:24px;">&#xe925;</i>
-        <span class="icon-label">Participate</span>
+        <i class="material-icons" style="font-size:18px;">&#xe925;</i>
+        <span class="participate-label">Participate</span>
     </a>
 {% else %}
     <!-- Optionally, show a message if the user hasn't joined -->
-    <p style="padding-left:8px;">You need to join this campaign to view activities and participate.</p>
+    <p style="padding-left:8px;"> You need to join this campaign to view activities and participate.</p>
 {% endif %}
+
+
 
                         <!-- Campaign poster -->
                         {% if campaign.poster %}
@@ -2017,53 +2336,64 @@ document.addEventListener("DOMContentLoaded", function() {
 
                 <div class="lower-post">
                     <div class="react">
-                         <div class="love">
-            <span style="cursor: pointer; font-size: 19px;" id="love-icon-{{ campaign.id }}" class="love-icon {% if user.is_authenticated and already_loved %}loved{% endif %}" onclick="toggleLove({{ campaign.id }})">
-                <i class="far fa-heart"></i>
-            </span>
-            <span style="color:gray; font-size:14px;" id="love-count-{{ campaign.id }}">{{ campaign.love_count }}</span>
-        </div>
+             <div class="love">
+    <span style="cursor: pointer; font-size: 19px;" id="love-icon-{{ campaign.id }}" 
+          class="love-icon {% if user.is_authenticated and already_loved %}loved{% endif %}" 
+          onclick="toggleLove({{ campaign.id }})">
+        <i class="fas fa-heart"></i>
+    </span>
+    <span style="color:gray; font-size:14px;" id="love-count-{{ campaign.id }}">
+        {{ campaign.love_count|format_count }}
+    </span>
+    <span class="tooltip-label"> love</span> <!-- Tooltip container -->
+</div>
+
+
         <div class="view">
             <i class="far fa-eye" style="font-size: 19px;"></i>
-            <span class="reaction-count" id="view-count">{{ campaign.campaignview_set.count }} views</span>
-        </div>
-        <div class="comment">
-            <span>
-                <i class="far fa-comment" style="font-size:19px;"></i>
+            <span class="reaction-count" id="view-count">
+                {{ campaign.campaignview_set.count|format_count }} views
             </span>
-            <a href="{% url 'campaign_comments' campaign_id=campaign.id %}" class="comment-count">comments</a>
-
-
+            <span class="tooltip-label">Campaign views </span> <!-- Tooltip container -->
         </div>
 
-            
+      <div class="comment">
+    <span>
+        <i class="far fa-comment" style="font-size:19px;" aria-hidden="true"></i>
+    </span>
+    <a href="{% url 'campaign_comments' campaign_id=campaign.id %}" class="comment-count">
+        {{ campaign.comment_set.count }} {{ campaign.comment_set.count|pluralize:"comment,comments" }}
+    </a>
+    <span class="tooltip-label">Comment to Campaign</span> <!-- Tooltip container -->
+</div>
+
+<div class="joiners">
+    <a href="{% url 'campaign_joiners' campaign.id %}" class="comment-count" aria-label="View joiners of this campaign">
+        <i class="fas fa-user-plus" style="font-size:19px;"></i> <!-- User Plus Icon -->
+        Joiners ({{ campaign.user_profiles.count|format_count }})
+    </a>
+    <span class="tooltip-label">Campaign Joiners</span> <!-- Tooltip container -->
+</div>
 
 
+        {% if user.profile in campaign.user_profiles.all %}
+            <a href="{% url 'join_leave_campaign' campaign.id %}" class="join-leave-btn">
+                <i class="fas fa-user-minus"></i> Leave
+                <span class="tooltip-text">Leave Campaign</span>
+            </a>
+        {% else %}
+            <a href="{% url 'join_leave_campaign' campaign.id %}" class="join-leave-btn">
+                <i class="fas fa-user-plus"></i> Join
+                <span class="tooltip-text">Join Campaign</span>
+            </a>
+        {% endif %}
+    </div>
 
-                            <div>
-                              
-<!-- Link to the joiners list -->
-<a href="{% url 'campaign_joiners' campaign.id %}" style="color:#495057;">
-    Joiners ({{ campaign.user_profiles.count|format_count }})
-</a>
+      
 
-                            </div>
-
-                                {% if user.profile in campaign.user_profiles.all %}
-        <a href="{% url 'join_leave_campaign' campaign.id %}" class="join-leave-btn">
-            <i class="fas fa-user-minus"></i> Leave
-            <span class="tooltip-text">Leave Campaign</span>
-        </a>
-    {% else %}
-        <a href="{% url 'join_leave_campaign' campaign.id %}" class="join-leave-btn">
-            <i class="fas fa-user-plus"></i> Join
-            <span class="tooltip-text">Join Campaign</span>
-        </a>
-    {% endif %}
-                       
-                    </div>
-
-                   <div class="campaign-members">
+                    
+                </div>
+                             <div class="campaign-members">
     <!-- Display campaign followers (visible_to_followers members) -->
     <h3 style="font-size: 16px;">Visible to:</h3>
     
@@ -2079,9 +2409,6 @@ document.addEventListener("DOMContentLoaded", function() {
         {% endfor %}
     </ul>
 </div>
-
-                    
-                </div>
             </div>
         {% endfor %}
     </div>
@@ -2263,11 +2590,7 @@ document.addEventListener("DOMContentLoaded", function() {
         align-items: flex-start; /* Align to start */
     }
 
-    .profile-pic img {
-        width: 50px; /* Adjust profile picture size */
-        height: auto; /* Maintain aspect ratio */
-    }
-
+   
     .react div {
         font-size: 14px; /* Adjust reaction font size */
     }
@@ -2577,7 +2900,8 @@ function triggerFireworks(loveIcon) {
 
 </script>
 <script type="text/javascript">
-  function switchColor() {
+  
+function switchColor() {
     var body = document.body;
     var logoContainer = document.querySelector('.logo-container');
 
@@ -2606,7 +2930,7 @@ function triggerFireworks(loveIcon) {
     var header = document.querySelector('header');
     var footer = document.querySelector('footer');
     var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, p, .campaign-nav, .campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a,.explore-link');
+    var textElements = document.querySelectorAll('h1, h2, h4, p, li, .campaign-nav, .campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link');
     var reactDivs = document.querySelectorAll('.react div');
     var loveCounts = document.querySelectorAll('[id^="love-count-"]');
     var viewCounts = document.querySelectorAll('#view-count');
@@ -2677,8 +3001,21 @@ function triggerFireworks(loveIcon) {
     commentCounts.forEach(function(element) {
         element.style.color = countTextColor;
     });
-}
 
+    // Update the input field and reset button inside .search-container
+    var inputField = document.querySelector('.search-container input[type="text"]');
+    var inputResetButton = document.querySelector('.search-container .btn-reset');
+
+    if (nextColor === "black") {
+        inputField.style.backgroundColor = "#333333"; // Dark gray for black mode
+        inputField.style.color = "white";            // White text in black mode
+        inputResetButton.style.color = "#b0b0b0";      // White icon for reset button
+    } else {
+        inputField.style.backgroundColor = "white";  // Default white background
+        inputField.style.color = "black";            // Black text in white mode
+        inputResetButton.style.color = "#b0b0b0";      // Black icon for reset button
+    }
+}
 
 
 
