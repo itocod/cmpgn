@@ -269,7 +269,7 @@ section {
         font-size: 14px; /* Smaller font size for mobile */
     }
       .logo-initials {
-        font-size: 40px; /* Smaller font size for small devices */
+        font-size: 50px; /* Smaller font size for small devices */
     }
 }
 
@@ -2231,7 +2231,7 @@ document.addEventListener("DOMContentLoaded", function() {
                         </div>
                         <div class="post-details">
                             <h1>{{ campaign.user.user.username }} 
-                                {% if campaign.user.is_verified %}
+                                {% if campaign.user.profile_verified %}
                                     <span class="verified-status" style="font-size:12px;"><span>verified</span><i class="material-icons" style="font-size:12px;color:green">verified_user</i></span>
                                 {% endif %}
                                 .  <i class="cm">
@@ -2548,7 +2548,7 @@ document.addEventListener("DOMContentLoaded", function() {
      
     <h2 style="margin-bottom: 10px;">{{ user_profile.user.username }} 
       . <i class="cm">campaigner</i></h2>
-               {% if user_profile.is_verified %}
+               {% if user_profile.profile_verified %}
         <p><strong>Status:</strong> <span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></p>
     {% endif %}
    <img src="{{ user_profile.image.url }}"  alt="Profile Image" width="150" height="150" style="

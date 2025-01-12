@@ -258,7 +258,7 @@ document.addEventListener("DOMContentLoaded", function() {
 </div>
                   
                     <strong>{{ comment.user.username }}
-                    {% if comment.user.profile.is_verified %}
+                    {% if comment.user.profile.profile_verified %}
                         <span class="verified-status" style="font-size: 12px;"><span> . verified</span><i class="material-icons" style="font-size:12px;color:green">verified_user</i></span></span>
                     {% endif %}
                     </strong> <span style="font-size:14px;">commented  - {{ comment.timestamp|timesince }} ago -</span>

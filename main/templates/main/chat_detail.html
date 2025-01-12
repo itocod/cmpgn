@@ -534,7 +534,7 @@ function switchColor() {
     <a href="{% url 'profile_view' chat.manager.username %}">
         {{ chat.manager }}
     </a>
-    {% if chat.manager.profile.is_verified %}
+    {% if chat.manager.profile.profile_verified %}
             <span class="verified-status" style="font-size: 12px;"><span>verified</span><i class="material-icons" style="font-size:12px;color:green">verified_user</i></span>
         {% endif %}
 </h3>
@@ -574,7 +574,7 @@ function switchColor() {
                             {% else %}
                                 <strong>{{ message.sender.username }}</strong>
                             {% endif %}
-                            {% if message.sender.profile.is_verified %}
+                            {% if message.sender.profile.profile_verified %}
                                 <span class="verified-status" style="font-size: 12px;">
                                     <span>verified</span>
                                     <i class="material-icons" style="font-size:12px;color:green">verified_user</i>

@@ -583,19 +583,34 @@
     <a href="{% url 'following_list' user_profile.user.username %}">Following: ({{ following_count|format_count }})</a> |
     User Public Campaigns:({{ public_campaigns_count|format_count }}) | Loves: ({{ user_profile.total_loves|format_count }})
     
-    <div class="changemakers">
-        {% for campaign in public_campaigns %}
-            {% if campaign.is_changemaker %}
-             <div class="changemaker-badge">
-    Changemaker -
-    
-    <span class="category-keyboard">{{ campaign.get_category_display }}</span>
+
+
+
+
+
+ <div class="changemakers">
+    {% if changemaker_category %}
+        <div class="changemaker-badge">
+            Changemaker -
+            <span class="category-keyboard">{{ changemaker_category }}</span>
+        </div>
+    {% endif %}
 </div>
 
-            {% endif %}
-        {% endfor %}
-    </div>
 
+{% if user_profile.profile_verified %}
+    <p><strong>Account:</strong> <span>verified</span>
+    <i class="material-icons" style="font-size:20px;color:green">verified_user</i></p>
+{% else %}
+    <div class="verification-section">
+        <a href="{% url 'verify_profile' %}" class="custom-btn silver-btn">Verify Your Account</a>
+    </div>
+{% endif %}
+    
+
+
+<div>
+  
     {% if not user_profile.user == request.user %}
         {% if not following_profile %}
             <form method="POST" action="{% url 'follow_user' user_profile.user.username %}">
@@ -609,16 +624,7 @@
             </form>
         {% endif %}
     {% endif %}
-    
-{% if user_profile.is_verified %}
-   <p><strong>Account:</strong>   <span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></p>
-{% else %}
-        <div class="verification-section">
-        <a href="{% url 'verify_profile' %}" class="custom-btn silver-btn">Verify Your Account</a>
-    </div>
-{% endif %}
-
-
+</div>
 </div>
 
 
@@ -641,7 +647,7 @@
     <p><strong>Location:</strong> {{ user_profile.location }} 🌍</p>
     <p><strong>Date of Birth:</strong> {{ user_profile.date_of_birth }} 🎉</p>
     <p><strong>Highest level of education:</strong>{{ user_profile.highest_level_of_education }} 🎓</p>
-    {% if user_profile.is_verified %}
+    {% if user_profileri.profile_verified %}
         <p><strong>Status:</strong>   <span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></p>
     {% endif %}
 </div>
@@ -810,6 +816,46 @@ function switchColor() {
 }
 
 
+</script>
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function() {
+    const navbarToggle = document.getElementById("navbarToggle");
+    const navbar = document.getElementById("navbar");
+    const popupClose = document.getElementById("popupClose");
+
+    // Toggle navbar visibility
+    navbarToggle.addEventListener("click", function() {
+        if (navbar.style.display === "block") {
+            navbar.style.display = "none";
+        } else {
+            navbar.style.display = "block";
+        }
+    });
+
+    // Close popup when clicking the close button
+    popupClose.addEventListener("click", function() {
+        navbar.style.display = "none";
+    });
+
+    // Adjust navbar display on window resize
+    window.addEventListener("resize", function() {
+        if (window.innerWidth > 768) {
+            navbar.style.display = "none";
+        } else if (navbar.style.display === "block") {
+            navbar.style.display = "block";
+        } else {
+            navbar.style.display = "none";
+        }
+    });
+
+    // Ensure the navbar is initially hidden on page load for larger screens
+    if (window.innerWidth > 768) {
+        navbar.style.display = "none";
+    } else {
+        navbar.style.display = "none"; // or "block" based on your initial requirement
+    }
+});
 </script>
 <script type="text/javascript">
 

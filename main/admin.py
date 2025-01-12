@@ -160,7 +160,7 @@ from django.contrib import admin
 from .models import Profile
 
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'bio', 'location', 'is_verified')  # Added 'is_verified' for display
+    list_display = ('user', 'bio', 'location', 'profile_verified')  # Updated field name
     search_fields = ('user__username', 'bio', 'location')  # Search functionality
     readonly_fields = ('user',)  # Make user field read-only
 
@@ -175,7 +175,7 @@ class ProfileAdmin(admin.ModelAdmin):
     def verify_users(self, request, queryset):
         # Verify selected users
         for profile in queryset:
-            profile.is_verified = True
+            profile.profile_verified = True  # Updated field name
             profile.save()
         self.message_user(request, "Selected profiles have been verified.")
 
@@ -183,7 +183,6 @@ class ProfileAdmin(admin.ModelAdmin):
 
 # Register the Profile model with the customized ProfileAdmin
 admin.site.register(Profile, ProfileAdmin)
-
 
 
 

@@ -760,26 +760,21 @@ def product_manage(request, campaign_id=None, product_id=None):
 
 
 
-
-
-
 def love_activity(request, activity_id):
     if request.method == 'POST' and request.user.is_authenticated:
-        activity = Activity.objects.get(id=activity_id)
-        # Check if the user has already loved this activity
-        if not ActivityLove.objects.filter(activity=activity, user=request.user).exists():
-            # Create a new love for this activity by the user
-            ActivityLove.objects.create(activity=activity, user=request.user)
-        # Get updated love count for the activity
-        love_count = activity.loves.count()
-        return JsonResponse({'love_count': love_count})
+        try:
+            activity = Activity.objects.get(id=activity_id)
+            # Check if the user has already loved this activity
+            if not ActivityLove.objects.filter(activity=activity, user=request.user).exists():
+                # Create a new love for this activity by the user
+                ActivityLove.objects.create(activity=activity, user=request.user)
+            # Get updated love count for the activity
+            love_count = activity.loves.count()
+            return JsonResponse({'love_count': love_count})
+        except Activity.DoesNotExist:
+            return JsonResponse({'error': 'Activity not found'}, status=404)
     else:
         return JsonResponse({'error': 'Unauthorized'}, status=401)
-
-
-
-
-
 
 
 
@@ -2282,58 +2277,74 @@ def profile_edit(request, username):
 
 
 
-
 from django.utils import timezone
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from .models import Profile, Follow
+
 @login_required
 def profile_view(request, username):
-    following_users = [follow.followed for follow in request.user.following.all()]
+    # Get the user's profile
     user_profile = get_object_or_404(Profile, user__username=username)
-
+    
+    # Check if the logged-in user is following this profile
+    following_profile = Follow.objects.filter(follower=request.user, followed=user_profile.user).exists()
+    
+    # Calculate followers and following counts
     followers_count = Follow.objects.filter(followed=user_profile.user).count()
     following_count = Follow.objects.filter(follower=user_profile.user).count()
+    
+    # Get public campaigns
     public_campaigns = user_profile.user_campaigns.filter(visibility='public').order_by('-timestamp')  # Sort by latest timestamp
     public_campaigns_count = public_campaigns.count()  # Get the count of public campaigns
-
-    following_profile = False
-    if request.user != user_profile.user:
-        following_profile = Follow.objects.filter(follower=request.user, followed=user_profile.user).exists()
-
+    
+    # Filter campaigns where the user qualifies as a changemaker
+    changemaker_campaigns = [campaign for campaign in public_campaigns if campaign.is_changemaker]
+    
+    # Determine the most appropriate campaign
+    most_appropriate_campaign = None
+    if changemaker_campaigns:
+        # First, prioritize the user's first campaign (based on timestamp)
+        first_campaign = min(changemaker_campaigns, key=lambda campaign: campaign.timestamp)
+        
+        # Then, prioritize the campaign with the highest number of loves
+        most_impactful_campaign = max(changemaker_campaigns, key=lambda campaign: campaign.love_count)
+        
+        # If there's a tie in love counts, resolve by selecting the most recent campaign
+        if most_impactful_campaign.love_count == first_campaign.love_count:
+            # Resolve tie by selecting the most recent one
+            most_appropriate_campaign = max(changemaker_campaigns, key=lambda campaign: campaign.timestamp)
+        else:
+            # Use the most impactful campaign (with the most loves)
+            most_appropriate_campaign = most_impactful_campaign
+    
+    # Get the category of the most appropriate campaign
+    category_display = most_appropriate_campaign.get_category_display() if most_appropriate_campaign else None
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
-
+    # Check if there are new campaigns from follows
+  
+    # Update last_campaign_check for the user's profile
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
-    ads = NativeAd.objects.all()  
-
-    # Pass the verification status
-    is_verified = user_profile.is_verified
-
+    ads = NativeAd.objects.all()     
+    # Prepare context
     context = {
-        'ads': ads,
         'user_profile': user_profile,
-        'following_profile': following_profile,
+        'following_profile': following_profile,  # Add this to the context
         'followers_count': followers_count,
         'following_count': following_count,
-        'public_campaigns': public_campaigns,  # Pass sorted campaigns
-        'public_campaigns_count': public_campaigns_count,  # Pass count of campaigns
-        'unread_notifications': unread_notifications,
-        'new_campaigns_from_follows': new_campaigns_from_follows,
-        'is_verified': is_verified,  # Add this line
+        'public_campaigns': public_campaigns,
+        'public_campaigns_count': public_campaigns_count,
+        'changemaker_category': category_display,  # Display the most appropriate category
+
+               'ads':ads,
+       
+        
+        'unread_notifications':unread_notifications,
+      
     }
+    
     return render(request, 'main/user_profile.html', context)
-
-    if 'search_query' in request.GET:
-        form = ProfileSearchForm(request.GET)
-        if form.is_valid():
-            search_query = form.cleaned_data['search_query']
-            results = Profile.objects.filter(user__username__icontains=search_query)
-            return render(request, 'main/search_profile_results.html', {'search_results': results, 'query': search_query})
-
-    return render(request, 'main/user_profile.html', context)
-
-
-
-
 
 def search_profile_results(request):
     if 'search_query' in request.GET:

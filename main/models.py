@@ -52,17 +52,10 @@ class Profile(models.Model):
     followers = models.ManyToManyField(User, related_name='follower_profiles', blank=True)
     last_campaign_check = models.DateTimeField(default=timezone.now)
     last_chat_check = models.DateTimeField(default=timezone.now)
-    is_verified = models.BooleanField(default=False)  # Keep this field
+    profile_verified = models.BooleanField(default=False)  # Renamed from `is_verified
     # Other fields...
 
-    def followers_count(self):
-        return self.followers.count()
-
-    def following_count(self):
-        return self.following.count()
-
-    def has_exactly_two_followers(self):
-        return self.followers_count() == 2
+ 
 
     def age(self):
         if self.date_of_birth:
@@ -72,9 +65,9 @@ class Profile(models.Model):
         return None
 
     def update_verification_status(self):
-        # This can be called after UserVerification is approved
-        self.is_verified = True  # Mark the user as verified
-        self.save(update_fields=['is_verified'])
+        """Update verification status."""
+        self.profile_verified = True  # Mark the profile as verified
+        self.save(update_fields=['profile_verified'])
 
 
     def __str__(self):
@@ -155,20 +148,12 @@ from django.dispatch import receiver
 
 @receiver(post_save, sender=Profile)
 def update_user_verification_status(sender, instance, created, **kwargs):
-    if instance.is_verified:
-        # Get the user verification instance associated with the user
+    if instance.profile_verified:  # Use the new field name
         verification = UserVerification.objects.filter(user=instance.user).first()
-        
-        if verification:
-            # If the verification exists and is not already approved
-            if verification.status != 'Approved':
-                verification.approve()  # Approve the verification
-                verification.verified_on = timezone.now()  # Set the verified_on timestamp
-                verification.save()
-
-
-
-
+        if verification and verification.status != 'Approved':
+            verification.approve()
+            verification.verified_on = timezone.now()
+            verification.save()
 
 
 
@@ -184,12 +169,15 @@ class Follow(models.Model):
         is_new = self.pk is None
         super().save(*args, **kwargs)
         if is_new:
-            self.followed.profile.update_verification_status()  # Check/update verification status on follow
+            # No need to call update_verification_status() anymore
             # Notify the followed user
             follower_username = self.follower.username
             followed_username = self.followed.username
             message = f"{follower_username} started following you. <a href='{reverse('profile_view', kwargs={'username': follower_username})}'>View Profile</a>"
             Notification.objects.create(user=self.followed, message=message)
+
+
+
 
 
 def default_content():
@@ -249,7 +237,7 @@ class Campaign(models.Model):
         ('Other', 'Other'),
     )
     category = models.CharField(max_length=30, choices=CATEGORY_CHOICES, default='Environmental Conservation')
-
+ 
     VISIBILITY_CHOICES = (
         ('public', 'Public'),
         ('private', 'Private'),

@@ -65,7 +65,7 @@ body {
 
 /* Each activity item */
 .activity-item {
-    background-color: #ffffff;
+    
     padding: 0;
     border-radius: 8px;
     border: 1px solid #e0e0e0;
@@ -80,7 +80,7 @@ body {
     justify-content: flex-start;
     margin-bottom: 5px;
     padding: 10px;
-    background-color: #f9f9f9;
+    
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     height: auto;
@@ -500,7 +500,7 @@ body {
     padding: 10px;
     padding-left: 15px; /* Add padding on the left */
     border-top: 1px solid #dbdbdb;
-    background-color: #ffffff;
+   
     flex-wrap: wrap; /* Handle wrapping on smaller screens */
 }
 
@@ -663,32 +663,41 @@ body {
 
 </style>
 
+<script type="text/javascript">
+    // Function to handle loving an activity
+function loveActivity(activityId) {
+    fetch(`/love_activity/${activityId}/`, {  // Make sure to add trailing slash
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({})
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error('Network response was not ok.');
+        }
+    })
+    .then(data => {
+        // Ensure the response has the updated love count
+        if (data.love_count !== undefined) {
+            // Update the love count in the DOM
+            const loveCountElement = document.getElementById(`love-count-${activityId}`);
+            if (loveCountElement) {
+                loveCountElement.textContent = ` ${data.love_count}`;
+            }
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
 
+</script>
 
     <script>
-        // Function to handle loving an activity
-        function loveActivity(activityId) {
-            fetch(`/love_activity/${activityId}/`, {  // Make sure to add trailing slash
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                body: JSON.stringify({})
-            })
-            .then(response => {
-                if (response.ok) {
-                    return response.json();
-                } else {
-                    throw new Error('Network response was not ok.');
-                }
-            })
-            .then(data => {
-                // Update love count on success
-                document.getElementById(`love-count-${activityId}`).textContent = `Love: ${data.love_count}`;
-            })
-            .catch(error => console.error('Error:', error));
-        }
+     
 
         function toggleContent(activityId) {
             var shortContent = document.getElementById(`activity-content-${activityId}-short`);
@@ -734,7 +743,7 @@ body {
     <h4 class="activity-count">
         Total Activities: ({{ activity_count }})
     </h4>
-</div>
+</div><br>
 
 <!-- Display activities -->
 {% if activities %}
@@ -751,13 +760,14 @@ body {
                     </a>
                     <div class="user-info">
                         <h3 class="username">{{ campaign.user.user.username }}.
-                            {% if campaign.user.is_verified %}
+                            {% if campaign.user.profile_verified %}
                                 <span class="verified-status">
                                     <span>verified</span>
                                     <i class="material-icons verified-icon">verified_user</i>
                                 </span>
                             {% endif %}
-                        </h3>.host
+                        </h3>
+                        <p>.host</p>
                     </div>
                 </div>
 
@@ -813,7 +823,8 @@ body {
     <div class="icon">
         <i class="far fa-heart love-icon" onclick="loveActivity('{{ activity.id }}')"></i>
         <span class="label love-label">Love</span>
-        <span class="count love-count">{{ activity.loves.count|format_count }}</span>
+        <span id="love-count-{{ activity.id }}" class="count love-count">{{ activity.loves.count|format_count }}</span>
+
     </div>
 
     <!-- Comment Icon -->
@@ -1065,8 +1076,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 </script>
-<script type="text/javascript">
-    
+      <script type="text/javascript">
 
 function switchColor() {
     var body = document.body;
@@ -1097,7 +1107,7 @@ function switchColor() {
     var header = document.querySelector('header');
     var footer = document.querySelector('footer');
     var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, h4, p, li, .campaign-nav, .campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link');
+    var textElements = document.querySelectorAll('h1, h2, h3,  li, .campaign-nav, .campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link');
     var reactDivs = document.querySelectorAll('.react div');
     var loveCounts = document.querySelectorAll('[id^="love-count-"]');
     var viewCounts = document.querySelectorAll('#view-count');
@@ -1158,7 +1168,7 @@ function switchColor() {
         }
     });
 
-    var countTextColor = nextColor === "black" ? "white" : "black";
+    var countTextColor = nextColor === "sliver" ? "sliver" : "sliver";
     loveCounts.forEach(function(element) {
         element.style.color = countTextColor;
     });

@@ -94,25 +94,33 @@
         }
     }
 
-    /* Styling for the "No suggested users yet" message */
-    .no-suggested-users {
-        text-align: center;
-        margin: 20px 0;
-        padding: 15px;
-        background-color: #e0f7e0; /* Light green background */
-        border-radius: 5px;
-        color: #228b22; /* Forest green text */
-        font-size: 12px; /* Reduced font size */
-        border: 1px solid #2e8b57; /* Green border */
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    }
 
-    /* Responsive Styles */
-    @media (max-width: 600px) {
-        .no-suggested-users {
-            font-size: 10px; /* Adjust font size for mobile */
-        }
+.no-suggested-users {
+    text-align: center;
+    margin: 20px 0;
+    padding: 15px;
+    background-color: rgba(76, 175, 80, 0.3); /* Semi-transparent green background */
+    border-radius: 5px;
+    color: #000000; /* Black text by default */
+    font-size: 14px;
+    border: 1px solid #4CAF50; /* Green border */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    transition: color 0.3s, background-color 0.3s; /* Smooth transition for color changes */
+}
+
+/* Change text color to white when the background color is dark */
+.no-suggested-users.dark-text {
+    color: #ffffff; /* White text */
+    background-color: rgba(56, 142, 108, 0.7); /* Darker semi-transparent green background */
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+    .no-suggested-users {
+        font-size: 12px; /* Adjust font size for mobile */
     }
+}
+
 </style>
 
 
