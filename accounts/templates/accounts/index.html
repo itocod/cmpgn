@@ -244,8 +244,7 @@
     </footer>
   </div>
 
-
-  <script type="application/ld+json">
+<script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "WebSite",
@@ -260,7 +259,6 @@
 }
 </script>
 
-  <!-- Schema Markup for SEO -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -291,20 +289,90 @@
 
 <script type="application/ld+json">
 {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    "itemListElement": [
-        {% for campaign in public_campaigns %}
-        {
-            "@type": "ListItem",
-            "position": {{ forloop.counter }},
-            "url": "https://rallynex.com/campaign/{{ campaign.id }}"
-        }
-        {% if not forloop.last %},{% endif %}
-        {% empty %}
-        []
-        {% endfor %}
-    ]
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Kisoro Ashraf Colline",
+  "url": "https://rallynex.com/about-us",
+  "sameAs": [
+    "https://www.linkedin.com/in/kisoroashrafcolline",
+    "https://twitter.com/KisoroAshraf"
+  ],
+  "jobTitle": "Founder",
+  "worksFor": {
+    "@type": "Organization",
+    "name": "RallyNex"
+  }
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": "Fundraising Event for Education",
+  "startDate": "2025-05-15T19:00:00+00:00",
+  "endDate": "2025-05-15T22:00:00+00:00",
+  "location": {
+    "@type": "Place",
+    "name": "RallyNex Event Hall",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "123 Main Street",
+      "addressLocality": "Kampala",
+      "addressRegion": "Ndejje",
+      "postalCode": "00000",
+      "addressCountry": "UG"
+    }
+  },
+  "description": "Join us for an exciting event to support educational initiatives in Uganda!",
+  "image": "https://rallynex.s3.eu-north-1.amazonaws.com/main/files/event_image.jpg",
+  "url": "https://rallynex.com/event/fundraising-education"
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://rallynex.com"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Campaigns",
+      "item": "https://rallynex.com/campaigns"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Environmental Conservation",
+      "item": "https://rallynex.com/campaigns/environmental-conservation"
+    }
+  ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Environmental Conservation Campaign Donation",
+  "description": "Support the environmental conservation efforts through a donation to this campaign.",
+  "brand": "RallyNex",
+  "sku": "ENV123456",
+  "offers": {
+    "@type": "Offer",
+    "url": "https://rallynex.com/campaigns/environmental-conservation",
+    "priceCurrency": "USD",
+    "price": "50.00",
+    "priceValidUntil": "2025-12-31",
+    "availability": "https://schema.org/InStock"
+  }
 }
 </script>
 
