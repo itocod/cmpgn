@@ -4,6 +4,7 @@ from .views import CustomLoginView
 from .views import CampaignDeleteView
 
 urlpatterns = [
+path('campaigns/', views.campaign_list, name='campaign_list'),
 
    path('campaign/<int:campaign_id>/engagement/', views.campaign_engagement_data, name='campaign_engagement'),
     path('explore/', views.explore_campaigns, name='explore_campaigns'),

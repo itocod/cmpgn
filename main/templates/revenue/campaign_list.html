@@ -1,0 +1,29 @@
+{% extends 'main/face.html' %}
+{% load custom_filters %}
+
+
+{% load static %}
+{% block content %}
+<head>
+    <title>Public Campaigns - Rallynex</title>
+    <meta name="description" content="Explore public campaigns on Rallynex. Discover causes to support and join meaningful initiatives.">
+</head>
+
+<h1>Campaigns</h1>
+<ul>
+    {% for campaign in public_campaigns %}
+        <li>
+            <article>
+                <header>
+                    <h2>{{ campaign.title }}</h2>
+                </header>
+                <p>{{ campaign.summary }}</p>
+                <footer>
+                    <a href="{% url 'view_campaign' campaign.id %}">Read More</a>
+                </footer>
+            </article>
+        </li>
+    {% empty %}
+        <li>No campaigns available.</li>
+    {% endfor %}
+</ul>

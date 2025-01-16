@@ -243,6 +243,23 @@
       </div>
     </footer>
   </div>
+
+
+  <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "RallyNex",
+  "url": "https://rallynex.com",
+  "description": "RallyNex is a crowdfunding platform empowering global causes like Environmental Conservation, Education, Health, and Equality. Join us to make a difference!",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://rallynex.com/search?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
   <!-- Schema Markup for SEO -->
 <script type="application/ld+json">
 {
@@ -269,6 +286,25 @@
     "https://twitter.com/RallyNex",
     "https://instagram.com/RallyNex"
   ]
+}
+</script>
+
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "itemListElement": [
+        {% for campaign in public_campaigns %}
+        {
+            "@type": "ListItem",
+            "position": {{ forloop.counter }},
+            "url": "https://rallynex.com/campaign/{{ campaign.id }}"
+        }
+        {% if not forloop.last %},{% endif %}
+        {% empty %}
+        []
+        {% endfor %}
+    ]
 }
 </script>
 

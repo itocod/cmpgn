@@ -5,10 +5,15 @@ from main.models import Profile
 
 
 
+from main.models import Campaign
 
 def index(request):
-    # Your view logic here...
-    return render(request, 'accounts/index.html', {})
+    # Fetch all public campaigns
+    public_campaigns = Campaign.objects.filter(visibility='public')  # Adjust this query to match your actual filtering criteria
+    
+    # Pass the public_campaigns to the template
+    return render(request, 'accounts/index.html', {'public_campaigns': public_campaigns})
+
 
 
 def home(request):

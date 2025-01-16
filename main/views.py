@@ -100,6 +100,67 @@ from django.shortcuts import render
 from .models import Campaign, ActivityLove, ActivityComment, Brainstorming, Donation
 
 
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, get_object_or_404
+from django.db.models import Case, When, Value, BooleanField, Q
+from django.utils import timezone
+from .models import Campaign, Profile, Notification, Chat, Message, NativeAd, NotInterested, Love
+
+@login_required
+def campaign_list(request):
+    # Get the current user's profile
+    user_profile = get_object_or_404(Profile, user=request.user)
+    
+    # Get all campaigns, annotate whether the current user marked them as "not interested"
+    campaigns = Campaign.objects.annotate(
+        is_not_interested=Case(
+            When(not_interested_by__user=user_profile, then=Value(True)),
+            default=Value(False),
+            output_field=BooleanField(),
+        )
+    )
+    
+    # Exclude campaigns that the current user has marked as "not interested"
+    public_campaigns = campaigns.filter(
+        is_not_interested=False, 
+        visibility='public'  # Ensure only public campaigns are displayed
+    ).order_by('-timestamp')
+    
+    # Fetch followed users' campaigns
+    following_users = request.user.following.values_list('followed', flat=True)
+    followed_campaigns = public_campaigns.filter(user__user__in=following_users)
+    
+    # Include the current user's own public campaigns
+    own_campaigns = public_campaigns.filter(user=user_profile)
+    
+    # Combine followed campaigns and own campaigns for display
+    campaigns_to_display = followed_campaigns | own_campaigns
+    
+    # Fetch new campaigns from followed users added after the user's last check
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check
+    ).exclude(id__in=NotInterested.objects.filter(user=user_profile).values_list('campaign_id', flat=True)).order_by('-timestamp')
+    
+    # Update the user's last campaign check time
+    user_profile.last_campaign_check = timezone.now()
+    user_profile.save()
+    
+    # Render the campaign list page
+    return render(request, 'revenue/campaign_list.html', {
+        'public_campaigns': campaigns_to_display,  # Filtered campaigns to display
+        'new_campaigns_from_follows': new_campaigns_from_follows,  # New campaigns ordered by latest
+    })
+
+
+
+
+
+
+
+
+
+
+
 
 def campaign_engagement_data(request, campaign_id):
     campaign = Campaign.objects.get(id=campaign_id)
