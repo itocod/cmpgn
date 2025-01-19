@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'main.apps.MainConfig',
     'django.contrib.sitemaps',
+
     
 ]
 
@@ -213,6 +214,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SITE_URL = 'https://www.rallynex.com'
 
+# settings.py
+
+SITE_DOMAIN = 'www.rallynex.com'
 
 
 # PayPal settings
@@ -221,5 +225,5 @@ PAYPAL_CLIENT_SECRET = env('PAYPAL_CLIENT_SECRET')
 PAYPAL_MODE = env('PAYPAL_MODE')  #
 
 
-
+SECURE_SSL_REDIRECT = True
 
