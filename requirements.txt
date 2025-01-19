@@ -14,8 +14,10 @@ django-ckeditor-5==0.2.13
 django-cloudinary-storage==0.3.0
 django-crispy-forms==2.2
 django-environ==0.11.2
+django-extensions==3.2.3
 django-heroku==0.3.1
 django-js-asset==2.2.0
+django-sslserver==0.22
 django-storages==1.14.4
 django-tinymce==4.0.0
 django-widget-tweaks==1.5.0
@@ -24,6 +26,7 @@ gunicorn==22.0.0
 idna==3.7
 jmespath==1.0.1
 joblib==1.4.2
+MarkupSafe==3.0.2
 numpy==2.0.0
 packaging==24.1
 paypalrestsdk==1.13.3
@@ -32,7 +35,7 @@ psycopg2==2.9.9
 psycopg2-binary==2.9.9
 pycparser==2.22
 PyJWT==2.8.0
-pyOpenSSL==24.1.0
+pyOpenSSL==25.0.0
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 requests==2.32.3
@@ -45,4 +48,5 @@ threadpoolctl==3.5.0
 typing_extensions==4.12.2
 tzdata==2024.1
 urllib3==2.2.2
+Werkzeug==3.1.3
 whitenoise==6.7.0
