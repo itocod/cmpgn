@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'main.apps.MainConfig',
     'django.contrib.sitemaps',
-
+'django_extensions',
     
 ]
 
@@ -225,5 +225,5 @@ PAYPAL_CLIENT_SECRET = env('PAYPAL_CLIENT_SECRET')
 PAYPAL_MODE = env('PAYPAL_MODE')  #
 
 
-SECURE_SSL_REDIRECT = True
+
 
