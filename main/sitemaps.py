@@ -1,6 +1,6 @@
 from django.contrib.sitemaps import Sitemap
 from django.urls import reverse
-from .models import Campaign
+from .models import Campaign, Profile
 
 class StaticViewSitemap(Sitemap):
     changefreq = "daily"
@@ -31,3 +31,20 @@ class CampaignSitemap(Sitemap):
     def location(self, obj):
         # Generate the URL for the campaign
         return reverse('view_campaign', args=[obj.id])
+
+class ProfileSitemap(Sitemap):
+    changefreq = "weekly"
+    priority = 0.6
+    protocol = "https"  # Ensure HTTPS is used
+
+    def items(self):
+        # Fetch all profiles that should be included in the sitemap
+        return Profile.objects.filter(user__is_active=True)  # Example condition, adjust as needed
+
+    def lastmod(self, obj):
+        # Use a timestamp field to determine the last modification date
+        return obj.user.date_joined  # Or a different field indicating last profile update
+
+    def location(self, obj):
+        # Generate the URL for the profile
+        return reverse('profile_view', args=[obj.user.username])

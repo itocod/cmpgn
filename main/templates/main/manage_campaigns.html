@@ -1327,6 +1327,40 @@ border: 1px solid silver;
     color: black; /* Ensure the bullet color matches the text */
 }
 
+/* Create button styles */
+.create {
+    display: none; /* Hidden by default */
+    position: fixed; /* Fixed position */
+    bottom: 70px; /* Position above the navbar toggle */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Center the button */
+    background: linear-gradient(135deg, rgba(192,192,192,0.7), rgba(50,205,50,0.5)); /* Transparent gradient with silver and lime green */
+    color: rgba(50,205,50,0.9); /* Semi-transparent lime green for the plus sign */
+    font-size: 24px; /* Slightly smaller font size */
+    width: 50px; /* Smaller circle width */
+    height: 50px; /* Smaller circle height */
+    border-radius: 50%; /* Circle shape */
+    text-align: center; /* Center text */
+    line-height: 50px; /* Vertically center the plus sign */
+    box-shadow: 0 3px 6px rgba(0,0,0,0.3), inset 0 0 8px rgba(50,205,50,0.4); /* Adjusted shadow for smaller size */
+    cursor: pointer;
+    z-index: 1001; /* Ensure it appears above the navbar toggle */
+    transition: all 0.3s ease-in-out; /* Smooth animations for other states */
+    backdrop-filter: blur(5px); /* Add a subtle blur effect */
+}
+
+/* Prevent any position change on click */
+.create:active {
+    transform: translateX(-50%) scale(0.95); /* Slight shrink effect on click */
+}
+
+/* Show create button only on mobile screens */
+@media (max-width: 768px) {
+    .create {
+        display: block; /* Show the create button on smaller screens */
+    }
+}
+
 
 /* Navbar toggle (hidden by default) */
 .navbar-toggle {
@@ -1345,7 +1379,6 @@ border: 1px solid silver;
     bottom: 0; /* Fix to the bottom of the screen */
     left: 0; /* Align to the left */
     z-index: 1000; /* Ensure it's above other elements */
-    background-color: #f5f5f5; /* Background color */
 }
 
 /* Navbar toggle hover effects */
@@ -1363,6 +1396,7 @@ border: 1px solid silver;
         display: flex; /* Show the toggle button on smaller screens */
     }
 }
+
 
 
 
@@ -1769,7 +1803,22 @@ body.dark-theme .explore-link i {
     color: black;
 }
 
+/* Hide the button on mobile screens */
+@media (max-width: 768px) {
+    .hide-on-mobile {
+        display: none;
+    }
+}
   </style>
+<script type="text/javascript">
+  function handleCreateClick() {
+    console.log("Create button clicked!");
+    // Add your custom logic here, if needed
+}
+
+</script>
+
+
 <script>
     function goBack() {
         window.history.back(); // Navigates to the previous page
@@ -1931,7 +1980,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 <header>
-            <span id="navbarToggle" class="navbar-toggle">☰</span></br>
+            <a href="{% url 'create_campaign' %}" class="create" onclick="handleCreateClick()">+</a>
+
+<span id="navbarToggle" class="navbar-toggle">☰</span>
 
 <div class="header-container">
     <div class="logo-container">
@@ -2109,18 +2160,17 @@ document.addEventListener("DOMContentLoaded", function() {
 
 <section>
 <div class="go-back-arrow" onclick="goBack()">
-    <i class="fas fa-arrow-left"></i> <!-- Font Awesome left arrow icon -->
+    <i class="fas fa-arrow-left" style="padding-left:20px;"></i> <!-- Font Awesome left arrow icon -->
 </div>
-
-    <!-- Beautiful upload button -->
-    <div class="upload-container">
-        <div class="upload-btn-wrapper">
-           <button class="btn" style="font-size: 14px;">+ Upload
-              <a href="{% url 'create_campaign' %}" class="overlay-link"></a>
-           </button>
-        </div>
+<!-- Beautiful upload button -->
+<div class="upload-container hide-on-mobile">
+    <div class="upload-btn-wrapper">
+        <button class="btn" style="font-size: 14px;">+ Upload
+            <a href="{% url 'create_campaign' %}" class="overlay-link"></a>
+        </button>
     </div>
-    </br>
+</div>
+</br>
 
     <h2 style="font-size: 19px; padding-left: 20px; display: inline-flex; align-items: center;">Manage Your Campaigns.</h2>
 
