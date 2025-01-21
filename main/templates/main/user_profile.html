@@ -444,8 +444,6 @@
     background-color: #e6e6e6; /* Slightly darker on hover */
     color: black;              /* Keep text black */
 }
-
-/* Campaigns section */
 .campaigns {
     padding: 0;
     background-color: #f9f9f9;
@@ -453,7 +451,7 @@
 
 .campaign-list {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Fixed 3 columns layout */
+    grid-template-columns: repeat(4, 1fr); /* Default: 4 columns layout */
     gap: 15px; /* Spacing between posters */
     padding: 10px;
     justify-items: center; /* Centers each campaign item */
@@ -510,9 +508,15 @@
 }
 
 /* Responsive adjustments */
+@media (max-width: 1024px) {
+    .campaign-list {
+        grid-template-columns: repeat(3, 1fr); /* Three columns for tablets */
+    }
+}
+
 @media (max-width: 768px) {
     .campaign-list {
-        grid-template-columns: repeat(2, 1fr); /* Two columns on smaller screens */
+        grid-template-columns: repeat(3, 1fr); /* Two columns on smaller screens */
     }
 
     .campaign-poster img {
@@ -527,13 +531,13 @@
 
 @media (max-width: 480px) {
     .campaign-list {
-        grid-template-columns: repeat(2, 1fr); /* Ensure 2 columns even on very small screens */
+        grid-template-columns: repeat(3, 1fr); /* Ensure 2 columns even on very small screens */
     }
 }
 
 /* Campaigns Section Title */
 .campaign-title {
-  padding-top: 10px;
+    padding-top: 10px;
     font-size: 16px; /* Reduced font size */
     font-family: 'Arial', sans-serif;
     color: #2ecc71; /* Lemon green color */
@@ -546,12 +550,12 @@
 /* Mobile Adjustments */
 @media (max-width: 768px) {
     .campaign-title {
-      padding-top: 10px;
         font-size: 14px; /* Smaller font size for mobile */
         margin-bottom: 15px; /* Reduced space below title */
         letter-spacing: 0.5px; /* Compact spacing for smaller screens */
     }
 }
+
 
 </style>
 
