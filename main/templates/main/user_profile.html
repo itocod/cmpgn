@@ -452,7 +452,7 @@
 .campaign-list {
     display: grid;
     grid-template-columns: repeat(4, 1fr); /* Default: 4 columns layout */
-    gap: 15px; /* Spacing between posters */
+    gap: 10px; /* Spacing between posters */
     padding: 10px;
     justify-items: center; /* Centers each campaign item */
 }
@@ -511,12 +511,15 @@
 @media (max-width: 1024px) {
     .campaign-list {
         grid-template-columns: repeat(3, 1fr); /* Three columns for tablets */
+        gap: 8px; /* Smaller gap for medium screens */
+
     }
 }
 
 @media (max-width: 768px) {
     .campaign-list {
         grid-template-columns: repeat(3, 1fr); /* Two columns on smaller screens */
+        gap: 5px; /* Even smaller gap for mobile */
     }
 
     .campaign-poster img {
@@ -532,6 +535,7 @@
 @media (max-width: 480px) {
     .campaign-list {
         grid-template-columns: repeat(3, 1fr); /* Ensure 2 columns even on very small screens */
+        
     }
 }
 

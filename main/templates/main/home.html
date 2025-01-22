@@ -252,7 +252,7 @@ section {
     }
 
     .logo-container {
-        margin-bottom: 15px; /* Increased space between logo and search bar */
+        display: none; /* Hide the logo container on mobile screens */
     }
 
     .search-wrapper {
@@ -268,10 +268,8 @@ section {
         padding: 10px 15px; /* Adjusted padding */
         font-size: 14px; /* Smaller font size for mobile */
     }
-      .logo-initials {
-        font-size: 50px; /* Smaller font size for small devices */
-    }
 }
+
 
 
     nav {
@@ -1758,22 +1756,7 @@ body.dark-theme .explore-link i {
 }
 
 
-.go-back-arrow {
-    cursor: pointer;
-    font-size: 20px; /* Icon size */
-    color: silver; /* Silver color for the icon */
-    background-color: transparent; /* Transparent background */
-    border: none; /* No border */
-    margin: 0; /* No margin */
-    padding: 0; /* No padding */
-    padding-left: 10px;
-    transition: color 0.3s ease, transform 0.2s ease; /* Smooth transition */
-}
 
-.go-back-arrow:hover {
-    color: gray; /* Change color to gray on hover */
-    transform: scale(1.1); /* Slight zoom on hover */
-}
 
 .search-container input[type="text"] {
     background-color: white;
@@ -2255,9 +2238,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 <section>
-<div class="go-back-arrow" onclick="goBack()">
-    <i class="fas fa-arrow-left" style="padding-left:20px;"></i> <!-- Font Awesome left arrow icon -->
-</div>
+
  <!-- Beautiful upload button -->
 <div class="upload-container hide-on-mobile">
     <div class="upload-btn-wrapper">

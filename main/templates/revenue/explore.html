@@ -252,7 +252,7 @@ section {
     }
 
     .logo-container {
-        margin-bottom: 15px; /* Increased space between logo and search bar */
+        display: none; /* Hide the logo container on mobile screens */
     }
 
     .search-wrapper {
@@ -268,11 +268,7 @@ section {
         padding: 10px 15px; /* Adjusted padding */
         font-size: 14px; /* Smaller font size for mobile */
     }
-      .logo-initials {
-        font-size: 50px; /* Smaller font size for small devices */
-    }
 }
-
 
     nav {
       margin-top: 20px;
@@ -1726,21 +1722,47 @@ border: 1px solid silver;
 
 
 
+
+/* Styling for the go-back arrow */
 .go-back-arrow {
     cursor: pointer;
     font-size: 20px; /* Icon size */
     color: silver; /* Silver color for the icon */
     background-color: transparent; /* Transparent background */
     border: none; /* No border */
-    margin: 0; /* No margin */
+    margin-right: 10px; /* Space between arrow and input field */
     padding: 0; /* No padding */
-    padding-left: 10px;
     transition: color 0.3s ease, transform 0.2s ease; /* Smooth transition */
 }
 
 .go-back-arrow:hover {
     color: gray; /* Change color to gray on hover */
     transform: scale(1.1); /* Slight zoom on hover */
+}
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+    .search-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .search-wrapper {
+        display: flex;
+        flex: 1; /* Make the search input fill the available space */
+        align-items: center;
+    }
+
+    .go-back-arrow {
+        display: inline-block; /* Show the arrow only on mobile */
+    }
+}
+
+/* Default: hide go-back arrow for larger screens */
+@media (min-width: 769px) {
+    .go-back-arrow {
+        display: none; /* Hide the go-back arrow on larger screens */
+    }
 }
 
   </style>
@@ -2046,6 +2068,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <span id="navbarToggle" class="navbar-toggle">☰</span>
 
+
+           
 <div class="header-container">
     <div class="logo-container">
         <div class="logo">
@@ -2055,20 +2079,23 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
 
     <div class="search-container">
+        <div class="go-back-arrow" onclick="goBack()">
+            <i class="fas fa-arrow-left"></i> <!-- Font Awesome left arrow icon -->
+        </div>
         <form action="{% url 'search_campaign' %}" method="get">
             <div class="search-wrapper">
-                <input type="text" placeholder="Search..." name="query_field" id="query-field">
-                  <button type="button" class="btn-reset" id="reset-field">
+                <input type="text" placeholder="Search..." name="search_query" id="query-field">
+                <button type="button" class="btn-reset" id="reset-field">
                     <i class="fas fa-times"></i>
                 </button>
                 <button type="submit" class="btn-search">
                     <i class="fas fa-search"></i>
                 </button>
-              
             </div>
         </form>
     </div>
 </div>
+
 
 
     <div class="action-item">
@@ -2222,9 +2249,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <section>
 
-    <div class="go-back-arrow" onclick="goBack()">
-    <i class="fas fa-arrow-left" style="padding-left:20px;"></i> <!-- Font Awesome left arrow icon -->
-</div>
+  
 <!-- Beautiful upload button -->
 <div class="upload-container hide-on-mobile">
     <div class="upload-btn-wrapper">
