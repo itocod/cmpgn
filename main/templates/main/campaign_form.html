@@ -280,22 +280,34 @@ function submitForm() {
 function previewAudio(event) {
     const fileInput = event.target;
     const previewContainer = document.getElementById('audioPreview');
-    previewContainer.innerHTML = ''; // Clear previous content
+    previewContainer.innerHTML = ''; // Clear previous preview
 
     const file = fileInput.files[0];
     if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
+        // Ensure the file type is audio
+        if (file.type.startsWith('audio/')) {
             const audio = document.createElement('audio');
             audio.controls = true;
-            audio.src = e.target.result;
+
+            // Use a direct object URL to ensure playback compatibility
+            const objectURL = URL.createObjectURL(file);
+            audio.src = objectURL;
+
+            // Add audio player to the preview container
             audio.style.marginTop = '10px';
             previewContainer.appendChild(audio);
-        };
-        reader.readAsDataURL(file);
+
+            // Revoke the object URL after the audio file is loaded
+            audio.onloadeddata = () => {
+                URL.revokeObjectURL(objectURL);
+            };
+        } else {
+            alert('Please upload a valid audio file.');
+        }
     }
 }
 </script>
+
 
 
 <script>
