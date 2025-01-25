@@ -149,7 +149,6 @@
     }
 }
 
-<style>
 .image-preview-container {
     margin-top: 10px;
     border: 1px solid #ddd;
@@ -163,7 +162,17 @@
     height: auto;
     border-radius: 5px;
 }
-</style>
+.audio-preview-container {
+    margin-top: 10px;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    text-align: center;
+    max-width: 300px;
+}
+.audio-preview-container audio {
+    width: 100%;
+}
 
 </style>
 
@@ -209,23 +218,27 @@
             <div id="posterPreview" class="image-preview-container"></div>
         </div>
 
-        <div class="input-group">
-            <label for="id_audio">Sound:</label>
-            <input 
-                type="file" 
-                id="id_audio" 
-                name="audio" 
-                class="form-control-file" 
-                accept=".mp3,.wav,.ogg">
-            <p class="form-help-text">
-                Upload a sound file for your campaign. Accepted formats: MP3, WAV, OGG.
-            </p>
-            <p class="disclaimer-text">
-                <small>
-                    By uploading, you confirm that you have the rights to use this sound file on the platform.
-                </small>
-            </p>
-        </div>
+      <div class="input-group">
+    <label for="id_audio">Sound:</label>
+    <input 
+        type="file" 
+        id="id_audio" 
+        name="audio" 
+        class="form-control-file" 
+        accept="audio/*" 
+        onchange="previewAudio(event)">
+    <p class="form-help-text">
+        Upload a sound file for your campaign. Accepted formats: MP3, WAV, OGG.
+    </p>
+    <p class="disclaimer-text">
+        <small>
+            By uploading, you confirm that you have the rights to use this sound file on the platform.
+        </small>
+    </p>
+    <!-- Preview container for the uploaded audio -->
+    <div id="audioPreview" class="audio-preview-container"></div>
+</div>
+
 
          <div class="input-group">
             <label for="id_visibility">Visibility:</label>
@@ -260,6 +273,29 @@ function submitForm() {
 
 
     </script>
+
+
+
+<script>
+function previewAudio(event) {
+    const fileInput = event.target;
+    const previewContainer = document.getElementById('audioPreview');
+    previewContainer.innerHTML = ''; // Clear previous content
+
+    const file = fileInput.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const audio = document.createElement('audio');
+            audio.controls = true;
+            audio.src = e.target.result;
+            audio.style.marginTop = '10px';
+            previewContainer.appendChild(audio);
+        };
+        reader.readAsDataURL(file);
+    }
+}
+</script>
 
 
 <script>
