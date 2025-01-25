@@ -148,9 +148,24 @@
         padding: 8px 12px; /* Adjust button padding */
     }
 }
+
+<style>
+.image-preview-container {
+    margin-top: 10px;
+    border: 1px solid #ddd;
+    padding: 5px;
+    max-width: 300px;
+    border-radius: 5px;
+    text-align: center;
+}
+.image-preview-container img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+}
 </style>
 
-
+</style>
 
 
 <div class="campaign-form-container">
@@ -182,27 +197,37 @@
 
         <div class="input-group">
             <label for="id_poster">Poster:</label>
-            <input type="file" id="id_poster" name="poster">
+            <input 
+                type="file" 
+                id="id_poster" 
+                name="poster" 
+                accept="image/*" 
+                onchange="previewImage(event)">
             <span class="form-help-text">Upload a poster for your campaign.</span>
             <a href="{% url 'poster_canva' %}" target="_blank" class="create-poster-link">Create a poster with Canva</a>
+            <!-- Preview container for the uploaded image -->
+            <div id="posterPreview" class="image-preview-container"></div>
         </div>
 
-       <div class="input-group">
-    <label for="id_audio">Sound:</label>
-    <input type="file" id="id_audio" name="audio" class="form-control-file" accept=".mp3,.wav,.ogg">
-    <p class="form-help-text">
-        Upload a sound file for your campaign. Accepted formats: MP3, WAV, OGG.
-    </p>
-    <p class="disclaimer-text">
-        <small>
-            By uploading, you confirm that you have the rights to use this sound file on the platform.
-        </small>
-    </p>
-</div>
-
-
-
         <div class="input-group">
+            <label for="id_audio">Sound:</label>
+            <input 
+                type="file" 
+                id="id_audio" 
+                name="audio" 
+                class="form-control-file" 
+                accept=".mp3,.wav,.ogg">
+            <p class="form-help-text">
+                Upload a sound file for your campaign. Accepted formats: MP3, WAV, OGG.
+            </p>
+            <p class="disclaimer-text">
+                <small>
+                    By uploading, you confirm that you have the rights to use this sound file on the platform.
+                </small>
+            </p>
+        </div>
+
+         <div class="input-group">
             <label for="id_visibility">Visibility:</label>
             <select id="id_visibility" name="visibility">
                 <option value="public">Public</option>
@@ -221,6 +246,9 @@
 </div>
 
 
+       
+  
+
 
 
     <script type="text/javascript">
@@ -232,6 +260,34 @@ function submitForm() {
 
 
     </script>
+
+
+<script>
+function previewImage(event) {
+    const fileInput = event.target;
+    const previewContainer = document.getElementById('posterPreview');
+    previewContainer.innerHTML = ''; // Clear previous content
+
+    const file = fileInput.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.alt = 'Selected Poster';
+            img.style.maxWidth = '100%';
+            img.style.height = 'auto';
+            img.style.marginTop = '10px';
+            previewContainer.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+    }
+}
+</script>
+
+
+
+
     <script type="text/javascript">
    
 function switchColor() {
