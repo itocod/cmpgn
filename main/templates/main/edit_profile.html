@@ -182,6 +182,18 @@ h1 {
 }
 
 
+.image-preview-container {
+    margin-top: 10px;
+    text-align: center;
+}
+.image-preview-container img {
+    max-width: 150px;
+    max-height: 150px;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+    object-fit: cover;
+}
+
 </style>
 
 
@@ -206,11 +218,13 @@ h1 {
             <small class="form-helper-text">Enter your email address.</small>
         </div>
         
-        <div class="form-section">
-            <label for="id_profile_form-image" class="form-label">Profile Picture:</label>
-            {{ profile_form.image|add_class:"form-input" }}
-            <small class="form-helper-text">Upload your profile picture.</small>
-        </div>
+      <div class="form-section">
+    <label for="id_profile_form-image" class="form-label">Profile Picture:</label>
+    <input type="file" id="id_profile_form-image" name="image" class="form-input" accept="image/*" onchange="previewImage(event)">
+    <small class="form-helper-text">Upload your profile picture.</small>
+    <!-- Container for the preview -->
+    <div id="imagePreviewContainer" class="image-preview-container"></div>
+</div>
         
         <div class="form-section">
             <label for="id_profile_form-bio" class="form-label">Bio:</label>
@@ -251,6 +265,39 @@ h1 {
         <button type="submit" class="submit-button">Save</button>
     </form></p>
     </div>
+
+
+
+
+<script>
+function previewImage(event) {
+    const fileInput = event.target;
+    const previewContainer = document.getElementById('imagePreviewContainer');
+    previewContainer.innerHTML = ''; // Clear previous preview
+
+    const file = fileInput.files[0];
+    if (file) {
+        // Ensure the file type is an image
+        if (file.type.startsWith('image/')) {
+            const img = document.createElement('img');
+            
+            // Use a direct object URL for the image preview
+            const objectURL = URL.createObjectURL(file);
+            img.src = objectURL;
+
+            // Add image to the preview container
+            previewContainer.appendChild(img);
+
+            // Revoke the object URL after the image is loaded
+            img.onload = () => {
+                URL.revokeObjectURL(objectURL);
+            };
+        } else {
+            alert('Please upload a valid image file.');
+        }
+    }
+}
+</script>
 
 
 <script type="text/javascript">
