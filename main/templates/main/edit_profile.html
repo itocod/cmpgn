@@ -187,11 +187,12 @@ h1 {
     text-align: center;
 }
 .image-preview-container img {
-    max-width: 150px;
-    max-height: 150px;
-    border-radius: 50%;
+    max-width: 100%; /* Make it responsive */
+    max-height: 200px; /* Constrain height */
     border: 2px solid #ddd;
-    object-fit: cover;
+    object-fit: contain; /* Maintain aspect ratio */
+    border-radius: 5px; /* Slightly rounded corners for aesthetics */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
 }
 
 </style>
