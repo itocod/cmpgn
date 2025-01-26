@@ -1306,22 +1306,30 @@ border: 1px solid silver;
     bottom: 70px; /* Position above the navbar toggle */
     left: 50%; /* Center horizontally */
     transform: translateX(-50%); /* Center the button */
-    background: linear-gradient(135deg, rgba(192,192,192,0.7), rgba(50,205,50,0.5)); /* Transparent gradient with silver and lime green */
-    color: rgba(50,205,50,0.9); /* Semi-transparent lime green for the plus sign */
-    font-size: 24px; /* Slightly smaller font size */
-    width: 50px; /* Smaller circle width */
-    height: 50px; /* Smaller circle height */
+    background: linear-gradient(135deg, rgba(192,192,192,0.8), rgba(169,169,169,0.8)); /* Gradient with silver and dark grey */
+    color: rgba(255,255,255,0.9); /* White color for the plus sign */
+    font-size: 24px; /* Font size for the plus sign */
+    width: 50px; /* Circle width */
+    height: 50px; /* Circle height */
     border-radius: 50%; /* Circle shape */
     text-align: center; /* Center text */
     line-height: 50px; /* Vertically center the plus sign */
-    box-shadow: 0 3px 6px rgba(0,0,0,0.3), inset 0 0 8px rgba(50,205,50,0.4); /* Adjusted shadow for smaller size */
-    cursor: pointer;
-    z-index: 1001; /* Ensure it appears above the navbar toggle */
-    transition: all 0.3s ease-in-out; /* Smooth animations for other states */
-    backdrop-filter: blur(5px); /* Add a subtle blur effect */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3), inset 0 0 10px rgba(192,192,192,0.5); /* Subtle shadow */
+    cursor: pointer; /* Change cursor to pointer */
+    z-index: 1001; /* Ensure it appears above other elements */
+    transition: all 0.4s ease; /* Smooth animations for hover and active states */
+    backdrop-filter: blur(3px); /* Add a subtle blur effect */
 }
 
-/* Prevent any position change on click */
+/* Hover effect */
+.create:hover {
+    background: linear-gradient(135deg, rgba(211,211,211,1), rgba(128,128,128,1)); /* Brightened silver and grey gradient */
+    box-shadow: 0 6px 12px rgba(0,0,0,0.4), inset 0 0 14px rgba(211,211,211,0.7); /* Enhanced shadow on hover */
+    transform: translateX(-50%) scale(1.1); /* Slightly enlarge the button */
+    color: rgba(255,255,255,1); /* Make the plus sign fully white */
+}
+
+/* Active effect */
 .create:active {
     transform: translateX(-50%) scale(0.95); /* Slight shrink effect on click */
 }
@@ -1332,7 +1340,6 @@ border: 1px solid silver;
         display: block; /* Show the create button on smaller screens */
     }
 }
-
 
 /* Navbar toggle (hidden by default) */
 .navbar-toggle {
@@ -1722,6 +1729,32 @@ border: 1px solid silver;
 
 
 
+
+    .no-suggested-users {
+        text-align: center;
+        margin: 20px 0;
+        padding: 15px;
+        background-color: rgba(76, 175, 80, 0.3); /* Semi-transparent green background */
+        border-radius: 5px;
+        color: #000000; /* Black text by default */
+        font-size: 14px;
+        border: 1px solid #4CAF50; /* Green border */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        transition: color 0.3s, background-color 0.3s; /* Smooth transition for color changes */
+    }
+
+    /* Change text color to white when the background color is dark */
+    .no-suggested-users.dark-text {
+        color: #ffffff; /* White text */
+        background-color: rgba(56, 142, 108, 0.7); /* Darker semi-transparent green background */
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 600px) {
+        .no-suggested-users {
+            font-size: 12px; /* Adjust font size for mobile */
+        }
+    }
 
 /* Styling for the go-back arrow */
 .go-back-arrow {
@@ -2262,7 +2295,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     <h2 style="font-size:19px; padding-left: 20px;">Explore</h2>
 
-
+    <!-- Check if there are campaigns -->
+    {% if campaigns %}
        <div class="sidebar-box">
             {% for campaign in campaigns %}
                 <div class="container-with-border">
@@ -2464,6 +2498,11 @@ document.addEventListener('DOMContentLoaded', function() {
             {% endfor %}
         </div>
 
+
+    {% else %}
+        <!-- Message to show if no campaigns are available -->
+        <li class="no-suggested-users">No campaigns available yet. !</li>
+    {% endif %}
 </section>
 
 

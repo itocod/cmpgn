@@ -2,10 +2,14 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
+
+    <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update Visibility</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+   
+
     <style>
         /* Custom checkbox styles */
         .checkbox-label {
@@ -141,10 +145,37 @@
             border-top: 1px solid #ddd;
             margin: 30px 0;
         }
+
+
+
+
+
+/* Styling for the go-back arrow */
+.go-back-arrow {
+    cursor: pointer;
+    font-size: 20px; /* Icon size */
+    color: silver; /* Silver color for the icon */
+    background-color: transparent; /* Transparent background */
+    border: none; /* No border */
+    margin-right: 10px; /* Space between arrow and input field */
+    padding: 20px; /* No padding */
+    transition: color 0.3s ease, transform 0.2s ease; /* Smooth transition */
+}
+
+.go-back-arrow:hover {
+    color: gray; /* Change color to gray on hover */
+    transform: scale(1.1); /* Slight zoom on hover */
+}
+
     </style>
 </head>
 <body>
+      
     <form method="post" class="visibility-form">
+
+        <div class="go-back-arrow" onclick="goBack()">
+            <i class="fas fa-arrow-left"></i> <!-- Font Awesome left arrow icon -->
+        </div>
         {% csrf_token %}
         <label class="checkbox-label">
             <input type="checkbox" name="donate_monetary_visible" {% if campaign.donate_monetary_visible %}checked{% endif %}>
@@ -166,5 +197,11 @@
 
         <button type="submit" class="submit-btn">Update Visibility</button>
     </form>
+
+    <script>
+    function goBack() {
+        window.history.back(); // Navigates to the previous page
+    }
+</script>
 </body>
 </html>

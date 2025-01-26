@@ -1871,31 +1871,33 @@ body.dark-theme .explore-link i {
 }
 
 
-.no-suggested-users {
-    text-align: center;
-    margin: 20px 0;
-    padding: 15px;
-    background-color: rgba(76, 175, 80, 0.3); /* Semi-transparent green background */
-    border-radius: 5px;
-    color: #000000; /* Black text by default */
-    font-size: 14px;
-    border: 1px solid #4CAF50; /* Green border */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    transition: color 0.3s, background-color 0.3s; /* Smooth transition for color changes */
-}
 
-/* Change text color to white when the background color is dark */
-.no-suggested-users.dark-text {
-    color: #ffffff; /* White text */
-    background-color: rgba(56, 142, 108, 0.7); /* Darker semi-transparent green background */
-}
-
-/* Responsive Styles */
-@media (max-width: 600px) {
     .no-suggested-users {
-        font-size: 12px; /* Adjust font size for mobile */
+        text-align: center;
+        margin: 20px 0;
+        padding: 15px;
+        background-color: rgba(76, 175, 80, 0.3); /* Semi-transparent green background */
+        border-radius: 5px;
+        color: #000000; /* Black text by default */
+        font-size: 14px;
+        border: 1px solid #4CAF50; /* Green border */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        transition: color 0.3s, background-color 0.3s; /* Smooth transition for color changes */
     }
-}
+
+    /* Change text color to white when the background color is dark */
+    .no-suggested-users.dark-text {
+        color: #ffffff; /* White text */
+        background-color: rgba(56, 142, 108, 0.7); /* Darker semi-transparent green background */
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 600px) {
+        .no-suggested-users {
+            font-size: 12px; /* Adjust font size for mobile */
+        }
+    }
+
 
 /* Hide the button on mobile screens */
 @media (max-width: 768px) {
@@ -3015,7 +3017,7 @@ function switchColor() {
     var header = document.querySelector('header');
     var footer = document.querySelector('footer');
     var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, h4, p, li, .campaign-nav, .campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link');
+    var textElements = document.querySelectorAll('h1, h2, h4, p,  .campaign-nav, .campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link');
     var reactDivs = document.querySelectorAll('.react div');
     var loveCounts = document.querySelectorAll('[id^="love-count-"]');
     var viewCounts = document.querySelectorAll('#view-count');

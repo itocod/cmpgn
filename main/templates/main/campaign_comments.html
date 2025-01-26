@@ -265,7 +265,7 @@
                     </a>
                 </div>
                 {{ comment.user }} - 
-                {% if comment.user.user.profile.is_verified %}
+                {% if comment.user.user.profile.profile_verified %}
                     <span class="verified-status"><i class="material-icons" style="color: green; font-size:12px;">verified_user</i></span>
                 {% endif %}
                 - {{ comment.timestamp|timesince }} ago
@@ -317,7 +317,7 @@ function switchColor() {
     var header = document.querySelector('header');
     var footer = document.querySelector('footer');
     var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, h4, p, li, .campaign-nav, .campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link');
+    var textElements = document.querySelectorAll('h1, h2,  p, li, .campaign-nav, .campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link');
     var reactDivs = document.querySelectorAll('.react div');
     var loveCounts = document.querySelectorAll('[id^="love-count-"]');
     var viewCounts = document.querySelectorAll('#view-count');
