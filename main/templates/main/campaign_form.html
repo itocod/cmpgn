@@ -12,255 +12,320 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emojionearea/dist/emojionearea.min.css">
 <script src="https://cdn.jsdelivr.net/npm/emojionearea/dist/emojionearea.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
-</head>
-<body>
-
-  
-
-
-<style>
-/* Existing styles */
-.campaign-form-container {
-    background: #f8f9fa; /* Light grey background */
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emojionearea@3.4.2/dist/emojionearea.min.css">
+<script src="https://cdn.jsdelivr.net/npm/emojionearea@3.4.2/dist/emojionearea.min.js"></script>
+<style type="text/css">
+/* General styles for the form */
+.edit-profile-form {
+    max-width: 800px; /* Slightly wider for better readability */
     margin: 20px auto;
-    font-family: Arial, sans-serif;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
+    background: #FFFFFF;
 }
 
-.campaign-form-container .affiliate-link {
-    color: #007bff; /* Blue link color */
-    font-weight: bold;
-    text-decoration: none;
-    display: inline-block;
-    margin-bottom: 20px;
-    font-size: 16px;
-}
-
-.campaign-form-container .affiliate-link i {
-    margin-right: 5px;
-}
-
-.campaign-form-container .heading-primary {
+h1 {
     text-align: center;
-    font-size: 18px;
-    color: #343a40; /* Dark grey */
+    color: #37474F;
+    font-size: 2em; /* Larger font size for emphasis */
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.form-section {
     margin-bottom: 20px;
 }
 
-.campaign-form-container .input-group {
-    margin-bottom: 15px;
-}
-
-.campaign-form-container label {
-    display: block;
+.form-label {
     font-weight: bold;
-    color: #495057; /* Medium grey */
-    margin-bottom: 5px;
+    color: #546E7A;
+    font-size: 1.1em;
+    display: block;
+    margin-bottom: 8px;
 }
 
-.campaign-form-container input,
-.campaign-form-container select,
-.campaign-form-container textarea {
+.form-input,
+.form-textarea,
+.form-select {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ced4da;
-    border-radius: 5px;
-    font-size: 14px;
-    color: #495057;
-    background: #ffffff;
+    padding: 12px;
+    border: 1px solid #90A4AE;
+    border-radius: 10px;
+    box-sizing: border-box;
+    margin-top: 5px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    background-color: #F1F1F1;
+    font-size: 1em;
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
     outline: none;
+    border-color: #2196F3;
+    box-shadow: 0 0 8px rgba(33, 150, 243, 0.5);
 }
 
-.campaign-form-container input:focus,
-.campaign-form-container select:focus,
-.campaign-form-container textarea:focus {
-    border-color: #007bff; /* Blue focus */
-    box-shadow: 0 0 4px rgba(0, 123, 255, 0.2);
+.form-textarea {
+    resize: vertical; /* Allow vertical resizing */
+    height: 150px; /* Slightly taller for better usability */
+    overflow-y: auto; /* Always show scrollbar for consistency */
 }
 
-.campaign-form-container .form-help-text {
-    font-size: 12px;
-    color: #6c757d; /* Lighter grey */
-    margin-top: 5px;
+.form-select {
+    appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%2390A4AE" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-position: right 10px top 50%;
+    background-repeat: no-repeat;
+    background-size: 12px;
 }
 
-.campaign-form-container .create-poster-link {
-    display: inline-block;
-    margin-top: 5px;
-    font-size: 12px;
-    color: #007bff;
-    text-decoration: none;
-}
-
-.campaign-form-container .create-poster-link:hover {
-    text-decoration: underline;
-}
-
-.campaign-form-container .primary-btn {
-    background: #007bff;
-    color: #ffffff;
-    border: none;
-    padding: 10px 15px;
-    font-size: 16px;
-    border-radius: 5px;
-    cursor: pointer;
+.submit-button {
+    display: block;
     width: 100%;
+    padding: 14px;
+    background-color: #2196F3;
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    font-size: 1.1em;
+    font-weight: bold;
 }
 
-.campaign-form-container .primary-btn:hover {
-    background: #0056b3; /* Darker blue */
+.submit-button:hover {
+    background-color: #1976D2;
+    transform: translateY(-2px);
 }
 
-.campaign-form-container form {
-    display: flex;
-    flex-direction: column;
+.form-helper-text {
+    color: #757575;
+    font-size: 0.9em;
+    margin-top: 5px;
+    display: block;
 }
 
-.campaign-form-container textarea {
-    height: 100px;
+.action-button {
+    display: inline-block;
+    padding: 10px 20px;
+    margin: 10px 5px;
+    border-radius: 25px;
+    text-align: center;
+    font-size: 14px;
+    background-color: #F1F1F1;
+    transition: background-color 0.3s ease;
 }
 
-/* Responsive styles for mobile */
-@media (max-width: 768px) {
-    .campaign-form-container .heading-primary {
-        font-size: 16px; /* Reduce heading size */
-    }
+.action-button:hover {
+    background-color: #E0E0E0;
+}
 
-    .campaign-form-container .affiliate-link {
-        font-size: 14px; /* Reduce link size */
-    }
+.action-button a {
+    color: #37474F;
+    text-decoration: none;
+    font-size: inherit;
+}
 
-    .campaign-form-container label {
-        font-size: 14px; /* Reduce label size */
-    }
-
-    .campaign-form-container .form-help-text,
-    .campaign-form-container .create-poster-link {
-        font-size: 11px; /* Reduce help text size */
-    }
-
-    .campaign-form-container .primary-btn {
-        font-size: 14px; /* Reduce button font size */
-        padding: 8px 12px; /* Adjust button padding */
-    }
+.action-button i {
+    margin-right: 8px;
 }
 
 .image-preview-container {
-    margin-top: 10px;
-    border: 1px solid #ddd;
-    padding: 5px;
-    max-width: 300px;
-    border-radius: 5px;
+    margin-top: 15px;
     text-align: center;
 }
+
 .image-preview-container img {
     max-width: 100%;
-    height: auto;
-    border-radius: 5px;
-}
-.audio-preview-container {
-    margin-top: 10px;
-    padding: 5px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    text-align: center;
-    max-width: 300px;
-}
-.audio-preview-container audio {
-    width: 100%;
+    max-height: 250px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+#emoji-picker-button {
+    margin-top: 10px;
+    padding: 10px 15px;
+    background-color: #2196F3;
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 0.9em;
+}
+
+#emoji-picker-button:hover {
+    background-color: #1976D2;
+}
+
+/* Media queries for mobile responsiveness */
+@media (max-width: 768px) {
+    .edit-profile-form {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 1.8em;
+    }
+
+    .form-label {
+        font-size: 1em;
+    }
+
+    .form-input,
+    .form-textarea,
+    .form-select {
+        font-size: 0.9em;
+        padding: 10px;
+    }
+
+    .submit-button {
+        padding: 12px;
+        font-size: 1em;
+    }
+
+    .form-helper-text {
+        font-size: 0.8em;
+    }
+}
+
+@media (max-width: 480px) {
+    h1 {
+        font-size: 1.5em;
+    }
+
+    .form-label {
+        font-size: 0.9em;
+    }
+
+    .submit-button {
+        font-size: 0.9em;
+    }
+}
+
+
+/* Add this to your existing CSS */
+.form-textarea {
+    white-space: pre-wrap; /* Preserve whitespace and wrap text */
+    word-wrap: break-word; /* Break long words if necessary */
+    word-break: break-word; /* Ensure words break to fit within the container */
+}
 </style>
 
-
-<div class="campaign-form-container">
+<body>
+<div class="edit-profile-form">
     <div style="text-align: center;">
-        <a href="{% url 'affiliate_links' %}" class="affiliate-link">
+        <a href="{% url 'affiliate_links' %}" class="affiliate-link action-button">
             <i class="fas fa-tools"></i> Campaign Advancement Tools
         </a>
     </div>
 
     <form method="post" enctype="multipart/form-data" id="campaignForm">
         {% csrf_token %}
-        <h3 class="heading-primary">Create Campaign Form</h3>
+        <h1>Create Campaign Form</h1>
 
-        <div class="input-group">
-            <label for="id_title">Title:</label>
-            <input type="text" id="id_title" name="title" required>
-            <span class="form-help-text">Provide a concise title for your campaign.</span>
+
+        <!-- Display Error Messages -->
+        {% if form.errors %}
+            <div class="form-errors" id="form-errors" style="color: red; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 5px;">
+                <ul style="list-style: none; padding-left: 0;">
+                    {% for field in form %}
+                        {% if field.errors %}
+                            <li>
+                                <strong>{{ field.label }}:</strong>
+                                <span style="color: #721c24;">{{ field.errors|join:', ' }}</span>
+                            </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+
+        <div class="form-section">
+            <label for="id_title" class="form-label">Title:</label>
+            <input type="text" id="id_title" name="title" class="form-input" required>
+            <span class="form-helper-text">Provide a concise title for your campaign.</span>
         </div>
 
-        <div class="input-group">
-            <label for="id_category">Category:</label>
-            <select id="id_category" name="category">
+        <div class="form-section">
+            <label for="id_category" class="form-label">Category:</label>
+            <select id="id_category" name="category" class="form-select">
                 {% for category in categories %}
                 <option value="{{ category.0 }}">{{ category.1 }}</option>
                 {% endfor %}
             </select>
-            <span class="form-help-text">Choose the category of your campaign.</span>
+            <span class="form-helper-text">Choose the category of your campaign.</span>
         </div>
 
-        <div class="input-group">
-            <label for="id_poster">Poster:</label>
-            <input 
-                type="file" 
-                id="id_poster" 
-                name="poster" 
-                accept="image/*" 
-                onchange="previewImage(event)">
-            <span class="form-help-text">Upload a poster for your campaign.</span>
-            <a href="{% url 'poster_canva' %}" target="_blank" class="create-poster-link">Create a poster with Canva</a>
-            <!-- Preview container for the uploaded image -->
+        <div class="form-section">
+            <label for="id_poster" class="form-label">Poster:</label>
+            <input type="file" id="id_poster" name="poster" accept="image/*" onchange="previewImage(event)">
+            <span class="form-helper-text">Upload a poster for your campaign.</span>
+            <a href="{% url 'poster_canva' %}" target="_blank" class="action-button">Create a poster with Canva</a>
             <div id="posterPreview" class="image-preview-container"></div>
         </div>
 
-      <div class="input-group">
-    <label for="id_audio">Sound:</label>
-    <input 
-        type="file" 
-        id="id_audio" 
-        name="audio" 
-        class="form-control-file" 
-        accept="audio/*" 
-        onchange="previewAudio(event)">
-    <span class="form-help-text">
-        Upload a sound file for your campaign. Accepted formats: MP3, WAV, OGG.
-    </span>
-    <span class="disclaimer-text">
-        <small>
-            By uploading, you confirm that you have the rights to use this sound file on the platform.
-        </small>
-    </span>
-    <!-- Preview container for the uploaded audio -->
-    <div id="audioPreview" class="audio-preview-container"></div>
-</div>
+        <div class="form-section">
+            <label for="id_audio" class="form-label">Sound:</label>
+            <input type="file" id="id_audio" name="audio" class="form-input" accept="audio/*" onchange="previewAudio(event)">
+            <span class="form-helper-text">Upload a sound file (MP3, WAV, OGG).</span>
+            <small class="form-helper-text">By uploading, you confirm that you have rights to use this sound.</small>
+            <div id="audioPreview" class="audio-preview-container"></div>
+        </div>
 
-
-         <div class="input-group">
-            <label for="id_visibility">Visibility:</label>
-            <select id="id_visibility" name="visibility">
+        <div class="form-section">
+            <label for="id_visibility" class="form-label">Visibility:</label>
+            <select id="id_visibility" name="visibility" class="form-select">
                 <option value="public">Public</option>
                 <option value="private">Private</option>
             </select>
-            <span class="form-help-text">Choose how to display your campaign.</span>
+            <span class="form-helper-text">Choose how to display your campaign.</span>
         </div>
 
-        <div class="input-group">
-            <label for="id_content">Content:</label>
-            <textarea id="id_content" name="content" required></textarea>
+        <div class="form-section">
+            <label for="id_content" class="form-label">Content:</label>
+            <textarea id="id_content" name="content" class="form-textarea" required></textarea>
+            
         </div>
 
-        <button type="submit" class="primary-btn">Submit</button>
+        <button type="submit" class="submit-button">Submit</button>
     </form>
 </div>
 
+<script>
+    // Make the error message disappear after 5 seconds
+    setTimeout(function() {
+        var errorDiv = document.getElementById('form-errors');
+        if (errorDiv) {
+            errorDiv.style.display = 'none';  // Hide the error message
+        }
+    }, 5000);  // 5000 milliseconds = 5 seconds
+</script>
 
-       
-  
+<script>
+$(document).ready(function () {
+    // Initialize EmojioneArea with correct options
+    var emojioneArea = $('#id_content').emojioneArea({
+        pickerPosition: "bottom", // Position of the picker outside the textarea
+        inline: false, // Disable inline picker
+        hidePickerOnBlur: false, // Keep picker open even when textarea loses focus
+    });
+
+    // Get the EmojioneArea instance
+    var emojioneAreaInstance = emojioneArea[0].emojioneArea;
+
+    // Add click event to the button to show the emoji picker
+    $('#emoji-picker-button').click(function () {
+        emojioneAreaInstance.showPicker(); // Show the emoji picker outside the textarea
+    });
+});
+
+</script>
+
 
 
 
@@ -367,7 +432,7 @@ function switchColor() {
     var header = document.querySelector('header');
     var footer = document.querySelector('footer');
     var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, h4, p, li, .campaign-nav, .campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link');
+    var textElements = document.querySelectorAll(' h2, h4, p, li, .campaign-nav, .campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link');
     var reactDivs = document.querySelectorAll('.react div');
     var loveCounts = document.querySelectorAll('[id^="love-count-"]');
     var viewCounts = document.querySelectorAll('#view-count');
@@ -581,15 +646,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
     </script>
-<script>
-    $(document).ready(function () {
-        // Initialize emojionearea on your message input field
-        $('#id_content').emojioneArea({
-            pickerPosition: "bottom", // Display emoji picker at the bottom
-            tones: false // Disable skin tones if not required
-        });
-    });
-</script>
+
 
 </body>
 </html>

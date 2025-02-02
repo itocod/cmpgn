@@ -2186,14 +2186,15 @@ def recreate_campaign(request, campaign_id):
     user_profile.save()
     ads = NativeAd.objects.all()  
     return render(request, 'main/campaign_form.html', {'ads':ads,'form': form, 'categories': categories,'user_profile': user_profile,'unread_notifications':unread_notifications,'new_campaigns_from_follows':new_campaigns_from_follows})
+
 def success_page(request):
     return render(request, 'main/success.html')
+
 
 @login_required
 def create_campaign(request):
     following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
-    # Get the user's profile
-    user_profile = get_object_or_404(Profile, user=request.user)
+    user_profile = get_object_or_404(Profile, user=request.user)  # Get the user's profile
     categories = Campaign.CATEGORY_CHOICES  # Get the category choices from the Campaign model
 
     if request.method == 'POST':
@@ -2202,9 +2203,14 @@ def create_campaign(request):
             campaign = form.save(commit=False)
             campaign.user = request.user.profile  # Assuming profile is a one-to-one field on the User model
             campaign.save()
+            messages.success(request, 'Campaign created successfully!')
             return redirect('home')  # Redirect to a success page
+        else:
+            messages.error(request, 'There were errors in your form. Please correct them below.')
+
     else:
         form = CampaignForm()
+
     # Fetch unread notifications for the user
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
     # Check if there are new campaigns from follows
@@ -2213,9 +2219,16 @@ def create_campaign(request):
     # Update last_campaign_check for the user's profile
     user_profile.last_campaign_check = timezone.now()
     user_profile.save() 
-    ads = NativeAd.objects.all()  
-    return render(request, 'main/campaign_form.html', {'ads':ads,'form': form, 'categories': categories, 'user_profile': user_profile,'unread_notifications':unread_notifications,'new_campaigns_from_follows':new_campaigns_from_follows})
+    ads = NativeAd.objects.all()
 
+    return render(request, 'main/campaign_form.html', {
+        'ads': ads,
+        'form': form,
+        'categories': categories,
+        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'new_campaigns_from_follows': new_campaigns_from_follows
+    })
 def poster_canva(request):
     return render(request, 'main/poster_canva.html')
 
