@@ -237,46 +237,209 @@ select:focus {
         font-size: 14px;
     }
 }
+/* Error message style */
+.errorlist {
+    color: red;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+}
 
-</style>
+.errorlist ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
 
-<h2 style="font-size:19px; padding-left: 20px; color:#333;">Campaign Activities Form</h2>
-<div class="custom-form-container">
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ formset.management_form }}
-        {% for form in formset %}
+.errorlist strong {
+    font-weight: bold;
+}
+
+.errorlist span {
+    color: #721c24;
+}
+
+.file-preview-error {
+    color: red;
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+}
+
+        /* Styles for previewing image and video files */
+        .file-preview {
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f9f9f9;
+            display: none; /* Hide initially */
+            max-width: 100%;
+            text-align: center;
+        }
+
+        .file-preview img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .file-preview video {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .file-preview p {
+            color: #333;
+            font-size: 14px;
+            font-style: italic;
+        }
+
+        .file-preview.show {
+            display: block;
+        }
+    </style>
+
+    <h2 style="font-size:19px; padding-left: 20px; color:#333;">Campaign Activities Form</h2>
+    <div class="custom-form-container">
+        <form method="post" enctype="multipart/form-data" onsubmit="clearErrors()">
+    {% csrf_token %}
+    {{ formset.management_form }}
+
+    {% for form in formset %}
+        <div>
+            <!-- Content Field -->
             <div>
-                {{ form.as_p }}
-                <label class="custom-label">Emoji:</label>
-                <div class="emoji-container" id="emojiContainer{{ form.content.auto_id }}">
-                    {% for emoji in initial_emojis %}
-                        <button type="button" class="custom-emoji-button" onclick="addEmoji('{{ emoji }}', '{{ form.content.auto_id }}')">{{ emoji }}</button>
-                    {% endfor %}
-                    <div class="emoji-container hidden" id="extraEmojis{{ form.content.auto_id }}">
-                        {% for emoji in additional_emojis %}
-                            <button type="button" class="custom-emoji-button" onclick="addEmoji('{{ emoji }}', '{{ form.content.auto_id }}')">{{ emoji }}</button>
-                        {% endfor %}
+                <label class="custom-label" for="{{ form.content.id_for_label }}">Content:</label>
+                {{ form.content }}
+                {% if form.content.errors %}
+                    <div class="errorlist" id="content-error-{{ form.content.auto_id }}">
+                        <ul>
+                            {% for error in form.content.errors %}
+                                <li><span>{{ error }}</span></li>
+                            {% endfor %}
+                        </ul>
                     </div>
-                </div>
-                <button type="button" class="show-more-button" onclick="toggleEmojiOverflow('{{ form.content.auto_id }}')">Show More</button>
-                <div>
-                    
+                {% endif %}
+            </div>
+
+            <!-- File Upload Field -->
+            <div>
+                <label class="custom-label" for="{{ form.file.id_for_label }}">Upload File:</label>
+                {{ form.file }}
+                {% if form.file.errors %}
+                    <div class="errorlist" id="file-error-{{ form.file.auto_id }}">
+                        <ul>
+                            {% for error in form.file.errors %}
+                                <li><span>{{ error }}</span></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                <!-- Preview section for image and video files -->
+                <div id="filePreview{{ form.file.auto_id }}" class="file-preview">
+                    <!-- Image or Video Preview will be displayed here -->
                 </div>
             </div>
-            <hr>
-        {% endfor %}
-        <button type="submit" class="custom-submit-button">Submit</button>
-    </form><br>    <div class="campaign-activities-container">
-                        <h4 class="campaign-activities-header">Examples of Activities to Post</h4>
-                        <div id="campaignActivitiesList" class="campaign-activities-list">
-                            {% for activity in campaign.get_objective_and_activities.Activities %}
-                                <activity-text class="campaign-activity-item">{{ activity }}</activity-text>
-                            {% endfor %}
-                        </div>
-                        <span id="toggleActivitiesButton" class="campaign-toggle-button">See More</span>
-                    </div>
+
+            <!-- Emoji Field -->
+            <label class="custom-label">Emoji:</label>
+            <div class="emoji-container" id="emojiContainer{{ form.content.auto_id }}">
+                {% for emoji in initial_emojis %}
+                    <button type="button" class="custom-emoji-button" onclick="addEmoji('{{ emoji }}', '{{ form.content.auto_id }}')">{{ emoji }}</button>
+                {% endfor %}
+                <div class="emoji-container hidden" id="extraEmojis{{ form.content.auto_id }}">
+                    {% for emoji in additional_emojis %}
+                        <button type="button" class="custom-emoji-button" onclick="addEmoji('{{ emoji }}', '{{ form.content.auto_id }}')">{{ emoji }}</button>
+                    {% endfor %}
+                </div>
+            </div>
+            <button type="button" class="show-more-button" onclick="toggleEmojiOverflow('{{ form.content.auto_id }}')">Show More</button>
+        </div>
+        <hr>
+    {% endfor %}
+
+    <button type="submit" class="custom-submit-button">Submit</button>
+</form>
+
+
 </div>
+
+
+<br>  
+</div>
+<script>
+    // Make all error messages disappear after 5 seconds
+    setTimeout(function() {
+        var errorMessages = document.querySelectorAll('.errorlist');
+        errorMessages.forEach(function(errorDiv) {
+            errorDiv.style.display = 'none';  // Hide the error message
+        });
+    }, 5000);  // 5000 milliseconds = 5 seconds
+</script>
+
+
+<script>
+    function previewFile(input, previewId) {
+        const file = input.files[0];
+        const preview = document.getElementById(previewId);
+
+        // Clear previous preview
+        preview.innerHTML = '';
+
+        if (file) {
+            const reader = new FileReader();
+            preview.classList.add('show'); // Show the preview area
+
+            reader.onload = function (e) {
+                const fileType = file.type.split('/')[0];
+
+                // Show image preview if it's an image file
+                if (fileType === 'image') {
+                    preview.innerHTML = `<img src="${e.target.result}" alt="Preview" />`;
+                } 
+                // Show video preview if it's a video file
+                else if (fileType === 'video') {
+                    preview.innerHTML = `<video controls>
+                                            <source src="${e.target.result}" type="${file.type}">
+                                            Your browser does not support the video tag.
+                                        </video>`;
+                } 
+                // Show message if the file type is neither image nor video
+                else {
+                    preview.innerHTML = `<p>Only images and videos are supported for preview.</p>`;
+                }
+            };
+
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // Listen for file input changes to trigger the preview function
+    document.addEventListener('change', function (event) {
+        if (event.target.type === 'file') {
+            const formFieldId = event.target.id;
+            const previewId = `filePreview${formFieldId}`;
+            previewFile(event.target, previewId);
+        }
+    });
+</script>
+
+
+<script>
+    // Make the error message disappear after 5 seconds
+    setTimeout(function() {
+        var errorDiv = document.getElementById('form-errors');
+        if (errorDiv) {
+            errorDiv.style.display = 'none';  // Hide the error message
+        }
+    }, 5000);  // 5000 milliseconds = 5 seconds
+</script>
 
 <script>
     // Toggle emoji container visibility
@@ -340,7 +503,7 @@ function switchColor() {
     var header = document.querySelector('header');
     var footer = document.querySelector('footer');
     var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, h3, p, li, .campaign-nav, .campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link');
+    var textElements = document.querySelectorAll('h1, h2, h3,  li, .campaign-nav, .campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link');
     var reactDivs = document.querySelectorAll('.react div');
     var loveCounts = document.querySelectorAll('[id^="love-count-"]');
     var viewCounts = document.querySelectorAll('#view-count');
