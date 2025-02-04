@@ -324,6 +324,51 @@ select:focus {
                         <span id="toggleActivitiesButton" class="campaign-toggle-button">See More</span>
                     </div>
 </div>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll('input[type="file"]').forEach(function (input) {
+            input.setAttribute("accept", "image/*,video/*"); // Restrict to images and videos
+
+            input.addEventListener("change", function (event) {
+                const file = event.target.files[0];
+                const previewContainer = event.target.closest("div").querySelector(".preview-container");
+
+                if (previewContainer) {
+                    previewContainer.innerHTML = ""; // Clear previous preview
+                } else {
+                    console.warn("No preview container found!");
+                    return;
+                }
+
+                if (file) {
+                    const fileType = file.type.split("/")[0]; // Get 'image' or 'video'
+
+                    if (fileType === "image") {
+                        const img = document.createElement("img");
+                        img.classList.add("preview-media");
+                        img.src = URL.createObjectURL(file);
+                        previewContainer.appendChild(img);
+                    } else if (fileType === "video") {
+                        const video = document.createElement("video");
+                        video.classList.add("preview-media");
+                        video.controls = true;
+                        video.src = URL.createObjectURL(file);
+                        previewContainer.appendChild(video);
+                    } else {
+                        previewContainer.innerHTML =
+                            '<p class="preview-error">Only images and videos are allowed.</p>';
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+
+
 <script>
     function previewFile(event, previewId) {
         const file = event.target.files[0];
