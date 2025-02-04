@@ -1733,6 +1733,10 @@ def activity_list(request, campaign_id):
 
 
 
+
+
+
+
 @login_required
 def create_activity(request, campaign_id):
     following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
@@ -1787,6 +1791,12 @@ def create_activity(request, campaign_id):
     additional_emojis = emojis[10:]
     return render(request, 'main/activity_create.html', {'ads':ads,'formset': formset, 'campaign': campaign,'user_profile':user_profile,'unread_notifications':unread_notifications,'new_campaigns_from_follows':new_campaigns_from_follows,'initial_emojis': initial_emojis,
         'additional_emojis': additional_emojis,})
+
+
+
+
+
+
 
 @login_required
 def manage_campaigns(request):

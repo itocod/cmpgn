@@ -237,210 +237,163 @@ select:focus {
         font-size: 14px;
     }
 }
-/* Error message style */
-.errorlist {
-    color: red;
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    padding: 10px;
-    border-radius: 5px;
-    margin-top: 10px;
-}
 
-.errorlist ul {
-    list-style: none;
-    padding-left: 0;
-    margin: 0;
-}
 
-.errorlist strong {
-    font-weight: bold;
-}
+    /* Preview container styling */
+    .preview-container {
+        margin-top: 10px;
+        border-radius: 8px;
+        overflow: hidden;
+        max-width: 100%;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
 
-.errorlist span {
-    color: #721c24;
-}
+    /* Image preview styling */
+    .preview-container img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        display: block;
+    }
 
-.file-preview-error {
-    color: red;
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    padding: 10px;
-    margin-top: 10px;
-    border-radius: 5px;
-}
+    /* Video preview styling */
+    .preview-container video {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        display: block;
+    }
 
-        /* Styles for previewing image and video files */
-        .file-preview {
-            margin-top: 10px;
-            border: 1px solid #ccc;
-            padding: 10px;
-            background-color: #f9f9f9;
-            display: none; /* Hide initially */
-            max-width: 100%;
-            text-align: center;
-        }
+    /* Placeholder for empty preview */
+    .preview-placeholder {
+        padding: 20px;
+        text-align: center;
+        color: #888;
+        font-size: 14px;
+        background-color: #f9f9f9;
+        border: 1px dashed #ddd;
+        border-radius: 8px;
+    }
 
-        .file-preview img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+        /* Error message styling */
+    .preview-error {
+        padding: 10px;
+        background-color: #ffebee;
+        color: #c62828;
+        border: 1px solid #ffcdd2;
+        border-radius: 4px;
+        font-size: 14px;
+        margin-top: 10px;
+    }
+</style>
 
-        .file-preview video {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-        }
-
-        .file-preview p {
-            color: #333;
-            font-size: 14px;
-            font-style: italic;
-        }
-
-        .file-preview.show {
-            display: block;
-        }
-    </style>
-
-    <h2 style="font-size:19px; padding-left: 20px; color:#333;">Campaign Activities Form</h2>
-    <div class="custom-form-container">
-        <form method="post" enctype="multipart/form-data" onsubmit="clearErrors()">
-    {% csrf_token %}
-    {{ formset.management_form }}
-
-    {% for form in formset %}
-        <div>
-            <!-- Content Field -->
+<h2 style="font-size:19px; padding-left: 20px; color:#333;">Campaign Activities Form</h2>
+<div class="custom-form-container">
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ formset.management_form }}
+        {% for form in formset %}
             <div>
-                <label class="custom-label" for="{{ form.content.id_for_label }}">Content:</label>
-                {{ form.content }}
-                {% if form.content.errors %}
-                    <div class="errorlist" id="content-error-{{ form.content.auto_id }}">
-                        <ul>
-                            {% for error in form.content.errors %}
-                                <li><span>{{ error }}</span></li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
-            </div>
-
-            <!-- File Upload Field -->
-            <div>
-                <label class="custom-label" for="{{ form.file.id_for_label }}">Upload File:</label>
-                {{ form.file }}
-                {% if form.file.errors %}
-                    <div class="errorlist" id="file-error-{{ form.file.auto_id }}">
-                        <ul>
-                            {% for error in form.file.errors %}
-                                <li><span>{{ error }}</span></li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
-                <!-- Preview section for image and video files -->
-                <div id="filePreview{{ form.file.auto_id }}" class="file-preview">
-                    <!-- Image or Video Preview will be displayed here -->
-                </div>
-            </div>
-
-            <!-- Emoji Field -->
-            <label class="custom-label">Emoji:</label>
-            <div class="emoji-container" id="emojiContainer{{ form.content.auto_id }}">
-                {% for emoji in initial_emojis %}
-                    <button type="button" class="custom-emoji-button" onclick="addEmoji('{{ emoji }}', '{{ form.content.auto_id }}')">{{ emoji }}</button>
-                {% endfor %}
-                <div class="emoji-container hidden" id="extraEmojis{{ form.content.auto_id }}">
-                    {% for emoji in additional_emojis %}
+                {{ form.as_p }}
+                <label class="custom-label">Emoji:</label>
+                <div class="emoji-container" id="emojiContainer{{ form.content.auto_id }}">
+                    {% for emoji in initial_emojis %}
                         <button type="button" class="custom-emoji-button" onclick="addEmoji('{{ emoji }}', '{{ form.content.auto_id }}')">{{ emoji }}</button>
                     {% endfor %}
+                    <div class="emoji-container hidden" id="extraEmojis{{ form.content.auto_id }}">
+                        {% for emoji in additional_emojis %}
+                            <button type="button" class="custom-emoji-button" onclick="addEmoji('{{ emoji }}', '{{ form.content.auto_id }}')">{{ emoji }}</button>
+                        {% endfor %}
+                    </div>
+                </div>
+                <button type="button" class="show-more-button" onclick="toggleEmojiOverflow('{{ form.content.auto_id }}')">…</button>
+                <div>
+                    
                 </div>
             </div>
-            <button type="button" class="show-more-button" onclick="toggleEmojiOverflow('{{ form.content.auto_id }}')">Show More</button>
-        </div>
-        <hr>
-    {% endfor %}
-
-    <button type="submit" class="custom-submit-button">Submit</button>
-</form>
-
-
-</div>
-
-
-<br>  
+            <hr>
+        {% endfor %}
+        <button type="submit" class="custom-submit-button">Submit</button>
+    </form><br>    <div class="campaign-activities-container">
+                        <h4 class="campaign-activities-header">Examples of Activities to Post</h4>
+                        <div id="campaignActivitiesList" class="campaign-activities-list">
+                            {% for activity in campaign.get_objective_and_activities.Activities %}
+                                <activity-text class="campaign-activity-item">{{ activity }}</activity-text>
+                            {% endfor %}
+                        </div>
+                        <span id="toggleActivitiesButton" class="campaign-toggle-button">See More</span>
+                    </div>
 </div>
 <script>
-    // Make all error messages disappear after 5 seconds
-    setTimeout(function() {
-        var errorMessages = document.querySelectorAll('.errorlist');
-        errorMessages.forEach(function(errorDiv) {
-            errorDiv.style.display = 'none';  // Hide the error message
-        });
-    }, 5000);  // 5000 milliseconds = 5 seconds
-</script>
-
-
-<script>
-    function previewFile(input, previewId) {
-        const file = input.files[0];
+    function previewFile(event, previewId) {
+        const file = event.target.files[0];
         const preview = document.getElementById(previewId);
+        const reader = new FileReader();
 
-        // Clear previous preview
+        // Clear previous preview and error messages
         preview.innerHTML = '';
 
         if (file) {
-            const reader = new FileReader();
-            preview.classList.add('show'); // Show the preview area
+            const fileType = file.type.split('/')[0]; // Get the file type (e.g., 'image' or 'video')
+            const allowedTypes = ['image', 'video']; // Allowed file types
 
-            reader.onload = function (e) {
-                const fileType = file.type.split('/')[0];
+            // Check if the file type is allowed
+            if (!allowedTypes.includes(fileType)) {
+                // Display an error message
+                const errorMessage = document.createElement('div');
+                errorMessage.classList.add('preview-error');
+                errorMessage.textContent = 'Only image and video files are allowed.';
+                preview.appendChild(errorMessage);
+                return; // Stop further execution
+            }
 
-                // Show image preview if it's an image file
-                if (fileType === 'image') {
-                    preview.innerHTML = `<img src="${e.target.result}" alt="Preview" />`;
-                } 
-                // Show video preview if it's a video file
-                else if (fileType === 'video') {
-                    preview.innerHTML = `<video controls>
-                                            <source src="${e.target.result}" type="${file.type}">
-                                            Your browser does not support the video tag.
-                                        </video>`;
-                } 
-                // Show message if the file type is neither image nor video
-                else {
-                    preview.innerHTML = `<p>Only images and videos are supported for preview.</p>`;
-                }
-            };
-
-            reader.readAsDataURL(file);
+            // If the file type is allowed, proceed with the preview
+            if (fileType === 'image') {
+                const img = document.createElement('img');
+                img.classList.add('preview-media');
+                reader.onload = function (e) {
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+                preview.appendChild(img);
+            } else if (fileType === 'video') {
+                const video = document.createElement('video');
+                video.classList.add('preview-media');
+                video.controls = true;
+                reader.onload = function (e) {
+                    video.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+                preview.appendChild(video);
+            }
+        } else {
+            // Show a placeholder if no file is selected
+            const placeholder = document.createElement('div');
+            placeholder.classList.add('preview-placeholder');
+            placeholder.textContent = 'No file selected';
+            preview.appendChild(placeholder);
         }
     }
 
-    // Listen for file input changes to trigger the preview function
-    document.addEventListener('change', function (event) {
-        if (event.target.type === 'file') {
-            const formFieldId = event.target.id;
-            const previewId = `filePreview${formFieldId}`;
-            previewFile(event.target, previewId);
-        }
+    // Bind event listeners dynamically based on form fields
+    document.querySelectorAll('input[type="file"]').forEach(function (input, index) {
+        input.addEventListener('change', function (event) {
+            const previewId = 'preview' + index;
+            let preview = document.getElementById(previewId);
+
+            // Create a preview container if it doesn't exist
+            if (!preview) {
+                preview = document.createElement('div');
+                preview.id = previewId;
+                preview.classList.add('preview-container');
+                input.parentElement.appendChild(preview);
+            }
+
+            // Call the preview function
+            previewFile(event, previewId);
+        });
     });
 </script>
-
-
-<script>
-    // Make the error message disappear after 5 seconds
-    setTimeout(function() {
-        var errorDiv = document.getElementById('form-errors');
-        if (errorDiv) {
-            errorDiv.style.display = 'none';  // Hide the error message
-        }
-    }, 5000);  // 5000 milliseconds = 5 seconds
-</script>
-
 <script>
     // Toggle emoji container visibility
     function toggleEmojiOverflow(fieldId) {
@@ -472,124 +425,5 @@ select:focus {
 <a href="{% url 'view_campaign' campaign_id=campaign.pk %}" class="custom-back-button" style="font-size:12px;">
     <i class="fa fa-arrow-left"></i> Back
 </a>
-      <script type="text/javascript">
 
-function switchColor() {
-    var body = document.body;
-    var logoContainer = document.querySelector('.logo-container');
-
-    // Define the color sequence (black, white)
-    var colors = ["black", "white"];
-
-    // Find the index of the current color in the sequence
-    var currentIndex = colors.indexOf(body.style.backgroundColor);
-
-    // Set the next color in the sequence
-    var nextColor = colors[(currentIndex + 1) % colors.length];
-
-    // Apply the new color to the body and other elements
-    body.style.backgroundColor = nextColor;
-
-    // Change background color and border of logo-container based on nextColor
-    if (nextColor === "black") {
-        logoContainer.style.backgroundColor = "";
-        logoContainer.style.border = "none"; 
-    } else {
-        logoContainer.style.backgroundColor = ""; // or "transparent"
-        logoContainer.style.border = "none";  // Remove border
-    }
-
-    // Other elements to be updated based on nextColor
-    var header = document.querySelector('header');
-    var footer = document.querySelector('footer');
-    var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, h3,  li, .campaign-nav, .campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link');
-    var reactDivs = document.querySelectorAll('.react div');
-    var loveCounts = document.querySelectorAll('[id^="love-count-"]');
-    var viewCounts = document.querySelectorAll('#view-count');
-    var commentCounts = document.querySelectorAll('.comment-count');
-    var exploreLinks = document.querySelectorAll('.explore-link i'); // Select all compass icons
-
-    // Update header background color based on nextColor
-    if (nextColor === "black") {
-        header.style.backgroundColor = "#333333";  // Darker gray when background is black
-    } else {
-        header.style.backgroundColor = nextColor;
-    }
-
-    footer.style.backgroundColor = nextColor;
-
-    sections.forEach(function(section) {
-        section.style.backgroundColor = nextColor;
-    });
-
-    var textColor = nextColor === "black" ? "white" : "black";
-    header.style.color = textColor;
-    footer.style.color = textColor;
-
-    textElements.forEach(function(element) {
-        element.style.color = textColor;
-    });
-
-    // Change the color of the compass icon based on the background color
-    exploreLinks.forEach(function(icon) {
-        icon.style.color = nextColor === "black" ? "white" : "black";
-    });
-
-    // Skip changing button colors
-    var buttonColor = nextColor === "black" ? "#262626" : ""; // If you want to change button colors based on background, adjust this accordingly
-    var buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)'); // Exclude specific buttons
-    buttons.forEach(function(button) {
-        button.style.backgroundColor = buttonColor;
-
-        if (nextColor === "black") {
-            button.classList.add('button-hover');
-        } else {
-            button.classList.remove('button-hover');
-            button.style.backgroundColor = "";
-        }
-    });
-
-    reactDivs.forEach(function(reactDiv) {
-        reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
-
-        var reactTextColor = nextColor === "black" ? "white" : "black";
-        reactDiv.style.color = reactTextColor;
-
-        if (nextColor === "black") {
-            reactDiv.classList.add('react-hover');
-        } else {
-            reactDiv.classList.remove('react-hover');
-            reactDiv.style.backgroundColor = "";
-        }
-    });
-
-    var countTextColor = nextColor === "sliver" ? "sliver" : "sliver";
-    loveCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-    viewCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-    commentCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-
-    // Update the input field and reset button inside .search-container
-    var inputField = document.querySelector('.search-container input[type="text"]');
-    var inputResetButton = document.querySelector('.search-container .btn-reset');
-
-    if (nextColor === "black") {
-        inputField.style.backgroundColor = "#333333"; // Dark gray for black mode
-        inputField.style.color = "white";            // White text in black mode
-        inputResetButton.style.color = "#b0b0b0";      // White icon for reset button
-    } else {
-        inputField.style.backgroundColor = "white";  // Default white background
-        inputField.style.color = "black";            // Black text in white mode
-        inputResetButton.style.color = "#b0b0b0";      // Black icon for reset button
-    }
-}
-
-
-</script>
 {% endblock %}

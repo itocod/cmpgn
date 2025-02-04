@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'main.apps.MainConfig',
     'django.contrib.sitemaps',
 'django_extensions',
+  'django.contrib.humanize',
     
 ]
 
