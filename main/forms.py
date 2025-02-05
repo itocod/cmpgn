@@ -74,16 +74,16 @@ class ActivityCommentForm(forms.ModelForm):
 
 
 # BrainstormingForm
+
 class BrainstormingForm(forms.ModelForm):
     class Meta:
         model = Brainstorming
-        fields = ['idea']  # Add other fields as needed
+        fields = ['idea', 'attachment']  # Added attachment field
 
     def clean_idea(self):
         idea = self.cleaned_data.get('idea')
         validate_no_long_words(idea)  # Validate the idea field
         return idea
-
 
 # ActivityForm
 class ActivityForm(forms.ModelForm):

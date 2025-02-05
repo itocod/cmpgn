@@ -19,35 +19,42 @@
         </ul>
 
         <!-- Idea Submission Form -->
-        <form method="post" class="submission-form">
-            {% csrf_token %}
-            <textarea name="idea" class="textarea-field" placeholder="Share your amazing idea..." rows="4"></textarea>
-            <button type="submit" class="submit-btn">Submit Idea</button>
-        </form>
+    <!-- Idea Submission Form -->
+<form method="post" class="submission-form" enctype="multipart/form-data">
+    {% csrf_token %}
+    <textarea name="idea" class="textarea-field" placeholder="Share your amazing idea..." rows="4"></textarea>
+    <input type="file" name="attachment" class="file-input">
+    <button type="submit" class="submit-btn">Submit Idea</button>
+</form>
 
         <!-- List of Ideas -->
-        <ul class="ideas-list">
-            {% for idea in ideas_for_campaign %}
-                <li class="idea-entry">
-                    <div class="profile-section">
-                        <a href="{% url 'profile_view' username=idea.supporter.username %}">
-                            <img src="{{ idea.supporter.profile.image.url }}" alt="User Profile" class="profile-pic">
-                        </a>
+     <ul class="ideas-list">
+    {% for idea in ideas_for_campaign %}
+        <li class="idea-entry">
+            <div class="profile-section">
+                <a href="{% url 'profile_view' username=idea.supporter.username %}">
+                    <img src="{{ idea.supporter.profile.image.url }}" alt="User Profile" class="profile-pic">
+                </a>
+            </div>
+            <div class="idea-details">
+                <div>
+                    <strong>{{ idea.supporter.username }}</strong>
+                    {% if idea.supporter.profile.profile_verified %}
+                        <span class="verified-badge">✔ Verified</span>
+                    {% endif %}
+                </div>
+                <div class="idea-text">{{ idea.idea | safe }}</div>
+                {% if idea.attachment %}
+                    <div class="attachment-section">
+                        <a href="{{ idea.attachment.url }}" target="_blank">View Attachment</a>
                     </div>
-                    <div class="idea-details">
-                        <div>
-                            <strong>{{ idea.supporter.username }}</strong>
-                            {% if idea.supporter.profile.profile_verified %}
-                                <span class="verified-badge">✔ Verified</span>
-                            {% endif %}
-                        </div>
-                        <div class="idea-text">{{ idea.idea | safe }}</div>
-                    </div>
-                </li>
-            {% empty %}
-                <li class="no-suggested-users">No ideas have been shared yet. Be the first to contribute!</li>
-            {% endfor %}
-        </ul>
+                {% endif %}
+            </div>
+        </li>
+    {% empty %}
+        <li class="no-suggested-users">No ideas have been shared yet. Be the first to contribute!</li>
+    {% endfor %}
+</ul>
     </div>
 </div>
 

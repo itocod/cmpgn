@@ -1269,11 +1269,6 @@ def update_hidden_links(request):
 
 
 
-
-
-
-
-
 def brainstorm_idea(request, campaign_id):
     following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
     campaign = Campaign.objects.get(id=campaign_id)
@@ -1288,7 +1283,7 @@ def brainstorm_idea(request, campaign_id):
     user_profile.save()
     ads = NativeAd.objects.all()  
     if request.method == 'POST':
-        form = BrainstormingForm(request.POST)
+        form = BrainstormingForm(request.POST, request.FILES)  # Include request.FILES for file uploads
         if form.is_valid():
             idea = form.save(commit=False)
             idea.supporter = request.user
@@ -1303,8 +1298,6 @@ def brainstorm_idea(request, campaign_id):
     # Retrieve all ideas for the current campaign before displaying the form
     ideas_for_campaign = Brainstorming.objects.filter(campaign=campaign).order_by('-pk')  # Order by creation timestamp in descending order
     return render(request, 'main/brainstorm.html', {'ads':ads,'form': form, 'ideas_for_campaign': ideas_for_campaign,'user_profile':user_profile, 'campaign': campaign,'unread_notifications':unread_notifications,'new_campaigns_from_follows':new_campaigns_from_follows})
-
-
 
 
 @login_required

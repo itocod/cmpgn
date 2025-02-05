@@ -185,8 +185,10 @@ def default_content():
 
          
 
+
 class Brainstorming(models.Model):
-    idea = HTMLField() 
+    idea = HTMLField()
+    attachment = models.FileField(upload_to='brainstorming_attachments/', blank=True, null=True)
     supporter = models.ForeignKey(User, on_delete=models.CASCADE)
     campaign = models.ForeignKey('Campaign', on_delete=models.CASCADE)
 
@@ -194,14 +196,10 @@ class Brainstorming(models.Model):
         is_new = self.pk is None
         super().save(*args, **kwargs)
         if is_new:
-            # Create the notification message
             supporter_username = self.supporter.username
             campaign_title = self.campaign.title
             message = f"{supporter_username} has added a new brainstorming idea to your campaign '{campaign_title}'. <a href='{reverse('view_campaign', kwargs={'campaign_id': self.campaign.pk})}'>View Campaign</a>"
-            
-            # Create the notification
             Notification.objects.create(user=self.campaign.user.user, message=message, campaign=self.campaign)
-
 
 from django.db import models
 from django.utils import timezone
