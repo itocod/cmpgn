@@ -831,6 +831,9 @@ def notify_user_added(sender, instance, action, model, pk_set, **kwargs):
 
 
 
+import re
+from django.utils.html import escape
+
 
 class Message(models.Model):
     chat = models.ForeignKey(Chat, related_name='messages', on_delete=models.CASCADE)
@@ -840,13 +843,21 @@ class Message(models.Model):
 
     def save(self, *args, **kwargs):
         if self.pk is None:  # If this is a new message
+            # Convert plain text links to clickable links
+            self.content = re.sub(
+                r'(https?://\S+)', 
+                r'<a href="\1" target="_blank" rel="noopener noreferrer">\1</a>', 
+                self.content
+            )
+
             # Create the notification message
             message = f"You have a new message from {self.sender.username} in the chat '{self.chat.title}'. <a href='{reverse('chat_detail', kwargs={'chat_id': self.chat.pk})}'>View Chat</a>"
+            
             # Notify all participants except the sender
             for participant in self.chat.participants.exclude(id=self.sender.id):
                 Notification.objects.create(user=participant, message=message)
-        super().save(*args, **kwargs)
 
+        super().save(*args, **kwargs)
 
 
 

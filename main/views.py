@@ -1489,30 +1489,27 @@ def create_chat(request):
 
 
 
+
+
 @login_required
 def chat_detail(request, chat_id):
-    chat = get_object_or_404(Chat, id=chat_id)
-    # Get the list of users followed by the current user
-    following_users = [follow.followed for follow in request.user.following.all()]
-    
-    # Get the list of followers of the current user
-    followers = [follow.follower for follow in request.user.followers.all()]
-    
-    # Combine followers and following users into a single set to eliminate duplicates
-    combined_users = set(following_users + followers)
-    
-    # Exclude the current user and users who are already participants in the chat
-    user_choices = User.objects.filter(
-        pk__in=[user.pk for user in combined_users]
-    ).exclude(pk=request.user.pk).exclude(pk__in=[participant.pk for participant in chat.participants.all()])
-    
-    # Get the user profile and chat
-    user_profile = get_object_or_404(Profile, user=request.user)
+    chat = get_object_or_404(
+        Chat.objects.select_related("manager").prefetch_related("participants"),
+        id=chat_id
+    )
 
-    
-    # Get all messages for the chat ordered by timestamp
-    messages = Message.objects.filter(chat=chat).order_by('timestamp')
-    
+    user_profile = get_object_or_404(Profile, user=request.user)
+    following_users = request.user.following.values_list('followed', flat=True)
+    followers = request.user.followers.values_list('follower', flat=True)
+
+    combined_users = set(following_users) | set(followers)
+
+    user_choices = User.objects.filter(pk__in=combined_users).exclude(
+        pk=request.user.pk
+    ).exclude(pk__in=chat.participants.values_list("pk", flat=True))
+
+    messages = Message.objects.filter(chat=chat).select_related("sender__profile").order_by('timestamp')[:50]
+
     if request.method == 'POST':
         message_form = MessageForm(request.POST, request.FILES)
         if message_form.is_valid():
@@ -1520,29 +1517,25 @@ def chat_detail(request, chat_id):
             message.sender = request.user
             message.chat = chat
             message.save()
-            return JsonResponse({'status': 'success', 'message': 'Message sent successfully', 'message_id': message.id})
-        else:
-            return JsonResponse({'status': 'error', 'message': 'Form data is invalid', 'errors': message_form.errors})
-    else:
-        message_form = MessageForm(initial={'chat': chat})
-    
-    # Get unread notifications for the current user
-    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    
-    # Get new public campaigns from followed users since the last campaign check
+            # Send a fixed success response
+            return JsonResponse({'status': 'success', 'message': 'Message sent successfully!'})
+
+        return JsonResponse({'status': 'error', 'message': 'Form data is invalid', 'errors': message_form.errors})
+
+    message_form = MessageForm(initial={'chat': chat})
+
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)[:10]
     new_campaigns_from_follows = Campaign.objects.filter(
-        user__in=[user.pk for user in following_users],
-        visibility='public',
-        timestamp__gt=user_profile.last_campaign_check
+        user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check
     )
-    
-    # Update the last campaign check time for the current user's profile
+
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
-    ads = NativeAd.objects.all()  
-    # Render the chat detail template with the relevant context
+
+    ads = NativeAd.objects.all()
+
     context = {
-        'ads':ads,
+        'ads': ads,
         'unread_notifications': unread_notifications,
         'new_campaigns_from_follows': new_campaigns_from_follows,
         'user_profile': user_profile,
@@ -1551,9 +1544,8 @@ def chat_detail(request, chat_id):
         'messages': messages,
         'user_choices': user_choices
     }
-    
-    return render(request, 'main/chat_detail.html', context)
 
+    return render(request, 'main/chat_detail.html', context)
 
 
 @login_required

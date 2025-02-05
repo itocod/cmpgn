@@ -133,25 +133,21 @@ class ProfileForm(forms.ModelForm):
         return location
 
 
-# MessageForm
+
+
+
+from django_summernote.widgets import SummernoteWidget  # Alternative rich editor
+
 class MessageForm(forms.ModelForm):
     class Meta:
         model = Message
-        fields = ['content']  # Include all fields that need to be submitted in the form
+        fields = ['content']
+        widgets = {
+            'content': forms.Textarea(attrs={'class': 'quill-editor'}),
+        }
 
-    def clean_content(self):
-        content = self.cleaned_data.get('content')
-        validate_no_long_words(content)  # Validate the content field
-        return content
 
-    def clean_attached_file(self):
-        attached_file = self.cleaned_data.get('attached_file', False)
-        if attached_file:
-            # Check the file size or any other validation rules if needed
-            max_size = 10 * 1024 * 1024  # 10 MB
-            if attached_file.size > max_size:
-                raise forms.ValidationError("File size too large. Please keep it under 10MB.")
-        return attached_file
+
 
 
 # CommentForm

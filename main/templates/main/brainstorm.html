@@ -7,9 +7,10 @@
 <div class="idea-exchange-wrapper">
     <div class="idea-exchange-container">
         <!-- Page Header -->
-        <div class="exchange-title" style="font-size:17px;">
-            <a href="{% url 'view_campaign' campaign_id=campaign.pk %}" style="color:#3498db; ">Campaign</a> Idea Exchange Room
-        </div>
+    <div class="exchange-title">
+    <a href="{% url 'view_campaign' campaign_id=campaign.pk %}">Campaign Idea Exchange Room</a>
+</div>
+
 
         <ul class="nav-list">
             <li><a href="{% url 'library_affiliates' %}"><i class="fas fa-book-open"></i> Discover In-Depth Knowledge</a></li>
@@ -61,7 +62,7 @@
 <style type="text/css">/* Wrapper and Layout */
 .idea-exchange-wrapper {
     font-family: 'Poppins', sans-serif;
-    background-color: #ffffff; /* White background */
+  
     color: #333333; /* Dark gray text */
     padding: 0;
 }
@@ -69,22 +70,34 @@
 .idea-exchange-container {
     max-width: 900px;
     margin: 0 auto;
-    background-color: #ffffff; /* White background */
+   
     border-radius: 20px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Subtle shadow */
     padding: 30px;
     border: 1px solid #dddddd; /* Light gray border */
 }
-
-/* Title */
 .exchange-title {
-    font-size: 2.5rem;
+    font-size: 17px;
+    font-family: Arial, sans-serif;
+    color: #666; /* Medium grey color */
     text-align: center;
-    margin-bottom: 25px;
-    color: #32CD32; /* Bright green */
-    text-shadow: 0 1px 2px rgba(50, 205, 50, 0.4); /* Subtle green glow */
+    padding: 10px;
+    background-color: #f9f9f9; /* Light grey background */
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 10px 0;
 }
 
+.exchange-title a {
+    color: #333; /* Darker grey for the link */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.exchange-title a:hover {
+    color: #000; /* Black on hover for better interaction */
+    text-decoration: underline;
+}
 /* Submission Form */
 .submission-form {
     text-align: center;
