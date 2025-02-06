@@ -495,101 +495,156 @@ body {
 /* General Layout */
 .activity-interactions.horizontal {
     display: flex;
-    justify-content: flex-start; /* Align to the left */
-    gap: 20px; /* Space between icons */
-    padding: 10px;
-    padding-left: 15px; /* Add padding on the left */
-    border-top: 1px solid #dbdbdb;
-   
-    flex-wrap: wrap; /* Handle wrapping on smaller screens */
+    justify-content: flex-start;
+    gap: 25px;
+    padding: 15px;
+    border-top: 1px solid #e0e0e0;
+  
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
 /* Icon Styling */
 .icon {
     position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.icon:hover {
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
 .icon i {
     font-size: 24px;
-    color: #8e8e8e;
-    cursor: pointer;
-    transition: color 0.3s ease, transform 0.2s ease;
+    color: #666;
+    transition: all 0.3s ease;
 }
 
-.icon i:hover {
-    color: #333; /* Darker hover effect */
-    transform: scale(1.1); /* Slight zoom */
+.icon:hover i {
+    color: #333;
+    transform: scale(1.1);
+}
+
+/* Click Effect */
+.icon:active i {
+    transform: scale(0.9);
+}
+/* Label Styling */
+.icon .label {
+    position: absolute;
+    top: -30px; /* Adjusted position */
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    font-size: 14px; /* Increased font size for better visibility */
+    padding: 5px 10px;
+    border-radius: 5px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-in-out;
+    z-index: 20; /* Ensure it's above other elements */
+}
+
+.icon:hover .label {
+    opacity: 1;
+}
+
+/* Adjusted font size for a better fit */
+.icon .label {
+    font-size: 14px; 
+    padding-left: 8px;
+}
+
+
+/* Count Styling */
+.count {
+    font-size: 14px;
+    color: #666;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.icon:hover .count {
+    color: #333;
 }
 
 /* Share Options */
-.share-wrapper {
-    display: inline-block;
-    position: relative; /* Ensure dropdown aligns with parent icon */
-}
-
 .share-options {
     position: absolute;
-    top: 35px;
-    left: 0; /* Align the dropdown to the left of the icon */
-    display: none; /* Initially hidden */
+    top: 40px;
+    left: 0;
+    display: none;
     flex-direction: column;
     gap: 10px;
     background-color: #fff;
-    padding: 10px;
-    border: 1px solid #dbdbdb;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     z-index: 10;
-    min-width: 120px; /* Ensure consistent dropdown width */
+    min-width: 140px;
 }
 
-/* Share Options Links */
 .share-options a {
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #8e8e8e;
+    color: #666;
     font-size: 18px;
-    transition: color 0.3s ease, transform 0.2s ease;
-    padding: 5px 0;
+    transition: all 0.3s ease;
 }
 
 .share-options a:hover {
-    color: #007bff; /* Highlight on hover */
+    color: #007bff;
+    transform: scale(1.1);
 }
 
-/* Facebook, Twitter, LinkedIn Specific Hover Colors */
-.share-options .fa-facebook:hover {
-    color: #4267b2;
+/* Specific Icon Colors */
+.love-icon.active i {
+    color: #ff4d4d;
 }
 
-.share-options .fa-twitter:hover {
-    color: #1da1f2;
+.comment-icon:hover i {
+    color: #4d94ff;
 }
 
-.share-options .fa-linkedin:hover {
-    color: #0077b5;
+.share-icon:hover i {
+    color: #4dff4d;
 }
 
 /* Responsive Design */
 @media screen and (max-width: 768px) {
     .activity-interactions.horizontal {
         gap: 15px;
-        padding: 8px;
-        padding-left: 10px; /* Adjust padding for smaller screens */
+        padding: 10px;
     }
 
     .icon i {
-        font-size: 20px; /* Slightly smaller icons for mobile */
+        font-size: 20px;
     }
 
     .share-options {
-        top: 30px; /* Adjust position for smaller screens */
-        min-width: 100px; /* Reduce dropdown width for mobile */
+        top: 35px;
+        min-width: 120px;
     }
+    .create-activity-link {
+            padding: 12px;
+            font-size: 14px;
+        }
 }
 
-
+/* Active state for love icon */
+.love-icon.active i {
+    color: #ff4d4d; /* Red color for active state */
+    animation: heartBeat 0.5s ease; /* Add a small animation */
+}
 
 
     .create-activity-link {
@@ -612,55 +667,72 @@ body {
     }
 
 
-
-
-/* Count Styling */
-.count {
-    font-size: 14px;
-    color: #8e8e8e;
-    margin-left: 3x; /* Space between icon and count */
-    vertical-align: middle; /* Align count with icon */
+@keyframes heartBeat {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
 
-.count:hover {
-    color: #333; /* Darker hover effect */
+
+/* Dark Mode Styles */
+body.dark-mode {
+    background-color: #121212; /* Dark background */
+    color: #ffffff; /* Light text */
 }
 
-
-.activity-interactions .icon {
-    position: relative;
-    display: inline-block;
-    margin-right: 15px;
+body.dark-mode header,
+body.dark-mode footer,
+body.dark-mode section,
+body.dark-mode .left-aside,
+body.dark-mode .right-aside,
+body.dark-mode .upper-post,
+body.dark-mode .campaign-content,
+body.dark-mode .react div {
+    background-color: #1e1e1e; /* Slightly lighter dark background */
+    color: #ffffff; /* Light text */
 }
 
-.icon .label {
-    position: absolute;
-    top: -20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #333;
-    color: #fff;
-    font-size: 12px;
-    padding: 5px 8px;
-    border-radius: 3px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s ease-in-out;
-    white-space: nowrap;
+body.dark-mode .campaign-category {
+    background-color: #333333; /* Darker background for category */
+    color: #ffffff; /* Light text */
 }
 
-.icon:hover .label {
-    opacity: 1;
+body.dark-mode .objectives-activities {
+    background-color: #262626; /* Dark background for objectives */
+    border-left: 4px solid #3498db; /* Accent border */
+    color: #ffffff; /* Light text */
 }
 
-.hover-underline {
-    text-decoration: none;
+body.dark-mode .search-container input[type="text"] {
+    background-color: #333333; /* Dark background for input */
+    color: #ffffff; /* Light text */
+    border: 1px solid #444444; /* Dark border */
 }
 
-.hover-link:hover .hover-underline {
-    text-decoration: underline;
+body.dark-mode .search-container .btn-reset {
+    color: #b0b0b0; /* Light icon color */
 }
 
+body.dark-mode button:not(.btn-search, .btn-reset) {
+    background-color: #262626; /* Dark background for buttons */
+    color: #ffffff; /* Light text */
+}
+
+body.dark-mode .explore-link i {
+    color: #ffffff; /* Light icon color */
+}
+
+body.dark-mode .love-count,
+body.dark-mode #view-count,
+body.dark-mode .comment-count {
+    color: #ffffff; /* Light text for counts */
+}
 </style>
 
 <script type="text/javascript">
@@ -718,6 +790,55 @@ function loveActivity(activityId) {
     </script>
 
   
+
+
+  <script type="text/javascript">
+document.addEventListener('DOMContentLoaded', () => {
+    // Function to handle love icon click
+    function loveActivity(activityId) {
+        const loveIcon = document.querySelector(`#love-count-${activityId}`).closest('.icon');
+        const loveCount = document.getElementById(`love-count-${activityId}`);
+
+        // Toggle the active class
+        loveIcon.classList.toggle('active');
+
+        // Update the love count (example logic)
+        if (loveIcon.classList.contains('active')) {
+            loveCount.textContent = parseInt(loveCount.textContent) + 1;
+        } else {
+            loveCount.textContent = parseInt(loveCount.textContent) - 1;
+        }
+    }
+
+    // Attach click event to love icons
+    document.querySelectorAll('.love-icon').forEach(icon => {
+        icon.addEventListener('click', (event) => {
+            const activityId = event.currentTarget.getAttribute('data-activity-id');
+            loveActivity(activityId);
+        });
+    });
+
+    // Share options functionality
+    function toggleShareOptions() {
+        const shareOptions = document.getElementById('shareOptions');
+        shareOptions.style.display = shareOptions.style.display === 'block' ? 'none' : 'block';
+    }
+
+    // Attach click event to share icons
+    document.querySelectorAll('.share-icon').forEach(icon => {
+        icon.addEventListener('click', toggleShareOptions);
+    });
+
+    // Close share options if clicked outside
+    document.addEventListener('click', (event) => {
+        if (!event.target.closest('.share-wrapper')) {
+            document.querySelectorAll('.share-options').forEach((options) => {
+                options.style.display = 'none';
+            });
+        }
+    });
+});
+  </script>
 
 
     {% if user == campaign.user.user %}
@@ -818,19 +939,21 @@ function loveActivity(activityId) {
                         {% endif %}
                     </div>
                 </div>
+
+
+
 <div class="activity-interactions horizontal">
     <!-- Love Icon -->
-    <div class="icon">
-        <i class="far fa-heart love-icon" onclick="loveActivity('{{ activity.id }}')"></i>
+    <div class="icon love-icon" data-activity-id="{{ activity.id }}" onclick="loveActivity('{{ activity.id }}')">
+        <i class="far fa-heart"></i>
         <span class="label love-label">Love</span>
         <span id="love-count-{{ activity.id }}" class="count love-count">{{ activity.loves.count|format_count }}</span>
-
     </div>
 
     <!-- Comment Icon -->
-    <div class="icon">
+    <div class="icon comment-icon">
         <a href="{% url 'add_activity_comment' activity_id=activity.id %}">
-            <i class="far fa-comment comment-icon"></i>
+            <i class="far fa-comment"></i>
         </a>
         <span class="label comment-label">Comment</span>
         <span class="count comment-count">{{ activity.comment_count|format_count }}</span>
@@ -838,11 +961,13 @@ function loveActivity(activityId) {
 
     <!-- Share Icon -->
     <div class="icon share-wrapper">
-        <i class="fas fa-share share-icon" onclick="toggleShareOptions()"></i>
-        <span class="label share-label">Share</span>
+        <div class="share-icon" onclick="toggleShareOptions('{{ activity.id }}')">
+            <i class="fas fa-share"></i>
+            <span class="label share-label">Share</span>
+        </div>
         <!-- Hidden Share Options -->
-        <div class="share-options" id="shareOptions">
-            <span style="text-align: center;">share.</span>
+        <div class="share-options" id="shareOptions-{{ activity.id }}" style="display: none;">
+            <span style="text-align: center;">Share via:</span>
             <a href="https://www.facebook.com/sharer/sharer.php?u={{ request.build_absolute_uri }}" target="_blank" rel="noopener noreferrer">
                 <i class="fab fa-facebook"></i>
             </a>
@@ -856,45 +981,47 @@ function loveActivity(activityId) {
     </div>
 </div>
 
+
+
             </li>
         {% endfor %}
     </ul>
 {% else %}
     <li class="no-suggested-users">No activities yet.</li>
 {% endif %}
-
 <script type="text/javascript">
 document.addEventListener('DOMContentLoaded', () => {
-    // Use event delegation to handle click events for all share icons
-    document.body.addEventListener('click', (event) => {
-        if (event.target.classList.contains('share-icon')) {
-            const parent = event.target.closest('.activity-item');
-            const shareOptions = parent.querySelector('.share-options');
-            
-            // Toggle visibility of the share options
-            if (shareOptions.style.display === 'block') {
-                shareOptions.style.display = 'none';
-            } else {
-                // Hide other share popups before showing the current one
-                document.querySelectorAll('.share-options').forEach((options) => {
-                    options.style.display = 'none';
-                });
-                shareOptions.style.display = 'block';
-            }
+    // Click event listener for showing the share options
+    document.body.addEventListener('click', function(event) {
+        const shareIcon = event.target.closest('.share-icon');
+        if (shareIcon) {
+            const activityId = shareIcon.getAttribute('onclick').match(/\d+/)[0];  // Get activity ID
+            const shareOptions = document.getElementById(`shareOptions-${activityId}`);
+
+            // Close all other share options
+            document.querySelectorAll('.share-options').forEach(option => {
+                if (option !== shareOptions) {
+                    option.style.display = 'none';
+                }
+            });
+
+            // Toggle current share options
+            shareOptions.style.display = shareOptions.style.display === 'block' ? 'none' : 'block';
         }
     });
 
-    // Close share options if clicked outside
-    document.addEventListener('click', (event) => {
+    // Close share options when clicking outside
+    document.addEventListener('click', function(event) {
         if (!event.target.closest('.share-wrapper')) {
-            document.querySelectorAll('.share-options').forEach((options) => {
-                options.style.display = 'none';
+            document.querySelectorAll('.share-options').forEach(option => {
+                option.style.display = 'none';
             });
         }
     });
 });
-
 </script>
+
+
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -1076,125 +1203,55 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 </script>
-      <script type="text/javascript">
+     <script type="text/javascript">
+  function switchColor() {
+    const body = document.body;
+    const isDarkMode = body.classList.toggle('dark-mode'); // Toggle dark mode class
 
-function switchColor() {
-    var body = document.body;
-    var logoContainer = document.querySelector('.logo-container');
+    // Update background and text colors for all elements
+    const elementsToUpdate = document.querySelectorAll(
+        'header, footer, section, .left-aside, .right-aside, .upper-post, .campaign-content, .react div, .search-container input, .search-container .btn-reset'
+    );
 
-    // Define the color sequence (black, white)
-    var colors = ["black", "white"];
+    elementsToUpdate.forEach(element => {
+        element.classList.toggle('dark-mode', isDarkMode);
+    });
 
-    // Find the index of the current color in the sequence
-    var currentIndex = colors.indexOf(body.style.backgroundColor);
+    // Update text colors for specific elements
+    const textElements = document.querySelectorAll(
+        'h1, h2, h3,  p, li, .campaign-nav, .campaign-nav a, .btn, .reaction, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link, .love-count, #view-count, .comment-count'
+    );
 
-    // Set the next color in the sequence
-    var nextColor = colors[(currentIndex + 1) % colors.length];
+    textElements.forEach(element => {
+        element.style.color = isDarkMode ? '#ffffff' : '#000000';
+    });
 
-    // Apply the new color to the body and other elements
-    body.style.backgroundColor = nextColor;
+    // Update button and icon colors
+    const buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)');
+    buttons.forEach(button => {
+        button.style.backgroundColor = isDarkMode ? '#262626' : '';
+        button.style.color = isDarkMode ? '#ffffff' : '#000000';
+    });
 
-    // Change background color and border of logo-container based on nextColor
-    if (nextColor === "black") {
-        logoContainer.style.backgroundColor = "";
-        logoContainer.style.border = "none"; 
+    const exploreIcons = document.querySelectorAll('.explore-link i');
+    exploreIcons.forEach(icon => {
+        icon.style.color = isDarkMode ? '#ffffff' : '#000000';
+    });
+
+    // Update input field and reset button
+    const inputField = document.querySelector('.search-container input[type="text"]');
+    const inputResetButton = document.querySelector('.search-container .btn-reset');
+
+    if (isDarkMode) {
+        inputField.style.backgroundColor = '#333333';
+        inputField.style.color = '#ffffff';
+        inputResetButton.style.color = '#b0b0b0';
     } else {
-        logoContainer.style.backgroundColor = ""; // or "transparent"
-        logoContainer.style.border = "none";  // Remove border
-    }
-
-    // Other elements to be updated based on nextColor
-    var header = document.querySelector('header');
-    var footer = document.querySelector('footer');
-    var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, h3,  li, .campaign-nav, .campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link');
-    var reactDivs = document.querySelectorAll('.react div');
-    var loveCounts = document.querySelectorAll('[id^="love-count-"]');
-    var viewCounts = document.querySelectorAll('#view-count');
-    var commentCounts = document.querySelectorAll('.comment-count');
-    var exploreLinks = document.querySelectorAll('.explore-link i'); // Select all compass icons
-
-    // Update header background color based on nextColor
-    if (nextColor === "black") {
-        header.style.backgroundColor = "#333333";  // Darker gray when background is black
-    } else {
-        header.style.backgroundColor = nextColor;
-    }
-
-    footer.style.backgroundColor = nextColor;
-
-    sections.forEach(function(section) {
-        section.style.backgroundColor = nextColor;
-    });
-
-    var textColor = nextColor === "black" ? "white" : "black";
-    header.style.color = textColor;
-    footer.style.color = textColor;
-
-    textElements.forEach(function(element) {
-        element.style.color = textColor;
-    });
-
-    // Change the color of the compass icon based on the background color
-    exploreLinks.forEach(function(icon) {
-        icon.style.color = nextColor === "black" ? "white" : "black";
-    });
-
-    // Skip changing button colors
-    var buttonColor = nextColor === "black" ? "#262626" : ""; // If you want to change button colors based on background, adjust this accordingly
-    var buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)'); // Exclude specific buttons
-    buttons.forEach(function(button) {
-        button.style.backgroundColor = buttonColor;
-
-        if (nextColor === "black") {
-            button.classList.add('button-hover');
-        } else {
-            button.classList.remove('button-hover');
-            button.style.backgroundColor = "";
-        }
-    });
-
-    reactDivs.forEach(function(reactDiv) {
-        reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
-
-        var reactTextColor = nextColor === "black" ? "white" : "black";
-        reactDiv.style.color = reactTextColor;
-
-        if (nextColor === "black") {
-            reactDiv.classList.add('react-hover');
-        } else {
-            reactDiv.classList.remove('react-hover');
-            reactDiv.style.backgroundColor = "";
-        }
-    });
-
-    var countTextColor = nextColor === "sliver" ? "sliver" : "sliver";
-    loveCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-    viewCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-    commentCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-
-    // Update the input field and reset button inside .search-container
-    var inputField = document.querySelector('.search-container input[type="text"]');
-    var inputResetButton = document.querySelector('.search-container .btn-reset');
-
-    if (nextColor === "black") {
-        inputField.style.backgroundColor = "#333333"; // Dark gray for black mode
-        inputField.style.color = "white";            // White text in black mode
-        inputResetButton.style.color = "#b0b0b0";      // White icon for reset button
-    } else {
-        inputField.style.backgroundColor = "white";  // Default white background
-        inputField.style.color = "black";            // Black text in white mode
-        inputResetButton.style.color = "#b0b0b0";      // Black icon for reset button
+        inputField.style.backgroundColor = '#ffffff';
+        inputField.style.color = '#000000';
+        inputResetButton.style.color = '#b0b0b0';
     }
 }
-
-
 </script>
 
 {% endblock %}
