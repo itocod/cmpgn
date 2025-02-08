@@ -221,7 +221,6 @@ def campaign_engagement_data(request, campaign_id):
 
 
 
-
 def top_participants_view(request, campaign_id):
     # Fetch the campaign
     campaign = Campaign.objects.get(pk=campaign_id)
@@ -279,42 +278,12 @@ def top_participants_view(request, campaign_id):
 
 
 
-
-
-
-
-
-
-
 def explore_campaigns(request):
-    user_profile = get_object_or_404(Profile, user=request.user)
-    # Optional: If you want to track the last time the user viewed their campaigns
-    user_profile.last_campaign_check = timezone.now()
-    user_profile.save()
-
-    # Other data to pass to the template (e.g., unread notifications, ads, etc.)
-    form = SubscriptionForm()
-    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    user_chats = Chat.objects.filter(participants=request.user)
-    unread_messages_count = Message.objects.filter(chat__in=user_chats).exclude(sender=request.user).count()
-    ads = NativeAd.objects.all()
-    # Fetch public campaigns with 2 or more loves
-    campaigns = (
-        Campaign.objects.filter(visibility='public')  # Only public campaigns
-        .annotate(love_count_annotated=Count('loves'))  # Add love count annotation
-        .filter(love_count_annotated__gte=2)  # Exclude campaigns with less than 2 loves
-        .order_by('-love_count_annotated')  # Sort by love count in descending order
-    )
-    context = {
-        'campaigns': campaigns,
-         'user_profile': user_profile,
-        'unread_notifications': unread_notifications,
-        'unread_messages_count': unread_messages_count,
-        'form': form,
-        'ads': ads
-    }
-    return render(request, 'revenue/explore.html', context)
-
+        # Fetch all public campaigns
+    public_campaigns = Campaign.objects.filter(visibility='public')  # Adjust this query to match your actual filtering criteria
+    
+    # Pass the public_campaigns to the template
+    return render(request, 'revenue/explore.html', {'public_campaigns': public_campaigns})
 
 
 
@@ -947,6 +916,7 @@ def suggest(request):
 
 
 
+@login_required
 def affiliate_links(request):
     following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
     user_profile = get_object_or_404(Profile, user=request.user)
@@ -1604,7 +1574,7 @@ def delete_chat(request, chat_id):
 
 
 
-
+@login_required
 def view_campaign(request, campaign_id):
     following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
     campaign = get_object_or_404(Campaign, pk=campaign_id)
@@ -2079,7 +2049,7 @@ def home(request):
 
 
 
-
+@login_required
 def campaign_comments(request, campaign_id):
     # Retrieve campaign object
     following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following

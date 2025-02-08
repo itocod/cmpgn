@@ -1,18 +1,91 @@
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.db.models import Count, Sum, Q, Case, When, Value, BooleanField
+from django.http import HttpResponse, HttpResponseServerError, HttpResponseBadRequest, JsonResponse
+from django.core.exceptions import ObjectDoesNotExist, MultipleObjectsReturned
+from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+from django.urls import reverse, reverse_lazy
+from django.utils import timezone
+from django.views.generic import CreateView
+from django.views.generic.edit import DeleteView
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.views import LoginView
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.conf import settings
 
-from django.shortcuts import render, redirect
-from django.shortcuts import render, get_object_or_404
-from main.models import Profile 
+import paypalrestsdk
+import os
+import json
+import base64
+import time
+import logging
+import mimetypes
+from decimal import Decimal
+from dotenv import load_dotenv
 
+from main.models import (
+    Profile, Campaign, Comment, Follow, Activity, SupportCampaign, Brainstorming,
+    User, Love, CampaignView, Chat, Notification, Message, CampaignFund,
+    AffiliateLink, AffiliateLibrary, AffiliateNewsSource, NativeAd,
+    Report, NotInterested, QuranVerse, Surah, Adhkar, Hadith,
+    PlatformFund, Donation, CampaignProduct, ActivityComment, ActivityLove
+)
+
+from main.forms import (
+    UserForm, ProfileForm, CampaignForm, CommentForm, ActivityForm, ActivityFormSet,
+    SupportForm, ChatForm, MessageForm, CampaignSearchForm, ProfileSearchForm,
+    BrainstormingForm, CampaignFundForm, CampaignProductForm, ReportForm, NotInterestedForm,
+    SubscriptionForm, DonationForm, UpdateVisibilityForm, ActivityCommentForm,
+    UserVerificationForm
+)
+
+from main.utils import calculate_similarity
 
 
 from main.models import Campaign
-
 def index(request):
-    # Fetch all public campaigns
-    public_campaigns = Campaign.objects.filter(visibility='public')  # Adjust this query to match your actual filtering criteria
-    
-    # Pass the public_campaigns to the template
-    return render(request, 'accounts/index.html', {'public_campaigns': public_campaigns})
+    user_profile = None
+    unread_notifications = []
+    unread_messages_count = 0
+    show_login_button = not request.user.is_authenticated  # Show the login button for anonymous users
+
+    if request.user.is_authenticated:
+        user_profile = get_object_or_404(Profile, user=request.user)
+        user_profile.last_campaign_check = timezone.now()
+        user_profile.save()
+        unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+        user_chats = Chat.objects.filter(participants=request.user)
+        unread_messages_count = Message.objects.filter(chat__in=user_chats).exclude(sender=request.user).count()
+
+    # Fetch public campaigns regardless of user authentication
+    campaigns = (
+        Campaign.objects.filter(visibility='public')
+        .select_related('user')  # Ensures that user profiles are prefetched
+        .annotate(love_count_annotated=Count('loves'))
+        .filter(love_count_annotated__gte=2)
+        .order_by('-love_count_annotated')
+    )
+
+    form = SubscriptionForm()
+    ads = NativeAd.objects.all()
+
+    context = {
+        'campaigns': campaigns,
+        'user_profile': user_profile,  # None for anonymous users
+        'unread_notifications': unread_notifications,
+        'unread_messages_count': unread_messages_count,
+        'form': form,
+        'ads': ads,
+        'show_login_button': show_login_button,  # Add the flag to context
+    }
+
+    return render(request, 'accounts/index.html', context)
+
 
 
 

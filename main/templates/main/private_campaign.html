@@ -2745,7 +2745,14 @@ document.addEventListener("DOMContentLoaded", function() {
     <h2 style="margin-bottom: 10px;">{{ user_profile.user.username }} 
       . <i class="cm">campaigner</i></h2>
                {% if user_profile.profile_verified %}
-        <p><strong>Status:</strong> <span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></p>
+        <p><strong>Status:</strong> 
+    {% if user_profile.profile_verified %}
+        <span>Verified</span>
+        <i class="material-icons" style="font-size:20px;color:green">verified_user</i>
+    {% else %}
+        <span>None</span>
+    {% endif %}
+</p>
     {% endif %}
    <img src="{{ user_profile.image.url }}"  alt="Profile Image" width="150" height="150" style="
       object-fit: cover;
@@ -2913,7 +2920,19 @@ document.addEventListener("DOMContentLoaded", function() {
 }
 </style>
 
-
+<script>
+    function toggleObjectives(element) {
+        // Find the sibling objectives-activities div
+        var objectivesDiv = element.nextElementSibling;
+        
+        // Toggle the visibility of the objectives-activities div
+        if (objectivesDiv.style.display === "none") {
+            objectivesDiv.style.display = "block";
+        } else {
+            objectivesDiv.style.display = "none";
+        }
+    }
+</script>
    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
 

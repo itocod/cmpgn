@@ -2436,7 +2436,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 <h4 style="font-size: 19px; padding-left: 20px; display: inline-flex; align-items: center;">
     Home
-    <a href="{% url 'explore_campaigns' %}" title="Explore" class="explore-link" style="margin-left: 10px;">
+    <a href="{% url 'index' %}" title="Explore" class="explore-link" style="margin-left: 10px;">
         <i class="fas fa-compass" style="font-size: 14px;"></i>
     </a>
 </h4>
@@ -2465,9 +2465,9 @@ document.addEventListener("DOMContentLoaded", function() {
 </i>
                             </h1> 
 
-                            <div class="campaign-category" style="cursor: pointer;">
-                                {{ campaign.category }} Campaign
-                            </div>
+                         <div class="campaign-category" style="cursor: pointer;" onclick="toggleObjectives(this)">
+    {{ campaign.category }} Campaign
+</div>
 
                             <div class="objectives-activities"></br>
                                 <h3>Objective:</h3>
@@ -2771,7 +2771,14 @@ document.addEventListener("DOMContentLoaded", function() {
     <h2 style="margin-bottom: 10px;">{{ user_profile.user.username }} 
       . <i class="cm">campaigner</i></h2>
                {% if user_profile.profile_verified %}
-        <p><strong>Status:</strong> <span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></p>
+       <p><strong>Status:</strong> 
+    {% if user_profile.profile_verified %}
+        <span>Verified</span>
+        <i class="material-icons" style="font-size:20px;color:green">verified_user</i>
+    {% else %}
+        <span>None</span>
+    {% endif %}
+</p>
     {% endif %}
    <img src="{{ user_profile.image.url }}"  alt="Profile Image" width="150" height="150" style="
       object-fit: cover;
@@ -2875,6 +2882,20 @@ document.addEventListener("DOMContentLoaded", function() {
 
 </style>
 
+
+<script>
+    function toggleObjectives(element) {
+        // Find the sibling objectives-activities div
+        var objectivesDiv = element.nextElementSibling;
+        
+        // Toggle the visibility of the objectives-activities div
+        if (objectivesDiv.style.display === "none") {
+            objectivesDiv.style.display = "block";
+        } else {
+            objectivesDiv.style.display = "none";
+        }
+    }
+</script>
 <script>
     function goBack() {
         window.history.back(); // Navigates to the previous page

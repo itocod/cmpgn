@@ -1,143 +1,168 @@
-<!-- donate.html -->
-{% extends 'main/face.html' %}
-
-{% block content %}
-<!-- templates/platformfund.html -->
 <!DOCTYPE html>
 <html>
 <head>
-     <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Google Site Verification Meta Tag -->
-  <meta name="google-site-verification" content="2IjHwnbJp2eoJ42Ec2-vy5FHzwfpyA4qxZlA2Ct1lW8" />
+    <!-- Meta Tags for SEO -->
+    <meta name="description" content="Join RallyNex to support impactful campaigns across global causes like Environmental Conservation, Education, Health, and Equality. Create, share, and fund projects that drive positive change in your community and beyond. Become part of a passionate community dedicated to making a difference today!">
+    <meta name="keywords" content="crowdfunding, global causes, environmental conservation, community development, health and wellness, education, equality and inclusion, animal welfare, humanitarian aid, sustainable development, economic empowerment, policy advocacy, artistic advocacy, support campaigns, social impact">
+    <meta name="author" content="RallyNex Team">
+    <meta name="language" content="English">
+    <link rel="canonical" href="https://rallynex.onrender.com">
 
-  <!-- bing Site Verification Meta Tag -->
-  <meta name="msvalidate.01" content="2DF73531AC8292B0D47E7DEAE6EEF4CF" />
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="RallyNex - Support Campaigns and Causes">
+    <meta property="og:description" content="Join RallyNex to support impactful campaigns across global causes like Environmental Conservation, Health, and Education. Create, share, and fund projects that drive positive change!">
+    <meta property="og:url" content="https://rallynex.onrender.com">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://rallynex.s3.eu-north-1.amazonaws.com/main/files/og-image.png">
+    <meta property="og:image:alt" content="RallyNex platform image">
+    <meta property="og:site_name" content="RallyNex">
+    <meta property="og:locale" content="en_US">
 
-  <!-- yandex Site Verification Meta Tag -->
-  <meta name="yandex-verification" content="27149014e6b080dd" />
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="RallyNex - Support Campaigns and Causes">
+    <meta name="twitter:description" content="Join RallyNex to support impactful campaigns across global causes like Environmental Conservation, Health, and Education. Create, share, and fund projects that drive positive change!">
+    <meta name="twitter:image" content="https://rallynex.s3.eu-north-1.amazonaws.com/main/files/og-image.png">
+    <meta name="twitter:image:alt" content="RallyNex platform image">
+    <meta name="twitter:site" content="@RallyNex">
 
-  <!-- Meta Tags for SEO -->
-  <meta name="description" content="Join RallyNex to support impactful campaigns across global causes like Environmental Conservation, Education, Health, and Equality. Create, share, and fund projects that drive positive change in your community and beyond. Become part of a passionate community dedicated to making a difference today!">
-  <meta name="keywords" content="crowdfunding, global causes, environmental conservation, community development, health and wellness, education, equality and inclusion, animal welfare, humanitarian aid, sustainable development, economic empowerment, policy advocacy, artistic advocacy, support campaigns, social impact">
-  <meta name="author" content="RallyNex Team">
-  <meta name="language" content="English">
-  <link rel="canonical" href="https://rallynex.onrender.com">
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <title>RallyNex - Together for Change: Support Global Campaigns and Transform Lives</title>
 
-  <!-- Open Graph Meta Tags -->
-  <meta property="og:title" content="RallyNex - Support Campaigns and Causes">
-  <meta property="og:description" content="Join RallyNex to support impactful campaigns across global causes like Environmental Conservation, Health, and Education. Create, share, and fund projects that drive positive change!">
-  <meta property="og:url" content="https://rallynex.onrender.com">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="https://rallynex.s3.eu-north-1.amazonaws.com/main/files/og-image.png">
-
-  <meta property="og:image:alt" content="RallyNex platform image">
-  <meta property="og:site_name" content="RallyNex">
-  <meta property="og:locale" content="en_US">
-
-  <!-- Twitter Card Meta Tags -->
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="RallyNex - Support Campaigns and Causes">
-  <meta name="twitter:description" content="Join RallyNex to support impactful campaigns across global causes like Environmental Conservation, Health, and Education. Create, share, and fund projects that drive positive change!">
-  <meta name="twitter:image" content="https://rallynex.s3.eu-north-1.amazonaws.com/main/files/og-image.png">
-  <meta name="twitter:image:alt" content="RallyNex platform image">
-  <meta name="twitter:site" content="@RallyNex">
-
-
-
-  <!-- Stylesheets -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-  <title>RallyNex - Together for Change: Support Global Campaigns and Transform Lives</title>
     <style type="text/css">
-        /* Adjusted CSS naming to avoid conflict */
-        .body-style {
-            font-family: Arial, sans-serif;
-           
+        /* Modern and clean body style */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
             margin: 0;
             padding: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #333;
         }
 
-        .heading-style {
-            color: #333;
+        /* Container to center content */
+        .container {
+            max-width: 800px;
+            width: 90%;
+            padding: 30px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
 
+        /* Stylish heading with a modern touch */
+        .heading-style {
+            color: #2c3e50;
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        /* Clean list style */
         .list-style {
             list-style-type: none;
             padding: 0;
+            margin: 0;
         }
 
-/* Style for fund item */
-.fund-item {
-    background-color: #fff;
-    border-radius: 10px;
-    margin: 10px 0;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    align-items: center; /* Center vertically */
-    justify-content: space-between; /* Space items evenly */
-}
+        /* Modern card-style fund item with border */
+        .fund-item {
+            background-color: #ffffff;
+            border-radius: 10px;
+            margin: 15px 0;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid #e0e0e0;
+        }
 
-.donation-link {
-    color: #007bff; /* Default link color */
-    text-decoration: none; /* Remove default underline */
-    font-weight: bold; /* Make link text bold */
-    transition: color 0.3s; /* Smooth color transition on hover */
-}
+        /* Hover effect for fund items */
+        .fund-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+            border-color: #007bff;
+        }
 
-.donation-link:hover {
-    color: #0056b3; /* Adjusted link color on hover */
-}
+        /* Stylish donation link */
+        .donation-link {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 16px;
+            transition: color 0.3s ease, transform 0.3s ease;
+        }
 
-.square-with-arrow {
-  position: relative;
-  display: inline-block;
+        /* Hover effect for donation link */
+        .donation-link:hover {
+            color: #0056b3;
+            transform: translateX(5px);
+        }
 
-}
+        /* Icon container with arrow */
+        .square-with-arrow {
+            position: relative;
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
 
-.square-with-arrow .fa-square {
-  position: relative;
-  display: inline-block;
-  color: #007bff;
-}
+        /* Square icon styling */
+        .square-with-arrow .fa-square {
+            color: #007bff;
+            font-size: 20px;
+            transition: color 0.3s ease;
+        }
 
-.square-with-arrow .fa-arrow-right {
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin-top: -5px; /* Adjust this value as needed */
-  margin-right: -10px; /* Adjust this value as needed */
-  transform: rotate(-45deg);
-    color: #007bff; /* Default color for icons */
-}
+        /* Arrow icon styling */
+        .square-with-arrow .fa-arrow-right {
+            position: absolute;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%) rotate(-45deg);
+            color: #007bff;
+            font-size: 12px;
+            transition: color 0.3s ease;
+        }
 
-.square-with-arrow:hover .fa-square,
-.square-with-arrow:hover .fa-arrow-right {
-    color: #0056b3; /* Adjusted color for icons on hover */
-}
+        /* Hover effect for icons */
+        .square-with-arrow:hover .fa-square,
+        .square-with-arrow:hover .fa-arrow-right {
+            color: #0056b3;
+        }
 
-
+        /* Hover effect for the entire icon container */
+        .square-with-arrow:hover {
+            transform: translateX(5px);
+        }
     </style>
 </head>
-<body class="body-style">
-  
-
-    <h2 class="heading-style" style=" font-size: 19px;">"We appreciate your support."</h2>
-    <ul class="list-style">
-        {% for fund in platformfunds %}
-            <li class="fund-item">
-              <a href="{{ fund.donation_link }}" class="donation-link"> <span> Click Here.</span> {{ fund.donation_link }}</a>
-
-
-           <div class="square-with-arrow" style="font-size:14px;" >
-        <i class="fas fa-square"></i>
-        <i class="fas fa-arrow-right"></i>
-    </div>
-            </li>
-        {% endfor %}
-    </ul>
+<body>
+    <div class="container">
+        <h2 class="heading-style">"We appreciate your support."</h2>
+        <ul class="list-style">
+            {% for fund in platformfunds %}
+                <li class="fund-item">
+                    <a href="{{ fund.donation_link }}" class="donation-link">
+                        <span>Click Here.</span> {{ fund.donation_link }}
+                    </a>
+                    <div class="square-with-arrow">
+                        <i class="fas fa-square"></i>
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
     <script type="text/javascript">
 
 function switchColor() {
@@ -335,4 +360,3 @@ document.addEventListener("DOMContentLoaded", function() {
 </body>
 </html>
 
-{% endblock %}
