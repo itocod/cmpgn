@@ -756,59 +756,96 @@
 .loved {
     color: red; /* Color for the loved state */
 }
+
 .firework {
     position: absolute;
     border-radius: 50%;
     pointer-events: none; /* Prevent clicks on fireworks */
     opacity: 0;
+    width: 10px;
+    height: 10px;
+    animation: firework-animation 1s ease-out forwards;
 }
 
 .firework1 {
-    background: rgba(255, 165, 0, 0.8); /* Orange color */
-    animation: firework-animation 0.8s forwards;
+    background: radial-gradient(circle, rgba(255, 165, 0, 0.8), rgba(255, 165, 0, 0)); /* Orange color */
+    box-shadow: 0 0 10px rgba(255, 165, 0, 0.8);
 }
 
 .firework2 {
-    background: rgba(0, 255, 0, 0.8); /* Green color */
-    animation: firework-animation 0.8s forwards;
+    background: radial-gradient(circle, rgba(0, 255, 0, 0.8), rgba(0, 255, 0, 0)); /* Green color */
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.8);
 }
 
 .firework3 {
-    background: rgba(0, 0, 255, 0.8); /* Blue color */
-    animation: firework-animation 0.8s forwards;
+    background: radial-gradient(circle, rgba(0, 0, 255, 0.8), rgba(0, 0, 255, 0)); /* Blue color */
+    box-shadow: 0 0 10px rgba(0, 0, 255, 0.8);
 }
 
 .firework4 {
-    background: rgba(255, 0, 255, 0.8); /* Purple color */
-    animation: firework-animation 0.8s forwards;
+    background: radial-gradient(circle, rgba(255, 0, 255, 0.8), rgba(255, 0, 255, 0)); /* Purple color */
+    box-shadow: 0 0 10px rgba(255, 0, 255, 0.8);
 }
 
 @keyframes firework-animation {
     0% {
-        transform: scale(0);
+        transform: scale(0) translateY(0);
         opacity: 1;
     }
+    50% {
+        transform: scale(1.5) translateY(-50px);
+        opacity: 0.8;
+    }
     100% {
-        transform: scale(1.5); /* Increase the final scale to make them bigger */
+        transform: scale(2) translateY(-100px);
         opacity: 0;
     }
 }
 
-@keyframes firework-animation {
+/* Add some randomness to the fireworks */
+.firework1 {
+    animation-delay: 0.1s;
+    left: 20%;
+}
+
+.firework2 {
+    animation-delay: 0.3s;
+    left: 40%;
+}
+
+.firework3 {
+    animation-delay: 0.5s;
+    left: 60%;
+}
+
+.firework4 {
+    animation-delay: 0.7s;
+    left: 80%;
+}
+
+/* Add a subtle glow effect to the heart when loved */
+.loved::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(255, 0, 0, 0.4), rgba(255, 0, 0, 0));
+    transform: translate(-50%, -50%);
+    animation: glow 1s ease-out forwards;
+}
+
+@keyframes glow {
     0% {
-        transform: scale(0);
+        transform: translate(-50%, -50%) scale(0);
         opacity: 1;
     }
     100% {
-        transform: scale(1);
+        transform: translate(-50%, -50%) scale(2);
         opacity: 0;
     }
 }
-
-.love {
-    position: relative; /* Necessary for the absolute positioning of .love-label */
-}
-
 .love-label {
     display: none; /* Hide label by default */
     position: absolute; /* Position it absolutely */
@@ -2606,13 +2643,17 @@ document.addEventListener("DOMContentLoaded", function() {
             </span>
             <span class="tooltip-label">Campaign views </span> <!-- Tooltip container -->
         </div>
-
-      <div class="comment">
+ <div class="comment">
     <span>
-        <i class="far fa-comment" style="font-size:19px;" aria-hidden="true"></i>
+        <i class="far fa-comment" style="font-size:19px;"></i>
     </span>
     <a href="{% url 'campaign_comments' campaign_id=campaign.id %}" class="comment-count">
-        {{ campaign.comment_set.count }} {{ campaign.comment_set.count|pluralize:"comment,comments" }}
+        {% if user.is_authenticated %}
+            {{ campaign.comments.count|default:0 }}
+        {% else %}
+            585.3K
+        {% endif %}
+        comment{{ campaign.comments.count|pluralize }}
     </a>
     <span class="tooltip-label">Comment to Campaign</span> <!-- Tooltip container -->
 </div>

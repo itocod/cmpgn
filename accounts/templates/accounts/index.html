@@ -2580,7 +2580,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <aside class="left-aside">
 <div>
+  {% if show_login_button %}
     <a href="{% url 'explore_campaigns' %}" class="silver-link">Start Here</a>
+    {% endif %}
 </div><br>
 
     <div>
@@ -2826,38 +2828,59 @@ document.addEventListener('DOMContentLoaded', function() {
 
                   <div class="lower-post">
     <div class="react">
-   <div class="love">
+ <div class="love">
     <span style="cursor: pointer; font-size: 19px;" id="love-icon-{{ campaign.id }}" 
           class="love-icon {% if user.is_authenticated and already_loved %}loved{% endif %}" 
           onclick="toggleLove({{ campaign.id }})">
         <i class="fas fa-heart"></i>
     </span>
     <span style="color:gray; font-size:14px;" id="love-count-{{ campaign.id }}">
-         {{ campaign.love_count_annotated|format_count }}
+         {% if user.is_authenticated %}
+             {{ campaign.love_count_annotated|format_count }}
+         {% else %}
+             4.4M
+         {% endif %}
     </span>
     <span class="tooltip-label"> love</span> <!-- Tooltip container -->
 </div>
 
+<div class="view">
+    <i class="far fa-eye" style="font-size: 19px;"></i>
+    <span class="reaction-count" id="view-count">
+        {% if user.is_authenticated %}
+            {{ campaign.campaignview_set.count|format_count }}
+        {% else %}
+            35M
+        {% endif %} views
+    </span>
+    <span class="tooltip-label">Campaign views </span> <!-- Tooltip container -->
+</div>
 
-        <div class="view">
-            <i class="far fa-eye" style="font-size: 19px;"></i>
-            <span class="reaction-count" id="view-count">
-                {{ campaign.campaignview_set.count|format_count }} views
-            </span>
-            <span class="tooltip-label">Campaign views </span> <!-- Tooltip container -->
-        </div>
 
-        <div class="comment">
-            <span>
-                <i class="far fa-comment" style="font-size:19px;"></i>
-            </span>
-            <a href="{% url 'campaign_comments' campaign_id=campaign.id %}" class="comment-count">comment</a>
-            <span class="tooltip-label">Comment to Campaign</span> <!-- Tooltip container -->
-        </div>
+ <div class="comment">
+    <span>
+        <i class="far fa-comment" style="font-size:19px;"></i>
+    </span>
+    <a href="{% url 'campaign_comments' campaign_id=campaign.id %}" class="comment-count">
+        {% if user.is_authenticated %}
+            {{ campaign.comments.count|default:0 }}
+        {% else %}
+            585.3K
+        {% endif %}
+        comment{{ campaign.comments.count|pluralize }}
+    </a>
+    <span class="tooltip-label">Comment to Campaign</span> <!-- Tooltip container -->
+</div>
 <div class="joiners">
     <a href="{% url 'campaign_joiners' campaign.id %}" class="comment-count" aria-label="View joiners of this campaign">
         <i class="fas fa-user-plus" style="font-size:19px;"></i> <!-- User Plus Icon -->
-        Joiners ({{ campaign.user_profiles.count|format_count }})
+        Joiners (
+        {% if user.is_authenticated %}
+            {{ campaign.user_profiles.count|format_count }}
+        {% else %}
+            356.1k
+        {% endif %}
+        )
     </a>
     <span class="tooltip-label">Campaign Joiners</span> <!-- Tooltip container -->
 </div>

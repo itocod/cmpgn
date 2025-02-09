@@ -2593,12 +2593,19 @@ document.addEventListener("DOMContentLoaded", function() {
         </div>
 
         <div class="comment">
-            <span>
-                <i class="far fa-comment" style="font-size:19px;"></i>
-            </span>
-            <a href="{% url 'campaign_comments' campaign_id=campaign.id %}" class="comment-count">comment</a>
-            <span class="tooltip-label">Comment to Campaign</span> <!-- Tooltip container -->
-        </div>
+    <span>
+        <i class="far fa-comment" style="font-size:19px;"></i>
+    </span>
+    <a href="{% url 'campaign_comments' campaign_id=campaign.id %}" class="comment-count">
+        {% if user.is_authenticated %}
+            {{ campaign.comments.count|default:0 }}
+        {% else %}
+            585.3K
+        {% endif %}
+        comment{{ campaign.comments.count|pluralize }}
+    </a>
+    <span class="tooltip-label">Comment to Campaign</span> <!-- Tooltip container -->
+</div>
 <div class="joiners">
     <a href="{% url 'campaign_joiners' campaign.id %}" class="comment-count" aria-label="View joiners of this campaign">
         <i class="fas fa-user-plus" style="font-size:19px;"></i> <!-- User Plus Icon -->

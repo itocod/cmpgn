@@ -2656,11 +2656,19 @@ document.addEventListener("DOMContentLoaded", function() {
             <span class="reaction-count" id="view-count">{{ campaign.campaignview_set.count|format_count }} views</span>
         </div>
         <div class="comment">
-            <span>
-                <i class="far fa-comment" style="font-size: 19px;"></i>
-            </span>
-            <a href="{% url 'campaign_comments' campaign_id=campaign.id %}" class="comment-count"> comments</a>
-        </div>
+    <span>
+        <i class="far fa-comment" style="font-size:19px;"></i>
+    </span>
+    <a href="{% url 'campaign_comments' campaign_id=campaign.id %}" class="comment-count">
+        {% if user.is_authenticated %}
+            {{ campaign.comments.count|default:0 }}
+        {% else %}
+            585.3K
+        {% endif %}
+        comment{{ campaign.comments.count|pluralize }}
+    </a>
+    <span class="tooltip-label">Comment to Campaign</span> <!-- Tooltip container -->
+</div>
         {% if request.user.is_authenticated and request.user.profile == campaign.user %}
         <div class="recreate">
             <a href="{% url 'recreate_campaign' campaign.id %}" class="report-link">✏️ Recreate cmpgn</a>

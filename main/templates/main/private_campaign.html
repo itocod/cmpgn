@@ -2070,6 +2070,49 @@ body.dark-mode #view-count,
 body.dark-mode .comment-count {
     color: #ffffff; /* Light text for counts */
 }
+
+body.dark-mode .no-suggested-users {
+    color: #b0b0b0; /* Light text for empty state */
+    font-style: italic;
+}
+/* Dark Mode Styles for .campaign-members */
+body.dark-mode .campaign-members {
+    background: linear-gradient(145deg, #1e1e1e, #2a2a2a); /* Dark gradient */
+    border: 1px solid #444444; /* Darker border */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3); /* Darker shadow */
+}
+
+body.dark-mode .campaign-members h3 {
+    color: #3498db; /* Accent blue for dark mode */
+    border-bottom: 2px solid #444444; /* Darker border */
+}
+
+body.dark-mode .campaign-members ul {
+    scrollbar-color: #3498db #2a2a2a; /* Customize scrollbar for dark mode */
+}
+
+body.dark-mode .campaign-members ul::-webkit-scrollbar-thumb {
+    background-color: #3498db; /* Blue scrollbar thumb */
+}
+
+body.dark-mode .campaign-members ul::-webkit-scrollbar-track {
+    background: #2a2a2a; /* Dark scrollbar track */
+}
+
+body.dark-mode .campaign-members a {
+    color: #3498db; /* Accent blue for links */
+}
+
+body.dark-mode .campaign-members a:hover {
+    color: #4aa3df; /* Brighter blue on hover */
+}
+
+body.dark-mode .campaign-members li:hover {
+    background: #333333; /* Darker background on hover */
+    border-radius: 5px;
+    padding: 5px;
+}
+
   </style>
 
 
@@ -2484,250 +2527,241 @@ document.addEventListener("DOMContentLoaded", function() {
 </aside>
 
 
-
-
-
-
 <section>
-
-  <!-- Beautiful upload button -->
-<div class="upload-container hide-on-mobile">
-    <div class="upload-btn-wrapper">
-        <button class="btn" style="font-size: 14px;">+ Upload
-            <a href="{% url 'create_campaign' %}" class="overlay-link"></a>
-        </button>
+    <!-- Beautiful upload button -->
+    <div class="upload-container hide-on-mobile">
+        <div class="upload-btn-wrapper">
+            <button class="btn" style="font-size: 14px;">
+                + Upload
+                <a href="{% url 'create_campaign' %}" class="overlay-link"></a>
+            </button>
+        </div>
     </div>
-</div>
-</br>
+    <br />
 
     <h2 style="font-size:19px; padding-left: 20px;">Private Campaigns Shared With You and Your Own.</h2>
- 
 
-
-  {% if private_campaigns %}
-  </p>
-    <div class="sidebar-box">
-        {% for campaign in private_campaigns %}
-            <div class="container-with-border">
-                <div class="upper-post">
-        <div class="profile-pic">
-          <a href="{% url 'profile_view' username=campaign.user.user.username %}">
-            <img src="{{ campaign.user.image.url }}" alt="Profile Picture" class="profile-pic-hover">
-          </a>
-        </div>
-        <div class="post-details">
-          <h1>
-            {{ campaign.user.user.username }}
-            {% if campaign.user.profile_verified %}
-              <span class="verified-status">verified <i class="material-icons">verified_user</i></span>
-            {% endif %}
-            {% if campaign.is_changemaker %}
-              <span class="cm"><i class="far fa-star"></i> Changemaker</span>
-            {% endif %}
-          </h1>
-          <div class="campaign-category" style="cursor: pointer;" onclick="toggleObjectives(this)">
-            {{ campaign.category }} Campaign
-          </div>
-          <div class="objectives-activities">
-            <h3>Objective:</h3>
-            <p>{{ campaign.get_objective_and_activities.Objectives }}</p>
-          </div>
-          <h2>
-            <a href="{% url 'view_campaign' campaign_id=campaign.pk %}">
-              <span>{{ campaign.title }}</span>
-            </a>
-          </h2>
-          <sp class="time-location">{{ campaign.timestamp|timesince }} ago - {{ campaign.user.location }}</sp>
-          <div class="campaign-content" data-campaign-id="{{ campaign.id }}">
-            {{ campaign.content|safe }}
-          </div>
-        </div>
-      </div>
-
-
-                <div class="file-container">
-                    <div style="position: relative;">
-                                <div style="position: relative;">
-{% if user.profile in campaign.user_profiles.all %}
-    <!-- Display the links if the user has joined the campaign -->
-    <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="activity-link">
-        <i style='font-size:18px' class='fas'>&#xf6e3;</i>
-        <span class="activity-label">Activities</span>
-    </a>
-
-    <a href="{% url 'support' campaign_id=campaign.id %}" class="support-link">
-        <i class="material-icons" style="font-size:18px;">&#xe925;</i>
-        <span class="participate-label">Participate</span>
-    </a>
-{% else %}
-    <!-- Optionally, show a message if the user hasn't joined -->
-    <p style="padding-left:8px;"> You need to join this campaign to view activities and participate.</p>
-{% endif %}
-
-
-
-                        <!-- Campaign poster -->
-                        {% if campaign.poster %}
-                            <a href="{{ campaign.poster.url }}">
-                                <img src="{{ campaign.poster.url }}" alt="Image Description" class="campaign-poster" style="max-width: 100%; height: auto;">
+    {% if private_campaigns %}
+        <div class="sidebar-box">
+            {% for campaign in private_campaigns %}
+                <div class="container-with-border">
+                    <!-- Upper Post Section -->
+                    <div class="upper-post">
+                        <div class="profile-pic">
+                            <a href="{% url 'profile_view' username=campaign.user.user.username %}">
+                                <img src="{{ campaign.user.image.url }}" alt="Profile Picture" class="profile-pic-hover">
                             </a>
-                        {% else %}
-                            <p>No file associated with this campaign.</p>
-                        {% endif %}
-
-                        <!-- Audio player -->
-                        {% if campaign.audio %}
-                            <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                                <source src="{{ campaign.audio.url }}" type="audio/mpeg">
-                                Your browser does not support the audio element.
-                            </audio>
-                        {% else %}
-                            <div class="audio-player">
-                                {% if campaign.category == 'Environmental Conservation' %}
-                                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                                        <source src="{% static 'main/audio/environment.mp3' %}" type="audio/mpeg">
-                                    </audio>
-                                {% elif campaign.category == 'Community Development' %}
-                                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                                        <source src="{% static 'main/audio/community.mp3' %}" type="audio/mpeg">
-                                    </audio>
-                                {% elif campaign.category == 'Health and Wellness' %}
-                                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                                        <source src="{% static 'main/audio/health.mp3' %}" type="audio/mpeg">
-                                    </audio>
-                                {% elif campaign.category == 'Education and Literacy' %}
-                                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                                        <source src="{% static 'main/audio/education1.mp3' %}" type="audio/mpeg">
-                                    </audio>
-                                {% elif campaign.category == 'Equality and Inclusion' %}
-                                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                                        <source src="{% static 'main/audio/Equality1.mp3' %}" type="audio/mpeg">
-                                    </audio>
-                                {% elif campaign.category == 'Animal Welfare' %}
-                                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                                        <source src="{% static 'main/audio/animal.mp3' %}" type="audio/mpeg">
-                                    </audio>
-                                {% elif campaign.category == 'Humanitarian Aid' %}
-                                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                                        <source src="{% static 'main/audio/Humanitarian Aid.mp3' %}" type="audio/mpeg">
-                                    </audio>
-                                {% elif campaign.category == 'Sustainable Development' %}
-                                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                                        <source src="{% static 'main/audio/Sustainable.mp3' %}" type="audio/mpeg">
-                                    </audio>
-                                {% elif campaign.category == 'Peace and Conflict Resolution' %}
-                                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                                        <source src="{% static 'main/audio/peace.mp3' %}" type="audio/mpeg">
-                                    </audio>
-                                {% elif campaign.category == 'Digital Rights' %}
-                                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                                        <source src="{% static 'main/audio/digital.mp3' %}" type="audio/mpeg">
-                                    </audio>
-                                {% elif campaign.category == 'Economic Empowerment' %}
-                                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                                        <source src="{% static 'main/audio/economic.mp3' %}" type="audio/mpeg">
-                                    </audio>
-                                {% elif campaign.category == 'Policy Advocacy' %}
-                                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                                        <source src="{% static 'main/audio/Policy.mp3' %}" type="audio/mpeg">
-                                    </audio>
-                                {% elif campaign.category == 'Artistic Advocacy' %}
-                                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                                        <source src="{% static 'main/audio/art.mp3' %}" type="audio/mpeg">
-                                    </audio>
-                                {% else %}
-                                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                                        <source src="{% static 'main/audio/default.mp3' %}" type="audio/mpeg">
-                                    </audio>
+                        </div>
+                        <div class="post-details">
+                            <h1>
+                                {{ campaign.user.user.username }}
+                                {% if campaign.user.profile_verified %}
+                                    <span class="verified-status">verified <i class="material-icons">verified_user</i></span>
                                 {% endif %}
+                                {% if campaign.is_changemaker %}
+                                    <span class="cm"><i class="far fa-star"></i> Changemaker</span>
+                                {% endif %}
+                            </h1>
+                            <div class="campaign-category" style="cursor: pointer;" onclick="toggleObjectives(this)">
+                                {{ campaign.category }} Campaign
                             </div>
-                        {% endif %}
+                            <div class="objectives-activities">
+                                <h3>Objective:</h3>
+                                <p>{{ campaign.get_objective_and_activities.Objectives }}</p>
+                            </div>
+                            <h2>
+                                <a href="{% url 'view_campaign' campaign_id=campaign.pk %}">
+                                    <span>{{ campaign.title }}</span>
+                                </a>
+                            </h2>
+                            <sp class="time-location">{{ campaign.timestamp|timesince }} ago - {{ campaign.user.location }}</sp>
+                            <div class="campaign-content" data-campaign-id="{{ campaign.id }}">
+                                {{ campaign.content|safe }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- File Container Section -->
+                    <div class="file-container">
+                        <div style="position: relative;">
+                            {% if user.profile in campaign.user_profiles.all %}
+                                <!-- Display the links if the user has joined the campaign -->
+                                <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="activity-link">
+                                    <i style='font-size:18px' class='fas'>&#xf6e3;</i>
+                                    <span class="activity-label">Activities</span>
+                                </a>
+                                <a href="{% url 'support' campaign_id=campaign.id %}" class="support-link">
+                                    <i class="material-icons" style="font-size:18px;">&#xe925;</i>
+                                    <span class="participate-label">Participate</span>
+                                </a>
+                            {% else %}
+                                <!-- Optionally, show a message if the user hasn't joined -->
+                                <p style="padding-left:8px;">You need to join this campaign to view activities and participate.</p>
+                            {% endif %}
+
+                            <!-- Campaign Poster -->
+                            {% if campaign.poster %}
+                                <a href="{{ campaign.poster.url }}">
+                                    <img src="{{ campaign.poster.url }}" alt="Image Description" class="campaign-poster" style="max-width: 100%; height: auto;">
+                                </a>
+                            {% else %}
+                                <p>No file associated with this campaign.</p>
+                            {% endif %}
+
+                            <!-- Audio Player -->
+                            {% if campaign.audio %}
+                                <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                                    <source src="{{ campaign.audio.url }}" type="audio/mpeg">
+                                    Your browser does not support the audio element.
+                                </audio>
+                            {% else %}
+                                <div class="audio-player">
+                                    {% if campaign.category == 'Environmental Conservation' %}
+                                        <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                                            <source src="{% static 'main/audio/environment.mp3' %}" type="audio/mpeg">
+                                        </audio>
+                                    {% elif campaign.category == 'Community Development' %}
+                                        <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                                            <source src="{% static 'main/audio/community.mp3' %}" type="audio/mpeg">
+                                        </audio>
+                                    {% elif campaign.category == 'Health and Wellness' %}
+                                        <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                                            <source src="{% static 'main/audio/health.mp3' %}" type="audio/mpeg">
+                                        </audio>
+                                    {% elif campaign.category == 'Education and Literacy' %}
+                                        <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                                            <source src="{% static 'main/audio/education1.mp3' %}" type="audio/mpeg">
+                                        </audio>
+                                    {% elif campaign.category == 'Equality and Inclusion' %}
+                                        <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                                            <source src="{% static 'main/audio/Equality1.mp3' %}" type="audio/mpeg">
+                                        </audio>
+                                    {% elif campaign.category == 'Animal Welfare' %}
+                                        <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                                            <source src="{% static 'main/audio/animal.mp3' %}" type="audio/mpeg">
+                                        </audio>
+                                    {% elif campaign.category == 'Humanitarian Aid' %}
+                                        <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                                            <source src="{% static 'main/audio/Humanitarian Aid.mp3' %}" type="audio/mpeg">
+                                        </audio>
+                                    {% elif campaign.category == 'Sustainable Development' %}
+                                        <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                                            <source src="{% static 'main/audio/Sustainable.mp3' %}" type="audio/mpeg">
+                                        </audio>
+                                    {% elif campaign.category == 'Peace and Conflict Resolution' %}
+                                        <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                                            <source src="{% static 'main/audio/peace.mp3' %}" type="audio/mpeg">
+                                        </audio>
+                                    {% elif campaign.category == 'Digital Rights' %}
+                                        <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                                            <source src="{% static 'main/audio/digital.mp3' %}" type="audio/mpeg">
+                                        </audio>
+                                    {% elif campaign.category == 'Economic Empowerment' %}
+                                        <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                                            <source src="{% static 'main/audio/economic.mp3' %}" type="audio/mpeg">
+                                        </audio>
+                                    {% elif campaign.category == 'Policy Advocacy' %}
+                                        <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                                            <source src="{% static 'main/audio/Policy.mp3' %}" type="audio/mpeg">
+                                        </audio>
+                                    {% elif campaign.category == 'Artistic Advocacy' %}
+                                        <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                                            <source src="{% static 'main/audio/art.mp3' %}" type="audio/mpeg">
+                                        </audio>
+                                    {% else %}
+                                        <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                                            <source src="{% static 'main/audio/default.mp3' %}" type="audio/mpeg">
+                                        </audio>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Lower Post Section -->
+                    <div class="lower-post">
+                        <div class="react">
+                            <div class="love">
+                                <span style="cursor: pointer; font-size: 19px;" id="love-icon-{{ campaign.id }}" 
+                                    class="love-icon {% if user.is_authenticated and already_loved %}loved{% endif %}" 
+                                    onclick="toggleLove({{ campaign.id }})">
+                                    <i class="fas fa-heart"></i>
+                                </span>
+                                <span style="color:gray; font-size:14px;" id="love-count-{{ campaign.id }}">
+                                    {{ campaign.love_count|format_count }}
+                                </span>
+                                <span class="tooltip-label">love</span>
+                            </div>
+
+                            <div class="view">
+                                <i class="far fa-eye" style="font-size: 19px;"></i>
+                                <span class="reaction-count" id="view-count">
+                                    {{ campaign.campaignview_set.count|format_count }} views
+                                </span>
+                                <span class="tooltip-label">Campaign views</span>
+                            </div>
+
+                            <div class="comment">
+                                <span>
+                                    <i class="far fa-comment" style="font-size:19px;"></i>
+                                </span>
+                                <a href="{% url 'campaign_comments' campaign_id=campaign.id %}" class="comment-count">
+                                    {% if user.is_authenticated %}
+                                        {{ campaign.comments.count|default:0 }}
+                                    {% else %}
+                                        585.3K
+                                    {% endif %}
+                                    comment{{ campaign.comments.count|pluralize }}
+                                </a>
+                                <span class="tooltip-label">Comment to Campaign</span>
+                            </div>
+
+                            <div class="joiners">
+                                <a href="{% url 'campaign_joiners' campaign.id %}" class="comment-count" aria-label="View joiners of this campaign">
+                                    <i class="fas fa-user-plus" style="font-size:19px;"></i>
+                                    Joiners ({{ campaign.user_profiles.count|format_count }})
+                                </a>
+                                <span class="tooltip-label">Campaign Joiners</span>
+                            </div>
+
+                            {% if user.profile in campaign.user_profiles.all %}
+                                <a href="{% url 'join_leave_campaign' campaign.id %}" class="join-leave-btn">
+                                    <i class="fas fa-user-minus"></i> Leave
+                                    <span class="tooltip-text">Leave Campaign</span>
+                                </a>
+                            {% else %}
+                                <a href="{% url 'join_leave_campaign' campaign.id %}" class="join-leave-btn">
+                                    <i class="fas fa-user-plus"></i> Join
+                                    <span class="tooltip-text">Join Campaign</span>
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Campaign Members Section -->
+                    <div class="campaign-members">
+                        <h3 style="font-size: 16px;">Visible to:</h3>
+                        <ul>
+                            {% for follower in campaign.visible_to_followers.all %}
+                                <li>
+                                    <a href="{% url 'profile_view' follower.user.username %}">
+                                        {{ follower.user.username }}
+                                    </a>
+                                </li>
+                            {% empty %}
+                                <li class="no-suggested-users">No followers are visible to this campaign</li>
+                            {% endfor %}
+                        </ul>
                     </div>
                 </div>
-
-                <div class="lower-post">
-                    <div class="react">
-             <div class="love">
-    <span style="cursor: pointer; font-size: 19px;" id="love-icon-{{ campaign.id }}" 
-          class="love-icon {% if user.is_authenticated and already_loved %}loved{% endif %}" 
-          onclick="toggleLove({{ campaign.id }})">
-        <i class="fas fa-heart"></i>
-    </span>
-    <span style="color:gray; font-size:14px;" id="love-count-{{ campaign.id }}">
-        {{ campaign.love_count|format_count }}
-    </span>
-    <span class="tooltip-label"> love</span> <!-- Tooltip container -->
-</div>
-
-
-        <div class="view">
-            <i class="far fa-eye" style="font-size: 19px;"></i>
-            <span class="reaction-count" id="view-count">
-                {{ campaign.campaignview_set.count|format_count }} views
-            </span>
-            <span class="tooltip-label">Campaign views </span> <!-- Tooltip container -->
+            {% endfor %}
         </div>
-
-      <div class="comment">
-    <span>
-        <i class="far fa-comment" style="font-size:19px;" aria-hidden="true"></i>
-    </span>
-    <a href="{% url 'campaign_comments' campaign_id=campaign.id %}" class="comment-count">
-        {{ campaign.comment_set.count }} {{ campaign.comment_set.count|pluralize:"comment,comments" }}
-    </a>
-    <span class="tooltip-label">Comment to Campaign</span> <!-- Tooltip container -->
-</div>
-
-<div class="joiners">
-    <a href="{% url 'campaign_joiners' campaign.id %}" class="comment-count" aria-label="View joiners of this campaign">
-        <i class="fas fa-user-plus" style="font-size:19px;"></i> <!-- User Plus Icon -->
-        Joiners ({{ campaign.user_profiles.count|format_count }})
-    </a>
-    <span class="tooltip-label">Campaign Joiners</span> <!-- Tooltip container -->
-</div>
-
-
-        {% if user.profile in campaign.user_profiles.all %}
-            <a href="{% url 'join_leave_campaign' campaign.id %}" class="join-leave-btn">
-                <i class="fas fa-user-minus"></i> Leave
-                <span class="tooltip-text">Leave Campaign</span>
-            </a>
-        {% else %}
-            <a href="{% url 'join_leave_campaign' campaign.id %}" class="join-leave-btn">
-                <i class="fas fa-user-plus"></i> Join
-                <span class="tooltip-text">Join Campaign</span>
-            </a>
-        {% endif %}
-    </div>
-
-      
-
-                    
-                </div>
-                             <div class="campaign-members">
-    <!-- Display campaign followers (visible_to_followers members) -->
-    <h3 style="font-size: 16px;">Visible to:</h3>
-    
-    <ul>
-        {% for follower in campaign.visible_to_followers.all %}
-            <li>
-                <a href="{% url 'profile_view' follower.user.username %}">
-                    {{ follower.user.username }}
-                </a>
-            </li>
-        {% empty %}
-          <li class="no-suggested-users">No followers are visible to this campaign</li>
-        {% endfor %}
-    </ul>
-</div>
-            </div>
-        {% endfor %}
-    </div>
-{% else %}
-    <li class="no-suggested-users" >No private campaigns available.</li>
-{% endif %}
-
+    {% else %}
+        <li class="no-suggested-users">No private campaigns available.</li>
+    {% endif %}
 </section>
+
+
 
 
 <aside class="right-aside">
@@ -3167,16 +3201,14 @@ startCarousel(); // Start the carousel on page load
 
 </script>
 
-
 <script type="text/javascript">
 function switchColor() {
     const body = document.body;
     const isDarkMode = body.classList.toggle('dark-mode'); // Toggle dark mode class
-    var reactDivs = document.querySelectorAll('.react');
 
     // Update background and text colors for all elements
     const elementsToUpdate = document.querySelectorAll(
-        'header, footer, section, .left-aside, .right-aside, .upper-post, .campaign-content, .react, .search-container input, .search-container .btn-reset'
+        'header, footer, section, .left-aside, .right-aside, .upper-post, .campaign-content, .react, .search-container input, .search-container .btn-reset, .campaign-members'
     );
 
     elementsToUpdate.forEach(element => {
@@ -3185,7 +3217,7 @@ function switchColor() {
 
     // Update text colors for specific elements
     const textElements = document.querySelectorAll(
-        'h1, h2, h3, h4, p, li, .campaign-nav, .campaign-nav a, .btn, .reaction, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link, .love-count, #view-count, .comment-count'
+        'h1, h2, h3, h4, p, li, .campaign-nav, .campaign-nav a, .btn, .reaction, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link, .love-count, #view-count, .comment-count, .campaign-members a, .campaign-members h3'
     );
 
     textElements.forEach(element => {
@@ -3200,6 +3232,7 @@ function switchColor() {
     });
 
     // Update `.react` divs
+    const reactDivs = document.querySelectorAll('.react');
     if (reactDivs.length > 0) {
         reactDivs.forEach(function(reactDiv) {
             reactDiv.style.backgroundColor = isDarkMode ? "#262626" : "";
@@ -3226,8 +3259,32 @@ function switchColor() {
     if (inputResetButton) {
         inputResetButton.style.color = '#b0b0b0';
     }
-}
 
+    // Update campaign members section
+    const campaignMembers = document.querySelector('.campaign-members');
+    if (campaignMembers) {
+        campaignMembers.style.backgroundColor = isDarkMode ? '#1e1e1e' : '';
+        campaignMembers.style.backgroundImage = isDarkMode ? 'linear-gradient(145deg, #1e1e1e, #2a2a2a)' : 'linear-gradient(145deg, #ffffff, #f0f0f0)';
+        campaignMembers.style.borderColor = isDarkMode ? '#444444' : '#cfcfcf';
+        campaignMembers.style.boxShadow = isDarkMode ? '0 4px 6px rgba(0, 0, 0, 0.3)' : '0 4px 6px rgba(0, 0, 0, 0.1)';
+
+        const campaignMembersLinks = campaignMembers.querySelectorAll('a');
+        campaignMembersLinks.forEach(link => {
+            link.style.color = isDarkMode ? '#3498db' : '#0044cc';
+            link.addEventListener('mouseover', () => {
+                link.style.color = isDarkMode ? '#4aa3df' : '#0066ff'; // Brighter blue on hover
+            });
+            link.addEventListener('mouseout', () => {
+                link.style.color = isDarkMode ? '#3498db' : '#0044cc';
+            });
+        });
+
+        const noSuggestedUsers = campaignMembers.querySelector('.no-suggested-users');
+        if (noSuggestedUsers) {
+            noSuggestedUsers.style.color = isDarkMode ? '#b0b0b0' : '#666666';
+        }
+    }
+}
 </script>
 
 <script type="text/javascript">
