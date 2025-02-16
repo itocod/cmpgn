@@ -1186,6 +1186,7 @@ from django.utils import timezone
 from .models import Campaign, Profile, SupportCampaign, CampaignProduct, NativeAd, Notification
 
 
+
 @login_required
 def support(request, campaign_id):
     following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
@@ -1196,15 +1197,6 @@ def support(request, campaign_id):
     
     # Retrieve or create the SupportCampaign object for the current user and campaign
     support_campaign, created = SupportCampaign.objects.get_or_create(user=request.user, campaign=campaign)
-    
-    # Handle POST request for updating visibility for campaign owner
-    if request.method == 'POST' and request.user == campaign.user.user:
-        support_campaign.donate_monetary_visible = request.POST.get('donate_monetary_visible', False)
-        support_campaign.attend_event_visible = request.POST.get('attend_event_visible', False)
-        support_campaign.brainstorm_idea_visible = request.POST.get('brainstorm_idea_visible', False)
-        support_campaign.campaign_product_visible = request.POST.get('campaign_product_visible', False)
-        support_campaign.save()
-        return redirect('support', campaign_id=campaign.id)
     
     # Check if there are new campaigns from follows
     new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
@@ -1232,9 +1224,6 @@ def support(request, campaign_id):
         'new_campaigns_from_follows': new_campaigns_from_follows,
         'products': products
     })
-
-
-
 
 
 @login_required
