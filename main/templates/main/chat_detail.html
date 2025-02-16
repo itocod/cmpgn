@@ -364,11 +364,246 @@
     100% { transform: rotate(360deg); }
 }
 
+/* Dark Mode Styles */
+body.dark-mode {
+    background-color: #121212; /* Dark background */
+    color: #e0e0e0; /* Light text */
+}
+
+body.dark-mode .chat-container {
+    background-color: #1e1e1e; /* Dark background for chat container */
+    border-color: #333333; /* Dark border color */
+    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1); /* Light shadow for contrast */
+}
+
+body.dark-mode .chat-container:hover {
+    box-shadow: 0 6px 16px rgba(255, 255, 255, 0.15); /* Light shadow for contrast */
+}
+
+body.dark-mode .chat-header h1 {
+    color: #ffffff; /* Light text for header */
+}
+
+body.dark-mode .chat-header h1::after {
+    background: #4caf50; /* Accent color */
+}
+
+body.dark-mode .chat-details,
+body.dark-mode .messages-section {
+    background-color: #262626; /* Dark background for details and messages section */
+    border-color: #333333; /* Dark border color */
+}
+
+body.dark-mode .chat-details:hover,
+body.dark-mode .messages-section:hover {
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1); /* Light shadow for contrast */
+}
+
+body.dark-mode .messages-container {
+    background-color: #1e1e1e; /* Dark background for messages container */
+    border-left-color: #3498db; /* Accent border color */
+}
+
+body.dark-mode .message-content {
+    background-color: #333333; /* Dark background for message content */
+    border-color: #444444; /* Dark border color */
+}
+
+body.dark-mode .message-content:hover {
+    box-shadow: 0 2px 6px rgba(255, 255, 255, 0.1); /* Light shadow for contrast */
+}
+
+body.dark-mode .message-content p {
+    color: #e0e0e0; /* Light text for message content */
+}
+
+body.dark-mode .own-message {
+    background-color: #2e7d32; /* Dark background for own message */
+    border-color: #4caf50; /* Accent border color */
+    color: #ffffff; /* Light text */
+}
+
+body.dark-mode .own-message:hover {
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.2); /* Light shadow for contrast */
+}
+
+body.dark-mode .other-user-message {
+    background-color: #333333; /* Dark background for other user message */
+    border-color: #444444; /* Dark border color */
+    color: #e0e0e0; /* Light text */
+}
+
+body.dark-mode .other-user-message:hover {
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1); /* Light shadow for contrast */
+}
+
+body.dark-mode .send-message-section {
+    background-color: #262626; /* Dark background for send message section */
+    border-top-color: #333333; /* Dark border color */
+}
+
+body.dark-mode .message-form input[type="text"],
+body.dark-mode .message-form textarea {
+    background-color: #333333; /* Dark background for input fields */
+    border-color: #444444; /* Dark border color */
+    color: #e0e0e0; /* Light text */
+}
+
+body.dark-mode .message-form input[type="text"]:focus,
+body.dark-mode .message-form textarea:focus {
+    border-color: #4caf50; /* Accent border color */
+    box-shadow: 0 0 6px rgba(76, 175, 80, 0.2); /* Light shadow for contrast */
+}
+
+body.dark-mode .msg-form-btn {
+    background-color: #4caf50; /* Accent color for button */
+    color: #ffffff; /* Light text */
+}
+
+body.dark-mode .msg-form-btn:hover {
+    background-color: #3e8e41; /* Darker accent color on hover */
+}
+
+body.dark-mode .attachment-btn {
+    background-color: #333333; /* Dark background for attachment buttons */
+    border-color: #444444; /* Dark border color */
+    color: #e0e0e0; /* Light text */
+}
+
+body.dark-mode .attachment-btn:hover {
+    background-color: #444444; /* Darker background on hover */
+}
+
+body.dark-mode .message-link a {
+    color: #3498db; /* Accent color for links */
+}
+
+body.dark-mode .message-link a:hover {
+    color: #2980b9; /* Darker accent color on hover */
+}
+
+body.dark-mode .show-more-btn {
+    background-color: #4caf50; /* Accent color for show more button */
+    color: #ffffff; /* Light text */
+}
+
+body.dark-mode .show-more-btn:hover {
+    background-color: #3e8e41; /* Darker accent color on hover */
+}
+
+body.dark-mode .download-btn {
+    background-color: #4caf50; /* Accent color for download button */
+    color: #ffffff; /* Light text */
+}
+
+body.dark-mode .download-btn:hover {
+    background-color: #3e8e41; /* Darker accent color on hover */
+}
+
+body.dark-mode .spinner {
+    border-color: #f3f3f3; /* Light border color */
+    border-top-color: #3498db; /* Accent border color */
+}
+
+/* Custom styles for the emoji picker */
+.ql-emoji-custom {
+    background-color: #4caf50;
+    color: white;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.ql-emoji-custom:hover {
+    background-color: #45a049;
+}
+
+
+body.dark-mode .affiliate-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 10px 15px;
+    background-color: #3498db; /* Accent color for buttons */
+    color: #ffffff;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+body.dark-mode .affiliate-link:hover {
+    background-color: #2980b9; /* Darker accent color on hover */
+}
+
+body.dark-mode .affiliate-link i {
+    margin-right: 8px; /* Space between icon and text */
+}
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 
 
+<script type="text/javascript">
+function switchColor() {
+    const body = document.body;
+    const isDarkMode = body.classList.toggle('dark-mode'); // Toggle dark mode class
+    var reactDivs = document.querySelectorAll('.react');
+
+    // Update background and text colors for all elements
+    const elementsToUpdate = document.querySelectorAll(
+        'header, footer, section, .left-aside, .right-aside, .upper-post, .campaign-content, .react, .search-container input, .search-container .btn-reset'
+    );
+
+    elementsToUpdate.forEach(element => {
+        element.classList.toggle('dark-mode', isDarkMode);
+    });
+
+    // Update text colors for specific elements
+    const textElements = document.querySelectorAll(
+        'h1, h2, h3, h4,  li, .campaign-nav, .campaign-nav a, .btn, .reaction, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link, .love-count, #view-count, .comment-count'
+    );
+
+    textElements.forEach(element => {
+        element.style.color = isDarkMode ? '#ffffff' : '#000000';
+    });
+
+    // Update buttons
+    const buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)');
+    buttons.forEach(button => {
+        button.style.backgroundColor = isDarkMode ? '#262626' : '';
+        button.style.color = isDarkMode ? '#ffffff' : '#000000';
+    });
+
+    // Update `.react` divs
+    if (reactDivs.length > 0) {
+        reactDivs.forEach(function(reactDiv) {
+            reactDiv.style.backgroundColor = isDarkMode ? "#262626" : "";
+            reactDiv.style.color = isDarkMode ? "white" : "black";
+
+            if (isDarkMode) {
+                reactDiv.classList.add('react-hover');
+            } else {
+                reactDiv.classList.remove('react-hover');
+                reactDiv.style.backgroundColor = "";
+            }
+        });
+    }
+
+    // Update input field and reset button
+    const inputField = document.querySelector('.search-container input[type="text"]');
+    const inputResetButton = document.querySelector('.search-container .btn-reset');
+
+    if (inputField) {
+        inputField.style.backgroundColor = isDarkMode ? '#333333' : '#ffffff';
+        inputField.style.color = isDarkMode ? '#ffffff' : '#000000';
+    }
+
+    if (inputResetButton) {
+        inputResetButton.style.color = '#b0b0b0';
+    }
+}
+
+</script>
 
 
 <script type="text/javascript">
@@ -383,178 +618,20 @@
     });
 </script>
 
-<script>
 
-
-function switchColor() {
-    var body = document.body;
-    var logoContainer = document.querySelector('.logo-container');
-
-    // Define the color sequence (black, white)
-    var colors = ["black", "white"];
-
-    // Find the index of the current color in the sequence
-    var currentIndex = colors.indexOf(body.style.backgroundColor);
-
-    // Set the next color in the sequence
-    var nextColor = colors[(currentIndex + 1) % colors.length];
-
-    // Apply the new color to the body and other elements
-    body.style.backgroundColor = nextColor;
-
-    // Change background color and border of logo-container based on nextColor
-    if (nextColor === "black") {
-        logoContainer.style.backgroundColor = "";
-        logoContainer.style.border = "none"; 
-    } else {
-        logoContainer.style.backgroundColor = ""; // or "transparent"
-        logoContainer.style.border = "none";  // Remove border
-    }
-
-    // Other elements to be updated based on nextColor
-    var header = document.querySelector('header');
-    var footer = document.querySelector('footer');
-    var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll(' h2, .campaign-nav, .campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link');
-    var reactDivs = document.querySelectorAll('.react div');
-    var loveCounts = document.querySelectorAll('[id^="love-count-"]');
-    var viewCounts = document.querySelectorAll('#view-count');
-    var commentCounts = document.querySelectorAll('.comment-count');
-    var exploreLinks = document.querySelectorAll('.explore-link i'); // Select all compass icons
-
-    // Update header background color based on nextColor
-    if (nextColor === "black") {
-        header.style.backgroundColor = "#333333";  // Darker gray when background is black
-    } else {
-        header.style.backgroundColor = nextColor;
-    }
-
-    footer.style.backgroundColor = nextColor;
-
-    sections.forEach(function(section) {
-        section.style.backgroundColor = nextColor;
-    });
-
-    var textColor = nextColor === "black" ? "white" : "black";
-    header.style.color = textColor;
-    footer.style.color = textColor;
-
-    textElements.forEach(function(element) {
-        element.style.color = textColor;
-    });
-
-    // Change the color of the compass icon based on the background color
-    exploreLinks.forEach(function(icon) {
-        icon.style.color = nextColor === "black" ? "white" : "black";
-    });
-
-    // Skip changing button colors
-    var buttonColor = nextColor === "black" ? "#262626" : ""; // If you want to change button colors based on background, adjust this accordingly
-    var buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)'); // Exclude specific buttons
-    buttons.forEach(function(button) {
-        button.style.backgroundColor = buttonColor;
-
-        if (nextColor === "black") {
-            button.classList.add('button-hover');
-        } else {
-            button.classList.remove('button-hover');
-            button.style.backgroundColor = "";
-        }
-    });
-
-    reactDivs.forEach(function(reactDiv) {
-        reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
-
-        var reactTextColor = nextColor === "black" ? "white" : "black";
-        reactDiv.style.color = reactTextColor;
-
-        if (nextColor === "black") {
-            reactDiv.classList.add('react-hover');
-        } else {
-            reactDiv.classList.remove('react-hover');
-            reactDiv.style.backgroundColor = "";
-        }
-    });
-
-    var countTextColor = nextColor === "black" ? "white" : "black";
-    loveCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-    viewCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-    commentCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-
-    // Update the input field and reset button inside .search-container
-    var inputField = document.querySelector('.search-container input[type="text"]');
-    var inputResetButton = document.querySelector('.search-container .btn-reset');
-
-    if (nextColor === "black") {
-        inputField.style.backgroundColor = "#333333"; // Dark gray for black mode
-        inputField.style.color = "white";            // White text in black mode
-        inputResetButton.style.color = "#b0b0b0";      // White icon for reset button
-    } else {
-        inputField.style.backgroundColor = "white";  // Default white background
-        inputField.style.color = "black";            // Black text in white mode
-        inputResetButton.style.color = "#b0b0b0";      // Black icon for reset button
-    }
-}
-
-
-
-
-</script>
-
-<script type="text/javascript">
-    document.addEventListener("DOMContentLoaded", function() {
-    const navbarToggle = document.getElementById("navbarToggle");
-    const navbar = document.getElementById("navbar");
-    const popupClose = document.getElementById("popupClose");
-
-    // Toggle navbar visibility
-    navbarToggle.addEventListener("click", function() {
-        if (navbar.style.display === "block") {
-            navbar.style.display = "none";
-        } else {
-            navbar.style.display = "block";
-        }
-    });
-
-    // Close popup when clicking the close button
-    popupClose.addEventListener("click", function() {
-        navbar.style.display = "none";
-    });
-
-    // Adjust navbar display on window resize
-    window.addEventListener("resize", function() {
-        if (window.innerWidth > 768) {
-            navbar.style.display = "none";
-        } else if (navbar.style.display === "block") {
-            navbar.style.display = "block";
-        } else {
-            navbar.style.display = "none";
-        }
-    });
-
-    // Ensure the navbar is initially hidden on page load for larger screens
-    if (window.innerWidth > 768) {
-        navbar.style.display = "none";
-    } else {
-        navbar.style.display = "none"; // or "block" based on your initial requirement
-    }
-});
-</script>
 
 
     <script src="{% static 'js/common.js' %}" defer></script>
 
-    <!-- Quill CSS -->
+<!-- Include Quill CSS -->
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-<!-- Quill JS -->
+
+<!-- Include Quill JS -->
 <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 
+<!-- Include quill-emoji CSS and JS -->
+<link href="https://cdn.jsdelivr.net/npm/quill-emoji@0.1.5/dist/quill-emoji.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/quill-emoji@0.1.5/dist/quill-emoji.min.js"></script>
 </head>
 <body id="mainBody">
 
@@ -752,18 +829,28 @@ var quill = new Quill('#editor-container', {
     theme: 'snow',
     placeholder: 'Type your message...',
     modules: {
-        toolbar: [
-            [{ 'header': [1, 2, false] }],
-            ['bold', 'italic', 'underline'],
-            ['link', 'image', 'code-block'], // Ensure 'link' is added
-            [{ 'list': 'ordered' }, { 'list': 'bullet' }]
-        ]
+        toolbar: {
+            container: [
+                [{ 'header': [1, 2, false] }],
+                ['bold', 'italic', 'underline'],
+                ['link', 'image', 'code-block'],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                ['emoji']
+            ],
+            handlers: {
+                'emoji': function () {}
+            }
+        },
+        'emoji-toolbar': {
+            buttonIcon: '😀', // Customize the emoji button icon
+            buttonText: 'Emoji', // Customize the emoji button text
+            buttonClass: 'ql-emoji-custom', // Add a custom class to the emoji button
+            emojiList: ['😀', '😃', '😄', '😁', '😆', '😅', '😂', '🤣', '😊', '😇'] // Custom emoji list
+        },
+        'emoji-textarea': true,
+        'emoji-shortname': true
     }
 });
-
-    document.getElementById('messageForm').onsubmit = function() {
-        document.getElementById('hiddenMessageInput').value = quill.root.innerHTML;
-    };
 </script>
 
 <script type="text/javascript">
@@ -990,7 +1077,6 @@ function fetchLatestMessages() {
 
 
 {% endblock %}
-
 
 
 

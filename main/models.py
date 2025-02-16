@@ -187,7 +187,7 @@ def default_content():
 
 
 class Brainstorming(models.Model):
-    idea = HTMLField()
+    idea = models.TextField() 
     attachment = models.FileField(upload_to='brainstorming_attachments/', blank=True, null=True)
     supporter = models.ForeignKey(User, on_delete=models.CASCADE)
     campaign = models.ForeignKey('Campaign', on_delete=models.CASCADE)
@@ -204,7 +204,7 @@ class Brainstorming(models.Model):
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
-
+from django.core.exceptions import ValidationError
 
 
 
@@ -281,8 +281,6 @@ class Campaign(models.Model):
                 campaign=self,
                 redirect_link=f'/campaigns/{self.pk}/'
             )
-
-
 
 
     @property
@@ -733,7 +731,7 @@ class Love(models.Model):
 
 class Comment(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name="comments")
     timestamp = models.DateTimeField(auto_now_add=True)
     text = models.TextField(default='say something..')
 

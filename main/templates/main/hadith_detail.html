@@ -2,79 +2,117 @@
 {% extends 'main/face.html' %}
 
 {% block content %}
-    <style>
-/* Unique and appealing styles */
-.hadith-detail-container {
-    background-color: #f7f7f7;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-}
+<style>
+    /* Define CSS variables for light mode */
+    :root {
+        --background-color: #f7f7f7;
+        --text-color: #333;
+        --container-bg: #ffffff;
+        --container-shadow: rgba(0, 0, 0, 0.1);
+        --link-color: #007bff;
+        --accent-color: #3498db;
+        --accent-hover: #2980b9;
+        --input-bg: #ffffff;
+        --input-border: #cccccc;
+    }
 
-.hadith-detail-title {
-    font-size: 19px;
-    color: #333;
-    text-decoration: underline;
-    margin-bottom: 10px;
-    font-weight: bold;
-    text-align: center; /* Center the title for better mobile display */
-}
+    /* Dark mode variables */
+    body.dark-mode {
+        --background-color: #121212;
+        --text-color: #ffffff;
+        --container-bg: #1e1e1e;
+        --container-shadow: rgba(255, 255, 255, 0.1);
+        --link-color: #1e90ff;
+        --accent-color: #2980b9;
+        --accent-hover: #1c6ea4;
+        --input-bg: #333333;
+        --input-border: #444444;
+    }
 
-.hadith-details {
-    margin-bottom: 20px;
-}
+    /* Apply variables */
+    body {
+        background-color: var(--background-color);
+        color: var(--text-color);
+    }
 
-.hadith-info {
-    margin-bottom: 10px;
-}
-
-.hadith-info strong {
-    font-weight: bold;
-    color: #333;
-}
-
-.hadith-info p {
-    margin: 5px 0;
-    font-size: 16px;
-    color: #555;
-    line-height: 1.5;
-}
-
-.back-to-list-link {
-    color: #007bff;
-    text-decoration: none;
-    font-size: 16px;
-    display: inline-block; /* Ensure proper spacing on mobile */
-    margin-top: 10px;
-}
-
-.back-to-list-link:hover {
-    text-decoration: underline;
-}
-
-/* Responsive Styles */
-@media (max-width: 600px) {
     .hadith-detail-container {
-        padding: 15px;
-        margin: 10px;
-        border-radius: 8px;
+        background-color: var(--container-bg);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 6px var(--container-shadow);
+        margin-bottom: 20px;
     }
 
     .hadith-detail-title {
-        font-size: 16px;
+        font-size: 19px;
+        color: var(--text-color);
+        text-decoration: underline;
+        margin-bottom: 10px;
+        font-weight: bold;
+        text-align: center;
     }
 
     .hadith-info p {
-        font-size: 14px;
+        margin: 5px 0;
+        font-size: 16px;
+        color: var(--text-color);
+        line-height: 1.5;
     }
 
     .back-to-list-link {
-        font-size: 14px;
+        color: var(--link-color);
+        text-decoration: none;
+        font-size: 16px;
+        display: inline-block;
+        margin-top: 10px;
     }
-}
 
-    </style>
+    .back-to-list-link:hover {
+        text-decoration: underline;
+    }
+
+    /* Dark mode specific styles */
+    body.dark-mode .search-container input[type="text"] {
+        background-color: var(--input-bg);
+        color: var(--text-color);
+        border: 1px solid var(--input-border);
+    }
+
+    body.dark-mode button:not(.btn-search, .btn-reset) {
+        background-color: var(--container-bg);
+        color: var(--text-color);
+    }
+
+    body.dark-mode .affiliate-link {
+        background-color: var(--accent-color);
+        color: var(--text-color);
+    }
+
+    body.dark-mode .affiliate-link:hover {
+        background-color: var(--accent-hover);
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 600px) {
+        .hadith-detail-container {
+            padding: 15px;
+            margin: 10px;
+            border-radius: 8px;
+        }
+
+        .hadith-detail-title {
+            font-size: 16px;
+        }
+
+        .hadith-info p {
+            font-size: 14px;
+        }
+
+        .back-to-list-link {
+            font-size: 14px;
+        }
+    }
+</style>
 
     <div class="hadith-detail-container">
         <h1 class="hadith-detail-title">Hadith Detail</h1>
@@ -272,125 +310,68 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 </script>
+
 <script type="text/javascript">
-    
-
 function switchColor() {
-    var body = document.body;
-    var logoContainer = document.querySelector('.logo-container');
+    const body = document.body;
+    const isDarkMode = body.classList.toggle('dark-mode'); // Toggle dark mode class
+    var reactDivs = document.querySelectorAll('.react');
 
-    // Define the color sequence (black, white)
-    var colors = ["black", "white"];
+    // Update background and text colors for all elements
+    const elementsToUpdate = document.querySelectorAll(
+        'header, footer, section, .left-aside, .right-aside, .upper-post, .campaign-content, .react, .search-container input, .search-container .btn-reset'
+    );
 
-    // Find the index of the current color in the sequence
-    var currentIndex = colors.indexOf(body.style.backgroundColor);
+    elementsToUpdate.forEach(element => {
+        element.classList.toggle('dark-mode', isDarkMode);
+    });
 
-    // Set the next color in the sequence
-    var nextColor = colors[(currentIndex + 1) % colors.length];
+    // Update text colors for specific elements
+    const textElements = document.querySelectorAll(
+        'h1, h2, h3, h4, p, li, .campaign-nav, .campaign-nav a, .btn, .reaction, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link, .love-count, #view-count, .comment-count'
+    );
 
-    // Apply the new color to the body and other elements
-    body.style.backgroundColor = nextColor;
+    textElements.forEach(element => {
+        element.style.color = isDarkMode ? '#ffffff' : '#000000';
+    });
 
-    // Change background color and border of logo-container based on nextColor
-    if (nextColor === "black") {
-        logoContainer.style.backgroundColor = "";
-        logoContainer.style.border = "none"; 
-    } else {
-        logoContainer.style.backgroundColor = ""; // or "transparent"
-        logoContainer.style.border = "none";  // Remove border
+    // Update buttons
+    const buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)');
+    buttons.forEach(button => {
+        button.style.backgroundColor = isDarkMode ? '#262626' : '';
+        button.style.color = isDarkMode ? '#ffffff' : '#000000';
+    });
+
+    // Update `.react` divs
+    if (reactDivs.length > 0) {
+        reactDivs.forEach(function(reactDiv) {
+            reactDiv.style.backgroundColor = isDarkMode ? "#262626" : "";
+            reactDiv.style.color = isDarkMode ? "white" : "black";
+
+            if (isDarkMode) {
+                reactDiv.classList.add('react-hover');
+            } else {
+                reactDiv.classList.remove('react-hover');
+                reactDiv.style.backgroundColor = "";
+            }
+        });
     }
 
-    // Other elements to be updated based on nextColor
-    var header = document.querySelector('header');
-    var footer = document.querySelector('footer');
-    var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, h4, p, li, .campaign-nav, .campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link');
-    var reactDivs = document.querySelectorAll('.react div');
-    var loveCounts = document.querySelectorAll('[id^="love-count-"]');
-    var viewCounts = document.querySelectorAll('#view-count');
-    var commentCounts = document.querySelectorAll('.comment-count');
-    var exploreLinks = document.querySelectorAll('.explore-link i'); // Select all compass icons
+    // Update input field and reset button
+    const inputField = document.querySelector('.search-container input[type="text"]');
+    const inputResetButton = document.querySelector('.search-container .btn-reset');
 
-    // Update header background color based on nextColor
-    if (nextColor === "black") {
-        header.style.backgroundColor = "#333333";  // Darker gray when background is black
-    } else {
-        header.style.backgroundColor = nextColor;
+    if (inputField) {
+        inputField.style.backgroundColor = isDarkMode ? '#333333' : '#ffffff';
+        inputField.style.color = isDarkMode ? '#ffffff' : '#000000';
     }
 
-    footer.style.backgroundColor = nextColor;
-
-    sections.forEach(function(section) {
-        section.style.backgroundColor = nextColor;
-    });
-
-    var textColor = nextColor === "black" ? "white" : "black";
-    header.style.color = textColor;
-    footer.style.color = textColor;
-
-    textElements.forEach(function(element) {
-        element.style.color = textColor;
-    });
-
-    // Change the color of the compass icon based on the background color
-    exploreLinks.forEach(function(icon) {
-        icon.style.color = nextColor === "black" ? "white" : "black";
-    });
-
-    // Skip changing button colors
-    var buttonColor = nextColor === "black" ? "#262626" : ""; // If you want to change button colors based on background, adjust this accordingly
-    var buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)'); // Exclude specific buttons
-    buttons.forEach(function(button) {
-        button.style.backgroundColor = buttonColor;
-
-        if (nextColor === "black") {
-            button.classList.add('button-hover');
-        } else {
-            button.classList.remove('button-hover');
-            button.style.backgroundColor = "";
-        }
-    });
-
-    reactDivs.forEach(function(reactDiv) {
-        reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
-
-        var reactTextColor = nextColor === "black" ? "white" : "black";
-        reactDiv.style.color = reactTextColor;
-
-        if (nextColor === "black") {
-            reactDiv.classList.add('react-hover');
-        } else {
-            reactDiv.classList.remove('react-hover');
-            reactDiv.style.backgroundColor = "";
-        }
-    });
-
-    var countTextColor = nextColor === "black" ? "white" : "black";
-    loveCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-    viewCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-    commentCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-
-    // Update the input field and reset button inside .search-container
-    var inputField = document.querySelector('.search-container input[type="text"]');
-    var inputResetButton = document.querySelector('.search-container .btn-reset');
-
-    if (nextColor === "black") {
-        inputField.style.backgroundColor = "#333333"; // Dark gray for black mode
-        inputField.style.color = "white";            // White text in black mode
-        inputResetButton.style.color = "#b0b0b0";      // White icon for reset button
-    } else {
-        inputField.style.backgroundColor = "white";  // Default white background
-        inputField.style.color = "black";            // Black text in white mode
-        inputResetButton.style.color = "#b0b0b0";      // Black icon for reset button
+    if (inputResetButton) {
+        inputResetButton.style.color = '#b0b0b0';
     }
 }
 
-
 </script>
+
+
 {% endblock %}

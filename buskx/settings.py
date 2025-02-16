@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 'django_extensions',
   'django.contrib.humanize',
    'django_summernote',  # Remove this if you don’t need it
+    'django_quill',
     
 ]
 

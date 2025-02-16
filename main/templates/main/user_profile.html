@@ -303,8 +303,7 @@
     border-radius: 5px;
     border: 1px solid #dcdcdc; /* Subtle gray border for a clean look */
 }
-
-
+/* Original CSS */
 .changemaker-badge {
     display: flex;
     align-items: center;
@@ -320,6 +319,18 @@
 
 .changemaker-badge .category-keyboard {
     margin-left: 10px; /* Adds space between the "Changemaker" and the category */
+}
+
+/* Dark Mode Overrides */
+body.dark-mode .changemaker-badge {
+    background-color: #333333; /* Dark background for the badge */
+    border: 1px solid #444444; /* Darker border */
+    color: #e0e0e0; /* Light text color */
+    box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1); /* Subtle shadow for depth */
+}
+
+body.dark-mode .changemaker-badge .category-keyboard {
+    color: #64b5f6; /* Light blue for the category text */
 }
 
 .changemaker-badge:hover {
@@ -560,7 +571,272 @@
     }
 }
 
+/* Dark Mode Styles */
+body.dark-mode {
+    background-color: #121212; /* Dark background */
+    color: #e0e0e0; /* Light text with a softer tone */
+    font-family: 'Arial', sans-serif; /* Consistent font */
+}
 
+body.dark-mode .more-profile-info {
+    background-color: #1e1e1e; /* Slightly lighter dark background */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+
+body.dark-mode .username-display {
+    color: #ffffff; /* Bright white for username */
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+
+
+body.dark-mode .changemaker-badge {
+    background-color: #333333; /* Darker background for badge */
+    color: #64b5f6; /* Light blue for text */
+    padding: 8px 12px;
+    border-radius: 5px;
+    display: inline-block;
+    margin-top: 10px;
+}
+
+body.dark-mode .category-keyboard {
+    color: #ffffff; /* White for category text */
+    font-weight: bold;
+}
+
+
+
+body.dark-mode .custom-btn {
+    background-color: #3498db; /* Accent color for buttons */
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+body.dark-mode .custom-btn:hover {
+    background-color: #2980b9; /* Darker accent color on hover */
+}
+
+body.dark-mode .silver-btn {
+    background-color: #7f8c8d; /* Silver color for verify button */
+}
+
+body.dark-mode .silver-btn:hover {
+    background-color: #95a5a6; /* Lighter silver on hover */
+}
+
+body.dark-mode .material-icons {
+    vertical-align: middle; /* Align icons with text */
+}
+
+body.dark-mode .changemakers {
+    margin-top: 15px;
+}
+
+body.dark-mode .follow-unfollow-section {
+    margin-top: 20px;
+}
+
+body.dark-mode .follow-unfollow-section .custom-btn {
+    width: 100%;
+    max-width: 200px;
+    text-align: center;
+}
+
+body.dark-mode .follow-unfollow-section .custom-btn:hover {
+    transform: scale(1.05); /* Slight scale effect on hover */
+}
+
+body.dark-mode .affiliate-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 10px 15px;
+    background-color: #3498db; /* Accent color for buttons */
+    color: #ffffff;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+body.dark-mode .affiliate-link:hover {
+    background-color: #2980b9; /* Darker accent color on hover */
+}
+
+body.dark-mode .affiliate-link i {
+    margin-right: 8px; /* Space between icon and text */
+}
+
+body.dark-mode .love-count,
+body.dark-mode #view-count,
+body.dark-mode .comment-count {
+    color: #ffffff; /* Light text for counts */
+    font-weight: bold;
+}
+
+body.dark-mode .search-container input[type="text"] {
+    background-color: #333333; /* Dark background for input */
+    color: #ffffff; /* Light text */
+    border: 1px solid #444444; /* Dark border */
+    padding: 10px;
+    border-radius: 5px;
+}
+
+body.dark-mode .search-container .btn-reset {
+    color: #b0b0b0; /* Light icon color */
+}
+
+body.dark-mode button:not(.btn-search, .btn-reset) {
+    background-color: #262626; /* Dark background for buttons */
+    color: #ffffff; /* Light text */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+body.dark-mode button:not(.btn-search, .btn-reset):hover {
+    background-color: #333333; /* Slightly lighter on hover */
+}
+
+body.dark-mode .explore-link i {
+    color: #ffffff; /* Light icon color */
+}
+
+body.dark-mode .objectives-activities {
+    background-color: #262626; /* Dark background for objectives */
+    border-left: 4px solid #3498db; /* Accent border */
+    color: #ffffff; /* Light text */
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 15px;
+}
+
+body.dark-mode .changemakers {
+    background-color: #1e1e1e; /* Dark background for the container */
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+body.dark-mode .changemaker-badge {
+    background-color: #333333; /* Darker background for the badge */
+    color: #64b5f6; /* Light blue for text */
+    padding: 8px 12px;
+    border-radius: 5px;
+    display: inline-block;
+    font-weight: bold;
+}
+
+body.dark-mode .category-keyboard {
+    color: #ffffff; /* White for the category text */
+}
+
+
+/* Dark Mode Overrides */
+body.dark-mode .verification-section {
+    background-color: #1e1e1e; /* Dark background for the section */
+    padding: 10px;
+    border-radius: 8px;
+    margin-top: 15px;
+}
+
+body.dark-mode .custom-btn.silver-btn {
+    background-color: #555555; /* Darker silver for dark mode */
+    color: #ffffff; /* White text */
+}
+
+body.dark-mode .custom-btn.silver-btn:hover {
+    background-color: #666666; /* Slightly lighter on hover */
+}
+
+/* Dark Mode Overrides */
+body.dark-mode .campaigns {
+    background-color: #1e1e1e; /* Dark background for the section */
+    padding: 0;
+}
+
+body.dark-mode .campaign-list {
+    background-color: #1e1e1e; /* Dark background for the grid */
+    padding: 10px;
+}
+
+body.dark-mode .campaign-item {
+    background-color: #333333; /* Darker background for campaign items */
+    box-shadow: 0 4px 8px rgba(255, 255, 255, 0.1); /* Subtle shadow for depth */
+}
+
+body.dark-mode .campaign-item:hover {
+    transform: scale(1.05); /* Slight zoom on hover */
+    box-shadow: 0 6px 12px rgba(255, 255, 255, 0.2); /* Stronger shadow on hover */
+}
+
+body.dark-mode .campaign-poster img {
+    filter: brightness(0.9); /* Slightly darken images for better contrast */
+}
+
+body.dark-mode .campaign-poster:hover img {
+    opacity: 0.8; /* Slight fade on hover */
+}
+
+body.dark-mode .view {
+    background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent white for view count */
+    color: #ffffff; /* White text for contrast */
+}
+
+body.dark-mode .view i {
+    color: #f39c12; /* Gold color for eye icon (unchanged) */
+}
+
+body.dark-mode .campaign-title {
+    color: #2ecc71; /* Keep the lemon green color for the title */
+}
+
+/* Responsive adjustments (unchanged, but ensure they work in dark mode) */
+@media (max-width: 1024px) {
+    body.dark-mode .campaign-list {
+        grid-template-columns: repeat(3, 1fr); /* Three columns for tablets */
+        gap: 8px; /* Smaller gap for medium screens */
+    }
+}
+
+@media (max-width: 768px) {
+    body.dark-mode .campaign-list {
+        grid-template-columns: repeat(3, 1fr); /* Two columns on smaller screens */
+        gap: 5px; /* Even smaller gap for mobile */
+    }
+
+    body.dark-mode .campaign-poster img {
+        height: 150px; /* Smaller height for mobile view */
+    }
+
+    body.dark-mode .view {
+        font-size: 12px; /* Smaller text on mobile */
+        padding: 3px 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    body.dark-mode .campaign-list {
+        grid-template-columns: repeat(3, 1fr); /* Ensure 2 columns even on very small screens */
+    }
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+    body.dark-mode .campaign-title {
+        font-size: 14px; /* Smaller font size for mobile */
+        margin-bottom: 15px; /* Reduced space below title */
+        letter-spacing: 0.5px; /* Compact spacing for smaller screens */
+    }
+}
 </style>
 
 
@@ -676,6 +952,7 @@
 
 
 </div>
+
 <div class="campaigns">
     <!-- Title for Campaigns Section -->
     <h3 class="campaign-title">Public Campaigns</h3>
@@ -705,126 +982,70 @@
 
       
     </div>
+    
 <script type="text/javascript">
-
 function switchColor() {
-    var body = document.body;
-    var logoContainer = document.querySelector('.logo-container');
+    const body = document.body;
+    const isDarkMode = body.classList.toggle('dark-mode'); // Toggle dark mode class
+    var reactDivs = document.querySelectorAll('.react');
 
-    // Define the color sequence (black, white)
-    var colors = ["black", "white"];
+    // Update background and text colors for all elements
+    const elementsToUpdate = document.querySelectorAll(
+        'header, footer, section, .left-aside, .right-aside, .upper-post, .campaign-content, .react, .search-container input, .search-container .btn-reset'
+    );
 
-    // Find the index of the current color in the sequence
-    var currentIndex = colors.indexOf(body.style.backgroundColor);
+    elementsToUpdate.forEach(element => {
+        element.classList.toggle('dark-mode', isDarkMode);
+    });
 
-    // Set the next color in the sequence
-    var nextColor = colors[(currentIndex + 1) % colors.length];
+    // Update text colors for specific elements
+    const textElements = document.querySelectorAll(
+        'h1, h2, h3, h4, p, li, .campaign-nav, .campaign-nav a, .btn, .reaction, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link, .love-count, #view-count, .comment-count'
+    );
 
-    // Apply the new color to the body and other elements
-    body.style.backgroundColor = nextColor;
+    textElements.forEach(element => {
+        element.style.color = isDarkMode ? '#ffffff' : '#000000';
+    });
 
-    // Change background color and border of logo-container based on nextColor
-    if (nextColor === "black") {
-        logoContainer.style.backgroundColor = "";
-        logoContainer.style.border = "none"; 
-    } else {
-        logoContainer.style.backgroundColor = ""; // or "transparent"
-        logoContainer.style.border = "none";  // Remove border
+    // Update buttons
+    const buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)');
+    buttons.forEach(button => {
+        button.style.backgroundColor = isDarkMode ? '#262626' : '';
+        button.style.color = isDarkMode ? '#ffffff' : '#000000';
+    });
+
+    // Update `.react` divs
+    if (reactDivs.length > 0) {
+        reactDivs.forEach(function(reactDiv) {
+            reactDiv.style.backgroundColor = isDarkMode ? "#262626" : "";
+            reactDiv.style.color = isDarkMode ? "white" : "black";
+
+            if (isDarkMode) {
+                reactDiv.classList.add('react-hover');
+            } else {
+                reactDiv.classList.remove('react-hover');
+                reactDiv.style.backgroundColor = "";
+            }
+        });
     }
 
-    // Other elements to be updated based on nextColor
-    var header = document.querySelector('header');
-    var footer = document.querySelector('footer');
-    var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, h4, p, li, .campaign-nav, .campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link');
-    var reactDivs = document.querySelectorAll('.react div');
-    var loveCounts = document.querySelectorAll('[id^="love-count-"]');
-    var viewCounts = document.querySelectorAll('#view-count');
-    var commentCounts = document.querySelectorAll('.comment-count');
-    var exploreLinks = document.querySelectorAll('.explore-link i'); // Select all compass icons
+    // Update input field and reset button
+    const inputField = document.querySelector('.search-container input[type="text"]');
+    const inputResetButton = document.querySelector('.search-container .btn-reset');
 
-    // Update header background color based on nextColor
-    if (nextColor === "black") {
-        header.style.backgroundColor = "#333333";  // Darker gray when background is black
-    } else {
-        header.style.backgroundColor = nextColor;
+    if (inputField) {
+        inputField.style.backgroundColor = isDarkMode ? '#333333' : '#ffffff';
+        inputField.style.color = isDarkMode ? '#ffffff' : '#000000';
     }
 
-    footer.style.backgroundColor = nextColor;
-
-    sections.forEach(function(section) {
-        section.style.backgroundColor = nextColor;
-    });
-
-    var textColor = nextColor === "black" ? "white" : "black";
-    header.style.color = textColor;
-    footer.style.color = textColor;
-
-    textElements.forEach(function(element) {
-        element.style.color = textColor;
-    });
-
-    // Change the color of the compass icon based on the background color
-    exploreLinks.forEach(function(icon) {
-        icon.style.color = nextColor === "black" ? "white" : "black";
-    });
-
-    // Skip changing button colors
-    var buttonColor = nextColor === "black" ? "#262626" : ""; // If you want to change button colors based on background, adjust this accordingly
-    var buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)'); // Exclude specific buttons
-    buttons.forEach(function(button) {
-        button.style.backgroundColor = buttonColor;
-
-        if (nextColor === "black") {
-            button.classList.add('button-hover');
-        } else {
-            button.classList.remove('button-hover');
-            button.style.backgroundColor = "";
-        }
-    });
-
-    reactDivs.forEach(function(reactDiv) {
-        reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
-
-        var reactTextColor = nextColor === "black" ? "white" : "black";
-        reactDiv.style.color = reactTextColor;
-
-        if (nextColor === "black") {
-            reactDiv.classList.add('react-hover');
-        } else {
-            reactDiv.classList.remove('react-hover');
-            reactDiv.style.backgroundColor = "";
-        }
-    });
-
-    var countTextColor = nextColor === "black" ? "white" : "black";
-    loveCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-    viewCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-    commentCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-
-    // Update the input field and reset button inside .search-container
-    var inputField = document.querySelector('.search-container input[type="text"]');
-    var inputResetButton = document.querySelector('.search-container .btn-reset');
-
-    if (nextColor === "black") {
-        inputField.style.backgroundColor = "#333333"; // Dark gray for black mode
-        inputField.style.color = "white";            // White text in black mode
-        inputResetButton.style.color = "#b0b0b0";      // White icon for reset button
-    } else {
-        inputField.style.backgroundColor = "white";  // Default white background
-        inputField.style.color = "black";            // Black text in white mode
-        inputResetButton.style.color = "#b0b0b0";      // Black icon for reset button
+    if (inputResetButton) {
+        inputResetButton.style.color = '#b0b0b0';
     }
 }
 
-
 </script>
+
+
 
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function() {

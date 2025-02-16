@@ -680,6 +680,7 @@ body {
 }
 
 
+
 /* Dark Mode Styles */
 body.dark-mode {
     background-color: #121212; /* Dark background */
@@ -732,6 +733,27 @@ body.dark-mode .love-count,
 body.dark-mode #view-count,
 body.dark-mode .comment-count {
     color: #ffffff; /* Light text for counts */
+}
+
+
+body.dark-mode .affiliate-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 10px 15px;
+    background-color: #3498db; /* Accent color for buttons */
+    color: #ffffff;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+body.dark-mode .affiliate-link:hover {
+    background-color: #2980b9; /* Darker accent color on hover */
+}
+
+body.dark-mode .affiliate-link i {
+    margin-right: 8px; /* Space between icon and text */
 }
 </style>
 
@@ -1203,14 +1225,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 </script>
-     <script type="text/javascript">
-  function switchColor() {
+
+<script type="text/javascript">
+function switchColor() {
     const body = document.body;
     const isDarkMode = body.classList.toggle('dark-mode'); // Toggle dark mode class
+    var reactDivs = document.querySelectorAll('.react');
 
     // Update background and text colors for all elements
     const elementsToUpdate = document.querySelectorAll(
-        'header, footer, section, .left-aside, .right-aside, .upper-post, .campaign-content, .react div, .search-container input, .search-container .btn-reset'
+        'header, footer, section, .left-aside, .right-aside, .upper-post, .campaign-content, .react, .search-container input, .search-container .btn-reset'
     );
 
     elementsToUpdate.forEach(element => {
@@ -1226,32 +1250,44 @@ document.addEventListener('DOMContentLoaded', function() {
         element.style.color = isDarkMode ? '#ffffff' : '#000000';
     });
 
-    // Update button and icon colors
+    // Update buttons
     const buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)');
     buttons.forEach(button => {
         button.style.backgroundColor = isDarkMode ? '#262626' : '';
         button.style.color = isDarkMode ? '#ffffff' : '#000000';
     });
 
-    const exploreIcons = document.querySelectorAll('.explore-link i');
-    exploreIcons.forEach(icon => {
-        icon.style.color = isDarkMode ? '#ffffff' : '#000000';
-    });
+    // Update `.react` divs
+    if (reactDivs.length > 0) {
+        reactDivs.forEach(function(reactDiv) {
+            reactDiv.style.backgroundColor = isDarkMode ? "#262626" : "";
+            reactDiv.style.color = isDarkMode ? "white" : "black";
+
+            if (isDarkMode) {
+                reactDiv.classList.add('react-hover');
+            } else {
+                reactDiv.classList.remove('react-hover');
+                reactDiv.style.backgroundColor = "";
+            }
+        });
+    }
 
     // Update input field and reset button
     const inputField = document.querySelector('.search-container input[type="text"]');
     const inputResetButton = document.querySelector('.search-container .btn-reset');
 
-    if (isDarkMode) {
-        inputField.style.backgroundColor = '#333333';
-        inputField.style.color = '#ffffff';
-        inputResetButton.style.color = '#b0b0b0';
-    } else {
-        inputField.style.backgroundColor = '#ffffff';
-        inputField.style.color = '#000000';
+    if (inputField) {
+        inputField.style.backgroundColor = isDarkMode ? '#333333' : '#ffffff';
+        inputField.style.color = isDarkMode ? '#ffffff' : '#000000';
+    }
+
+    if (inputResetButton) {
         inputResetButton.style.color = '#b0b0b0';
     }
 }
+
 </script>
+
+
 
 {% endblock %}

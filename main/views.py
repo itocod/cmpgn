@@ -1180,30 +1180,61 @@ def update_visibility(request, campaign_id):
         'support_campaigns': support_campaigns,  # Added this to the context
     })
 
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, get_object_or_404
+from django.utils import timezone
+from .models import Campaign, Profile, SupportCampaign, CampaignProduct, NativeAd, Notification
+
 
 @login_required
 def support(request, campaign_id):
     following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
-    campaign = Campaign.objects.get(id=campaign_id)
-        # Get the user's profile
+    campaign = get_object_or_404(Campaign, id=campaign_id)
+    
+    # Get the user's profile
     user_profile = get_object_or_404(Profile, user=request.user)
-    # Retrieve the SupportCampaign object for the current user and campaign
-    try:
-        support_campaign = SupportCampaign.objects.get(user=request.user, campaign=campaign)
-    except SupportCampaign.DoesNotExist:
-        # If the user hasn't supported this campaign yet, create a new SupportCampaign object
-        support_campaign = SupportCampaign.objects.create(user=request.user, campaign=campaign)
+    
+    # Retrieve or create the SupportCampaign object for the current user and campaign
+    support_campaign, created = SupportCampaign.objects.get_or_create(user=request.user, campaign=campaign)
+    
+    # Handle POST request for updating visibility for campaign owner
+    if request.method == 'POST' and request.user == campaign.user.user:
+        support_campaign.donate_monetary_visible = request.POST.get('donate_monetary_visible', False)
+        support_campaign.attend_event_visible = request.POST.get('attend_event_visible', False)
+        support_campaign.brainstorm_idea_visible = request.POST.get('brainstorm_idea_visible', False)
+        support_campaign.campaign_product_visible = request.POST.get('campaign_product_visible', False)
+        support_campaign.save()
+        return redirect('support', campaign_id=campaign.id)
+    
     # Check if there are new campaigns from follows
     new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
+    
+    # Get products related to the campaign
     products = CampaignProduct.objects.filter(campaign=campaign) if campaign else None
+    
     # Update last_campaign_check for the user's profile
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
-    ads = NativeAd.objects.all()  
+    
+    # Get all ads
+    ads = NativeAd.objects.all()
+    
     # Fetch unread notifications for the user
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    # Pass the support_campaign object to the template
-    return render(request, 'main/support.html', {'ads':ads,'campaign': campaign, 'support_campaign': support_campaign, 'user_profile':user_profile,'unread_notifications':unread_notifications,'new_campaigns_from_follows':new_campaigns_from_follows,'products':products})
+    
+    # Pass all relevant context data to the template
+    return render(request, 'main/support.html', {
+        'ads': ads,
+        'campaign': campaign,
+        'support_campaign': support_campaign,
+        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'new_campaigns_from_follows': new_campaigns_from_follows,
+        'products': products
+    })
+
+
+
 
 
 @login_required
@@ -1237,37 +1268,46 @@ def update_hidden_links(request):
 
 
 
-
-
 def brainstorm_idea(request, campaign_id):
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
+    following_users = [follow.followed for follow in request.user.following.all()]  
     campaign = Campaign.objects.get(id=campaign_id)
     user_profile = get_object_or_404(Profile, user=request.user)
-    # Fetch unread notifications for the user
+    
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    # Check if there are new campaigns from follows
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check
+    )
 
-    # Update last_campaign_check for the user's profile
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
-    ads = NativeAd.objects.all()  
+
+    ads = NativeAd.objects.all()
+    
     if request.method == 'POST':
-        form = BrainstormingForm(request.POST, request.FILES)  # Include request.FILES for file uploads
+        form = BrainstormingForm(request.POST, request.FILES)
         if form.is_valid():
             idea = form.save(commit=False)
             idea.supporter = request.user
             idea.campaign = campaign
             idea.save()
-            # Retrieve all ideas for the current campaign after saving the new idea
-            ideas_for_campaign = Brainstorming.objects.filter(campaign=campaign).order_by('-pk')  # Order by creation timestamp in descending order
-            return render(request, 'main/brainstorm.html', {'ads':ads,'form': form, 'ideas_for_campaign': ideas_for_campaign,'user_profile':user_profile, 'campaign': campaign,'unread_notifications':unread_notifications,'new_campaigns_from_follows':new_campaigns_from_follows})
+            return redirect('brainstorm_idea', campaign_id=campaign.id)  # Redirect to prevent form resubmission
+        else:
+            # If form is invalid, errors will be included in context
+            messages.error(request, "Please fix the errors in your submission.")
+
     else:
         form = BrainstormingForm()
-    
-    # Retrieve all ideas for the current campaign before displaying the form
-    ideas_for_campaign = Brainstorming.objects.filter(campaign=campaign).order_by('-pk')  # Order by creation timestamp in descending order
-    return render(request, 'main/brainstorm.html', {'ads':ads,'form': form, 'ideas_for_campaign': ideas_for_campaign,'user_profile':user_profile, 'campaign': campaign,'unread_notifications':unread_notifications,'new_campaigns_from_follows':new_campaigns_from_follows})
+
+    ideas_for_campaign = Brainstorming.objects.filter(campaign=campaign).order_by('-pk')
+    return render(request, 'main/brainstorm.html', {
+        'ads': ads,
+        'form': form,
+        'ideas_for_campaign': ideas_for_campaign,
+        'user_profile': user_profile,
+        'campaign': campaign,
+        'unread_notifications': unread_notifications,
+        'new_campaigns_from_follows': new_campaigns_from_follows
+    })
 
 
 @login_required
@@ -2113,44 +2153,53 @@ def campaign_support(request, campaign_id):
     return render(request, 'main/campaign_support.html', {'ads':ads,'support_campaign': support_campaign,'user_profile':user_profile,'unread_notifications':unread_notifications,'new_campaigns_from_follows':new_campaigns_from_follows})
 
 
+
+
 def recreate_campaign(request, campaign_id):
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
-    # Get the user's profile
+    following_users = [follow.followed for follow in request.user.following.all()]
     user_profile = get_object_or_404(Profile, user=request.user)
-    categories = Campaign.CATEGORY_CHOICES  # Get the category choices from the Campaign model
+    categories = Campaign.CATEGORY_CHOICES  
+
+    # Get the existing campaign
+    existing_campaign = get_object_or_404(Campaign, pk=campaign_id)
 
     if request.method == 'POST':
-        form = CampaignForm(request.POST, request.FILES)  # Include request.FILES for file uploads
+        # ✅ Bind form to the existing campaign (allows editing)
+        form = CampaignForm(request.POST, request.FILES, instance=existing_campaign)
         if form.is_valid():
-            # Assuming you have a way to retrieve the existing campaign based on campaign_id
-            existing_campaign = Campaign.objects.get(pk=campaign_id)
-
-            # Update the existing campaign with the new data from the form
-            existing_campaign.title = form.cleaned_data['title']
-            existing_campaign.content = form.cleaned_data['content']
-            existing_campaign.poster = form.cleaned_data['poster']
-            existing_campaign.visibility = form.cleaned_data['visibility']
-
-            existing_campaign.save()
-
-            # Redirect the user to a success page or any other page
-            return redirect('success_page')  # Replace 'success_page' with the appropriate URL name
+            form.save()  # ✅ Saves changes to the existing campaign
+            return redirect('success_page')  # Change to the correct success URL
 
     else:
-        # Render the form with pre-filled data if it's a GET request
-        # Assuming you have a way to retrieve the existing campaign based on campaign_id
-        existing_campaign = Campaign.objects.get(pk=campaign_id)
-        form = CampaignForm(instance=existing_campaign)  # Pass the existing campaign instance to pre-fill the form
-    # Fetch unread notifications for the user
-    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    # Check if there are new campaigns from follows
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
+        # ✅ Pre-fill the form with existing campaign data
+        form = CampaignForm(instance=existing_campaign)
 
-    # Update last_campaign_check for the user's profile
+    # Fetch unread notifications
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    
+    # Check for new campaigns from followed users
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__in=following_users,
+        visibility='public',
+        timestamp__gt=user_profile.last_campaign_check
+    )
+
+    # Update the user's last campaign check timestamp
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
+
     ads = NativeAd.objects.all()  
-    return render(request, 'main/campaign_form.html', {'ads':ads,'form': form, 'categories': categories,'user_profile': user_profile,'unread_notifications':unread_notifications,'new_campaigns_from_follows':new_campaigns_from_follows})
+  
+
+    return render(request, 'main/recreatecampaign_form.html', {
+        'ads': ads,
+        'form': form,
+        'categories': categories,
+        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'new_campaigns_from_follows': new_campaigns_from_follows
+    })
+
 
 def success_page(request):
     return render(request, 'main/success.html')

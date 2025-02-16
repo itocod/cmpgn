@@ -8,165 +8,192 @@
 <head>
     <meta charset="UTF-8">
     <title>Brainstorming Library Resources</title>
-    <style>
-        /* Reset default margin and padding */
+   <style>
+    /* Reset default margin and padding */
+    body, h1, h2, h3, p, ul, li {
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Basic styling for main content */
+    .main-content {
+        font-family: Arial, sans-serif;
        
-
-        /* Basic styling for main content */
-        .main-content {
-            font-family: Arial, sans-serif;
-            
-        }
-
-        .container {
-            
-            margin: 0 auto;
-        }
-
-        .main-heading {
-            color: #333;
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 19px;
-        }
-
-        .library-list {
-            list-style-type: none;
-            padding: 0;
-        }
-
-        .library-item {
-            margin-bottom: 10px;
-            background-color: #fff;
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .library-link {
-            color: #007bff;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        .library-link:hover {
-            text-decoration: underline;
-        }
-
-        .library-description {
-            color: #666;
-            font-size: 14px;
-            margin-top: 5px;
-        }
-
-        .no-libraries {
-            color: #999;
-            font-style: italic;
-            padding: 20px;
-        }
-    </style>
-    <script>
-        function switchColor() {
-    var body = document.body;
-    var logoContainer = document.querySelector('.logo-container');
-
-    // Define the color sequence (black, white)
-    var colors = ["black", "white"];
-
-    // Find the index of the current color in the sequence
-    var currentIndex = colors.indexOf(body.style.backgroundColor);
-
-    // Set the next color in the sequence
-    var nextColor = colors[(currentIndex + 1) % colors.length];
-
-    // Apply the new color to the body and other elements
-    body.style.backgroundColor = nextColor;
-
-    // Change background color and border of logo-container based on nextColor
-    if (nextColor === "black") {
-        logoContainer.style.backgroundColor = "transparent";
-        logoContainer.style.border = "none"; 
-    } else {
-        logoContainer.style.backgroundColor = "transparent";
-        logoContainer.style.border = "none"; 
+        color: #333; /* Dark text */
     }
 
-    // Elements to update based on nextColor
-    var header = document.querySelector('header');
-    var footer = document.querySelector('footer');
-    var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, p, li, .campaign-nav,.campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a');
-    var reactDivs = document.querySelectorAll('.react div');
-    var loveCounts = document.querySelectorAll('[id^="love-count-"]');
-    var viewCounts = document.querySelectorAll('#view-count');
-    var commentCounts = document.querySelectorAll('.comment-count');
-
-    // Update header and footer background color based on nextColor
-    if (nextColor === "black") {
-        header.style.backgroundColor = "#333333";  // Darker gray when background is black
-    } else {
-        header.style.backgroundColor = nextColor;
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
     }
 
-    footer.style.backgroundColor = nextColor;
+    .main-heading {
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 19px;
+    }
 
-    sections.forEach(function(section) {
-        section.style.backgroundColor = nextColor;
-    });
+    .library-list {
+        list-style-type: none;
+        padding: 0;
+    }
 
-    // Adjust text color based on nextColor
-    var textColor = nextColor === "black" ? "white" : "black";
-    header.style.color = textColor;
-    footer.style.color = textColor;
+    .library-item {
+        margin-bottom: 10px;
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-    textElements.forEach(function(element) {
-        element.style.color = textColor;
-    });
+    .library-link {
+        color: #007bff;
+        text-decoration: none;
+        font-weight: bold;
+    }
 
-    // Skip changing specific button colors (e.g., .btn-search, .btn-reset)
-    var buttonColor = nextColor === "black" ? "#262626" : ""; 
-    var buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)'); // Exclude specific buttons
-    buttons.forEach(function(button) {
-        button.style.backgroundColor = buttonColor;
+    .library-link:hover {
+        text-decoration: underline;
+    }
 
-        if (nextColor === "black") {
-            button.classList.add('button-hover');
-        } else {
-            button.classList.remove('button-hover');
-            button.style.backgroundColor = "";
-        }
-    });
+    .library-description {
+        color: #666;
+        font-size: 14px;
+        margin-top: 5px;
+    }
 
-    // Update colors for .react divs
-    reactDivs.forEach(function(reactDiv) {
-        reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
+    .no-libraries {
+        color: #999;
+        font-style: italic;
+        padding: 20px;
+    }
 
-        var reactTextColor = nextColor === "black" ? "white" : "black";
-        reactDiv.style.color = reactTextColor;
+    /* Dark Mode Styles */
+    body.dark-mode {
+        background-color: #121212; /* Dark background */
+        color: #ffffff; /* Light text */
+    }
 
-        if (nextColor === "black") {
-            reactDiv.classList.add('react-hover');
-        } else {
-            reactDiv.classList.remove('react-hover');
-            reactDiv.style.backgroundColor = "";
-        }
-    });
+    body.dark-mode .main-content {
+        background-color: #121212; /* Dark background for main content */
+        color: #ffffff; /* Light text */
+    }
 
-    // Adjust colors for counts (love, view, comment counts)
-    var countTextColor = nextColor === "black" ? "white" : "black";
-    loveCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-    viewCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-    commentCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
+    body.dark-mode .container {
+        background-color: #121212; /* Dark background for container */
+    }
+
+    body.dark-mode .main-heading {
+        color: #ffffff; /* Light text for headings */
+    }
+
+    body.dark-mode .library-item {
+        background-color: #1e1e1e; /* Dark background for library items */
+        color: #ffffff; /* Light text */
+        box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1); /* Light shadow for dark mode */
+    }
+
+    body.dark-mode .library-link {
+        color: #3498db; /* Accent color for links */
+    }
+
+    body.dark-mode .library-link:hover {
+        color: #2980b9; /* Darker accent color on hover */
+    }
+
+    body.dark-mode .library-description {
+        color: #b0b0b0; /* Light gray text for descriptions */
+    }
+
+    body.dark-mode .no-libraries {
+        color: #b0b0b0; /* Light gray text for no libraries message */
+    }
+
+
+body.dark-mode .affiliate-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 10px 15px;
+    background-color: #3498db; /* Accent color for buttons */
+    color: #ffffff;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
 }
 
+body.dark-mode .affiliate-link:hover {
+    background-color: #2980b9; /* Darker accent color on hover */
+}
+
+body.dark-mode .affiliate-link i {
+    margin-right: 8px; /* Space between icon and text */
+}
+</style>
+  <script type="text/javascript">
+function switchColor() {
+    const body = document.body;
+    const isDarkMode = body.classList.toggle('dark-mode'); // Toggle dark mode class
+    var reactDivs = document.querySelectorAll('.react');
+
+    // Update background and text colors for all elements
+    const elementsToUpdate = document.querySelectorAll(
+        'header, footer, section, .left-aside, .right-aside, .upper-post, .campaign-content, .react, .search-container input, .search-container .btn-reset'
+    );
+
+    elementsToUpdate.forEach(element => {
+        element.classList.toggle('dark-mode', isDarkMode);
+    });
+
+    // Update text colors for specific elements
+    const textElements = document.querySelectorAll(
+        'h1, h2, h3, h4, p, li, .campaign-nav, .campaign-nav a, .btn, .reaction, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link, .love-count, #view-count, .comment-count'
+    );
+
+    textElements.forEach(element => {
+        element.style.color = isDarkMode ? '#ffffff' : '#000000';
+    });
+
+    // Update buttons
+    const buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)');
+    buttons.forEach(button => {
+        button.style.backgroundColor = isDarkMode ? '#262626' : '';
+        button.style.color = isDarkMode ? '#ffffff' : '#000000';
+    });
+
+    // Update `.react` divs
+    if (reactDivs.length > 0) {
+        reactDivs.forEach(function(reactDiv) {
+            reactDiv.style.backgroundColor = isDarkMode ? "#262626" : "";
+            reactDiv.style.color = isDarkMode ? "white" : "black";
+
+            if (isDarkMode) {
+                reactDiv.classList.add('react-hover');
+            } else {
+                reactDiv.classList.remove('react-hover');
+                reactDiv.style.backgroundColor = "";
+            }
+        });
+    }
+
+    // Update input field and reset button
+    const inputField = document.querySelector('.search-container input[type="text"]');
+    const inputResetButton = document.querySelector('.search-container .btn-reset');
+
+    if (inputField) {
+        inputField.style.backgroundColor = isDarkMode ? '#333333' : '#ffffff';
+        inputField.style.color = isDarkMode ? '#ffffff' : '#000000';
+    }
+
+    if (inputResetButton) {
+        inputResetButton.style.color = '#b0b0b0';
+    }
+}
 
 </script>
+
 
 </head>
 <body class="main-content">

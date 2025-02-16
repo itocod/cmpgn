@@ -8,100 +8,163 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
    
     <title>User Verification</title>
-    <style>
-        /* General container styles */
-        body {
-            font-family: Arial, sans-serif;
-            color: #333;
-        }
+<style>
+    /* Define CSS variables for light mode */
+    :root {
+        --background-color: #ffffff;
+        --text-color: #333;
+        --container-bg: #fff;
+        --container-border: #d0d0d0;
+        --container-shadow: rgba(0, 0, 0, 0.1);
+        --title-color: #4a90e2;
+        --input-bg: #fff;
+        --input-border: #d0d0d0;
+        --button-bg: #4a90e2;
+        --button-hover-bg: #357ab7;
+        --message-bg: #dff0d8;
+        --message-text: #3c763d;
+        --message-border: #d6e9c6;
+        --notification-bg: #f5f5f5;
+        --notification-text: #4a90e2;
+        --notification-border: #d0d0d0;
+    }
 
-        .custom-form-container {
-            background-color: #fff;
-            border: 1px solid #d0d0d0;
-            border-radius: 8px;
-            padding: 25px;
-            max-width: 600px;
-            margin: 0 auto;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
+    /* Dark mode variables */
+    body.dark-mode {
+        --background-color: #121212;
+        --text-color: #ffffff;
+        --container-bg: #1e1e1e;
+        --container-border: #444444;
+        --container-shadow: rgba(255, 255, 255, 0.1);
+        --title-color: #64b5f6;
+        --input-bg: #333333;
+        --input-border: #555555;
+        --button-bg: #64b5f6;
+        --button-hover-bg: #42a5f5;
+        --message-bg: #2e7d32;
+        --message-text: #e8f5e9;
+        --message-border: #1b5e20;
+        --notification-bg: #333333;
+        --notification-text: #64b5f6;
+        --notification-border: #444444;
+    }
 
-        h1.custom-title {
-            text-align: center;
-            color: #4a90e2;  /* Blue title */
-            font-size: 2rem;  /* Increased font size */
-            margin-bottom: 20px;
-        }
+    /* Apply variables */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: var(--background-color);
+        color: var(--text-color);
+    }
 
-        /* Custom form styles */
-        form.custom-form {
-            display: flex;
-            flex-direction: column;
-        }
+    .custom-form-container {
+        background-color: var(--container-bg);
+        border: 1px solid var(--container-border);
+        border-radius: 8px;
+        padding: 25px;
+        max-width: 600px;
+        margin: 0 auto;
+        box-shadow: 0 4px 8px var(--container-shadow);
+    }
 
-        label.custom-label {
-            font-size: 1.1rem;  /* Increased font size for labels */
-            color: #333;
-            margin-bottom: 10px;
-        }
+    h1.custom-title {
+        text-align: center;
+        color: var(--title-color);
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
 
-        .custom-input, 
-        .custom-select, 
-        .custom-file-input {
-            padding: 10px;
-            font-size: 1rem;  /* Increased font size for inputs */
-            border: 1px solid #d0d0d0;
-            border-radius: 4px;
-            margin-bottom: 20px;
-        }
+    /* Custom form styles */
+    form.custom-form {
+        display: flex;
+        flex-direction: column;
+    }
 
-        /* Custom button styles */
-        button.custom-submit-btn {
-            background-color: #4a90e2;
-            color: white;
-            padding: 12px 25px;
-            font-size: 1.1rem;  /* Larger button text */
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
+    label.custom-label {
+        font-size: 1.1rem;
+        color: var(--text-color);
+        margin-bottom: 10px;
+    }
 
-        button.custom-submit-btn:hover {
-            background-color: #357ab7;
-        }
+    .custom-input,
+    .custom-select,
+    .custom-file-input {
+        padding: 10px;
+        font-size: 1rem;
+        background-color: var(--input-bg);
+        border: 1px solid var(--input-border);
+        border-radius: 4px;
+        margin-bottom: 20px;
+        color: var(--text-color);
+    }
 
-        /* Custom message styles */
-        .custom-messages {
-            list-style: none;
-            padding: 0;
-            text-align: center;
-            max-height: 200px; /* Set maximum height for the container */
-            overflow-y: auto;  /* Enable scrolling if messages overflow */
-            margin-bottom: 20px;  /* Add some space at the bottom */
-        }
+    /* Custom button styles */
+    button.custom-submit-btn {
+        background-color: var(--button-bg);
+        color: white;
+        padding: 12px 25px;
+        font-size: 1.1rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
 
-        .custom-messages li {
-            background-color: #dff0d8;
-            color: #3c763d;
-            border: 1px solid #d6e9c6;
-            padding: 12px;
-            border-radius: 4px;
-            margin-bottom: 15px;
-            font-size: 1rem;  /* Slightly larger message text */
-        }
+    button.custom-submit-btn:hover {
+        background-color: var(--button-hover-bg);
+    }
 
-        /* Custom notification styles */
-        .verification-note {
-            font-size: 1.2rem;  /* Increase font size for the notification */
-            color: #4a90e2;  /* Blue text color */
-            background-color: #f5f5f5;  /* Light gray background */
-            padding: 10px;
-            border: 1px solid #d0d0d0;
-            border-radius: 5px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-    </style>
+    /* Custom message styles */
+    .custom-messages {
+        list-style: none;
+        padding: 0;
+        text-align: center;
+        max-height: 200px;
+        overflow-y: auto;
+        margin-bottom: 20px;
+    }
+
+    .custom-messages li {
+        background-color: var(--message-bg);
+        color: var(--message-text);
+        border: 1px solid var(--message-border);
+        padding: 12px;
+        border-radius: 4px;
+        margin-bottom: 15px;
+        font-size: 1rem;
+    }
+
+    /* Custom notification styles */
+    .verification-note {
+        font-size: 1.2rem;
+        color: var(--notification-text);
+        background-color: var(--notification-bg);
+        padding: 10px;
+        border: 1px solid var(--notification-border);
+        border-radius: 5px;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    body.dark-mode .affiliate-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 10px 15px;
+    background-color: #3498db; /* Accent color for buttons */
+    color: #ffffff;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+body.dark-mode .affiliate-link:hover {
+    background-color: #2980b9; /* Darker accent color on hover */
+}
+
+body.dark-mode .affiliate-link i {
+    margin-right: 8px; /* Space between icon and text */
+}
+</style>
 </head>
 <body>
 

@@ -17,6 +17,7 @@ from .models import UserVerification
 
 
 
+
 # Custom validator to check for long words
 def validate_no_long_words(value):
     for word in value.split():
@@ -80,10 +81,6 @@ class BrainstormingForm(forms.ModelForm):
         model = Brainstorming
         fields = ['idea', 'attachment']  # Added attachment field
 
-    def clean_idea(self):
-        idea = self.cleaned_data.get('idea')
-        validate_no_long_words(idea)  # Validate the idea field
-        return idea
 
 # ActivityForm
 class ActivityForm(forms.ModelForm):
@@ -272,11 +269,9 @@ def validate_no_long_words(value):
             raise ValidationError(f"Word '{word}' exceeds the allowed length of 20 characters.")
 
 class CampaignForm(forms.ModelForm):
-    emoji_shortcode = forms.CharField(max_length=50, required=False, label='Emoji Shortcut')
-
     class Meta:
         model = Campaign
-        fields = ['title', 'content', 'poster', 'audio', 'visibility', 'category']
+        fields = ['title', 'category', 'poster', 'audio', 'visibility', 'content']
         labels = {
             'title': 'Title:',
             'content': 'Content:',
@@ -286,7 +281,10 @@ class CampaignForm(forms.ModelForm):
             'category': 'Category:',
         }
 
-    # Adding the custom validators
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['content'].widget.attrs['readonly'] = False  # Allow editing
+
     def clean_title(self):
         title = self.cleaned_data.get('title')
         validate_no_long_words(title)  # Validate the title field
@@ -296,6 +294,7 @@ class CampaignForm(forms.ModelForm):
         content = self.cleaned_data.get('content')
         validate_no_long_words(content)  # Validate the content field
         return content
+
 
 
 class CampaignFundForm(forms.ModelForm):

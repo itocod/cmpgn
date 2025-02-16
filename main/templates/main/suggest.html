@@ -10,157 +10,229 @@
 
     
     <title>Suggested Users to Follow</title>
-     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
+<style>
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 0;
+        transition: background-color 0.3s, color 0.3s;
+    }
 
-        .container-profiles {
-            max-width: 800px;
-            margin: auto;
-            padding: 20px;
-        }
+    .container-profiles {
+        max-width: 800px;
+        margin: auto;
+        padding: 20px;
+    }
 
-        .profile-header {
-            text-align: center;
-            margin-bottom: 30px;
-            color: #333;
-        }
+    .profile-header {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #333;
+        font-size: 24px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+    }
 
-        .profile-list {
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-        }
+    .profile-list {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
 
-        .profile-card {
-            margin-bottom: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            display: flex; /* Use flexbox for alignment */
-            flex-direction: column; /* Stack items vertically */
-        }
+    .profile-card {
+        margin-bottom: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        background: linear-gradient(135deg, #ffffff 0%, #f5f5f5 100%);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
 
+    .profile-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    .profile-content {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .profile-pic {
+        flex-shrink: 0;
+        margin-right: 15px;
+    }
+
+    .profile-picture {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        border: 3px solid #c0c0c0; /* Silver border */
+        transition: border-color 0.3s;
+    }
+
+    .profile-picture:hover {
+        border-color: #a0a0a0; /* Darker silver on hover */
+    }
+
+    .profile-details {
+        flex-grow: 1;
+    }
+
+    .profile-name {
+        margin-top: 0;
+        margin-bottom: 10px;
+        color: #333;
+        font-size: 20px;
+        font-weight: 600;
+    }
+
+    .profile-info {
+        margin: 5px 0;
+        font-size: 16px;
+        color: #555;
+    }
+
+    .profile-link {
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+        transition: color 0.3s;
+    }
+
+    .profile-link:hover {
+        color: #000;
+        text-decoration: underline;
+    }
+
+    .cm {
+        font-size: 12px;
+        color: #777;
+    }
+
+
+
+    
+
+    @media (max-width: 600px) {
         .profile-content {
-            display: flex;
-            align-items: center;
-            padding: 20px;
+            flex-direction: column;
+            align-items: flex-start;
         }
 
         .profile-pic {
-            flex-shrink: 0; /* Prevent image from shrinking */
-            margin-right: 15px; /* Space between image and text */
-        }
-
-        .profile-picture {
-            width: 50px; /* Set a fixed width for the profile picture */
-            height: 50px; /* Set a fixed height for the profile picture */
-            border-radius: 50%; /* Make the profile picture circular */
-        }
-
-        .profile-details {
-            flex-grow: 1;
+            margin-bottom: 10px;
+            margin-right: 0;
         }
 
         .profile-name {
-            margin-top: 0;
-            margin-bottom: 10px;
-            color: #333;
-            font-size: 19px;
+            font-size: 18px;
         }
 
         .profile-info {
-            margin: 5px 0;
-            font-size: 16px;
+            font-size: 14px;
         }
 
-        .profile-link {
-            text-decoration: none;
-            color: #007bff;
-        }
-
-        .profile-link:hover {
-            text-decoration: underline;
-        }
-
-        .cm {
-            font-size: 12px;
-        }
-
-        .action-item {
-            display: inline-block;
-            padding: 10px 20px;
-            margin-right: 10px;
-            border-radius: 5px;
-            text-align: center;
-            font-size: 12px; /* Adjust the font size as needed */
-        }
-
-        .action-item a {
-            color: #000;
-            text-decoration: none;
-            font-size: inherit;
-        }
-
-        .action-item i {
-            margin-right: 5px;
-        }
-
-       
-.no-suggested-users {
-    text-align: center;
-    margin: 20px 0;
-    padding: 15px;
-    background-color: rgba(76, 175, 80, 0.3); /* Semi-transparent green background */
-    border-radius: 5px;
-    color: #000000; /* Black text by default */
-    font-size: 14px;
-    border: 1px solid #4CAF50; /* Green border */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    transition: color 0.3s, background-color 0.3s; /* Smooth transition for color changes */
-}
-
-/* Change text color to white when the background color is dark */
-.no-suggested-users.dark-text {
-    color: #ffffff; /* White text */
-    background-color: rgba(56, 142, 108, 0.7); /* Darker semi-transparent green background */
-}
-
-/* Responsive Styles */
-@media (max-width: 600px) {
-    .no-suggested-users {
-        font-size: 12px; /* Adjust font size for mobile */
+        
     }
+
+    /* Dark Mode Styles */
+    body.dark-mode {
+        background-color: #121212;
+        color: #e0e0e0;
+    }
+
+    body.dark-mode .profile-header {
+        color: #e0e0e0;
+    }
+
+    body.dark-mode .profile-card {
+        background: linear-gradient(135deg, #1e1e1e 0%, #2c2c2c 100%);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    body.dark-mode .profile-name {
+        color: #e0e0e0;
+    }
+
+    body.dark-mode .profile-info {
+        color: #b0b0b0;
+    }
+
+    body.dark-mode .profile-link {
+        color: #c0c0c0; /* Silver link color */
+    }
+
+    body.dark-mode .profile-link:hover {
+        color: #ffffff; /* White on hover */
+    }
+
+    body.dark-mode .cm {
+        color: #888;
+    }
+
+  
+
+    body.dark-mode .profile-picture {
+        border-color: #808080; /* Gray border */
+    }
+
+    body.dark-mode .profile-picture:hover {
+        border-color: #a0a0a0; /* Darker gray on hover */
+    }
+    
+body.dark-mode .affiliate-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 10px 15px;
+    background-color: #3498db; /* Accent color for buttons */
+    color: #ffffff;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
 }
 
-        /* Responsive Styles */
-        @media (max-width: 600px) {
-            .profile-content {
-                flex-direction: column; /* Stack elements vertically on mobile */
-                align-items: flex-start; /* Align items to the left */
-            }
+body.dark-mode .affiliate-link:hover {
+    background-color: #2980b9; /* Darker accent color on hover */
+}
 
-            .profile-pic {
-                margin-bottom: 10px; /* Add space below profile picture */
-                margin-right: 0; /* Remove right margin */
-            }
+body.dark-mode .affiliate-link i {
+    margin-right: 8px; /* Space between icon and text */
+}
 
-            .profile-name {
-                font-size: 18px; /* Slightly smaller font size */
-            }
 
-            .profile-info {
-                font-size: 14px; /* Smaller font size for profile info */
-            }
 
-            .no-suggested-users {
-                font-size: 12px; /* Adjust font size for mobile */
-            }
+    .no-suggested-users {
+        text-align: center;
+        margin: 20px 0;
+        padding: 15px;
+        background-color: rgba(76, 175, 80, 0.3); /* Semi-transparent green background */
+        border-radius: 5px;
+        color: #000000; /* Black text by default */
+        font-size: 14px;
+        border: 1px solid #4CAF50; /* Green border */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+        transition: color 0.3s, background-color 0.3s; /* Smooth transition for color changes */
+    }
+
+    /* Change text color to white when the background color is dark */
+    .no-suggested-users.dark-text {
+        color: #ffffff; /* White text */
+        background-color: rgba(56, 142, 108, 0.7); /* Darker semi-transparent green background */
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 600px) {
+        .no-suggested-users {
+            font-size: 12px; /* Adjust font size for mobile */
         }
-    </style>
+    }
+</style>
 </head>
 <body>
     <h2 style="font-size: 19px; padding-left: 20px;">Suggested Users</h2>
@@ -290,126 +362,72 @@
 
 
     </script>
-    <script type="text/javascript">
-        
+
+
+<script type="text/javascript">
 function switchColor() {
-    var body = document.body;
-    var logoContainer = document.querySelector('.logo-container');
+    const body = document.body;
+    const isDarkMode = body.classList.toggle('dark-mode'); // Toggle dark mode class
+    var reactDivs = document.querySelectorAll('.react');
 
-    // Define the color sequence (black, white)
-    var colors = ["black", "white"];
+    // Update background and text colors for all elements
+    const elementsToUpdate = document.querySelectorAll(
+        'header, footer, section, .left-aside, .right-aside, .upper-post, .campaign-content, .react, .search-container input, .search-container .btn-reset'
+    );
 
-    // Find the index of the current color in the sequence
-    var currentIndex = colors.indexOf(body.style.backgroundColor);
+    elementsToUpdate.forEach(element => {
+        element.classList.toggle('dark-mode', isDarkMode);
+    });
 
-    // Set the next color in the sequence
-    var nextColor = colors[(currentIndex + 1) % colors.length];
+    // Update text colors for specific elements
+    const textElements = document.querySelectorAll(
+        'h1, h2, h3, h4, p, li, .campaign-nav, .campaign-nav a, .btn, .reaction, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link, .love-count, #view-count, .comment-count'
+    );
 
-    // Apply the new color to the body and other elements
-    body.style.backgroundColor = nextColor;
+    textElements.forEach(element => {
+        element.style.color = isDarkMode ? '#ffffff' : '#000000';
+    });
 
-    // Change background color and border of logo-container based on nextColor
-    if (nextColor === "black") {
-        logoContainer.style.backgroundColor = "";
-        logoContainer.style.border = "none"; 
-    } else {
-        logoContainer.style.backgroundColor = ""; // or "transparent"
-        logoContainer.style.border = "none";  // Remove border
+    // Update buttons
+    const buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)');
+    buttons.forEach(button => {
+        button.style.backgroundColor = isDarkMode ? '#262626' : '';
+        button.style.color = isDarkMode ? '#ffffff' : '#000000';
+    });
+
+    // Update `.react` divs
+    if (reactDivs.length > 0) {
+        reactDivs.forEach(function(reactDiv) {
+            reactDiv.style.backgroundColor = isDarkMode ? "#262626" : "";
+            reactDiv.style.color = isDarkMode ? "white" : "black";
+
+            if (isDarkMode) {
+                reactDiv.classList.add('react-hover');
+            } else {
+                reactDiv.classList.remove('react-hover');
+                reactDiv.style.backgroundColor = "";
+            }
+        });
     }
 
-    // Other elements to be updated based on nextColor
-    var header = document.querySelector('header');
-    var footer = document.querySelector('footer');
-    var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2, h4, p, li, .campaign-nav, .campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link');
-    var reactDivs = document.querySelectorAll('.react div');
-    var loveCounts = document.querySelectorAll('[id^="love-count-"]');
-    var viewCounts = document.querySelectorAll('#view-count');
-    var commentCounts = document.querySelectorAll('.comment-count');
-    var exploreLinks = document.querySelectorAll('.explore-link i'); // Select all compass icons
+    // Update input field and reset button
+    const inputField = document.querySelector('.search-container input[type="text"]');
+    const inputResetButton = document.querySelector('.search-container .btn-reset');
 
-    // Update header background color based on nextColor
-    if (nextColor === "black") {
-        header.style.backgroundColor = "#333333";  // Darker gray when background is black
-    } else {
-        header.style.backgroundColor = nextColor;
+    if (inputField) {
+        inputField.style.backgroundColor = isDarkMode ? '#333333' : '#ffffff';
+        inputField.style.color = isDarkMode ? '#ffffff' : '#000000';
     }
 
-    footer.style.backgroundColor = nextColor;
-
-    sections.forEach(function(section) {
-        section.style.backgroundColor = nextColor;
-    });
-
-    var textColor = nextColor === "black" ? "white" : "black";
-    header.style.color = textColor;
-    footer.style.color = textColor;
-
-    textElements.forEach(function(element) {
-        element.style.color = textColor;
-    });
-
-    // Change the color of the compass icon based on the background color
-    exploreLinks.forEach(function(icon) {
-        icon.style.color = nextColor === "black" ? "white" : "black";
-    });
-
-    // Skip changing button colors
-    var buttonColor = nextColor === "black" ? "#262626" : ""; // If you want to change button colors based on background, adjust this accordingly
-    var buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)'); // Exclude specific buttons
-    buttons.forEach(function(button) {
-        button.style.backgroundColor = buttonColor;
-
-        if (nextColor === "black") {
-            button.classList.add('button-hover');
-        } else {
-            button.classList.remove('button-hover');
-            button.style.backgroundColor = "";
-        }
-    });
-
-    reactDivs.forEach(function(reactDiv) {
-        reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
-
-        var reactTextColor = nextColor === "black" ? "white" : "black";
-        reactDiv.style.color = reactTextColor;
-
-        if (nextColor === "black") {
-            reactDiv.classList.add('react-hover');
-        } else {
-            reactDiv.classList.remove('react-hover');
-            reactDiv.style.backgroundColor = "";
-        }
-    });
-
-    var countTextColor = nextColor === "black" ? "white" : "black";
-    loveCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-    viewCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-    commentCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-
-    // Update the input field and reset button inside .search-container
-    var inputField = document.querySelector('.search-container input[type="text"]');
-    var inputResetButton = document.querySelector('.search-container .btn-reset');
-
-    if (nextColor === "black") {
-        inputField.style.backgroundColor = "#333333"; // Dark gray for black mode
-        inputField.style.color = "white";            // White text in black mode
-        inputResetButton.style.color = "#b0b0b0";      // White icon for reset button
-    } else {
-        inputField.style.backgroundColor = "white";  // Default white background
-        inputField.style.color = "black";            // Black text in white mode
-        inputResetButton.style.color = "#b0b0b0";      // Black icon for reset button
+    if (inputResetButton) {
+        inputResetButton.style.color = '#b0b0b0';
     }
 }
 
+</script>
 
-    </script>
+
+    
     <script type="text/javascript">
          
 document.addEventListener("DOMContentLoaded", function() {

@@ -14,342 +14,172 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emojionearea@3.4.2/dist/emojionearea.min.css">
 <script src="https://cdn.jsdelivr.net/npm/emojionearea@3.4.2/dist/emojionearea.min.js"></script>
+
 <style type="text/css">
-/* General styles for the form */
+/* General Form Styling */
 .edit-profile-form {
-    max-width: 800px; /* Slightly wider for better readability */
+    max-width: 450px; /* Keeps it compact */
     margin: 20px auto;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-    background: #FFFFFF;
+    padding: 25px;
+    background: linear-gradient(135deg, #f0f0f0, #e0e0e0); /* Silver gradient */
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    color: #333333; /* Dark text for contrast */
+    font-family: 'Arial', sans-serif;
 }
 
+/* Title */
 h1 {
     text-align: center;
-    color: #37474F;
-    font-size: 2em; /* Larger font size for emphasis */
+    font-size: 22px;
     margin-bottom: 20px;
-    font-weight: 600;
+    color: #555555; /* Subtle dark gray */
 }
 
+/* Form Sections */
 .form-section {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
 }
 
 .form-label {
+    font-size: 14px;
     font-weight: bold;
-    color: #546E7A;
-    font-size: 1.1em;
-    display: block;
-    margin-bottom: 8px;
+    color: #444444; /* Dark gray */
+    margin-bottom: 6px;
 }
 
-.form-input,
-.form-textarea,
-.form-select {
+input, select, textarea {
+    background: #ffffff; /* White background */
+    border: 1px solid #cccccc;
+    padding: 10px;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #333333; /* Dark text */
     width: 100%;
-    padding: 12px;
-    border: 1px solid #90A4AE;
-    border-radius: 10px;
-    box-sizing: border-box;
-    margin-top: 5px;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    background-color: #F1F1F1;
-    font-size: 1em;
+    transition: 0.3s;
 }
 
-.form-input:focus,
-.form-textarea:focus,
-.form-select:focus {
+input:focus, select:focus, textarea:focus {
+    border-color: #1e90ff; /* Vibrant blue */
     outline: none;
-    border-color: #2196F3;
-    box-shadow: 0 0 8px rgba(33, 150, 243, 0.5);
+    box-shadow: 0 0 5px rgba(30, 144, 255, 0.5); /* Subtle glow */
 }
 
-.form-textarea {
-    resize: vertical; /* Allow vertical resizing */
-    height: 150px; /* Slightly taller for better usability */
-    overflow-y: auto; /* Always show scrollbar for consistency */
+/* Helper Text */
+.form-helper-text {
+    font-size: 12px;
+    color: #666666; /* Medium gray */
+    margin-top: 4px;
 }
 
-.form-select {
-    appearance: none;
-    background-image: url('data:image/svg+xml;utf8,<svg fill="%2390A4AE" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
-    background-position: right 10px top 50%;
-    background-repeat: no-repeat;
-    background-size: 12px;
+/* Error Messages */
+.form-errors {
+    background: #ffe6e6; /* Light red background */
+    padding: 10px;
+    border-left: 4px solid #ff4c4c;
+    margin-bottom: 15px;
+    font-size: 13px;
+    color: #ff0000; /* Red text */
 }
 
+/* Submit Button */
 .submit-button {
-    display: block;
-    width: 100%;
-    padding: 14px;
-    background-color: #2196F3;
-    color: #fff;
+    background: #1e90ff; /* Bold blue */
     border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    margin-top: 20px;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-    font-size: 1.1em;
+    color: #ffffff;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 15px;
     font-weight: bold;
+    width: 100%;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
 .submit-button:hover {
-    background-color: #1976D2;
-    transform: translateY(-2px);
+    background: #0056b3; /* Darker blue */
+    transform: translateY(-2px); /* Slight lift */
 }
 
-.form-helper-text {
-    color: #757575;
-    font-size: 0.9em;
-    margin-top: 5px;
-    display: block;
-}
 
-.action-button {
-    display: inline-block;
-    padding: 10px 20px;
-    margin: 10px 5px;
-    border-radius: 25px;
-    text-align: center;
-    font-size: 14px;
-    background-color: #F1F1F1;
-    transition: background-color 0.3s ease;
-}
 
-.action-button:hover {
-    background-color: #E0E0E0;
-}
+    .affiliate-link {
+      color: #3498db; /* Set the text color */
+      text-decoration: none; /* Remove the default underline */
+      font-weight: bold; /* Make the text bold */
+      transition: color 0.3s; /* Smooth transition for color change */
+    }
 
-.action-button a {
-    color: #37474F;
-    text-decoration: none;
-    font-size: inherit;
-}
+    /* Hover effect for the affiliate link */
+    .affiliate-link:hover {
+      color: #1abc9c; /* Change the text color on hover */
+    }
 
-.action-button i {
-    margin-right: 8px;
-}
-
-.image-preview-container {
-    margin-top: 15px;
-    text-align: center;
-}
-
-.image-preview-container img {
-    max-width: 100%;
-    max-height: 250px;
-    border: 2px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-#emoji-picker-button {
-    margin-top: 10px;
-    padding: 10px 15px;
-    background-color: #2196F3;
-    color: #fff;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-size: 0.9em;
-}
-
-#emoji-picker-button:hover {
-    background-color: #1976D2;
-}
-
-/* Media queries for mobile responsiveness */
-@media (max-width: 768px) {
+/* Responsive */
+@media (max-width: 480px) {
     .edit-profile-form {
+        max-width: 90%;
         padding: 20px;
     }
-
-    h1 {
-        font-size: 1.8em;
-    }
-
-    .form-label {
-        font-size: 1em;
-    }
-
-    .form-input,
-    .form-textarea,
-    .form-select {
-        font-size: 0.9em;
-        padding: 10px;
-    }
-
-    .submit-button {
-        padding: 12px;
-        font-size: 1em;
-    }
-
-    .form-helper-text {
-        font-size: 0.8em;
-    }
-}
-
-@media (max-width: 480px) {
-    h1 {
-        font-size: 1.5em;
-    }
-
-    .form-label {
-        font-size: 0.9em;
-    }
-
-    .submit-button {
-        font-size: 0.9em;
-    }
-}
-
-
-/* Add this to your existing CSS */
-.form-textarea {
-    white-space: pre-wrap; /* Preserve whitespace and wrap text */
-    word-wrap: break-word; /* Break long words if necessary */
-    word-break: break-word; /* Ensure words break to fit within the container */
 }
 
 /* Dark Mode Styles */
 body.dark-mode {
     background-color: #121212; /* Dark background */
-    color: #e0e0e0; /* Light text for better readability */
+    color: #e0e0e0; /* Light text for readability */
     font-family: 'Arial', sans-serif;
 }
 
-/* Create Campaign Form */
-body.dark-mode #campaignForm {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #1e1e1e; /* Slightly lighter dark background */
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+body.dark-mode .edit-profile-form {
+    background: linear-gradient(135deg, #1e1e1e, #2c2c2c); /* Dark gradient */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    color: #e0e0e0; /* Light text */
 }
 
 body.dark-mode h1 {
-    color: #ffffff; /* Bright white for headings */
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-body.dark-mode .form-section {
-    margin-bottom: 20px;
+    color: #ffffff; /* Bright white */
 }
 
 body.dark-mode .form-label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 8px;
-    color: #ffffff; /* Bright white for labels */
+    color: #e0e0e0; /* Light gray */
 }
 
-body.dark-mode .form-input,
-body.dark-mode .form-select,
-body.dark-mode .form-textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #444444; /* Dark border */
-    border-radius: 5px;
+body.dark-mode input,
+body.dark-mode select,
+body.dark-mode textarea {
     background-color: #333333; /* Dark background for inputs */
     color: #e0e0e0; /* Light text */
-    font-size: 14px;
+    border-color: #444444; /* Dark border */
 }
 
-body.dark-mode .form-input:focus,
-body.dark-mode .form-select:focus,
-body.dark-mode .form-textarea:focus {
+body.dark-mode input:focus,
+body.dark-mode select:focus,
+body.dark-mode textarea:focus {
     border-color: #3498db; /* Accent color for focus */
-    outline: none;
+    box-shadow: 0 0 5px rgba(52, 152, 219, 0.5); /* Subtle glow */
 }
 
 body.dark-mode .form-helper-text {
-    display: block;
-    font-size: 12px;
-    color: #b0b0b0; /* Light gray for helper text */
-    margin-top: 5px;
+    color: #b0b0b0; /* Light gray */
 }
 
 body.dark-mode .form-errors {
-    color: #ff6b6b; /* Light red for errors */
-    background-color: #2d1e1e; /* Darker red background */
-    border: 1px solid #ff6b6b;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 20px;
-}
-
-body.dark-mode .form-errors ul {
-    list-style: none;
-    padding-left: 0;
-}
-
-body.dark-mode .form-errors li {
-    margin-bottom: 5px;
-}
-
-body.dark-mode .action-button {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 8px 12px;
-    background-color: #3498db; /* Accent color for buttons */
-    color: #ffffff;
-    border-radius: 5px;
-    text-decoration: none;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
-}
-
-body.dark-mode .action-button:hover {
-    background-color: #2980b9; /* Darker accent color on hover */
-}
-
-body.dark-mode .image-preview-container,
-body.dark-mode .audio-preview-container {
-    margin-top: 10px;
-    padding: 10px;
-    background-color: #262626; /* Dark background for preview containers */
-    border-radius: 5px;
+    background: #3a3a3a; /* Dark background */
+    border-left: 4px solid #ff4c4c;
+    color: #ffaaaa; /* Light red text */
 }
 
 body.dark-mode .submit-button {
-    display: block;
-    width: 100%;
-    padding: 12px;
-    background-color: #3498db; /* Accent color for submit button */
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    background: #3498db; /* Accent blue */
 }
 
 body.dark-mode .submit-button:hover {
-    background-color: #2980b9; /* Darker accent color on hover */
+    background: #2980b9; /* Darker blue */
 }
 
-/* Edit Profile Form */
-body.dark-mode .edit-profile-form {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #1e1e1e; /* Slightly lighter dark background */
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-}
 
-body.dark-mode .edit-profile-form h1 {
-    color: #ffffff; /* Bright white for headings */
-    text-align: center;
-    margin-bottom: 20px;
-}
 
 body.dark-mode .affiliate-link {
     display: inline-block;
@@ -370,8 +200,9 @@ body.dark-mode .affiliate-link:hover {
 body.dark-mode .affiliate-link i {
     margin-right: 8px; /* Space between icon and text */
 }
-</style>
 
+</style>
+</head>
 <body>
 
 <div class="edit-profile-form">
@@ -383,18 +214,17 @@ body.dark-mode .affiliate-link i {
 
     <form method="post" enctype="multipart/form-data" id="campaignForm">
         {% csrf_token %}
-        <h1>Create Campaign Form</h1>
-
+        <h1>Recreate Campaign Form</h1>
 
         <!-- Display Error Messages -->
         {% if form.errors %}
-            <div class="form-errors" id="form-errors" style="color: red; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 5px;">
-                <ul style="list-style: none; padding-left: 0;">
+            <div class="form-errors" id="form-errors">
+                <ul>
                     {% for field in form %}
                         {% if field.errors %}
                             <li>
                                 <strong>{{ field.label }}:</strong>
-                                <span style="color: #721c24;">{{ field.errors|join:', ' }}</span>
+                                <span>{{ field.errors|join:', ' }}</span>
                             </li>
                         {% endif %}
                     {% endfor %}
@@ -403,55 +233,47 @@ body.dark-mode .affiliate-link i {
         {% endif %}
 
         <div class="form-section">
-            <label for="id_title" class="form-label">Title:</label>
-            <input type="text" id="id_title" name="title" class="form-input" required>
+            <label for="{{ form.title.id_for_label }}" class="form-label">Title:</label>
+            {{ form.title }}
             <span class="form-helper-text">Provide a concise title for your campaign.</span>
         </div>
 
         <div class="form-section">
-            <label for="id_category" class="form-label">Category:</label>
-            <select id="id_category" name="category" class="form-select">
-                {% for category in categories %}
-                <option value="{{ category.0 }}">{{ category.1 }}</option>
-                {% endfor %}
-            </select>
+            <label for="{{ form.category.id_for_label }}" class="form-label">Category:</label>
+            {{ form.category }}
             <span class="form-helper-text">Choose the category of your campaign.</span>
         </div>
 
         <div class="form-section">
-            <label for="id_poster" class="form-label">Poster:</label>
-            <input type="file" id="id_poster" name="poster" accept="image/*" onchange="previewImage(event)">
+            <label for="{{ form.poster.id_for_label }}" class="form-label">Poster:</label>
+            {{ form.poster }}
             <span class="form-helper-text">Upload a poster for your campaign.</span>
-            <a href="{% url 'poster_canva' %}" target="_blank" class="action-button">Create a poster with Canva</a>
-            <div id="posterPreview" class="image-preview-container"></div>
         </div>
 
         <div class="form-section">
-            <label for="id_audio" class="form-label">Sound:</label>
-            <input type="file" id="id_audio" name="audio" class="form-input" accept="audio/*" onchange="previewAudio(event)">
-            <span class="form-helper-text">Upload a sound file (MP3, WAV, OGG).</span>
-            <small class="form-helper-text">By uploading, you confirm that you have rights to use this sound.</small>
-            <div id="audioPreview" class="audio-preview-container"></div>
+            <label for="{{ form.audio.id_for_label }}" class="form-label">Sound:</label>
+            {{ form.audio }}
+            <span class="form-helper-text">Upload a sound file.</span>
         </div>
 
         <div class="form-section">
-            <label for="id_visibility" class="form-label">Visibility:</label>
-            <select id="id_visibility" name="visibility" class="form-select">
-                <option value="public">Public</option>
-                <option value="private">Private</option>
-            </select>
-            <span class="form-helper-text">Choose how to display your campaign.</span>
+            <label for="{{ form.visibility.id_for_label }}" class="form-label">Visibility:</label>
+            {{ form.visibility }}
+            <span class="form-helper-text">Choose visibility.</span>
         </div>
 
         <div class="form-section">
-            <label for="id_content" class="form-label">Content:</label>
-            <textarea id="id_content" name="content" class="form-textarea" required></textarea>
-           <span class="form-helper-text">A Simple Description for your campaign.</span> 
-        </div>
+    <label for="{{ form.content.id_for_label }}" class="form-label">Content:</label>
+    {{ form.content }}
+    <span class="form-helper-text">A simple description for your campaign.</span>
+</div>
+
 
         <button type="submit" class="submit-button">Submit</button>
     </form>
 </div>
+
+
 
 <script>
     // Make the error message disappear after 5 seconds

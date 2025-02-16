@@ -43,11 +43,13 @@
     color: #666; /* Subtle grey for secondary text */
     margin: 8px 0; /* Adjusted spacing */
 }
+
 .cc-header h5 {
     font-size: 1.5rem; /* Increased size for comment count */
     color: #666; /* Subtle grey for secondary text */
     margin: 8px 0; /* Adjusted spacing */
 }
+
 /* Mobile styles */
 @media (max-width: 768px) {
     .cc-header {
@@ -71,8 +73,6 @@
     }
 }
 
-
-
 /* Smaller mobile devices (e.g., phones) */
 @media (max-width: 480px) {
     .cc-header {
@@ -90,11 +90,33 @@
     .cc-header h4 {
         font-size: 0.9rem; /* Smaller comment count text */
     }
+
     .cc-header h5 {
         font-size: 1rem; /* Adjusted size for comment count */
     }
 }
 
+/* Dark Mode Styles */
+body.dark-mode .cc-header {
+    background-color: #1e1e1e; /* Dark background for the header */
+    border-bottom: 2px solid #64b5f6; /* Light blue underline for emphasis */
+}
+
+body.dark-mode .cc-header h2 {
+    color: #e0e0e0; /* Light grey for better readability */
+}
+
+body.dark-mode .cc-header h3 {
+    color: #64b5f6; /* Light blue for the campaign title */
+}
+
+body.dark-mode .cc-header h4 {
+    color: #b0b0b0; /* Subtle grey for secondary text */
+}
+
+body.dark-mode .cc-header h5 {
+    color: #b0b0b0; /* Subtle grey for secondary text */
+}
         .cc-comments-list {
             list-style-type: none;
             padding: 0;
@@ -122,40 +144,7 @@
             color: green;
         }
 
-        .cc-comment-form {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 30px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        }
 
-        .cc-comment-form textarea {
-            width: 100%;
-            min-height: 100px;
-            padding: 10px;
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            resize: vertical;
-        }
-
-        .cc-comment-form button {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            border: none;
-            background-color: #007bff;
-            color: #fff;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .cc-comment-form button:hover {
-            background-color: #0056b3;
-        }
 
         .cc-profile-pic {
             flex-shrink: 0;
@@ -198,14 +187,7 @@
         @media (max-width: 600px) {
      
 
-            .cc-comment-form {
-                padding: 20px;
-            }
-
-            .cc-comment-form textarea {
-                min-height: 80px;
-            }
-
+        
             .cc-profile-pic img {
                 width: 36px;
                 height: 36px;
@@ -215,37 +197,222 @@
                 font-size: 12px;
             }
         }
+
+
+
+/* Dark Mode Styles */
+body.dark-mode {
+    background-color: #121212; /* Dark background */
+    color: #ffffff; /* Light text */
+}
+
+body.dark-mode header,
+body.dark-mode footer,
+body.dark-mode section,
+body.dark-mode .left-aside,
+body.dark-mode .right-aside,
+body.dark-mode .upper-post,
+body.dark-mode .campaign-content,
+body.dark-mode .react div {
+    background-color: #1e1e1e; /* Slightly lighter dark background */
+    color: #ffffff; /* Light text */
+}
+
+body.dark-mode .campaign-category {
+    background-color: #333333; /* Darker background for category */
+    color: #ffffff; /* Light text */
+}
+
+body.dark-mode .objectives-activities {
+    background-color: #262626; /* Dark background for objectives */
+    border-left: 4px solid #3498db; /* Accent border */
+    color: #ffffff; /* Light text */
+}
+
+body.dark-mode .search-container input[type="text"] {
+    background-color: #333333; /* Dark background for input */
+    color: #ffffff; /* Light text */
+    border: 1px solid #444444; /* Dark border */
+}
+
+body.dark-mode .search-container .btn-reset {
+    color: #b0b0b0; /* Light icon color */
+}
+
+body.dark-mode button:not(.btn-search, .btn-reset) {
+    background-color: #262626; /* Dark background for buttons */
+    color: #ffffff; /* Light text */
+}
+
+body.dark-mode .explore-link i {
+    color: #ffffff; /* Light icon color */
+}
+
+body.dark-mode .love-count,
+body.dark-mode #view-count,
+body.dark-mode .comment-count {
+    color: #ffffff; /* Light text for counts */
+}
+
+
+body.dark-mode .affiliate-link {
+    display: inline-block;
+    margin-bottom: 20px;
+    padding: 10px 15px;
+    background-color: #3498db; /* Accent color for buttons */
+    color: #ffffff;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+body.dark-mode .affiliate-link:hover {
+    background-color: #2980b9; /* Darker accent color on hover */
+}
+
+body.dark-mode .affiliate-link i {
+    margin-right: 8px; /* Space between icon and text */
+}
+
+/* Base styles */
+.cc-comment-form {
+    background-color: #ffffff; /* White background */
+    padding: 20px;
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    margin-top: 20px;
+}
+
+.cc-comment-form h4 {
+    font-size: 1.5rem; /* Larger font size for the title */
+    color: #333; /* Dark grey for the title */
+    margin-bottom: 15px;
+}
+
+.cc-comment-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd; /* Light grey border */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 1rem;
+    color: #333; /* Dark grey text */
+    background-color: #f9f9f9; /* Light background for textarea */
+    resize: vertical; /* Allow vertical resizing */
+    margin-bottom: 15px;
+}
+
+.cc-comment-form button {
+    background-color: #007bff; /* Blue background for the button */
+    color: #fff; /* White text */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.cc-comment-form button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Dark Mode Styles */
+body.dark-mode .cc-comment-form {
+    background-color: #1e1e1e; /* Dark background for the form */
+    box-shadow: 0 2px 4px rgba(255, 255, 255, 0.1); /* Subtle shadow for dark mode */
+}
+
+body.dark-mode .cc-comment-form h4 {
+    color: #e0e0e0; /* Light grey for the title */
+}
+
+body.dark-mode .cc-comment-form textarea {
+    background-color: #333333; /* Dark background for textarea */
+    border: 1px solid #444444; /* Darker border */
+    color: #e0e0e0; /* Light grey text */
+}
+
+body.dark-mode .cc-comment-form textarea::placeholder {
+    color: #b0b0b0; /* Light grey placeholder text */
+}
+
+body.dark-mode .cc-comment-form button {
+    background-color: #64b5f6; /* Light blue for the button */
+    color: #121212; /* Dark text for contrast */
+}
+
+body.dark-mode .cc-comment-form button:hover {
+    background-color: #42a5f5; /* Slightly lighter blue on hover */
+}
+
+  .spinner {
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-top: 3px solid #fff;
+        border-radius: 50%;
+        width: 15px;
+        height: 15px;
+        animation: spin 0.8s linear infinite;
+        display: inline-block;
+        margin-left: 8px;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+
+    .cc-comments-container {
+    max-height: 300px; /* Adjust height as needed */
+    overflow-y: auto; /* Enable vertical scrolling */
+    border: 1px solid #ddd; /* Optional: Add a border for better visibility */
+    padding: 10px; /* Optional: Add padding */
+    border-radius: 5px; /* Optional: Rounded corners */
+}
+
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/emojionearea/dist/emojionearea.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('#commentText').emojioneArea({
-                pickerPosition: "bottom",
-                tones: false
-            });
+   <script>
+    $(document).ready(function() {
+        $('#commentText').emojioneArea({
+            pickerPosition: "bottom",
+            tones: false
+        });
 
-            $('#commentForm').submit(function(e) {
-                e.preventDefault();
-                $.ajax({
-                    type: 'POST',
-                    url: '{% url "campaign_comments" campaign_id=campaign.id %}',
-                    data: $('#commentForm').serialize(),
-                    success: function(response) {
-                        if (response.success) {
-                            $('#message').text('Comment sent successfully!');
-                            $('#commentsList').load(location.href + ' #commentsList>*');
-                        } else {
-                            $('#message').text('Error: ' + response.errors.text[0]);
-                        }
-                    },
-                    error: function(xhr, errmsg, err) {
-                        $('#message').text('Error: ' + xhr.status + ': ' + xhr.responseText);
+        $('#commentForm').submit(function(e) {
+            e.preventDefault();
+
+            // Show spinner and disable submit button
+            $('#spinner').show();
+            $('#submitButton').prop('disabled', true);
+
+            $.ajax({
+                type: 'POST',
+                url: '{% url "campaign_comments" campaign_id=campaign.id %}',
+                data: $('#commentForm').serialize(),
+                success: function(response) {
+                    if (response.success) {
+                        $('#message').text('Comment sent successfully!');
+                        $('#commentsList').load(location.href + ' #commentsList>*');
+                        $('#commentText').val(''); // Clear textarea
+                    } else {
+                        $('#message').text('Error: ' + response.errors.text[0]);
                     }
-                });
+                },
+                error: function(xhr, errmsg, err) {
+                    $('#message').text('Error: ' + xhr.status + ': ' + xhr.responseText);
+                },
+                complete: function() {
+                    // Hide spinner and enable submit button after request completes
+                    $('#spinner').hide();
+                    $('#submitButton').prop('disabled', false);
+                }
             });
         });
-    </script>
+    });
+</script>
 </head>
 <body class="cc-body">
     <div class="cc-header">
@@ -256,6 +423,7 @@
 
         <h4>Total Comments: {{ comments.count }}</h4>
     </div><br>
+    <div class="cc-comments-container">
     <ul id="commentsList" class="cc-comments-list">
         {% for comment in comments %}
             <li>
@@ -275,137 +443,85 @@
             <li class="cc-no-suggested-users">No comments yet.</li>
         {% endfor %}
     </ul>
+</div>
     <div id="message" class="cc-success-message"></div>
-    <form id="commentForm" class="cc-comment-form">
-        <h4>Add a Comment:</h4>
-        {% csrf_token %}
-        <textarea id="commentText" name="text"></textarea>
-        <button type="submit">Submit</button>
-    </form>
+   <form id="commentForm" class="cc-comment-form">
+    <h4>Add a Comment:</h4>
+    {% csrf_token %}
+    <textarea id="commentText" name="text"></textarea>
+    <button type="submit" id="submitButton">
+        Submit
+        <span id="spinner" class="spinner" style="display: none;"></span>
+    </button>
+</form>
 
 
 
-    <script>
-
-
+<script type="text/javascript">
 function switchColor() {
-    var body = document.body;
-    var logoContainer = document.querySelector('.logo-container');
+    const body = document.body;
+    const isDarkMode = body.classList.toggle('dark-mode'); // Toggle dark mode class
+    var reactDivs = document.querySelectorAll('.react');
 
-    // Define the color sequence (black, white)
-    var colors = ["black", "white"];
+    // Update background and text colors for all elements
+    const elementsToUpdate = document.querySelectorAll(
+        'header, footer, section, .left-aside, .right-aside, .upper-post, .campaign-content, .react, .search-container input, .search-container .btn-reset'
+    );
 
-    // Find the index of the current color in the sequence
-    var currentIndex = colors.indexOf(body.style.backgroundColor);
+    elementsToUpdate.forEach(element => {
+        element.classList.toggle('dark-mode', isDarkMode);
+    });
 
-    // Set the next color in the sequence
-    var nextColor = colors[(currentIndex + 1) % colors.length];
+    // Update text colors for specific elements
+    const textElements = document.querySelectorAll(
+        'h1, h2, h3, h4, p, li, .campaign-nav, .campaign-nav a, .btn, .reaction, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link, .love-count, #view-count, .comment-count'
+    );
 
-    // Apply the new color to the body and other elements
-    body.style.backgroundColor = nextColor;
+    textElements.forEach(element => {
+        element.style.color = isDarkMode ? '#ffffff' : '#000000';
+    });
 
-    // Change background color and border of logo-container based on nextColor
-    if (nextColor === "black") {
-        logoContainer.style.backgroundColor = "";
-        logoContainer.style.border = "none"; 
-    } else {
-        logoContainer.style.backgroundColor = ""; // or "transparent"
-        logoContainer.style.border = "none";  // Remove border
+    // Update buttons
+    const buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)');
+    buttons.forEach(button => {
+        button.style.backgroundColor = isDarkMode ? '#262626' : '';
+        button.style.color = isDarkMode ? '#ffffff' : '#000000';
+    });
+
+    // Update `.react` divs
+    if (reactDivs.length > 0) {
+        reactDivs.forEach(function(reactDiv) {
+            reactDiv.style.backgroundColor = isDarkMode ? "#262626" : "";
+            reactDiv.style.color = isDarkMode ? "white" : "black";
+
+            if (isDarkMode) {
+                reactDiv.classList.add('react-hover');
+            } else {
+                reactDiv.classList.remove('react-hover');
+                reactDiv.style.backgroundColor = "";
+            }
+        });
     }
 
-    // Other elements to be updated based on nextColor
-    var header = document.querySelector('header');
-    var footer = document.querySelector('footer');
-    var sections = document.querySelectorAll('section, .left-aside, .right-aside');
-    var textElements = document.querySelectorAll('h1, h2,  p, li, .campaign-nav, .campaign-nav a, .btn, .upper-post, .reaction, .campaign-content, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link');
-    var reactDivs = document.querySelectorAll('.react div');
-    var loveCounts = document.querySelectorAll('[id^="love-count-"]');
-    var viewCounts = document.querySelectorAll('#view-count');
-    var commentCounts = document.querySelectorAll('.comment-count');
-    var exploreLinks = document.querySelectorAll('.explore-link i'); // Select all compass icons
+    // Update input field and reset button
+    const inputField = document.querySelector('.search-container input[type="text"]');
+    const inputResetButton = document.querySelector('.search-container .btn-reset');
 
-    // Update header background color based on nextColor
-    if (nextColor === "black") {
-        header.style.backgroundColor = "#333333";  // Darker gray when background is black
-    } else {
-        header.style.backgroundColor = nextColor;
+    if (inputField) {
+        inputField.style.backgroundColor = isDarkMode ? '#333333' : '#ffffff';
+        inputField.style.color = isDarkMode ? '#ffffff' : '#000000';
     }
 
-    footer.style.backgroundColor = nextColor;
-
-    sections.forEach(function(section) {
-        section.style.backgroundColor = nextColor;
-    });
-
-    var textColor = nextColor === "black" ? "white" : "black";
-    header.style.color = textColor;
-    footer.style.color = textColor;
-
-    textElements.forEach(function(element) {
-        element.style.color = textColor;
-    });
-
-    // Change the color of the compass icon based on the background color
-    exploreLinks.forEach(function(icon) {
-        icon.style.color = nextColor === "black" ? "white" : "black";
-    });
-
-    // Skip changing button colors
-    var buttonColor = nextColor === "black" ? "#262626" : ""; // If you want to change button colors based on background, adjust this accordingly
-    var buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)'); // Exclude specific buttons
-    buttons.forEach(function(button) {
-        button.style.backgroundColor = buttonColor;
-
-        if (nextColor === "black") {
-            button.classList.add('button-hover');
-        } else {
-            button.classList.remove('button-hover');
-            button.style.backgroundColor = "";
-        }
-    });
-
-    reactDivs.forEach(function(reactDiv) {
-        reactDiv.style.backgroundColor = nextColor === "black" ? "#262626" : "";
-
-        var reactTextColor = nextColor === "black" ? "white" : "black";
-        reactDiv.style.color = reactTextColor;
-
-        if (nextColor === "black") {
-            reactDiv.classList.add('react-hover');
-        } else {
-            reactDiv.classList.remove('react-hover');
-            reactDiv.style.backgroundColor = "";
-        }
-    });
-
-    var countTextColor = nextColor === "black" ? "white" : "black";
-    loveCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-    viewCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-    commentCounts.forEach(function(element) {
-        element.style.color = countTextColor;
-    });
-
-    // Update the input field and reset button inside .search-container
-    var inputField = document.querySelector('.search-container input[type="text"]');
-    var inputResetButton = document.querySelector('.search-container .btn-reset');
-
-    if (nextColor === "black") {
-        inputField.style.backgroundColor = "#333333"; // Dark gray for black mode
-        inputField.style.color = "white";            // White text in black mode
-        inputResetButton.style.color = "#b0b0b0";      // White icon for reset button
-    } else {
-        inputField.style.backgroundColor = "white";  // Default white background
-        inputField.style.color = "black";            // Black text in white mode
-        inputResetButton.style.color = "#b0b0b0";      // Black icon for reset button
+    if (inputResetButton) {
+        inputResetButton.style.color = '#b0b0b0';
     }
 }
 
+</script>
 
 
+
+<script type="text/javascript">
 
 function toggleCommentForm() {
     var popup = document.getElementById("commentFormPopup");

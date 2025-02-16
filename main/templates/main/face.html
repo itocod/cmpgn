@@ -60,7 +60,7 @@
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: white;
+        background-color: #f9f9f9; /* Light background */
     }
 
     header {
@@ -2104,6 +2104,14 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 <header>
+
+       <!-- Skeleton loading for header -->
+    <div id="header-skeleton" class="skeleton-loading" style="display: none;">
+        <div class="header-container-skeleton">
+            <div class="logo-skeleton"></div>
+            <div class="search-skeleton"></div>
+        </div>
+    </div>
 <a href="{% url 'create_campaign' %}" class="create" onclick="handleCreateClick()">+</a>
 
 <span id="navbarToggle" class="navbar-toggle">☰</span>
@@ -2197,13 +2205,25 @@ document.addEventListener("DOMContentLoaded", function() {
         </nav>
 </header>
 
-
+    <!-- Skeleton loading for main content -->
+    <div id="main-skeleton" class="skeleton-loading" style="display: none;">
+        <div class="skeleton-box"></div>
+        <div class="skeleton-box"></div>
+        <!-- Add more skeleton placeholders as needed -->
+    </div>
 
   <main>
 
 
 
 <aside class="left-aside">
+
+
+        <!-- Sidebar skeleton -->
+        <div id="left-sidebar-skeleton" class="skeleton-loading" style="display: none;">
+            <div class="skeleton-box"></div>
+            <div class="skeleton-box"></div>
+        </div>
 
     <div>
         <a href="{% url 'affiliate_links' %}" class="affiliate-link"><i class="fas fa-tools"></i> Campaign Advancement Tools</a>
@@ -2288,6 +2308,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
 <section>
 
+        <!-- Content skeleton -->
+        <div id="content-skeleton" class="skeleton-loading" style="display: none;">
+            <div class="skeleton-box"></div>
+            <div class="skeleton-box"></div>
+        </div>
 
 <!-- Beautiful upload button -->
 <div class="upload-container hide-on-mobile">
@@ -2314,7 +2339,11 @@ document.addEventListener("DOMContentLoaded", function() {
 
 <aside class="right-aside">
 
-
+   <!-- Right sidebar skeleton -->
+        <div id="right-sidebar-skeleton" class="skeleton-loading" style="display: none;">
+            <div class="skeleton-box"></div>
+            <div class="skeleton-box"></div>
+        </div>
   <nav  style="display:none;">
 
     <ul>
@@ -2435,9 +2464,56 @@ document.addEventListener("DOMContentLoaded", function() {
 }
 
 
+.skeleton-loading {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #f0f0f0;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+.skeleton-box {
+    width: 100%;
+    height: 20px;
+    margin: 10px 0;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+}
+
+@keyframes pulse {
+    0% {
+        background-color: #e0e0e0;
+    }
+    50% {
+        background-color: #f7f7f7;
+    }
+    100% {
+        background-color: #e0e0e0;
+    }
+}
 
 </style>
+    <script>
+        // Example of showing skeleton loading when data is being fetched
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show skeletons while content is loading
+            document.getElementById('header-skeleton').style.display = 'block';
+            document.getElementById('main-skeleton').style.display = 'block';
+            document.getElementById('left-sidebar-skeleton').style.display = 'block';
+            document.getElementById('content-skeleton').style.display = 'block';
+            document.getElementById('right-sidebar-skeleton').style.display = 'block';
 
+            // Simulate loading delay (You can replace this with real AJAX loading logic)
+            setTimeout(function() {
+                document.getElementById('header-skeleton').style.display = 'none';
+                document.getElementById('main-skeleton').style.display = 'none';
+                document.getElementById('left-sidebar-skeleton').style.display = 'none';
+                document.getElementById('content-skeleton').style.display = 'none';
+                document.getElementById('right-sidebar-skeleton').style.display = 'none';
+            }, 3000); // Hide skeleton after 3 seconds (replace with actual loading logic)
+        });
+    </script>
 
 <script type="text/javascript">
   
