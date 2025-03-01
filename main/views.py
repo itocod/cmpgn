@@ -105,6 +105,7 @@ from django.shortcuts import render, get_object_or_404
 from django.db.models import Case, When, Value, BooleanField, Q
 from django.utils import timezone
 from .models import Campaign, Profile, Notification, Chat, Message, NativeAd, NotInterested, Love
+from django.contrib.auth.models import AnonymousUser
 
 @login_required
 def campaign_list(request):
@@ -536,24 +537,36 @@ def robots_txt(request):
 
 
 
-
-
 def platformfund_view(request):
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
-    user_profile = get_object_or_404(Profile, user=request.user)
-    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    # Check if there are new campaigns from follows
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
+    if request.user.is_authenticated:
+        following_users = [follow.followed for follow in request.user.following.all()]  
+        user_profile = get_object_or_404(Profile, user=request.user)
+        unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+        
+        # Check if there are new campaigns from follows
+        new_campaigns_from_follows = Campaign.objects.filter(
+            user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check
+        )
 
-    # Update last_campaign_check for the user's profile
-    user_profile.last_campaign_check = timezone.now()
-    user_profile.save()
+        # Update last_campaign_check for the user's profile
+        user_profile.last_campaign_check = timezone.now()
+        user_profile.save()
+    else:
+        following_users = []
+        user_profile = None
+        unread_notifications = []
+        new_campaigns_from_follows = []
+
     platformfunds = PlatformFund.objects.all()
     ads = NativeAd.objects.all()  
-    return render(request, 'revenue/platformfund.html', {'ads':ads,'platformfunds': platformfunds,'user_profile': user_profile,
-                                               'unread_notifications': unread_notifications,
-    
-                                               'new_campaigns_from_follows': new_campaigns_from_follows})
+
+    return render(request, 'revenue/platformfund.html', {
+        'ads': ads,
+        'platformfunds': platformfunds,
+        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'new_campaigns_from_follows': new_campaigns_from_follows
+    })
 
 
 

@@ -95,68 +95,96 @@
     <footer>
         &copy; 2024 Rallynex. All rights reserved.
     </footer>
-    <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "name": "RallyNex",
+      "url": "https://www.rallynex.com",
+      "logo": "https://rallynex.s3.eu-north-1.amazonaws.com/main/files/og-image.png",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "rallynex1@gmail.com",
+        "contactType": "Customer Service",
+        "areaServed": "East Africa",
+        "availableLanguage": "English"
+      },
+      "sameAs": [
+        "https://www.facebook.com/RallyNex",
+        "https://twitter.com/RallyNex",
+        "https://www.instagram.com/RallyNex",
+        "https://www.youtube.com/@rallynex"
+      ],
+      "description": "RallyNex is a crowdfunding platform that supports global causes, including health, education, environment, and social justice.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "East Africa",
+        "addressCountry": "Kenya"
+      }
+    },
+    {
+      "@type": "WebSite",
+      "url": "https://www.rallynex.com",
+      "name": "RallyNex Crowdfunding Platform",
+      "description": "A crowdfunding platform where individuals and organizations can raise funds for meaningful causes worldwide.",
+      "publisher": {
+        "@type": "Organization",
+        "name": "RallyNex"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://www.rallynex.com/search?q={search_term}",
+        "query-input": "required name=search_term"
+      }
+    },
+    {
+      "@type": "Product",
+      "name": "Crowdfunding Campaigns",
+      "url": "https://www.rallynex.com",
+      "description": "Support global causes and fundraisers through RallyNex, including health, education, environmental, and social campaigns.",
+      "image": "https://rallynex.s3.eu-north-1.amazonaws.com/main/files/og-image.png",
+      "brand": {
+        "@type": "Brand",
+        "name": "RallyNex"
+      },
+      "offers": {
+        "@type": "Offer",
+        "priceCurrency": "USD",
+        "price": "0",
+        "eligibleRegion": {
+          "@type": "Place",
+          "name": "Global"
+        },
+        "url": "https://www.rallynex.com/"
+      }
+    },
+    {
+      "@type": "VideoObject",
+      "name": "RallyNex - Crowdfunding Platform",
+      "description": "Join RallyNex and support global crowdfunding campaigns. Discover how to create, share, and fund impactful projects.",
+      "thumbnailUrl": "https://rallynex.s3.eu-north-1.amazonaws.com/main/files/og-image.png",
+      "uploadDate": "2024-03-01",
+      "contentUrl": "https://www.youtube.com/@rallynex",
+      "embedUrl": "https://www.youtube.com/embed/YOUR_VIDEO_ID",
+      "publisher": {
         "@type": "Organization",
         "name": "RallyNex",
-        "url": "https://www.rallynex.com",
-        "logo": "https://rallynex.s3.eu-north-1.amazonaws.com/main/files/og-image.png",
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "email": "rallynex1@gmail.com",
-          "contactType": "Customer Service",
-          "areaServed": "East Africa",
-          "availableLanguage": "English"
-        },
-        "sameAs": [
-          "https://www.facebook.com/RallyNex",
-          "https://twitter.com/RallyNex",
-          "https://www.instagram.com/RallyNex"
-        ],
-        "description": "RallyNex is a crowdfunding platform that supports global causes, including health, education, environment, and social justice.",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "East Africa",
-          "addressCountry": "Kenya"
-        }
-      },
-      {
-        "@type": "WebSite",
-        "url": "https://www.rallynex.com",
-        "name": "RallyNex Crowdfunding Platform",
-        "description": "A crowdfunding platform where individuals and organizations can raise funds for meaningful causes worldwide.",
-        "publisher": {
-          "@type": "Organization",
-          "name": "RallyNex"
-        }
-      },
-      {
-        "@type": "Product",
-        "name": "Crowdfunding Campaigns",
-        "url": "https://www.rallynex.com",
-        "description": "Support global causes and fundraisers through RallyNex, including health, education, environmental, and social campaigns.",
-        "image": "https://rallynex.s3.eu-north-1.amazonaws.com/main/files/og-image.png",
-        "brand": {
-          "@type": "Brand",
-          "name": "RallyNex"
-        },
-        "offers": {
-          "@type": "Offer",
-          "priceCurrency": "USD",
-          "price": "0",
-          "eligibleRegion": {
-            "@type": "Place",
-            "name": "Global"
-          },
-          "url": "https://www.rallynex.com/"
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://rallynex.s3.eu-north-1.amazonaws.com/main/files/og-image.png"
         }
       }
-    ]
-  }
+    }
+  ]
+}
 </script>
+
+
+
 
 </body>
 </html>
