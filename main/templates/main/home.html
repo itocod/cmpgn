@@ -2087,6 +2087,71 @@ body.dark-mode .affiliate-link i {
     margin-right: 8px; /* Space between icon and text */
 }
 
+
+/* Light mode (default) */
+.filter-form {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 20px;
+}
+
+.filter-label {
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+}
+
+.filter-select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    font-size: 14px;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.filter-select:hover {
+    border-color: #bbb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+/* Dark mode */
+.dark-mode .filter-form {
+    background-color: transparent; /* Ensure form background doesn't conflict */
+}
+
+.dark-mode .filter-label {
+    color: #f0f0f0; /* Light text for dark mode */
+}
+
+.dark-mode .filter-select {
+    background-color: #333; /* Dark background for select */
+    border-color: #555; /* Darker border */
+    color: #f0f0f0; /* Light text */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Darker shadow */
+}
+
+.dark-mode .filter-select:hover {
+    border-color: #777; /* Lighter border on hover */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); /* Stronger shadow on hover */
+}
+
+.dark-mode .filter-select:focus {
+    border-color: #007bff; /* Keep focus color consistent */
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Brighter focus shadow */
+}
+
   </style>
 
 
@@ -2516,8 +2581,24 @@ document.addEventListener("DOMContentLoaded", function() {
     </a>
 </h4>
 
+
+
+<form method="GET" action="{% url 'home' %}" class="filter-form">
+    <label for="category" class="filter-label">Filter by Category:</label>
+    <select name="category" id="category" class="filter-select" onchange="this.form.submit()">
+        <option value="">All Categories</option>
+        {% for category in categories %}
+            <option value="{{ category }}" {% if category == selected_category %}selected{% endif %}>
+                {{ category }}
+            </option>
+        {% endfor %}
+    </select>
+</form>
+
     {% if public_campaigns %}
        <div class="sidebar-box">
+
+
             {% for campaign in public_campaigns %}
                 <div class="container-with-border">
                     <div class="upper-post">

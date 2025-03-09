@@ -2116,6 +2116,73 @@ body.dark-mode .affiliate-link:hover {
 body.dark-mode .affiliate-link i {
     margin-right: 8px; /* Space between icon and text */
 }
+
+
+/* Light mode (default) */
+.filter-form {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 20px;
+}
+
+.filter-label {
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+}
+
+.filter-select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    font-size: 14px;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.filter-select:hover {
+    border-color: #bbb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+/* Dark mode */
+.dark-mode .filter-form {
+    background-color: transparent; /* Ensure form background doesn't conflict */
+}
+
+.dark-mode .filter-label {
+    color: #f0f0f0; /* Light text for dark mode */
+}
+
+.dark-mode .filter-select {
+    background-color: #333; /* Dark background for select */
+    border-color: #555; /* Darker border */
+    color: #f0f0f0; /* Light text */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Darker shadow */
+}
+
+.dark-mode .filter-select:hover {
+    border-color: #777; /* Lighter border on hover */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); /* Stronger shadow on hover */
+}
+
+.dark-mode .filter-select:focus {
+    border-color: #007bff; /* Keep focus color consistent */
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Brighter focus shadow */
+}
+
+
   </style>
 <script type="text/javascript">
   function handleCreateClick() {
@@ -2549,6 +2616,19 @@ document.addEventListener("DOMContentLoaded", function() {
 
     <h2 style="font-size: 19px; padding-left: 20px; display: inline-flex; align-items: center;">Manage Your Campaigns.</h2>
 
+
+    <form method="GET" action="{% url 'manage_campaigns' %}" class="filter-form">
+        <label for="category" class="filter-label">Filter by Category:</label>
+        <select name="category" id="category" class="filter-select" onchange="this.form.submit()">
+            <option value="">All Categories</option>
+            {% for category in categories %}
+                <option value="{{ category }}" {% if category == selected_category %}selected{% endif %}>
+                    {{ category }}
+                </option>
+            {% endfor %}
+        </select>
+    </form>
+
     {% if campaigns %}
        <div class="sidebar-box">
             {% for campaign in campaigns %}
@@ -2560,15 +2640,18 @@ document.addEventListener("DOMContentLoaded", function() {
           </a>
         </div>
         <div class="post-details">
-          <h1>
-            {{ campaign.user.user.username }}
-            {% if campaign.user.profile_verified %}
-              <span class="verified-status">verified <i class="material-icons">verified_user</i></span>
-            {% endif %}
-            {% if campaign.is_changemaker %}
-              <span class="cm"><i class="far fa-star"></i> Changemaker</span>
-            {% endif %}
-          </h1>
+                  <h1>{{ campaign.user.user.username }} 
+                                {% if campaign.user.profile_verified %}
+                                    <span class="verified-status" style="font-size:12px;"><span>verified</span><i class="material-icons" style="font-size:12px;color:green">verified_user</i></span>
+                                {% endif %}
+                                .  <i class="cm">
+    {% if campaign.is_changemaker %}
+        <span  class="far fa-star"
+ style="color:red; font-size: 12px;"></span>
+        <span class="changemaker-text">Changemaker</span>
+    {% endif %}
+</i>
+                            </h1> 
           <div class="campaign-category" style="cursor: pointer;" onclick="toggleObjectives(this)">
             {{ campaign.category }} Campaign
           </div>

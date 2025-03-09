@@ -54,6 +54,9 @@ def index(request):
     unread_messages_count = 0
     show_login_button = not request.user.is_authenticated  # Show the login button for anonymous users
 
+    # Get selected category filter from request
+    category_filter = request.GET.get('category', '')
+
     if request.user.is_authenticated:
         user_profile = get_object_or_404(Profile, user=request.user)
         user_profile.last_campaign_check = timezone.now()
@@ -62,14 +65,19 @@ def index(request):
         user_chats = Chat.objects.filter(participants=request.user)
         unread_messages_count = Message.objects.filter(chat__in=user_chats).exclude(sender=request.user).count()
 
-    # Fetch public campaigns regardless of user authentication
-    campaigns = (
-        Campaign.objects.filter(visibility='public')
-        .select_related('user')  # Ensures that user profiles are prefetched
-        .annotate(love_count_annotated=Count('loves'))
-        .filter(love_count_annotated__gte=2)
+    # Fetch public campaigns, filter by category if selected
+    campaigns = Campaign.objects.filter(visibility='public')
+
+    if category_filter:
+        campaigns = campaigns.filter(category=category_filter)
+
+    campaigns = campaigns.select_related('user') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
         .order_by('-love_count_annotated')
-    )
+
+    # Fetch available categories
+    categories = Campaign.objects.values_list('category', flat=True).distinct()
 
     form = SubscriptionForm()
     ads = NativeAd.objects.all()
@@ -82,9 +90,14 @@ def index(request):
         'form': form,
         'ads': ads,
         'show_login_button': show_login_button,  # Add the flag to context
+        'categories': categories,  # Pass categories to template
+        'selected_category': category_filter,  # Retain selected category
     }
 
     return render(request, 'accounts/index.html', context)
+
+
+
 
 
 

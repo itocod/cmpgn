@@ -1792,36 +1792,51 @@ def create_activity(request, campaign_id):
 
 
 
-
-
-
 @login_required
 def manage_campaigns(request):
     # Get the user's profile
     user_profile = get_object_or_404(Profile, user=request.user)
     
+    # Get selected category filter from request
+    category_filter = request.GET.get('category', '')
+
     # Fetch all campaigns (both public and private) for the current user's profile
-    all_campaigns = Campaign.objects.filter(user=user_profile).order_by('-timestamp')
+    all_campaigns = Campaign.objects.filter(user=user_profile)
     
+    # Apply category filter if provided
+    if category_filter:
+        all_campaigns = all_campaigns.filter(category=category_filter)
+
+    all_campaigns = all_campaigns.order_by('-timestamp')
+
     # Fetch unread notifications for the user
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
     
     # Check if there are new campaigns from follows
     following_users = [follow.followed for follow in request.user.following.all()]
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check
+    )
 
     # Update last_campaign_check for the user's profile
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
-    
+
     ads = NativeAd.objects.all()
+
+    # Fetch available categories
+    categories = Campaign.objects.filter(user=user_profile).values_list('category', flat=True).distinct()
+
     return render(request, 'main/manage_campaigns.html', {
         'ads': ads,
         'campaigns': all_campaigns,
         'user_profile': user_profile,
         'unread_notifications': unread_notifications,
-        'new_campaigns_from_follows': new_campaigns_from_follows
+        'new_campaigns_from_follows': new_campaigns_from_follows,
+        'categories': categories,  # Pass categories to template
+        'selected_category': category_filter,  # Retain selected category
     })
+
 
 
 
@@ -1829,6 +1844,9 @@ def manage_campaigns(request):
 def private_campaign(request):
     # Get the current user's profile
     user_profile = get_object_or_404(Profile, user=request.user)
+
+    # Get selected category filter from request
+    category_filter = request.GET.get('category', '')
 
     # Get the users that the current user is following
     following_users = request.user.following.values_list('followed', flat=True)
@@ -1847,12 +1865,18 @@ def private_campaign(request):
         Q(user__user__in=following_users) | Q(user=user_profile),
         visibility='private',
         is_not_interested=False
-    ).order_by('-timestamp')
+    )
 
     # Additional filter to include campaigns where the current user is in the 'visible_to_followers' list
     visible_campaigns = visible_campaigns.filter(
         Q(visible_to_followers=user_profile) | Q(user=user_profile)
     )
+
+    # Apply category filter if provided
+    if category_filter:
+        visible_campaigns = visible_campaigns.filter(category=category_filter)
+
+    visible_campaigns = visible_campaigns.order_by('-timestamp')
 
     # Fetch unread notifications, chats, and unread messages
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
@@ -1871,6 +1895,12 @@ def private_campaign(request):
     # Fetch native ads for display on the page
     ads = NativeAd.objects.all()
 
+    # Fetch available categories from private campaigns
+    categories = Campaign.objects.filter(
+        Q(user__user__in=following_users) | Q(user=user_profile),
+        visibility='private'
+    ).values_list('category', flat=True).distinct()
+
     return render(request, 'main/private_campaign.html', {
         'ads': ads,
         'private_campaigns': visible_campaigns,  # Filtered private campaigns to display
@@ -1878,7 +1908,11 @@ def private_campaign(request):
         'unread_notifications': unread_notifications,
         'new_campaigns_from_follows': new_campaigns_from_follows,
         'unread_messages_count': unread_messages_count,
+        'categories': categories,  # Pass categories to template
+        'selected_category': category_filter,  # Retain selected category
     })
+
+
 
 
 
@@ -2018,76 +2052,65 @@ def toggle_love(request, campaign_id):
     return JsonResponse({}, status=404)
 
 
-
 @login_required
 def home(request):
-    # Get the current user's profile
     user_profile = get_object_or_404(Profile, user=request.user)
-    # Try to get the campaign ID from request parameters; if not, fetch a default campaign
     campaign_id = request.GET.get('campaign_id')
+    category_filter = request.GET.get('category', '')  # Get category filter from request
+    
     if campaign_id:
         campaign = get_object_or_404(Campaign, pk=campaign_id)
     else:
-        campaign = Campaign.objects.first()  # Get the first campaign or handle as needed
-
-    user = request.user
+        campaign = Campaign.objects.first()  # Default campaign
     
-    # Check if the user has loved the campaign only if they are not the owner
-    already_loved = False
-    if campaign and user != campaign.user:  # Check if the user is not the owner
-        already_loved = Love.objects.filter(campaign=campaign, user=user).exists()
+    user = request.user
+    already_loved = campaign and user != campaign.user and Love.objects.filter(campaign=campaign, user=user).exists()
 
-    # Get all campaigns, annotate whether the current user marked them as "not interested"
+    # Get campaigns, annotate whether the user marked them as "not interested"
     campaigns = Campaign.objects.annotate(
         is_not_interested=Case(
             When(not_interested_by__user=user_profile, then=Value(True)),
             default=Value(False),
             output_field=BooleanField(),
         )
-    )
+    ).filter(is_not_interested=False, visibility='public')
 
-    # Exclude campaigns that the current user has marked as "not interested"
-    visible_campaigns = campaigns.filter(is_not_interested=False, visibility='public').order_by('-timestamp')
+    # Apply category filter if provided
+    if category_filter:
+        campaigns = campaigns.filter(category=category_filter)
 
-    # Fetch followed users' campaigns
+    campaigns = campaigns.order_by('-timestamp')
+
     following_users = request.user.following.values_list('followed', flat=True)
-    followed_campaigns = visible_campaigns.filter(user__user__in=following_users)
-
-    # Include the current user's own public campaigns
-    own_campaigns = visible_campaigns.filter(user=user_profile)
-
-    # Combine followed campaigns and own campaigns
+    followed_campaigns = campaigns.filter(user__user__in=following_users)
+    own_campaigns = campaigns.filter(user=user_profile)
     campaigns_to_display = followed_campaigns | own_campaigns
 
-    # Fetch unread notifications, chats, and unread messages
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
     user_chats = Chat.objects.filter(participants=request.user)
     unread_messages_count = Message.objects.filter(chat__in=user_chats).exclude(sender=request.user).count()
-
-    # Fetch new campaigns from followed users added after the user's last check
     new_campaigns_from_follows = Campaign.objects.filter(
         user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check
     ).exclude(id__in=NotInterested.objects.filter(user=user_profile).values_list('campaign_id', flat=True)).order_by('-timestamp')
 
-    # Update the user's last campaign check time
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
 
-    # Fetch native ads for display on the page
     ads = NativeAd.objects.all()
+    categories = Campaign.objects.values_list('category', flat=True).distinct()  # Fetch unique categories
 
-    # Render the home page
     return render(request, 'main/home.html', {
         'ads': ads,
-        'public_campaigns': campaigns_to_display,  # Filtered campaigns to display
+        'public_campaigns': campaigns_to_display,
         'campaign': Campaign.objects.last(),
         'already_loved': already_loved,
         'user_profile': user_profile,
         'unread_notifications': unread_notifications,
         'unread_messages_count': unread_messages_count,
-        'new_campaigns_from_follows': new_campaigns_from_follows,  # New campaigns ordered by latest
+        'new_campaigns_from_follows': new_campaigns_from_follows,
+        'categories': categories,  # Pass categories to template
+        'selected_category': category_filter,  # Pass selected category to retain state
     })
-
 
 
 

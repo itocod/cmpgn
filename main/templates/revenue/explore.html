@@ -7,7 +7,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 <!-- Google Site Verification -->
 <meta name="google-site-verification" content="2IjHwnbJp2eoJ42Ec2-vy5FHzwfpyA4qxZlA2Ct1lW8" />
 
@@ -69,9 +69,8 @@
     <!-- Default Title -->
   <title>RallyNex - Together for Change: Join Global Campaigns and Transform Lives</title>
 
-
-  <style>
-    /* Existing styles */
+<style>
+    /* General Styles */
     body, html {
       margin: 0;
       padding: 0;
@@ -81,6 +80,8 @@
       background: #000;
       color: #fff;
       overflow-x: hidden;
+      line-height: 1.6;
+      font-size: 16px; /* Standard base font size */
     }
 
     .container {
@@ -90,6 +91,7 @@
       padding: 0;
     }
 
+    /* Header Section */
     .header {
       position: relative;
       background: url('{% static 'main/files/vb.avif' %}') no-repeat center center/cover;
@@ -99,179 +101,456 @@
       align-items: center;
       justify-content: center;
       padding: 0;
+      color: #fff;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
     }
 
     .title {
-      font-size: 4rem;
+      font-size: 2.5rem; /* Moderate size for the title */
       margin: 0;
+      font-weight: bold;
+      animation: fadeIn 2s ease-in-out;
     }
 
     .tagline {
-      font-size: 1.5rem;
+      font-size: 1.25rem; /* Smaller and balanced */
       margin: 20px 0;
       color: #fff;
+      animation: fadeIn 3s ease-in-out;
     }
 
     .mission {
-      font-size: 1.2rem;
+      font-size: 1rem; /* Standard size for readability */
       margin: 20px;
       padding: 20px;
-      background-color: rgba(255, 255, 255, 0.1); /* semi-transparent background for better readability */
-      border-radius: 8px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      backdrop-filter: blur(5px);
+      animation: fadeIn 4s ease-in-out;
     }
 
     .btn-primary {
-      background-color: #1e90ff;
+      background: linear-gradient(135deg, #1e90ff, #3742fa);
       color: #fff;
-      padding: 10px 20px;
+      padding: 10px 20px; /* Standard padding */
       text-decoration: none;
-      border-radius: 5px;
-      transition: background-color 0.3s ease;
+      border-radius: 30px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 15px rgba(30, 144, 255, 0.4);
+      font-size: 1rem; /* Standard button font size */
     }
 
     .btn-primary:hover {
-      background-color: #3742fa;
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(30, 144, 255, 0.6);
     }
 
-    .features {
+    /* Campaign Categories Section */
+    .campaign-categories {
       background: #111;
       padding: 50px 20px;
     }
 
-    .feature {
+    .campaign-categories h2 {
+      font-size: 2rem; /* Moderate heading size */
       margin-bottom: 30px;
-    }
-
-    .feature h2 {
       color: #1e90ff;
-      font-size: 2rem;
     }
 
-    .feature img {
+    .category {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 20px;
+      border-radius: 12px;
+      margin: 20px 0;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .category:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 30px rgba(30, 144, 255, 0.3);
+    }
+
+    .category img {
       width: 100%;
       max-width: 300px;
-      margin-bottom: 10px;
+      border-radius: 8px;
+      margin-bottom: 15px;
     }
 
-    .success-stories {
+    .category h3 {
+      font-size: 1.5rem; /* Moderate size for subheadings */
+      margin: 10px 0;
+      color: #1e90ff;
+    }
+
+    .category p {
+      font-size: 1rem; /* Standard size for readability */
+      color: #ddd;
+    }
+
+    .btn-secondary {
+      background: rgba(30, 144, 255, 0.1);
+      color: #1e90ff;
+      padding: 8px 16px; /* Smaller padding */
+      text-decoration: none;
+      border-radius: 30px;
+      transition: background 0.3s ease, color 0.3s ease;
+      border: 1px solid #1e90ff;
+      font-size: 1rem; /* Standard button font size */
+    }
+
+    .btn-secondary:hover {
+      background: #1e90ff;
+      color: #fff;
+    }
+
+    /* How It Works Section */
+    .how-it-works {
       background: #222;
       padding: 50px 20px;
     }
 
-    .success-stories h2 {
+    .how-it-works h2 {
+      font-size: 2rem; /* Moderate heading size */
+      margin-bottom: 30px;
       color: #1e90ff;
-      font-size: 2.5rem;
-      margin-bottom: 20px;
+    }
+
+    .how-it-works ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .how-it-works li {
+      font-size: 1rem; /* Standard size for readability */
+      margin: 15px 0;
+      color: #ddd;
+    }
+
+    .how-it-works strong {
+      color: #1e90ff;
+    }
+
+    /* Success Stories Section */
+    .success-stories {
+      background: #111;
+      padding: 50px 20px;
+    }
+
+    .success-stories h2 {
+      font-size: 2rem; /* Moderate heading size */
+      margin-bottom: 30px;
+      color: #1e90ff;
     }
 
     .story {
-      margin-bottom: 30px;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 20px;
+      border-radius: 12px;
+      margin: 20px 0;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .story:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 30px rgba(30, 144, 255, 0.3);
     }
 
     .story img {
       width: 100%;
       max-width: 800px;
-      margin-bottom: 10px;
+      border-radius: 8px;
+      margin-bottom: 15px;
     }
 
-    .footer {
-      background: #000;
-      padding: 20px 0;
-      border-top: 1px solid #333;
+    .story p {
+      font-size: 1rem; /* Standard size for readability */
+      color: #ddd;
     }
 
-    .social-links {
-      margin-bottom: 10px;
+       /* Join Community Section */
+    .join-community {
+      background: #222;
+      padding: 50px 20px;
+      text-align: center;
     }
 
-    .social-links a {
+    .join-community h2 {
+      font-size: 2rem; /* Moderate heading size */
+      margin-bottom: 20px;
       color: #1e90ff;
-      margin: 0 10px;
+    }
+
+    .join-community p {
+      font-size: 1rem; /* Standard size for readability */
+      color: #ddd;
+      margin-bottom: 20px;
+    }
+
+    .join-community .btn-primary {
+      background: linear-gradient(135deg, #1e90ff, #3742fa);
+      color: #fff;
+      padding: 12px 24px;
       text-decoration: none;
+      border-radius: 30px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 15px rgba(30, 144, 255, 0.4);
+      font-size: 1rem; /* Standard button font size */
+      margin-bottom: 30px; /* Space between button and follow section */
+      display: inline-block; /* Ensure the button is centered */
+    }
+
+    .join-community .btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(30, 144, 255, 0.6);
+    }
+
+    .join-community .follow-us {
+      margin-top: 30px; /* Space between signup and follow sections */
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1); /* Subtle separator */
+    }
+
+    .join-community .follow-us p {
+      font-size: 1rem;
+      color: #ddd;
+      margin-bottom: 15px;
+    }
+
+    .join-community .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 15px; /* Space between social links */
+    }
+
+    .join-community .social-links a {
+      color: #1e90ff;
+      text-decoration: none;
+      font-size: 1rem;
       transition: color 0.3s ease;
     }
 
-    .social-links a:hover {
+    .join-community .social-links a:hover {
       color: #3742fa;
     }
 
-    .subscribe-link {
-      color: #4CAF50;
-      text-decoration: none;
-      font-weight: bold;
-      margin-top: 1em;
+    /* Footer Section */
+    .footer {
+      background: #000;
+      padding: 30px 0;
+      border-top: 1px solid #333;
+      text-align: center;
     }
 
-    .subscribe-link:hover {
-      text-decoration: underline;
+    .footer p {
+      margin: 10px 0;
+      color: #aaa;
+      font-size: 0.9rem; /* Slightly smaller for footer text */
     }
+
+
+
+/* Social Links Container */
+.social-links {
+    text-align: center;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.social-links h3 {
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+/* Social Buttons Container */
+.social-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+}
+
+/* Base Button Style */
+.btn-social {
+    display: inline-flex;
+    align-items: center;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    color: #fff; /* White text */
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 2px solid transparent; /* Add border for hover effect */
+}
+
+/* Ensure both text and icons are white */
+.btn-social,
+.btn-social i {
+    color: #fff;
+}
+
+/* Icons */
+.btn-social i {
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+/* Hover Effects */
+.btn-social:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.3); /* Add border on hover */
+}
+
+/* Platform-Specific Colors */
+.btn-social.facebook {
+    background-color: #1877f2; /* Facebook blue */
+}
+
+.btn-social.twitter {
+    background-color: #1da1f2; /* Twitter blue */
+}
+
+.btn-social.instagram {
+    background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d); /* Instagram gradient */
+}
+
+.btn-social.youtube {
+    background-color: #ff0000; /* YouTube red */
+}
+
+.btn-social.quora {
+    background-color: #b92b27; /* Quora red */
+}
+
+.btn-social.reddit {
+    background-color: #ff4500; /* Reddit orange */
+}
+
+.btn-social.medium {
+    background-color: #000; /* Medium black */
+}
+
+
   </style>
+
 </head>
 <body>
   <!-- Spinner -->
   <div class="spinner-wrapper" id="spinner-screen">
     <div class="spinner"></div>
   </div>
+<!-- Main Content -->
+<div class="container">
+  <header class="header">
+    <h1>Make a Difference: Support Causes That Matter</h1>
+    <p>Join our crowdfunding platform to fund impactful projects. Whether you're passionate about health, education, the environment, or humanitarian aid, we make it easy for you to support the causes closest to your heart.</p>
+   <a href="{% url 'index' %}" class="btn-primary">Explore Campaigns</a>
 
-  <!-- Main Content -->
-  <div class="container">
-    <header class="header">
-      <h1>Make a Difference: Fund Your Favorite Causes Today</h1>
-      <p>Join our crowdfunding platform to support causes that matter to you. Whether you're passionate about health, education, the environment, or social justice, our platform makes it easy for you to donate and make a tangible impact.</p>
-      <a href="{% url 'account_login' %}" class="btn-primary">Start Your Campaign</a>
-    </header>
+  </header>
 
-    <!-- Mission Statement Section -->
-    <section class="mission">
-      <h2>Our Mission</h2>
-      <p>RallyNex aims to empower individuals and communities by providing a dedicated crowdfunding platform for impactful projects and causes. We strive to connect passionate supporters with initiatives that foster positive change in areas such as environmental conservation, health, education, equality, and more. Our mission is to inspire collaboration, encourage community engagement, and facilitate the realization of diverse campaigns that contribute to a better world. Together, we can make a meaningful difference by supporting the causes that matter most.</p>
-    </section>
+<!-- Campaign Categories Section -->
+<section class="campaign-categories" id="campaigns">
+    <h2>Discover Campaign Categories</h2>
 
-    <!-- Features Section -->
-    <section class="features">
-      <h2>What We Offer</h2>
-      <div class="feature">
-        <img src="{% static 'main/files/sp.jpg' %}" alt="Diverse Campaigns">
-        <h2>Diverse Campaigns for Every Purpose</h2>
-        <p>We empower individuals, businesses, and organizations to launch campaigns that matter. Whether you're raising funds, spreading awareness, or rallying support for a cause, our platform is designed to give you the tools to succeed. With customizable campaign options and an easy-to-use interface, you can focus on making an impact while we handle the details.</p>
-      </div>
-      <div class="feature">
-        <img src="{% static 'main/files/spt.jpg' %}" alt="Community Support">
-        <h2>A Thriving Community of Supporters</h2>
-        <p>Join a growing network of passionate individuals and groups who are dedicated to creating change. Our platform connects you with supporters who share your values, helping you reach your goals faster. By fostering a culture of collaboration and mutual aid, we ensure that every campaign receives the attention it deserves.</p>
-      </div>
-      <div class="feature">
-        <img src="{% static 'main/files/tls.jpg' %}" alt="Fun Features">
-        <h2>Innovative and Fun Engagement Features</h2>
-        <p>From gamified fundraising challenges to social media integration, we make supporting campaigns both enjoyable and impactful. Our interactive tools keep your audience engaged, while detailed analytics help you track progress and make data-driven decisions. We continuously innovate to keep campaigns fresh and exciting, ensuring users and backers stay connected.</p>
-      </div>
-    </section>
+    <div class="category">
+        <img src="{% static 'main/files/healthp.webp' %}" alt="Health Campaigns">
+        <h3>Health and Wellness</h3>
+        <p>Fund medical research, healthcare initiatives, and wellness programs that can save lives and improve quality of life.</p>
+        <a href="{% url 'index' %}?category=Health%20and%20Wellness" class="btn-secondary">Support Health Projects</a>
+    </div>
 
-    <!-- Success Stories Section -->
-    <section class="success-stories">
-      <h2>Success Stories</h2>
-      <div class="story">
-        <img src="{% static 'main/files/xc.jpg' %}" alt="Success Story 1">
-        <p>Learn how our community has achieved remarkable milestones through RallyNex.</p>
-      </div>
-      <div class="story">
-        <img src="{% static 'main/files/ok.avif' %}" alt="Success Story 2">
-        <p>Explore inspiring stories of projects that made a significant impact.</p>
-      </div>
-    </section>
+    <div class="category">
+        <img src="{% static 'main/files/education.jpg' %}" alt="Education Campaigns">
+        <h3>Education and Literacy</h3>
+        <p>Support schools, scholarships, and learning resources that empower future generations and drive social change.</p>
+        <a href="{% url 'index' %}?category=Education%20and%20Literacy" class="btn-secondary">Support Education</a>
+    </div>
 
-    <!-- Footer Section -->
-    <footer class="footer">
-      <p>© 2025 RallyNex. All rights reserved.</p>
-      <div class="social-links">
-        <a href="https://facebook.com/RallyNex">Facebook</a>
-        <a href="https://twitter.com/RallyNex">Twitter</a>
-        <a href="https://instagram.com/RallyNex">Instagram</a>
-      </div>
-    </footer>
-  </div>
+    <div class="category">
+        <img src="{% static 'main/files/environment.jpg' %}" alt="Environmental Campaigns">
+        <h3>Environmental Conservation</h3>
+        <p>Contribute to the fight against climate change, protect wildlife, and preserve natural resources for future generations.</p>
+        <a href="{% url 'index' %}?category=Environmental%20Conservation" class="btn-secondary">Support Environmental Projects</a>
+    </div>
+
+    <div class="category">
+        <img src="{% static 'main/files/human.jpg' %}" alt="Humanitarian Aid Campaigns">
+        <h3>Humanitarian Aid</h3>
+        <p>Support life-saving initiatives, disaster relief, and humanitarian projects that provide essential aid to those in need.</p>
+        <a href="{% url 'index' %}?category=Humanitarian%20Aid" class="btn-secondary">Support Humanitarian Aid</a>
+    </div>
+
+ 
+</section>
 
 
+  <!-- How It Works Section -->
+  <section class="how-it-works">
+    <h2>How It Works</h2>
+    <p>Our platform allows you to easily support campaigns, track progress, and make a lasting impact. It's simple:</p>
+    <ul>
+      <li><strong>Explore Campaigns:</strong> Browse through categories to find the causes you care about.</li>
+      <li><strong>Donate:</strong> Contribute directly to the campaign of your choice.</li>
+      <li><strong>Make a Difference:</strong> See the impact your donation is making in real time.</li>
+    </ul>
+  </section>
+
+  <!-- Success Stories Section -->
+  <section class="success-stories">
+    <h2>Success Stories</h2>
+    <div class="story">
+      <img src="{% static 'main/files/success1.jpg' %}" alt="Success Story 1">
+      <p>See how our community has helped fund groundbreaking health initiatives that saved lives.</p>
+    </div>
+    <div class="story">
+      <img src="{% static 'main/files/innovate.webp' %}" alt="Success Story 2">
+      <p>Read inspiring stories of education projects that transformed communities through access to learning.</p>
+    </div>
+  </section>
+
+<!-- Join Our Community Section -->
+<section class="join-community">
+  <h2>Join Our Community</h2>
+  <p>Be a part of something bigger. By joining our community, you can connect with like-minded individuals, follow exciting campaigns, and make a real difference in the world. Together, we can change lives!</p>
+  
+  <a href="/accounts/signup/" class="btn-primary">Sign Up Now</a>
+
+  <!-- Follow Us Section -->
+<div class="social-links">
+    <h3>Follow Us on Social Media</h3>
+    <div class="social-buttons">
+        <a href="https://facebook.com/RallyNex" target="_blank" rel="noopener noreferrer" class="btn-social facebook">
+            <i class="fab fa-facebook-f"></i> 
+        </a>
+        <a href="https://twitter.com/RallyNex" target="_blank" rel="noopener noreferrer" class="btn-social twitter">
+            <i class="fab fa-twitter"></i> 
+        </a>
+        <a href="https://instagram.com/RallyNex" target="_blank" rel="noopener noreferrer" class="btn-social instagram">
+            <i class="fab fa-instagram"></i> 
+        </a>
+        <a href="https://www.youtube.com/@RallyNex" target="_blank" rel="noopener noreferrer" class="btn-social youtube">
+            <i class="fab fa-youtube"></i> 
+        </a>
+        <a href="https://www.quora.com/profile/Rally-Nex" target="_blank" rel="noopener noreferrer" class="btn-social quora">
+            <i class="fab fa-quora"></i> 
+        </a>
+        <a href="https://www.reddit.com/user/AvailablePackage8282" target="_blank" rel="noopener noreferrer" class="btn-social reddit">
+            <i class="fab fa-reddit-alien"></i> 
+        </a>
+        <a href="https://medium.com/@Rallynex1" target="_blank" rel="noopener noreferrer" class="btn-social medium">
+            <i class="fab fa-medium-m"></i> 
+        </a>
+    </div>
+</div>
 
 <script type="application/ld+json">
 {
