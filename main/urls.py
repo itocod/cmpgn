@@ -7,7 +7,7 @@ urlpatterns = [
 path('campaigns/', views.campaign_list, name='campaign_list'),
 
    path('campaign/<int:campaign_id>/engagement/', views.campaign_engagement_data, name='campaign_engagement'),
-    path('explore/', views.explore_campaigns, name='explore_campaigns'),
+    path('landing/', views.explore_campaigns, name='explore_campaigns'),
     path('verify/', views.verify_profile, name='verify_profile'),
     path('campaign/<int:campaign_id>/join_leave/', views.join_leave_campaign, name='join_leave_campaign'),
     path('campaign/<int:campaign_id>/joiners/', views.campaign_joiners, name='campaign_joiners'),

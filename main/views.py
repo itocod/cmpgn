@@ -284,7 +284,7 @@ def explore_campaigns(request):
     public_campaigns = Campaign.objects.filter(visibility='public')  # Adjust this query to match your actual filtering criteria
     
     # Pass the public_campaigns to the template
-    return render(request, 'revenue/explore.html', {'public_campaigns': public_campaigns})
+    return render(request, 'marketing/landing.html', {'public_campaigns': public_campaigns})
 
 
 
