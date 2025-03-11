@@ -314,3 +314,36 @@ class ProfileAdmin(admin.ModelAdmin):
         return any(campaign.is_changemaker for campaign in obj.user_campaigns.all())
     is_changemaker.boolean = True
     is_changemaker.short_description = 'Changemaker'
+
+
+
+
+
+from django.contrib import admin
+from .models import Blog
+
+
+
+class BlogAdmin(admin.ModelAdmin):
+    list_display = ('title', 'author', 'created_at', 'updated_at', 'is_published')  # Added updated_at
+    list_filter = ('is_published', 'created_at', 'updated_at', 'author')  # Filter by updated_at
+    search_fields = ('title', 'content', 'author__username')
+    prepopulated_fields = {'slug': ('title',)}
+    readonly_fields = ('created_at', 'updated_at')  # Prevents editing timestamps
+    ordering = ('-created_at',)
+
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('title', 'slug', 'content', 'image', 'is_published')
+        }),
+        ('Author & Timestamps', {
+            'fields': ('author', 'created_at', 'updated_at'),
+        }),
+    )
+
+admin.site.register(Blog, BlogAdmin)
+
+
+
+
+

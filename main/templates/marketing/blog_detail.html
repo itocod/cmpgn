@@ -1,0 +1,12 @@
+{% block content %}
+    <article>
+        <h1>{{ blog_post.title }}</h1>
+        <p>By {{ blog_post.author }} | {{ blog_post.created_at|date:"F d, Y" }}</p>
+        
+        {% if blog_post.image %}
+            <img src="{{ blog_post.image.url }}" alt="{{ blog_post.title }}" style="max-width: 100%; height: auto; margin-bottom: 15px;">
+        {% endif %}
+        
+        <p>{{ blog_post.content|safe }}</p>
+    </article>
+{% endblock %}

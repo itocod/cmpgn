@@ -2467,3 +2467,33 @@ def search_profile_results(request):
             results = Profile.objects.filter(user__username__icontains=search_query)
             return render(request, 'main/search_profile_results.html', {'search_results': results, 'query': search_query})
     return render(request, 'main/search_profile_results.html', {'search_results': [], 'query': ''})
+
+
+
+
+
+
+
+#marketing
+
+from .models import Blog
+
+def blog_list(request):
+    blogs = Blog.objects.filter(is_published=True).order_by('-created_at')  # Show latest first
+    return render(request, 'marketing/blog_list.html', {'blogs': blogs})    
+
+
+
+def blog_detail(request, slug):
+    blog_post = get_object_or_404(Blog, slug=slug, is_published=True)
+    return render(request, 'marketing/blog_detail.html', {'blog_post': blog_post})
+
+
+
+
+
+
+
+
+
+

@@ -91,7 +91,18 @@ path('campaigns/', views.campaign_list, name='campaign_list'),
     path('campaign/<int:campaign_id>/activity/create/', views.create_activity, name='create_activity'),
     path('campaign/<int:campaign_id>/activity_list/', views.activity_list, name='activity_list'),
     path('campaign/<int:campaign_id>/comments/', views.campaign_comments, name='campaign_comments'),
+
+
+# marketing 
+
+    path('blog/', views.blog_list, name='blog_list'),  # List of all blogs
+    path('blog/<slug:slug>/', views.blog_detail, name='blog_detail'),  # Single blog post
+
+
 ]
+
+
+
 
 
 
