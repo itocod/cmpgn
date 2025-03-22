@@ -98,3 +98,51 @@
     </div>
 </body>
 </html>
+
+
+
+@login_required
+def home(request):
+    user_profile = get_object_or_404(Profile, user=request.user)
+    campaign_id = request.GET.get('campaign_id')
+    category_filter = request.GET.get('category', '')
+
+    # Fetch campaign if an ID is provided
+    campaign = get_object_or_404(Campaign, pk=campaign_id) if campaign_id else Campaign.objects.first()
+
+    user = request.user
+    already_loved = campaign and user != campaign.user and Love.objects.filter(campaign=campaign, user=user).exists()
+
+    # Get user's campaigns (No filtering by loves)
+    user_campaigns = Campaign.objects.filter(user=user_profile, visibility='public')
+
+    # If user has no campaigns, show trending campaigns (only with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .order_by('-love_count_annotated')[:10]  # Show top 10 trending campaigns
+
+    # Apply category filter only to trending campaigns
+    if category_filter:
+        trending_campaigns = trending_campaigns.filter(category=category_filter)
+
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    user_chats = Chat.objects.filter(participants=request.user)
+    unread_messages_count = Message.objects.filter(chat__in=user_chats).exclude(sender=request.user).count()
+
+    ads = NativeAd.objects.all()
+    categories = Campaign.objects.values_list('category', flat=True).distinct()
+
+    return render(request, 'main/home.html', {
+        'ads': ads,
+        'public_campaigns': user_campaigns if user_campaigns.exists() else trending_campaigns,  
+        'campaign': Campaign.objects.last(),
+        'already_loved': already_loved,
+        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'unread_messages_count': unread_messages_count,
+        'categories': categories,
+        'selected_category': category_filter,
+    })
+
+

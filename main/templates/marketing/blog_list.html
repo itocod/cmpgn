@@ -1,111 +1,143 @@
-{% block content %}
-<style>
-    /* General Reset */
-    body {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        line-height: 1.6;
-        color: #333;
-        margin: 0;
-        padding: 0;
-        background-color: #f9f9f9;
-    }
+{% extends 'marketing/geno.html' %}
+{% load static %}
 
+
+
+
+{% block content %}
+<style type="text/css">
+    /* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4; /* Light silver background */
+    color: #333; /* Dark gray for text */
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: #1e3a8a; /* Dark blue */
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h2 {
+    font-size: 2rem;
+    color: #1e3a8a; /* Dark blue */
+    margin-bottom: 10px;
+}
+
+a {
+    color: #1e3a8a; /* Dark blue */
+    text-decoration: none;
+}
+
+a:hover {
+    color: #3b82f6; /* Lighter blue for hover */
+}
+
+/* Blog Post Styles */
+article {
+    background-color: #ffffff; /* White background for posts */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    margin-bottom: 30px;
+    padding: 20px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+article:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+}
+
+.meta {
+    font-size: 0.9rem;
+    color: #666; /* Gray for meta info */
+    margin-bottom: 15px;
+}
+
+.meta span {
+    margin-right: 10px;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.excerpt {
+    font-size: 1rem;
+    color: #444; /* Slightly darker gray for excerpt */
+    margin-bottom: 20px;
+}
+
+.read-more {
+    display: inline-block;
+    background-color: #1e3a8a; /* Dark blue */
+    color: #ffffff; /* White text */
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    transition: background-color 0.3s ease;
+}
+
+.read-more:hover {
+    background-color: #3b82f6; /* Lighter blue on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
     h1 {
         font-size: 2rem;
-        text-align: center;
-        margin: 2rem 0;
-        color: #2c3e50;
-    }
-
-    article {
-        background: #fff;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        margin: 1rem auto;
-        padding: 1.5rem;
-        max-width: 800px;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    article:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     }
 
     h2 {
         font-size: 1.5rem;
-        margin: 0 0 0.5rem;
     }
 
-    h2 a {
-        color: #2980b9;
-        text-decoration: none;
+    .container {
+        padding: 10px;
     }
 
-    h2 a:hover {
-        color: #3498db;
-        text-decoration: underline;
+    article {
+        padding: 15px;
     }
 
-    p {
-        margin: 0.5rem 0;
-        font-size: 0.9rem;
-        color: #555;
+    .read-more {
+        width: 100%;
+        text-align: center;
     }
-
-    img {
-        border-radius: 4px;
-        margin: 1rem 0;
-    }
-
-    .meta {
-        font-size: 0.8rem;
-        color: #777;
-        margin-bottom: 1rem;
-    }
-
-    .excerpt {
-        font-size: 0.9rem;
-        color: #444;
-        line-height: 1.5;
-    }
-
-    /* Mobile Styles */
-    @media only screen and (max-width: 600px) {
-        body {
-            font-size: 18px; /* Increase base font size for mobile */
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Ensure font family is applied */
-        }
-
-        h1 {
-            font-size: 2.5rem; /* Increase heading size for mobile */
-        }
-
-        h2 {
-            font-size: 2rem; /* Increase article title size for mobile */
-        }
-
-        p, .meta, .excerpt {
-            font-size: 1rem; /* Increase paragraph and meta text size for mobile */
-        }
-
-        article {
-            padding: 0; /* Remove padding from article container on mobile */
-        }
-    }
+}
 </style>
-
-<h1>Blog Stories</h1>
-{% for post in blogs %}
-    <article>
-        <h2><a href="{% url 'blog_detail' post.slug %}">{{ post.title }}</a></h2>
-        <p class="meta">{{ post.created_at|date:"F d, Y" }} | {{ post.author }}</p>
+<div class="container">
+    <h1>Blog Stories</h1>
+    {% for post in blogs %}
+        <article>
+            <h2><a href="{% url 'blog_detail' post.slug %}">{{ post.title }}</a></h2>
+            <p class="meta">
+                <span>{{ post.created_at|date:"F d, Y" }}</span>
+                <span>{{ post.author }}</span>
+            </p>
+            
+            {% if post.image %}
+                <img src="{{ post.image.url }}" alt="{{ post.title }}">
+            {% endif %}
+            
+            <p class="excerpt">{{ post.excerpt }}</p>
         
-        {% if post.image %}
-            <img src="{{ post.image.url }}" alt="{{ post.title }}" style="max-width: 100%; height: auto;">
-        {% endif %}
-        
-        <p class="excerpt">{{ post.excerpt }}</p>  <!-- A short preview -->
-    </article>
-{% endfor %}
+        </article>
+    {% endfor %}
+</div>
 {% endblock %}

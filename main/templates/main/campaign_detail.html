@@ -2495,6 +2495,32 @@ document.addEventListener("DOMContentLoaded", function() {
             <h3>Objective:</h3>
             <p>{{ campaign.get_objective_and_activities.Objectives }}</p>
           </div>
+        <p>
+    <strong>Fund:</strong> 
+    <a href="{% url 'donate' campaign_id=campaign.pk %}" 
+       style="text-decoration: none; color: inherit;"
+       onmouseover="this.style.textDecoration='underline'; this.style.color='black';"
+       onmouseout="this.style.textDecoration='none'; this.style.color='inherit';">
+        ${{ campaign.target_amount }}
+    </a>
+</p>
+
+
+<p><strong>Duration:</strong> 
+    {% if campaign.duration %}
+        {{ campaign.duration }} {{ campaign.duration_unit }}
+    {% else %}
+        Ongoing
+    {% endif %}
+</p>
+
+{% if campaign.is_outdated %}
+    <p style="color: red; font-weight: bold;">Campaign is outdated</p>
+{% else %}
+    <p style="color: green;">Campaign is active</p>
+{% endif %}
+
+
           <h2>
             <a href="{% url 'view_campaign' campaign_id=campaign.pk %}">
               <span>{{ campaign.title }}</span>
@@ -2774,7 +2800,8 @@ document.addEventListener("DOMContentLoaded", function() {
   </div></br>
 
  <!-- Assuming this is in a template file like base.html -->
-<a href="{% url 'platformfund' %}" class="donate-link"> Help Us Grow! Support Our Mission with Your Generosity </a>
+<a href="{% url 'donate' %}#rallynex-campaigns" class="donate-link" style="hovercolor"> Help Us Build a Better Platform to Support More Campaigns </a>
+
 
 
 
@@ -2823,7 +2850,11 @@ document.addEventListener("DOMContentLoaded", function() {
             <h2>Legal</h2>
             <a href="{% url 'privacy_policy' %}">Privacy Policy|</a>
             <a href="{% url 'terms_of_service' %}">Terms of Service|</a>
-            <a href="{% url 'project_support' %}">Support</a>
+            <a href="{% url 'project_support' %}">Support|</a>
+               <a href="{% url 'hiw' %}">How It Works|</a>
+            <a href="{% url 'faq' %}">FAQ|</a>
+            <a href="{% url 'aboutus' %}">About Us|</a>
+            <a href="{% url 'donate' %}">Donate|</a>
         </div>
     </div>
     <div class="footer-bottom">

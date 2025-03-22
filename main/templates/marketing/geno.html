@@ -1,0 +1,198 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rallynex - Crowdfunding Platform</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Header Styles */
+        header {
+            background-color: #007BFF;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .site-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .inspiration {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .explore-link {
+            color: white;
+            font-weight: bold;
+            transition: opacity 0.3s ease;
+        }
+        .explore-link:hover {
+            opacity: 0.8;
+        }
+        .donate-button {
+            background: white;
+            color: #007BFF;
+            padding: 8px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        .donate-button:hover {
+            background: #0056b3;
+            color: white;
+        }
+
+        /* Body Styles */
+        main {
+            flex: 1;
+            padding: 20px;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        .footer-links a {
+            color: #ccc;
+            transition: color 0.3s ease;
+        }
+        .footer-links a:hover {
+            color: #007BFF;
+        }
+        .footer-bottom {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #999;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 768px) {
+            /* Adjust header for smaller screens */
+            header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 10px;
+            }
+            .header-left, .header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .site-name {
+                font-size: 2rem; /* Larger font size for Rallynex on smaller screens */
+            }
+            .inspiration {
+                font-size: 0.9rem;
+            }
+            .donate-button {
+                padding: 6px 12px;
+                font-size: 0.9rem;
+            }
+
+            /* Adjust footer links for smaller screens */
+            .footer-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            /* Further adjustments for mobile */
+            .site-name {
+                font-size: 2.2rem; /* Even larger font size for very small screens */
+            }
+            .inspiration {
+                display: none; /* Hide inspiration text on very small screens */
+            }
+            .header-right {
+                gap: 10px;
+            }
+            .donate-button {
+                padding: 5px 10px;
+                font-size: 0.8rem;
+            }
+
+            /* Adjust main content padding */
+            main {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-left">
+            <div class="site-name">Rallynex</div>
+            <div class="inspiration"> - Act Small, Change Big.</div>
+        </div>
+        <div class="header-right">
+            <a href="{% url 'index' %}" class="explore-link">Explore</a>
+            <a href="{% url 'donate' %}#rallynex-campaigns" class="donate-button">Donate</a>
+
+        </div>
+    </header>
+
+    <!-- Body -->
+    <main>
+       {% block content %}{% endblock %} <!-- Dynamic content goes here -->
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="{% url 'blog_list' %}">Blog</a>
+            <a href="{% url 'success_stories' %}">Success Stories</a>
+            <a href="{% url 'campaign_story_list' %}">Campaign Stories</a>
+            <a href="{% url 'testimonial' %}">Testimonials</a>
+            <a href="{% url 'hiw' %}">How It Works</a>
+            <a href="{% url 'faq' %}">FAQ</a>
+            <a href="{% url 'aboutus' %}">About Us</a>
+            <a href="{% url 'donate' %}">Donate</a>
+            <a href="{% url 'project_support'  %}">Support</a> <!-- Added Support Link -->
+            <a href="{% url 'privacy_policy' %}">Privacy Policy</a>
+            <a href="{% url 'terms_of_service' %}">Terms of Service</a>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2023 Rallynex. All rights reserved.
+        </div>
+    </footer>
+</body>
+</html>

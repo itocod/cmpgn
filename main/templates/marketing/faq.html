@@ -1,0 +1,105 @@
+{% extends 'marketing/geno.html' %}
+{% load static %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ | Crowdfunding Platform</title>
+    <style>
+ body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+.container {
+    max-width: 800px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+h2 {
+    margin-top: 20px;
+    color: #007BFF;
+}
+
+.faq-item {
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.faq-question {
+    padding: 15px;
+    background: #007BFF;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.faq-question::after {
+    content: "+";
+    font-size: 1.5em;
+}
+
+.faq-answer {
+    padding: 0 15px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, padding 0.3s ease-out;
+}
+
+.faq-item.active .faq-question::after {
+    content: "-";
+}
+
+.faq-item.active .faq-answer {
+    max-height: 200px;
+    padding: 15px;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Frequently Asked Questions</h1>
+
+{% for faq in faqs %}
+    <div class="faq-item">
+        <div class="faq-question">{{ faq.question }}</div>
+        <div class="faq-answer">{{ faq.answer|safe }}</div>
+    </div>
+{% empty %}
+    <p>No FAQs available at the moment.</p>
+{% endfor %}
+
+
+    </div>
+
+    <script>
+        document.querySelectorAll('.faq-question').forEach(item => {
+            item.addEventListener('click', () => {
+                item.parentElement.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html>
+
+{% endblock %}

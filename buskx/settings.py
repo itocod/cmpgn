@@ -17,7 +17,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Security settings
 SECRET_KEY = env('SECRET_KEY', default='unsafe-secret-key')
 DEBUG = env.bool('DEBUG', default=True)
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['www.rallynex.com','localhost', '127.0.0.1','rallynex-r6uk.onrender.com',])
+ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 # Application definitions
 INSTALLED_APPS = [
@@ -34,16 +34,15 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
-    'storages',
     'accounts',
     'crispy_forms',
     'main.apps.MainConfig',
     'django.contrib.sitemaps',
-'django_extensions',
-  'django.contrib.humanize',
-   'django_summernote',  # Remove this if you don’t need it
+    'django_extensions',
+    'django.contrib.humanize',
+    'django_summernote',  # Remove this if you don’t need it
     'django_quill',
-    
+  
 ]
 
 MIDDLEWARE = [
@@ -54,7 +53,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'allauth.account.middleware.AccountMiddleware',
     'buskx.middlewares.LegalLinksMiddleware',
 ]
@@ -81,18 +79,18 @@ TEMPLATES = [
 # WSGI application
 WSGI_APPLICATION = 'buskx.wsgi.application'
 
-
 # Database configuration
 DATABASES = {
-    'default': env.db('DATABASE_URL'),
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://www.rallynex.com',
-    'https://rallynex.com',
+    'http://localhost',
+    'http://127.0.0.1',
 ]
-
-
 
 # Authentication and password validators
 AUTH_PASSWORD_VALIDATORS = [
@@ -122,6 +120,7 @@ STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
 # Media files settings
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+
 
 # Email settings
 EMAIL_BACKEND = env('EMAIL_BACKEND')
@@ -159,25 +158,6 @@ ACCOUNT_EMAIL_REQUIRED = env.bool('ACCOUNT_EMAIL_REQUIRED', default=True)
 LOGIN_REDIRECT_URL = '/rallynex-logo/'
 LOGOUT_REDIRECT_URL = 'index'
 SOCIALACCOUNT_LOGIN_ON_GET = True
-# Ensure email is required for allauth
-
-# Make sure email verification is handled properly
-ACCOUNT_EMAIL_VERIFICATION = 'optional'  # Set this depending on your preference ('mandatory' or 'none')
-
-# Automatically link social accounts to existing email accounts
-SOCIALACCOUNT_AUTO_SIGNUP = True
-
-# Connect social accounts to existing users with the same email address
-SOCIALACCOUNT_QUERY_EMAIL = True
-
-# Add this to point to your custom adapter
-SOCIALACCOUNT_ADAPTER = 'accounts.adapter.CustomSocialAccountAdapter'
-# Optional: Require users to provide a username
-ACCOUNT_USERNAME_REQUIRED = False
-
-
-
-
 
 # TinyMCE configuration
 TINYMCE_DEFAULT_CONFIG = {
@@ -212,21 +192,11 @@ TERMS_OF_SERVICE_LINK = env('TERMS_OF_SERVICE_LINK')
 # Default auto field setting
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 # settings.py
-
-SITE_URL = 'https://www.rallynex.com'
-
-# settings.py
-
-SITE_DOMAIN = 'www.rallynex.com'
-
+SITE_URL = 'http://localhost:8000'
+SITE_DOMAIN = 'localhost'
 
 # PayPal settings
 PAYPAL_CLIENT_ID = env('PAYPAL_CLIENT_ID')
 PAYPAL_CLIENT_SECRET = env('PAYPAL_CLIENT_SECRET')
-PAYPAL_MODE = env('PAYPAL_MODE')  #
-
-
-
-
+PAYPAL_MODE = env('PAYPAL_MODE')  # 'sandbox' or 'live'

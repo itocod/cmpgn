@@ -1,12 +1,94 @@
+{% extends 'marketing/geno.html' %}
+{% load static %}
+
+
+
+
 {% block content %}
+
+
+<style type="text/css">
+    /* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4; /* Light silver background */
+    color: #333; /* Dark gray for text */
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    background-color: #ffffff; /* White background for content */
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+h1 {
+    font-size: 2.8rem;
+    color: #1e3a8a; /* Dark blue */
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+}
+
+p {
+    font-size: 1.1rem;
+    color: #444; /* Slightly darker gray for text */
+    line-height: 1.8;
+    margin-bottom: 20px;
+}
+
+.meta {
+    font-size: 0.95rem;
+    color: #666; /* Gray for meta info */
+    margin-bottom: 30px;
+    text-align: center;
+    font-style: italic;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    display: block;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 20px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    p {
+        font-size: 1rem;
+    }
+
+    .meta {
+        font-size: 0.9rem;
+    }
+}
+</style>
+<div class="container">
     <article>
         <h1>{{ blog_post.title }}</h1>
-        <p>By {{ blog_post.author }} | {{ blog_post.created_at|date:"F d, Y" }}</p>
+        <p class="meta">By {{ blog_post.author }} | {{ blog_post.created_at|date:"F d, Y" }}</p>
         
         {% if blog_post.image %}
-            <img src="{{ blog_post.image.url }}" alt="{{ blog_post.title }}" style="max-width: 100%; height: auto; margin-bottom: 15px;">
+            <img src="{{ blog_post.image.url }}" alt="{{ blog_post.title }}">
         {% endif %}
         
         <p>{{ blog_post.content|safe }}</p>
     </article>
+</div>
 {% endblock %}

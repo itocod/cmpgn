@@ -879,6 +879,7 @@ border: 1px solid silver;
     }
 
 
+
   .donate-link {
     text-align: center;
     margin-top: 20px;
@@ -891,12 +892,10 @@ border: 1px solid silver;
     transition: background-color 0.3s ease;
   }
 
- 
   .donate-link:hover {
    
     color: whitesmoke;
   }
-
 .profile-pic-hover:hover {
     transform: scale(1.5); /* Adjust the scale factor as needed */
     transition: transform 0.2s ease-in-out; /* Smooth transition */
@@ -2400,7 +2399,7 @@ document.addEventListener("DOMContentLoaded", function() {
   </div></br>
 
  <!-- Assuming this is in a template file like base.html -->
-<a href="{% url 'platformfund' %}" class="donate-link"> Help Us Build a Better Platform to Support More Campaigns </a>
+<a href="{% url 'donate' %}#rallynex-campaigns" class="donate-link" style="hovercolor"> Help Us Build a Better Platform to Support More Campaigns </a>
 
 
 
@@ -2449,7 +2448,11 @@ document.addEventListener("DOMContentLoaded", function() {
             <h2>Legal</h2>
             <a href="{% url 'privacy_policy' %}">Privacy Policy|</a>
             <a href="{% url 'terms_of_service' %}">Terms of Service|</a>
-            <a href="{% url 'project_support' %}">Support</a>
+            <a href="{% url 'project_support' %}">Support|</a>
+            <a href="{% url 'hiw' %}">How It Works|</a>
+            <a href="{% url 'faq' %}">FAQ|</a>
+            <a href="{% url 'aboutus' %}">About Us|</a>
+            <a href="{% url 'donate' %}">Donate|</a>
         </div>
     </div>
     <div class="footer-bottom">

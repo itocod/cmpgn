@@ -206,9 +206,11 @@ from django.utils import timezone
 from django.urls import reverse
 from django.core.exceptions import ValidationError
 
-
-
-
+from django.db import models
+from django.utils import timezone
+from datetime import timedelta
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class Campaign(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='user_campaigns')
@@ -217,6 +219,7 @@ class Campaign(models.Model):
     content = models.TextField()
     poster = models.ImageField(upload_to='campaign_files', null=True, blank=True)
     audio = models.FileField(upload_to='campaign_audio', null=True, blank=True)
+    target_amount = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)  # Goal amount
 
     CATEGORY_CHOICES = (
         ('Environmental Conservation', 'Environmental Conservation'),
@@ -235,19 +238,37 @@ class Campaign(models.Model):
         ('Other', 'Other'),
     )
     category = models.CharField(max_length=30, choices=CATEGORY_CHOICES, default='Environmental Conservation')
- 
+
     VISIBILITY_CHOICES = (
         ('public', 'Public'),
         ('private', 'Private'),
     )
     visibility = models.CharField(max_length=10, choices=VISIBILITY_CHOICES, default='public')
-
-    # Followers who can see the campaign when it's private
     visible_to_followers = models.ManyToManyField(Profile, blank=True, related_name='visible_campaigns')
-    
+
+    DURATION_UNITS = (
+        ('minutes', 'Minutes'),
+        ('days', 'Days'),
+    )
+    duration = models.PositiveIntegerField(null=True, blank=True, help_text="Enter duration.")
+    duration_unit = models.CharField(max_length=10, choices=DURATION_UNITS, default='days')
+
+    @property
+    def is_outdated(self):
+        """Check if the campaign is outdated based on duration and unit."""
+        if self.duration is None:
+            return False  # Ongoing campaigns never expire
+
+        if self.duration_unit == 'minutes':
+            expiration_date = self.timestamp + timedelta(minutes=self.duration)
+        else:
+            expiration_date = self.timestamp + timedelta(days=self.duration)
+
+        return timezone.now() > expiration_date
 
     def __str__(self):
         return self.title
+
 
     def save(self, *args, **kwargs):
         # Check if the campaign is new or if visibility has changed
@@ -666,16 +687,30 @@ class CampaignProduct(models.Model):
 
 
 
+
+
+from decimal import Decimal
+from django.db import models
+
 class CampaignFund(models.Model):
     campaign = models.OneToOneField(Campaign, on_delete=models.CASCADE)
-    target_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    target_amount = models.DecimalField(max_digits=10, decimal_places=2, editable=False)
     amount_raised = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     paypal_email = models.EmailField(default="paypal_email")
 
+    def save(self, *args, **kwargs):
+        if not self.target_amount and self.campaign.target_amount:
+            self.target_amount = self.campaign.target_amount  # Auto-fill from Campaign
+        super().save(*args, **kwargs)
+
     def progress_percentage(self):
         if self.target_amount > 0:
-            return (self.amount_raised / self.target_amount) * 100
-        return 0
+            return (Decimal(self.amount_raised) / Decimal(self.target_amount)) * 100
+        return Decimal(0)  # Always return a Decimal value
+
+
+
+
 
 
 
@@ -1056,3 +1091,35 @@ class Blog(models.Model):
         return self.title
 
 
+class CampaignStory(models.Model):
+    title = models.CharField(max_length=255)
+    slug = models.SlugField(unique=True, blank=True)  # For friendly URLs
+    content = models.TextField()
+    image = models.ImageField(upload_to='story_images/', blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.title)  # Automatically create a URL-friendly slug
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
+
+
+class FAQ(models.Model):
+    CATEGORY_CHOICES = [
+        ('general', 'General Information'),
+        ('campaigns', 'Creating & Managing Campaigns'),
+        ('funding', 'Funding & Payments'),
+        ('security', 'Security & Policies'),
+        ('backers', 'For Backers & Donors'),
+    ]
+    
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
+    question = models.CharField(max_length=255)
+    answer = models.TextField()
+
+    def __str__(self):
+        return self.question

@@ -235,39 +235,48 @@ body.dark-mode .affiliate-link i {
         <div class="form-section">
             <label for="{{ form.title.id_for_label }}" class="form-label">Title:</label>
             {{ form.title }}
-            <span class="form-helper-text">Provide a concise title for your campaign.</span>
         </div>
 
         <div class="form-section">
             <label for="{{ form.category.id_for_label }}" class="form-label">Category:</label>
             {{ form.category }}
-            <span class="form-helper-text">Choose the category of your campaign.</span>
         </div>
 
         <div class="form-section">
             <label for="{{ form.poster.id_for_label }}" class="form-label">Poster:</label>
             {{ form.poster }}
-            <span class="form-helper-text">Upload a poster for your campaign.</span>
         </div>
 
         <div class="form-section">
             <label for="{{ form.audio.id_for_label }}" class="form-label">Sound:</label>
             {{ form.audio }}
-            <span class="form-helper-text">Upload a sound file.</span>
         </div>
 
         <div class="form-section">
             <label for="{{ form.visibility.id_for_label }}" class="form-label">Visibility:</label>
             {{ form.visibility }}
-            <span class="form-helper-text">Choose visibility.</span>
         </div>
 
         <div class="form-section">
-    <label for="{{ form.content.id_for_label }}" class="form-label">Content:</label>
-    {{ form.content }}
-    <span class="form-helper-text">A simple description for your campaign.</span>
-</div>
+            <label for="{{ form.content.id_for_label }}" class="form-label">Content:</label>
+            {{ form.content }}
+        </div>
 
+        <!-- New Fields -->
+        <div class="form-section">
+            <label for="{{ form.target_amount.id_for_label }}" class="form-label">Goal Amount:</label>
+            {{ form.target_amount }}
+        </div>
+
+        <div class="form-section">
+            <label for="{{ form.duration.id_for_label }}" class="form-label">Duration:</label>
+            {{ form.duration }}
+        </div>
+
+        <div class="form-section">
+            <label for="{{ form.duration_unit.id_for_label }}" class="form-label">Duration Unit:</label>
+            {{ form.duration_unit }}
+        </div>
 
         <button type="submit" class="submit-button">Submit</button>
     </form>

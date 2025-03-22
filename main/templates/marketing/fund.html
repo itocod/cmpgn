@@ -1,0 +1,205 @@
+{% extends 'marketing/geno.html' %}
+{% load static %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support Innovation & Change | Rallynex</title>
+    <style>
+       body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+        .container {
+            width: 90%;
+            max-width: 100%;
+            margin: 10px auto;
+            padding: 15px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #0077cc;
+            font-size: 1.5rem; /* Smaller font size for mobile */
+            margin: 10px 0;
+        }
+        .section {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            background: #f1f1f1;
+        }
+        .step, .distribution-item {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+        .step-icon, .distribution-icon {
+            width: 30px; /* Smaller icons for mobile */
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px; /* Smaller font size for icons */
+            font-weight: bold;
+            color: white;
+            background: #0077cc;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .cta {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .cta a {
+            display: inline-block;
+            padding: 12px 24px; /* Slightly larger for touch-friendly buttons */
+            background: #0077cc;
+            color: #fff;
+            text-decoration: none;
+            font-size: 16px;
+            border-radius: 5px;
+            width: 100%; /* Full-width button for easier tapping */
+            box-sizing: border-box;
+        }
+        .cta a:hover {
+            background: #005fa3;
+        }
+
+        /* Media Queries for Further Adjustments */
+        @media (max-width: 480px) {
+            h1, h2 {
+                font-size: 1.3rem; /* Even smaller font size for very small screens */
+            }
+            .step-icon, .distribution-icon {
+                width: 25px;
+                height: 25px;
+                font-size: 12px;
+            }
+            .cta a {
+                font-size: 14px;
+                padding: 10px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Fuel Innovation & Change</h1>
+
+        <!-- Section: User-Led Crowdfunding -->
+        <div class="section">
+            <h2>Support Creators & Changemakers</h2>
+            <p>Every contribution sparks innovation, fuels creativity, and empowers changemakers. Your donation doesn’t just fund projects—it turns bold ideas into reality.</p>
+
+            <h3>How It Works</h3>
+            <div class="step">
+                <div class="step-icon">1</div>
+                <div class="step-content">
+                    <strong>Find a Cause</strong> – Explore inspiring projects and choose the ones that resonate with you.
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-icon">2</div>
+                <div class="step-content">
+                    <strong>Make an Impact</strong> – Contribute any amount to help projects succeed.
+                </div>
+            </div>
+            <div class="step">
+                <div class="step-icon">3</div>
+                <div class="step-content">
+                    <strong>See the Change</strong> – Stay updated on project progress and real-world impact.
+                </div>
+            </div>
+
+            <h3>Where Your Donation Goes</h3>
+            <div class="distribution-item">
+                <div class="distribution-icon">💡</div>
+                <div class="distribution-content">
+                    <strong>Direct to Creators</strong> – The majority of your donation goes straight to project creators.
+                </div>
+            </div>
+            <div class="distribution-item">
+                <div class="distribution-icon">⚙️</div>
+                <div class="distribution-content">
+                    <strong>Platform Support</strong> – A small percentage helps keep Rallynex running smoothly.
+                </div>
+            </div>
+            <div class="distribution-item">
+                <div class="distribution-icon">🌍</div>
+                <div class="distribution-content">
+                    <strong>Community Growth</strong> – We reinvest in underrepresented creators and impactful projects.
+                </div>
+            </div>
+
+            <div class="cta">
+                <a href="{% url 'index' %}">Donate to a Project</a>
+            </div>
+        </div>
+
+        <!-- Section: Rallynex-Led Campaigns -->
+        <div class="section" id="rallynex-campaigns">
+            <h2>Support Rallynex’s Mission</h2>
+            <p>We don’t just host projects—we also run impact-driven campaigns for social innovators, underrepresented creators, and urgent global causes.</p>
+
+            <h3>Where Your Donation Goes</h3>
+            <div class="distribution-item">
+                <div class="distribution-icon">🌍</div>
+                <div class="distribution-content">
+                    <strong>Cause-Driven Campaigns</strong> – Rallynex leads initiatives on climate action, education access, gender equity, and more.
+                </div>
+            </div>
+            <div class="distribution-item">
+                <div class="distribution-icon">💡</div>
+                <div class="distribution-content">
+                    <strong>Emerging Creators Fund</strong> – We provide funding, mentorship, and exposure to rising changemakers.
+                </div>
+            </div>
+            <div class="distribution-item">
+                <div class="distribution-icon">🎯</div>
+                <div class="distribution-content">
+                    <strong>Social Innovation Grants</strong> – We empower tech-driven, community-based solutions to real-world challenges.
+                </div>
+            </div>
+
+            <h3>Ways to Give</h3>
+            <ul>
+                <li><strong>One-Time Gift</strong> – Fund an active Rallynex-led campaign.</li>
+                <li><strong>Monthly Giving</strong> – Sustain long-term impact.</li>
+                <li><strong>Corporate & Partner Giving</strong> – Align your business with transformative change.</li>
+            </ul>
+
+<div class="cta">
+<a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=kcollino39@gmail.com&currency_code=USD&item_name=Support+Our+Cause" target="_blank">
+    <button style="padding: 12px 24px; background: #0077cc; color: #fff; border: none; font-size: 16px; border-radius: 5px; cursor: pointer; width: 100%;">
+        Contribute via PayPal
+    </button>
+</a>
+
+</div>
+
+<p style="font-size: 14px; color: gray; margin-top: 5px;">
+    *You can enter any amount on the next page. Thanks for your support!*
+</p>
+
+
+
+        </div>
+
+    </div>
+
+</body>
+</html>
+
+
+
+{% endblock %}

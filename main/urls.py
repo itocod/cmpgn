@@ -3,7 +3,12 @@ from . import views
 from .views import CustomLoginView
 from .views import CampaignDeleteView
 
+
+from .views import campaign_story_list, campaign_story_detail
+
 urlpatterns = [
+
+    path('campaign/<int:campaign_id>/donate/', views.donate, name='donate'),
 path('campaigns/', views.campaign_list, name='campaign_list'),
 
    path('campaign/<int:campaign_id>/engagement/', views.campaign_engagement_data, name='campaign_engagement'),
@@ -11,7 +16,7 @@ path('campaigns/', views.campaign_list, name='campaign_list'),
     path('verify/', views.verify_profile, name='verify_profile'),
     path('campaign/<int:campaign_id>/join_leave/', views.join_leave_campaign, name='join_leave_campaign'),
     path('campaign/<int:campaign_id>/joiners/', views.campaign_joiners, name='campaign_joiners'),
-    path('donate/<int:campaign_id>/', views.donate, name='donate'),
+    path('fund/', views.fund, name='fund'),
     path('payment-success/<int:campaign_id>/', views.payment_success, name='payment_success'),
     path('payment-cancel/', views.payment_cancel, name='payment_cancel'),
     path('campaign/delete/<int:pk>/', CampaignDeleteView.as_view(), name='campaign-delete'),
@@ -51,7 +56,7 @@ path('campaigns/', views.campaign_list, name='campaign_list'),
     path('delete/<int:campaign_id>/', views.delete_campaign, name='delete_campaign'),
     path('activity/<int:activity_id>/add_comment/', views.add_activity_comment, name='add_activity_comment'),
     path('suggest/', views.suggest, name='suggest'),
-         path('campaign/<int:campaign_id>/donate/', views.donate, name='donate'),
+  
     path('affiliate-links/', views.affiliate_links, name='affiliate_links'),
 
      path('platformfund/', views.platformfund_view, name='platformfund'),
@@ -98,8 +103,24 @@ path('campaigns/', views.campaign_list, name='campaign_list'),
     path('blog/', views.blog_list, name='blog_list'),  # List of all blogs
     path('blog/<slug:slug>/', views.blog_detail, name='blog_detail'),  # Single blog post
 
+    path('success-stories/', views.success_stories, name='success_stories'),
+    path('campaign-stories/', campaign_story_list, name='campaign_story_list'),
+    path('campaign-stories/<slug:slug>/', campaign_story_detail, name='campaign_story_detail'),
 
+    path('testimonial/', views.testimonial, name='testimonial'),
+
+    path('hiw/', views.hiw, name='hiw'),
+    path('faq/', views.faq_view, name='faq'),
+     path('about/', views.aboutus, name='aboutus'),
+      path('donations/', views.donate, name='donate'),
+       path('geno/', views.geno, name='geno'),
+     
 ]
+
+
+
+
+
 
 
 

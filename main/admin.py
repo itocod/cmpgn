@@ -81,13 +81,12 @@ class CampaignAdmin(admin.ModelAdmin):
         extra = 1  # Number of empty forms to display
 
     inlines = [CampaignFundInline]
-
-# Register the CampaignFund model separately if you want to manage it independently
+    
 @admin.register(CampaignFund)
 class CampaignFundAdmin(admin.ModelAdmin):
-    list_display = ('campaign', 'target_amount', 'amount_raised')
-    search_fields = ('campaign__title', )
-
+    list_display = ('campaign', 'target_amount', 'amount_raised', 'paypal_email')
+    search_fields = ('campaign__title',)
+    readonly_fields = ('target_amount',)  # Make target_amount read-only
 
 
 
@@ -345,5 +344,44 @@ admin.site.register(Blog, BlogAdmin)
 
 
 
+from django.utils.html import format_html
+from .models import CampaignStory
+
+class CampaignStoryAdmin(admin.ModelAdmin):
+    list_display = ('title', 'created_at', 'display_image')
+    list_filter = ('created_at',)
+    search_fields = ('title', 'content')
+    prepopulated_fields = {'slug': ('title',)}
+    readonly_fields = ('created_at', 'display_image')
+
+    fieldsets = (
+        ('Basic Information', {
+            'fields': ('title', 'slug', 'content', 'image', 'display_image'),
+        }),
+        ('Timestamps', {
+            'fields': ('created_at',),
+        }),
+    )
+
+    def display_image(self, obj):
+        """Display an image preview in the admin panel."""
+        if obj.image:
+            return format_html('<img src="{}" width="100" style="border-radius: 5px;" />', obj.image.url)
+        return "No Image"
+    
+    display_image.short_description = "Image Preview"
+
+admin.site.register(CampaignStory, CampaignStoryAdmin)
+
+
+
+from .models import FAQ
+
+class FAQAdmin(admin.ModelAdmin):
+    list_display = ('question', 'category')  # Display question and category in the list view
+    list_filter = ('category',)  # Add a filter by category
+    search_fields = ('question', 'answer')  # Enable search by question and answer
+
+admin.site.register(FAQ, FAQAdmin)
 
 

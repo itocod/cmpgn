@@ -2597,14 +2597,15 @@ document.addEventListener("DOMContentLoaded", function() {
 
 <form method="GET" action="{% url 'home' %}" class="filter-form">
     <label for="category" class="filter-label">Filter by Category:</label>
-    <select name="category" id="category" class="filter-select" onchange="this.form.submit()">
-        <option value="">All Categories</option>
-        {% for category in categories %}
-            <option value="{{ category }}" {% if category == selected_category %}selected{% endif %}>
-                {{ category }}
-            </option>
-        {% endfor %}
-    </select>
+ <select name="category" id="category" class="filter-select" onchange="this.form.submit()">
+    <option value="">All Categories</option>
+    {% for category in categories %}
+        <option value="{{ category }}" {% if category == selected_category %}selected{% endif %}>
+            {{ category }}
+        </option>
+    {% endfor %}
+</select>
+
 </form>
 
     {% if public_campaigns %}
@@ -2633,8 +2634,11 @@ document.addEventListener("DOMContentLoaded", function() {
 </i>
                             </h1> 
 
-                         <div class="campaign-category" style="cursor: pointer;" onclick="toggleObjectives(this)">
+           <div class="campaign-category" style="cursor: pointer;" onclick="toggleObjectives(this)">
     {{ campaign.category }} Campaign
+    <br>
+
+
 </div>
 
                             <div class="objectives-activities"></br>
@@ -2642,6 +2646,35 @@ document.addEventListener("DOMContentLoaded", function() {
                                 <p>{{ campaign.get_objective_and_activities.Objectives }}</p>
                             </div>
 
+
+<div>
+<p>
+    <strong>Fund:</strong> 
+    <a href="{% url 'donate' campaign_id=campaign.pk %}" 
+       style="text-decoration: none; color: inherit;"
+       onmouseover="this.style.textDecoration='underline'; this.style.color='black';"
+       onmouseout="this.style.textDecoration='none'; this.style.color='inherit';">
+        ${{ campaign.target_amount }}
+    </a>
+</p>
+
+
+<p><strong>Duration:</strong> 
+    {% if campaign.duration %}
+        {{ campaign.duration }} {{ campaign.duration_unit }}
+    {% else %}
+        Ongoing
+    {% endif %}
+</p>
+
+{% if campaign.is_outdated %}
+    <p style="color: red; font-weight: bold;">Campaign is outdated</p>
+{% else %}
+    <p style="color: green;">Campaign is active</p>
+{% endif %}
+
+
+</div>
                             <h2 style="font-size:19px;">
                                 <a href="{% url 'view_campaign' campaign_id=campaign.pk %}" style="color:#3498db;">
                                     <span>{{ campaign.title }}</span>
@@ -2824,108 +2857,20 @@ document.addEventListener("DOMContentLoaded", function() {
         </div>
     {% else %}
 <!-- Default campaign display for when there are no public campaigns -->
-<div class="container-with-border">
-    <div class="upper-post">
-        <div class="profile-pic">
-            <img src="{% static 'main/files/am.jpg' %}" alt="Default Profile Picture" class="profile-pic-hover">
-        </div>
-      <div class="post-details">
-                            <h1>USERName.
-                               
-                                  
-                               
 
-                            </h1> 
-
-                            <div class="campaign-category" style="cursor: pointer;">
-                                campaign.category 
-                            </div>
-
-                            <div class="objectives-activities"></br>
-                                <h3>Objective:</h3>
-                                <p>[objectives]</p>
-                            </div>
-
-                            <h2 style="font-size:19px;">
-                                <a href="{% url 'view_campaign' campaign_id=campaign.pk %}" style="color:#3498db;">
-                                    <span>default campaign.title </span>
-                                </a>
-                            </h2>
-                            <sp class="time-location"> times ago -  campaign-location </sp>
-                            <div class="campaign-content" data-campaign-id="{{ campaign.id }}">
-                                 campaign.content
-                            </div>
-                        </div>
-    </div>
-    <div class="file-container">
-        <div style="position: relative;">
-                 <!-- Display the links if the user has joined the campaign -->
-    <a href="#" class="activity-link">
-        <i style='font-size:18px' class='fas'>&#xf6e3;</i>
-        <span class="activity-label">Activities</span>
-    </a>
-
-    <a href="#" class="support-link">
-        <i class="material-icons" style="font-size:18px;">&#xe925;</i>
-        <span class="participate-label">Participate</span>
-    </a>
-            <img src="{% static 'main/files/defa.jpg' %}" alt="Default Campaign Image" id="campaign-image" style="max-width: 100%; height: auto;">
-        </div>
-    </div>
-               <div class="lower-post">
-    <div class="react">
-   <div class="love">
-    <span style="cursor: pointer; font-size: 19px;" id="love-icon-{{ campaign.id }}" 
-          class="love-icon {% if user.is_authenticated and already_loved %}loved{% endif %}" 
-          >
-        <i class="fas fa-heart"></i>
-    </span>
-    <span style="color:gray; font-size:14px;" id="love-count-{{ campaign.id }}">
-      0 Love
-    </span>
-    <span class="tooltip-label"> love</span> <!-- Tooltip container -->
-</div>
-
-
-        <div class="view">
-            <i class="far fa-eye" style="font-size: 19px;"></i>
-            <span class="reaction-count" id="view-count">
-                {{ campaign.campaignview_set.count|format_count }} views
-            </span>
-            <span class="tooltip-label">Campaign views </span> <!-- Tooltip container -->
-        </div>
-
-        <div class="comment">
-            <span>
-                <i class="far fa-comment" style="font-size:19px;"></i>
-            </span>
-            <a href="#" class="comment-count">comment</a>
-            <span class="tooltip-label">Comment to Campaign</span> <!-- Tooltip container -->
-        </div>
-<div class="joiners">
-    <a href="#" class="comment-count" aria-label="View joiners of this campaign">
-        <i class="fas fa-user-plus" style="font-size:19px;"></i> <!-- User Plus Icon -->
-        Joiners ({{ campaign.user_profiles.count|format_count }})
-    </a>
-    <span class="tooltip-label">Campaign Joiners</span> <!-- Tooltip container -->
-</div>
-
-
-        {% if user.profile in campaign.user_profiles.all %}
-            <a href="#"class="join-leave-btn">
-                <i class="fas fa-user-minus"></i> Leave
-                <span class="tooltip-text">Leave Campaign</span>
+{% if not public_campaigns %}
+    <h4>Explore Campaigns</h4>
+    {% for campaign in campaigns %}
+        <div class="explore-campaign">
+            <a href="{% url 'view_campaign' campaign_id=campaign.pk %}">
+                <h2>{{ campaign.title }}</h2>
             </a>
-        {% else %}
-            <a href="#" class="join-leave-btn">
-                <i class="fas fa-user-plus"></i> Join
-                <span class="tooltip-text">Join Campaign</span>
-            </a>
-        {% endif %}
-    </div>
-</div>
+            <p>{{ campaign.category }} - {{ campaign.timestamp|timesince }} ago</p>
+        </div>
+    {% endfor %}
+{% endif %}
 
-</div>
+
     {% endif %}
 </section>
 
@@ -2976,7 +2921,8 @@ document.addEventListener("DOMContentLoaded", function() {
   </div></br>
 
  <!-- Assuming this is in a template file like base.html -->
-<a href="{% url 'platformfund' %}" class="donate-link"> Help Us Build a Better Platform to Support More Campaigns </a>
+<a href="{% url 'donate' %}#rallynex-campaigns" class="donate-link" style="hovercolor"> Help Us Build a Better Platform to Support More Campaigns </a>
+
 
 
 
@@ -3025,7 +2971,11 @@ document.addEventListener("DOMContentLoaded", function() {
             <h2>Legal</h2>
             <a href="{% url 'privacy_policy' %}">Privacy Policy|</a>
             <a href="{% url 'terms_of_service' %}">Terms of Service|</a>
-            <a href="{% url 'project_support' %}">Support</a>
+            <a href="{% url 'project_support' %}">Support|</a>
+             <a href="{% url 'hiw' %}">How It Works|</a>
+            <a href="{% url 'faq' %}">FAQ|</a>
+            <a href="{% url 'aboutus' %}">About Us|</a>
+            <a href="{% url 'donate' %}">Donate|</a>
         </div>
     </div>
     <div class="footer-bottom">
@@ -3060,6 +3010,9 @@ document.addEventListener("DOMContentLoaded", function() {
 </style>
 
 
+
+
+
 <script>
     function toggleObjectives(element) {
         // Find the sibling objectives-activities div
@@ -3073,6 +3026,12 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 </script>
+
+
+
+
+
+
 <script>
     function goBack() {
         window.history.back(); // Navigates to the previous page

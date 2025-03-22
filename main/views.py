@@ -977,9 +977,10 @@ paypalrestsdk.configure({
 
 def donate(request, campaign_id):
     campaign = get_object_or_404(Campaign, id=campaign_id)
+    
 
     # Attempt to retrieve the CampaignFund or create one with a default target_amount
-    fund, created = CampaignFund.objects.get_or_create(campaign=campaign, defaults={'target_amount': 0.00, 'paypal_email': 'default_email@example.com'})
+    fund, created = CampaignFund.objects.get_or_create(campaign=campaign, defaults={'target_amount': campaign.target_amount or 0.00, 'paypal_email': 'default_email@example.com'})
 
     target_reached = fund.progress_percentage() >= 100
 
@@ -1103,7 +1104,7 @@ def payment_success(request, campaign_id):
                     "value": str(commission_fee),
                     "currency": "USD"
                 },
-                "receiver": "kcollino39@gmail.com",  # Your PayPal email
+                "receiver": "k@gmail.com",  # Your PayPal email
                 "note": f"Commission for donation {payment_id}",
                 "sender_item_id": str(payment_id)
             }]
@@ -2052,6 +2053,8 @@ def toggle_love(request, campaign_id):
     return JsonResponse({}, status=404)
 
 
+
+
 @login_required
 def home(request):
     user_profile = get_object_or_404(Profile, user=request.user)
@@ -2086,6 +2089,17 @@ def home(request):
     own_campaigns = campaigns.filter(user=user_profile)
     campaigns_to_display = followed_campaigns | own_campaigns
 
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1)
+
+    # ✅ Apply category filter before slicing
+    if category_filter:
+        trending_campaigns = trending_campaigns.filter(category=category_filter)
+
+    trending_campaigns = trending_campaigns.order_by('-love_count_annotated')[:10]  # Show top 10 trending campaigns
+
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
     user_chats = Chat.objects.filter(participants=request.user)
     unread_messages_count = Message.objects.filter(chat__in=user_chats).exclude(sender=request.user).count()
@@ -2101,7 +2115,7 @@ def home(request):
 
     return render(request, 'main/home.html', {
         'ads': ads,
-        'public_campaigns': campaigns_to_display,
+        'public_campaigns': campaigns_to_display if campaigns_to_display.exists() else trending_campaigns,
         'campaign': Campaign.objects.last(),
         'already_loved': already_loved,
         'user_profile': user_profile,
@@ -2489,10 +2503,48 @@ def blog_detail(request, slug):
     return render(request, 'marketing/blog_detail.html', {'blog_post': blog_post})
 
 
+from .models import CampaignStory
+
+def campaign_story_list(request):
+    stories = CampaignStory.objects.all().order_by('-created_at')  # Order by creation date in descending order
+    return render(request, 'marketing/story_list.html', {'stories': stories})
+
+
+def campaign_story_detail(request, slug):
+    story = get_object_or_404(CampaignStory, slug=slug)
+    return render(request, 'marketing/story_detail.html', {'story': story})
+
+
+
+def success_stories(request):
+    return render(request, 'marketing/success_stories.html')
+
+
+def testimonial(request):
+    return render(request, 'marketing/testimonial.html')
 
 
 
 
+from .models import FAQ
+def faq_view(request):
+    faqs = FAQ.objects.all()
+    return render(request, 'marketing/faq.html', {'faqs': faqs})
+
+
+def hiw(request):
+    return render(request, 'marketing/hiw.html')
+
+def aboutus(request):
+    return render(request, 'marketing/aboutus.html')
+
+
+def fund(request):
+    return render(request, 'marketing/fund.html')
+
+
+def geno(request):
+    return render(request, 'marketing/geno.html')
 
 
 

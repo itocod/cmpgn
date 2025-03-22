@@ -868,6 +868,7 @@ border: 1px solid silver;
     }
 
 
+
   .donate-link {
     text-align: center;
     margin-top: 20px;
@@ -881,9 +882,9 @@ border: 1px solid silver;
   }
 
   .donate-link:hover {
-    background-color: #228B22;
+   
+    color: whitesmoke;
   }
-
 .profile-pic-hover:hover {
     transform: scale(1.5); /* Adjust the scale factor as needed */
     transition: transform 0.2s ease-in-out; /* Smooth transition */
@@ -2628,7 +2629,8 @@ document.addEventListener("DOMContentLoaded", function() {
 </div></br>
 
  <!-- Assuming this is in a template file like base.html -->
-<a href="{% url 'platformfund' %}" class="donate-link"> Help Us Build a Better Platform to Support More Campaigns </a>
+<a href="{% url 'donate' %}#rallynex-campaigns" class="donate-link" style="hovercolor"> Help Us Build a Better Platform to Support More Campaigns </a>
+
 
 
 

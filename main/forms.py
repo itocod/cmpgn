@@ -271,7 +271,7 @@ def validate_no_long_words(value):
 class CampaignForm(forms.ModelForm):
     class Meta:
         model = Campaign
-        fields = ['title', 'category', 'poster', 'audio', 'visibility', 'content']
+        fields = ['title', 'category', 'poster', 'audio', 'visibility', 'content', 'target_amount','duration', 'duration_unit']
         labels = {
             'title': 'Title:',
             'content': 'Content:',
@@ -279,7 +279,11 @@ class CampaignForm(forms.ModelForm):
             'audio': 'Audio:',
             'visibility': 'Visibility:',
             'category': 'Category:',
+            'duration': 'Duration:',
+            'duration_unit': 'Duration Unit:',
+            'target_amount':'target_amount',
         }
+
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -296,26 +300,19 @@ class CampaignForm(forms.ModelForm):
         return content
 
 
-
 class CampaignFundForm(forms.ModelForm):
     class Meta:
         model = CampaignFund
-        fields = ['target_amount', 'paypal_email']
+        fields = ['paypal_email']  # Exclude target_amount
         labels = {
-            'target_amount': 'Target Amount:',
             'paypal_email': 'PayPal Email:'
         }
         widgets = {
-            'target_amount': forms.TextInput(attrs={
-                'class': 'form-control',  
-                'placeholder': 'Enter target amount'
-            }),
             'paypal_email': forms.EmailInput(attrs={
                 'class': 'form-control', 
                 'placeholder': 'Enter PayPal email'
             })
         }
-
 
 
 

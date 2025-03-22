@@ -417,6 +417,27 @@ body.dark-mode .affiliate-link i {
             </select>
             <span class="form-helper-text">Choose the category of your campaign.</span>
         </div>
+<div class="form-section">
+    <label for="id_target_amount" class="form-label">Funding Goal:</label>
+    <input type="number" id="id_target_amount" name="target_amount" class="form-input" required min="1">
+    <span class="form-helper-text">Set the amount you want to raise.</span>
+</div>
+
+<div class="form-section">
+    <label for="id_duration" class="form-label">Campaign Duration:</label>
+    <input type="number" id="id_duration" name="duration" class="form-input" min="1" required>
+    <span class="form-helper-text">Specify how long your campaign should run.</span>
+</div>
+
+<div class="form-section">
+    <label for="id_duration_unit" class="form-label">Duration Unit:</label>
+    <select id="id_duration_unit" name="duration_unit" class="form-select">
+        <option value="days">Days</option>
+        <option value="minutes">Minutes</option>
+    </select>
+    <span class="form-helper-text">Choose whether duration is in minutes or days.</span>
+</div>
+
 
         <div class="form-section">
             <label for="id_poster" class="form-label">Poster:</label>

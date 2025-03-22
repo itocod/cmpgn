@@ -1,0 +1,116 @@
+{% extends 'marketing/geno.html' %}
+{% load static %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How It Works | Crowdfunding Platform</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .step {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            background: #f9f9f9;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .step:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .step-icon {
+            font-size: 2em;
+            color: #007BFF;
+            margin-right: 20px;
+        }
+        .step-content {
+            flex: 1;
+        }
+        .step-title {
+            font-size: 1.5em;
+            color: #007BFF;
+            margin-bottom: 10px;
+        }
+        .step-description {
+            color: #555;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>How It Works</h1>
+
+        <!-- Step 1 -->
+        <div class="step">
+            <div class="step-icon">1</div>
+            <div class="step-content">
+                <div class="step-title">Create Your Project</div>
+                <div class="step-description">
+                    Start by setting up your project. Add a title, description, and funding goal. Upload images or videos to make your project stand out.
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step">
+            <div class="step-icon">2</div>
+            <div class="step-content">
+                <div class="step-title">Share with the World</div>
+                <div class="step-description">
+                    Spread the word about your project! Share it on social media, email, and other platforms to attract backers and supporters.
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step">
+            <div class="step-icon">3</div>
+            <div class="step-content">
+                <div class="step-title">Receive Funding</div>
+                <div class="step-description">
+                    Once your project reaches its funding goal, the funds will be transferred to your account. You can start working on bringing your idea to life!
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="step">
+            <div class="step-icon">4</div>
+            <div class="step-content">
+                <div class="step-title">Deliver Rewards</div>
+                <div class="step-description">
+                    Fulfill your promises to backers by delivering rewards or updates on your project's progress. Keep your supporters engaged and happy!
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
+{% endblock %}
