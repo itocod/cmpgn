@@ -62,6 +62,26 @@
             font-weight: bold;
             color: #333;
         }
+
+
+        
+               .cta {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background: #007BFF;
+            color: white;
+            border-radius: 10px;
+        }
+        .cta a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+         .cta p {
+            color: white;
+          
+        }
     </style>
 </head>
 <body>
@@ -128,6 +148,12 @@
             </div>
         </div>
     </div>
+
+           <div class="cta">
+            <h2 style="color: white;">Start Your Own Campaign!</h2>
+            <p >Do you have a cause you're passionate about? Join Rallynex and create your own impactful campaign today!</p>
+            <a href="{% url 'index' %}">Start a Campaign</a>
+        </div>
 </body>
 </html>
 

@@ -2349,7 +2349,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
         <li><a href="{% url 'suggest' %}" style="color: white;"><i class="fas fa-user-friends"></i> Suggested Users</a></li>
 
-                <li><a href="{% url 'profile_view' username=user.username %}" style="color: white; margin-right: 15px;">
+                <li><a href="% url 'profile_view' username=request.user.username %}" style="color: white; margin-right: 15px;">
             <i class="fas fa-user"></i> Visit Profile
         </a></li>
         <!-- Add logout link here -->
@@ -2480,7 +2480,7 @@ document.addEventListener("DOMContentLoaded", function() {
         </div>
         <div class="post-details">
           <h1>
-            {{ campaign.user.user.username }}
+            @{{ campaign.user.user.username }}
             {% if campaign.user.profile_verified %}
               <span class="verified-status">verified <i class="material-icons">verified_user</i></span>
             {% endif %}
@@ -2769,7 +2769,7 @@ document.addEventListener("DOMContentLoaded", function() {
 </nav><br>
   <div style="border: 1px solid #808080; padding: 20px; text-align: center; border-radius: 10px;">
      
-    <h2 style="margin-bottom: 10px;">{{ user_profile.user.username }} 
+    <h2 style="margin-bottom: 10px;">@{{ user_profile.user.username }} 
       . <i class="cm">campaigner</i></h2>
                {% if user_profile.profile_verified %}
        <p><strong>Status:</strong> 

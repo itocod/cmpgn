@@ -251,7 +251,7 @@ body.dark-mode .affiliate-link i {
                             <div class="profile-details">
                                 <h2 class="profile-name">
                                     <a href="{% url 'profile_view' user.username %}" class="profile-link" style="font-size: 16px;">
-                                        {{ user.username }}
+                                        @{{ user.username }}
                                         {% if user.profile.profile_verified %}
                                             <span>verified</span><i class="material-icons" style="font-size: 12px; color: green;">verified_user</i>
                                         {% endif %}

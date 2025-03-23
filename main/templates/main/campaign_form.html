@@ -14,6 +14,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emojionearea@3.4.2/dist/emojionearea.min.css">
 <script src="https://cdn.jsdelivr.net/npm/emojionearea@3.4.2/dist/emojionearea.min.js"></script>
+
+<!-- Include Quill CSS and JS -->
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
 <style type="text/css">
 /* General styles for the form */
 .edit-profile-form {
@@ -488,9 +492,10 @@ body.dark-mode .affiliate-link i {
 $(document).ready(function () {
     // Initialize EmojioneArea with correct options
     var emojioneArea = $('#id_content').emojioneArea({
-        pickerPosition: "bottom", // Position of the picker outside the textarea
-        inline: false, // Disable inline picker
-        hidePickerOnBlur: false, // Keep picker open even when textarea loses focus
+        pickerPosition: "bottom", // Position picker outside the textarea
+        inline: false, // Ensure picker appears in a separate popup
+        hidePickerOnBlur: false, // Keep picker open when clicking outside
+        tonesStyle: "bullet"
     });
 
     // Get the EmojioneArea instance
@@ -498,9 +503,22 @@ $(document).ready(function () {
 
     // Add click event to the button to show the emoji picker
     $('#emoji-picker-button').click(function () {
-        emojioneAreaInstance.showPicker(); // Show the emoji picker outside the textarea
+        emojioneAreaInstance.showPicker(); // Show the emoji picker
     });
+
+    // Ensure the picker appears above everything
+    setTimeout(function () {
+        $('.emojionearea-picker').css({
+            "z-index": "9999",   // High z-index to be on top
+            "position": "absolute",
+            "top": "50px", // Adjust this as needed
+            "left": "50%", // Center it if needed
+            "transform": "translateX(-50%)",
+            "box-shadow": "0px 5px 15px rgba(0, 0, 0, 0.3)"
+        });
+    }, 1000);
 });
+
 
 </script>
 

@@ -24,7 +24,7 @@
             {% for profile in joiners %}
                 <li>
                     <a href="{% url 'profile_view' username=profile.user.username %}">
-                        {{ profile.user.username }}
+                        @{{ profile.user.username }}
                     </a>
                 </li>
             {% endfor %}

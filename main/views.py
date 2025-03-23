@@ -2411,6 +2411,10 @@ from .models import Profile, Follow
 
 @login_required
 def profile_view(request, username):
+
+    # Remove "@" if it's included in the username
+    if username.startswith('@'):
+        username = username[1:]
     # Get the user's profile
     user_profile = get_object_or_404(Profile, user__username=username)
     

@@ -2368,7 +2368,7 @@ document.addEventListener("DOMContentLoaded", function() {
 </nav><br>
   <div style="border: 1px solid #808080; padding: 20px; text-align: center; border-radius: 10px;">
      
-    <h2 style="margin-bottom: 10px;">{{ user_profile.user.username }} 
+    <h2 style="margin-bottom: 10px;">@{{ user_profile.user.username }} 
       . <i class="cm">campaigner</i></h2>
                {% if user_profile.profile_verified %}
        <p><strong>Status:</strong> 
@@ -2394,6 +2394,7 @@ document.addEventListener("DOMContentLoaded", function() {
     {{ user_profile.bio|truncatewords:10 }}
 </sp>
 <div style="margin-top: 20px;">
+
     <a href="{% url 'profile_view' username=user.username %}" style="text-decoration: none; color: #007bff; margin-right: 15px;">Visit Profile</a>
 </div>
   </div></br>

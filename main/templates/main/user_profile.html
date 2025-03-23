@@ -862,7 +862,7 @@ body.dark-mode .campaign-title {
 
 
 <div class="more-profile-info">
-    <h3 class="username-display">{{ user_profile.user.username }}</h3>
+    <h3 class="username-display">@{{ user_profile.user.username }}</h3>
     <a href="{% url 'follower_list' user_profile.user.username %}">Followers: ({{ followers_count|format_count }})</a> |
     <a href="{% url 'following_list' user_profile.user.username %}">Following: ({{ following_count|format_count }})</a> |
     User Public Campaigns:({{ public_campaigns_count|format_count }}) | Loves: ({{ user_profile.total_loves|format_count }})

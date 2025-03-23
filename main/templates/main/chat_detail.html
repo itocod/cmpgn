@@ -659,7 +659,7 @@ function switchColor() {
         <div class="chat-details">
        <h3>Chat Manager: 
     <a href="{% url 'profile_view' chat.manager.username %}">
-        {{ chat.manager }}
+        @{{ chat.manager }}
     </a>
     {% if chat.manager.profile.profile_verified %}
             <span class="verified-status" style="font-size: 12px;"><span>verified</span><i class="material-icons" style="font-size:12px;color:green">verified_user</i></span>
@@ -675,7 +675,7 @@ function switchColor() {
             <li style="padding-left: 8px;">
                 <a href="{% url 'profile_view' username=participant.username %}" 
                    style="text-decoration: none; color: inherit; transition: text-decoration 0.3s ease;">
-                    {{ participant.username }}
+                    @{{ participant.username }}
                 </a>
             </li>
         {% endfor %}
@@ -699,7 +699,7 @@ function switchColor() {
                             {% if message.sender == user %}
                                 <strong style="color: limegreen;">Me:</strong>
                             {% else %}
-                                <strong>{{ message.sender.username }}</strong>
+                                <strong>@{{ message.sender.username }}</strong>
                             {% endif %}
                             {% if message.sender.profile.profile_verified %}
                                 <span class="verified-status" style="font-size: 12px;">
@@ -779,7 +779,7 @@ function switchColor() {
                 {% for user_choice in user_choices %}
                     <label style="display: block; font-size: 12px; color: #2c3e50;">
                         <input type="checkbox" name="participants" value="{{ user_choice.pk }}" style="margin-right: 5px;">
-                        {{ user_choice.username }}
+                        @{{ user_choice.username }}
                     </label>
                 {% endfor %}
             </div>
@@ -799,7 +799,7 @@ function switchColor() {
                 {% for participant in chat.participants.all %}
                     <label style="display: block; font-size: 12px; color: #2c3e50;">
                         <input type="checkbox" name="participants" value="{{ participant.id }}" style="margin-right: 5px;">
-                        {{ participant.username }}
+                        @{{ participant.username }}
                     </label>
                 {% endfor %}
             </div>

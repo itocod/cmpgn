@@ -251,7 +251,7 @@ body.dark-mode .affiliate-link i {
                         <img src="{{ profile.image.url }}" alt="{{ profile.user.username }}">
                     </div>
                     <div class="profile-details">
-                        <h2><a href="{% url 'profile_view' profile.user.username %}">{{ profile.user.username }}</a></h2>
+                        <h2><a href="{% url 'profile_view' profile.user.username %}">@{{ profile.user.username }}</a></h2>
                         <p>{{ profile.bio|truncatewords:20 }}</p>
                     </div>
                 </li>

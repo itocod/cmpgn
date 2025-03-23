@@ -113,6 +113,10 @@
             text-decoration: none;
             font-weight: bold;
         }
+         .cta p {
+            color: white;
+          
+        }
     </style>
 </head>
 <body>
@@ -127,9 +131,9 @@
         <a href="{% url 'donate' %}#rallynex-campaigns" class="donate-button">Donate Now</a> <!-- Replace # with your donation link -->
     </div>
 
-        <div class="cta">
-            <h2>Start Your Own Campaign!</h2>
-            <p>Do you have a cause you're passionate about? Join Rallynex and create your own impactful campaign today!</p>
+       <div class="cta">
+            <h2 style="color: white;">Start Your Own Campaign!</h2>
+            <p >Do you have a cause you're passionate about? Join Rallynex and create your own impactful campaign today!</p>
             <a href="{% url 'index' %}">Start a Campaign</a>
         </div>
 </body>
