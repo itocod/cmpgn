@@ -80,6 +80,8 @@ img {
 }
 
 
+           
+        
                .cta {
             text-align: center;
             margin-top: 30px;
@@ -93,7 +95,19 @@ img {
             text-decoration: none;
             font-weight: bold;
         }
+         .cta p {
+            color: white;
+          
+        }
+
+
+        .cta a:hover {
+    text-decoration: underline; /* Adds underline on hover */
+   
+}
+
 </style>
+
 <div class="container">
     <article>
         <h1>{{ blog_post.title }}</h1>
@@ -108,9 +122,10 @@ img {
 
 </div>
 
- <div class="cta">
-            <h2>Start Your Own Campaign!</h2>
-            <p>Do you have a cause you're passionate about? Join Rallynex and create your own impactful campaign today!</p>
+ 
+           <div class="cta">
+            <h2 style="color: white;">Start Your Own Campaign!</h2>
+            <p >Do you have a cause you're passionate about? Join Rallynex and create your own impactful campaign today!</p>
             <a href="{% url 'index' %}">Start a Campaign</a>
         </div>
 {% endblock %}

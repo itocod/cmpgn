@@ -2531,10 +2531,19 @@ def testimonial(request):
 
 
 from .models import FAQ
+# views.py
 def faq_view(request):
-    faqs = FAQ.objects.all()
-    return render(request, 'marketing/faq.html', {'faqs': faqs})
-
+    categories = []
+    for choice in FAQ.CATEGORY_CHOICES:
+        faqs = FAQ.objects.filter(category=choice[0])
+        if faqs.exists():  # Only include categories with FAQs
+            categories.append({
+                'name': choice[1],
+                'code': choice[0],
+                'faqs': faqs
+            })
+    
+    return render(request, 'marketing/faq.html', {'categories': categories})
 
 def hiw(request):
     return render(request, 'marketing/hiw.html')

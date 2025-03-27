@@ -1072,16 +1072,28 @@ from django.db import models
 from django.utils.text import slugify
 from django.contrib.auth.models import User
 
+from django.db import models
+from django.utils.text import slugify
+
 class Blog(models.Model):
+    CATEGORY_CHOICES = [
+        ('RallyNex-Led', 'RallyNex-Led'),
+        ('Tips', 'Tips'),
+        ('Spotlight', 'Spotlight'),
+        ('Other', 'Other'),
+    ]
+    
     title = models.CharField(max_length=255)
     slug = models.SlugField(unique=True, blank=True)
     content = models.TextField()
-    author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey('auth.User', on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     image = models.ImageField(upload_to='blog_images/', blank=True, null=True)
     is_published = models.BooleanField(default=True)
-
+    category = models.CharField(max_length=20, choices=CATEGORY_CHOICES, default='Other')  # new field for category
+    estimated_reading_time = models.PositiveIntegerField(default=5)  # new field for time in minutes
+    
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)

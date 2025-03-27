@@ -117,6 +117,12 @@
             color: white;
           
         }
+
+        .cta a:hover {
+    text-decoration: underline; /* Adds underline on hover */
+   
+}
+
     </style>
 </head>
 <body>
@@ -128,7 +134,7 @@
     <!-- Content Section -->
     <div class="content">
         <p>{{ story.content }}</p>
-        <a href="{% url 'donate' %}#rallynex-campaigns" class="donate-button">Donate Now</a> <!-- Replace # with your donation link -->
+        <a href="{% url 'fund' %}#fuel-movement" class="donate-button">Donate Now</a> <!-- Replace # with your donation link -->
     </div>
 
        <div class="cta">

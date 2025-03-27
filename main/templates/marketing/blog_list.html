@@ -5,139 +5,481 @@
 
 
 {% block content %}
-<style type="text/css">
-    /* General Styles */
-body {
-    font-family: 'Arial', sans-serif;
-    line-height: 1.6;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4; /* Light silver background */
-    color: #333; /* Dark gray for text */
-}
-
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-h1 {
-    font-size: 2.5rem;
-    color: #1e3a8a; /* Dark blue */
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-h2 {
-    font-size: 2rem;
-    color: #1e3a8a; /* Dark blue */
-    margin-bottom: 10px;
-}
-
-a {
-    color: #1e3a8a; /* Dark blue */
-    text-decoration: none;
-}
-
-a:hover {
-    color: #3b82f6; /* Lighter blue for hover */
-}
-
-/* Blog Post Styles */
-article {
-    background-color: #ffffff; /* White background for posts */
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    margin-bottom: 30px;
-    padding: 20px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-article:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
-}
-
-.meta {
-    font-size: 0.9rem;
-    color: #666; /* Gray for meta info */
-    margin-bottom: 15px;
-}
-
-.meta span {
-    margin-right: 10px;
-}
-
-img {
-    max-width: 100%;
-    height: auto;
-    border-radius: 8px;
-    margin-bottom: 15px;
-}
-
-.excerpt {
-    font-size: 1rem;
-    color: #444; /* Slightly darker gray for excerpt */
-    margin-bottom: 20px;
-}
-
-.read-more {
-    display: inline-block;
-    background-color: #1e3a8a; /* Dark blue */
-    color: #ffffff; /* White text */
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 0.9rem;
-    text-transform: uppercase;
-    transition: background-color 0.3s ease;
-}
-
-.read-more:hover {
-    background-color: #3b82f6; /* Lighter blue on hover */
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    h1 {
-        font-size: 2rem;
-    }
-
-    h2 {
-        font-size: 1.5rem;
-    }
-
-    .container {
-        padding: 10px;
-    }
-
-    article {
-        padding: 15px;
-    }
-
-    .read-more {
-        width: 100%;
-        text-align: center;
-    }
-}
-</style>
-<div class="container">
-    <h1>Blog Stories</h1>
-    {% for post in blogs %}
-        <article>
-            <h2><a href="{% url 'blog_detail' post.slug %}">{{ post.title }}</a></h2>
-            <p class="meta">
-                <span>{{ post.created_at|date:"F d, Y" }}</span>
-                <span>{{ post.author }}</span>
-            </p>
-            
-            {% if post.image %}
-                <img src="{{ post.image.url }}" alt="{{ post.title }}">
-            {% endif %}
-            
-            <p class="excerpt">{{ post.excerpt }}</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RallyNex Blog - Fueling Changemakers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* ===== Global Styles ===== */
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+        }
         
-        </article>
-    {% endfor %}
-</div>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #f5f7ff;
+        }
+        
+        a {
+            text-decoration: none;
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+        
+        a:hover {
+            color: var(--accent);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: 2px solid var(--primary);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn-outline {
+          
+            color: var(--primary);
+          
+        }
+        
+        .btn-outline:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        /* ===== Header ===== */
+      
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+        
+        .logo span {
+            color: var(--accent);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 30px;
+        }
+        
+        nav ul li a {
+            font-weight: 600;
+        }
+        
+        /* ===== Hero Section ===== */
+        .hero {
+            background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1521791136064-7986c2920216?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            opacity: 0.15;
+            z-index: 1;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        .hero-btns {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        /* ===== Blog Section ===== */
+        .blog-section {
+            padding: 80px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        
+        .section-title h2 {
+            font-size: 36px;
+            color: var(--dark);
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title h2::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background-color: var(--accent);
+            border-radius: 2px;
+        }
+        
+        .section-title p {
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .blog-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .blog-card-img {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .blog-card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .blog-card:hover .blog-card-img img {
+            transform: scale(1.1);
+        }
+        
+        .blog-card-content {
+            padding: 25px;
+        }
+        
+        .blog-card-category {
+            display: inline-block;
+            padding: 5px 15px;
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .blog-card-title {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .blog-card-excerpt {
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+        
+        .blog-card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--gray);
+            font-size: 14px;
+        }
+        
+        .blog-card-meta i {
+            margin-right: 5px;
+            color: var(--accent);
+        }
+        
+        /* ===== CTA Section ===== */
+        .cta-section {
+            background-color: var(--primary);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .cta-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .cta-content h2 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        
+        .cta-content p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+        
+        /* ===== Footer ===== */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 60px 0 20px;
+        }
+        
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-col h3 {
+            font-size: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-col h3::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--accent);
+        }
+        
+        .footer-col p {
+            margin-bottom: 15px;
+            opacity: 0.8;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        
+        .social-links a:hover {
+            background-color: var(--accent);
+            transform: translateY(-3px);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 14px;
+            opacity: 0.7;
+        }
+        
+        /* ===== Responsive Design ===== */
+        @media (max-width: 768px) {
+            
+                .container {
+        padding: 0 ; /* Reduced padding on edges */
+    }
+            nav ul {
+                margin-top: 15px;
+            }
+            
+            nav ul li {
+                margin-left: 15px;
+                margin-right: 15px;
+            }
+            
+            .hero h1 {
+                font-size: 36px;
+            }
+            
+            .hero p {
+                font-size: 18px;
+            }
+            
+            .hero-btns {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .section-title h2 {
+                font-size: 30px;
+            }
+            
+            .blog-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Fuel the Movement with RallyNex</h1>
+            <p>Discover inspiring stories, campaign tips, and how our community is changing the world—one idea at a time.</p>
+            <div class="hero-btns">
+                <a href="{% url 'create_campaign' %}" class="btn btn-primary">Start a Campaign</a>
+                <a href="{% url 'index' %}" class="btn btn-outline">Support Causes</a>
+            </div>
+        </div>
+    </section>
+
+   <!-- Blog Section -->
+    <section class="blog-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Latest From Our Blog</h2>
+                <p>Learn how to create impactful campaigns and stay updated with RallyNex-led initiatives.</p>
+            </div>
+
+            <div class="blog-grid">
+                {% for blog in blogs %}
+                    <div class="blog-card">
+                        <div class="blog-card-img">
+                            <img src="{{ blog.image.url }}" alt="{{ blog.title }}">
+                        </div>
+                        <div class="blog-card-content">
+                            <span class="blog-card-category">{{ blog.category }}</span>
+                            <h3 class="blog-card-title">
+                                <a href="{% url 'blog_detail' slug=blog.slug %}">{{ blog.title }}</a>
+                            </h3>
+                            <p class="blog-card-excerpt">{{ blog.content|slice:":150" }}...</p>
+                            <div class="blog-card-meta">
+                                <span><i class="far fa-calendar-alt"></i> {{ blog.created_at|date:"F j, Y" }}</span>
+                                <span><i class="far fa-clock"></i>{{ blog.estimated_reading_time }} min read</span>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+
+           
+        </div>
+    </section>
+      <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2>Ready to Make an Impact?</h2>
+            <p>Join thousands of changemakers who are turning their ideas into reality with RallyNex. Whether you want to start a campaign or support one, your journey begins here.</p>
+            <div style="display: flex; justify-content: center; gap: 15px; margin-top: 30px;">
+                <a href="{% url 'hiw' %}" class="btn btn-primary">Learn How It Works</a>
+                <a href="{% url 'explore_campaigns' %}" class="btn btn-primary">Get Started</a>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
 {% endblock %}

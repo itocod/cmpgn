@@ -317,30 +317,41 @@ class ProfileAdmin(admin.ModelAdmin):
 
 
 
-
 from django.contrib import admin
 from .models import Blog
 
-
-
 class BlogAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'created_at', 'updated_at', 'is_published')  # Added updated_at
-    list_filter = ('is_published', 'created_at', 'updated_at', 'author')  # Filter by updated_at
+    # Fields to display in the list view
+    list_display = ('title', 'author', 'category', 'is_published', 'created_at', 'updated_at', 'estimated_reading_time')
+    
+    # Filter options on the right sidebar
+    list_filter = ('category', 'is_published', 'created_at')
+    
+    # Search bar functionality
     search_fields = ('title', 'content', 'author__username')
-    prepopulated_fields = {'slug': ('title',)}
-    readonly_fields = ('created_at', 'updated_at')  # Prevents editing timestamps
-    ordering = ('-created_at',)
-
+    
+    # Fields to display on the detail page, excluding non-editable fields
     fieldsets = (
-        ('Basic Information', {
-            'fields': ('title', 'slug', 'content', 'image', 'is_published')
+        (None, {
+            'fields': ('title', 'slug', 'content', 'author', 'category', 'estimated_reading_time', 'is_published')
         }),
-        ('Author & Timestamps', {
-            'fields': ('author', 'created_at', 'updated_at'),
+        ('Image', {
+            'fields': ('image',)
         }),
     )
+    
+    # Make the slug field editable in the admin panel
+    prepopulated_fields = {'slug': ('title',)}
 
+    # Exclude 'created_at' and 'updated_at' from being editable in the admin form
+    exclude = ('created_at', 'updated_at')
+
+# Register the model and admin class
 admin.site.register(Blog, BlogAdmin)
+
+
+
+
 
 
 

@@ -13,7 +13,7 @@
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             background-color: #f4f4f4;
         }
         .container {
@@ -59,55 +59,266 @@
             color: #555;
             line-height: 1.6;
         }
+
+
+
+        
+               .cta {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            background: #007BFF;
+            color: white;
+            border-radius: 10px;
+        }
+        .cta a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+         .cta p {
+            color: white;
+          
+        }
+
+
+.cta a:hover {
+    text-decoration: underline; /* Adds underline on hover */
+   
+}
+
+        .section-header {
+    margin-top: 40px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #eee;
+    color: #2c3e50;
+}
+
+
+.awards-list {
+    margin-top: 10px;
+    padding-left: 20px;
+}
+
+.awards-list li {
+    margin-bottom: 5px;
+    position: relative;
+    list-style-type: none;
+}
+
+.awards-list li:before {
+    content: "•";
+    color: #f1c40f; /* Gold color for bullets */
+    font-weight: bold;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+}
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>How It Works</h1>
+        <h1>How RallyNex Works</h1>
 
-        <!-- Step 1 -->
+        <!-- Getting Started Section -->
+        <h2 class="section-header">Getting Started</h2>
+        
         <div class="step">
             <div class="step-icon">1</div>
             <div class="step-content">
-                <div class="step-title">Create Your Project</div>
+                <div class="step-title">Create Your Profile</div>
                 <div class="step-description">
-                    Start by setting up your project. Add a title, description, and funding goal. Upload images or videos to make your project stand out.
+                    Complete your profile with bio, contact info, education details and profile picture. 
+                    Verify your account by submitting ID documents for trusted status.
                 </div>
             </div>
         </div>
 
-        <!-- Step 2 -->
         <div class="step">
             <div class="step-icon">2</div>
             <div class="step-content">
-                <div class="step-title">Share with the World</div>
+                <div class="step-title">Find People to Follow</div>
                 <div class="step-description">
-                    Spread the word about your project! Share it on social media, email, and other platforms to attract backers and supporters.
+                    Use suggested users to find friends with similar interests. Following users lets you see their campaigns in your feed.
                 </div>
             </div>
         </div>
 
-        <!-- Step 3 -->
+        <!-- Campaign Creation Section -->
+        <h2 class="section-header">Creating Campaigns</h2>
+        
         <div class="step">
             <div class="step-icon">3</div>
             <div class="step-content">
-                <div class="step-title">Receive Funding</div>
+                <div class="step-title">Start a Campaign</div>
                 <div class="step-description">
-                    Once your project reaches its funding goal, the funds will be transferred to your account. You can start working on bringing your idea to life!
+                    Click upload to create campaigns with titles, descriptions, media (images/audio). 
+                    Set visibility (public or private) and optional funding targets/duration.
                 </div>
             </div>
         </div>
 
-        <!-- Step 4 -->
         <div class="step">
             <div class="step-icon">4</div>
             <div class="step-content">
-                <div class="step-title">Deliver Rewards</div>
+                <div class="step-title">Manage Your Campaign</div>
                 <div class="step-description">
-                    Fulfill your promises to backers by delivering rewards or updates on your project's progress. Keep your supporters engaged and happy!
+                    Add regular updates through Activities. View donations, comments, and engagement metrics. 
+                    Edit campaign details anytime from your profile.
                 </div>
             </div>
         </div>
+
+        <!-- Supporting Campaigns Section -->
+        <h2 class="section-header">Supporting Causes</h2>
+        
+        <div class="step">
+            <div class="step-icon">5</div>
+            <div class="step-content">
+                <div class="step-title">Engage with Campaigns</div>
+                <div class="step-description">
+                   Love campaigns to show support, comment with your thoughts, and join campaigns to become an active participant and view their activities regularly.
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-icon">6</div>
+            <div class="step-content">
+                <div class="step-title">Participation Options</div>
+                <div class="step-description">
+                    Donate financially (anonymous option available), brainstorm ideas to help the cause, 
+                    or purchase campaign products (when available).
+                </div>
+            </div>
+        </div>
+
+        <!-- Communication Section -->
+        <h2 class="section-header">Communication</h2>
+        
+        <div class="step">
+            <div class="step-icon">7</div>
+            <div class="step-content">
+                <div class="step-title">Chat with Others</div>
+                <div class="step-description">
+                    Start private chats with individuals or groups. Shared links automatically become clickable. 
+                    Get notifications for new messages.
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-icon">8</div>
+            <div class="step-content">
+                <div class="step-title">Get Notified</div>
+                <div class="step-description">
+                    Receive alerts for new followers, campaign interactions (loves/comments), 
+                    donation receipts, and chat messages. All notifications can be marked as read.
+                </div>
+            </div>
+        </div>
+
+        <!-- Discovery Section -->
+        <h2 class="section-header">Discover Content</h2>
+        
+        <div class="step">
+            <div class="step-icon">9</div>
+            <div class="step-content">
+                <div class="step-title">Explore Campaigns</div>
+                <div class="step-description">
+                    Browse by categories or use search. See what campaigns your friends support. 
+                    Mark "Not Interested" to refine suggestions in campaign details.
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-icon">10</div>
+            <div class="step-content">
+                <div class="step-title">Private Campaigns</div>
+                <div class="step-description">
+                    View campaigns shared specifically with you in a separate section. 
+                    Manage who can see your private campaigns.
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Management Section -->
+        <h2 class="section-header">Your Profile</h2>
+        
+        <div class="step">
+            <div class="step-icon">11</div>
+            <div class="step-content">
+                <div class="step-title">Manage Your Account</div>
+                <div class="step-description">
+                    Edit personal information anytime. View your campaign history and verification status. 
+                    See your total impact through loves received and supporter counts.
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-icon">12</div>
+            <div class="step-content">
+                <div class="step-title">Affiliate Links</div>
+                <div class="step-description">
+                    Discover recommended resources. Support campaigns through affiliate purchases 
+                    that contribute to causes you care about.
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+        <!-- Recognition & Rewards Section -->
+        <h2 class="section-header">Recognition & Rewards</h2>
+        
+        <div class="step">
+            <div class="step-icon">13</div>
+            <div class="step-content">
+                <div class="step-title">Earn Changemaker Awards</div>
+                <div class="step-description">
+                    Get recognized for your contributions! Our system automatically awards Bronze, Silver, 
+                    and Gold badges based on your campaign participation and impact:
+                    <ul class="awards-list">
+                        <li><strong>Bronze:</strong> For starting your first campaign</li>
+                        <li><strong>Silver:</strong> After creating 2 successful campaigns</li>
+                        <li><strong>Gold:</strong> For launching 3+ impactful campaigns</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-icon">14</div>
+            <div class="step-content">
+                <div class="step-title">Become a Top Participant</div>
+                <div class="step-description">
+                    Your contributions to campaigns (donations, brainstorming, purchases) are tracked. 
+                    The most active supporters appear as top participants on campaign pages, 
+                    gaining visibility in our community.
+                </div>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-icon">15</div>
+            <div class="step-content">
+                <div class="step-title">Community Leader Status</div>
+                <div class="step-description">
+                    Users who consistently provide value to the community receive special recognition. 
+                    This includes verified badges, profile highlights, and early access to new features.
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="cta">
+        <h2 style="color: white;">Start Your Own Campaign!</h2>
+        <p>Do you have a cause you're passionate about? Join Rallynex and create your own impactful campaign today!</p>
+        <a href="{% url 'index' %}">Start a Campaign</a>
     </div>
 </body>
 </html>

@@ -48,6 +48,8 @@ from main.utils import calculate_similarity
 
 
 from main.models import Campaign
+
+
 def index(request):
     user_profile = None
     unread_notifications = []
