@@ -90,8 +90,9 @@ DATABASES = {
 CSRF_TRUSTED_ORIGINS = [
     'https://www.rallynex.com',
     'https://rallynex.com',
-    'rallynex1.onrender.com',
+    'https://rallynex1.onrender.com',
 ]
+
 
 
 
