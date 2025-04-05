@@ -1,0 +1,12 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "Image": {
+    "Name": "your-docker-image-name",
+    "Update": "true"
+  },
+  "Ports": [
+    {
+      "ContainerPort": "80"
+    }
+  ]
+}
