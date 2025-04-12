@@ -85,9 +85,23 @@ WSGI_APPLICATION = 'buskx.wsgi.application'
 
 
 # Database configuration
+
+# Database configuration
 DATABASES = {
-    'default': env.db('DATABASE_URL'),
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': env('DB_NAME'),  # Load database name from .env
+        'USER': env('DB_USER'),  # Load username from .env
+        'PASSWORD': env('DB_PASSWORD'),  # Load password from .env
+        'HOST': env('DB_HOST'),  # Load host from .env
+        'PORT': env('DB_PORT'),  # Load port from .env
+        'OPTIONS': {
+            'sslmode': 'require',  # SSL mode for secure connection
+        },
+    }
 }
+
+
 
 CSRF_TRUSTED_ORIGINS = [
     'https://www.rallynex.com',
