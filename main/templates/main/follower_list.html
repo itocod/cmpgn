@@ -184,7 +184,7 @@ body.dark-mode .affiliate-link i {
 <body>
     
     <div class="follower-container">
-        <h1 class="follower-title">Follower List for @{{ user.username }}</h1>
+        <h1 class="follower-title">Follower List for {{ user.username }}</h1>
         {% if followers %}
         <div class="scrollable-followers">
             <ul class="follower-list">
@@ -195,7 +195,7 @@ body.dark-mode .affiliate-link i {
                             <img src="{{ follower.follower.profile.image.url }}" alt="{{ follower.follower.username }}'s Profile Picture">
                         </a>
                     </div>
-                    <span>@{{ follower.follower.username }}</span>
+                    <span>{{ follower.follower.username }}</span>
                     {% if follower.follower.profile.profile_verified %}
                     <span class="verified-badge">
                         verified

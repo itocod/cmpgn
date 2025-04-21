@@ -73,56 +73,78 @@
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Success Stories That Inspire Change</h1>
-        
-        <!-- Environmental Conservation -->
-        <div class="story">
-            <h2> Environmental Conservation: Restoring Hope, One Tree at a Time</h2>
-            <div class="image-gallery">
-                <a href="{% static 'main/files/tree.jpg' %}" target="_blank"><img src="{% static 'main/files/tree.jpg' %}" alt="Environmental Campaign 1"></a>
-                <a href="{% static 'main/files/trees.jpg' %}" target="_blank"><img src="{% static 'main/files/tree.jpg' %}" alt="Environmental Campaign 2"></a>
-                <a href="{% static 'main/files/tree.jpg' %}" target="_blank"><img src="{% static 'main/files/tree.jpg' %}" alt="Environmental Campaign 3"></a>
-            </div>
-            <p><strong>Campaign:</strong> Green Future Initiative by Rallynex</p>
-            <p><strong>Impact:</strong> Over 500,000 trees planted, restoring deforested areas and improving biodiversity.</p>
-            <p><strong>Story:</strong> "In just two years, our campaign transformed barren lands into thriving forests, giving local communities cleaner air and sustainable livelihoods. Your support made this possible."</p>
-        </div>
+<div class="container">
+  <h1>Success Stories That Inspire Change</h1>
 
-        <!-- Health and Wellness -->
-        <div class="story">
-            <h2> Health and Wellness: Fighting for Accessible Healthcare</h2>
-            <div class="image-gallery">
-                <a href="{% static 'main/files/mobile.jpg' %}" target="_blank"><img src="{% static 'main/files/mobile.jpg' %}" alt="Health Campaign 1"></a>
-                <a href="{% static 'main/files/mobile.jpg' %}" target="_blank"><img src="{% static 'main/files/mobile.jpg' %}" alt="Health Campaign 2"></a>
-                <a href="{% static 'main/files/mobile.jpg' %}" target="_blank"><img src="{% static 'main/files/mobile.jpg' %}" alt="Health Campaign 3"></a>
-            </div>
-            <p><strong>Campaign:</strong> Mobile Medical Units by Rallynex</p>
-            <p><strong>Impact:</strong> 10,000+ people received medical care in underserved regions.</p>
-            <p><strong>Story:</strong> "For years, our village had no access to healthcare. Now, thanks to your donations, we have mobile clinics that bring doctors to our doorsteps."</p>
-        </div>
-
-        <!-- Education and Literacy -->
-        <div class="story">
-            <h2> Education and Literacy: Building a Brighter Future</h2>
-            <div class="image-gallery">
-                <a href="{% static 'main/files/quality.jpg' %}" target="_blank"><img src="{% static 'main/files/quality.jpg' %}" alt="Education Campaign 1"></a>
-                <a href="{% static 'main/files/quality.jpg' %}" target="_blank"><img src="{% static 'main/files/quality.jpg' %}" alt="Education Campaign 2"></a>
-                <a href="{% static 'main/files/quality.jpg' %}" target="_blank"><img src="{% static 'main/files/quality.jpg' %}" alt="Education Campaign 3"></a>
-            </div>
-            <p><strong>Campaign:</strong> Bright Minds Program by Rallynex</p>
-            <p><strong>Impact:</strong> 5,000+ children provided with access to quality education.</p>
-            <p><strong>Story:</strong> "In rural areas, many children never get the chance to attend school. With your help, we’ve built schools, trained teachers, and given these children the tools to dream big."</p>
-        </div>
-
-        <p>Your support creates change. Every contribution leads to real, lasting impact. Be part of the next success story today!</p>
-        
-        <div class="cta">
-            <h2 style="color: white;">Start Your Own Campaign!</h2>
-            <p>Do you have a cause you're passionate about? Join Rallynex and create your own impactful campaign today!</p>
-            <a href="{% url 'index' %}">Start a Campaign</a>
-        </div>
+  <!-- Poverty and Hunger -->
+  <div class="story" id="poverty">
+    <h2>Hunger Relief: Nourishing Hope, One Meal at a Time</h2>
+    <div class="image-gallery">
+      <a href="{% static 'main/files/meal.avif' %}" target="_blank"><img src="{% static 'main/files/meal.avif' %}" alt="Food Campaign 1"></a>
+      <a href="{% static 'main/files/meal.avif' %}" target="_blank"><img src="{% static 'main/files/meal.avif' %}" alt="Food Campaign 2"></a>
+      <a href="{% static 'main/files/meal.avif' %}" target="_blank"><img src="{% static 'main/files/meal.avif' %}" alt="Food Campaign 3"></a>
     </div>
+    <p><strong>Campaign:</strong> Feeding Hope by Rallynex</p>
+    <p><strong>Impact:</strong> 250,000+ meals delivered, 50 community food banks launched, and nutrition workshops in 10 underserved neighborhoods.</p>
+    <p><strong>Story:</strong> “Before this initiative, many families went days without proper meals. Now, thanks to our campaign and your donations, local food banks operate daily. Mothers no longer skip meals to feed their children. Community kitchens have become gathering spaces for dignity, support, and resilience.”</p>
+    <p><strong>Highlight:</strong></p>
+<div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+  <img src="{% static 'main/files/a.jfif' %}" alt="Amina's Portrait" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%;">
+  <p style="margin: 0;">Amina, a single mother of three, now volunteers at her local food bank after receiving consistent help. 
+  <em>"This program didn’t just feed my kids—it gave me purpose,"</em> she shares.</p>
+</div>
+
+  </div>
+
+<!-- Climate Action -->
+<div class="story" id="climate-action">
+  <h2>Climate Action: Turning the Tide Against a Warming World</h2>
+  <div class="image-gallery">
+    <a href="{% static 'main/files/environment.jpg' %}" target="_blank"><img src="{% static 'main/files/environment.jpg' %}" alt="Climate Campaign 1"></a>
+    <a href="{% static 'main/files/environment.jpg' %}" target="_blank"><img src="{% static 'main/files/environment.jpg' %}" alt="Climate Campaign 2"></a>
+    <a href="{% static 'main/files/environment.jpg' %}" target="_blank"><img src="{% static 'main/files/environment.jpg' %}" alt="Climate Campaign 3"></a>
+  </div>
+  <p><strong>Campaign:</strong> Green Future Initiative by Rallynex</p>
+  <p><strong>Impact:</strong> Over 500,000 trees planted to absorb carbon, 30 degraded forests revived to cool local climates, climate education in 40 schools, and clean-energy jobs for youth in vulnerable communities.</p>
+  <p><strong>Story:</strong> “Rising temperatures and unpredictable rains were threatening our lands. But this campaign changed everything. Through large-scale reforestation and climate resilience projects, communities began reversing the damage. Air cooled, rains returned on time, and hope was reborn.”</p>
+  <p><strong>Highlight:</strong></p>
+  <div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+    <img src="{% static 'main/files/b.jfif' %}" alt="Samuel's Portrait" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%;">
+    <p style="margin: 0;"><em>"We were on the edge of losing everything to climate change,"</em> says Samuel, a village leader. 
+    <em>"Now our home is cooler, greener, and even attracts climate researchers from across the country."</em></p>
+  </div>
+</div>
+
+
+  <!-- Education and Literacy -->
+  <div class="story" id="education">
+    <h2>Education for All: Building a Brighter Future</h2>
+    <div class="image-gallery">
+      <a href="{% static 'main/files/cc.jpg' %}" target="_blank"><img src="{% static 'main/files/cc.jpg' %}" alt="Education Campaign 1"></a>
+      <a href="{% static 'main/files/cc.jpg' %}" target="_blank"><img src="{% static 'main/files/cc.jpg' %}" alt="Education Campaign 2"></a>
+      <a href="{% static 'main/files/cc.jpg' %}" target="_blank"><img src="{% static 'main/files/cc.jpg' %}" alt="Education Campaign 3"></a>
+    </div>
+    <p><strong>Campaign:</strong> Bright Minds Program by Rallynex</p>
+    <p><strong>Impact:</strong> Over 5,000 students educated, 20 classrooms built, 300+ scholarships granted, and digital literacy labs set up in remote schools.</p>
+    <p><strong>Story:</strong> “Before our intervention, children in these areas walked miles to crowded schools or dropped out completely. We partnered with local builders and educators to create safe, inspiring learning environments. Teachers received specialized training, and kids now dream beyond their villages.”</p>
+  <p><strong>Highlight:</strong></p>
+<div style="display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;">
+  <img src="{% static 'main/files/ci.jpg' %}" alt="Maria's Portrait" style="width: 80px; height: 80px; object-fit: cover; border-radius: 50%;">
+  <p style="margin: 0;"><em>"I want to be a doctor and open a clinic here one day,"</em> says Maria, 12. 
+  <em>"I study hard every day because Rallynex gave me a real chance."</em></p>
+</div>
+
+  </div>
+
+  <p>Your support creates change. Every contribution leads to real, lasting impact. Be part of the next success story today!</p>
+
+  <div class="cta">
+    <h2 style="color: white;">Start Your Own Campaign!</h2>
+    <p>Do you have a cause you're passionate about? Join Rallynex and create your own impactful campaign today!</p>
+    <a href="{% url 'index' %}">Start a Campaign</a>
+  </div>
+</div>
+
 </body>
 </html>
 

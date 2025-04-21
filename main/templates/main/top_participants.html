@@ -231,7 +231,7 @@ body.dark-mode .affiliate-link i {
                 <td>
                     <a href="{% url 'profile_view' participant.user.username %}" class="participant-link">
                         <img src="{{ participant.user.profile.image.url }}" alt="{{ participant.user.username }}" class="participant-img rounded-circle">
-                       @{{ participant.user.username }}
+                       {{ participant.user.username }}
                     </a>
                 </td>
                 <td>{{ participant.score }}</td>

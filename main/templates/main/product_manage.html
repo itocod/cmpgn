@@ -511,7 +511,7 @@ body.dark-mode .no-products {
             <p><strong>Status:</strong> {% if product.is_active %}Active ✅{% else %}Inactive ❌{% endif %}</p>
             <p><strong>Added:</strong> {{ product.date_added|timesince }} ago.</p>
             <a href="{{ product.url }}" class="access-btn">
-                Shop with @{{ campaign.user.user.username }}'s Store
+                Shop with {{ campaign.user.user.username }}'s Store
                 <div class="square-with-arrow">
                     <i class="fas fa-square"></i>
                     <i class="fas fa-arrow-right"></i>

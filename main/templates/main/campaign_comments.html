@@ -432,7 +432,7 @@ body.dark-mode .cc-comment-form button:hover {
                         <img src="{{ comment.user.user.profile.image.url }}" alt="Profile Picture">
                     </a>
                 </div>
-                @{{ comment.user }} - 
+                {{ comment.user }} - 
                 {% if comment.user.user.profile.profile_verified %}
                     <span class="verified-status"><i class="material-icons" style="color: green; font-size:12px;">verified_user</i></span>
                 {% endif %}

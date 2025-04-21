@@ -167,7 +167,7 @@ body.dark-mode .affiliate-link i {
         <a href="{% url 'create_chat' %}" class="new-chat-button">Create a New Chat Table</a>
     </div>
     <hr>
-    <h2 class="chat-list-heading" style="text-align: center;">@{{ user.username }}'s Chat Tables</h2>
+    <h2 class="chat-list-heading" style="text-align: center;">{{ user.username }}'s Chat Tables</h2>
     <div style="border-left: 2px solid #3498db; height: 300px; overflow-y: auto; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
 
         <ul class="chat-list">
@@ -177,7 +177,7 @@ body.dark-mode .affiliate-link i {
                         <span class="red-spot"></span>
                     {% endif %}
                     <a href="{% url 'chat_detail' chat.id %}">
-                        Chat - {{ chat.title }} (Manager: @{{ chat.manager.username }}
+                        Chat - {{ chat.title }} (Manager: {{ chat.manager.username }}
                         {% if chat.manager.profile.profile_verified %}
                             <span class="verified-status"><span>verified</span><i class="material-icons" style="font-size:12px;color:green">verified_user</i></span>
                         {% endif %}

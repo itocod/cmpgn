@@ -3109,7 +3109,7 @@ document.addEventListener('DOMContentLoaded', function() {
   <div style="border: 1px solid #808080; padding: 20px; text-align: center; border-radius: 10px;">
      
    <h2 style="margin-bottom: 10px;">
-    @{{ user_profile.user.username|default:"Anonymous" }} 
+    {{ user_profile.user.username|default:"Anonymous" }} 
     . <i class="cm">campaigner</i>
 </h2>
 <p><strong>Status:</strong> 

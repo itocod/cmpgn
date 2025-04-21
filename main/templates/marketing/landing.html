@@ -568,38 +568,44 @@
       </div>
     </section>
 
-    <!-- Campaign Categories Section -->
-    <section class="campaign-categories" id="campaigns">
-      <h2>Join Movements That Matter</h2>
-      <div class="category-grid">
-        <div class="category">
-          <img src="{% static 'main/files/health.jpg' %}" alt="Health Campaigns">
-          <div class="category-content">
-            <h3>Health & Wellness</h3>
-            <p>From local clinics to global research - improve lives together</p>
-            <a href="{% url 'index' %}?category=Health%20and%20Wellness" class="btn-secondary">Join Health Movements</a>
-          </div>
-        </div>
+  <!-- Campaign Categories Section -->
+<section class="campaign-categories" id="campaigns">
+  <h2>Join Movements That Matter</h2>
+  <div class="category-grid">
 
-        <div class="category">
-          <img src="{% static 'main/files/educ.jpg' %}" alt="Education Campaigns">
-          <div class="category-content">
-            <h3>Education Access</h3>
-            <p>Build schools, fund scholarships, create learning tools collectively</p>
-            <a href="{% url 'index' %}?category=Education%20and%20Literacy" class="btn-secondary">Support Education</a>
-          </div>
-        </div>
-
-        <div class="category">
-          <img src="{% static 'main/files/environment.jpg' %}" alt="Environmental Campaigns">
-          <div class="category-content">
-            <h3>Environmental Action</h3>
-            <p>Community-powered conservation and climate solutions</p>
-            <a href="{% url 'index' %}?category=Environmental%20Conservation" class="btn-secondary">Protect Our Planet</a>
-          </div>
-        </div>
+    <!-- Education for All -->
+    <div class="category">
+      <img src="{% static 'main/files/ea.jpg' %}" alt="Education Campaigns">
+      <div class="category-content">
+        <h3>Education for All</h3>
+        <p>Build schools, fund scholarships, and promote global literacy.</p>
+        <a href="{% url 'index' %}?category=Education%20for%20All" class="btn-secondary">Support Education</a>
       </div>
-    </section>
+    </div>
+
+    <!-- Poverty and Hunger -->
+    <div class="category">
+      <img src="{% static 'main/files/poverty.jpg' %}" alt="Poverty and Hunger Campaigns">
+      <div class="category-content">
+        <h3>End Poverty & Hunger</h3>
+        <p>Join efforts to provide food, resources, and hope to vulnerable communities.</p>
+        <a href="{% url 'index' %}?category=Poverty%20and%20Hunger" class="btn-secondary">Fight Poverty</a>
+      </div>
+    </div>
+
+    <!-- Climate Action -->
+    <div class="category">
+      <img src="{% static 'main/files/tree.jpg' %}" alt="Climate Action Campaigns">
+      <div class="category-content">
+        <h3>Climate Action</h3>
+        <p>Support climate resilience, clean energy, and environmental justice.</p>
+        <a href="{% url 'index' %}?category=Climate%20Action" class="btn-secondary">Act for the Planet</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 
     <!-- How It Works Section -->
     <section class="how-it-works">
@@ -623,28 +629,51 @@
       </div>
     </section>
 
-    <!-- Success Stories Section -->
-    <section class="success-stories">
-      <h2>Movements We've Powered Together</h2>
-      <div class="story-grid">
-        <div class="story-card">
-          <img src="{% static 'main/files/wt.jpg' %}" alt="Community Success">
-          <div class="story-content">
-            <h3>200+ Clean Water Projects</h3>
-            <p>How small donations + volunteer ideas brought clean water to 50k people</p>
-            <a href="#" class="story-link">See the impact →</a>
-          </div>
-        </div>
-        <div class="story-card">
-          <img src="{% static 'main/files/ed.jpg' %}" alt="Education Success">
-          <div class="story-content">
-            <h3>Youth Education Network</h3>
-            <p>From one brainstorm to 30 after-school programs</p>
-            <a href="#" class="story-link">Read the story →</a>
-          </div>
-        </div>
+<!-- Success Stories Section -->
+<section class="success-stories" style="padding: 2rem 0;">
+  <h2>Transforming Lives Together: Our Success Stories</h2>
+  <div class="category-grid">
+    
+    <!-- Poverty and Hunger Story -->
+    <div class="category">
+      <img src="{% static 'main/files/meal.avif' %}" alt="Poverty and Hunger Success — Empowering Families with Food Banks">
+      <div class="category-content">
+        <h3>From Empty Plates to Full Tables</h3>
+        <p><strong>Campaign:</strong> <em>Feeding Hope by Rallynex</em></p>
+        <p><strong>Impact:</strong> Over <strong>250,000 meals</strong> delivered and <strong>50+ community food banks</strong> launched in regions hardest hit by food insecurity.</p>
+        <p><strong>Testimonial:</strong> "Before this initiative, many families went days without proper meals. Now, communities gather weekly to support one another and ensure no one is left hungry."</p>
+        <a href="{% url 'success_stories' %}#poverty" class="btn-secondary">Discover How We're Making a Difference</a>
       </div>
-    </section>
+    </div>
+
+    <!-- Education for All Story -->
+    <div class="category">
+      <img src="{% static 'main/files/cc.jpg' %}" alt="Education for All Success — Building Classrooms and Future Leaders">
+      <div class="category-content">
+        <h3>Turning Classrooms into Change</h3>
+        <p><strong>Campaign:</strong> <em>Bright Minds Program by Rallynex</em></p>
+        <p><strong>Impact:</strong> <strong>5,000+ children</strong> reached, <strong>20 schools</strong> built, and <strong>300+ scholarships</strong> granted across underserved communities.</p>
+        <p><strong>Testimonial:</strong> "In rural areas, many children never get the chance to attend school. With your help, we’ve built schools, trained teachers, and given these children the tools to dream big."</p>
+        <a href="{% url 'success_stories' %}#education" class="btn-secondary">Read About the Impact</a>
+      </div>
+    </div>
+
+    <!-- Climate Action Story -->
+    <div class="category">
+      <img src="{% static 'main/files/environment.jpg' %}" alt="Climate Action Success — Cooling the Earth, One Tree at a Time">
+      <div class="category-content">
+        <h3>Cooling the Earth, One Tree at a Time</h3>
+        <p><strong>Campaign:</strong> <em>Green Future Initiative by Rallynex</em></p>
+        <p><strong>Impact:</strong> 500,000+ trees planted for carbon absorption, 30 forests restored to fight heatwaves, climate programs in 40 schools, and clean-energy jobs created for youth.</p>
+        <p><strong>Testimonial:</strong> "We were on the edge of losing everything to climate change. Now our home is cooler, greener, and even attracts climate researchers from across the country." – <em>Samuel, Village Leader</em></p>
+        <a href="{% url 'success_stories' %}#climate-action" class="btn-secondary">Explore the Climate Action Movement</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+
 
     <!-- Community CTA Section -->
     <section class="community-cta">

@@ -222,21 +222,34 @@ class Campaign(models.Model):
     target_amount = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)  # Goal amount
 
     CATEGORY_CHOICES = (
-        ('Environmental Conservation', 'Environmental Conservation'),
-        ('Community Development', 'Community Development'),
-        ('Health and Wellness', 'Health and Wellness'),
-        ('Education and Literacy', 'Education and Literacy'),
-        ('Equality and Inclusion', 'Equality and Inclusion'),
-        ('Animal Welfare', 'Animal Welfare'),
-        ('Humanitarian Aid', 'Humanitarian Aid'),
-        ('Sustainable Development', 'Sustainable Development'),
-        ('Peace and Conflict Resolution', 'Peace and Conflict Resolution'),
-        ('Digital Rights', 'Digital Rights'),
-        ('Economic Empowerment', 'Economic Empowerment'),
-        ('Policy Advocacy', 'Policy Advocacy'),
-        ('Artistic Advocacy', 'Artistic Advocacy'),
-        ('Other', 'Other'),
-    )
+    # Survival Essentials
+    ('Poverty and Hunger', 'Poverty and Hunger'),  
+    ('Clean Water and Sanitation', 'Clean Water and Sanitation'),  
+    ('Disaster Relief', 'Disaster Relief'),  # Earthquakes, floods, wars
+    
+    # Health
+    ('Healthcare and Medicine', 'Healthcare and Medicine'),  # Diseases, hospitals, emergencies
+    ('Mental Health', 'Mental Health'),  
+    
+    # Equity and Justice
+    ('Human Rights and Equality', 'Human Rights and Equality'),  # Gender, race, LGBTQ+, refugees
+    ('Peace and Justice', 'Peace and Justice'),  # Conflict zones, legal aid
+    
+    # Future Foundations
+    ('Education for All', 'Education for All'),  # Schools, scholarships, literacy
+    ('Economic Empowerment', 'Economic Empowerment'),  # Jobs, entrepreneurship
+    
+    # Planet Sustainability
+    ('Climate Action', 'Climate Action'),  # Extreme weather, pollution
+    ('Save Our Planet', 'Save Our Planet'),  # Forests, oceans, wildlife
+    
+    # Technology for Good
+    ('Tech for Humanity', 'Tech for Humanity'),  # Digital access, innovation
+    
+    # Other
+    ('Community Development', 'Community Development'),  # Local projects
+    ('Other', 'Other'),
+)
     category = models.CharField(max_length=30, choices=CATEGORY_CHOICES, default='Environmental Conservation')
 
     VISIBILITY_CHOICES = (
@@ -348,265 +361,194 @@ class Campaign(models.Model):
                 timestamp=timezone.now()
             )
 
+
+
     def get_objective_and_activities(self):
         objectives_activities = {
-         'Environmental Conservation': {
-    'Objectives': [
-        'Promote environmental conservation and sustainability practices.',
-        'Protect endangered species or ecosystems.',
-    ],
-    'Activities': [
-        'Organize clean-up events for beaches, parks, or urban areas.',
-        'Plant trees or establish community gardens.',
-        'Advocate for environmental legislation or initiatives.',
-        'Fundraise for conservation efforts or endangered species programs.',
-        'Host workshops or events on sustainable living practices.',
-        'Collaborate with wildlife experts or organizations to protect endangered species.',
-        'Initiate habitat restoration projects for ecosystems in danger.',
-        'Raise awareness about conservation issues through  campaigns.',
-        'Organize petition campaigns to support environmental laws and policies.',
-        'Partner with local environmental organizations to scale conservation efforts.',
-    ]
-},
-         'Community Development': {
-    'Objectives': [
-        'Improve infrastructure and amenities within a community.',
-        'Foster social cohesion and civic engagement.',
-    ],
-    'Activities': [
-        'Organize community clean-up or beautification projects.',
-        'Advocate for improvements in housing or public spaces.',
-        'Establish community centers or hubs for social activities.',
-        'Create programs to support local businesses or entrepreneurs.',
-        'Organize neighborhood safety initiatives or watch groups.',
-        'Host cultural or social events to strengthen community bonds.',
-        'Develop mentorship or educational programs for youth or underprivileged groups.',
-        'Raise funds for infrastructure projects, such as parks or playgrounds.',
-        'Promote volunteerism within the community to address local issues.',
-        'Collaborate with local government to address specific community needs.',
-    ]
-},
-'Health and Wellness': {
-    'Objectives': [
-        'Promote health and wellness initiatives.',
-        'Raise awareness about healthcare issues or conditions.',
-    ],
-    'Activities': [
-        'Organize health screenings or vaccination drives.',
-        'Fundraise for medical treatments or equipment.',
-        'Advocate for healthcare policy changes.',
-        'Host workshops or seminars on healthy living and disease prevention.',
-        'Collaborate with local health professionals to provide free medical consultations.',
-        'Raise awareness about mental health through campaigns or workshops.',
-        'Organize fitness challenges or community exercise programs.',
-        'Establish support groups for individuals dealing with chronic illnesses or conditions.',
-        'Promote nutritional education and healthy eating habits.',
-        'Partner with healthcare providers to offer discounted or free services for underserved populations.',
-    ]
-},
-
-'Education and Literacy': {
-    'Objectives': [
-        'Promote and facilitate learning opportunities within a community.',
-        'Improve access to education resources and support.',
-    ],
-    'Activities': [
-        'Offer tutoring or mentoring programs for students.',
-        'Organize workshops or conferences on educational topics.',
-        'Raise funds to provide educational materials or scholarships for underprivileged students.',
-        'Establish community libraries or book donation drives.',
-        'Collaborate with educators to create after-school programs or learning clubs.',
-        'Host literacy campaigns aimed at reducing illiteracy rates in underserved areas.',
-        'Promote digital literacy and access to technology through training programs.',
-        'Create parent education initiatives to help families support their children’s learning.',
-        'Develop vocational training programs to improve job readiness.',
-        'Partner with local schools or educational institutions to expand learning resources.',
-    ]
-},
-
-  'Equality and Inclusion': {
-    'Objectives': [
-        'Promote equality, diversity, and inclusion.',
-        'Advocate for the rights of marginalized communities.',
-    ],
-    'Activities': [
-        'Organize awareness campaigns and educational seminars.',
-        'Support social justice initiatives and advocacy efforts.',
-        'Host diversity training programs for organizations and community groups.',
-        'Create safe spaces for marginalized communities to share their experiences.',
-        'Collaborate with legal experts to provide pro bono services for marginalized individuals.',
-        'Launch mentorship programs aimed at empowering underrepresented groups.',
-        'Advocate for policy changes that address inequality and discrimination.',
-        'Promote inclusive hiring practices through partnerships with businesses.',
-        'Raise funds for organizations that support equality and inclusion initiatives.',
-        'Host cultural exchange events to celebrate diversity and foster understanding.',
-    ]
-},
-
-'Animal Welfare': {
-    'Objectives': [
-        'Promote the welfare and rights of animals.',
-        'Rescue and provide care for animals in need.',
-    ],
-    'Activities': [
-        'Fundraise for animal shelters or rescue organizations.',
-        'Advocate for animal protection laws or policies.',
-        'Organize adoption events or pet care workshops.',
-        'Create and distribute educational materials on responsible pet ownership.',
-        'Collaborate with veterinarians to offer free or low-cost medical services.',
-        'Host spay and neuter clinics to control pet overpopulation.',
-        'Develop outreach programs to educate the public about animal welfare issues.',
-        'Establish a network of foster homes for animals awaiting adoption.',
-        'Organize volunteer opportunities to support animal shelters and rescue groups.',
-        'Promote and support wildlife conservation efforts to protect endangered species.',
-    ]
-},
-
-'Humanitarian Aid': {
-    'Objectives': [
-        'Provide humanitarian assistance to communities in need.',
-        'Respond to humanitarian crises and emergencies.',
-    ],
-    'Activities': [
-        'Fundraise for humanitarian relief efforts.',
-        'Coordinate aid distribution and relief operations.',
-        'Provide medical care and essential supplies.',
-        'Organize and support emergency response teams for disaster relief.',
-        'Partner with local organizations to deliver targeted aid in affected areas.',
-        'Conduct needs assessments to identify and address critical gaps in aid.',
-        'Host community workshops to educate on disaster preparedness and response.',
-        'Develop and maintain emergency preparedness plans for future crises.',
-        'Raise awareness and advocate for support for humanitarian causes.',
-        'Collaborate with international agencies to coordinate global relief efforts.',
-    ]
-},
-
-'Sustainable Development': {
-    'Objectives': [
-        'Promote sustainable development practices.',
-        'Support initiatives for long-term environmental and social sustainability.',
-    ],
-    'Activities': [
-        'Implement renewable energy projects.',
-        'Advocate for sustainable agriculture and resource management.',
-        'Educate communities about sustainable living practices.',
-        'Develop and support green building projects or energy-efficient infrastructure.',
-        'Organize community workshops on waste reduction and recycling.',
-        'Support initiatives for water conservation and management.',
-        'Promote sustainable transportation options, such as biking and public transit.',
-        'Partner with local businesses to adopt sustainable practices.',
-        'Raise awareness about climate change and its impacts through campaigns or events.',
-        'Facilitate collaborations between stakeholders to advance sustainability goals.',
-    ]
-},
-
-'Peace and Conflict Resolution': {
-    'Objectives': [
-        'Promote peacebuilding and conflict resolution.',
-        'Support reconciliation and peace initiatives.',
-    ],
-    'Activities': [
-        'Organize peacebuilding workshops and dialogues.',
-        'Support mediation and dialogue processes.',
-        'Advocate for peace and disarmament policies.',
-        'Facilitate community-led conflict resolution programs.',
-        'Partner with local and international organizations to support peace initiatives.',
-        'Host educational events on conflict resolution skills and techniques.',
-        'Develop and implement reconciliation programs for post-conflict communities.',
-        'Promote cross-cultural exchange programs to foster understanding and tolerance.',
-        'Raise awareness about the impacts of conflict and the benefits of peace through campaigns.',
-        'Support initiatives that address the root causes of conflict, such as poverty or inequality.',
-    ]
-},
-'Digital Rights': {
-    'Objectives': [
-        'Advocate for digital rights and online privacy protection.',
-        'Promote internet freedom and access to information.',
-    ],
-    'Activities': [
-        'Campaign for digital rights legislation and policies.',
-        'Raise awareness about online security and data privacy issues.',
-        'Provide digital literacy training and resources.',
-        'Organize workshops on safe online practices and cyber hygiene.',
-        'Advocate for the protection of freedom of expression online.',
-        'Support initiatives to improve access to the internet in underserved areas.',
-        'Collaborate with tech companies to promote ethical data handling practices.',
-        'Host events to educate the public on their digital rights and how to protect them.',
-        'Promote tools and resources for secure communication and data protection.',
-        'Engage in research and policy advocacy to address emerging digital rights issues.',
-    ]
-},
-
-'Economic Empowerment': {
-    'Objectives': [
-        'Promote economic empowerment and entrepreneurship.',
-        'Support initiatives for job creation and financial inclusion.',
-    ],
-    'Activities': [
-        'Offer business development training and mentorship.',
-        'Facilitate access to microloans or small business grants.',
-        'Organize networking events and economic forums.',
-        'Provide financial literacy workshops to enhance personal and business finance management.',
-        'Support initiatives that promote women and minority entrepreneurship.',
-        'Create and support incubators or accelerators for startups and small businesses.',
-        'Partner with local businesses to offer apprenticeships or job placement programs.',
-        'Advocate for policies that support economic development and job creation.',
-        'Host career fairs and job readiness workshops to connect individuals with employment opportunities.',
-        'Facilitate access to technology and resources for underserved entrepreneurs.',
-    ]
-},
-
-'Policy Advocacy': {
-    'Objectives': [
-        'Advocate for policy changes and legislative reform.',
-        'Promote public awareness and engagement in policy issues.',
-    ],
-    'Activities': [
-        'Develop policy briefs and position papers.',
-        'Engage with policymakers and government officials.',
-        'Mobilize grassroots advocacy campaigns.',
-        'Organize public forums and town hall meetings to discuss policy issues.',
-        'Conduct research and analysis to support advocacy efforts.',
-        'Create and disseminate educational materials to inform the public about policy issues.',
-        'Build coalitions with other organizations to strengthen advocacy efforts.',
-        'Host workshops and training sessions on effective advocacy strategies.',
-        'Track and report on legislative developments and policy changes.'
-    ]
-},
-
-
-'Artistic Advocacy': {
-    'Objectives': [
-        'Promote and support artistic expression and creativity for social causes.',
-        'Provide platforms for artists to advocate for their causes through art.',
-    ],
-    'Activities': [
-        'Organize art exhibitions and galleries focused on social issues.',
-        'Conduct art workshops and classes that highlight advocacy.',
-        'Fundraise for art supplies and resources for advocacy projects.',
-        'Advocate for the importance of art in education and society.',
-        'Host art-based fundraising events to support social causes.',
-        'Collaborate with artists to create public art installations addressing social issues.',
-        'Create and distribute art that raises awareness about specific causes.',
-        'Support artist-in-residence programs that focus on community engagement and advocacy.',
-        'Promote art as a tool for social change through public talks and panels.',
-        'Develop partnerships with schools and community organizations to integrate art into social advocacy.'
-    ]
-},
-
-
-
-    'Other': {
-        'Objectives': [
-        'Support miscellaneous causes or initiatives not covered by other categories.',
-        ],
-        'Activities': [
-            'Tailor activities based on the specific nature of the campaign.',
-        ]
+            'Poverty and Hunger': {
+                'Objectives': [
+                    'Reduce poverty and hunger by providing immediate and long-term support.',
+                    'Empower communities with resources for food security and income generation.'
+                ],
+                'Activities': [
+                    'Distribute food packages or meals to low-income families.',
+                    'Fund community farming or cooperative initiatives.',
+                    'Launch skills training or small-business grants for unemployed individuals.',
+                    'Support food banks or hunger relief programs.',
+                    'Organize donation drives for clothes and daily essentials.'
+                ]
+            },
+            'Clean Water and Sanitation': {
+                'Objectives': [
+                    'Ensure access to clean drinking water and improved sanitation.',
+                    'Raise awareness about hygiene and waterborne diseases.'
+                ],
+                'Activities': [
+                    'Build or repair wells, boreholes, or water systems.',
+                    'Distribute water filters or hygiene kits to communities.',
+                    'Conduct sanitation awareness campaigns.',
+                    'Partner with engineers to develop sustainable water solutions.',
+                    'Install toilets and handwashing facilities in underserved areas.'
+                ]
+            },
+            'Disaster Relief': {
+                'Objectives': [
+                    'Provide emergency aid to victims of natural or human-made disasters.',
+                    'Support recovery and rebuilding efforts.'
+                ],
+                'Activities': [
+                    'Distribute emergency supplies like food, blankets, and medicine.',
+                    'Raise funds for rebuilding homes and schools.',
+                    'Mobilize volunteers for rescue and relief operations.',
+                    'Partner with emergency response organizations.',
+                    'Provide temporary shelter and medical services.'
+                ]
+            },
+            'Healthcare and Medicine': {
+                'Objectives': [
+                    'Improve access to medical care and essential medicines.',
+                    'Support health infrastructure in low-resource settings.'
+                ],
+                'Activities': [
+                    'Fund surgeries or treatments for patients in need.',
+                    'Provide medical equipment or ambulances to rural clinics.',
+                    'Organize blood donation or vaccination drives.',
+                    'Train health workers in local communities.',
+                    'Create mobile health clinics or telemedicine services.'
+                ]
+            },
+            'Mental Health': {
+                'Objectives': [
+                    'Raise awareness about mental health challenges.',
+                    'Provide accessible support and counseling services.'
+                ],
+                'Activities': [
+                    'Launch online or in-person mental health counseling programs.',
+                    'Train community members as mental health first responders.',
+                    'Fund hotlines or mental health apps.',
+                    'Host awareness events to fight stigma.',
+                    'Create support groups for anxiety, depression, or trauma recovery.'
+                ]
+            },
+            'Human Rights and Equality': {
+                'Objectives': [
+                    'Promote and protect fundamental human rights.',
+                    'Fight discrimination and injustice in all forms.'
+                ],
+                'Activities': [
+                    'Advocate for refugee rights or gender equality.',
+                    'Organize legal aid or education workshops.',
+                    'Support organizations working on human rights issues.',
+                    'Launch campaigns to expose injustice or systemic discrimination.',
+                    'Provide safe havens or shelters for vulnerable groups.'
+                ]
+            },
+            'Peace and Justice': {
+                'Objectives': [
+                    'Support justice systems and conflict resolution.',
+                    'Promote peacebuilding and reconciliation in conflict zones.'
+                ],
+                'Activities': [
+                    'Train youth in conflict resolution and mediation.',
+                    'Support rehabilitation programs for former offenders or soldiers.',
+                    'Organize peace dialogues between divided communities.',
+                    'Fund legal defense for marginalized populations.',
+                    'Document and report human rights abuses.'
+                ]
+            },
+            'Education for All': {
+                'Objectives': [
+                    'Ensure equitable access to quality education.',
+                    'Reduce school dropout rates and promote literacy.'
+                ],
+                'Activities': [
+                    'Build classrooms or learning centers.',
+                    'Fund school supplies, tuition, or scholarships.',
+                    'Train teachers and provide educational resources.',
+                    'Host community literacy campaigns.',
+                    'Create inclusive education programs for girls and disabled students.'
+                ]
+            },
+            'Economic Empowerment': {
+                'Objectives': [
+                    'Promote entrepreneurship and job creation.',
+                    'Support marginalized groups through income-generating activities.'
+                ],
+                'Activities': [
+                    'Provide startup capital to small businesses.',
+                    'Offer vocational training and mentorship programs.',
+                    'Launch financial literacy and savings programs.',
+                    'Support women-led enterprises.',
+                    'Connect job seekers to employment opportunities.'
+                ]
+            },
+            'Climate Action': {
+                'Objectives': [
+                    'Combat climate change and its effects.',
+                    'Promote community-based solutions to environmental challenges.'
+                ],
+                'Activities': [
+                    'Raise awareness about carbon emissions and climate change.',
+                    'Organize reforestation or carbon offset programs.',
+                    'Support renewable energy projects.',
+                    'Develop sustainable agriculture initiatives.',
+                    'Advocate for green policies and eco-justice.'
+                ]
+            },
+            'Save Our Planet': {
+                'Objectives': [
+                    'Protect biodiversity, forests, oceans, and wildlife.',
+                    'Promote sustainable and ethical environmental practices.'
+                ],
+                'Activities': [
+                    'Fund rescue and rehabilitation of endangered species.',
+                    'Organize beach cleanups and marine conservation efforts.',
+                    'Create campaigns to stop deforestation.',
+                    'Partner with conservation groups on wildlife protection.',
+                    'Educate communities on eco-friendly lifestyles.'
+                ]
+            },
+            'Tech for Humanity': {
+                'Objectives': [
+                    'Leverage technology to solve social and environmental problems.',
+                    'Bridge the digital divide.'
+                ],
+                'Activities': [
+                    'Donate laptops or tablets to students in need.',
+                    'Develop tech tools for health, education, or disaster response.',
+                    'Offer coding and digital literacy workshops.',
+                    'Support innovation hubs or tech incubators for social good.',
+                    'Create platforms or apps that connect underserved communities.'
+                ]
+            },
+            'Community Development': {
+                'Objectives': [
+                    'Enhance the quality of life in local communities.',
+                    'Build strong and resilient local systems.'
+                ],
+                'Activities': [
+                    'Renovate community centers or build shared spaces.',
+                    'Support local artists or cultural initiatives.',
+                    'Create neighborhood safety and youth empowerment programs.',
+                    'Fund micro-infrastructure like street lights or boreholes.',
+                    'Organize community festivals and forums.'
+                ]
+            },
+            'Other': {
+                'Objectives': [
+                    'Support causes that don’t fit into predefined categories.',
+                    'Provide flexibility for unique community needs.'
+                ],
+                'Activities': [
+                    'Launch one-time campaigns for urgent needs.',
+                    'Fundraise for emerging or unexpected challenges.',
+                    'Engage in storytelling to raise awareness.',
+                    'Partner with local influencers or activists.',
+                    'Customize support efforts to individual or group-specific cases.'
+                ]
             },
         }
         return objectives_activities.get(self.category, {})
-
 
 
 
