@@ -68,254 +68,233 @@
   <title>RallyNex - Together for Change: Join Global Campaigns and Transform Lives</title>
 
 
+ 
+
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-        background-color: #f9f9f9; /* Light background */
-    }
+    /* Paste the provided CSS code here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+              background-color: #f9f9f9; /* Light background */
+        }
 
-    header {
-      background-color: 
-      color: grey;
-      padding: 0;
-      text-align: center;
-    }
-main {
-  display: flex;
-  justify-content: space-around;
-  padding: 0;
-}
+        header {
+            background-color: ;
+            color: grey;
+            padding: 0;
+            text-align: center;
+        }
 
+        main {
+            display: flex;
+            justify-content: space-around;
+            padding: 0;
+        }
 
-    .upper-post,
-    .lower-post {
-      padding: 10px;
-    }
+        .upper-post,
+        .lower-post {
+            padding: 10px;
+        }
 
-section {
-  flex: 3; /* Ensure it remains flexible within its parent */
-  background-color: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 100%; /* Ensure it takes full width of its container */
-  max-width: 750px; /* Set the maximum width you desire */
-  padding: 0; /* Remove padding */
-  box-sizing: border-box; /* Include padding and border in the element's total width and height */
-  border: 1px solid whitesmoke; /* Optional: Set border */
-  margin: 0 auto; /* Center the section horizontally within its container */
-  
-}
+        section {
+            flex: 3;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 750px;
+            padding: 0;
+            box-sizing: border-box;
+            border: 1px solid whitesmoke;
+            margin: 0 auto;
+        }
 
+        @media (max-width: 768px) {
+            section {
+                width: calc(100vw - 2px);
+            }
+        }
 
-/* Media query for smaller screens */
-@media (max-width: 768px) {
-  section {
-    width: calc(100vw - 2px); /* Calculate 100% viewport width minus any border */
-   */
-  }
-}
+        .left-aside, .right-aside {
+            flex: 1;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
 
-.left-aside, .right-aside {
-  flex: 1; /* Keep the asides smaller */
-  background-color: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-}
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            margin: 0 auto;
+            box-sizing: border-box;
+            border-bottom: 1px solid #e1e1e1;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
 
+        .logo-container {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
 
-.header-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px; /* Increased padding for a more spacious look */
-    margin: 0 auto;
-    box-sizing: border-box;
-    
-    border-bottom: 1px solid #e1e1e1; /* Subtle border for separation */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Light shadow for a soft border shade effect */
-   
-}
+        .logo {
+            margin-right: 15px;
+            background: none;
+            border: none;
+            box-shadow: none;
+        }
 
+        .logo-initials {
+            color: #28a745;
+            font-size: 60px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            text-shadow: 
+                2px 2px 0 #28a745,
+                -2px -2px 0 #28a745,
+                2px -2px 0 #28a745,
+                -2px 2px 0 #28a745,
+                4px 4px 0 black,
+                -4px -4px 0 black,
+                4px -4px 0 black,
+                -4px 4px 0 black;
+        }
 
+        .logo-name {
+            font-size: 24px;
+            margin-top: 5px;
+            opacity: 0.9;
+        }
 
-/* Logo container */
-.logo-container {
-    display: flex;
-    align-items: center;
-    flex: 1;
-}
+        .search-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
 
-/* Logo styling */
-.logo {
-    margin-right: 15px; /* Increased space between logo and name */
-    background: none;
-    border: none;
-    box-shadow: none;
-}
+        .search-wrapper {
+            display: flex;
+            border: 2px solid #ced4da;
+            border-radius: 25px;
+            overflow: hidden;
+            width: 100%;
+            max-width: 600px;
+            box-sizing: border-box;
+        }
 
-/* Logo initials styling */
-.logo-initials {
-    color: #28a745; /* Updated color for a fresher look */
-    font-size: 60px; /* Increased font size for prominence */
-    font-weight: bold;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    text-shadow: 
-        2px 2px 0 #28a745,
-        -2px -2px 0 #28a745,
-        2px -2px 0 #28a745,
-        -2px 2px 0 #28a745,
-        4px 4px 0 black,
-        -4px -4px 0 black,
-        4px -4px 0 black,
-        -4px 4px 0 black;
-}
+        #query-field {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            font-size: 16px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: box-shadow 0.3s ease, border-color 0.3s ease;
+        }
 
-/* Logo name styling */
-.logo-name {
-    font-size: 24px; /* Increased font size */
-    margin-top: 5px; /* Slightly increased space */
-   
-    opacity: 0.9;
-}
+        #query-field:focus {
+            outline: none;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+            border-color: #007bff;
+        }
 
-/* Search container */
-.search-container {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-}
+        .btn-search {
+            border: none;
+            background: limegreen;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+            padding: 12px;
+        }
 
-/* Search wrapper */
-.search-wrapper {
-    display: flex;
-    border: 2px solid #ced4da; /* Updated border color */
-    border-radius: 25px; /* Rounded corners for a modern look */
-    overflow: hidden;
-    width: 100%;
-    max-width: 600px; /* Restrict max width for better appearance */
-    box-sizing: border-box;
-}
+        .btn-search:hover {
+            background: #4CAF50;
+            transform: scale(1.05);
+        }
 
-/* Input field */
-#query-field {
-    flex: 1;
-    padding: 12px 20px; /* Increased padding for a more comfortable input */
-    border: none;
-    font-size: 16px; /* Larger font size for readability */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    transition: box-shadow 0.3s ease, border-color 0.3s ease;
-}
+        .btn-reset {
+            border: none;
+            background: #f5f5f5;
+            color: #b0b0b0;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
+            padding: 12px;
+        }
 
-/* Input field focus */
-#query-field:focus {
-    outline: none;
-    box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
-    border-color: #007bff; /* Add border color on focus */
-}
+        .btn-reset:hover {
+            background: #eeeeee;
+            color: #a0a0a0;
+            transform: scale(1.05);
+        }
 
-/* Submit button (search icon) */
-.btn-search {
-    border: none;
-    background: limegreen; /* Primary button color */
-    color: white;
-    font-size: 20px;
-    cursor: pointer;
-    transition: background 0.3s ease, transform 0.2s ease;
-    padding: 12px; /* Increased size for better click area */
-}
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 15px;
+            }
 
-/* Submit button hover */
-.btn-search:hover {
-    background: #4CAF50; /* Darker lime green on hover */
-    transform: scale(1.05); /* Slightly scale up on hover */
-}
+            .logo-container {
+                margin-bottom: 15px;
+            }
 
-/* Reset button */
-.btn-reset {
-    border: none;
-    background: #f5f5f5; /* Smokewhite background */
-    color: #b0b0b0; /* Softer light silver text color */
-    font-size: 18px;
-    cursor: pointer;
-    transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
-    padding: 12px; /* Increased size for better click area */
-}
+            .search-wrapper {
+                border-radius: 20px;
+            }
 
-/* Reset button hover */
-.btn-reset:hover {
-    background: #eeeeee; /* Very light gray for hover */
-    color: #a0a0a0; /* Slightly darker but still soft text color */
-    transform: scale(1.05); /* Slightly scale up on hover */
-}
+            .btn-search, .btn-reset {
+                padding: 10px;
+                font-size: 16px;
+            }
 
+            #query-field {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
 
-/* Mobile styles */
-@media (max-width: 768px) {
-    .header-container {
-        flex-direction: column;
-        align-items: stretch;
-        padding: 15px; /* Adjusted padding for smaller screens */
-    }
+            .logo-initials {
+                font-size: 50px;
+            }
+        }
 
-    .logo-container {
-        display: none; /* Hide the logo container on mobile screens */
-    }
+        nav {
+            margin-top: 20px;
+            border: 1px solid #808080;
+            border-radius: 5px;
+            overflow: hidden;
+        }
 
-    .search-wrapper {
-        border-radius: 20px; /* Adjusted border radius for mobile */
-    }
+        nav a {
+            text-decoration: none;
+            font-weight: bold;
+            padding: 8px 10px;
+            display: block;
+            transition: background-color 0.3s ease;
+            border-bottom: 1px solid #e6e6e6;
+        }
 
-    .btn-search, .btn-reset {
-        padding: 10px; /* Adjusted padding for mobile */
-        font-size: 16px; /* Adjusted font size */
-    }
+        nav a:hover {
+            background-color: limegreen;
+        }
 
-    #query-field {
-        padding: 10px 15px; /* Adjusted padding */
-        font-size: 14px; /* Smaller font size for mobile */
-    }
-}
+        .upload-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
 
-
-    nav {
-      margin-top: 20px;
-      border: 1px solid #808080;
-      border-radius: 5px;
-      overflow: hidden;
-    }
-
-    nav a {
-      text-decoration: none;
-      font-weight: bold;
-      padding: 8px 10px;
-      display: block;
-      transition: background-color 0.3s ease;
-      border-bottom: 1px solid #e6e6e6;
-    }
-
-    nav a:hover {
-      background-color:limegreen; /* Light lime green on hover */
-
-    }
-
-    /* Beautiful upload button styles */
-    .upload-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      margin-top: 20px;
-    }
-
-    .upload-btn-wrapper {
-      position: relative;
-      overflow: hidden;
-      display: inline-block;
-    }
-
+        .upload-btn-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
 
         .btn-submit {
             display: block;
@@ -334,229 +313,322 @@ section {
             background-color: #2980b9;
         }
 
+        .btn {
+            border: 2px solid gray;
+            color: #333333;
+            background-color: white;
+            padding: 8px 20px;
+            border-radius: 8px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
 
+        .btn:hover {
+            background-color: #eee;
+        }
 
+        .upload-btn-wrapper input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
 
-    .btn {
-      border: 2px solid gray;
-    color: #333333;
-      background-color: white;
-      padding: 8px 20px;
-      border-radius: 8px;
-      font-size: 20px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+        hr {
+            border: 1px solid silver;
+            margin: 10px 0;
+        }
 
+        .upper-post {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+            transition: border-color 0.3s ease, transform 0.3s ease;
+        }
 
-    .btn:hover {
-      background-color: #eee; /* Change the color on hover */
-    }
-    .upload-btn-wrapper input[type=file] {
-      font-size: 100px;
-      position: absolute;
-      left: 0;
-      top: 0;
-      opacity: 0;
-      cursor: pointer;
-    }
+        .upper-post:hover {
+            /* Optional: Add hover effects if needed */
+        }
 
-border: 1px solid silver;
-    hr {
-      border: 1px solid silver; /* Set border to 1px solid silver for a silver color */
-      margin: 10px 0; /* Add some margin for spacing */
-    }
+        .profile-pic {
+            flex-shrink: 0;
+            margin-right: 20px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            overflow: hidden;
+        }
 
-.upper-post {
-  display: flex;
-  align-items: flex-start; /* Align items to the top */
-  padding: 20px;
-  border-radius: 8px; /* Smoother rounded corners */
-  background-color: #fff; /* White background */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
-  margin-bottom:0; /* Space between posts */
-}
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 50%;
+        }
 
-.upper-post:hover {
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
-  transform: translateY(-2px); /* Slight lift effect */
-}
+        @media (max-width: 768px) {
+            .upper-post {
+                flex-direction: column;
+                align-items: flex-start;
+            }
 
-/* Profile Picture Container */
-.profile-pic {
-  flex-shrink: 0;
-  width: 60px; /* Slightly larger for better visibility */
-  height: 60px;
-  border-radius: 50%;
-  overflow: hidden;
-  margin-right: 20px;
-  border: 2px solid #e0e0e0; /* Light border for the profile picture */
-}
+            .profile-pic {
+                width: 50px;
+                height: 50px;
+                margin-bottom: 15px;
+                margin-right: 0;
+            }
 
-.profile-pic img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  border-radius: 50%;
-}
+            .profile-pic img {
+                image-rendering: auto;
+                width: auto;
+                height: auto;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                object-position: center;
+                border-radius: 50%;
+            }
+        }
 
-/* Post Details */
-.post-details {
-  flex: 1;
-}
+        .post-details {
+            flex: 1;
+        }
 
-.post-details h1 {
-  margin: 0;
-  font-size: 20px;
-  color: #333;
-  font-weight: 600; /* Bold username */
-}
+        .post-details h2 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+        }
 
-.post-details h1 .verified-status {
-  font-size: 12px;
-  color: #4CAF50; /* Green for verified status */
-  margin-left: 5px;
-}
+        .post-details h3 {
+            margin: 0;
+            font-size: 16px;
+        }
 
-.post-details h1 .cm {
-  font-size: 12px;
-  color: #e74c3c; /* Red for changemaker */
-  margin-left: 5px;
-}
+        .time-location {
+            color: #888;
+            margin-bottom: 5px;
+        }
 
-.post-details h2 {
-  margin: 10px 0 5px 0;
-  font-size: 18px;
-  color: #3498db; /* Blue for campaign title */
-  font-weight: 500;
-}
+        .description {
+            color: #555;
+        }
 
-.post-details h2 a {
-  color: inherit;
-  text-decoration: none;
-}
+        .tag {
+            font-weight: bold;
+            color: #32CD32;
+        }
 
-.post-details h2 a:hover {
-  text-decoration: underline; /* Underline on hover */
-}
+        .tag::before {
+            content: "#";
+        }
 
-.time-location {
-  color: #888;
-  font-size: 14px;
-  margin-bottom: 10px;
-}
+        @media (max-width: 768px) {
+            .upper-post {
+                flex-direction: column;
+                align-items: flex-start;
+            }
 
-.campaign-content {
-  color: #555;
-  font-size: 16px;
-  line-height: 1.5; /* Better readability */
-}
+            .profile-pic {
+                margin-bottom: 15px;
+                margin-right: 0;
+            }
+        }
 
-.campaign-category {
-  font-size: 16px;
-  font-weight: 500;
-  color: #2c3e50; /* Darker color for category */
-  margin: 10px 0;
-  cursor: pointer;
-  padding: 8px 12px;
-  background-color: #f5f5f5; /* Light background for category */
-  border-radius: 4px;
-  display: inline-block;
-  transition: background-color 0.3s ease;
-}
+        .upper-post {
+            display: flex;
+            align-items: flex-start;
+            padding: 20px;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+            margin-bottom: 0;
+        }
 
-.campaign-category:hover {
-  background-color: #e0e0e0; /* Slightly darker on hover */
-}
+        .upper-post:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-2px);
+        }
 
-.objectives-activities {
-  display: none;
-  margin-top: 10px;
-  padding: 15px;
-  background-color: #f9f9f9; /* Light background for objectives */
-  border-radius: 4px;
-  border-left: 4px solid #3498db; /* Accent border */
-}
+        .profile-pic {
+            flex-shrink: 0;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin-right: 20px;
+            border: 2px solid #e0e0e0;
+        }
 
-.objectives-activities h3 {
-  margin: 0 0 10px 0;
-  font-size: 16px;
-  color: #333;
-}
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 50%;
+        }
 
-.objectives-activities p {
-  margin: 0;
-  font-size: 14px;
-  color: #555;
-  line-height: 1.5;
-}
-/* Mobile View Adjustments */
-@media (max-width: 768px) {
-  .upper-post {
-    padding: 15px; /* Reduce padding for smaller screens */
-    flex-direction: column; /* Stack elements vertically */
-    align-items: flex-start; /* Align items to the start */
-  }
+        .post-details {
+            flex: 1;
+        }
 
-  .profile-pic {
-    width: 50px; /* Smaller profile picture for mobile */
-    height: 50px;
-    margin-right: 0; /* Remove right margin */
-    margin-bottom: 10px; /* Add space below the profile picture */
-  }
+        .post-details h1 {
+            margin: 0;
+            font-size: 20px;
+            color: #333;
+            font-weight: 600;
+        }
 
-  .post-details {
-    width: 100%; /* Full width for better use of space */
-  }
+        .post-details h1 .verified-status {
+            font-size: 12px;
+            color: #4CAF50;
+            margin-left: 5px;
+        }
 
-  .post-details h1 {
-    font-size: 18px; /* Slightly smaller font size */
-    margin-bottom: 5px; /* Reduce space below the username */
-  }
+        .post-details h1 .cm {
+            font-size: 12px;
+            color: #e74c3c;
+            margin-left: 5px;
+        }
 
-  .post-details h2 {
-    font-size: 16px; /* Smaller font size for campaign title */
-    margin: 5px 0; /* Adjust spacing */
-  }
+        .post-details h2 {
+            margin: 10px 0 5px 0;
+            font-size: 18px;
+            color: #3498db;
+            font-weight: 500;
+        }
 
-  .time-location {
-    font-size: 12px; /* Smaller font size for time and location */
-    margin-bottom: 10px; /* Add space below */
-  }
+        .post-details h2 a {
+            color: inherit;
+            text-decoration: none;
+        }
 
-  .campaign-category {
-    font-size: 14px; /* Smaller font size for category */
-    padding: 6px 10px; /* Adjust padding */
-    margin: 10px 0; /* Add space around */
-    width: 100%; /* Full width for better touch interaction */
-    text-align: center; /* Center text */
-  }
+        .post-details h2 a:hover {
+            text-decoration: underline;
+        }
 
-  .objectives-activities {
-    padding: 10px; /* Reduce padding */
-    font-size: 14px; /* Smaller font size */
-    margin-top: 10px; /* Add space above */
-  }
+        .time-location {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
 
-  .objectives-activities h3 {
-    font-size: 14px; /* Smaller heading */
-    margin-bottom: 8px; /* Reduce space below */
-  }
+        .campaign-content {
+            color: #555;
+            font-size: 16px;
+            line-height: 1.5;
+        }
 
-  .objectives-activities p {
-    font-size: 13px; /* Smaller text */
-    line-height: 1.4; /* Tighter line height */
-  }
+        .campaign-category {
+            font-size: 16px;
+            font-weight: 500;
+            color: #2c3e50;
+            margin: 10px 0;
+            cursor: pointer;
+            padding: 8px 12px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            display: inline-block;
+            transition: background-color 0.3s ease;
+        }
 
-  .campaign-content {
-    font-size: 14px; /* Smaller font size for content */
-    line-height: 1.5; /* Improve readability */
-  }
-}
+        .campaign-category:hover {
+            background-color: #e0e0e0;
+        }
 
+        .objectives-activities {
+            display: none;
+            margin-top: 10px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+            border-left: 4px solid #3498db;
+        }
 
+        .objectives-activities h3 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+            color: #333;
+        }
+
+        .objectives-activities p {
+            margin: 0;
+            font-size: 14px;
+            color: #555;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            .upper-post {
+                padding: 15px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .profile-pic {
+                width: 50px;
+                height: 50px;
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+
+            .post-details {
+                width: 100%;
+            }
+
+            .post-details h1 {
+                font-size: 18px;
+                margin-bottom: 5px;
+            }
+
+            .post-details h2 {
+                font-size: 16px;
+                margin: 5px 0;
+            }
+
+            .time-location {
+                font-size: 12px;
+                margin-bottom: 10px;
+            }
+
+            .campaign-category {
+                font-size: 14px;
+                padding: 6px 10px;
+                margin: 10px 0;
+                width: 100%;
+                text-align: center;
+            }
+
+            .objectives-activities {
+                padding: 10px;
+                font-size: 14px;
+                margin-top: 10px;
+            }
+
+            .objectives-activities h3 {
+                font-size: 14px;
+                margin-bottom: 8px;
+            }
+
+            .objectives-activities p {
+                font-size: 13px;
+                line-height: 1.4;
+            }
+
+            .campaign-content {
+                font-size: 14px;
+                line-height: 1.5;
+            }
+        }
 .comment-form-popup {
   display: none;
   position: fixed;
@@ -697,12 +769,6 @@ border: 1px solid silver;
 .loved {
     color: red; /* Color for the loved state */
 }
-.
-
-.love {
-    position: relative; /* Necessary for the absolute positioning of .love-label */
-}
-
 
 .firework {
     position: absolute;
@@ -1002,11 +1068,12 @@ border: 1px solid silver;
     transition: background-color 0.3s ease;
   }
 
-
+ 
   .donate-link:hover {
    
     color: whitesmoke;
   }
+
 
 
 .profile-pic-hover:hover {
@@ -1373,11 +1440,17 @@ border: 1px solid silver;
 }
 
 .ad .sponsored-by {
-    font-size: 1rem; /* Smaller font size */
+    font-size: 1.2rem; /* Smaller font size */
     color: #888;
     margin-bottom: 8px;
     text-align: center;
 }
+
+.ad .sponsored-by strong {
+    color: #444; /* Optional: Add a different color for the bold text */
+    font-weight: bold;
+}
+
 
 .ad a {
     display: block;
@@ -1437,48 +1510,6 @@ border: 1px solid silver;
     color: black; /* Ensure the bullet color matches the text */
 }
 
-/* Create button styles */
-.create {
-    display: none; /* Hidden by default */
-    position: fixed; /* Fixed position */
-    bottom: 70px; /* Position above the navbar toggle */
-    left: 50%; /* Center horizontally */
-    transform: translateX(-50%); /* Center the button */
-    background: linear-gradient(135deg, rgba(192,192,192,0.8), rgba(169,169,169,0.8)); /* Gradient with silver and dark grey */
-    color: rgba(255,255,255,0.9); /* White color for the plus sign */
-    font-size: 24px; /* Font size for the plus sign */
-    width: 50px; /* Circle width */
-    height: 50px; /* Circle height */
-    border-radius: 50%; /* Circle shape */
-    text-align: center; /* Center text */
-    line-height: 50px; /* Vertically center the plus sign */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3), inset 0 0 10px rgba(192,192,192,0.5); /* Subtle shadow */
-    cursor: pointer; /* Change cursor to pointer */
-    z-index: 1001; /* Ensure it appears above other elements */
-    transition: all 0.4s ease; /* Smooth animations for hover and active states */
-    backdrop-filter: blur(3px); /* Add a subtle blur effect */
-}
-
-/* Hover effect */
-.create:hover {
-    background: linear-gradient(135deg, rgba(211,211,211,1), rgba(128,128,128,1)); /* Brightened silver and grey gradient */
-    box-shadow: 0 6px 12px rgba(0,0,0,0.4), inset 0 0 14px rgba(211,211,211,0.7); /* Enhanced shadow on hover */
-    transform: translateX(-50%) scale(1.1); /* Slightly enlarge the button */
-    color: rgba(255,255,255,1); /* Make the plus sign fully white */
-}
-
-/* Active effect */
-.create:active {
-    transform: translateX(-50%) scale(0.95); /* Slight shrink effect on click */
-}
-
-/* Show create button only on mobile screens */
-@media (max-width: 768px) {
-    .create {
-        display: block; /* Show the create button on smaller screens */
-    }
-}
-
 
 /* Navbar toggle (hidden by default) */
 .navbar-toggle {
@@ -1497,6 +1528,7 @@ border: 1px solid silver;
     bottom: 0; /* Fix to the bottom of the screen */
     left: 0; /* Align to the left */
     z-index: 1000; /* Ensure it's above other elements */
+    background-color: #f5f5f5; /* Background color */
 }
 
 /* Navbar toggle hover effects */
@@ -1573,7 +1605,10 @@ border: 1px solid silver;
 
 
 
-
+@media (max-width: 480px) {
+  .upper-post, .lower-post, .upload-container {
+    padding: 10px;
+  }
 }
 
 
@@ -1590,69 +1625,6 @@ border: 1px solid silver;
         visibility: visible; /* Show text on hover */
     }
 
-
-.join-leave-btn {
-    position: relative;
-    text-decoration: none;
-    display: inline-block;
-    padding: 10px 20px;
-    background: linear-gradient(135deg, #1a1a1a, #444);
-    color: #e0e0e0;
-    border: 2px solid transparent;
-    border-radius: 30px;
-    font-size: 14px;
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-    cursor: pointer;
-}
-
-.join-leave-btn:hover {
-    background: linear-gradient(135deg, #333, #000);
-    color: #fff;
-    border: 2px solid #fff;
-    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.2);
-}
-
-.tooltip-text {
-    visibility: hidden;
-    position: absolute;
-    bottom: 120%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.8);
-    color: #e0e0e0;
-    padding: 8px 12px;
-    border-radius: 6px;
-    white-space: nowrap;
-    font-size: 12px;
-    opacity: 0;
-    transition: visibility 0.3s, opacity 0.3s;
-    text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.6);
-}
-
-.join-leave-btn:hover .tooltip-text {
-    visibility: visible;
-    opacity: 1;
-    bottom: 130%; /* Slightly moving upward */
-}
-
-.join-leave-btn::after {
-    content: '🌙';
-    position: absolute;
-    top: -15px;
-    right: -15px;
-    font-size: 20px;
-    opacity: 0.6;
-    transition: all 0.3s ease;
-}
-
-.join-leave-btn:hover::after {
-    transform: rotate(20deg);
-    opacity: 1;
-}
 
 
 .sidebar-box {
@@ -1766,7 +1738,7 @@ border: 1px solid silver;
     gap: 15px; /* Adds space between the icons */
 }
 
-.love, .view, .comment,.share, .joiners {
+.love, .view, .comment, .joiners , .share {
     position: relative; /* Necessary for tooltip positioning */
 }
 
@@ -1789,8 +1761,8 @@ border: 1px solid silver;
 
 /* Show tooltip on hover */
 .love:hover .tooltip-label,
-.share:hover .tooltip-label,
 .view:hover .tooltip-label,
+.share:hover .tooltip-label,
 .comment:hover .tooltip-label,
 .joiners:hover .tooltip-label {
     display: block; /* Show the tooltip */
@@ -1832,22 +1804,46 @@ border: 1px solid silver;
     background-color: limegreen; /* Light lime green on hover */
 }
 
-.search-container input[type="text"] {
-    background-color: white;
-    color: black;
-    border: 1px solid #ccc;
+
+/* For larger screens (desktop) */
+h4 {
+    font-size: 19px;
+    padding-left: 20px;
+    display: inline-flex;
+    align-items: center;
 }
 
-.search-container {
-    color: black;
+.explore-link i {
+    font-size: 14px;  /* Smaller icon size */
+    color: black;  /* Default icon color is black */
+    transition: transform 0.3s ease, color 0.3s ease;  /* Smooth transition for hover and color change */
 }
-/* Hide the button on mobile screens */
+
+/* For smaller screens (mobile) */
 @media (max-width: 768px) {
-    .hide-on-mobile {
-        display: none;
+    h4 {
+        font-size: 16px;  /* Smaller text on mobile */
+        padding-left: 15px;  /* Reduced padding */
+    }
+
+    .explore-link i {
+        font-size: 12px;  /* Even smaller icon on mobile */
     }
 }
 
+/* Hover effect for icon */
+.explore-link:hover i {
+    transform: scale(1.1);  /* Slightly enlarge the icon on hover */
+}
+
+/* Adjust the icon color depending on the background (for both light and dark backgrounds) */
+body.light-theme .explore-link i {
+    color: black;  /* Black icon for light backgrounds */
+}
+
+body.dark-theme .explore-link i {
+    color: white;  /* White icon for dark backgrounds */
+}
 
 
 
@@ -1893,6 +1889,66 @@ border: 1px solid silver;
     }
 }
 
+
+.search-container input[type="text"] {
+    background-color: white;
+    color: black;
+    border: 1px solid #ccc;
+}
+
+.search-container {
+    color: black;
+}
+
+
+/* Create button styles */
+.create {
+    display: none; /* Hidden by default */
+    position: fixed; /* Fixed position */
+    bottom: 70px; /* Position above the navbar toggle */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Center the button */
+    background: linear-gradient(135deg, rgba(192,192,192,0.8), rgba(169,169,169,0.8)); /* Gradient with silver and dark grey */
+    color: rgba(255,255,255,0.9); /* White color for the plus sign */
+    font-size: 24px; /* Font size for the plus sign */
+    width: 50px; /* Circle width */
+    height: 50px; /* Circle height */
+    border-radius: 50%; /* Circle shape */
+    text-align: center; /* Center text */
+    line-height: 50px; /* Vertically center the plus sign */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3), inset 0 0 10px rgba(192,192,192,0.5); /* Subtle shadow */
+    cursor: pointer; /* Change cursor to pointer */
+    z-index: 1001; /* Ensure it appears above other elements */
+    transition: all 0.4s ease; /* Smooth animations for hover and active states */
+    backdrop-filter: blur(3px); /* Add a subtle blur effect */
+}
+
+/* Hover effect */
+.create:hover {
+    background: linear-gradient(135deg, rgba(211,211,211,1), rgba(128,128,128,1)); /* Brightened silver and grey gradient */
+    box-shadow: 0 6px 12px rgba(0,0,0,0.4), inset 0 0 14px rgba(211,211,211,0.7); /* Enhanced shadow on hover */
+    transform: translateX(-50%) scale(1.1); /* Slightly enlarge the button */
+    color: rgba(255,255,255,1); /* Make the plus sign fully white */
+}
+
+/* Active effect */
+.create:active {
+    transform: translateX(-50%) scale(0.95); /* Slight shrink effect on click */
+}
+
+/* Show create button only on mobile screens */
+@media (max-width: 768px) {
+    .create {
+        display: block; /* Show the create button on smaller screens */
+    }
+}
+
+/* Hide the button on mobile screens */
+@media (max-width: 768px) {
+    .hide-on-mobile {
+        display: none;
+    }
+}
 
 
 /* Dark Mode Styles */
@@ -1968,9 +2024,536 @@ body.dark-mode .affiliate-link:hover {
 body.dark-mode .affiliate-link i {
     margin-right: 8px; /* Space between icon and text */
 }
+
+
+/* Light mode (default) */
+.filter-form {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 20px;
+}
+
+.filter-label {
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+}
+
+.filter-select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    font-size: 14px;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.filter-select:hover {
+    border-color: #bbb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+/* Dark mode */
+.dark-mode .filter-form {
+    background-color: transparent; /* Ensure form background doesn't conflict */
+}
+
+.dark-mode .filter-label {
+    color: #f0f0f0; /* Light text for dark mode */
+}
+
+.dark-mode .filter-select {
+    background-color: #333; /* Dark background for select */
+    border-color: #555; /* Darker border */
+    color: #f0f0f0; /* Light text */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Darker shadow */
+}
+
+.dark-mode .filter-select:hover {
+    border-color: #777; /* Lighter border on hover */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); /* Stronger shadow on hover */
+}
+
+.dark-mode .filter-select:focus {
+    border-color: #007bff; /* Keep focus color consistent */
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Brighter focus shadow */
+}
+
+/* Mobile version */
+@media (max-width: 768px) {
+    .filter-form {
+        flex-direction: column; /* Stack elements vertically */
+        align-items: flex-start; /* Align items to the start */
+        padding-left: 10px; /* Reduce padding */
+        gap: 8px; /* Reduce gap between elements */
+    }
+
+    .filter-label {
+        font-size
+
+
+/* Add these to your CSS */
+.poster-message-overlay {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 8px;
+    border-radius: 10px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.activity-count-overlay {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+
   </style>
 
 
+
+<style type="text/css">
+  /* Base Button Styles */
+.join-leave-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 28px;
+    border: none;
+    border-radius: 50px;
+    font-size: 15px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    overflow: hidden;
+    z-index: 1;
+    box-shadow: 
+        0 4px 20px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+    text-decoration: none;
+}
+
+/* Join Button Specific */
+.join-leave-btn.join {
+    background: linear-gradient(145deg, #4CAF50, #2E7D32);
+    color: #e8f5e9;
+}
+
+/* Leave Button Specific */
+.join-leave-btn.leave {
+    background: linear-gradient(145deg, #F44336, #C62828);
+    color: #ffebee;
+}
+
+/* Hover Effects */
+.join-leave-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 
+        0 8px 25px rgba(0, 0, 0, 0.4),
+        0 0 0 2px rgba(255, 255, 255, 0.15);
+}
+
+.join-leave-btn.join:hover {
+    background: linear-gradient(145deg, #66BB6A, #43A047);
+}
+
+.join-leave-btn.leave:hover {
+    background: linear-gradient(145deg, #EF5350, #E53935);
+}
+
+/* Active State */
+.join-leave-btn:active {
+    transform: translateY(1px);
+    box-shadow: 
+        0 2px 10px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* Icon Styling */
+.join-leave-btn i {
+    margin-right: 10px;
+    font-size: 16px;
+    transition: transform 0.3s ease;
+}
+
+.join-leave-btn:hover i {
+    transform: scale(1.2);
+}
+
+/* Tooltip Styling */
+.tooltip-text {
+    visibility: hidden;
+    position: absolute;
+    bottom: 120%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: normal;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    white-space: nowrap;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+}
+
+.join-leave-btn:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+    bottom: 130%;
+}
+
+/* Ripple Effect */
+.join-leave-btn::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 100%;
+    transform: scale(1, 1) translate(-50%, -50%);
+    transform-origin: 50% 50%;
+}
+
+.join-leave-btn:focus:not(:active)::after {
+    animation: ripple 0.6s ease-out;
+}
+
+@keyframes ripple {
+    0% {
+        transform: scale(0, 0) translate(-50%, -50%);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(20, 20) translate(-50%, -50%);
+        opacity: 0;
+    }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .join-leave-btn {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+    
+    .tooltip-text {
+        font-size: 12px;
+        padding: 8px 14px;
+    }
+}
+
+
+
+</style>
+<style type="text/css">
+    
+.funding-progress-card {
+    position: relative;
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 500px;
+    margin: 0 auto;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.funding-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.campaign-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+.funding-stats {
+    background: linear-gradient(135deg, #6e8efb, #a777e3);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 8px rgba(111, 142, 251, 0.3);
+}
+
+.progress-visual {
+    margin-bottom: 20px;
+}
+
+.progress-bar-container {
+    height: 12px;
+    background: #f0f0f0;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    border-radius: 10px;
+    position: relative;
+    transition: width 0.6s ease;
+}
+
+.progress-bar-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+    border-radius: 10px;
+}
+
+.progress-marker {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translate(50%, -50%);
+    width: 16px;
+    height: 16px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(79, 172, 254, 0.3);
+    z-index: 2;
+}
+
+.marker-pulse {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+}
+
+.progress-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.progress-labels i {
+    margin-right: 5px;
+}
+
+.progress-raised i {
+    color: #4facfe;
+}
+
+.progress-goal i {
+    color: #a777e3;
+}
+
+.funding-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.countdown-badge {
+    background: #f8f9fa;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    color: #555;
+    display: flex;
+    align-items: center;
+}
+
+.countdown-badge i {
+    margin-right: 6px;
+    color: #6c757d;
+}
+
+.donate-btn {
+    background: linear-gradient(135deg, #ff7b4e, #ff6b6b);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
+
+.donate-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+}
+
+.donate-btn i {
+    margin-left: 8px;
+    font-size: 0.8rem;
+    transition: transform 0.3s ease;
+}
+
+.donate-btn:hover i {
+    transform: translateX(3px);
+}
+
+.funding-sparkles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.sparkle {
+    position: absolute;
+    background: rgba(255, 215, 0, 0.6);
+    border-radius: 50%;
+    animation: float 5s infinite ease-in-out;
+}
+
+.s1 {
+    width: 8px;
+    height: 8px;
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.s2 {
+    width: 6px;
+    height: 6px;
+    top: 60%;
+    left: 80%;
+    animation-delay: 1.5s;
+}
+
+.s3 {
+    width: 4px;
+    height: 4px;
+    top: 30%;
+    left: 50%;
+    animation-delay: 2.5s;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    70% { transform: scale(2.5); opacity: 0; }
+    100% { opacity: 0; }
+}
+
+@keyframes float {
+    0% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(180deg); }
+    100% { transform: translateY(0) rotate(360deg); }
+}
+
+/* Dark Mode Styles */
+.funding-progress-card.dark-mode {
+    background: #1e1e1e;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.05);
+}
+
+.dark-mode .campaign-title {
+    color: #f0f0f0;
+}
+
+.dark-mode .funding-stats {
+    box-shadow: 0 4px 8px rgba(111, 142, 251, 0.2);
+}
+
+.dark-mode .progress-bar-container {
+    background: #2d2d2d;
+}
+
+.dark-mode .progress-marker {
+    background: #1e1e1e;
+    box-shadow: 0 0 0 4px rgba(79, 172, 254, 0.2);
+}
+
+.dark-mode .marker-pulse {
+    background: rgba(30, 30, 30, 0.8);
+}
+
+.dark-mode .progress-labels {
+    color: #b0b0b0;
+}
+
+.dark-mode .countdown-badge {
+    background: #2d2d2d;
+    color: #d0d0d0;
+}
+
+.dark-mode .countdown-badge i {
+    color: #a0a0a0;
+}
+
+.dark-mode .donate-btn {
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.2);
+}
+
+/* Sparkles adjustment for dark mode */
+.dark-mode .sparkle {
+    background: rgba(255, 215, 0, 0.4);
+}
+
+/* Additional dark mode animations */
+@keyframes darkPulse {
+    0% { transform: scale(1); opacity: 1; }
+    70% { transform: scale(2.5); opacity: 0; }
+    100% { opacity: 0; }
+}
+
+.dark-mode .marker-pulse {
+    animation-name: darkPulse;
+}
+</style>
 
 <script type="text/javascript">
 function toggleLove(campaignId) {
@@ -2069,7 +2652,9 @@ function switchColor() {
     const body = document.body;
     const isDarkMode = body.classList.toggle('dark-mode'); // Toggle dark mode class
     var reactDivs = document.querySelectorAll('.react');
-
+   // Add this line to toggle dark mode on the funding card
+    document.querySelector('.funding-progress-card')?.classList.toggle('dark-mode', isDarkMode);
+    
     // Update background and text colors for all elements
     const elementsToUpdate = document.querySelectorAll(
         'header, footer, section, .left-aside, .right-aside, .upper-post, .campaign-content, .react, .search-container input, .search-container .btn-reset'
@@ -2456,6 +3041,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 
+
 <section>
 
 <!-- Beautiful upload button -->
@@ -2466,54 +3052,150 @@ document.addEventListener("DOMContentLoaded", function() {
         </button>
     </div>
 </div>
-</br>
-    <h2 style="font-size:19px; padding-left: 20px;">Campaign_Detail</h2>
+    </br>
 
-  
+<h4 style="font-size: 19px; padding-left: 20px; display: inline-flex; align-items: center;">
+    Campaign_Detail
+    <a href="{% url 'index' %}" title="Explore" class="explore-link" style="margin-left: 10px;">
+        <i class="fas fa-compass" style="font-size: 14px;"></i>
+    </a>
+</h4>
+
+
+
+<form method="GET" action="{% url 'home' %}" class="filter-form">
+    <label for="category" class="filter-label">Filter by Category:</label>
+ <select name="category" id="category" class="filter-select" onchange="this.form.submit()">
+    <option value="">All Categories</option>
+    {% for category in categories %}
+        <option value="{{ category }}" {% if category == selected_category %}selected{% endif %}>
+            {{ category }}
+        </option>
+    {% endfor %}
+</select>
+
+</form>
+
+ 
        <div class="sidebar-box">
-          
+
+
                 <div class="container-with-border">
                     <div class="upper-post">
-        <div class="profile-pic">
-          <a href="{% url 'profile_view' username=campaign.user.user.username %}">
-            <img src="{{ campaign.user.image.url }}" alt="Profile Picture" class="profile-pic-hover">
-          </a>
-        </div>
-        <div class="post-details">
-          <h1>
-            {{ campaign.user.user.username }}
-            {% if campaign.user.profile_verified %}
-              <span class="verified-status">verified <i class="material-icons">verified_user</i></span>
-            {% endif %}
-            {% if campaign.is_changemaker %}
-              <span class="cm"><i class="far fa-star"></i> Changemaker</span>
-            {% endif %}
-          </h1>
-          <div class="campaign-category" style="cursor: pointer;" onclick="toggleObjectives(this)">
-            {{ campaign.category }} Campaign
-          </div>
-          <div class="objectives-activities">
-            <h3>Objective:</h3>
-            <p>{{ campaign.get_objective_and_activities.Objectives }}</p>
-          </div>
-        <p>
-    <strong>Fund:</strong> 
-    <a href="{% url 'donate' campaign_id=campaign.pk %}" 
-       style="text-decoration: none; color: inherit;"
-       onmouseover="this.style.textDecoration='underline'; this.style.color='black';"
-       onmouseout="this.style.textDecoration='none'; this.style.color='inherit';">
-        ${{ campaign.target_amount }}
-    </a>
-</p>
-
-
-<p><strong>Duration:</strong> 
-    {% if campaign.duration %}
-        {{ campaign.duration }} {{ campaign.duration_unit }}
-    {% else %}
-        Ongoing
+                        <div class="profile-pic">
+                            <a href="{% url 'profile_view' username=campaign.user.user.username %}">
+                                <img src="{{ campaign.user.image.url }}" alt="Profile Picture" class="profile-pic-hover">
+                            </a>
+                        </div>
+                        <div class="post-details">
+                            <h1>{{ campaign.user.user.username }} 
+                                {% if campaign.user.profile_verified %}
+                                    <span class="verified-status" style="font-size:12px;"><span>verified</span><i class="material-icons" style="font-size:12px;color:green">verified_user</i></span>
+                                {% endif %}
+                                .  <i class="cm">
+    {% if campaign.is_changemaker %}
+        <span  class="far fa-star"
+ style="color:red; font-size: 12px;"></span>
+        <span class="changemaker-text">Changemaker</span>
     {% endif %}
-</p>
+</i>
+                            </h1> 
+
+           <div class="campaign-category" style="cursor: pointer;" onclick="toggleObjectives(this)">
+    {{ campaign.category }} Campaign
+    <br>
+
+
+</div>
+
+                            <div class="objectives-activities"></br>
+                                <h3>Objective:</h3>
+                                <p>{{ campaign.get_objective_and_activities.Objectives }}</p>
+                            </div>
+
+
+                            <h2 style="font-size:19px;">
+                                <a href="{% url 'view_campaign' campaign_id=campaign.pk %}" style="color:#3498db;">
+                                    <span>{{ campaign.title }}</span>
+                                </a>
+                            </h2><br>
+                            <sp class="time-location">{{ campaign.timestamp|timesince }} ago - {{ campaign.user.location }}</sp>
+                           <div class="campaign-content" data-campaign-id="{{ campaign.id }}">
+    <ul>
+        {% for point in campaign.content.splitlines %}
+            <li>{{ point }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+                        </div>
+
+<div>
+
+
+<div class="funding-progress-card">
+    <div class="funding-header">
+        <h3 class="campaign-title">{{ campaign.title|truncatechars:30 }}</h3>
+        <div class="funding-stats">
+            <span class="progress-percent">
+                {% widthratio campaign.amount_raised campaign.target_amount 100 %}%
+            </span>
+        </div>
+    </div>
+    
+    <div class="progress-visual">
+        <div class="progress-bar-container">
+            <div class="progress-bar-bg"></div>
+            <div class="progress-bar" style="width: {% widthratio campaign.amount_raised campaign.target_amount 100 %}%">
+                <div class="progress-bar-gradient"></div>
+                <div class="progress-marker">
+                    <div class="marker-pulse"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="progress-labels">
+            <span class="progress-raised">
+                <i class="fas fa-coins"></i>
+                ${{ campaign.amount_raised|default:0|floatformat:0 }} raised
+            </span>
+            <span class="progress-goal">
+                <i class="fas fa-bullseye"></i>
+                ${{ campaign.target_amount|floatformat:0 }} goal
+            </span>
+        </div>
+    </div>
+    
+    <div class="funding-footer">
+        <div class="time-left">
+            <div class="countdown-badge">
+                <i class="fas fa-clock"></i>
+                {% if campaign.days_left != None %}
+                    {{ campaign.days_left }} 
+                    {% if campaign.days_left == 1 %}
+                        {% if campaign.duration_unit == "days" %}day{% else %}minute{% endif %}
+                    {% else %}
+                        {% if campaign.duration_unit == "days" %}days{% else %}minutes{% endif %}
+                    {% endif %}
+                    left
+                {% else %}
+                    Ongoing
+                {% endif %}
+            </div>
+        </div>
+        <a href="{% url 'donate' campaign_id=campaign.pk %}" class="donate-btn">
+            <span>Support This Cause</span>
+            <i class="fas fa-heart"></i>
+        </a>
+    </div>
+    
+    <div class="funding-sparkles">
+        <div class="sparkle s1"></div>
+        <div class="sparkle s2"></div>
+        <div class="sparkle s3"></div>
+    </div>
+</div>
+
 
 {% if campaign.is_outdated %}
     <p style="color: red; font-weight: bold;">Campaign is outdated</p>
@@ -2522,51 +3204,68 @@ document.addEventListener("DOMContentLoaded", function() {
 {% endif %}
 
 
-          <h2>
-            <a href="{% url 'view_campaign' campaign_id=campaign.pk %}">
-              <span>{{ campaign.title }}</span>
+<p><strong>Campaign runtime:</strong> 
+    {% if campaign.duration %}
+        {{ campaign.duration }} {{ campaign.duration_unit }}
+    {% else %}
+        Ongoing
+    {% endif %}
+</p>
+
+
+
+</div>
+                    </div>
+
+
+<div class="file-container">
+    <div style="position: relative;">
+        {% if user.profile in campaign.user_profiles.all %}
+            <!-- Display the links if the user has joined the campaign -->
+            <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="activity-link">
+                <i style='font-size:18px' class='fas'>&#xf6e3;</i>
+                <span class="activity-label">Activities</span>
             </a>
-          </h2>
-          <sp class="time-location">{{ campaign.timestamp|timesince }} ago - {{ campaign.user.location }}</sp>
-          <div class="campaign-content" data-campaign-id="{{ campaign.id }}">
-             <ul>
-        {% for point in campaign.content.splitlines %}
-            <li>{{ point }}</li>
-        {% endfor %}
-    </ul>
-          </div>
+
+            <a href="{% url 'support' campaign_id=campaign.id %}" class="support-link">
+                <i class="material-icons" style="font-size:18px;">&#xe925;</i>
+                <span class="participate-label">Participate</span>
+            </a>
+        {% endif %}
+
+        {% if campaign.poster %}
+            <div style="position: relative; display: inline-block;">
+                <a href="{{ campaign.poster.url }}">
+                    <img src="{{ campaign.poster.url }}" alt="Image Description" class="campaign-poster" style="max-width: 100%; height: auto;">
+                </a>
+                {% if not user.profile in campaign.user_profiles.all %}
+                    <div style="position: absolute; top: 10px; left: 10px; right: 10px; color: white; background-color: rgba(0, 0, 0, 0.7); padding: 8px; border-radius: 10px; font-size: 14px; text-align: center;">
+                        Join this campaign to view activities and participate
+                    </div>
+                {% endif %}
+
+
+        <!-- Bottom left - Days left counter -->
+        <div class="days-left-overlay" style="position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.6); color: white; padding: 4px 10px; border-radius: 12px; font-size: 13px; display: flex; align-items: center; gap: 5px;">
+            <i class="fas fa-donate" style="font-size: 12px;"></i>
+            <span>
+                  <a href="{% url 'donate' campaign_id=campaign.pk %}" style="color:white;">
+            Donate Now <i class="fas fa-arrow-right"></i>
+        </a>
+            </span>
         </div>
-      </div>
-
-                    <div class="file-container">
-                        <div style="position: relative;">
-{% if user.profile in campaign.user_profiles.all %}
-    <!-- Display the links if the user has joined the campaign -->
-    <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="activity-link">
-        <i style='font-size:18px' class='fas'>&#xf6e3;</i>
-        <span class="activity-label">Activities</span>
-    </a>
-
-    <a href="{% url 'support' campaign_id=campaign.id %}" class="support-link">
-        <i class="material-icons" style="font-size:18px;">&#xe925;</i>
-        <span class="participate-label">Participate</span>
-    </a>
-{% else %}
-    <!-- Optionally, show a message if the user hasn't joined -->
-    <p style="padding-left:8px;"> You need to join this campaign to view activities and participate.</p>
-{% endif %}
+                <div style="position: absolute; bottom: 10px; right: 10px; color: white; background-color: rgba(0, 0, 0, 0.5); padding: 2px 8px; border-radius: 10px; font-size: 14px;">
+                    {{ campaign.activity_set.count }} Activities
+                </div>
+            </div>
+        {% else %}
+            <p>No file associated with this campaign.</p>
+        {% endif %}
+    
 
 
-                            <!-- Campaign poster -->
-                            {% if campaign.poster %}
-                                <a href="{{ campaign.poster.url }}">
-                                    <img src="{{ campaign.poster.url }}" alt="Image Description" class="campaign-poster" style="max-width: 100%; height: auto;">
-                                </a>
-                            {% else %}
-                                <p>No file associated with this campaign.</p>
-                            {% endif %}
 
-                           <!-- Audio player -->
+<!-- Audio player -->
 {% if campaign.audio %}
     <audio class="campaign-audio" loop preload="auto" muted autoplay>
         <source src="{{ campaign.audio.url }}" type="audio/mpeg">
@@ -2635,8 +3334,11 @@ document.addEventListener("DOMContentLoaded", function() {
 {% endif %}
 
 
+        
                         </div>
                     </div>
+
+  
 
                   <div class="lower-post">
     <div class="react">
@@ -2682,6 +3384,7 @@ document.addEventListener("DOMContentLoaded", function() {
     </span>
     <span class="tooltip-label">Share</span>
 </div>
+
 
 <div class="joiners">
     <a href="{% url 'campaign_joiners' campaign.id %}" class="comment-count" aria-label="View joiners of this campaign">

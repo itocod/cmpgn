@@ -2071,12 +2071,14 @@ def home(request):
 
     # Get campaigns, annotate whether the user marked them as "not interested"
     campaigns = Campaign.objects.annotate(
-        is_not_interested=Case(
-            When(not_interested_by__user=user_profile, then=Value(True)),
-            default=Value(False),
-            output_field=BooleanField(),
-        )
-    ).filter(is_not_interested=False, visibility='public')
+   
+    is_not_interested=Case(
+        When(not_interested_by__user=user_profile, then=Value(True)),
+        default=Value(False),
+        output_field=BooleanField(),
+    )
+).filter(is_not_interested=False, visibility='public')
+
 
     # Apply category filter if provided
     if category_filter:

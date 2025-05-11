@@ -278,6 +278,23 @@ class Campaign(models.Model):
             expiration_date = self.timestamp + timedelta(days=self.duration)
 
         return timezone.now() > expiration_date
+    
+    @property
+    def days_left(self):
+        if self.duration is None:
+            return None
+
+        if self.duration_unit == 'minutes':
+            end_time = self.timestamp + timedelta(minutes=self.duration)
+            remaining = end_time - timezone.now()
+            return max(int(remaining.total_seconds() // 60), 0)
+        else:
+            end_time = self.timestamp + timedelta(days=self.duration)
+            remaining = end_time - timezone.now()
+            return max(remaining.days, 0)
+
+
+
 
     def __str__(self):
         return self.title
