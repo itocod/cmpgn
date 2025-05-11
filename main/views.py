@@ -975,6 +975,7 @@ paypalrestsdk.configure({
     "client_secret": settings.PAYPAL_CLIENT_SECRET
 })
 
+@login_required
 def donate(request, campaign_id):
     campaign = get_object_or_404(Campaign, id=campaign_id)
     
