@@ -1485,41 +1485,40 @@ border: 1px solid silver;
 }
 
 
-/* Navbar toggle (hidden by default) */
+/* Mobile Nav Controls */
+.mobile-nav-controls {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    display: none;
+}
+
+
 .navbar-toggle {
-    display: none; /* Hidden by default */
+    display: none;
     cursor: pointer;
     font-size: 16px;
-    color: #888; /* Light grey color */
-    background-color: #f5f5f5; /* Very light grey background */
-    border: 1px solid #ccc; /* Light border */
-    padding: 0; /* Set padding to 0 as required */
-    border-radius: 3px; /* Slight border radius */
-    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-    justify-content: center; /* Center horizontally */
-    width: 100%; /* Full width for mobile view */
-    position: fixed;
-    bottom: 0; /* Fix to the bottom of the screen */
-    left: 0; /* Align to the left */
-    z-index: 1000; /* Ensure it's above other elements */
+    color: #888;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    padding: 12px 0;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+    justify-content: center;
+    width: 100%;
+    margin: 0;
+    text-align: center;
 }
 
-/* Navbar toggle hover effects */
 .navbar-toggle:hover {
-    background-color: #f7f7f7; /* Lighter background on hover */
-    color: #777; /* Slightly darker text on hover */
-    border-color: #4CAF50; /* Green border on hover */
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Subtle shadow */
+    background-color: #f7f7f7;
+    color: #777;
+    border-color: #4CAF50;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     border-radius: 10px;
 }
-
-/* Show navbar toggle only on smaller screens */
-@media (max-width: 768px) {
-    .navbar-toggle {
-        display: flex; /* Show the toggle button on smaller screens */
-    }
-}
-
 
 
 
@@ -1579,6 +1578,43 @@ border: 1px solid silver;
 
 
 
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Responsive behavior */
+@media (max-width: 768px) {
+    .mobile-nav-controls {
+        display: block;
+    }
+    
+    .navbar-toggle {
+        display: block;
+    }
+    
+    /* Adjust your existing navbar items for mobile */
+    .navbar ul {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .navbar li {
+        margin: 5px 0;
+    }
+    
+    .navbar a {
+        flex-direction: row;
+        justify-content: center;
+        gap: 10px;
+    }
+}
 
 }
 
@@ -2771,43 +2807,52 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <script type="text/javascript">
-  
-document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function() {
     const navbarToggle = document.getElementById("navbarToggle");
     const navbar = document.getElementById("navbar");
     const popupClose = document.getElementById("popupClose");
 
-    // Toggle navbar visibility
+    // Toggle navbar visibility with smooth animation
     navbarToggle.addEventListener("click", function() {
         if (navbar.style.display === "block") {
-            navbar.style.display = "none";
+            navbar.style.animation = "fadeOut 0.3s forwards";
+            setTimeout(() => {
+                navbar.style.display = "none";
+            }, 300);
         } else {
             navbar.style.display = "block";
+            navbar.style.animation = "fadeIn 0.3s forwards";
         }
     });
 
-    // Close popup when clicking the close button
+    // Close navbar
     popupClose.addEventListener("click", function() {
-        navbar.style.display = "none";
+        navbar.style.animation = "fadeOut 0.3s forwards";
+        setTimeout(() => {
+            navbar.style.display = "none";
+        }, 300);
     });
 
-    // Adjust navbar display on window resize
+    // Handle window resize
     window.addEventListener("resize", function() {
         if (window.innerWidth > 768) {
             navbar.style.display = "none";
-        } else if (navbar.style.display === "block") {
-            navbar.style.display = "block";
-        } else {
-            navbar.style.display = "none";
         }
     });
 
-    // Ensure the navbar is initially hidden on page load for larger screens
-    if (window.innerWidth > 768) {
-        navbar.style.display = "none";
-    } else {
-        navbar.style.display = "none"; // or "block" based on your initial requirement
-    }
+    // Add animation keyframes
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(20px); }
+        }
+    `;
+    document.head.appendChild(style);
 });
 </script>
 

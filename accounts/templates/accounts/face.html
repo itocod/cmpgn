@@ -1,3 +1,441 @@
+
+
+
+<section>
+
+<!-- Beautiful upload button -->
+<div class="upload-container hide-on-mobile">
+    <div class="upload-btn-wrapper">
+        <button class="btn" style="font-size: 14px;">+ Upload
+            <a href="{% url 'create_campaign' %}" class="overlay-link"></a>
+        </button>
+    </div>
+</div>
+    </br>
+
+<h4 style="font-size: 19px; padding-left: 20px; display: inline-flex; align-items: center;">
+    Campaign_Detail
+    <a href="{% url 'index' %}" title="Explore" class="explore-link" style="margin-left: 10px;">
+        <i class="fas fa-compass" style="font-size: 14px;"></i>
+    </a>
+</h4>
+
+
+
+<form method="GET" action="{% url 'home' %}" class="filter-form">
+    <label for="category" class="filter-label">Filter by Category:</label>
+ <select name="category" id="category" class="filter-select" onchange="this.form.submit()">
+    <option value="">All Categories</option>
+    {% for category in categories %}
+        <option value="{{ category }}" {% if category == selected_category %}selected{% endif %}>
+            {{ category }}
+        </option>
+    {% endfor %}
+</select>
+
+</form>
+
+ 
+       <div class="sidebar-box">
+
+
+                <div class="container-with-border">
+                    <div class="upper-post">
+                        <div class="profile-pic">
+                            <a href="{% url 'profile_view' username=campaign.user.user.username %}">
+                                <img src="{{ campaign.user.image.url }}" alt="Profile Picture" class="profile-pic-hover">
+                            </a>
+                        </div>
+                        <div class="post-details">
+                            <h1>{{ campaign.user.user.username }} 
+                                {% if campaign.user.profile_verified %}
+                                    <span class="verified-status" style="font-size:12px;"><span>verified</span><i class="material-icons" style="font-size:12px;color:green">verified_user</i></span>
+                                {% endif %}
+                                .  <i class="cm">
+    {% if campaign.is_changemaker %}
+        <span  class="far fa-star"
+ style="color:red; font-size: 12px;"></span>
+        <span class="changemaker-text">Changemaker</span>
+    {% endif %}
+</i>
+                            </h1> 
+
+           <div class="campaign-category" style="cursor: pointer;" onclick="toggleObjectives(this)">
+    {{ campaign.category }} Campaign
+    <br>
+
+
+</div>
+
+                            <div class="objectives-activities"></br>
+                                <h3>Objective:</h3>
+                                <p>{{ campaign.get_objective_and_activities.Objectives }}</p>
+                            </div>
+
+
+                            <h2 style="font-size:19px;">
+                                <a href="{% url 'view_campaign' campaign_id=campaign.pk %}" style="color:#3498db;">
+                                    <span>{{ campaign.title }}</span>
+                                </a>
+                            </h2><br>
+                            <sp class="time-location">{{ campaign.timestamp|timesince }} ago - {{ campaign.user.location }}</sp>
+                           <div class="campaign-content" data-campaign-id="{{ campaign.id }}">
+    <ul>
+        {% for point in campaign.content.splitlines %}
+            <li>{{ point }}</li>
+        {% endfor %}
+    </ul>
+</div>
+
+                        </div>
+
+<div>
+
+
+<div class="funding-progress-card">
+    <div class="funding-header">
+        <h3 class="campaign-title">{{ campaign.title|truncatechars:30 }}</h3>
+        <div class="funding-stats">
+            <span class="progress-percent">
+                {% widthratio campaign.amount_raised campaign.target_amount 100 %}%
+            </span>
+        </div>
+    </div>
+    
+    <div class="progress-visual">
+        <div class="progress-bar-container">
+            <div class="progress-bar-bg"></div>
+            <div class="progress-bar" style="width: {% widthratio campaign.amount_raised campaign.target_amount 100 %}%">
+                <div class="progress-bar-gradient"></div>
+                <div class="progress-marker">
+                    <div class="marker-pulse"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="progress-labels">
+            <span class="progress-raised">
+                <i class="fas fa-coins"></i>
+                ${{ campaign.amount_raised|default:0|floatformat:0 }} raised
+            </span>
+            <span class="progress-goal">
+                <i class="fas fa-bullseye"></i>
+                ${{ campaign.target_amount|floatformat:0 }} goal
+            </span>
+        </div>
+    </div>
+    
+    <div class="funding-footer">
+        <div class="time-left">
+            <div class="countdown-badge">
+                <i class="fas fa-clock"></i>
+                {% if campaign.days_left != None %}
+                    {{ campaign.days_left }} 
+                    {% if campaign.days_left == 1 %}
+                        {% if campaign.duration_unit == "days" %}day{% else %}minute{% endif %}
+                    {% else %}
+                        {% if campaign.duration_unit == "days" %}days{% else %}minutes{% endif %}
+                    {% endif %}
+                    left
+                {% else %}
+                    Ongoing
+                {% endif %}
+            </div>
+        </div>
+        <a href="{% url 'donate' campaign_id=campaign.pk %}" class="donate-btn">
+            <span>Support This Cause</span>
+            <i class="fas fa-heart"></i>
+        </a>
+    </div>
+    
+    <div class="funding-sparkles">
+        <div class="sparkle s1"></div>
+        <div class="sparkle s2"></div>
+        <div class="sparkle s3"></div>
+    </div>
+</div>
+
+
+{% if campaign.is_outdated %}
+    <p style="color: red; font-weight: bold;">Campaign is outdated</p>
+{% else %}
+    <p style="color: green;">Campaign is active</p>
+{% endif %}
+
+
+<p><strong>Campaign runtime:</strong> 
+    {% if campaign.duration %}
+        {{ campaign.duration }} {{ campaign.duration_unit }}
+    {% else %}
+        Ongoing
+    {% endif %}
+</p>
+
+
+
+</div>
+                    </div>
+
+
+<div class="file-container">
+    <div style="position: relative;">
+        {% if user.profile in campaign.user_profiles.all %}
+            <!-- Display the links if the user has joined the campaign -->
+            <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="activity-link">
+                <i style='font-size:18px' class='fas'>&#xf6e3;</i>
+                <span class="activity-label">Activities</span>
+            </a>
+
+            <a href="{% url 'support' campaign_id=campaign.id %}" class="support-link">
+                <i class="material-icons" style="font-size:18px;">&#xe925;</i>
+                <span class="participate-label">Participate</span>
+            </a>
+        {% endif %}
+
+        {% if campaign.poster %}
+            <div style="position: relative; display: inline-block;">
+                <a href="{{ campaign.poster.url }}">
+                    <img src="{{ campaign.poster.url }}" alt="Image Description" class="campaign-poster" style="max-width: 100%; height: auto;">
+                </a>
+                {% if not user.profile in campaign.user_profiles.all %}
+                    <div style="position: absolute; top: 10px; left: 10px; right: 10px; color: white; background-color: rgba(0, 0, 0, 0.7); padding: 8px; border-radius: 10px; font-size: 14px; text-align: center;">
+                        Join this campaign to view activities and participate
+                    </div>
+                {% endif %}
+
+
+        <!-- Bottom left - Days left counter -->
+        <div class="days-left-overlay" style="position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.6); color: white; padding: 4px 10px; border-radius: 12px; font-size: 13px; display: flex; align-items: center; gap: 5px;">
+            <i class="fas fa-donate" style="font-size: 12px;"></i>
+            <span>
+                  <a href="{% url 'donate' campaign_id=campaign.pk %}" style="color:white;">
+            Donate Now <i class="fas fa-arrow-right"></i>
+        </a>
+            </span>
+        </div>
+                <div style="position: absolute; bottom: 10px; right: 10px; color: white; background-color: rgba(0, 0, 0, 0.5); padding: 2px 8px; border-radius: 10px; font-size: 14px;">
+                    {{ campaign.activity_set.count }} Activities
+                </div>
+            </div>
+        {% else %}
+            <p>No file associated with this campaign.</p>
+        {% endif %}
+    
+
+
+
+<!-- Audio player -->
+{% if campaign.audio %}
+    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+        <source src="{{ campaign.audio.url }}" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+{% else %}
+    <div class="audio-player">
+        {% if campaign.category == 'Poverty and Hunger' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/peace.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Clean Water and Sanitation' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/art.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Disaster Relief' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/Humanitarian Aid.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Healthcare and Medicine' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/health.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Mental Health' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/environment.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Human Rights and Equality' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/Equality1.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Peace and Justice' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/Policy.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Education for All' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/education1.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Economic Empowerment' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/economic.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Climate Action' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/Sustainable.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Save Our Planet' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/animal.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Tech for Humanity' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/digital.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Community Development' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/community.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% else %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/default.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% endif %}
+    </div>
+{% endif %}
+
+
+        
+                        </div>
+                    </div>
+
+  
+
+                  <div class="lower-post">
+    <div class="react">
+   <div class="love">
+    <span style="cursor: pointer; font-size: 19px;" id="love-icon-{{ campaign.id }}" 
+          class="love-icon {% if user.is_authenticated and already_loved %}loved{% endif %}" 
+          onclick="toggleLove({{ campaign.id }})">
+        <i class="fas fa-heart"></i>
+    </span>
+    <span style="color:gray; font-size:14px;" id="love-count-{{ campaign.id }}">
+        {{ campaign.love_count|format_count }}
+    </span>
+    <span class="tooltip-label"> love</span> <!-- Tooltip container -->
+</div>
+
+
+        <div class="view">
+            <i class="far fa-eye" style="font-size: 19px;"></i>
+            <span class="reaction-count" id="view-count">
+                {{ campaign.campaignview_set.count|format_count }} views
+            </span>
+            <span class="tooltip-label">Campaign views </span> <!-- Tooltip container -->
+        </div>
+
+        <div class="comment">
+    <span>
+        <i class="far fa-comment" style="font-size:19px;"></i>
+    </span>
+    <a href="{% url 'campaign_comments' campaign_id=campaign.id %}" class="comment-count">
+        {% if user.is_authenticated %}
+            {{ campaign.comments.count|default:0 }}
+        {% else %}
+            585.3K
+        {% endif %}
+        comment{{ campaign.comments.count|pluralize }}
+    </a>
+    <span class="tooltip-label">Comment to Campaign</span> <!-- Tooltip container -->
+</div>
+
+<div class="share">
+    <span style="cursor: pointer; font-size: 19px;" class="share-icon" onclick="showSharePopup({{ campaign.id }})">
+        <i class="fas fa-share-alt"></i>
+    </span>
+    <span class="tooltip-label">Share</span>
+</div>
+
+
+<div class="joiners">
+    <a href="{% url 'campaign_joiners' campaign.id %}" class="comment-count" aria-label="View joiners of this campaign">
+        <i class="fas fa-user-plus" style="font-size:19px;"></i> <!-- User Plus Icon -->
+        Joiners ({{ campaign.user_profiles.count|format_count }})
+    </a>
+    <span class="tooltip-label">Campaign Joiners</span> <!-- Tooltip container -->
+</div>
+
+
+        {% if user.profile in campaign.user_profiles.all %}
+            <a href="{% url 'join_leave_campaign' campaign.id %}" class="join-leave-btn">
+                <i class="fas fa-user-minus"></i> Leave
+                <span class="tooltip-text">Leave Campaign</span>
+            </a>
+        {% else %}
+            <a href="{% url 'join_leave_campaign' campaign.id %}" class="join-leave-btn">
+                <i class="fas fa-user-plus"></i> Join
+                <span class="tooltip-text">Join Campaign</span>
+            </a>
+        {% endif %}
+
+        
+        <!-- Add this section inside your section element, preferably below the campaign content -->
+
+
+
+<div>
+  <a href="{% url 'report_campaign' campaign_id=campaign.id %}" class="report-link">🚨Report cmpgn</a>
+</div>
+
+   
+
+
+
+<div class="campaign-actions">
+    
+    <form action="{% url 'mark_not_interested' campaign_id=campaign.pk %}" method="post" class="not-interested-form">
+        {% csrf_token %}
+        <label for="not-interested">Not Interested</label>
+        <input type="checkbox" id="not-interested" name="not_interested">
+        <button type="submit" class="submit-button"> Submit</button>
+    </form>
+</div>
+
+    </div>
+</div>
+
+
+
+                </div>
+           
+        </div>
+  
+
+   
+
+<!-- Share Popup Container -->
+<div id="sharePopup" class="share-popup">
+    <div class="share-popup-content">
+        <span class="close-share" onclick="hideSharePopup()">×</span>
+        <h3>Share This Campaign</h3>
+        <div class="share-buttons">
+            <a href="#" class="share-facebook" onclick="shareOnFacebook()"><i class="fab fa-facebook-f"></i> Facebook</a>
+            <a href="#" class="share-twitter" onclick="shareOnTwitter()"><i class="fab fa-twitter"></i> Twitter</a>
+            <a href="#" class="share-linkedin" onclick="shareOnLinkedIn()"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
+            <a href="#" class="share-whatsapp" onclick="shareOnWhatsApp()"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+            <a href="#" class="share-reddit" onclick="shareOnReddit()"><i class="fab fa-reddit-alien"></i> Reddit</a>
+            <a href="#" class="share-telegram" onclick="shareOnTelegram()"><i class="fab fa-telegram-plane"></i> Telegram</a>
+            <a href="#" class="share-pinterest" onclick="shareOnPinterest()"><i class="fab fa-pinterest-p"></i> Pinterest</a>
+            <a href="#" class="share-email" onclick="shareViaEmail()"><i class="fas fa-envelope"></i> Email</a>
+        </div>
+        <div class="copy-link-container">
+            <span class="copy-link-title">Or copy the link directly</span>
+            <div class="copy-link">
+                <input type="text" id="campaignUrl" readonly>
+                <button onclick="copyCampaignUrl()"><i class="fas fa-copy"></i> Copy</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+</section>
+
+
+
+
+
+
+
 {% load static %}
 
 <!DOCTYPE html>

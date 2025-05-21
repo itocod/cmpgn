@@ -1408,62 +1408,148 @@ border: 1px solid silver;
     }
 }
 
+    /* Navbar styling */
+    .navbar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black */
+        backdrop-filter: blur(10px); /* Frosted glass effect */
+        -webkit-backdrop-filter: blur(10px);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        padding: 10px 0;
+        z-index: 1000;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
 
-/* Overlay effect for the navbar */
-.navbar {
-    display: none; /* Hidden by default */
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-    backdrop-filter: blur(3px); /* Blur effect */
-    z-index: 1000; /* Ensure it appears above other content */
-    overflow-y: auto; /* Allow scrolling if content is too long */
-}
+    .navbar ul {
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        align-items: center;
+    }
 
-/* Style for the popup (navbar) */
-.navbar ul {
+    .navbar li {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: relative;
+    }
 
-    margin: 0;
-    padding: 0;
-    list-style: none; /* Remove bullets */
-    display: flex;
-    flex-direction: column; /* Stack items vertically */
-    align-items: center; /* Center items horizontally */
-    justify-content: center; /* Center items vertically */
-    height: 100%; /* Full height */
-}
+    .navbar a {
+        color: white;
+        text-decoration: none;
+        font-size: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 5px 10px;
+        transition: transform 0.2s ease;
+    }
 
-.navbar li {
-    padding: 10px;
+    .navbar a:active {
+        transform: scale(0.9);
+    }
 
-}
+    .navbar i {
+        font-size: 20px;
+        margin-bottom: 3px;
+    }
 
-.navbar a {
-    text-decoration: none;
-    color: white; /* Change text color for better visibility */
-    font-size: 18px; /* Adjust font size */
-    padding: 10px 20px;
-    display: block;
-}
+    /* TikTok-style create button */
+    .create-btn-container {
+        position: relative;
+        margin-top: -30px; /* Pull it up above the navbar */
+    }
 
-.navbar .popup-close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    font-size: 24px;
-    color: white;
-    cursor: pointer;
-    z-index: 1001; /* Ensure close button is above other content */
-}
+    .create-btn {
+        background: linear-gradient(135deg, #FE2C55, #25F4EE);
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 28px;
+        font-weight: bold;
+        color: white;
+        box-shadow: 0 4px 20px rgba(254, 44, 85, 0.4);
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
 
-.navbar .popup-close:hover {
-    color: red; /* Change color on hover */
-}
+    .create-btn::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: linear-gradient(
+            to bottom right,
+            rgba(255, 255, 255, 0.3),
+            rgba(255, 255, 255, 0)
+        );
+        transform: rotate(30deg);
+        transition: all 0.3s ease;
+    }
 
+    .create-btn:hover::before {
+        transform: rotate(30deg) translate(20%, 20%);
+    }
 
+    .create-btn:active {
+        transform: scale(0.95);
+        box-shadow: 0 2px 10px rgba(254, 44, 85, 0.6);
+    }
+
+    /* Alert badges */
+    .alert-badge {
+        position: absolute;
+        top: 0;
+        right: 5px;
+        background-color: #FE2C55;
+        color: white;
+        border-radius: 50%;
+        width: 16px;
+        height: 16px;
+        font-size: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Active state */
+    .navbar a.active {
+        color: #FE2C55;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 350px) {
+        .navbar a {
+            font-size: 8px;
+            padding: 5px 5px;
+        }
+        
+        .navbar i {
+            font-size: 18px;
+        }
+        
+        .create-btn {
+            width: 45px;
+            height: 45px;
+            font-size: 24px;
+        }
+    }
 
 @media (max-width: 480px) {
   .upper-post, .lower-post, .upload-container {
@@ -1551,13 +1637,14 @@ border: 1px solid silver;
 
 
 .sidebar-box {
-    border-left: 2px solid #3498db;
+    border-left: 2px solid #c0c0c0; /* Silver color */
     height: 700px;
     overflow-y: auto;
     overflow-x: hidden;
     border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 4px rgba(192, 192, 192, 0.3); /* Lighter silver shadow */
     padding: 0; /* Optional, for spacing inside the box */
+    background-color: #f8f8f8; /* Optional: light silver-ish background */
 }
 
 /* On small devices, remove styling but keep the content visible */
@@ -1569,8 +1656,11 @@ border: 1px solid silver;
         border-radius: 0;
         box-shadow: none;
         padding: 0;
+        background-color: transparent; /* Remove background on mobile if desired */
     }
 }
+
+
 /* Styles for the "Activities" label (left-centered) */
 .activity-label {
     visibility: hidden;
@@ -1883,6 +1973,84 @@ body.dark-mode #view-count,
 body.dark-mode .comment-count {
     color: #ffffff; /* Light text for counts */
 }
+
+
+/* Light mode (default) */
+.filter-form {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 20px;
+}
+
+.filter-label {
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+}
+
+.filter-select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    font-size: 14px;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.filter-select:hover {
+    border-color: #bbb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+/* Dark mode */
+.dark-mode .filter-form {
+    background-color: transparent; /* Ensure form background doesn't conflict */
+}
+
+.dark-mode .filter-label {
+    color: #f0f0f0; /* Light text for dark mode */
+}
+
+.dark-mode .filter-select {
+    background-color: #333; /* Dark background for select */
+    border-color: #555; /* Darker border */
+    color: #f0f0f0; /* Light text */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Darker shadow */
+}
+
+.dark-mode .filter-select:hover {
+    border-color: #777; /* Lighter border on hover */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); /* Stronger shadow on hover */
+}
+
+.dark-mode .filter-select:focus {
+    border-color: #007bff; /* Keep focus color consistent */
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Brighter focus shadow */
+}
+
+/* Mobile version */
+@media (max-width: 768px) {
+    .filter-form {
+        flex-direction: column; /* Stack elements vertically */
+        align-items: flex-start; /* Align items to the start */
+        padding-left: 10px; /* Reduce padding */
+        gap: 8px; /* Reduce gap between elements */
+    }
+
+    .filter-label {
+        font-size
+
   </style>
 
 
@@ -1906,6 +2074,21 @@ body.dark-mode .comment-count {
 
 </script>
 
+
+
+<script>
+    function handleCreateClick(e) {
+        // Optional: Add any animation or pre-submit logic here
+        // e.preventDefault(); // Uncomment if you want to handle with AJAX
+        
+        // Example animation:
+        const btn = e.target;
+        btn.style.transform = 'scale(0.9)';
+        setTimeout(() => {
+            btn.style.transform = 'scale(1)';
+        }, 100);
+    }
+</script>
 
 <script type="text/javascript">
 function switchColor() {
@@ -2127,7 +2310,7 @@ document.addEventListener("DOMContentLoaded", function() {
             <div class="search-skeleton"></div>
         </div>
     </div>
-<a href="{% url 'create_campaign' %}" class="create" onclick="handleCreateClick()">+</a>
+
 
 <span id="navbarToggle" class="navbar-toggle">☰</span>
 
@@ -2173,51 +2356,50 @@ document.addEventListener("DOMContentLoaded", function() {
     </div>
     
     <audio id="bgAudio" autoplay loop></audio>
-
-         <nav id="navbar" class="navbar">
-         <span id="popupClose" class="popup-close">&times;</span>
+<nav id="navbar" class="navbar">
     <ul>
-       <li>
-  <a href="{% url 'home' %}" style="color: white; position: relative;">
-    <i class="fas fa-home"></i> Home
-    {% if new_campaigns_from_follows %}
-        <span id="home-alert" class="alert-badge">{{ new_campaigns_from_follows.count }}</span> <!-- Red alert spot -->
-    {% endif %}
-</a>
-
-</li>
-        <li><a href="{% url 'manage_campaigns' %}" style="color: white;"><i class="fas fa-cog"></i> Manage </a></li>
-        <li><a href="{% url 'private_campaign' %}" style="color: white;"><i class="fas fa-lock"></i> Private </a></li>
-        <li><a href="{% url 'user_chats' %}" style="color: white;"><i class="fas fa-comment-alt"></i> Chat Table</a></li>
         <li>
-    <a href="{% url 'notification_list' %}" style="color: white; position: relative;">
-        <i class="fas fa-bell"></i>
-        {% if unread_notifications %}
-            <span id="notification-alert" class="alert-badge">{{ unread_notifications.count }}</span>
-        {% endif %}
-        Notification
-    </a>
-</li>
-
-        <li><a href="{% url 'suggest' %}" style="color: white;"><i class="fas fa-user-friends"></i> Suggested Users</a></li>
-
-                <li><a href="{% url 'profile_view' username=user.username %}" style="color: white; margin-right: 15px;">
-            <i class="fas fa-user"></i> Visit Profile
-        </a></li>
-        <!-- Add logout link here -->
-                <li>
-          <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"  style="color:black;">
-    <i class="fas fa-sign-out-alt" style="color:red;"></i> Logout
-</a>
-
-<form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
-    {% csrf_token %}
-</form>
-
+            <a href="{% url 'home' %}" class="{% if request.path == '/' %}active{% endif %}">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+                {% if new_campaigns_from_follows %}
+                    <span id="home-alert" class="alert-badge">{{ new_campaigns_from_follows.count }}</span>
+                {% endif %}
+            </a>
+        </li>
+        
+        <li>
+            <a href="{% url 'suggest' %}" class="{% if 'suggest' in request.path %}active{% endif %}">
+                <i class="fas fa-user-friends"></i>
+                <span>Discover</span>
+            </a>
+        </li>
+        
+        <!-- TikTok-style centered create button -->
+        <li class="create-btn-container">
+            <a href="{% url 'create_campaign' %}" class="create-btn" onclick="handleCreateClick(event)">
+                +
+            </a>
+        </li>
+        
+        <li>
+            <a href="{% url 'notification_list' %}" class="{% if 'notification' in request.path %}active{% endif %}">
+                <i class="fas fa-bell"></i>
+                <span>Alerts</span>
+                {% if unread_notifications %}
+                    <span id="notification-alert" class="alert-badge">{{ unread_notifications.count }}</span>
+                {% endif %}
+            </a>
+        </li>
+        
+        <li>
+            <a href="{% url 'profile_view' username=request.user.username %}" class="{% if 'profile' in request.path %}active{% endif %}">
+                <i class="fas fa-user"></i>
+                <span>Profile</span>
+            </a>
         </li>
     </ul>
-
-        </nav>
+</nav>
 </header>
 
     <!-- Skeleton loading for main content -->
