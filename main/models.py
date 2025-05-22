@@ -720,23 +720,56 @@ class Love(models.Model):
 
 
 
-
-
+# models.py
+from django.db import models
+from django.contrib.auth.models import User
 
 class Comment(models.Model):
     user = models.ForeignKey(Profile, on_delete=models.CASCADE)
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name="comments")
+    parent_comment = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name="replies")
     timestamp = models.DateTimeField(auto_now_add=True)
     text = models.TextField(default='say something..')
-
+    
+    class Meta:
+        ordering = ['-timestamp']
+    
+    def __str__(self):
+        return f"Comment by {self.user.user.username} on {self.campaign.title}"
+    
     def save(self, *args, **kwargs):
         if self.pk is None:  # If this is a new comment
-            # Create the notification message
-            commenter_username = self.user.user.username
-            message = f"{commenter_username} commented on your campaign '{self.campaign.title}'. <a href='{reverse('view_campaign', kwargs={'campaign_id': self.campaign.pk})}'>View Campaign</a>"
-            # Create the notification
-            Notification.objects.create(user=self.campaign.user.user, message=message)
+            # Create notification only for top-level comments
+            if not self.parent_comment:
+                commenter_username = self.user.user.username
+                message = f"{commenter_username} commented on your campaign '{self.campaign.title}'. <a href='{reverse('view_campaign', kwargs={'campaign_id': self.campaign.pk})}'>View Campaign</a>"
+                Notification.objects.create(user=self.campaign.user.user, message=message)
         super().save(*args, **kwargs)
+    
+  
+    
+
+    
+
+    def user_like_status(self, user):
+        try:
+            profile = user.profile
+            like = self.likes.get(user=profile)
+            return 'liked' if like.is_like else 'disliked'
+        except CommentLike.DoesNotExist:
+            return None
+
+class CommentLike(models.Model):
+    user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='likes')
+    is_like = models.BooleanField()  # True for like, False for dislike
+    timestamp = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = ('user', 'comment')  # A user can only like/dislike a comment once
+    
+    def __str__(self):
+        return f"{'Like' if self.is_like else 'Dislike'} by {self.user.user.username} on comment {self.comment.id}"
 
 
 

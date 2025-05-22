@@ -2053,7 +2053,204 @@ def toggle_love(request, campaign_id):
     # If the request method is not POST or user is not authenticated, return 404
     return JsonResponse({}, status=404)
 
+from .models import CommentLike  # Adjust path if it's in another app
 
+from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from .models import Campaign
+from django.db.models import Count, Case, When, Value, Q
+from django.db.models.fields import CharField
+
+# views.py
+from django.http import JsonResponse
+
+def record_campaign_view(request, campaign_id):
+    if request.method == 'POST':
+        # Handle logic (e.g., increment views)
+        return JsonResponse({'success': True})
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+
+
+@login_required
+def get_comments(request):
+    campaign_id = request.GET.get('campaign_id')
+    if not campaign_id:
+        return JsonResponse({'error': 'Campaign ID is required'}, status=400)
+    
+    try:
+        campaign = Campaign.objects.get(pk=campaign_id)
+        # Get top-level comments (not replies)
+        comments = campaign.comments.filter(parent_comment__isnull=True).annotate(
+            like_count=Count('likes', filter=Q(likes__is_like=True)),
+            dislike_count=Count('likes', filter=Q(likes__is_like=False)),
+            reply_count=Count('replies'),
+            user_like_status=Case(
+                When(likes__user=request.user.profile, likes__is_like=True, then=Value('liked')),
+                When(likes__user=request.user.profile, likes__is_like=False, then=Value('disliked')),
+                default=Value(None),
+                output_field=CharField()  # Changed from models.CharField() to CharField()
+            )
+        ).order_by('-timestamp')
+        
+        # Prepare comments data for JSON response
+        comments_data = []
+        for comment in comments:
+            profile_image_url = comment.user.image.url if comment.user.image else None
+            comments_data.append({
+                'id': comment.id,
+                'user_username': comment.user.user.username,
+                'user_profile_image': request.build_absolute_uri(profile_image_url) if profile_image_url else None,
+                'text': comment.text,
+                'timestamp': comment.timestamp.isoformat(),
+                'like_count': comment.like_count,
+                'dislike_count': comment.dislike_count,
+                'reply_count': comment.reply_count,
+                'user_like_status': comment.user_like_status,
+                'is_reply': False,  # This is a top-level comment
+            })
+        
+        return JsonResponse({'comments': comments_data})
+    except Campaign.DoesNotExist:
+        return JsonResponse({'error': 'Campaign not found'}, status=404)
+
+@login_required
+def post_comment(request):
+    if request.method == 'POST':
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user.profile
+            
+            campaign_id = request.POST.get('campaign_id')
+            parent_comment_id = request.POST.get('parent_comment_id')
+            
+            try:
+                campaign = Campaign.objects.get(pk=campaign_id)
+                comment.campaign = campaign
+                
+                if parent_comment_id:
+                    parent_comment = Comment.objects.get(pk=parent_comment_id)
+                    comment.parent_comment = parent_comment
+                
+                comment.save()
+                
+                # Return the new comment data
+                return JsonResponse({
+                    'success': True,
+                    'comment': {
+                        'id': comment.id,
+                        'user_username': comment.user.user.username,
+                        'user_profile_image': comment.user.image.url if comment.user.image else None,
+                        'text': comment.text,
+                        'timestamp': comment.timestamp.isoformat(),
+                        'like_count': 0,
+                        'dislike_count': 0,
+                        'reply_count': 0,
+                        'user_like_status': None,
+                        'is_reply': parent_comment_id is not None,
+                    }
+                })
+            except (Campaign.DoesNotExist, Comment.DoesNotExist):
+                return JsonResponse({'error': 'Campaign or parent comment not found'}, status=404)
+        else:
+            return JsonResponse({'error': 'Invalid form data', 'details': form.errors}, status=400)
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+
+@login_required
+@require_POST
+def like_dislike_comment(request):
+    comment_id = request.POST.get('comment_id')
+    action = request.POST.get('action')  # 'like', 'dislike', or 'remove'
+    
+    if not comment_id or not action:
+        return JsonResponse({'error': 'Missing parameters'}, status=400)
+    
+    try:
+        comment = Comment.objects.get(pk=comment_id)
+        profile = request.user.profile
+        
+        # Check if user already liked/disliked this comment
+        try:
+            like = CommentLike.objects.get(user=profile, comment=comment)
+            
+            if action == 'remove' or (action == 'like' and like.is_like) or (action == 'dislike' and not like.is_like):
+                # Remove the like/dislike
+                like.delete()
+                return JsonResponse({
+                    'success': True, 
+                    'action': 'removed',
+                    'like_count': comment.likes.filter(is_like=True).count(),
+                    'dislike_count': comment.likes.filter(is_like=False).count()
+                })
+            else:
+                # Update existing like/dislike
+                like.is_like = action == 'like'
+                like.save()
+                return JsonResponse({
+                    'success': True, 
+                    'action': 'updated',
+                    'like_count': comment.likes.filter(is_like=True).count(),
+                    'dislike_count': comment.likes.filter(is_like=False).count()
+                })
+        except CommentLike.DoesNotExist:
+            if action in ['like', 'dislike']:
+                # Create new like/dislike
+                CommentLike.objects.create(
+                    user=profile,
+                    comment=comment,
+                    is_like=(action == 'like')
+                )
+                return JsonResponse({
+                    'success': True, 
+                    'action': 'added',
+                    'like_count': comment.likes.filter(is_like=True).count(),
+                    'dislike_count': comment.likes.filter(is_like=False).count()
+                })
+            else:
+                return JsonResponse({'error': 'Invalid action for new interaction'}, status=400)
+    except Comment.DoesNotExist:
+        return JsonResponse({'error': 'Comment not found'}, status=404)
+
+from django.db.models import Q, Count
+
+@login_required
+def get_replies(request, comment_id):
+    try:
+        comment = Comment.objects.get(pk=comment_id)
+        replies = comment.replies.annotate(
+    like_count=Count('likes', filter=Q(likes__is_like=True)),
+    dislike_count=Count('likes', filter=Q(likes__is_like=False)),
+    user_like_status=Case(
+        When(likes__user=request.user.profile, likes__is_like=True, then=Value('liked')),
+        When(likes__user=request.user.profile, likes__is_like=False, then=Value('disliked')),
+        default=Value(None),
+        output_field=CharField()
+    )
+).order_by('timestamp')
+
+
+        
+        replies_data = []
+        for reply in replies:
+            profile_image_url = reply.user.image.url if reply.user.image else None
+            replies_data.append({
+                'id': reply.id,
+                'user_username': reply.user.user.username,
+                'user_profile_image': request.build_absolute_uri(profile_image_url) if profile_image_url else None,
+                'text': reply.text,
+                'timestamp': reply.timestamp.isoformat(),
+                'like_count': reply.like_count,
+                'dislike_count': reply.dislike_count,
+                'user_like_status': reply.user_like_status,
+                'is_reply': True,
+            })
+        
+        return JsonResponse({'replies': replies_data})
+    except Comment.DoesNotExist:
+        return JsonResponse({'error': 'Comment not found'}, status=404)
 
 
 @login_required
@@ -2414,11 +2611,7 @@ from .models import Profile, Follow
 
 @login_required
 def profile_view(request, username):
-
-    # Remove "@" if it's included in the username
-    if username.startswith('@'):
-        username = username[1:]
-    # Get the user's profile
+    # Get the user's profile (username will come without @ due to URL pattern)
     user_profile = get_object_or_404(Profile, user__username=username)
     
     # Check if the logged-in user is following this profile
@@ -2429,8 +2622,8 @@ def profile_view(request, username):
     following_count = Follow.objects.filter(follower=user_profile.user).count()
     
     # Get public campaigns
-    public_campaigns = user_profile.user_campaigns.filter(visibility='public').order_by('-timestamp')  # Sort by latest timestamp
-    public_campaigns_count = public_campaigns.count()  # Get the count of public campaigns
+    public_campaigns = user_profile.user_campaigns.filter(visibility='public').order_by('-timestamp')
+    public_campaigns_count = public_campaigns.count()
     
     # Filter campaigns where the user qualifies as a changemaker
     changemaker_campaigns = [campaign for campaign in public_campaigns if campaign.is_changemaker]
@@ -2438,44 +2631,31 @@ def profile_view(request, username):
     # Determine the most appropriate campaign
     most_appropriate_campaign = None
     if changemaker_campaigns:
-        # First, prioritize the user's first campaign (based on timestamp)
         first_campaign = min(changemaker_campaigns, key=lambda campaign: campaign.timestamp)
-        
-        # Then, prioritize the campaign with the highest number of loves
         most_impactful_campaign = max(changemaker_campaigns, key=lambda campaign: campaign.love_count)
         
-        # If there's a tie in love counts, resolve by selecting the most recent campaign
         if most_impactful_campaign.love_count == first_campaign.love_count:
-            # Resolve tie by selecting the most recent one
             most_appropriate_campaign = max(changemaker_campaigns, key=lambda campaign: campaign.timestamp)
         else:
-            # Use the most impactful campaign (with the most loves)
             most_appropriate_campaign = most_impactful_campaign
     
-    # Get the category of the most appropriate campaign
     category_display = most_appropriate_campaign.get_category_display() if most_appropriate_campaign else None
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    # Check if there are new campaigns from follows
-  
-    # Update last_campaign_check for the user's profile
+    
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
-    ads = NativeAd.objects.all()     
-    # Prepare context
+    ads = NativeAd.objects.all()
+    
     context = {
         'user_profile': user_profile,
-        'following_profile': following_profile,  # Add this to the context
+        'following_profile': following_profile,
         'followers_count': followers_count,
         'following_count': following_count,
         'public_campaigns': public_campaigns,
         'public_campaigns_count': public_campaigns_count,
-        'changemaker_category': category_display,  # Display the most appropriate category
-
-               'ads':ads,
-       
-        
-        'unread_notifications':unread_notifications,
-      
+        'changemaker_category': category_display,
+        'ads': ads,
+        'unread_notifications': unread_notifications,
     }
     
     return render(request, 'main/user_profile.html', context)

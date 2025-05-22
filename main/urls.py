@@ -5,9 +5,10 @@ from .views import CampaignDeleteView
 
 
 from .views import campaign_story_list, campaign_story_detail
-
+from .views import get_comments, post_comment
 urlpatterns = [
-
+    path('get_comments/', get_comments, name='get_comments'),
+    path('post_comment/', post_comment, name='post_comment'),
     path('campaign/<int:campaign_id>/donate/', views.donate, name='donate'),
 path('campaigns/', views.campaign_list, name='campaign_list'),
 
@@ -85,7 +86,7 @@ path('campaigns/', views.campaign_list, name='campaign_list'),
     path('face', views.face, name='face'),
     path('create_campaign/', views.create_campaign, name='create_campaign'),
     path('edit-profile/<str:username>/', views.profile_edit, name='edit_profile'),
-   path('user-profile/@<str:username>/', views.profile_view, name='profile_view'),
+  path('user-profile/@<str:username>/', views.profile_view, name='profile_view'),
     path('follow/<str:username>/', views.follow_user, name='follow_user'),
     path('unfollow/<str:username>/', views.unfollow_user, name='unfollow_user'),
     path('followers/<str:username>/', views.follower_list, name='follower_list'),
@@ -96,8 +97,11 @@ path('campaigns/', views.campaign_list, name='campaign_list'),
     path('campaign/<int:campaign_id>/activity/create/', views.create_activity, name='create_activity'),
     path('campaign/<int:campaign_id>/activity_list/', views.activity_list, name='activity_list'),
     path('campaign/<int:campaign_id>/comments/', views.campaign_comments, name='campaign_comments'),
-
-
+   path('like_dislike_comment/', views.like_dislike_comment, name='like_dislike_comment'),
+path('post_comment/', views.post_comment, name='post_comment'),
+path('get_comments/', views.get_comments, name='get_comments'),
+path('get_replies/<int:comment_id>/', views.get_replies, name='get_replies'),
+    path('record_campaign_view/<int:campaign_id>/', views.record_campaign_view, name='record_campaign_view'),
 # marketing 
 
     path('blog/', views.blog_list, name='blog_list'),  # List of all blogs
