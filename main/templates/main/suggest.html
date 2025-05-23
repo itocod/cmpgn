@@ -1,4 +1,6 @@
 {% extends 'main/face.html' %}
+{% load user_tags %}
+
 {% load static %}
 
 {% block content %}
@@ -238,9 +240,51 @@ body.dark-mode .affiliate-link i {
     <h2 style="font-size: 19px; padding-left: 20px;">Suggested Users</h2>
     
     <div class="container-profiles">
+        <div class="container-profiles">
+    <!-- Section for contact-based suggestions -->
+    {% if contact_based_suggestions %}
+    <div class="suggestion-section">
+        <h3 class="section-title">People you may know from your friends' contacts</h3>
+        <ul class="profile-list">
+            {% for user in contact_based_suggestions %}
+                <li class="profile-card contact-suggestion">
+                    <div class="profile-content">
+                        <div class="profile-pic">
+                            <a href="{% url 'profile_view' username=user.username %}">
+                                <img src="{{ user.profile.image.url }}" alt="{{ user.username }}'s Profile Picture" class="profile-picture">
+                            </a>
+                        </div>
+                        <div class="profile-details">
+                            <h2 class="profile-name">
+                                <a href="{% url 'profile_view' user.username %}" class="profile-link" style="font-size: 16px;">
+                                    {{ user.username }}
+                                    {% if user.profile.profile_verified %}
+                                        <span>verified</span><i class="material-icons" style="font-size: 12px; color: green;">verified_user</i>
+                                    {% endif %}
+                                </a>
+                            </h2>
+                            <p class="connection-info">Connected through a friend's contacts</p>
+                            <!-- Add friend connection info if available -->
+                          {% with mutual_friends=user|get_mutual_friends:request.user %}
+    {% if mutual_friends %}
+        <p class="mutual-friends">{{ mutual_friends|length }} mutual friend(s)</p>
+    {% endif %}
+{% endwith %}
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <!-- Section for regular suggestions -->
+    <div class="suggestion-section">
+        <h3 class="section-title">Suggested for you</h3>
         <ul class="profile-list">
             {% if suggested_users %}
                 {% for user in suggested_users %}
+                    {% if user not in contact_based_suggestions %}
                     <li class="profile-card">
                         <div class="profile-content">
                             <div class="profile-pic">
@@ -255,30 +299,59 @@ body.dark-mode .affiliate-link i {
                                         {% if user.profile.profile_verified %}
                                             <span>verified</span><i class="material-icons" style="font-size: 12px; color: green;">verified_user</i>
                                         {% endif %}
-                                        <i class="cm" style="font-size: 16px;"></i>
                                     </a>
                                 </h2>
                                 {% if user.profile.bio %}
                                     <p class="profile-info" style="font-size: 16px;">{{ user.profile.bio|truncatewords:20|safe }}</p>
                                 {% endif %}
-                                {% if user.profile.location %}
-                                    <p class="profile-info">Location: {{ user.profile.location }}</p>
-                                {% endif %}
-                                {% if user.profile.highest_level_of_education %}
-                                    <p class="profile-info">Education: {{ user.profile.highest_level_of_education }}</p>
-                                {% endif %}
-                                <hr>
+                                {% with mutual_friends=user|get_mutual_friends:request.user %}
+                                    {% if mutual_friends %}
+                                        <p class="mutual-friends">{{ mutual_friends|length }} mutual friend(s)</p>
+                                    {% endif %}
+                                {% endwith %}
                             </div>
                         </div>
                     </li>
+                    {% endif %}
                 {% endfor %}
             {% else %}
                 <li class="no-suggested-users">No suggested users yet.</li>
             {% endif %}
         </ul>
     </div>
+</div>
+ 
 
+<style type="text/css">
+    .suggestion-section {
+    margin-bottom: 30px;
+}
 
+.section-title {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #eee;
+}
+
+.contact-suggestion {
+    border-left: 3px solid #4CAF50;
+    background-color: #f9f9f9;
+}
+
+.mutual-friends {
+    color: #666;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+.connection-info {
+    font-style: italic;
+    color: #888;
+    font-size: 14px;
+}
+</style>
 
     <script type="text/javascript">
         

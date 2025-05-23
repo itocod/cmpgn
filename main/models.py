@@ -54,7 +54,7 @@ class Profile(models.Model):
     last_chat_check = models.DateTimeField(default=timezone.now)
     profile_verified = models.BooleanField(default=False)  # Renamed from `is_verified
     # Other fields...
-
+    contacts = models.TextField(blank=True, null=True, help_text="Comma-separated list of phone numbers/emails")
  
 
     def age(self):
@@ -653,40 +653,26 @@ from django.db import models
 
 class CampaignFund(models.Model):
     campaign = models.OneToOneField(Campaign, on_delete=models.CASCADE)
-    target_amount = models.DecimalField(max_digits=10, decimal_places=2, editable=False)
+    target_amount = models.DecimalField(max_digits=10, decimal_places=2)
     amount_raised = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    paypal_email = models.EmailField(default="paypal_email")
+    paypal_email = models.EmailField(default="paypal_email@example.com")
 
     def save(self, *args, **kwargs):
-        if not self.target_amount and self.campaign.target_amount:
-            self.target_amount = self.campaign.target_amount  # Auto-fill from Campaign
+        if not self.target_amount:
+            self.target_amount = self.campaign.target_amount
         super().save(*args, **kwargs)
 
     def progress_percentage(self):
         if self.target_amount > 0:
-            return (Decimal(self.amount_raised) / Decimal(self.target_amount)) * 100
-        return Decimal(0)  # Always return a Decimal value
-
-
-
-
-
-
-
+            return (self.amount_raised / self.target_amount) * 100
+        return Decimal(0)
 
 class Donation(models.Model):
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    donor_name = models.CharField(max_length=255, default="Anonymous")  # Set a default value
+    donor_name = models.CharField(max_length=255, default="Anonymous")
     transaction_id = models.CharField(max_length=255, unique=True, null=True)
-    created_at = models.DateTimeField(default=timezone.now)  # Automatically set the field to now when the donation is created
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        # Remove the fund update from here
-        # This will prevent double counting
-
-
+    created_at = models.DateTimeField(default=timezone.now)
 
 
 

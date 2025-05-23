@@ -6,7 +6,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+<!-- Add this in your <head> if not already present -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <!-- Google Site Verification -->
 <meta name="google-site-verification" content="2IjHwnbJp2eoJ42Ec2-vy5FHzwfpyA4qxZlA2Ct1lW8" />
 
@@ -339,6 +340,7 @@ section {
 
     }
 
+
     /* Beautiful upload button styles */
     .upload-container {
       display: flex;
@@ -397,6 +399,8 @@ section {
       opacity: 0;
       cursor: pointer;
     }
+
+
 
 border: 1px solid silver;
     hr {
@@ -2556,19 +2560,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-    <div class="action-item">
-        <a href="#" onclick="uploadAudio()">
-            <i class="fas fa-volume-up"></i> VibeVent
-        </a>
-    </div>
-    
-    <div class="action-item">
-        <a href="#" onclick="switchColor()">
-            <i class="fas fa-sync-alt"></i>
-        </a>
-    </div>
-    
-    <audio id="bgAudio" autoplay loop></audio>
+
 
 </div>
 
@@ -2781,6 +2773,85 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
 </div>
 
+<style>
+.newsletter-signup {
+  margin-top: 24px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  background: linear-gradient(135deg, #1877f2, #0d5bb5);
+  color: white;
+}
+
+.newsletter-header {
+  margin-bottom: 16px;
+}
+
+.newsletter-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.newsletter-text {
+  font-size: 14px;
+  margin-bottom: 16px;
+  opacity: 0.9;
+}
+
+.newsletter-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.newsletter-input {
+  padding: 12px;
+  border-radius: 6px;
+  border: none;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.newsletter-btn {
+  background: white;
+  color: #1877f2;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.newsletter-btn:hover {
+  background: #f0f2f5;
+}
+
+.newsletter-privacy {
+  font-size: 11px;
+  opacity: 0.8;
+  margin-top: 8px;
+}
+</style>
+
+<div class="newsletter-signup">
+  <div class="newsletter-header">
+    <h3 class="newsletter-title"><i class="fas fa-envelope"></i> Stay Updated</h3>
+  </div>
+  
+  <p class="newsletter-text">
+    Get the latest campaigns, success stories and community updates in your inbox.
+  </p>
+  
+  <form class="newsletter-form">
+    <input type="email" class="newsletter-input" placeholder="Your email address">
+    <button type="submit" class="newsletter-btn">Subscribe</button>
+    <p class="newsletter-privacy">
+      We respect your privacy. Unsubscribe at any time.
+    </p>
+  </form>
+</div>
 </aside>
 
 
@@ -2789,14 +2860,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <section>
 
-<!-- Beautiful upload button -->
-<div class="upload-container hide-on-mobile">
-    <div class="upload-btn-wrapper">
-        <button class="btn" style="font-size: 14px;">+ Upload
-            <a href="{% url 'create_campaign' %}" class="overlay-link"></a>
-        </button>
-    </div>
-</div>
+
     </br>
 
 <h4 style="font-size: 19px; padding-left: 20px; display: inline-flex; align-items: center;">
@@ -2804,8 +2868,39 @@ document.addEventListener('DOMContentLoaded', function() {
     <a href="{% url 'index' %}" title="Explore" class="explore-link" style="margin-left: 10px;">
         <i class="fas fa-compass" style="font-size: 14px;"></i>
     </a>
-</h4>
 
+    <div class="action-item">
+        <a href="#" onclick="switchColor()">
+            <i class="fas fa-sync-alt"></i>
+        </a>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 8px; margin-left: 10px;">
+        <a href="{% url 'profile_view' username=user.username %}" style="text-decoration: none; display: flex; align-items: center;">
+           <img src="{{ user_profile.image.url }}" alt="Profile Image" width="50" height="50" style="
+                object-fit: cover;
+                border: 3px solid #E0E0E0;
+                box-shadow: 0 0 15px rgba(192, 192, 192, 0.6);
+                transition: all 0.3s ease;
+                border-radius: 50%;
+                margin-bottom: 15px;
+                filter: brightness(105%);
+                background: linear-gradient(45deg, #F5F5F5, #FFFFFF);
+           " 
+           onmouseover="this.style.borderColor='#FFFFFF'; this.style.boxShadow='0 0 20px rgba(255, 255, 255, 0.8)';" 
+           onmouseout="this.style.borderColor='#E0E0E0'; this.style.boxShadow='0 0 15px rgba(192, 192, 192, 0.6)';">
+           <span style="
+                font-size: 14px;
+                color: #888;
+                margin-left: 8px;
+                transition: all 0.3s ease;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                font-weight: 500;
+           ">View Profile</span>
+        </a>
+    </div>
+</h4>
 
 
 <form method="GET" action="{% url 'home' %}" class="filter-form">
@@ -2820,6 +2915,20 @@ document.addEventListener('DOMContentLoaded', function() {
 </select>
 
 </form>
+
+<!-- Beautiful upload button -->
+<div class="upload-container hide-on-mobile">
+
+     <div class="upload-btn-wrapper">
+        <button class="btn" style="font-size: 14px;">+ Upload
+            <a href="{% url 'create_campaign' %}" class="overlay-link"></a>
+        </button>
+    </div>
+
+</div>
+
+    
+</div><br>
 <div class="sidebar-box ">
    {% if public_campaigns %}
 <div class="simple-campaigns-container">
@@ -3232,116 +3341,305 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 </section>
-
-
-
-
-
 <aside class="right-aside">
+  <!-- Suggested Users Section -->
+  <div class="suggested-users">
+    <div class="section-header">
+      <h3 class="section-title">Suggested for You</h3>
+       {% if suggested_users|length >= 2 %}
+            <a href="{% url 'suggest' %}" class="see-all">See All</a>
+        {% endif %}
+    </div>
+    {% for suggested in suggested_users %}
+    {% with user=suggested.user followers_count=suggested.followers_count %}
+    <div class="user-card">
+      <div class="user-avatar">
+        <img src="{{ user.profile.image.url }}" alt="{{ user.username }}" class="avatar-img">
+        {% if user.profile.is_online %}
+        <span class="online-status"></span>
+        {% endif %}
+      </div>
+      <div class="user-info">
+        <h4 class="user-name">{{ user.get_full_name|default:user.username }}</h4>
+        <p class="user-bio">{{ user.profile.bio|truncatechars:30 }}</p>
+        <div class="user-meta">
+          <span class="followers">{{ followers_count }} followers</span>
+          {% if user.profile.is_verified %}
+          <span class="verified-badge">✓</span>
+          {% endif %}
+        </div>
+        <button class="follow-btn" onclick="followUser('{{ user.username }}')">
+          <a href="{% url 'profile_view' username=user.username %}">                                                         
+            <span class="btn-text">Visit</span>
+          </a>
+          <span class="btn-icon"></span>
+        </button>
+      </div>
+    </div>
+    {% endwith %}
+{% empty %}
+    <p class="no-suggestions">No suggestions available. Follow more people to get better recommendations.</p>
+{% endfor %}
 
 
-  <nav  style="display:none;">
 
-    <ul>
-        <li>ad space</li>
+  
+<div class="trending-now">
+  <div class="trending-header">
+    <h3 class="trending-title"><i class="fas fa-fire"></i> Trending Now</h3>
+    <button class="refresh-btn" onclick="refreshTrending()">
+      <i class="fas fa-sync-alt"></i> Refresh
+    </button>
+  </div>
+  
+  <ul class="trending-list">
+    {% for campaign in trending_campaigns|slice:":5" %}
+    <li class="trending-item">
+      <span class="trending-rank trending-rank-{{ forloop.counter }}">{{ forloop.counter }}</span>
+      {% if forloop.counter <= 3 %}
+      <span class="trending-hot">HOT</span>
+      {% endif %}
       
-    </ul>
-</nav><br>
-  <div style="border: 1px solid #808080; padding: 20px; text-align: center; border-radius: 10px;">
-     
-    <h2 style="margin-bottom: 10px;">{{ user_profile.user.username }} 
-      . <i class="cm">campaigner</i></h2>
-               {% if user_profile.profile_verified %}
-       <p><strong>Status:</strong> 
-    {% if user_profile.profile_verified %}
-        <span>Verified</span>
-        <i class="material-icons" style="font-size:20px;color:green">verified_user</i>
-    {% else %}
-        <span>None</span>
-    {% endif %}
-</p>
-    {% endif %}
-   <img src="{{ user_profile.image.url }}"  alt="Profile Image" width="150" height="150" style="
-      object-fit: cover;
-      border: 4px solid #32CD32;
-      
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      transition: border-color 0.3s ease;
-      border-radius: 50%; margin-bottom: 15px;
-    " onmouseover="this.style.borderColor='#00FF00';" onmouseout="this.style.borderColor='#32CD32';">
-    <p style="font-size: 16px; color: #555;">Campaigner</p>
-    <hr style="border-color: #ccc; margin: 20px 0;">
-      <sp style="font-size: 14px; color: #777; line-height: 1.6;">
-    {{ user_profile.bio|truncatewords:10 }}
-</sp>
-<div style="margin-top: 20px;">
-    <a href="{% url 'profile_view' username=user.username %}" style="text-decoration: none; color: #007bff; margin-right: 15px;">Visit Profile</a>
+      <div class="trending-content">
+        <h4 class="trending-topic">
+          <a href="{% url 'view_campaign' campaign_id=campaign.pk %}" style="color: inherit; text-decoration: none;">
+            {{ campaign.title|truncatechars:40 }}
+          </a>
+          {% if campaign.user.profile_verified %}
+          <i class="fas fa-check-circle"></i>
+          {% endif %}
+        </h4>
+        <div class="trending-meta">
+          <span class="trending-posts">
+            <i class="fas fa-heart" style="color: #ff4d4f;"></i>
+            {{ campaign.love_count|default:0 }} loves
+          </span>
+          <span class="trending-posts">
+            <i class="fas fa-comment" style="color: #1890ff;"></i>
+            {{ campaign.comments.count|default:0 }} comments
+          </span>
+          <span class="trending-category">{{ campaign.category }}</span>
+        </div>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  
+  <div class="view-more">
+    <a href="">View all trending campaigns</a>
+  </div>
 </div>
-  </div></br>
-
- <!-- Assuming this is in a template file like base.html -->
-<a href="{% url 'donate' %}#rallynex-campaigns" class="donate-link" style="hovercolor"> Help Us Build a Better Platform to Support More Campaigns </a>
 
 
 
+<div class="top-contributors">
+  <div class="contributors-header">
+    <h3 class="contributors-title"><i class="fas fa-trophy"></i> Top Contributors</h3>
+  </div>
+  
+  <div class="contributors-list">
+    {% for contributor in top_contributors %}
+    <div class="contributor-item">
+      <div class="contributor-avatar">
+        <img src="{{ contributor.image.url }}" class="contributor-img">
+        <div class="contributor-badge">{{ forloop.counter }}</div>
+      </div>
+      <div class="contributor-info">
+        <h4 class="contributor-name">{{ contributor.user.get_full_name }}</h4>
+        <div class="contributor-stats">
+          {{ contributor.campaign_count }} Campaign{{ contributor.campaign_count|pluralize }} • 
+         
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="view-all-contributors">
+    <a href="#">View All Contributors</a>
+  </div>
+</div>
 
 
 
-                        <div class="square-with-arrow" style="font-size:14px;" >
-                            <i class="fas fa-square"></i>
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
+
+<div class="quick-actions">
+  <div class="actions-header">
+    <h3 class="actions-title"><i class="fas fa-bolt"></i> Quick Actions</h3>
+  </div>
+  
+  <div class="action-grid">
+    <a href="#" class="action-btn">
+      <i class="action-icon fas fa-plus-circle"></i>
+      <span class="action-label">Create Campaign</span>
+    </a>
+    
+    <a href="#" class="action-btn">
+      <i class="action-icon fas fa-donate"></i>
+      <span class="action-label">Donate</span>
+    </a>
+    
+    <a href="#" class="action-btn">
+      <i class="action-icon fas fa-calendar-check"></i>
+      <span class="action-label">Events</span>
+    </a>
+    
+    <a href="#" class="action-btn">
+      <i class="action-icon fas fa-hands-helping"></i>
+      <span class="action-label">Volunteer</span>
+    </a>
+  </div>
+</div>
 
 
+
+  <!-- Footer Links -->
+  <div class="aside-footer">
+    <a href="#">About</a> • <a href="#">Help</a> • <a href="#">Terms</a> • <a href="#">Privacy</a>
+  </div>
 </aside>
+
+
+
   </main>
 
 
 
 
 
-<hr>
 
-<footer class="footer">
-    <div class="footer-content">
-        <!-- Existing footer sections -->
-        <div class="footer-section">
-            <h2>Contact Us</h2>
-            <p>Email: rallynex1@gmail.com</p>
-            <p style="display:none;">Address: 123 Networking St, Net City</p>
-        </div>
-        <div class="footer-section" style="display: none;">
-            <h2>Follow Us</h2>
-            <div class="social-icons">
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                <a href="#"><i class="fab fa-github"></i></a>
-            </div>
-        </div>
-        <div class="footer-section">
-            <h2>Subscribe</h2>
-            <!-- Include subscription form -->
-        
-            <p><a href="{% url 'subscribe' %}" class="subscribe-link">Subscribe Now</a></p>
-        </div>
-        <div class="footer-section">
-            <h2>Legal</h2>
-            <a href="{% url 'privacy_policy' %}">Privacy Policy|</a>
-            <a href="{% url 'terms_of_service' %}">Terms of Service|</a>
-            <a href="{% url 'project_support' %}">Support|</a>
-             <a href="{% url 'hiw' %}">How It Works|</a>
-            <a href="{% url 'faq' %}">FAQ|</a>
-            <a href="{% url 'aboutus' %}">About Us|</a>
-            <a href="{% url 'donate' %}">Donate|</a>
-        </div>
-    </div>
-    <div class="footer-bottom">
-        <p>&copy; 2024 Networking Site. All rights reserved.</p>
-        <p class="mystery-text"></p>
-    </div>
-</footer>
+
+
+
+<style>
+
+
+   .quick-actions {
+      margin-top: 24px;
+      background: #fff;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .action-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .action-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 12px;
+      background: #f0f2f5;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+
+    .action-icon {
+      font-size: 20px;
+      margin-bottom: 8px;
+      color: #1877f2;
+    }
+
+    .action-label {
+      display: block; /* CRITICAL */
+      font-size: 13px;
+      color: #000; /* Explicit color */
+      font-weight: 500;
+    }
+</style>
+
+
+<style>
+.top-contributors {
+  margin-top: 24px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.contributors-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.contributors-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #050505;
+  margin: 0;
+}
+
+.contributor-item {
+  display: flex;
+  align-items: center;
+  padding: 8px 0;
+}
+
+.contributor-avatar {
+  position: relative;
+  margin-right: 12px;
+}
+
+.contributor-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.contributor-badge {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffd700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: #000;
+  font-weight: bold;
+}
+
+.contributor-info {
+  flex: 1;
+}
+
+.contributor-name {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 2px 0;
+}
+
+.contributor-stats {
+  font-size: 12px;
+  color: #65676b;
+}
+
+.view-all-contributors {
+  text-align: center;
+  margin-top: 12px;
+}
+
+.view-all-contributors a {
+  color: #1877f2;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+}
+</style>
 
 <style>
     /* Comment Popup Styles */
@@ -3652,6 +3950,323 @@ document.addEventListener('DOMContentLoaded', function() {
 
 .error-loading-replies .retry-btn:hover {
     background-color: #0b7dda;
+}
+</style>
+
+
+<style>
+.right-aside {
+  width: 340px;
+  padding: 16px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
+  position: sticky;
+  top: 20px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #050505;
+  margin: 0;
+}
+
+.see-all {
+  font-size: 14px;
+  color: #1877f2;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.see-all:hover {
+  text-decoration: underline;
+}
+
+.user-card {
+  display: flex;
+  padding: 12px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+  margin-bottom: 8px;
+}
+
+.user-card:hover {
+  background-color: #f0f2f5;
+}
+
+.user-avatar {
+  position: relative;
+  margin-right: 12px;
+}
+
+.avatar-img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.online-status {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 12px;
+  height: 12px;
+  background-color: #31a24c;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+}
+
+.user-info {
+  flex: 1;
+}
+
+.user-name {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 2px 0;
+  color: #050505;
+}
+
+.user-bio {
+  font-size: 13px;
+  color: #65676b;
+  margin: 0 0 4px 0;
+  line-height: 1.3;
+}
+
+.user-meta {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  color: #65676b;
+  margin-bottom: 8px;
+}
+
+.followers {
+  margin-right: 6px;
+}
+
+.verified-badge {
+  color: #1877f2;
+  font-size: 14px;
+}
+
+.follow-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e7f3ff;
+  color: #1877f2;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  width: 100%;
+}
+
+.follow-btn:hover {
+  background-color: #dbe7f2;
+}
+
+.btn-text {
+  margin-right: 4px;
+}
+
+.
+</style>
+
+
+<style>
+.trending-now {
+  margin-top: 24px;
+}
+
+.trending-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.trending-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #050505;
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.trending-title i {
+  margin-right: 8px;
+  color: #1877f2;
+}
+
+.refresh-btn {
+  background: none;
+  border: none;
+  color: #65676b;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.refresh-btn:hover {
+  background-color: #f0f2f5;
+  color: #1877f2;
+}
+
+.refresh-btn i {
+  margin-right: 4px;
+}
+
+.trending-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.trending-item {
+  display: flex;
+  padding: 12px;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.trending-item:hover {
+  background-color: #f0f2f5;
+}
+
+.trending-rank {
+  font-size: 14px;
+  font-weight: 600;
+  color: #65676b;
+  min-width: 24px;
+  text-align: center;
+  align-self: center;
+}
+
+.trending-hot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 10px;
+  background-color: #ff4d4f;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.trending-content {
+  flex: 1;
+  margin-left: 12px;
+}
+
+.trending-topic {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+  color: #050505;
+  display: flex;
+  align-items: center;
+}
+
+.trending-topic i {
+  margin-left: 6px;
+  color: #1877f2;
+  font-size: 14px;
+}
+
+.trending-meta {
+  display: flex;
+  font-size: 12px;
+  color: #65676b;
+}
+
+.trending-posts {
+  margin-right: 12px;
+  display: flex;
+  align-items: center;
+}
+
+.trending-posts i {
+  margin-right: 4px;
+  font-size: 10px;
+}
+
+.trending-category {
+  background-color: #e7f3ff;
+  color: #1877f2;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  align-self: center;
+}
+
+.view-more {
+  text-align: center;
+  margin-top: 12px;
+}
+
+.view-more a {
+  color: #1877f2;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.view-more a:hover {
+  text-decoration: underline;
+}
+
+/* Animation for hot items */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+.trending-hot {
+  animation: pulse 2s infinite;
+}
+
+/* Rank colors */
+.trending-rank-1 {
+  color: #ff4d4f;
+  font-weight: 700;
+}
+
+.trending-rank-2 {
+  color: #fa8c16;
+  font-weight: 700;
+}
+
+.trending-rank-3 {
+  color: #fadb14;
+  font-weight: 700;
 }
 </style>
 
@@ -4340,7 +4955,27 @@ document.addEventListener('DOMContentLoaded', function() {
 </style>
 
 
+<script>
+function refreshTrending() {
+  // Add AJAX call to refresh trending content
+  console.log("Refreshing trending content...");
+  // In a real implementation, you would fetch new trending data here
+}
 
+// Add this to your existing script section
+document.addEventListener('DOMContentLoaded', function() {
+  // Highlight the first three items more prominently
+  const trendingItems = document.querySelectorAll('.trending-item');
+  trendingItems.forEach((item, index) => {
+    if (index < 3) {
+      item.style.borderLeft = `3px solid ${
+        index === 0 ? '#ff4d4f' : 
+        index === 1 ? '#fa8c16' : '#fadb14'
+      }`;
+    }
+  });
+});
+</script>
 
 
 <script type="text/javascript">

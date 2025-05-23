@@ -886,38 +886,112 @@ def add_activity_comment(request, activity_id):
         })
 
 
+import logging
+from django.contrib import messages
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from django.utils import timezone
+from .models import Profile, Notification, Campaign, NativeAd
+from django.contrib.auth.models import User
+
+logger = logging.getLogger(__name__)
 
 
 @login_required
 def suggest(request):
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
-    user_profile = get_object_or_404(Profile, user=request.user)
-    current_user_following = user_profile.following.all()
-    suggested_users = []
+    try:
+        # Get users the current user is following
+        following_users = [follow.followed for follow in request.user.following.all()]
+        user_profile = get_object_or_404(Profile, user=request.user)
+        current_user_following = user_profile.following.all()
+        suggested_users = []
 
-    # Fetch all profiles except the current user's profile and those the current user is already following
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+        # 1. Get friends' contacts
+        friends_contacts = set()
+        for friend in following_users:
+            try:
+                friend_profile = friend.profile
+                if friend_profile.contacts:
+                    contacts = [c.strip() for c in friend_profile.contacts.split(',') if c.strip()]
+                    friends_contacts.update(contacts)
+            except Profile.DoesNotExist:
+                continue
 
-    # Calculate similarity score for each profile and include those with a score >= 0.5
-    for profile in all_profiles:
-        similarity_score = calculate_similarity(user_profile, profile)
-        if similarity_score >= 0.5:  # Adjust this threshold as needed
-            suggested_users.append(profile.user)
+        # 2. Find users matching these contacts
+        matching_profiles = Profile.objects.filter(
+            Q(contacts__in=friends_contacts) | 
+            Q(user__email__in=friends_contacts)
+        ).exclude(user=request.user).exclude(user__in=current_user_following)
 
-    # Remove profiles that the current user is already following
-    suggested_users = [user for user in suggested_users if user not in following_users]
+        contact_matches = User.objects.filter(
+            id__in=matching_profiles.values('user_id')
+        ).distinct()
 
-    # Fetch unread notifications for the user
-    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    # Check if there are new campaigns from follows
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
+        suggested_users.extend(contact_matches)
 
-    # Update last_campaign_check for the user's profile
-    user_profile.last_campaign_check = timezone.now()
-    user_profile.save()
-    ads = NativeAd.objects.all()  
-    return render(request, 'main/suggest.html', {'ads':ads,'suggested_users': suggested_users, 'user_profile': user_profile,'unread_notifications':unread_notifications,'new_campaigns_from_follows':new_campaigns_from_follows})
+        # 3. Get similarity-based suggestions
+        all_profiles = Profile.objects.exclude(user=request.user).exclude(
+            user__in=current_user_following
+        ).select_related('user')
 
+        for profile in all_profiles:
+            if profile.user in suggested_users:
+                continue
+                
+            try:
+                similarity_score = calculate_similarity(user_profile, profile)
+                if similarity_score >= 0.5:
+                    suggested_users.append(profile.user)
+            except Exception as e:
+                logger.error(f"Error calculating similarity: {e}")
+
+        # Final processing
+        suggested_users = [user for user in suggested_users if user not in following_users]
+        seen = set()
+        suggested_users = [user for user in suggested_users if not (user in seen or seen.add(user))]
+        suggested_users.sort(key=lambda user: 0 if user in contact_matches else 1)
+
+        # Get other data
+        unread_notifications = Notification.objects.filter(
+            user=request.user, 
+            viewed=False
+        ).order_by('-timestamp')[:10]
+
+        new_campaigns_from_follows = Campaign.objects.filter(
+            user__user__in=following_users,
+            visibility='public',
+            timestamp__gt=user_profile.last_campaign_check
+        ).order_by('-timestamp')[:5]
+
+        user_profile.last_campaign_check = timezone.now()
+        user_profile.save()
+
+        # Updated ads query to handle case where active field doesn't exist
+        try:
+            if hasattr(NativeAd, 'active'):
+                ads = NativeAd.objects.filter(active=True).order_by('?')[:3]
+            else:
+                ads = NativeAd.objects.all().order_by('?')[:3]
+        except Exception as e:
+            logger.error(f"Error loading ads: {e}")
+            ads = []
+
+        context = {
+            'ads': ads,
+            'suggested_users': suggested_users,
+            'user_profile': user_profile,
+            'unread_notifications': unread_notifications,
+            'new_campaigns_from_follows': new_campaigns_from_follows,
+            'contact_based_suggestions': contact_matches,
+        }
+
+        return render(request, 'main/suggest.html', context)
+
+    except Exception as e:
+        logger.error(f"Error in suggest view: {e}", exc_info=True)
+        messages.error(request, "An error occurred while loading suggestions.")
+        return redirect('home')
 
 
 
@@ -963,14 +1037,18 @@ def affiliate_links(request):
 
 
 
-
-
+# views.py
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.urls import reverse
+from decimal import Decimal
 import paypalrestsdk
-from django.conf import settings
-from django.shortcuts import redirect
+from .models import Campaign, CampaignFund, Donation
+from .forms import DonationForm, CampaignFundForm  # Ensure these exist
 
 paypalrestsdk.configure({
-    "mode": settings.PAYPAL_MODE,  # Sandbox or live
+    "mode": settings.PAYPAL_MODE,
     "client_id": settings.PAYPAL_CLIENT_ID,
     "client_secret": settings.PAYPAL_CLIENT_SECRET
 })
@@ -978,22 +1056,20 @@ paypalrestsdk.configure({
 @login_required
 def donate(request, campaign_id):
     campaign = get_object_or_404(Campaign, id=campaign_id)
-    
-
-    # Attempt to retrieve the CampaignFund or create one with a default target_amount
-    fund, created = CampaignFund.objects.get_or_create(campaign=campaign, defaults={'target_amount': campaign.target_amount or 0.00, 'paypal_email': 'default_email@example.com'})
+    fund, _ = CampaignFund.objects.get_or_create(
+        campaign=campaign,
+        defaults={'target_amount': campaign.target_amount, 'paypal_email': 'default_email@example.com'}
+    )
 
     target_reached = fund.progress_percentage() >= 100
+    donation_form = DonationForm(request.POST or None)
+    fund_form = CampaignFundForm(request.POST or None, instance=fund)
 
     if request.method == 'POST':
-        donation_form = DonationForm(request.POST)
-        fund_form = CampaignFundForm(request.POST, instance=fund)
-
         if 'donate' in request.POST and not target_reached:
             if donation_form.is_valid():
-                # Create PayPal payment
-                donation_amount = request.POST.get('amount')
-                
+                donation_amount = donation_form.cleaned_data['amount']
+
                 payment = paypalrestsdk.Payment({
                     "intent": "sale",
                     "payer": {"payment_method": "paypal"},
@@ -1005,15 +1081,13 @@ def donate(request, campaign_id):
                         "item_list": {"items": [{
                             "name": f"Donation for {campaign.title}",
                             "sku": "donation",
-                            "price": donation_amount,
+                            "price": str(donation_amount),
                             "currency": "USD",
                             "quantity": 1
                         }]},
-                        "amount": {"total": donation_amount, "currency": "USD"},
+                        "amount": {"total": str(donation_amount), "currency": "USD"},
                         "description": f"Donation for {campaign.title}",
-                        "payee": {
-                            "email": fund.paypal_email
-                        }
+                        "payee": {"email": fund.paypal_email}
                     }]
                 })
 
@@ -1022,49 +1096,26 @@ def donate(request, campaign_id):
                         if link.rel == "approval_url":
                             return redirect(link.href)
                 else:
-                    messages.error(request, 'Error creating PayPal payment.')
+                    messages.error(request, f"Payment error: {payment.error}")
 
-        elif 'update_campaign' in request.POST:
-            if fund_form.is_valid():
-                fund_form.save()
-                messages.success(request, 'Donation info updated successfully.')
-            else:
-                messages.error(request, 'Error updating donation info.')
+        elif 'update_campaign' in request.POST and fund_form.is_valid():
+            fund_form.save()
+            messages.success(request, 'Donation info updated successfully.')
 
-    else:
-        donation_form = DonationForm()
-        fund_form = CampaignFundForm(instance=fund)
-
-    user_profile = get_object_or_404(Profile, user=request.user)
-    user_profile.last_campaign_check = timezone.now()
-    user_profile.save()
-    ads = NativeAd.objects.all() 
     return render(request, 'revenue/donation.html', {
         'campaign': campaign,
         'form': donation_form,
         'fund_form': fund_form,
         'fund': fund,
         'target_reached': target_reached,
-        'user_profile': user_profile,
-        'ads':ads,
     })
 
 
-
-from django.urls import reverse
-from decimal import Decimal
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, redirect
-from django.contrib import messages
-import paypalrestsdk
-
 @login_required
 def payment_success(request, campaign_id):
-    # Extract PayPal payment information
     payment_id = request.GET.get('paymentId')
     payer_id = request.GET.get('PayerID')
 
-    # Check if this payment has already been processed
     if Donation.objects.filter(transaction_id=payment_id).exists():
         messages.warning(request, 'This payment has already been processed.')
         return redirect('donate', campaign_id=campaign_id)
@@ -1072,71 +1123,50 @@ def payment_success(request, campaign_id):
     payment = paypalrestsdk.Payment.find(payment_id)
 
     if payment.execute({"payer_id": payer_id}):
-        # Payment was successful, update campaign fund
         campaign = get_object_or_404(Campaign, id=campaign_id)
         fund = CampaignFund.objects.get(campaign=campaign)
         amount = Decimal(payment.transactions[0].amount.total)
 
-        # Deduct commission fee (fixed amount)
-        commission_fee = Decimal('0.30')  # Example commission fee
+        commission_fee = Decimal('0.30')
         net_amount = amount - commission_fee
-
-        # Update the amount raised
         fund.amount_raised += net_amount
         fund.save()
 
-        # Create the donation record (with transaction ID to avoid duplicates)
         Donation.objects.create(
             campaign=campaign,
-            amount=net_amount,  # Store the net amount after deductions
-            donor_name=request.user.username,  # or anonymous if you allow it
-            transaction_id=payment_id  # Store the PayPal payment ID
+            amount=net_amount,
+            donor_name=request.user.username,
+            transaction_id=payment_id
         )
 
-        # Send commission to your PayPal account
         payout = paypalrestsdk.Payout({
             "sender_batch_header": {
-                "sender_batch_id": str(payment_id),
+                "sender_batch_id": payment_id,
                 "email_subject": "Commission Payment"
             },
             "items": [{
                 "recipient_type": "EMAIL",
-                "amount": {
-                    "value": str(commission_fee),
-                    "currency": "USD"
-                },
-                "receiver": "k@gmail.com",  # Your PayPal email
+                "amount": {"value": str(commission_fee), "currency": "USD"},
+                "receiver": "k@gmail.com",
                 "note": f"Commission for donation {payment_id}",
-                "sender_item_id": str(payment_id)
+                "sender_item_id": payment_id
             }]
         })
 
-        # Create payout with asynchronous mode
         if payout.create(sync_mode=False):
-            messages.success(request, 'Thank you for your donation! A commission has been processed.')
+            messages.success(request, 'Donation successful! Commission processed.')
         else:
-            messages.error(request, f'Failed to process commission. Error: {payout.error}')
-
-        # Calculate the updated progress percentage
-        if fund.target_amount > 0:
-            fund.progress_percentage = (fund.amount_raised / fund.target_amount) * 100
-        else:
-            fund.progress_percentage = 100  # Avoid division by zero
-
-        fund.save()  # Save the updated progress percentage
+            messages.error(request, f"Commission failed: {payout.error}")
 
         return redirect('donate', campaign_id=campaign_id)
 
-    # If payment execution failed
-    messages.error(request, 'Payment failed. Please try again.')
+    messages.error(request, 'Payment execution failed.')
     return redirect('donate', campaign_id=campaign_id)
-
 
 @login_required
 def payment_cancel(request):
     messages.warning(request, 'Payment was cancelled.')
     return redirect('donate')
-
 
 
 
@@ -2269,14 +2299,12 @@ def home(request):
 
     # Get campaigns, annotate whether the user marked them as "not interested"
     campaigns = Campaign.objects.annotate(
-   
-    is_not_interested=Case(
-        When(not_interested_by__user=user_profile, then=Value(True)),
-        default=Value(False),
-        output_field=BooleanField(),
-    )
-).filter(is_not_interested=False, visibility='public')
-
+        is_not_interested=Case(
+            When(not_interested_by__user=user_profile, then=Value(True)),
+            default=Value(False),
+            output_field=BooleanField(),
+        )
+    ).filter(is_not_interested=False, visibility='public')
 
     # Apply category filter if provided
     if category_filter:
@@ -2313,6 +2341,28 @@ def home(request):
     ads = NativeAd.objects.all()
     categories = Campaign.objects.values_list('category', flat=True).distinct()  # Fetch unique categories
 
+    # Get suggested users with followers count
+    current_user_following = user_profile.following.all()
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+    suggested_users = []
+    
+    for profile in all_profiles:
+        similarity_score = calculate_similarity(user_profile, profile)
+        if similarity_score >= 0.5:
+            # Get followers count for each suggested user
+            followers_count = Follow.objects.filter(followed=profile.user).count()
+            suggested_users.append({
+                'user': profile.user,
+                'followers_count': followers_count
+            })
+
+    # Limit to only 2 suggested users
+    suggested_users = suggested_users[:2]
+# Annotate profiles with campaign count and total raised
+    top_contributors = Profile.objects.annotate(
+    campaign_count=Count('user_campaigns'),
+    total_raised=Sum('user_campaigns__target_amount')
+).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
     return render(request, 'main/home.html', {
         'ads': ads,
         'public_campaigns': campaigns_to_display if campaigns_to_display.exists() else trending_campaigns,
@@ -2324,8 +2374,10 @@ def home(request):
         'new_campaigns_from_follows': new_campaigns_from_follows,
         'categories': categories,  # Pass categories to template
         'selected_category': category_filter,  # Pass selected category to retain state
+        'trending_campaigns': trending_campaigns,
+        'suggested_users': suggested_users,
+        'top_contributors': top_contributors,
     })
-
 
 
 @login_required

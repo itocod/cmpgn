@@ -303,14 +303,19 @@ class CampaignForm(forms.ModelForm):
 class CampaignFundForm(forms.ModelForm):
     class Meta:
         model = CampaignFund
-        fields = ['paypal_email']  # Exclude target_amount
+        fields = ['target_amount', 'paypal_email']  # Include target_amount
         labels = {
-            'paypal_email': 'PayPal Email:'
+            'paypal_email': 'PayPal Email:',
+            'target_amount': 'Target Amount:'
         }
         widgets = {
             'paypal_email': forms.EmailInput(attrs={
-                'class': 'form-control', 
+                'class': 'form-control',
                 'placeholder': 'Enter PayPal email'
+            }),
+            'target_amount': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter target amount'
             })
         }
 
