@@ -54,7 +54,7 @@ class Profile(models.Model):
     last_chat_check = models.DateTimeField(default=timezone.now)
     profile_verified = models.BooleanField(default=False)  # Renamed from `is_verified
     # Other fields...
-    contacts = models.TextField(blank=True, null=True, help_text="Comma-separated list of phone numbers/emails")
+
  
 
     def age(self):
@@ -219,7 +219,11 @@ class Campaign(models.Model):
     content = models.TextField()
     poster = models.ImageField(upload_to='campaign_files', null=True, blank=True)
     audio = models.FileField(upload_to='campaign_audio', null=True, blank=True)
-    target_amount = models.DecimalField(max_digits=12, decimal_places=2, null=True, blank=True)  # Goal amount
+    target_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    amount_raised = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    is_active = models.BooleanField(default=True)  # Stops donations when target is met
+    stripe_connected_account_id = models.CharField(max_length=100, blank=True, null=True)  # Stripe Connect ID
+
 
     CATEGORY_CHOICES = (
     # Survival Essentials
@@ -293,7 +297,13 @@ class Campaign(models.Model):
             remaining = end_time - timezone.now()
             return max(remaining.days, 0)
 
+    def progress_percentage(self):
+        return (self.amount_raised / self.target_amount) * 100 if self.target_amount > 0 else 0
 
+    def check_target_reached(self):
+        if self.amount_raised >= self.target_amount:
+            self.is_active = False
+            self.save()
 
 
     def __str__(self):
@@ -647,32 +657,21 @@ class CampaignProduct(models.Model):
 
 
 
-
-from decimal import Decimal
-from django.db import models
-
-class CampaignFund(models.Model):
-    campaign = models.OneToOneField(Campaign, on_delete=models.CASCADE)
-    target_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    amount_raised = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    paypal_email = models.EmailField(default="paypal_email@example.com")
-
-    def save(self, *args, **kwargs):
-        if not self.target_amount:
-            self.target_amount = self.campaign.target_amount
-        super().save(*args, **kwargs)
-
-    def progress_percentage(self):
-        if self.target_amount > 0:
-            return (self.amount_raised / self.target_amount) * 100
-        return Decimal(0)
-
 class Donation(models.Model):
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    donor_name = models.CharField(max_length=255, default="Anonymous")
-    transaction_id = models.CharField(max_length=255, unique=True, null=True)
-    created_at = models.DateTimeField(default=timezone.now)
+    donor_name = models.ForeignKey(Profile, null=True, blank=True, on_delete=models.SET_NULL)
+    stripe_payment_intent_id = models.CharField(max_length=255, null=True, blank=True)
+
+    timestamp = models.DateTimeField(auto_now_add=True, null=True)
+
+
+    def __str__(self):
+        return f"Donation of ${self.amount} to {self.campaign.title}"
+
+
+
+
 
 
 

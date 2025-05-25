@@ -59,6 +59,7 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'allauth.account.middleware.AccountMiddleware',
     'buskx.middlewares.LegalLinksMiddleware',
+    
 ]
 
 ROOT_URLCONF = 'buskx.urls'
@@ -196,7 +197,6 @@ ACCOUNT_USERNAME_REQUIRED = False
 
 
 
-
 # TinyMCE configuration
 TINYMCE_DEFAULT_CONFIG = {
     'height': 360,
@@ -240,8 +240,10 @@ SITE_URL = 'https://www.rallynex.com'
 SITE_DOMAIN = 'www.rallynex.com'
 
 
-# PayPal settings
-PAYPAL_CLIENT_ID = env('PAYPAL_CLIENT_ID')
-PAYPAL_CLIENT_SECRET = env('PAYPAL_CLIENT_SECRET')
-PAYPAL_MODE = env('PAYPAL_MODE')  #
+
+
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
+STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY')
+STRIPE_WEBHOOK_SECRET = os.getenv('STRIPE_WEBHOOK_SECRET')
+
 

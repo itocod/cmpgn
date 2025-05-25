@@ -2,6 +2,8 @@ from django.urls import path, include
 from . import views
 from .views import CustomLoginView
 from .views import CampaignDeleteView
+# urls.py
+from .views import donate, payment_success, payment_cancel, stripe_webhook
 
 
 from .views import campaign_story_list, campaign_story_detail
@@ -18,8 +20,18 @@ path('campaigns/', views.campaign_list, name='campaign_list'),
     path('campaign/<int:campaign_id>/join_leave/', views.join_leave_campaign, name='join_leave_campaign'),
     path('campaign/<int:campaign_id>/joiners/', views.campaign_joiners, name='campaign_joiners'),
     path('fund/', views.fund, name='fund'),
-    path('payment-success/<int:campaign_id>/', views.payment_success, name='payment_success'),
-    path('payment-cancel/', views.payment_cancel, name='payment_cancel'),
+
+
+
+
+    path('webhook/stripe/', views.stripe_webhook, name='stripe_webhook'),
+    path('payment/success/<int:campaign_id>/', views.payment_success, name='payment_success'),
+    path('payment/cancel/', views.payment_cancel, name='payment_cancel'),
+
+
+
+
+
     path('campaign/delete/<int:pk>/', CampaignDeleteView.as_view(), name='campaign-delete'),
     path('libraries/', views.library_affiliates, name='library_affiliates'),
     path('news/', views.news_affiliates, name='news_affiliates'),

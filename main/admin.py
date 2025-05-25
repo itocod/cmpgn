@@ -15,7 +15,7 @@ from .models import Subscriber
 from .models import AffiliateLibrary, AffiliateNewsSource
 from .models import NativeAd
 
-from .models import Campaign, CampaignFund
+from .models import Campaign
 from .models import Donation  # Adjust the import based on your project structure
 
 from .models import  ChangemakerAward,UserVerification
@@ -58,16 +58,18 @@ admin.site.register(ChangemakerAward, ChangemakerAwardAdmin)
 
 
 
-
+@admin.register(Donation)
 class DonationAdmin(admin.ModelAdmin):
-    list_display = ('id', 'campaign', 'amount', 'donor_name', 'transaction_id')  # Exclude created_at
-    search_fields = ('donor_name', 'transaction_id')  # Enable search by donor name and transaction ID
-    list_filter = ('campaign',)  # Allow filtering by campaign
+    list_display = ('id', 'campaign', 'amount', 'get_donor_name', 'stripe_payment_intent_id', 'timestamp')
 
-    # Optional: Add any additional configurations like ordering, etc.
-    ordering = ('-id',)  # Order by ID, descending
+    def get_donor_name(self, obj):
+        return obj.donor_name.user.username if obj.donor_name and obj.donor_name.user else "Anonymous"
+    get_donor_name.short_description = 'Donor Name'
 
-admin.site.register(Donation, DonationAdmin) 
+
+
+
+
 
 @admin.register(Campaign)
 class CampaignAdmin(admin.ModelAdmin):
@@ -75,18 +77,6 @@ class CampaignAdmin(admin.ModelAdmin):
     search_fields = ('user__user__username', 'title')
     list_filter = ('timestamp',)
 
-    # Add the inline for CampaignFund
-    class CampaignFundInline(admin.StackedInline):
-        model = CampaignFund
-        extra = 1  # Number of empty forms to display
-
-    inlines = [CampaignFundInline]
-    
-@admin.register(CampaignFund)
-class CampaignFundAdmin(admin.ModelAdmin):
-    list_display = ('campaign', 'target_amount', 'amount_raised', 'paypal_email')
-    search_fields = ('campaign__title',)
-    readonly_fields = ('target_amount',)  # Make target_amount read-only
 
 
 

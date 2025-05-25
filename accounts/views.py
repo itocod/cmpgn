@@ -30,7 +30,7 @@ from dotenv import load_dotenv
 
 from main.models import (
     Profile, Campaign, Comment, Follow, Activity, SupportCampaign, Brainstorming,
-    User, Love, CampaignView, Chat, Notification, Message, CampaignFund,
+    User, Love, CampaignView, Chat, Notification, Message,
     AffiliateLink, AffiliateLibrary, AffiliateNewsSource, NativeAd,
     Report, NotInterested, QuranVerse, Surah, Adhkar, Hadith,
     PlatformFund, Donation, CampaignProduct, ActivityComment, ActivityLove
@@ -39,7 +39,7 @@ from main.models import (
 from main.forms import (
     UserForm, ProfileForm, CampaignForm, CommentForm, ActivityForm, ActivityFormSet,
     SupportForm, ChatForm, MessageForm, CampaignSearchForm, ProfileSearchForm,
-    BrainstormingForm, CampaignFundForm, CampaignProductForm, ReportForm, NotInterestedForm,
+    BrainstormingForm, CampaignProductForm, ReportForm, NotInterestedForm,
     SubscriptionForm, DonationForm, UpdateVisibilityForm, ActivityCommentForm,
     UserVerificationForm
 )

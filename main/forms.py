@@ -9,7 +9,7 @@ from .models import ActivityComment,CampaignProduct
 from tinymce.widgets import TinyMCE
 from .models import Report
 from .models import NotInterested
-from .models import Subscriber,Donation,CampaignFund
+from .models import Subscriber,Donation
 
 from django.core.exceptions import ValidationError
 from django import forms
@@ -300,45 +300,28 @@ class CampaignForm(forms.ModelForm):
         return content
 
 
-class CampaignFundForm(forms.ModelForm):
-    class Meta:
-        model = CampaignFund
-        fields = ['target_amount', 'paypal_email']  # Include target_amount
-        labels = {
-            'paypal_email': 'PayPal Email:',
-            'target_amount': 'Target Amount:'
-        }
-        widgets = {
-            'paypal_email': forms.EmailInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Enter PayPal email'
-            }),
-            'target_amount': forms.NumberInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Enter target amount'
-            })
-        }
 
 
 
-class DonationForm(forms.ModelForm):
-    class Meta:
-        model = Donation
-        fields = ['donor_name', 'amount']
-        labels = {
-            'donor_name': 'Your Name (optional):',
-            'amount': 'Donation Amount:',
-        }
-        widgets = {
-            'donor_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your name'}),
-            'amount': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter donation amount'}),
-        }
+from django import forms
+from decimal import Decimal
+
+class DonationForm(forms.Form):
+    amount = forms.DecimalField(min_value=1.00, max_digits=10, decimal_places=2)
+    tip_for_platform = forms.DecimalField(
+        required=False,
+        initial=0.00,
+        min_value=0.00,
+        max_digits=10,
+        decimal_places=2,
+        label="Tip for Platform (Optional)"
+    )
 
 
 
 
 
-
+    
 
 
 class ChatForm(forms.ModelForm):
