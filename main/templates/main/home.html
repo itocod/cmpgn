@@ -984,18 +984,30 @@ border: 1px solid silver;
 
 
 
+
+/* Light mode (default) styles remain the same */
 .sidebar-box {
-    border-left: 2px solid #c0c0c0; /* Silver color */
+    border-left: 2px solid #c0c0c0;
     height: 800px;
     overflow-y: auto;
     overflow-x: hidden;
     border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(192, 192, 192, 0.3); /* Lighter silver shadow */
-    padding: 0; /* Optional, for spacing inside the box */
-    background-color: #f8f8f8; /* Optional: light silver-ish background */
+    box-shadow: 0 2px 4px rgba(192, 192, 192, 0.3);
+    padding: 0;
+    background-color: #f8f8f8;
+}
+.sidebar-box {
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+/* Dark mode styles */
+.dark-mode .sidebar-box {
+    border-left: 2px solid #444; /* Darker border */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Darker shadow */
+    background-color: #2d2d2d; /* Dark background */
+    color: #e0e0e0; /* Light text color */
 }
 
-/* On small devices, remove styling but keep the content visible */
+/* Mobile styles remain the same */
 @media (max-width: 767px) {
     .sidebar-box {
         border: none;
@@ -1004,9 +1016,19 @@ border: 1px solid silver;
         border-radius: 0;
         box-shadow: none;
         padding: 0;
-        background-color: transparent; /* Remove background on mobile if desired */
+        background-color: transparent;
+    }
+    
+    /* Dark mode mobile override */
+    .dark-mode .sidebar-box {
+        background-color: transparent; /* Keep transparent in dark mode on mobile */
+        color: inherit; /* Inherit text color from parent */
     }
 }
+
+
+
+
 
 .navbar {
     position: fixed;
@@ -1908,6 +1930,153 @@ body.dark-mode .comment-count {
 }
 
 
+
+
+/* ===== Dark Mode Styles ===== */
+.dark-mode .simple-campaigns-container {
+    background-color: #121212;
+}
+
+.dark-mode .simple-campaign-card {
+    background: #1e1e1e;
+    border-color: #333;
+}
+
+.dark-mode .creator-name,
+.dark-mode .simple-campaign-title,
+.dark-mode .campaign-caption strong {
+    color: #f0f0f0;
+}
+
+.dark-mode .campaign-time,
+.dark-mode .simple-campaign-objective,
+.dark-mode .campaign-caption,
+.dark-mode .campaign-content-points,
+.dark-mode .runtime-info {
+    color: #b0b0b0;
+}
+
+.dark-mode .campaign-menu {
+    color: #b0b0b0;
+}
+
+.dark-mode .menu-dropdown {
+    background: #2d2d2d;
+    border-color: #444;
+}
+
+.dark-mode .menu-dropdown a {
+    color: #e0e0e0;
+}
+
+.dark-mode .menu-dropdown a:hover {
+    background: #383838;
+}
+
+.dark-mode .no-image-placeholder {
+    background: #2a2a2a;
+    color: #666;
+}
+
+.dark-mode .status-badge.active {
+    background: #1b5e20;
+    color: #a5d6a7;
+}
+
+.dark-mode .status-badge.outdated {
+    background: #b71c1c;
+    color: #ffcdd2;
+}
+
+.dark-mode .simple-actions {
+    border-top-color: #333;
+}
+
+.dark-mode .simple-action-btn {
+    color: #b0b0b0;
+}
+
+.dark-mode .simple-action-btn:hover {
+    color: #e0e0e0;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.dark-mode .simple-action-btn.love-btn {
+    color: #ff2d55;
+}
+
+.dark-mode .simple-action-btn.love-btn:hover {
+    color: #ff6b8b;
+}
+
+.dark-mode .participation-link {
+    background: #2a2a2a;
+    color: #e0e0e0;
+}
+
+.dark-mode .participation-link:hover {
+    background: #383838;
+}
+
+.dark-mode .participation-link i {
+    color: #64b5f6;
+}
+
+.dark-mode .see-more-btn,
+.dark-mode .see-less-btn {
+    color: #64b5f6;
+}
+
+.dark-mode .see-more-btn:hover,
+.dark-mode .see-less-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #90caf9;
+}
+
+/* Overlay elements in dark mode */
+.dark-mode .join-prompt,
+.dark-mode .campaign-views-overlay {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.dark-mode .campaign-views-overlay:hover {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+/* Progress bar adjustments */
+.dark-mode .progress-bar {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Donate button in dark mode */
+.dark-mode .simple-donate-btn {
+    background: #ff7043;
+}
+
+/* Join/Leave buttons in dark mode */
+.dark-mode .simple-join-btn {
+    background: #1976d2;
+}
+
+.dark-mode .simple-join-btn.leave-btn {
+    background: #d32f2f;
+}
+
+/* List bullets in dark mode */
+.dark-mode .campaign-content-points li:before {
+    color: #666;
+}
+
+/* Mobile adjustments for dark mode */
+@media (max-width: 480px) {
+    .dark-mode .simple-campaign-card {
+        border-color: #333;
+    }
+}
+
+
+
+
 /* Views Counter with Tooltip */
 .campaign-views-overlay {
     position: absolute;
@@ -2252,6 +2421,41 @@ body.dark-mode .comment-count {
     .simple-action-btn:hover .action-label,
     .simple-action-btn:active .action-label {
         top: -25px;
+    }
+}
+
+
+
+/* ===== Dark Mode Styles for Action Labels ===== */
+.dark-mode .action-label {
+    background: rgba(255, 255, 255, 0.9);
+    color: #121212;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .action-label::after {
+    border-color: rgba(255, 255, 255, 0.9) transparent transparent;
+}
+
+/* Adjust hover states in dark mode */
+.dark-mode .simple-action-btn:hover .action-label,
+.dark-mode .simple-action-btn:active .action-label,
+.dark-mode .simple-action-btn:focus .action-label {
+    background: rgba(255, 255, 255, 0.95);
+}
+
+/* Love button tooltip special case */
+.dark-mode .simple-action-btn.love-btn:hover .action-label,
+.dark-mode .simple-action-btn.love-btn:active .action-label,
+.dark-mode .simple-action-btn.love-btn:focus .action-label {
+    background: rgba(255, 255, 255, 0.95);
+    color: #121212;
+}
+
+/* Mobile adjustments for dark mode */
+@media (max-width: 480px) {
+    .dark-mode .action-label {
+        background: rgba(255, 255, 255, 0.95);
     }
 }
 </style>
@@ -2781,7 +2985,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 
 <style>
-.newsletter-signup {
+.subscription-box {
   margin-top: 24px;
   background: #fff;
   border-radius: 12px;
@@ -2791,28 +2995,28 @@ document.addEventListener('DOMContentLoaded', function() {
   color: white;
 }
 
-.newsletter-header {
+.subscription-header {
   margin-bottom: 16px;
 }
 
-.newsletter-title {
+.subscription-title {
   font-size: 18px;
   font-weight: 600;
   margin: 0;
 }
 
-.newsletter-text {
+.subscription-description {
   font-size: 14px;
   margin-bottom: 16px;
   opacity: 0.9;
 }
 
-.newsletter-form {
+.subscription-form {
   display: flex;
   flex-direction: column;
 }
 
-.newsletter-input {
+.subscription-email {
   padding: 12px;
   border-radius: 6px;
   border: none;
@@ -2820,7 +3024,7 @@ document.addEventListener('DOMContentLoaded', function() {
   font-size: 14px;
 }
 
-.newsletter-btn {
+.subscription-button {
   background: white;
   color: #1877f2;
   border: none;
@@ -2831,34 +3035,71 @@ document.addEventListener('DOMContentLoaded', function() {
   transition: all 0.2s;
 }
 
-.newsletter-btn:hover {
+.subscription-button:hover {
   background: #f0f2f5;
 }
 
-.newsletter-privacy {
+.subscription-note {
   font-size: 11px;
   opacity: 0.8;
   margin-top: 8px;
 }
+
+/* ===== Dark Mode Styles ===== */
+.dark-mode .subscription-box {
+  background: linear-gradient(135deg, #0d5bb5, #0a4a9c);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dark-mode .subscription-email {
+  background: rgba(255, 255, 255, 0.9);
+  color: #121212;
+}
+
+.dark-mode .subscription-email::placeholder {
+  color: #666;
+}
+
+.dark-mode .subscription-button {
+  background: rgba(255, 255, 255, 0.95);
+  color: #0d5bb5;
+}
+
+.dark-mode .subscription-button:hover {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.dark-mode .subscription-note {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Optional transitions for smooth mode switching */
+.subscription-box,
+.subscription-email,
+.subscription-button {
+  transition: all 0.3s ease;
+}
+
 </style>
 
-<div class="newsletter-signup">
-  <div class="newsletter-header">
-    <h3 class="newsletter-title"><i class="fas fa-envelope"></i> Stay Updated</h3>
+<div class="subscription-box">
+  <div class="subscription-header">
+    <h3 class="subscription-title"><i class="fas fa-envelope"></i> Stay Updated</h3>
   </div>
   
-  <p class="newsletter-text">
+  <p class="subscription-description">
     Get the latest campaigns, success stories and community updates in your inbox.
   </p>
   
-  <form class="newsletter-form">
-    <input type="email" class="newsletter-input" placeholder="Your email address">
-    <button type="submit" class="newsletter-btn">Subscribe</button>
-    <p class="newsletter-privacy">
+  <form class="subscription-form">
+    <input type="email" class="subscription-email" placeholder="Your email address">
+    <button type="submit" class="subscription-button">Subscribe</button>
+    <p class="subscription-note">
       We respect your privacy. Unsubscribe at any time.
     </p>
   </form>
 </div>
+
 </aside>
 
 
@@ -3599,6 +3840,37 @@ document.addEventListener('DOMContentLoaded', function() {
       color: #000; /* Explicit color */
       font-weight: 500;
     }
+
+    /* ===== Dark Mode Styles for Quick Actions ===== */
+.dark-mode .quick-actions {
+  background: #1e1e1e;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dark-mode .action-btn {
+  background: #2d2d2d;
+  transition: background-color 0.2s ease;
+}
+
+.dark-mode .action-btn:hover {
+  background: #383838;
+}
+
+.dark-mode .action-icon {
+  color: #64b5f6; /* Lighter blue for better visibility */
+}
+
+.dark-mode .action-label {
+  color: #e0e0e0; /* Light text for readability */
+}
+
+/* Optional: Add smooth transitions for all elements */
+.quick-actions,
+.action-btn,
+.action-icon,
+.action-label {
+  transition: all 0.3s ease;
+}
 </style>
 
 
@@ -3686,6 +3958,55 @@ document.addEventListener('DOMContentLoaded', function() {
   font-size: 14px;
   font-weight: 500;
   text-decoration: none;
+}
+
+/* ===== Dark Mode Styles for Top Contributors ===== */
+.dark-mode .top-contributors {
+  background: #1e1e1e;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.dark-mode .contributors-title {
+  color: #e0e0e0;
+}
+
+.dark-mode .contributor-img {
+  border-color: #333;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+.dark-mode .contributor-name {
+  color: #f0f0f0;
+}
+
+.dark-mode .contributor-stats {
+  color: #b0b0b0;
+}
+
+.dark-mode .view-all-contributors a {
+  color: #64b5f6;
+}
+
+/* Contributor badges in dark mode */
+.dark-mode .contributor-badge {
+  color: #000; /* Keep text black for contrast */
+  box-shadow: 0 0 0 2px #1e1e1e; /* Creates outline effect */
+}
+
+/* Hover effects for dark mode */
+.dark-mode .view-all-contributors a:hover {
+  color: #90caf9;
+  text-decoration: underline;
+}
+
+/* Optional: Add smooth transitions */
+.top-contributors,
+.contributors-title,
+.contributor-img,
+.contributor-name,
+.contributor-stats,
+.view-all-contributors a {
+  transition: all 0.3s ease;
 }
 </style>
 
@@ -3999,6 +4320,158 @@ document.addEventListener('DOMContentLoaded', function() {
 .error-loading-replies .retry-btn:hover {
     background-color: #0b7dda;
 }
+/* ===== Dark Mode Styles for Comment Popup ===== */
+.dark-mode .comment-popup-container {
+    background-color: rgba(0, 0, 0, 0.85);
+}
+
+.dark-mode .comment-popup-content {
+    background-color: #1e1e1e;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.dark-mode .close-comment-popup {
+    color: #888;
+}
+
+.dark-mode .close-comment-popup:hover {
+    color: #e0e0e0;
+}
+
+.dark-mode .comment-form-container {
+    border-bottom-color: #333;
+}
+
+.dark-mode .comment-textarea {
+    background-color: #2d2d2d;
+    border-color: #444;
+    color: #e0e0e0;
+}
+
+.dark-mode .comment-textarea::placeholder {
+    color: #888;
+}
+
+.dark-mode .submit-comment-btn {
+    background-color: #388e3c;
+}
+
+.dark-mode .submit-comment-btn:hover {
+    background-color: #2e7d32;
+}
+
+.dark-mode .comment-item {
+    border-bottom-color: #333;
+}
+
+.dark-mode .comment-user {
+    color: #e0e0e0;
+}
+
+.dark-mode .comment-user:hover {
+    color: #81c784;
+}
+
+.dark-mode .comment-timestamp {
+    color: #888;
+}
+
+.dark-mode .comment-text {
+    background-color: #2d2d2d;
+    color: #e0e0e0;
+}
+
+.dark-mode .comment-text:before {
+    border-right-color: #2d2d2d;
+}
+
+.dark-mode .current-user-preview {
+    background-color: #2a2a2a;
+}
+
+.dark-mode .comment-user-img {
+    border-color: #444;
+}
+
+.dark-mode .comment-actions button {
+    color: #888;
+}
+
+.dark-mode .comment-actions button:hover {
+    background-color: #333;
+    color: #e0e0e0;
+}
+
+.dark-mode .comment-actions .like-comment-btn.active {
+    color: #81c784;
+}
+
+.dark-mode .comment-actions .dislike-comment-btn.active {
+    color: #e57373;
+}
+
+.dark-mode .reply-form-container {
+    background-color: #2a2a2a;
+    border-left-color: #444;
+}
+
+.dark-mode .reply-textarea {
+    background-color: #2d2d2d;
+    border-color: #444;
+    color: #e0e0e0;
+}
+
+.dark-mode .submit-reply-btn {
+    background-color: #388e3c;
+}
+
+.dark-mode .submit-reply-btn:hover {
+    background-color: #2e7d32;
+}
+
+.dark-mode .cancel-reply-btn {
+    background-color: #d32f2f;
+}
+
+.dark-mode .cancel-reply-btn:hover {
+    background-color: #b71c1c;
+}
+
+.dark-mode .replies-container {
+    border-left-color: #444;
+}
+
+.dark-mode .loading-replies,
+.dark-mode .no-replies,
+.dark-mode .error-loading-replies {
+    color: #888;
+}
+
+.dark-mode .error-loading-replies .retry-btn {
+    background-color: #1976d2;
+}
+
+.dark-mode .error-loading-replies .retry-btn:hover {
+    background-color: #1565c0;
+}
+
+/* Additional dark mode improvements */
+.dark-mode .comment-popup-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.dark-mode .comment-popup-content::-webkit-scrollbar-track {
+    background: #2d2d2d;
+}
+
+.dark-mode .comment-popup-content::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+}
+
+.dark-mode .comment-popup-content::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
 </style>
 
 
@@ -4135,7 +4608,68 @@ document.addEventListener('DOMContentLoaded', function() {
   margin-right: 4px;
 }
 
-.
+/* ===== Dark Mode Styles ===== */
+.dark-mode .section-title {
+  color: #e0e0e0;
+}
+
+.dark-mode .see-all {
+  color: #64b5f6;
+}
+
+.dark-mode .see-all:hover {
+  color: #90caf9;
+}
+
+.dark-mode .user-card {
+  background-color: transparent;
+}
+
+.dark-mode .user-card:hover {
+  background-color: #2d2d2d;
+}
+
+.dark-mode .avatar-img {
+  border-color: #333;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .online-status {
+  border-color: #1e1e1e;
+}
+
+.dark-mode .user-name {
+  color: #f0f0f0;
+}
+
+.dark-mode .user-bio,
+.dark-mode .user-meta {
+  color: #b0b0b0;
+}
+
+.dark-mode .follow-btn {
+  background-color: rgba(100, 181, 246, 0.1);
+  color: #64b5f6;
+}
+
+.dark-mode .follow-btn:hover {
+  background-color: rgba(100, 181, 246, 0.2);
+}
+
+.dark-mode .verified-badge {
+  color: #64b5f6;
+}
+
+/* Optional: Add smooth transitions */
+.section-title,
+.see-all,
+.user-card,
+.user-name,
+.user-bio,
+.user-meta,
+.follow-btn {
+  transition: all 0.3s ease;
+}
 </style>
 
 
@@ -4315,6 +4849,92 @@ document.addEventListener('DOMContentLoaded', function() {
 .trending-rank-3 {
   color: #fadb14;
   font-weight: 700;
+}
+
+
+
+/* ===== Dark Mode Styles for Trending Now ===== */
+.dark-mode .trending-title {
+  color: #e0e0e0;
+}
+
+.dark-mode .trending-title i {
+  color: #64b5f6;
+}
+
+.dark-mode .refresh-btn {
+  color: #b0b0b0;
+}
+
+.dark-mode .refresh-btn:hover {
+  background-color: #2d2d2d;
+  color: #64b5f6;
+}
+
+.dark-mode .trending-item:hover {
+  background-color: #2d2d2d;
+}
+
+.dark-mode .trending-rank {
+  color: #b0b0b0;
+}
+
+.dark-mode .trending-topic {
+  color: #f0f0f0;
+}
+
+.dark-mode .trending-topic i {
+  color: #64b5f6;
+}
+
+.dark-mode .trending-meta {
+  color: #b0b0b0;
+}
+
+.dark-mode .trending-category {
+  background-color: rgba(100, 181, 246, 0.1);
+  color: #64b5f6;
+}
+
+.dark-mode .view-more a {
+  color: #64b5f6;
+}
+
+.dark-mode .view-more a:hover {
+  color: #90caf9;
+}
+
+/* Rank colors in dark mode */
+.dark-mode .trending-rank-1 {
+  color: #ff6b6b;
+}
+
+.dark-mode .trending-rank-2 {
+  color: #ffa940;
+}
+
+.dark-mode .trending-rank-3 {
+  color: #ffec3d;
+}
+
+/* Hot badge in dark mode */
+.dark-mode .trending-hot {
+  background-color: #ff6b6b;
+  box-shadow: 0 0 0 2px #1e1e1e;
+}
+
+/* Animation remains the same in dark mode */
+.dark-mode .trending-hot {
+  animation: pulse 2s infinite;
+}
+
+/* Optional transitions */
+.trending-item,
+.trending-topic,
+.trending-rank,
+.refresh-btn,
+.trending-category {
+  transition: all 0.3s ease;
 }
 </style>
 
@@ -4496,7 +5116,102 @@ document.addEventListener('DOMContentLoaded', function() {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+/* ===== Dark Mode Styles for Share Popup ===== */
+.dark-mode .share-popup {
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(6px); /* Slightly stronger blur in dark mode */
+}
 
+.dark-mode .share-popup-content {
+    background: #1e1e1e;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+    border: 1px solid #333; /* Added subtle border for depth */
+}
+
+.dark-mode .popup-title {
+    color: #f0f0f0;
+}
+
+.dark-mode .close-btn {
+    color: #888;
+}
+
+.dark-mode .close-btn:hover {
+    color: #f0f0f0;
+    transform: scale(1.1);
+}
+
+.dark-mode .link-copy-section {
+    border-top-color: #333;
+}
+
+.dark-mode .link-copy-title {
+    color: #b0b0b0;
+}
+
+.dark-mode .link-input {
+    background: #2d2d2d;
+    color: #e0e0e0;
+    border-right: 1px solid #333; /* Add separator */
+}
+
+.dark-mode .link-copy-container {
+    border-color: #444;
+}
+
+/* Platform buttons - maintain brand colors but adjust hover states */
+.dark-mode .share-btn {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.dark-mode .share-btn:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    filter: brightness(1.1); /* Slightly brighten on hover */
+}
+
+/* Copy button adjustments */
+.dark-mode .copy-btn {
+    background: #4a6bff;
+}
+
+.dark-mode .copy-btn:hover {
+    background: #3a5bef;
+    filter: brightness(1.1);
+}
+
+/* Scrollbar styling for dark mode */
+.dark-mode .share-popup-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.dark-mode .share-popup-content::-webkit-scrollbar-track {
+    background: #2d2d2d;
+}
+
+.dark-mode .share-popup-content::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 4px;
+}
+
+.dark-mode .share-popup-content::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
+
+/* Responsive adjustments */
+@media (max-width: 500px) {
+    .dark-mode .share-popup-content {
+        margin: 5vh auto;
+        padding: 20px;
+    }
+    
+    .dark-mode .share-grid {
+        gap: 10px;
+    }
+    
+    .dark-mode .share-btn {
+        padding: 10px;
+    }
+}
 
 </style>
 
@@ -4728,6 +5443,38 @@ document.addEventListener('DOMContentLoaded', function() {
         font-size: 15px;
         color: #666;
     }
+
+    /* ===== Dark Mode Styles ===== */
+.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
+}
+
+.dark-mode .navbar {
+    background-color: #1e1e1e;
+    border-top-color: #333;
+}
+
+.dark-mode .bottom-nav a {
+    color: #b0b0b0;
+}
+
+.dark-mode .bottom-nav a.active {
+    color: #0095f6; /* Keep the same active color for consistency */
+}
+
+/* Optional: Add smooth transition for dark mode toggle */
+html, body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar {
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.bottom-nav a {
+    transition: color 0.3s ease;
+}
 
     .delete-link {
         color: #e74c3c !important;

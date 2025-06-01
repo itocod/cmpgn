@@ -4,7 +4,7 @@ from .views import CustomLoginView
 from .views import CampaignDeleteView
 # urls.py
 from .views import donate, payment_success, payment_cancel, stripe_webhook
-
+from .views import get_activity_comments, post_activity_comment, like_activity_comment
 
 from .views import campaign_story_list, campaign_story_detail
 from .views import get_comments, post_comment
@@ -22,14 +22,9 @@ path('campaigns/', views.campaign_list, name='campaign_list'),
     path('fund/', views.fund, name='fund'),
 
 
-
-
     path('webhook/stripe/', views.stripe_webhook, name='stripe_webhook'),
     path('payment/success/<int:campaign_id>/', views.payment_success, name='payment_success'),
     path('payment/cancel/', views.payment_cancel, name='payment_cancel'),
-
-
-
 
 
     path('campaign/delete/<int:pk>/', CampaignDeleteView.as_view(), name='campaign-delete'),
@@ -67,7 +62,7 @@ path('campaigns/', views.campaign_list, name='campaign_list'),
    path('activity/<int:activity_id>/', views.activity_detail, name='activity_detail'),
 
     path('delete/<int:campaign_id>/', views.delete_campaign, name='delete_campaign'),
-    path('activity/<int:activity_id>/add_comment/', views.add_activity_comment, name='add_activity_comment'),
+path('add_activity_comment/<int:activity_id>/', views.add_activity_comment, name='add_activity_comment'),
     path('suggest/', views.suggest, name='suggest'),
   
     path('affiliate-links/', views.affiliate_links, name='affiliate_links'),
@@ -115,7 +110,6 @@ path('get_comments/', views.get_comments, name='get_comments'),
 path('get_replies/<int:comment_id>/', views.get_replies, name='get_replies'),
     path('record_campaign_view/<int:campaign_id>/', views.record_campaign_view, name='record_campaign_view'),
 # marketing 
-
     path('blog/', views.blog_list, name='blog_list'),  # List of all blogs
     path('blog/<slug:slug>/', views.blog_detail, name='blog_detail'),  # Single blog post
 
@@ -130,6 +124,12 @@ path('get_replies/<int:comment_id>/', views.get_replies, name='get_replies'),
      path('about/', views.aboutus, name='aboutus'),
       path('donations/', views.donate, name='donate'),
        path('geno/', views.geno, name='geno'),
+           path('get_activity_comments/<int:activity_id>/', get_activity_comments, name='get_activity_comments'),
+    path('post_activity_comment/', post_activity_comment, name='post_activity_comment'),
+    path('like_activity_comment/', like_activity_comment, name='like_activity_comment'),
+        path('post_comment_reply/', views.post_comment_reply, name='post_comment_reply'),
+    path('get_comment_replies/<int:comment_id>/', views.get_comment_replies, name='get_comment_replies'),
+    path('like_comment_reply/', views.like_comment_reply, name='like_comment_reply'),
      
 ]
 

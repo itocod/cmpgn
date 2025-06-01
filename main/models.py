@@ -801,19 +801,37 @@ class ActivityLove(models.Model):
         super().save(*args, **kwargs)
 
 
-class ActivityComment(models.Model):
-    activity = models.ForeignKey(Activity, on_delete=models.CASCADE)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    content =  models.TextField(default='say something..')
-    timestamp = models.DateTimeField(auto_now_add=True)
 
-    def save(self, *args, **kwargs):
-        if self.pk is None:  # If this is a new comment
-            # Create the notification message
-            message = f"{self.user.username} commented on an activity in your campaign '{self.activity.campaign.title}'. <a href='{reverse('view_campaign', kwargs={'campaign_id': self.activity.campaign.pk})}'>View Campaign</a>"
-            # Create the notification
-            Notification.objects.create(user=self.activity.campaign.user.user, message=message)
-        super().save(*args, **kwargs)
+
+class ActivityComment(models.Model):
+    activity = models.ForeignKey('Activity', on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+    parent_comment = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True, related_name='replies')
+    
+    @property
+    def like_count(self):
+        return self.likes.count()
+    
+    @property
+    def reply_count(self):
+        return self.replies.count()
+    
+    def __str__(self):
+        return f"Comment by {self.user.username} on {self.activity}"
+
+class ActivityCommentLike(models.Model):
+    comment = models.ForeignKey(ActivityComment, on_delete=models.CASCADE, related_name='likes')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        unique_together = ('comment', 'user')
+    
+    def __str__(self):
+        return f"{self.user.username} likes {self.comment}"
+
 
 
 

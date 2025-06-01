@@ -1232,6 +1232,10 @@ def activity_detail(request, activity_id):
 
 
 
+
+
+
+
 def add_activity_comment(request, activity_id):
     activity = get_object_or_404(Activity, id=activity_id)
     user_profile = get_object_or_404(Profile, user=request.user)
@@ -2358,6 +2362,9 @@ def thank_you(request):
 
 
 
+
+
+
 def activity_list(request, campaign_id):
     following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
     # Get the user's profile
@@ -2431,7 +2438,237 @@ def activity_list(request, campaign_id):
 
 
 
+# views.py
+from django.http import JsonResponse
+from django.core.serializers.json import DjangoJSONEncoder
+from django.views.decorators.http import require_POST, require_GET
+from django.contrib.auth.decorators import login_required
+from django.utils import timezone
+import json
+from .models import ActivityComment, ActivityCommentLike
+from django.db.models import Count
 
+@require_GET
+@login_required
+def get_activity_comments(request, activity_id):
+    try:
+        activity = Activity.objects.get(id=activity_id)
+        load_all = request.GET.get('all', 'false').lower() == 'true'
+        
+        # Get base queryset
+        comments = ActivityComment.objects.filter(activity=activity)
+        
+        # Count total comments
+        total_comments = comments.count()
+        
+        # Get either all or just the 2 most recent comments
+        if not load_all and total_comments > 2:
+            comments = comments.order_by('-timestamp')[:2]
+        
+        # Prepare comment data
+        comments_data = []
+        for comment in comments:
+            comments_data.append({
+                'id': comment.id,
+                'username': comment.user.username,
+                'user_image': comment.user.profile.image.url if comment.user.profile.image else '',
+                'content': comment.content,
+                'timestamp': timezone.localtime(comment.timestamp).strftime('%b %d, %Y at %I:%M %p'),
+                'like_count': ActivityCommentLike.objects.filter(comment=comment).count(),
+                'liked': ActivityCommentLike.objects.filter(comment=comment, user=request.user).exists()
+            })
+        
+        # Return newest first
+        comments_data.reverse()
+        
+        return JsonResponse({
+            'success': True,
+            'comments': comments_data,
+            'total_comments': total_comments
+        })
+    except Activity.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Activity not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+
+
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+from django.views.decorators.csrf import csrf_exempt
+
+@require_POST
+def post_activity_comment(request):
+    try:
+        data = json.loads(request.body)
+        activity_id = data.get('activity_id')
+        content = data.get('content')
+        
+        if not content:
+            return JsonResponse({'success': False, 'error': 'Comment cannot be empty'})
+            
+        activity = Activity.objects.get(id=activity_id)
+        comment = ActivityComment.objects.create(
+            activity=activity,
+            user=request.user,
+            content=content
+        )
+        
+        return JsonResponse({
+            'success': True,
+            'comment_id': comment.id
+        })
+        
+    except Activity.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Activity not found'})
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)})
+
+
+
+
+
+
+
+@require_POST
+@login_required
+def like_activity_comment(request):
+    try:
+        data = json.loads(request.body)
+        comment_id = data.get('comment_id')
+        action = data.get('action')
+        
+        if not comment_id or not action:
+            return JsonResponse({'success': False, 'error': 'Missing required fields'}, status=400)
+        
+        comment = ActivityComment.objects.get(id=comment_id)
+        
+        if action == 'like':
+            # Check if already liked
+            if not ActivityCommentLike.objects.filter(comment=comment, user=request.user).exists():
+                ActivityCommentLike.objects.create(comment=comment, user=request.user)
+        elif action == 'unlike':
+            ActivityCommentLike.objects.filter(comment=comment, user=request.user).delete()
+        else:
+            return JsonResponse({'success': False, 'error': 'Invalid action'}, status=400)
+        
+        # Get updated like count
+        like_count = ActivityCommentLike.objects.filter(comment=comment).count()
+        
+        return JsonResponse({
+            'success': True,
+            'like_count': like_count
+        })
+    except ActivityComment.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Comment not found'}, status=404)
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+
+
+# views.py
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST, require_GET
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ObjectDoesNotExist
+import json
+from .models import ActivityComment
+from django.shortcuts import get_object_or_404
+
+@require_POST
+@login_required
+@csrf_exempt
+def post_comment_reply(request):
+    try:
+        data = json.loads(request.body)
+        comment_id = data.get('comment_id')
+        content = data.get('content')
+        
+        if not content:
+            return JsonResponse({'success': False, 'error': 'Content is required'}, status=400)
+        
+        parent_comment = get_object_or_404(ActivityComment, id=comment_id)
+        reply = ActivityComment.objects.create(
+            activity=parent_comment.activity,
+            user=request.user,
+            content=content,
+            parent_comment=parent_comment
+        )
+        
+        return JsonResponse({
+            'success': True,
+            'reply': {
+                'id': reply.id,
+                'content': reply.content,
+                'username': reply.user.username,
+                'user_image': reply.user.profile.image.url if hasattr(reply.user, 'profile') and reply.user.profile.image else '',
+                'timestamp': reply.timestamp.strftime('%b %d, %Y %I:%M %p'),
+                'like_count': reply.like_count,
+                'liked': False  # New replies aren't liked by default
+            }
+        })
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+@require_GET
+@login_required
+def get_comment_replies(request, comment_id):
+    try:
+        parent_comment = get_object_or_404(ActivityComment, id=comment_id)
+        replies = parent_comment.replies.all().order_by('timestamp')
+        
+        replies_data = []
+        for reply in replies:
+            replies_data.append({
+                'id': reply.id,
+                'content': reply.content,
+                'username': reply.user.username,
+                'user_image': reply.user.profile.image.url if hasattr(reply.user, 'profile') and reply.user.profile.image else '',
+                'timestamp': reply.timestamp.strftime('%b %d, %Y %I:%M %p'),
+                'like_count': reply.like_count,
+                'liked': request.user in reply.likes.all()
+            })
+        
+        return JsonResponse({
+            'success': True,
+            'replies': replies_data,
+            'total_replies': parent_comment.reply_count
+        })
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+
+
+
+@require_POST
+@login_required
+@csrf_exempt
+def like_comment_reply(request):
+    try:
+        data = json.loads(request.body)
+        reply_id = data.get('reply_id')
+        action = data.get('action')  # 'like' or 'unlike'
+        
+        if action not in ['like', 'unlike']:
+            return JsonResponse({'success': False, 'error': 'Invalid action'}, status=400)
+        
+        reply = get_object_or_404(ActivityComment, id=reply_id)
+        
+        if action == 'like':
+            # Using the ActivityCommentLike model
+            if not ActivityCommentLike.objects.filter(comment=reply, user=request.user).exists():
+                ActivityCommentLike.objects.create(comment=reply, user=request.user)
+        else:
+            ActivityCommentLike.objects.filter(comment=reply, user=request.user).delete()
+        
+        return JsonResponse({
+            'success': True,
+            'like_count': ActivityCommentLike.objects.filter(comment=reply).count(),
+            'action': action
+        })
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
 
 

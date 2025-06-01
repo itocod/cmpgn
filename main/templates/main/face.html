@@ -1409,17 +1409,34 @@ border: 1px solid silver;
 }
 
 
+
+
+
+
+
+/* Light mode (default) styles remain the same */
 .sidebar-box {
-    border-left: 2px solid #3498db;
-    height: 700px;
+    border-left: 2px solid #c0c0c0;
+    height: 800px;
     overflow-y: auto;
     overflow-x: hidden;
     border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 0; /* Optional, for spacing inside the box */
+    box-shadow: 0 2px 4px rgba(192, 192, 192, 0.3);
+    padding: 0;
+    background-color: #f8f8f8;
+}
+.sidebar-box {
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+/* Dark mode styles */
+.dark-mode .sidebar-box {
+    border-left: 2px solid #444; /* Darker border */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Darker shadow */
+    background-color: #2d2d2d; /* Dark background */
+    color: #e0e0e0; /* Light text color */
 }
 
-/* On small devices, remove styling but keep the content visible */
+/* Mobile styles remain the same */
 @media (max-width: 767px) {
     .sidebar-box {
         border: none;
@@ -1428,8 +1445,21 @@ border: 1px solid silver;
         border-radius: 0;
         box-shadow: none;
         padding: 0;
+        background-color: transparent;
+    }
+    
+    /* Dark mode mobile override */
+    .dark-mode .sidebar-box {
+        background-color: transparent; /* Keep transparent in dark mode on mobile */
+        color: inherit; /* Inherit text color from parent */
     }
 }
+
+
+
+
+
+
 /* Styles for the "Activities" label (left-centered) */
 .activity-label {
     visibility: hidden;
