@@ -1432,7 +1432,16 @@ import logging
 logger = logging.getLogger(__name__)
 
 @login_required
-def donate(request, campaign_id):
+def give(request, campaign_id):
+    try:
+        campaign = Campaign.objects.get(id=campaign_id)
+    except Campaign.DoesNotExist:
+        logger.error(f"Campaign with id {campaign_id} not found.")
+        return render(request, 'revenue/error.html', {
+            'message': 'Campaign not found.'
+        })
+    
+    # Rest of your view code...
     campaign = get_object_or_404(Campaign, id=campaign_id)
 
     if not campaign.is_active:

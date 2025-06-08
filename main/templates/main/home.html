@@ -2964,7 +2964,36 @@ document.addEventListener('DOMContentLoaded', function() {
         </ul>
     </nav>
 
-    <br>
+  
+
+<div class="quick-actions">
+  <div class="actions-header">
+    <h3 class="actions-title"><i class="fas fa-bolt"></i> Quick Actions</h3>
+  </div>
+  
+  <div class="action-grid">
+    <a href="#" class="action-btn">
+      <i class="action-icon fas fa-plus-circle"></i>
+      <span class="action-label">Create Campaign</span>
+    </a>
+    
+    <a href="#" class="action-btn">
+      <i class="action-icon fas fa-donate"></i>
+      <span class="action-label">Donate</span>
+    </a>
+    
+    <a href="#" class="action-btn">
+      <i class="action-icon fas fa-calendar-check"></i>
+      <span class="action-label">Events</span>
+    </a>
+    
+    <a href="#" class="action-btn">
+      <i class="action-icon fas fa-hands-helping"></i>
+      <span class="action-label">Volunteer</span>
+    </a>
+  </div>
+</div>
+
 
 <!-- Carousel for Ads -->
 <div class="carousel" onmouseover="pauseCarousel()" onmouseout="resumeCarousel()">
@@ -2984,121 +3013,6 @@ document.addEventListener('DOMContentLoaded', function() {
     </div>
 </div>
 
-<style>
-.subscription-box {
-  margin-top: 24px;
-  background: #fff;
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-  background: linear-gradient(135deg, #1877f2, #0d5bb5);
-  color: white;
-}
-
-.subscription-header {
-  margin-bottom: 16px;
-}
-
-.subscription-title {
-  font-size: 18px;
-  font-weight: 600;
-  margin: 0;
-}
-
-.subscription-description {
-  font-size: 14px;
-  margin-bottom: 16px;
-  opacity: 0.9;
-}
-
-.subscription-form {
-  display: flex;
-  flex-direction: column;
-}
-
-.subscription-email {
-  padding: 12px;
-  border-radius: 6px;
-  border: none;
-  margin-bottom: 12px;
-  font-size: 14px;
-}
-
-.subscription-button {
-  background: white;
-  color: #1877f2;
-  border: none;
-  padding: 10px;
-  border-radius: 6px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.subscription-button:hover {
-  background: #f0f2f5;
-}
-
-.subscription-note {
-  font-size: 11px;
-  opacity: 0.8;
-  margin-top: 8px;
-}
-
-/* ===== Dark Mode Styles ===== */
-.dark-mode .subscription-box {
-  background: linear-gradient(135deg, #0d5bb5, #0a4a9c);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-.dark-mode .subscription-email {
-  background: rgba(255, 255, 255, 0.9);
-  color: #121212;
-}
-
-.dark-mode .subscription-email::placeholder {
-  color: #666;
-}
-
-.dark-mode .subscription-button {
-  background: rgba(255, 255, 255, 0.95);
-  color: #0d5bb5;
-}
-
-.dark-mode .subscription-button:hover {
-  background: rgba(255, 255, 255, 0.85);
-}
-
-.dark-mode .subscription-note {
-  color: rgba(255, 255, 255, 0.7);
-}
-
-/* Optional transitions for smooth mode switching */
-.subscription-box,
-.subscription-email,
-.subscription-button {
-  transition: all 0.3s ease;
-}
-
-</style>
-
-<div class="subscription-box">
-  <div class="subscription-header">
-    <h3 class="subscription-title"><i class="fas fa-envelope"></i> Stay Updated</h3>
-  </div>
-  
-  <p class="subscription-description">
-    Get the latest campaigns, success stories and community updates in your inbox.
-  </p>
-  
-  <form class="subscription-form">
-    <input type="email" class="subscription-email" placeholder="Your email address">
-    <button type="submit" class="subscription-button">Subscribe</button>
-    <p class="subscription-note">
-      We respect your privacy. Unsubscribe at any time.
-    </p>
-  </form>
-</div>
 
 </aside>
 
@@ -3300,9 +3214,9 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
                 {% endif %}
      <div class="donate-button-overlay">
-    <a href="{% url 'donate' campaign_id=campaign.pk %}" class="simple-donate-btn" aria-label="Donate Now">
+    <a href="{% url 'give' campaign.id %}" class="simple-donate-btn" aria-label="Donate Now">
         <i class="fas fa-donate" ></i>
-        <span class="donate-text">Donate Now</span>
+        <span class="donate-text"> Now</span>
     </a>
 </div>
             </div>
@@ -3704,6 +3618,9 @@ document.addEventListener('DOMContentLoaded', function() {
     {% endfor %}
   </div>
 
+
+
+
   <div class="view-all-contributors">
     <a href="#">View All Contributors</a>
   </div>
@@ -3712,35 +3629,122 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-<div class="quick-actions">
-  <div class="actions-header">
-    <h3 class="actions-title"><i class="fas fa-bolt"></i> Quick Actions</h3>
+
+<style>
+.subscription-box {
+  margin-top: 24px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  background: linear-gradient(135deg, #1877f2, #0d5bb5);
+  color: white;
+}
+
+.subscription-header {
+  margin-bottom: 16px;
+}
+
+.subscription-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.subscription-description {
+  font-size: 14px;
+  margin-bottom: 16px;
+  opacity: 0.9;
+}
+
+.subscription-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.subscription-email {
+  padding: 12px;
+  border-radius: 6px;
+  border: none;
+  margin-bottom: 12px;
+  font-size: 14px;
+}
+
+.subscription-button {
+  background: white;
+  color: #1877f2;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.subscription-button:hover {
+  background: #f0f2f5;
+}
+
+.subscription-note {
+  font-size: 11px;
+  opacity: 0.8;
+  margin-top: 8px;
+}
+
+/* ===== Dark Mode Styles ===== */
+.dark-mode .subscription-box {
+  background: linear-gradient(135deg, #0d5bb5, #0a4a9c);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dark-mode .subscription-email {
+  background: rgba(255, 255, 255, 0.9);
+  color: #121212;
+}
+
+.dark-mode .subscription-email::placeholder {
+  color: #666;
+}
+
+.dark-mode .subscription-button {
+  background: rgba(255, 255, 255, 0.95);
+  color: #0d5bb5;
+}
+
+.dark-mode .subscription-button:hover {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.dark-mode .subscription-note {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Optional transitions for smooth mode switching */
+.subscription-box,
+.subscription-email,
+.subscription-button {
+  transition: all 0.3s ease;
+}
+
+</style>
+
+<div class="subscription-box">
+  <div class="subscription-header">
+    <h3 class="subscription-title"><i class="fas fa-envelope"></i> Stay Updated</h3>
   </div>
   
-  <div class="action-grid">
-    <a href="#" class="action-btn">
-      <i class="action-icon fas fa-plus-circle"></i>
-      <span class="action-label">Create Campaign</span>
-    </a>
-    
-    <a href="#" class="action-btn">
-      <i class="action-icon fas fa-donate"></i>
-      <span class="action-label">Donate</span>
-    </a>
-    
-    <a href="#" class="action-btn">
-      <i class="action-icon fas fa-calendar-check"></i>
-      <span class="action-label">Events</span>
-    </a>
-    
-    <a href="#" class="action-btn">
-      <i class="action-icon fas fa-hands-helping"></i>
-      <span class="action-label">Volunteer</span>
-    </a>
-  </div>
+  <p class="subscription-description">
+    Get the latest campaigns, success stories and community updates in your inbox.
+  </p>
+  
+  <form class="subscription-form">
+    <input type="email" class="subscription-email" placeholder="Your email address">
+    <button type="submit" class="subscription-button">Subscribe</button>
+    <p class="subscription-note">
+      We respect your privacy. Unsubscribe at any time.
+    </p>
+  </form>
 </div>
-
-
 
   <!-- Footer Links -->
   <div class="aside-footer">
@@ -3786,7 +3790,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <a href="{% url 'hiw' %}">How It Works|</a>
             <a href="{% url 'faq' %}">FAQ|</a>
             <a href="{% url 'aboutus' %}">About Us|</a>
-            <a href="{% url 'donate' %}">Donate|</a>
+            
         </div>
     </div>
     <div class="footer-bottom">

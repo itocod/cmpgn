@@ -222,8 +222,7 @@ class Campaign(models.Model):
     target_amount = models.DecimalField(max_digits=10, decimal_places=2)
     amount_raised = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     is_active = models.BooleanField(default=True)  # Stops donations when target is met
-    stripe_connected_account_id = models.CharField(max_length=100, blank=True, null=True)  # Stripe Connect ID
-
+   
 
     CATEGORY_CHOICES = (
     # Survival Essentials

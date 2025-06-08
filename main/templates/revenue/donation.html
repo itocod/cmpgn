@@ -254,13 +254,12 @@ body.dark-mode .affiliate-link i {
 </head>
 <body>
 
-  <h2>Donate to {{ campaign.title }}</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Donate</button>
-  </form>
-
+<h2>Donate to {{ campaign.title }}</h2>
+<form method="post" action="{% url 'give' campaign.id %}">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Donate</button>
+</form>
 
 
 </body>

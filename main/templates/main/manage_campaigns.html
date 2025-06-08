@@ -3121,7 +3121,7 @@ document.addEventListener("DOMContentLoaded", function() {
                 {% endif %}
             </div>
         </div>
-        <a href="{% url 'donate' campaign_id=campaign.pk %}" class="donate-btn">
+        <a href="{% url 'give' campaign.id %}" class="donate-btn">
             <span>Support This Cause</span>
             <i class="fas fa-heart"></i>
         </a>
@@ -3187,7 +3187,7 @@ document.addEventListener("DOMContentLoaded", function() {
         <div class="days-left-overlay" style="position: absolute; bottom: 10px; left: 10px; background: rgba(0,0,0,0.6); color: white; padding: 4px 10px; border-radius: 12px; font-size: 13px; display: flex; align-items: center; gap: 5px;">
             <i class="fas fa-donate" style="font-size: 12px;"></i>
             <span>
-                  <a href="{% url 'donate' campaign_id=campaign.pk %}" style="color:white;">
+                  <a href="{% url 'give' campaign.id %}" style="color:white;">
             Donate Now <i class="fas fa-arrow-right"></i>
         </a>
             </span>
@@ -3440,8 +3440,7 @@ document.addEventListener("DOMContentLoaded", function() {
 </div>
   </div></br>
 
- <!-- Assuming this is in a template file like base.html -->
-<a href="{% url 'donate' %}#rallynex-campaigns" class="donate-link" style="hovercolor"> Help Us Build a Better Platform to Support More Campaigns </a>
+
 
 
 
@@ -3496,7 +3495,7 @@ document.addEventListener("DOMContentLoaded", function() {
                <a href="{% url 'hiw' %}">How It Works|</a>
             <a href="{% url 'faq' %}">FAQ|</a>
             <a href="{% url 'aboutus' %}">About Us|</a>
-            <a href="{% url 'donate' %}">Donate|</a>
+           
         </div>
     </div>
     <div class="footer-bottom">

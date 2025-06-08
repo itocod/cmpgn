@@ -3,7 +3,8 @@ from . import views
 from .views import CustomLoginView
 from .views import CampaignDeleteView
 # urls.py
-from .views import donate, payment_success, payment_cancel, stripe_webhook
+from .views import payment_success, payment_cancel, stripe_webhook
+
 from .views import get_activity_comments, post_activity_comment, like_activity_comment
 
 from .views import campaign_story_list, campaign_story_detail
@@ -11,8 +12,7 @@ from .views import get_comments, post_comment
 urlpatterns = [
     path('get_comments/', get_comments, name='get_comments'),
     path('post_comment/', post_comment, name='post_comment'),
-    path('campaign/<int:campaign_id>/donate/', views.donate, name='donate'),
-path('campaigns/', views.campaign_list, name='campaign_list'),
+   path('campaign/<int:campaign_id>/give/', views.give, name='give'),
 
    path('campaign/<int:campaign_id>/engagement/', views.campaign_engagement_data, name='campaign_engagement'),
     path('landing/', views.explore_campaigns, name='explore_campaigns'),
@@ -74,7 +74,7 @@ path('add_activity_comment/<int:activity_id>/', views.add_activity_comment, name
     path('update_hidden_links/', views.update_hidden_links, name='update_hidden_links'),
  path('upload/', views.upload_file, name='upload_file'),
     path('brainstorm_idea/<int:campaign_id>/', views.brainstorm_idea, name='brainstorm_idea'),
-    path('campaign/<int:campaign_id>/donate', views.donate_monetary, name='donate_monetary'),
+ 
     path('search_profile_results/', views.search_profile_results, name='search_profile_results'),
     path('search/', views.search_campaign, name='search_campaign'),
     path('notifications/', views.notification_list, name='notification_list'),
@@ -122,7 +122,7 @@ path('get_replies/<int:comment_id>/', views.get_replies, name='get_replies'),
     path('hiw/', views.hiw, name='hiw'),
     path('faq/', views.faq_view, name='faq'),
      path('about/', views.aboutus, name='aboutus'),
-      path('donations/', views.donate, name='donate'),
+     
        path('geno/', views.geno, name='geno'),
            path('get_activity_comments/<int:activity_id>/', get_activity_comments, name='get_activity_comments'),
     path('post_activity_comment/', post_activity_comment, name='post_activity_comment'),

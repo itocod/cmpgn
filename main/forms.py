@@ -306,6 +306,7 @@ class CampaignForm(forms.ModelForm):
 from django import forms
 from decimal import Decimal
 
+# forms.py
 class DonationForm(forms.Form):
     amount = forms.DecimalField(min_value=1.00, max_digits=10, decimal_places=2)
     tip_for_platform = forms.DecimalField(
@@ -317,6 +318,18 @@ class DonationForm(forms.Form):
         label="Tip for Platform (Optional)"
     )
 
+    def __init__(self, *args, campaign=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.campaign = campaign
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if self.campaign and not self.campaign.stripe_connected_account_id:
+            raise forms.ValidationError(
+                "This campaign cannot accept donations yet because the owner hasn't connected a payment account. "
+                "Please contact the campaign owner or support."
+            )
+        return cleaned_data
 
 
 
