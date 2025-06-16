@@ -3213,12 +3213,13 @@ document.addEventListener('DOMContentLoaded', function() {
     <i class="fas fa-lock"></i> Join to see activities
 </div>
                 {% endif %}
-     <div class="donate-button-overlay">
-    <a href="{% url 'give' campaign.id %}" class="simple-donate-btn" aria-label="Donate Now">
-        <i class="fas fa-donate" ></i>
-        <span class="donate-text"> Now</span>
+   <div class="donate-button-overlay">
+    <a href="{% url 'donate' campaign.id %}" class="simple-donate-btn" aria-label="Donate Now">
+        <i class="fas fa-donate"></i>
+        <span class="donate-text">Now</span>
     </a>
 </div>
+
             </div>
             {% else %}
             <div class="no-image-placeholder">

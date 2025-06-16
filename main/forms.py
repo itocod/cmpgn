@@ -13,7 +13,7 @@ from .models import Subscriber,Donation
 
 from django.core.exceptions import ValidationError
 from django import forms
-from .models import UserVerification
+from .models import UserVerification,CampaignFund
 
 
 
@@ -303,38 +303,52 @@ class CampaignForm(forms.ModelForm):
 
 
 
-from django import forms
-from decimal import Decimal
-
-# forms.py
-class DonationForm(forms.Form):
-    amount = forms.DecimalField(min_value=1.00, max_digits=10, decimal_places=2)
-    tip_for_platform = forms.DecimalField(
-        required=False,
-        initial=0.00,
-        min_value=0.00,
-        max_digits=10,
-        decimal_places=2,
-        label="Tip for Platform (Optional)"
-    )
-
-    def __init__(self, *args, campaign=None, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.campaign = campaign
-
-    def clean(self):
-        cleaned_data = super().clean()
-        if self.campaign and not self.campaign.stripe_connected_account_id:
-            raise forms.ValidationError(
-                "This campaign cannot accept donations yet because the owner hasn't connected a payment account. "
-                "Please contact the campaign owner or support."
-            )
-        return cleaned_data
 
 
 
 
-    
+class CampaignFundForm(forms.ModelForm):
+    class Meta:
+        model = CampaignFund
+        fields = ['target_amount', 'paypal_email']
+        labels = {
+            'target_amount': 'Target Amount:',
+            'paypal_email': 'PayPal Email:'
+        }
+        widgets = {
+            'target_amount': forms.TextInput(attrs={
+                'class': 'form-control',  
+                'placeholder': 'Enter target amount'
+            }),
+            'paypal_email': forms.EmailInput(attrs={
+                'class': 'form-control', 
+                'placeholder': 'Enter PayPal email'
+            })
+        }
+
+
+
+
+class DonationForm(forms.ModelForm):
+    class Meta:
+        model = Donation
+        fields = ['donor_name', 'amount']
+        labels = {
+            'donor_name': 'Your Name (optional):',
+            'amount': 'Donation Amount:',
+        }
+        widgets = {
+            'donor_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your name'}),
+            'amount': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter donation amount'}),
+        }
+
+
+
+
+
+
+
+
 
 
 class ChatForm(forms.ModelForm):

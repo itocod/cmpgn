@@ -60,14 +60,9 @@ admin.site.register(ChangemakerAward, ChangemakerAwardAdmin)
 
 @admin.register(Donation)
 class DonationAdmin(admin.ModelAdmin):
-    list_display = ('id', 'campaign', 'amount', 'get_donor_name', 'stripe_payment_intent_id', 'timestamp')
-
-    def get_donor_name(self, obj):
-        return obj.donor_name.user.username if obj.donor_name and obj.donor_name.user else "Anonymous"
-    get_donor_name.short_description = 'Donor Name'
-
-
-
+    list_display = ('campaign', 'donor_name', 'amount', 'created_at', 'transaction_id')
+    list_filter = ('campaign',)
+    search_fields = ('campaign__title', 'donor_name', 'transaction_id')
 
 
 

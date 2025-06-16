@@ -19,9 +19,9 @@ from .forms import (
 
 from .models import (
     Profile, Campaign, Comment, Follow, Activity, SupportCampaign,Brainstorming,
-    User, Love, CampaignView, Chat, Notification,Message
+    User, Love, CampaignView, Chat, Notification,Message,CampaignFund
 )
-from .forms import   BrainstormingForm
+from .forms import   BrainstormingForm,CampaignFundForm
 from django.http import JsonResponse
 from django.core.exceptions import MultipleObjectsReturned
 from django.http import HttpResponseServerError
@@ -1422,180 +1422,6 @@ def affiliate_links(request):
           'suggested_users': suggested_users,
         'top_contributors': top_contributors,
     })
-
-
-
-
-
-import logging
-
-logger = logging.getLogger(__name__)
-
-@login_required
-def give(request, campaign_id):
-    try:
-        campaign = Campaign.objects.get(id=campaign_id)
-    except Campaign.DoesNotExist:
-        logger.error(f"Campaign with id {campaign_id} not found.")
-        return render(request, 'revenue/error.html', {
-            'message': 'Campaign not found.'
-        })
-    
-    # Rest of your view code...
-    campaign = get_object_or_404(Campaign, id=campaign_id)
-
-    if not campaign.is_active:
-        return render(request, 'campaign/campaign_closed.html')
-
-    if request.method == 'POST':
-        form = DonationForm(request.POST)
-        if form.is_valid():
-            amount = form.cleaned_data['amount']
-            tip = form.cleaned_data['tip_for_platform'] or Decimal('0.00')
-
-            stripe_fee = (amount * Decimal('0.029')) + Decimal('0.59')
-            campaign_owner_gets = amount - stripe_fee
-
-            if not campaign.stripe_connected_account_id:
-                logger.error(f"Campaign {campaign.id} missing Stripe account ID.")
-                return render(request, 'revenue/error.html', {
-                    'message': 'Campaign owner has not connected a Stripe account.'
-                })
-
-            try:
-                session = stripe.checkout.Session.create(
-                    payment_method_types=['card'],
-                    line_items=[{
-                        'price_data': {
-                            'currency': 'usd',
-                            'product_data': {
-                                'name': f"Donation for {campaign.title}",
-                            },
-                            'unit_amount': int(amount * 100),
-                        },
-                        'quantity': 1,
-                    }],
-                    payment_intent_data={
-                        'application_fee_amount': int(tip * 100),
-                        'transfer_data': {
-                            'destination': campaign.stripe_connected_account_id,
-                        },
-                        'metadata': {
-                            'campaign_id': str(campaign.id),
-                            'donor_id': str(request.user.profile.id),
-                        },
-                    },
-                    metadata={
-                        'campaign_id': str(campaign.id),
-                        'donor_id': str(request.user.profile.id),
-                    },
-                    mode='payment',
-                    success_url=request.build_absolute_uri(
-                        reverse('payment_success', args=[campaign.id])
-                    ) + '?session_id={CHECKOUT_SESSION_ID}',
-                    cancel_url=request.build_absolute_uri(reverse('payment_cancel')),
-                )
-                return redirect(session.url, code=303)
-
-            except stripe.error.CardError as e:
-                logger.error(f"Stripe CardError: {e.user_message}")
-                return render(request, 'revenue/error.html', {'message': e.user_message})
-
-            except stripe.error.RateLimitError as e:
-                logger.error(f"Stripe RateLimitError: {str(e)}")
-                return render(request, 'revenue/error.html', {'message': "Too many requests to payment processor."})
-
-            except stripe.error.InvalidRequestError as e:
-                logger.error(f"Stripe InvalidRequestError: {str(e)}")
-                return render(request, 'revenue/error.html', {'message': "Invalid payment request."})
-
-            except stripe.error.AuthenticationError as e:
-                logger.error(f"Stripe AuthenticationError: {str(e)}")
-                return render(request, 'revenue/error.html', {'message': "Payment authentication failed."})
-
-            except stripe.error.APIConnectionError as e:
-                logger.error(f"Stripe APIConnectionError: {str(e)}")
-                return render(request, 'revenue/error.html', {'message': "Network communication with payment processor failed."})
-
-            except stripe.error.StripeError as e:
-                logger.error(f"Stripe generic error: {str(e)}")
-                return render(request, 'revenue/error.html', {'message': "An error occurred while processing your payment. Please try again."})
-
-            except Exception as e:
-                logger.error(f"Unexpected error in donation: {str(e)}")
-                return render(request, 'revenue/error.html', {'message': "An unexpected error occurred. Please try again later."})
-
-    else:
-        form = DonationForm()
-
-    return render(request, 'revenue/donation.html', {
-        'campaign': campaign,
-        'form': form,
-    })
-
-
-
-
-
-
-
-@csrf_exempt
-def stripe_webhook(request):
-    payload = request.body
-    sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
-    endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
-
-    if sig_header is None:
-        return HttpResponse(status=400)
-
-    try:
-        event = stripe.Webhook.construct_event(payload, sig_header, endpoint_secret)
-    except (ValueError, stripe.error.SignatureVerificationError):
-        return HttpResponse(status=400)
-
-    if event['type'] == 'checkout.session.completed':
-        session = event['data']['object']
-        metadata = session.get('metadata', {})
-        campaign_id = metadata.get('campaign_id')
-        donor_id = metadata.get('donor_id')
-
-        try:
-            campaign = Campaign.objects.get(id=campaign_id)
-            amount = Decimal(session['amount_total']) / 100
-
-            campaign.amount_raised += amount
-            campaign.save()
-            campaign.check_target_reached()
-
-            donor = None
-            if donor_id:
-                try:
-                    donor = Profile.objects.get(id=donor_id)
-                except Profile.DoesNotExist:
-                    donor = None
-
-            Donation.objects.create(
-                campaign=campaign,
-                amount=amount,
-                donor=donor,
-                stripe_payment_intent_id=session.get('payment_intent')
-            )
-        except Campaign.DoesNotExist:
-            pass
-
-    return JsonResponse({'status': 'success'})
-
-def payment_success(request, campaign_id):
-    return render(request, 'payment_success.html')
-
-def payment_cancel(request):
-    return render(request, 'payment_cancel.html')
-
-
-
-
-
-
 
 
 
@@ -4013,6 +3839,183 @@ def fund(request):
 
 def geno(request):
     return render(request, 'marketing/geno.html')
+
+
+
+
+
+
+import paypalrestsdk
+from django.conf import settings
+from django.shortcuts import redirect
+
+paypalrestsdk.configure({
+    "mode": settings.PAYPAL_MODE,  # Sandbox or live
+    "client_id": settings.PAYPAL_CLIENT_ID,
+    "client_secret": settings.PAYPAL_CLIENT_SECRET
+})
+
+def donate(request, campaign_id):
+    campaign = get_object_or_404(Campaign, id=campaign_id)
+
+    # Attempt to retrieve the CampaignFund or create one with a default target_amount
+    fund, created = CampaignFund.objects.get_or_create(campaign=campaign, defaults={'target_amount': 0.00, 'paypal_email': 'default_email@example.com'})
+
+    target_reached = fund.progress_percentage() >= 100
+
+    if request.method == 'POST':
+        donation_form = DonationForm(request.POST)
+        fund_form = CampaignFundForm(request.POST, instance=fund)
+
+        if 'donate' in request.POST and not target_reached:
+            if donation_form.is_valid():
+                # Create PayPal payment
+                donation_amount = request.POST.get('amount')
+                
+                payment = paypalrestsdk.Payment({
+                    "intent": "sale",
+                    "payer": {"payment_method": "paypal"},
+                    "redirect_urls": {
+                        "return_url": request.build_absolute_uri(reverse('payment_success', args=[campaign_id])),
+                        "cancel_url": request.build_absolute_uri(reverse('payment_cancel')),
+                    },
+                    "transactions": [{
+                        "item_list": {"items": [{
+                            "name": f"Donation for {campaign.title}",
+                            "sku": "donation",
+                            "price": donation_amount,
+                            "currency": "USD",
+                            "quantity": 1
+                        }]},
+                        "amount": {"total": donation_amount, "currency": "USD"},
+                        "description": f"Donation for {campaign.title}",
+                        "payee": {
+                            "email": fund.paypal_email
+                        }
+                    }]
+                })
+
+                if payment.create():
+                    for link in payment.links:
+                        if link.rel == "approval_url":
+                            return redirect(link.href)
+                else:
+                    messages.error(request, 'Error creating PayPal payment.')
+
+        elif 'update_campaign' in request.POST:
+            if fund_form.is_valid():
+                fund_form.save()
+                messages.success(request, 'Donation info updated successfully.')
+            else:
+                messages.error(request, 'Error updating donation info.')
+
+    else:
+        donation_form = DonationForm()
+        fund_form = CampaignFundForm(instance=fund)
+
+    user_profile = get_object_or_404(Profile, user=request.user)
+    user_profile.last_campaign_check = timezone.now()
+    user_profile.save()
+    ads = NativeAd.objects.all() 
+    return render(request, 'revenue/donation.html', {
+        'campaign': campaign,
+        'form': donation_form,
+        'fund_form': fund_form,
+        'fund': fund,
+        'target_reached': target_reached,
+        'user_profile': user_profile,
+        'ads':ads,
+    })
+
+
+
+from django.urls import reverse
+from decimal import Decimal
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+import paypalrestsdk
+
+@login_required
+def payment_success(request, campaign_id):
+    # Extract PayPal payment information
+    payment_id = request.GET.get('paymentId')
+    payer_id = request.GET.get('PayerID')
+
+    # Check if this payment has already been processed
+    if Donation.objects.filter(transaction_id=payment_id).exists():
+        messages.warning(request, 'This payment has already been processed.')
+        return redirect('donate', campaign_id=campaign_id)
+
+    payment = paypalrestsdk.Payment.find(payment_id)
+
+    if payment.execute({"payer_id": payer_id}):
+        # Payment was successful, update campaign fund
+        campaign = get_object_or_404(Campaign, id=campaign_id)
+        fund = CampaignFund.objects.get(campaign=campaign)
+        amount = Decimal(payment.transactions[0].amount.total)
+
+        # Deduct commission fee (fixed amount)
+        commission_fee = Decimal('0.30')  # Example commission fee
+        net_amount = amount - commission_fee
+
+        # Update the amount raised
+        fund.amount_raised += net_amount
+        fund.save()
+
+        # Create the donation record (with transaction ID to avoid duplicates)
+        Donation.objects.create(
+            campaign=campaign,
+            amount=net_amount,  # Store the net amount after deductions
+            donor_name=request.user.username,  # or anonymous if you allow it
+            transaction_id=payment_id  # Store the PayPal payment ID
+        )
+
+        # Send commission to your PayPal account
+        payout = paypalrestsdk.Payout({
+            "sender_batch_header": {
+                "sender_batch_id": str(payment_id),
+                "email_subject": "Commission Payment"
+            },
+            "items": [{
+                "recipient_type": "EMAIL",
+                "amount": {
+                    "value": str(commission_fee),
+                    "currency": "USD"
+                },
+                "receiver": "kcollino39@gmail.com",  # Your PayPal email
+                "note": f"Commission for donation {payment_id}",
+                "sender_item_id": str(payment_id)
+            }]
+        })
+
+        # Create payout with asynchronous mode
+        if payout.create(sync_mode=False):
+            messages.success(request, 'Thank you for your donation! A commission has been processed.')
+        else:
+            messages.error(request, f'Failed to process commission. Error: {payout.error}')
+
+        # Calculate the updated progress percentage
+        if fund.target_amount > 0:
+            fund.progress_percentage = (fund.amount_raised / fund.target_amount) * 100
+        else:
+            fund.progress_percentage = 100  # Avoid division by zero
+
+        fund.save()  # Save the updated progress percentage
+
+        return redirect('donate', campaign_id=campaign_id)
+
+    # If payment execution failed
+    messages.error(request, 'Payment failed. Please try again.')
+    return redirect('donate', campaign_id=campaign_id)
+
+
+@login_required
+def payment_cancel(request):
+    messages.warning(request, 'Payment was cancelled.')
+    return redirect('donate')
+
+
 
 
 

@@ -16,6 +16,7 @@ from PIL import Image, ExifTags
 from io import BytesIO
 from django.core.files.base import ContentFile
 
+import stripe
 
 
 User = get_user_model()
@@ -53,8 +54,7 @@ class Profile(models.Model):
     last_campaign_check = models.DateTimeField(default=timezone.now)
     last_chat_check = models.DateTimeField(default=timezone.now)
     profile_verified = models.BooleanField(default=False)  # Renamed from `is_verified
-    # Other fields...
-
+    stripe_account_id = models.CharField(max_length=255, blank=True, null=True)
  
 
     def age(self):
@@ -86,6 +86,16 @@ class Profile(models.Model):
         return activity_count >= 1 and activity_love_count >= 1
 
 
+    def has_completed_stripe_onboarding(self):
+        if not self.stripe_account_id:
+            return False
+        try:
+            account = stripe.Account.retrieve(self.stripe_account_id)
+            return account.details_submitted and account.charges_enabled
+        except stripe.error.StripeError:
+            return False
+    
+  
 
 
 @receiver(post_save, sender=User)
@@ -299,11 +309,6 @@ class Campaign(models.Model):
     def progress_percentage(self):
         return (self.amount_raised / self.target_amount) * 100 if self.target_amount > 0 else 0
 
-    def check_target_reached(self):
-        if self.amount_raised >= self.target_amount:
-            self.is_active = False
-            self.save()
-
 
     def __str__(self):
         return self.title
@@ -387,6 +392,17 @@ class Campaign(models.Model):
                 timestamp=timezone.now()
             )
 
+    def can_accept_payments(self):
+        return (
+            self.is_active and 
+            self.user.stripe_account_id and
+            self.user.has_completed_stripe_onboarding()
+        )
+    
+    def percentage_funded(self):
+        if self.target_amount == 0:
+            return 0
+        return min(100, (self.amount_raised / self.target_amount) * 100)
 
 
     def get_objective_and_activities(self):
@@ -656,17 +672,31 @@ class CampaignProduct(models.Model):
 
 
 
+class CampaignFund(models.Model):
+    campaign = models.OneToOneField(Campaign, on_delete=models.CASCADE)
+    target_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    amount_raised = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    paypal_email = models.EmailField(default="paypal_email")
+
+    def progress_percentage(self):
+        if self.target_amount > 0:
+            return (self.amount_raised / self.target_amount) * 100
+        return 0
+
+
+
+
 class Donation(models.Model):
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    donor_name = models.ForeignKey(Profile, null=True, blank=True, on_delete=models.SET_NULL)
-    stripe_payment_intent_id = models.CharField(max_length=255, null=True, blank=True)
+    donor_name = models.CharField(max_length=255, default="Anonymous")  # Set a default value
+    transaction_id = models.CharField(max_length=255, unique=True, null=True)
+    created_at = models.DateTimeField(default=timezone.now)  # Automatically set the field to now when the donation is created
 
-    timestamp = models.DateTimeField(auto_now_add=True, null=True)
-
-
-    def __str__(self):
-        return f"Donation of ${self.amount} to {self.campaign.title}"
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        # Remove the fund update from here
+        # This will prevent double counting
 
 
 

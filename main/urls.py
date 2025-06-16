@@ -3,7 +3,7 @@ from . import views
 from .views import CustomLoginView
 from .views import CampaignDeleteView
 # urls.py
-from .views import payment_success, payment_cancel, stripe_webhook
+
 
 from .views import get_activity_comments, post_activity_comment, like_activity_comment
 
@@ -12,19 +12,14 @@ from .views import get_comments, post_comment
 urlpatterns = [
     path('get_comments/', get_comments, name='get_comments'),
     path('post_comment/', post_comment, name='post_comment'),
-   path('campaign/<int:campaign_id>/give/', views.give, name='give'),
 
    path('campaign/<int:campaign_id>/engagement/', views.campaign_engagement_data, name='campaign_engagement'),
     path('landing/', views.explore_campaigns, name='explore_campaigns'),
     path('verify/', views.verify_profile, name='verify_profile'),
     path('campaign/<int:campaign_id>/join_leave/', views.join_leave_campaign, name='join_leave_campaign'),
     path('campaign/<int:campaign_id>/joiners/', views.campaign_joiners, name='campaign_joiners'),
-    path('fund/', views.fund, name='fund'),
 
-
-    path('webhook/stripe/', views.stripe_webhook, name='stripe_webhook'),
-    path('payment/success/<int:campaign_id>/', views.payment_success, name='payment_success'),
-    path('payment/cancel/', views.payment_cancel, name='payment_cancel'),
+   
 
 
     path('campaign/delete/<int:pk>/', CampaignDeleteView.as_view(), name='campaign-delete'),
@@ -116,6 +111,7 @@ path('get_replies/<int:comment_id>/', views.get_replies, name='get_replies'),
     path('success-stories/', views.success_stories, name='success_stories'),
     path('campaign-stories/', campaign_story_list, name='campaign_story_list'),
     path('campaign-stories/<slug:slug>/', campaign_story_detail, name='campaign_story_detail'),
+  
 
     path('testimonial/', views.testimonial, name='testimonial'),
 
@@ -130,6 +126,12 @@ path('get_replies/<int:comment_id>/', views.get_replies, name='get_replies'),
         path('post_comment_reply/', views.post_comment_reply, name='post_comment_reply'),
     path('get_comment_replies/<int:comment_id>/', views.get_comment_replies, name='get_comment_replies'),
     path('like_comment_reply/', views.like_comment_reply, name='like_comment_reply'),
+
+# urls.py
+
+   path('donate/<int:campaign_id>/', views.donate, name='donate'),
+    path('donation-success/<int:campaign_id>/', views.payment_success, name='payment_success'),
+    path('donation-cancel/', views.payment_cancel, name='payment_cancel'),
      
 ]
 

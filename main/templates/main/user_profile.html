@@ -971,7 +971,8 @@ body.dark-mode .campaign-title {
 <div class="details">
     <hr>
     <h3 style="font-size:19px;">User Details:</h3>
- 
+<p><a href="{% url 'create_stripe_account' %}">Connect with Stripe</a>
+</p>
     <p><strong>Email:</strong> {{ user_profile.user.email }} ✉️</p>
     {% if user_profile.date_of_birth %}
         <p><strong>Age:</strong>{{ user_profile.age }} 🎂</p>
