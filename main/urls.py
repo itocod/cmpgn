@@ -129,7 +129,7 @@ path('get_replies/<int:comment_id>/', views.get_replies, name='get_replies'),
 
 # urls.py
 
-   path('donate/<int:campaign_id>/', views.donate, name='donate'),
+   path('campaign/<int:campaign_id>/donate/', views.donate, name='donate'),
     path('donation-success/<int:campaign_id>/', views.payment_success, name='payment_success'),
     path('donation-cancel/', views.payment_cancel, name='payment_cancel'),
      

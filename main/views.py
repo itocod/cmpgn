@@ -3164,12 +3164,13 @@ def home(request):
             default=Value(False),
             output_field=BooleanField(),
         )
-    ).filter(is_not_interested=False, visibility='public')
+    ).filter(is_not_interested=False, visibility='public').select_related('campaignfund')
 
     # Apply category filter if provided
     if category_filter:
         campaigns = campaigns.filter(category=category_filter)
 
+   
     campaigns = campaigns.order_by('-timestamp')
 
     following_users = request.user.following.values_list('followed', flat=True)
@@ -3180,7 +3181,9 @@ def home(request):
     # 🔥 Trending campaigns (Only those with at least 1 love)
     trending_campaigns = Campaign.objects.filter(visibility='public') \
         .annotate(love_count_annotated=Count('loves')) \
-        .filter(love_count_annotated__gte=1)
+        .filter(love_count_annotated__gte=1)\
+        .select_related('campaignfund')
+
 
     # ✅ Apply category filter before slicing
     if category_filter:
@@ -3220,9 +3223,9 @@ def home(request):
     suggested_users = suggested_users[:2]
 # Annotate profiles with campaign count and total raised
     top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
+    
+   
+)  # Top 10
     return render(request, 'main/home.html', {
         'ads': ads,
         'public_campaigns': campaigns_to_display if campaigns_to_display.exists() else trending_campaigns,
@@ -3955,14 +3958,15 @@ def payment_success(request, campaign_id):
         fund = CampaignFund.objects.get(campaign=campaign)
         amount = Decimal(payment.transactions[0].amount.total)
 
-        # Deduct commission fee (fixed amount)
-        commission_fee = Decimal('0.30')  # Example commission fee
+# Calculate 5% commission fee
+        commission_percentage = Decimal('0.05')  # 5%
+        commission_fee = (amount * commission_percentage).quantize(Decimal('0.01'))  # rounding to cents
+
         net_amount = amount - commission_fee
 
-        # Update the amount raised
+# Update the amount raised
         fund.amount_raised += net_amount
         fund.save()
-
         # Create the donation record (with transaction ID to avoid duplicates)
         Donation.objects.create(
             campaign=campaign,
@@ -3983,7 +3987,7 @@ def payment_success(request, campaign_id):
                     "value": str(commission_fee),
                     "currency": "USD"
                 },
-                "receiver": "kcollino39@gmail.com",  # Your PayPal email
+                "receiver":settings.PAYPAL_PLATFORM_EMAIL,  # Your PayPal email
                 "note": f"Commission for donation {payment_id}",
                 "sender_item_id": str(payment_id)
             }]

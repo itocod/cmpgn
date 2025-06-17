@@ -271,7 +271,7 @@ def validate_no_long_words(value):
 class CampaignForm(forms.ModelForm):
     class Meta:
         model = Campaign
-        fields = ['title', 'category', 'poster', 'audio', 'visibility', 'content', 'target_amount','duration', 'duration_unit']
+        fields = ['title', 'category', 'poster', 'audio', 'visibility', 'content','duration', 'duration_unit']
         labels = {
             'title': 'Title:',
             'content': 'Content:',
@@ -281,7 +281,7 @@ class CampaignForm(forms.ModelForm):
             'category': 'Category:',
             'duration': 'Duration:',
             'duration_unit': 'Duration Unit:',
-            'target_amount':'target_amount',
+           
         }
 
 

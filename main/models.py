@@ -39,8 +39,7 @@ class Profile(models.Model):
         ('PhD', 'PhD'),
         ('Other', 'Other'),
     )
-
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     image = models.ImageField(upload_to='profile_pics/', default='profile_pics/pp.png', max_length=255)
     bio = models.TextField(default='No bio available')
     contact = models.CharField(max_length=15, blank=True)
@@ -54,7 +53,7 @@ class Profile(models.Model):
     last_campaign_check = models.DateTimeField(default=timezone.now)
     last_chat_check = models.DateTimeField(default=timezone.now)
     profile_verified = models.BooleanField(default=False)  # Renamed from `is_verified
-    stripe_account_id = models.CharField(max_length=255, blank=True, null=True)
+   
  
 
     def age(self):
@@ -229,8 +228,6 @@ class Campaign(models.Model):
     content = models.TextField()
     poster = models.ImageField(upload_to='campaign_files', null=True, blank=True)
     audio = models.FileField(upload_to='campaign_audio', null=True, blank=True)
-    target_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    amount_raised = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     is_active = models.BooleanField(default=True)  # Stops donations when target is met
    
 
