@@ -52,10 +52,7 @@ class Profile(models.Model):
     followers = models.ManyToManyField(User, related_name='follower_profiles', blank=True)
     last_campaign_check = models.DateTimeField(default=timezone.now)
     last_chat_check = models.DateTimeField(default=timezone.now)
-    profile_verified = models.BooleanField(default=False)  # Renamed from `is_verified
-   
- 
-
+    profile_verified = models.BooleanField(default=False) 
     def age(self):
         if self.date_of_birth:
             today = timezone.now().date()
@@ -163,8 +160,6 @@ def update_user_verification_status(sender, instance, created, **kwargs):
             verification.approve()
             verification.verified_on = timezone.now()
             verification.save()
-
-
 
 
 class Follow(models.Model):
@@ -685,6 +680,7 @@ class CampaignFund(models.Model):
 
 class Donation(models.Model):
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
+    donor = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     donor_name = models.CharField(max_length=255, default="Anonymous")  # Set a default value
     transaction_id = models.CharField(max_length=255, unique=True, null=True)

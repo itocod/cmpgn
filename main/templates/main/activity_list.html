@@ -543,72 +543,38 @@ body.dark-mode .menu-item {
 body.dark-mode .menu-item:hover {
     background-color: #333;
 }
+/* Share System Styles */
+.share-wrapper {
+    position: relative;
+}
+
+.share-options {
+    display: none;
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 8px;
+    border-radius: 4px;
+    z-index: 100;
+}
+
+.share-options a {
+    display: block;
+    margin: 5px 0;
+    text-decoration: none;
+    color: #333;
+}
+
+.share-wrapper {
+    position: relative;
+}
 
 
-    /* Comment Section Styles */
-    .comment-section {
-        margin-top: 12px;
-        border-top: 1px solid #efefef;
-        padding-top: 12px;
-    }
-    
-    body.dark-mode .comment-section {
-        border-top-color: #333;
-    }
-    
-    .view-comments-link {
-        color: #707070;
-        font-size: 14px;
-        text-decoration: none;
-        display: block;
-        margin-bottom: 8px;
-        transition: color 0.2s ease;
-    }
-    
-    .view-comments-link:hover {
-        color: #0095f6;
-    }
-    
-    body.dark-mode .view-comments-link {
-        color: #a0a0a0;
-    }
-    
-    /* Comment Form Styles */
-    .comment-form-container {
-        margin: 12px 0;
-    }
-    
-    .activity-comment-form {
-        display: flex;
-        align-items: center;
-    }
-    
-    .comment-textarea {
-        flex-grow: 1;
-        border: 1px solid #dbdbdb;
-        border-radius: 20px;
-        padding: 10px 16px;
-        font-size: 14px;
-        resize: none;
-        height: 40px;
-        transition: all 0.2s ease;
-        background-color: #fafafa;
-    }
-    
-    .comment-textarea:focus {
-        outline: none;
-        border-color: #0095f6;
-        background-color: #fff;
-        height: 60px;
-    }
-    
-    body.dark-mode .comment-textarea {
-        background-color: #2a2a2a;
-        border-color: #444;
-        color: #e0e0e0;
-    }
-    
 </style>
+
+
+
+
 
 <script type="text/javascript">
     // Function to handle loving an activity
@@ -760,6 +726,8 @@ body.dark-mode .menu-item:hover {
         }
     });
 </script>
+
+
 {% if user == campaign.user.user %}
     <a href="{% url 'create_activity' campaign_id=campaign.id %}" class="create-activity-link">Create Activity</a>
 {% endif %}
@@ -845,8 +813,7 @@ body.dark-mode .menu-item:hover {
                         {% endif %}
                     {% endif %}
                 </div>
-
-               <div class="activity-interactions">
+<div class="activity-interactions">
     <div class="interaction-container">
         <div class="interaction-item">
             <i class="far fa-heart icon love-icon {% if user in activity.loves.all %}loved{% endif %}" 
@@ -862,35 +829,25 @@ body.dark-mode .menu-item:hover {
                 {{ activity.comments.count|format_count }}
             </span>
         </div>
+        <div class="interaction-item share-wrapper">
+            <i class="fas fa-share-alt icon share-icon" onclick="showShareOptions('{{ activity.id }}')"></i>
+            <div class="share-options" id="shareOptions-{{ activity.id }}">
+                <a href="javascript:void(0);" onclick="shareToFacebook('{{ activity.id }}')">
+                    <i class="fab fa-facebook"></i> Facebook
+                </a>
+                <a href="javascript:void(0);" onclick="shareToTwitter('{{ activity.id }}')">
+                    <i class="fab fa-twitter"></i> Twitter
+                </a>
+                <a href="javascript:void(0);" onclick="copyActivityLink('{{ activity.id }}')">
+                    <i class="fas fa-link"></i> Copy Link
+                </a>
+            </div>
+        </div>
     </div>
-
-                    
-             <!-- Add this inside your activity-item div, after the activity-interactions section -->
-<div class="comment-section" id="comment-section-{{ activity.id }}" style="display: none;">
-    <!-- Comment form -->
-    <div class="comment-form-container">
-        <form class="activity-comment-form" data-activity-id="{{ activity.id }}">
-            {% csrf_token %}
-            <textarea class="comment-textarea" placeholder="Add a comment..." required></textarea>
-            <button type="submit" class="comment-submit-btn" style="margin-left: 8px; background: none; border: none; cursor: pointer;">
-                <i class="fas fa-paper-plane" style="color: #0095f6; font-size: 20px;"></i>
-            </button>
-        </form>
-    </div>
-    
-    <!-- Comments list -->
-    <div class="comments-list" id="comments-list-{{ activity.id }}">
-        <!-- Comments will be loaded here via AJAX -->
-    </div>
-    
-    <!-- View all comments link -->
-    {% if activity.comment_count > 2 %}
-    <a href="#" class="view-all-comments" data-activity-id="{{ activity.id }}" style="display: none;">
-        View all {{ activity.comment_count }} comments
-    </a>
-    {% endif %}
 </div>
-                </div>
+ 
+    
+         </div>
             </li>
         {% endfor %}
     </ul>
@@ -902,933 +859,43 @@ body.dark-mode .menu-item:hover {
 
 
 
-<script type="text/javascript">
-// ==============================================
-// COMMENT SYSTEM FUNCTIONS
-// ==============================================
 
-// --------------------------
-// Comment Section Management
-// --------------------------
-function toggleCommentSection(activityId) {
-    const commentSection = document.getElementById(`comment-section-${activityId}`);
-    if (!commentSection) {
-        console.error(`Comment section not found for activity ${activityId}`);
-        return;
-    }
-    
-    const isHidden = commentSection.style.display === 'none' || !commentSection.style.display;
-    commentSection.style.display = isHidden ? 'block' : 'none';
-    
-    if (isHidden) {
-        const commentsList = document.getElementById(`comments-list-${activityId}`);
-        if (commentsList && commentsList.children.length === 0) {
-            loadComments(activityId);
+<script>
+function showShareOptions(activityId) {
+    const shareOptions = document.getElementById(`shareOptions-${activityId}`);
+    // Hide all others first
+    document.querySelectorAll('.share-options').forEach(opt => {
+        if (opt.id !== `shareOptions-${activityId}`) {
+            opt.style.display = 'none';
         }
-    }
+    });
+    // Toggle visibility
+    shareOptions.style.display = shareOptions.style.display === 'block' ? 'none' : 'block';
 }
 
-// ------------------
-// Comment Loading
-// ------------------
-function loadComments(activityId, loadAll = false) {
-    const commentsList = document.getElementById(`comments-list-${activityId}`);
-    const viewAllLink = document.querySelector(`.view-all-comments[data-activity-id="${activityId}"]`);
-    
-    if (!commentsList) return;
-    
-    commentsList.innerHTML = '<div style="padding: 16px; text-align: center; color: #8e8e8e;">Loading comments...</div>';
-    
-    fetch(`/get_activity_comments/${activityId}/?all=${loadAll}`, {
-        method: 'GET',
-        headers: {'Content-Type': 'application/json'}
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.comments?.length > 0) {
-            renderComments(activityId, data.comments);
-            if (viewAllLink) {
-                viewAllLink.style.display = (data.total_comments > 2 && !loadAll) ? 'block' : 'none';
-                viewAllLink.textContent = `View all ${data.total_comments} comments`;
-            }
-        } else {
-            commentsList.innerHTML = '<div style="padding: 16px; text-align: center; color: #8e8e8e;">No comments yet. Be the first to comment!</div>';
-            if (viewAllLink) viewAllLink.style.display = 'none';
-        }
-    })
-    .catch(error => {
-        console.error('Error loading comments:', error);
-        commentsList.innerHTML = '<div style="padding: 16px; text-align: center; color: #ff0000;">Failed to load comments. Please try again.</div>';
-    });
+function shareToFacebook(activityId) {
+    const url = window.location.origin + `/activity/${activityId}/`;
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+    window.open(facebookUrl, '_blank', 'width=600,height=400');
 }
 
-// ------------------
-// Comment Rendering
-// ------------------
-function renderComments(activityId, comments) {
-    const commentsList = document.getElementById(`comments-list-${activityId}`);
-    if (!commentsList) return;
-    
-    commentsList.innerHTML = '';
-    comments.forEach(comment => {
-        const commentElement = document.createElement('div');
-        commentElement.className = 'comment-item';
-        commentElement.innerHTML = `
-            <div class="comment-user-pic">
-                <img src="${comment.user_image}" alt="${comment.username}" onerror="this.src='{% static 'images/default-profile.png' %}'">
-            </div>
-            <div class="comment-content">
-                <div>
-                    <span class="comment-username">${comment.username}</span>
-                    <span class="comment-text">${comment.content}</span>
-                </div>
-                <div class="comment-meta">
-                    <span class="comment-timestamp">${comment.timestamp}</span>
-                    <button class="comment-reply-btn" data-comment-id="${comment.id}">Reply</button>
-                    <button class="comment-like-btn ${comment.liked ? 'liked' : ''}" data-comment-id="${comment.id}">
-                        <i class="far fa-heart"></i> ${comment.like_count}
-                    </button>
-                </div>
-                <!-- Reply form (hidden by default) -->
-                <div class="reply-form-container" id="reply-form-${comment.id}" style="display: none; margin-top: 10px;">
-                    <form class="comment-reply-form" data-comment-id="${comment.id}">
-                        {% csrf_token %}
-                        <textarea class="reply-textarea" placeholder="Write a reply..." required style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid #ddd;"></textarea>
-                        <div style="margin-top: 5px;">
-                            <button type="submit" class="reply-submit-btn" style="background: #0095f6; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">
-                                Post Reply
-                            </button>
-                            <button type="button" class="cancel-reply-btn" data-comment-id="${comment.id}" style="background: #eee; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; margin-left: 5px;">
-                                Cancel
-                            </button>
-                        </div>
-                    </form>
-                </div>
-                <!-- Replies container -->
-                <div class="replies-list" id="replies-list-${comment.id}" style="margin-left: 20px; border-left: 2px solid #eee; padding-left: 10px;"></div>
-            </div>
-        `;
-        commentsList.appendChild(commentElement);
-        
-        // Load replies for this comment if they exist
-        if (comment.reply_count > 0) {
-            loadReplies(comment.id);
-        }
-    });
-    
-    setupCommentEventListeners(activityId);
+function shareToTwitter(activityId) {
+    const url = window.location.origin + `/activity/${activityId}/`;
+    const text = encodeURIComponent("Check out this activity!");
+    const twitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${text}`;
+    window.open(twitterUrl, '_blank', 'width=600,height=400');
 }
 
-function setupCommentEventListeners(activityId) {
-    // Like buttons
-    document.querySelectorAll(`#comments-list-${activityId} .comment-like-btn`).forEach(btn => {
-        btn.addEventListener('click', function() {
-            const commentId = this.getAttribute('data-comment-id');
-            likeComment(commentId, this);
-        });
-    });
-    
-    // Reply buttons
-    document.querySelectorAll(`#comments-list-${activityId} .comment-reply-btn`).forEach(btn => {
-        btn.addEventListener('click', function() {
-            const commentId = this.getAttribute('data-comment-id');
-            const replyForm = document.getElementById(`reply-form-${commentId}`);
-            replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';
-            if (replyForm.style.display === 'block') {
-                replyForm.querySelector('.reply-textarea').focus();
-            }
-        });
-    });
-    
-    // Cancel reply buttons
-    document.querySelectorAll(`#comments-list-${activityId} .cancel-reply-btn`).forEach(btn => {
-        btn.addEventListener('click', function() {
-            const commentId = this.getAttribute('data-comment-id');
-            document.getElementById(`reply-form-${commentId}`).style.display = 'none';
-        });
-    });
-    
-    // Reply form submissions
-    document.querySelectorAll(`#comments-list-${activityId} .comment-reply-form`).forEach(form => {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const commentId = this.getAttribute('data-comment-id');
-            const content = this.querySelector('.reply-textarea').value.trim();
-            if (content) submitReply(commentId, content, this);
-        });
-    });
-}
-
-// ------------------
-// Reply System
-// ------------------
-function submitReply(commentId, content, form) {
-    const textarea = form.querySelector('.reply-textarea');
-    const submitBtn = form.querySelector('.reply-submit-btn');
-    const originalBtnHTML = submitBtn.innerHTML;
-    
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Posting...';
-    textarea.disabled = true;
-    
-    fetch('/post_comment_reply/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': '{{ csrf_token }}'
-        },
-        body: JSON.stringify({
-            comment_id: commentId,
-            content: content
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            textarea.value = '';
-            form.style.display = 'none';
-            loadReplies(commentId);
-        } else {
-            alert(data.error || 'Failed to post reply. Please try again.');
-        }
-    })
-    .catch(error => {
-        console.error('Error posting reply:', error);
-        alert('Failed to post reply. Please try again.');
-    })
-    .finally(() => {
-        submitBtn.innerHTML = originalBtnHTML;
-        textarea.disabled = false;
-    });
-}
-
-function loadReplies(commentId) {
-    const repliesList = document.getElementById(`replies-list-${commentId}`);
-    if (!repliesList) return;
-    
-    repliesList.innerHTML = '<div style="padding: 8px; color: #8e8e8e;">Loading replies...</div>';
-    
-    fetch(`/get_comment_replies/${commentId}/`, {
-        method: 'GET',
-        headers: {'Content-Type': 'application/json'}
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.replies?.length > 0) {
-            renderReplies(commentId, data.replies);
-        } else {
-            repliesList.innerHTML = '';
-        }
-    })
-    .catch(error => {
-        console.error('Error loading replies:', error);
-        repliesList.innerHTML = '<div style="padding: 8px; color: #ff0000;">Failed to load replies</div>';
-    });
-}
-
-function renderReplies(commentId, replies) {
-    const repliesList = document.getElementById(`replies-list-${commentId}`);
-    if (!repliesList) return;
-    
-    const isDarkMode = document.body.classList.contains('dark-mode');
-    
-    repliesList.innerHTML = '';
-    replies.forEach(reply => {
-        const replyElement = document.createElement('div');
-        replyElement.className = 'reply-item';
-        replyElement.style.marginTop = '8px';
-        replyElement.style.padding = '8px';
-        replyElement.style.background = isDarkMode ? '#2d2d2d' : '#f9f9f9';
-        replyElement.style.borderRadius = '8px';
-        replyElement.style.transition = 'background-color 0.3s ease';
-        
-        replyElement.innerHTML = `
-            <div style="display: flex;">
-                <div class="reply-user-pic" style="margin-right: 10px;">
-                    <img src="${reply.user_image}" alt="${reply.username}" style="width: 32px; height: 32px; border-radius: 50%;" onerror="this.src='{% static 'images/default-profile.png' %}'">
-                </div>
-                <div class="reply-content" style="flex: 1;">
-                    <div>
-                        <span class="reply-username" style="font-weight: bold; color: ${isDarkMode ? '#f5f5f5' : '#262626'}">${reply.username}</span>
-                        <span class="reply-text" style="color: ${isDarkMode ? '#e0e0e0' : '#000'}">${reply.content}</span>
-                    </div>
-                    <div class="reply-meta" style="font-size: 12px; color: ${isDarkMode ? '#aaa' : '#8e8e8e'}; margin-top: 4px;">
-                        <span class="reply-timestamp">${reply.timestamp}</span>
-                        <button class="reply-like-btn ${reply.liked ? 'liked' : ''}" data-reply-id="${reply.id}" 
-                                style="margin-left: 8px; background: none; border: none; cursor: pointer; 
-                                       color: ${reply.liked ? '#ed4956' : (isDarkMode ? '#aaa' : '#8e8e8e')}">
-                            <i class="far fa-heart"></i> ${reply.like_count}
-                        </button>
-                    </div>
-                </div>
-            </div>
-        `;
-        repliesList.appendChild(replyElement);
-        
-        replyElement.querySelector('.reply-like-btn')?.addEventListener('click', function() {
-            const replyId = this.getAttribute('data-reply-id');
-            likeReply(replyId, this);
-        });
-    });
-}
-
-// ==============================================
-// LIKE SYSTEM FUNCTIONS
-// ==============================================
-
-// ------------------
-// Comment Likes
-// ------------------
-function likeComment(commentId, likeBtn) {
-    const icon = likeBtn.querySelector('i');
-    const isLiked = likeBtn.classList.contains('liked');
-    const likeCountElement = likeBtn.querySelector('i').nextSibling;
-    let likeCount = parseInt(likeCountElement.textContent.trim()) || 0;
-    
-    // Optimistic UI update
-    if (isLiked) {
-        likeBtn.classList.remove('liked');
-        likeBtn.style.color = '#8e8e8e';
-        icon.classList.replace('fas', 'far');
-        likeCount--;
-    } else {
-        likeBtn.classList.add('liked');
-        likeBtn.style.color = '#ed4956';
-        icon.classList.replace('far', 'fas');
-        likeCount++;
-    }
-    likeCountElement.textContent = ` ${likeCount}`;
-    
-    // AJAX request
-    fetch('/like_activity_comment/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': '{{ csrf_token }}'
-        },
-        body: JSON.stringify({
-            comment_id: commentId,
-            action: isLiked ? 'unlike' : 'like'
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (!data.success) {
-            // Revert UI if failed
-            if (isLiked) {
-                likeBtn.classList.add('liked');
-                likeBtn.style.color = '#ed4956';
-                icon.classList.replace('far', 'fas');
-                likeCount++;
-            } else {
-                likeBtn.classList.remove('liked');
-                likeBtn.style.color = '#8e8e8e';
-                icon.classList.replace('fas', 'far');
-                likeCount--;
-            }
-            likeCountElement.textContent = ` ${likeCount}`;
-        }
-    })
-    .catch(error => {
-        console.error('Error liking comment:', error);
-        // Revert UI on error
-        if (isLiked) {
-            likeBtn.classList.add('liked');
-            likeBtn.style.color = '#ed4956';
-            icon.classList.replace('far', 'fas');
-            likeCount++;
-        } else {
-            likeBtn.classList.remove('liked');
-            likeBtn.style.color = '#8e8e8e';
-            icon.classList.replace('fas', 'far');
-            likeCount--;
-        }
-        likeCountElement.textContent = ` ${likeCount}`;
-    });
-}
-
-// ------------------
-// Reply Likes
-// ------------------
-function likeReply(replyId, likeBtn) {
-    const icon = likeBtn.querySelector('i');
-    const isLiked = likeBtn.classList.contains('liked');
-    const likeCountElement = likeBtn.querySelector('i').nextSibling;
-    let likeCount = parseInt(likeCountElement.textContent.trim()) || 0;
-    
-    // Optimistic UI update
-    if (isLiked) {
-        likeBtn.classList.remove('liked');
-        likeBtn.style.color = '#8e8e8e';
-        icon.classList.replace('fas', 'far');
-        likeCount--;
-    } else {
-        likeBtn.classList.add('liked');
-        likeBtn.style.color = '#ed4956';
-        icon.classList.replace('far', 'fas');
-        likeCount++;
-    }
-    likeCountElement.textContent = ` ${likeCount}`;
-    
-    // AJAX request
-    fetch('/like_comment_reply/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': '{{ csrf_token }}'
-        },
-        body: JSON.stringify({
-            reply_id: replyId,
-            action: isLiked ? 'unlike' : 'like'
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (!data.success) {
-            // Revert UI if failed
-            if (isLiked) {
-                likeBtn.classList.add('liked');
-                likeBtn.style.color = '#ed4956';
-                icon.classList.replace('far', 'fas');
-                likeCount++;
-            } else {
-                likeBtn.classList.remove('liked');
-                likeBtn.style.color = '#8e8e8e';
-                icon.classList.replace('fas', 'far');
-                likeCount--;
-            }
-            likeCountElement.textContent = ` ${likeCount}`;
-        }
-    })
-    .catch(error => {
-        console.error('Error liking reply:', error);
-        // Revert UI on error
-        if (isLiked) {
-            likeBtn.classList.add('liked');
-            likeBtn.style.color = '#ed4956';
-            icon.classList.replace('far', 'fas');
-            likeCount++;
-        } else {
-            likeBtn.classList.remove('liked');
-            likeBtn.style.color = '#8e8e8e';
-            icon.classList.replace('fas', 'far');
-            likeCount--;
-        }
-        likeCountElement.textContent = ` ${likeCount}`;
-    });
-}
-
-
-// ------------------
-// Comment Submission
-// ------------------
-function submitComment(activityId, content, form) {
-    const textarea = form.querySelector('.comment-textarea');
-    const submitBtn = form.querySelector('.comment-submit-btn');
-    const originalBtnHTML = submitBtn.innerHTML;
-    
-    // Show loading state
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-    textarea.disabled = true;
-    
-    fetch('/post_activity_comment/', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value
-        },
-        body: JSON.stringify({
-            activity_id: activityId,
-            content: content
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Clear textarea and reload comments
-            textarea.value = '';
-            loadComments(activityId);
-            
-            // Update comment count
-            const commentCountElement = document.querySelector(`.comment-count[data-activity-id="${activityId}"]`);
-            if (commentCountElement) {
-                const currentCount = parseInt(commentCountElement.textContent) || 0;
-                commentCountElement.textContent = currentCount + 1;
-            }
-        } else {
-            alert(data.error || 'Failed to post comment. Please try again.');
-        }
-    })
-    .catch(error => {
-        console.error('Error posting comment:', error);
-        alert('Failed to post comment. Please try again.');
-    })
-    .finally(() => {
-        submitBtn.innerHTML = originalBtnHTML;
-        textarea.disabled = false;
-    });
-}
-
-// ==============================================
-// INITIALIZATION
-// ==============================================
-document.addEventListener('DOMContentLoaded', function() {
-    // View all comments links
-    document.querySelectorAll('.view-all-comments').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const activityId = this.getAttribute('data-activity-id');
-            loadComments(activityId, true);
-            this.style.display = 'none';
-        });
-    });
-    
-    // Comment form submission
-    document.querySelectorAll('.activity-comment-form').forEach(form => {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const activityId = this.getAttribute('data-activity-id');
-            const content = this.querySelector('.comment-textarea').value.trim();
-            if (content) submitComment(activityId, content, this);
-        });
-    });
-    
-    // Close comment sections when clicking outside
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('.comment-section') && 
-            !e.target.closest('.icon.comment') && 
-            !e.target.classList.contains('icon') && 
-            !e.target.classList.contains('comment')) {
-            document.querySelectorAll('.comment-section').forEach(section => {
-                section.style.display = 'none';
-            });
-        }
-    });
-});
-</script>
-<script type="text/javascript">
-    // Modify the loadReplies function to show a "View Replies" button when replies exist
-function loadReplies(commentId) {
-    const repliesList = document.getElementById(`replies-list-${commentId}`);
-    if (!repliesList) return;
-    
-    // Check if we already have a "View Replies" button
-    if (!repliesList.previousElementSibling || !repliesList.previousElementSibling.classList.contains('view-replies-btn')) {
-        const viewRepliesBtn = document.createElement('button');
-        viewRepliesBtn.className = 'view-replies-btn';
-        viewRepliesBtn.setAttribute('data-comment-id', commentId);
-        viewRepliesBtn.innerHTML = '<i class="fas fa-chevron-down"></i> View replies';
-        viewRepliesBtn.style.margin = '5px 0';
-        viewRepliesBtn.style.background = 'none';
-        viewRepliesBtn.style.border = 'none';
-        viewRepliesBtn.style.color = '#8e8e8e';
-        viewRepliesBtn.style.cursor = 'pointer';
-        
-        viewRepliesBtn.addEventListener('click', function() {
-            this.style.display = 'none';
-            fetchReplies(commentId);
-        });
-        
-        repliesList.parentNode.insertBefore(viewRepliesBtn, repliesList);
-    }
-    
-    // Initially hide the replies list
-    repliesList.style.display = 'none';
-}
-
-// Separate function to actually fetch replies
-function fetchReplies(commentId) {
-    const repliesList = document.getElementById(`replies-list-${commentId}`);
-    if (!repliesList) return;
-    
-    repliesList.innerHTML = '<div style="padding: 8px; color: #8e8e8e;">Loading replies...</div>';
-    repliesList.style.display = 'block';
-    
-    fetch(`/get_comment_replies/${commentId}/`, {
-        method: 'GET',
-        headers: {'Content-Type': 'application/json'}
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.replies?.length > 0) {
-            renderReplies(commentId, data.replies);
-        } else {
-            repliesList.innerHTML = '<div style="padding: 8px; color: #8e8e8e;">No replies yet</div>';
-        }
-    })
-    .catch(error => {
-        console.error('Error loading replies:', error);
-        repliesList.innerHTML = '<div style="padding: 8px; color: #ff0000;">Failed to load replies</div>';
+function copyActivityLink(activityId) {
+    const url = window.location.origin + `/activity/${activityId}/`;
+    navigator.clipboard.writeText(url).then(() => {
+        alert('Activity link copied to clipboard!');
+    }).catch(err => {
+        console.error('Failed to copy: ', err);
+        alert('Failed to copy link.');
     });
 }
 </script>
-
-
-
-
-<style type="text/css">
-    /* Add these styles to your existing CSS */
-.comment-section {
-    margin-top: 12px;
-    border-top: 1px solid #efefef;
-    padding: 12px 16px 0;
-    background-color: #fafafa;
-    border-radius: 0 0 8px 8px;
-}
-
-body.dark-mode .comment-section {
-    border-top-color: #333;
-    background-color: #1e1e1e;
-}
-
-.comments-list {
-    max-height: 300px;
-    overflow-y: auto;
-    margin-bottom: 8px;
-}
-
-.comment-item {
-    display: flex;
-    margin-bottom: 12px;
-    padding: 8px;
-    border-radius: 4px;
-    transition: background-color 0.2s ease;
-}
-
-.comment-item:hover {
-    background-color: rgba(0, 0, 0, 0.02);
-}
-
-body.dark-mode .comment-item:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-}
-
-.comment-user-pic {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    margin-right: 10px;
-    flex-shrink: 0;
-}
-
-.comment-user-pic img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.comment-content {
-    flex-grow: 1;
-}
-
-.comment-username {
-    font-weight: 600;
-    font-size: 13px;
-    margin-right: 6px;
-    color: #262626;
-}
-
-body.dark-mode .comment-username {
-    color: #f5f5f5;
-}
-
-.comment-text {
-    font-size: 14px;
-    line-height: 1.4;
-    margin-top: 2px;
-    word-break: break-word;
-}
-
-.comment-meta {
-    display: flex;
-    align-items: center;
-    margin-top: 4px;
-}
-
-.comment-timestamp {
-    font-size: 11px;
-    color: #8e8e8e;
-    margin-right: 10px;
-}
-
-.comment-reply-btn {
-    font-size: 11px;
-    color: #8e8e8e;
-    font-weight: 600;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-}
-
-.comment-reply-btn:hover {
-    color: #0095f6;
-}
-
-.comment-like-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    margin-left: 10px;
-    color: #8e8e8e;
-    font-size: 12px;
-}
-
-.comment-like-btn.liked {
-    color: #ed4956;
-}
-
-.comment-like-btn i {
-    font-size: 12px;
-    margin-right: 4px;
-}
-
-.view-all-comments {
-    display: block;
-    color: #8e8e8e;
-    font-size: 14px;
-    margin-bottom: 8px;
-    text-decoration: none;
-}
-
-.view-all-comments:hover {
-    color: #0095f6;
-}
-
-/* Scrollbar styling */
-.comments-list::-webkit-scrollbar {
-    width: 6px;
-}
-
-.comments-list::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 10px;
-}
-
-.comments-list::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
-    border-radius: 10px;
-}
-
-.comments-list::-webkit-scrollbar-thumb:hover {
-    background: #a8a8a8;
-}
-
-body.dark-mode .comments-list::-webkit-scrollbar-track {
-    background: #2a2a2a;
-}
-
-body.dark-mode .comments-list::-webkit-scrollbar-thumb {
-    background: #4a4a4a;
-}
-
-body.dark-mode .comments-list::-webkit-scrollbar-thumb:hover {
-    background: #5a5a5a;
-}
-
-
-
-.comment-reply-btn {
-    background: none;
-    border: none;
-    color: #8e8e8e;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    padding: 0;
-    margin-right: 10px;
-}
-
-.comment-reply-btn:hover {
-    color: #0095f6;
-    text-decoration: underline;
-}
-
-.reply-form-container {
-    margin-top: 10px;
-    padding: 10px;
-    background: #f9f9f9;
-    border-radius: 8px;
-}
-
-.reply-textarea {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    resize: vertical;
-    min-height: 50px;
-    margin-bottom: 8px;
-}
-
-.reply-form-buttons {
-    display: flex;
-    gap: 8px;
-}
-
-.reply-submit-btn, .cancel-reply-btn {
-    padding: 6px 12px;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.reply-submit-btn {
-    background: #0095f6;
-    color: white;
-    border: none;
-}
-
-.cancel-reply-btn {
-    background: #efefef;
-    color: #262626;
-    border: none;
-}
-
-
-/* Dark Mode Base Styles */
-body.dark-mode {
-    background-color: #121212;
-    color: #e0e0e0;
-}
-
-/* Activity Item Dark Mode */
-body.dark-mode .activity-item {
-    background-color: #1e1e1e;
-    border-color: #333;
-}
-
-body.dark-mode .activity-content,
-body.dark-mode .activity-title,
-body.dark-mode .campaign-link {
-    color: #e0e0e0;
-}
-
-body.dark-mode .activity-timestamp,
-body.dark-mode .activity-count {
-    color: #b0b0b0;
-}
-
-/* Comment Section Dark Mode */
-body.dark-mode .comment-section {
-    background-color: #1e1e1e;
-    border-top-color: #333;
-}
-
-body.dark-mode .comment-textarea {
-    background-color: #2d2d2d;
-    color: #e0e0e0;
-    border-color: #444;
-}
-
-body.dark-mode .comment-textarea::placeholder {
-    color: #888;
-}
-
-body.dark-mode .comment-item {
-    background-color: #252525;
-}
-
-body.dark-mode .comment-username {
-    color: #f5f5f5;
-}
-
-body.dark-mode .comment-text {
-    color: #e0e0e0;
-}
-
-body.dark-mode .comment-timestamp,
-body.dark-mode .view-all-comments {
-    color: #aaa;
-}
-
-body.dark-mode .comment-reply-btn,
-body.dark-mode .comment-like-btn {
-    color: #aaa;
-}
-
-body.dark-mode .comment-reply-btn:hover,
-body.dark-mode .view-all-comments:hover {
-    color: #0095f6;
-}
-
-/* Reply Form Dark Mode */
-body.dark-mode .reply-form-container {
-    background-color: #252525;
-}
-
-body.dark-mode .reply-textarea {
-    background-color: #2d2d2d;
-    color: #e0e0e0;
-    border-color: #444;
-}
-
-body.dark-mode .cancel-reply-btn {
-    background-color: #333;
-    color: #e0e0e0;
-}
-
-/* Activity Interactions Dark Mode */
-body.dark-mode .interaction-icons .icon {
-    color: #aaa;
-}
-
-body.dark-mode .interaction-icons .icon:hover {
-    color: #e0e0e0;
-}
-
-body.dark-mode .love-count {
-    color: #aaa;
-}
-
-/* Menu Popup Dark Mode */
-body.dark-mode .menu-popup {
-    background-color: #2d2d2d;
-    border-color: #444;
-}
-
-body.dark-mode .menu-item {
-    color: #e0e0e0;
-}
-
-body.dark-mode .menu-item:hover {
-    background-color: #333;
-}
-
-
-/* Dark mode styles for replies */
-body.dark-mode .reply-item {
-    background-color: #2d2d2d;
-    border: 1px solid #444;
-}
-
-body.dark-mode .reply-username {
-    color: #f5f5f5 !important;
-}
-
-body.dark-mode .reply-text {
-    color: #e0e0e0 !important;
-}
-
-body.dark-mode .reply-meta {
-    color: #aaa !important;
-}
-
-body.dark-mode .reply-like-btn {
-    color: #aaa !important;
-}
-
-body.dark-mode .reply-like-btn.liked {
-    color: #ed4956 !important;
-}
-
-body.dark-mode .view-replies-btn {
-    color: #aaa !important;
-}
-
-body.dark-mode .view-replies-btn:hover {
-    color: #4db2ff !important;
-}
-</style>
 
 
 <script type="text/javascript">
@@ -1864,8 +931,7 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 
 
-
-    <script>
+<script>
         document.addEventListener('DOMContentLoaded', function() {
             const videos = document.querySelectorAll('video');
             const options = {
@@ -2109,5 +1175,6 @@ function switchColor() {
 </script>
 
 
-
 {% endblock %}
+
+    

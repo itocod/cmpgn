@@ -31,7 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-
+   
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -88,19 +88,26 @@ WSGI_APPLICATION = 'buskx.wsgi.application'
 
 
 # Database configuration
+# PostgreSQL configuration (commented out)
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': env('DB_NAME'),  # Load database name from .env
+#         'USER': env('DB_USER'),  # Load username from .env
+#         'PASSWORD': env('DB_PASSWORD'),  # Load password from .env
+#         'HOST': env('DB_HOST'),  # Load host from .env
+#         'PORT': env('DB_PORT'),  # Load port from .env
+#         'OPTIONS': {
+#             'sslmode': 'require',  # SSL mode for secure connection
+#         },
+#     }
+# }
 
-# Database configuration
+# SQLite configuration (default for development)
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env('DB_NAME'),  # Load database name from .env
-        'USER': env('DB_USER'),  # Load username from .env
-        'PASSWORD': env('DB_PASSWORD'),  # Load password from .env
-        'HOST': env('DB_HOST'),  # Load host from .env
-        'PORT': env('DB_PORT'),  # Load port from .env
-        'OPTIONS': {
-            'sslmode': 'require',  # SSL mode for secure connection
-        },
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
@@ -129,20 +136,32 @@ USE_I18N = True
 USE_TZ = True
 
 # AWS S3 configurations for static and media files
-AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
-AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
-AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME', default='us-east-1')
-AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
-AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+#AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+#AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+#AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
+#AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME', default='us-east-1')
+#AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+#AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 
 # Static files settings
-STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
+#STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+#STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
 
 # Media files settings
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+#DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+#MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+
+
+# Static files settings (local)
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Media files settings (local)
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+
+
 
 # Email settings
 EMAIL_BACKEND = env('EMAIL_BACKEND')

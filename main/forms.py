@@ -18,6 +18,11 @@ from .models import UserVerification,CampaignFund
 
 
 
+
+
+
+
+
 # Custom validator to check for long words
 def validate_no_long_words(value):
     for word in value.split():
@@ -268,6 +273,12 @@ def validate_no_long_words(value):
         if len(word) > 20:  # Check if any word exceeds 20 characters
             raise ValidationError(f"Word '{word}' exceeds the allowed length of 20 characters.")
 
+
+
+from django.core.exceptions import ValidationError
+from PIL import Image
+import os
+
 class CampaignForm(forms.ModelForm):
     class Meta:
         model = Campaign
@@ -283,6 +294,23 @@ class CampaignForm(forms.ModelForm):
             'duration_unit': 'Duration Unit:',
            
         }
+
+
+    def clean_poster(self):
+        poster = self.cleaned_data.get('poster')
+        if poster:
+            valid_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
+            ext = os.path.splitext(poster.name)[1].lower()
+            if ext not in valid_extensions:
+                raise ValidationError("Unsupported file format. Allowed formats: JPG, JPEG, PNG, GIF, WEBP")
+
+            try:
+                image = Image.open(poster)
+                image.verify()  # Check if it's a valid image file
+            except Exception:
+                raise ValidationError("Uploaded file is not a valid image.")
+
+        return poster
 
 
     def __init__(self, *args, **kwargs):

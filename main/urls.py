@@ -12,14 +12,13 @@ from .views import get_comments, post_comment
 urlpatterns = [
     path('get_comments/', get_comments, name='get_comments'),
     path('post_comment/', post_comment, name='post_comment'),
-
+  
    path('campaign/<int:campaign_id>/engagement/', views.campaign_engagement_data, name='campaign_engagement'),
     path('landing/', views.explore_campaigns, name='explore_campaigns'),
     path('verify/', views.verify_profile, name='verify_profile'),
     path('campaign/<int:campaign_id>/join_leave/', views.join_leave_campaign, name='join_leave_campaign'),
     path('campaign/<int:campaign_id>/joiners/', views.campaign_joiners, name='campaign_joiners'),
 
-   
 
 
     path('campaign/delete/<int:pk>/', CampaignDeleteView.as_view(), name='campaign-delete'),
@@ -120,14 +119,12 @@ path('get_replies/<int:comment_id>/', views.get_replies, name='get_replies'),
      path('about/', views.aboutus, name='aboutus'),
      
        path('geno/', views.geno, name='geno'),
-           path('get_activity_comments/<int:activity_id>/', get_activity_comments, name='get_activity_comments'),
-    path('post_activity_comment/', post_activity_comment, name='post_activity_comment'),
-    path('like_activity_comment/', like_activity_comment, name='like_activity_comment'),
-        path('post_comment_reply/', views.post_comment_reply, name='post_comment_reply'),
+      path('get_activity_comments/<int:activity_id>/', views.get_activity_comments, name='get_activity_comments'),
+    path('post_activity_comment/', views.post_activity_comment, name='post_activity_comment'),
+    path('like_activity_comment/', views.like_activity_comment, name='like_activity_comment'),
+    path('post_comment_reply/', views.post_comment_reply, name='post_comment_reply'),
     path('get_comment_replies/<int:comment_id>/', views.get_comment_replies, name='get_comment_replies'),
     path('like_comment_reply/', views.like_comment_reply, name='like_comment_reply'),
-
-# urls.py
 
    path('campaign/<int:campaign_id>/donate/', views.donate, name='donate'),
     path('donation-success/<int:campaign_id>/', views.payment_success, name='payment_success'),

@@ -1127,6 +1127,11 @@ border: 1px solid silver;
     font-size: 12px;
     color: #bdc3c7;
 }
+@media (min-width: 768px) {
+  .footer {
+    display: none;
+  }
+}
 
 .mystery-text {
     color: #ecf0f1;
@@ -2383,19 +2388,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 
-    <div class="action-item">
-        <a href="#" onclick="uploadAudio()">
-            <i class="fas fa-volume-up"></i> VibeVent
-        </a>
-    </div>
-    
-    <div class="action-item">
-        <a href="#" onclick="switchColor()">
-            <i class="fas fa-sync-alt"></i>
-        </a>
-    </div>
-    
-    <audio id="bgAudio" autoplay loop></audio>
 
          <nav id="navbar" class="navbar">
          <span id="popupClose" class="popup-close">&times;</span>
@@ -2492,16 +2484,20 @@ document.addEventListener("DOMContentLoaded", function() {
             </li>
 
             <li><a href="{% url 'suggest' %}" style="color: black;"><i class="fas fa-user-friends"></i> Suggested Users</a></li>
-
-            <!-- Logout link -->
-            <li>
-                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
-                <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
-                    {% csrf_token %}
-                </form>
-            </li>
+<li>
+     <a href="{% url 'index' %}" title="Explore"  style="color: black;">
+        <i class="fas fa-compass" style="font-size: 14px;"> Explore</i>
+    </a>
+</li>
+            <!-- Login link -->
+                   <li>
+    <a href="{% url 'account_login' %}">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M13 12h9m-9-3l3 3-3 3m5-9V5a2 2 0 00-2-2H6a2 2 0 00-2 2v14a2 2 0 002 2h8a2 2 0 002-2v-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>Login</span>
+    </a>
+</li>
         </ul>
     </nav>
 
@@ -2524,7 +2520,9 @@ document.addEventListener("DOMContentLoaded", function() {
         {% endfor %}
     </div>
 </div>
-
+  <div class="aside-footer">
+    <a href="#">About</a> • <a href="#">Help</a> • <a href="#">Terms</a> • <a href="#">Privacy</a>
+  </div>
 </aside>
 
 
@@ -2534,23 +2532,9 @@ document.addEventListener("DOMContentLoaded", function() {
 <section>
 
 
-<!-- Beautiful upload button -->
-<div class="upload-container hide-on-mobile">
-    <div class="upload-btn-wrapper">
-        <button class="btn" style="font-size: 14px;">+ Upload
-            <a href="{% url 'create_campaign' %}" class="overlay-link"></a>
-        </button>
-    </div>
-</div>
-</br>
-
 
 
 <div class="sidebar-box ">
-  <a href="{% url 'index' %}" title="Explore" class="explore-link" style="margin-left: 10px; text-decoration: none; display: inline-block;">
-    <i class="fas fa-compass" style="font-size: 18px; color: #c0c0c0; transition: transform 0.3s ease, color 0.3s ease;"></i>
-    <span style="margin-left: 8px; color: #c0c0c0; font-size: 14px; font-weight: 500; transition: color 0.3s ease;">Explore</span>
-</a>
 
 
 
@@ -2587,7 +2571,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 
-
 <aside class="right-aside">
 
 
@@ -2600,19 +2583,58 @@ document.addEventListener("DOMContentLoaded", function() {
 </nav><br>
   <div style="border: 1px solid #808080; padding: 20px; text-align: center; border-radius: 10px;">
      
-    <h2 style="margin-bottom: 10px;">anonymous
-      . <i class="cm">campaigner</i></h2>
-               
-        <p><strong>Status:</strong> <span>None</span></p>
-   
-   <img src="{% static 'profile_pics/pp.png' %}"  alt="Profile Image" width="150" height="150" style="
-      object-fit: cover;
-      border: 4px solid #32CD32;
-      
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      transition: border-color 0.3s ease;
-      border-radius: 50%; margin-bottom: 15px;
-    " onmouseover="this.style.borderColor='#00FF00';" onmouseout="this.style.borderColor='#32CD32';">
+   <h2 style="margin-bottom: 10px;">
+    {{ user_profile.user.username|default:"Anonymous" }} 
+    . <i class="cm">campaigner</i>
+</h2>
+<p><strong>Status:</strong> 
+    {% if user_profile.profile_verified %}
+        <span>Verified</span>
+        <i class="material-icons" style="font-size:20px;color:green">verified_user</i>
+    {% else %}
+        <span>None</span>
+    {% endif %}
+</p>
+
+  {% if user_profile and user_profile.image %}
+    <img src="{{ user_profile.image.url }}" alt="Profile Image" width="150" height="150" 
+         style="
+             object-fit: cover;
+             border: 4px solid #32CD32;
+             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+             transition: border-color 0.3s ease;
+             border-radius: 50%; 
+             margin-bottom: 15px;
+         " 
+         onmouseover="this.style.borderColor='#00FF00';" 
+         onmouseout="this.style.borderColor='#32CD32';">
+{% else %}
+    <div style="
+    display: inline-block; 
+    border-radius: 50%; 
+    padding: 8px; 
+    background: linear-gradient(135deg, #E0F7FA 0%, #E8F5E9 100%); /* Soft blue-green gradient */
+    box-shadow: 0 0 15px rgba(0, 150, 136, 0.2); /* Matching subtle shadow */
+">
+    <img 
+        src="{% static 'main/files/py.jpeg' %}" 
+        alt="Default Profile Image" 
+        width="150" 
+        height="150" 
+        style="
+            object-fit: cover;
+            border: 4px solid #C0C0C0; /* Silver border */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease; /* Smooth transition for hover */
+            border-radius: 50%; 
+            margin: 0; /* Remove default margin */
+            display: block; /* Fix spacing */
+        " 
+        onmouseover="this.style.borderColor='#FFFFFF'; this.style.boxShadow='0 0 15px rgba(192, 192, 192, 0.7)';" 
+        onmouseout="this.style.borderColor='#C0C0C0'; this.style.boxShadow='0 0 10px rgba(0, 0, 0, 0.1)';"
+    >
+</div>
+{% endif %}
     <p style="font-size: 16px; color: #555;">Campaigner</p>
     <hr style="border-color: #ccc; margin: 20px 0;">
       <sp style="font-size: 14px; color: #777; line-height: 1.6;">
@@ -2620,15 +2642,14 @@ document.addEventListener("DOMContentLoaded", function() {
 </sp>
 <div style="margin-top: 20px;">
     {% if user_profile %}
-    <a href="{% url 'profile_view' username=user_profile.user.username %}">Profile</a>
+  
 {% else %}
  <a href="/accounts/login/" style="display: inline-block; padding: 10px 20px; background-color: #1877F2; color: white; font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; text-decoration: none; border-radius: 5px; transition: background-color 0.3s ease;">Log in</a> <!-- Or any other anonymous user action -->
     <a href=""></a> <!-- Or any other anonymous user action -->
 {% endif %}
 
-</div></br>
-
-
+</div>
+  </div></br>
 
 
 

@@ -94,6 +94,9 @@ from django.db.models import Count
 
 
 
+from django.db.models import Count, Q
+from itertools import chain
+from collections import defaultdict
 
 from django.db.models import Count, Sum
 from django.shortcuts import render
@@ -106,6 +109,9 @@ from django.db.models import Case, When, Value, BooleanField, Q
 from django.utils import timezone
 from .models import Campaign, Profile, Notification, Chat, Message, NativeAd, NotInterested, Love
 from django.contrib.auth.models import AnonymousUser
+
+
+
 
 @login_required
 def campaign_list(request):
@@ -224,11 +230,7 @@ def campaign_engagement_data(request, campaign_id):
 
     # Limit to only 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
+
          
     return render(request, 'revenue/engagement_graph.html', {"campaign": campaign, "engagement_data": engagement_data,'user_profile': user_profile,
         'unread_notifications': unread_notifications,
@@ -236,22 +238,23 @@ def campaign_engagement_data(request, campaign_id):
         'form': form,
         'ads': ads,
            'suggested_users': suggested_users,
-        'top_contributors': top_contributors,})
-
-
-
-
-
-
-
-
+      })
 
 
 
 def top_participants_view(request, campaign_id):
-    # Fetch the campaign
-    campaign = Campaign.objects.get(pk=campaign_id)
+    # Fetch the campaign and user profile
+    campaign = get_object_or_404(Campaign, pk=campaign_id)
+    user_profile = get_object_or_404(Profile, user=request.user)
     
+    # Update last campaign check time
+    user_profile.last_campaign_check = timezone.now()
+    user_profile.save()
+
+    # Get following user IDs using the improved pattern
+    current_user_following = request.user.following.all()
+    following_user_ids = [follow.followed_id for follow in current_user_following]
+
     # Aggregate engagement metrics
     loves = ActivityLove.objects.filter(activity__campaign=campaign).values('user').annotate(total=Count('id'))
     comments = ActivityComment.objects.filter(activity__campaign=campaign).values('user').annotate(total=Count('id'))
@@ -269,39 +272,64 @@ def top_participants_view(request, campaign_id):
     for donation in donations:
         participant_scores[donation['donor_name']] = participant_scores.get(donation['donor_name'], 0) + donation['total']
 
-    # Sort participants by score
+    # Sort participants by score and get top 10
     sorted_participants = sorted(participant_scores.items(), key=lambda x: x[1], reverse=True)
-    
-    # Fetch user profiles for the top participants
     top_participants = [
         {
             'user': User.objects.get(pk=participant[0]),
             'score': participant[1]
-        } for participant in sorted_participants[:10]  # Limit to top 10
+        } for participant in sorted_participants[:10]
     ]
-    user_profile = get_object_or_404(Profile, user=request.user)
-    campaign = get_object_or_404(Campaign, id=campaign_id)
-    
-    # Optional: If you want to track the last time the user viewed their campaigns
-    user_profile.last_campaign_check = timezone.now()
-    user_profile.save()
 
-    # Other data to pass to the template (e.g., unread notifications, ads, etc.)
-    form = SubscriptionForm()
-    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    user_chats = Chat.objects.filter(participants=request.user)
-    unread_messages_count = Message.objects.filter(chat__in=user_chats).exclude(sender=request.user).count()
-    ads = NativeAd.objects.all()
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund') \
+        .order_by('-love_count_annotated')[:10]
 
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+    # Top Contributors logic (site-wide)
+    engaged_users = set()
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    # Get suggested users with improved logic
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
     suggested_users = []
     
     for profile in all_profiles:
         similarity_score = calculate_similarity(user_profile, profile)
         if similarity_score >= 0.5:
-            # Get followers count for each suggested user
             followers_count = Follow.objects.filter(followed=profile.user).count()
             suggested_users.append({
                 'user': profile.user,
@@ -310,24 +338,28 @@ def top_participants_view(request, campaign_id):
 
     # Limit to only 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
-           
-    return render(request, 'main/top_participants.html', {
+
+    # Other template data
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    user_chats = Chat.objects.filter(participants=request.user)
+    unread_messages_count = Message.objects.filter(chat__in=user_chats).exclude(sender=request.user).count()
+    ads = NativeAd.objects.all()
+    form = SubscriptionForm()
+
+    context = {
         'campaign': campaign,
         'top_participants': top_participants,
-        'campaign': campaign,        'user_profile': user_profile,
+        'user_profile': user_profile,
         'unread_notifications': unread_notifications,
         'unread_messages_count': unread_messages_count,
         'form': form,
         'ads': ads,
-         'suggested_users': suggested_users,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
         'top_contributors': top_contributors,
-    })
-
+    }
+    
+    return render(request, 'main/top_participants.html', context)
 
 
 def explore_campaigns(request):
@@ -352,35 +384,82 @@ def verify_profile(request):
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
 
-    # Other data to pass to the template (e.g., unread notifications, ads, etc.)
+    # Other data to pass to the template
     form = SubscriptionForm()
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
     user_chats = Chat.objects.filter(participants=request.user)
     unread_messages_count = Message.objects.filter(chat__in=user_chats).exclude(sender=request.user).count()
     ads = NativeAd.objects.all()
+
     if request.method == 'POST':
         form = UserVerificationForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save(user=request.user)  # Pass the logged-in user to the save method
+            form.save(user=request.user)
             
             # Clear existing messages before adding the new one
             storage = messages.get_messages(request)
-            storage.used = True  # Clear all previous messages
+            storage.used = True
 
             messages.success(request, 'Your verification request has been submitted successfully.')
-            return redirect('verify_profile')  # Redirect to the same page
+            return redirect('verify_profile')
     else:
         form = UserVerificationForm()
 
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund') \
+        .order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    engaged_users = set()
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    # Get suggested users with followers count (using the improved logic)
+    current_user_following = request.user.following.all()  # Get all Follow objects
+    following_user_ids = [follow.followed_id for follow in current_user_following]  # Extract user IDs
+    
+    # Exclude current user and already followed users
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
+    
     suggested_users = []
     
     for profile in all_profiles:
         similarity_score = calculate_similarity(user_profile, profile)
         if similarity_score >= 0.5:
-            # Get followers count for each suggested user
             followers_count = Follow.objects.filter(followed=profile.user).count()
             suggested_users.append({
                 'user': profile.user,
@@ -389,20 +468,19 @@ def verify_profile(request):
 
     # Limit to only 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
-                        
-    return render(request, 'main/verify_profile.html', {'form': form,  'user_profile': user_profile,
+
+    context = {
+        'form': form,
+        'user_profile': user_profile,
         'unread_notifications': unread_notifications,
         'unread_messages_count': unread_messages_count,
-        'form': form,
         'ads': ads,
-          'suggested_users': suggested_users,
-        'top_contributors': top_contributors,})
-
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
+        'top_contributors': top_contributors,
+    }
+    
+    return render(request, 'main/verify_profile.html', context)
 
 @login_required
 def join_leave_campaign(request, campaign_id):
@@ -418,51 +496,105 @@ def join_leave_campaign(request, campaign_id):
 
     return redirect('view_campaign', campaign_id=campaign.id)  # Redirect to the campaign detail page
 
+
+
+
+
 @login_required
 def campaign_joiners(request, campaign_id):
+    # Get user and campaign data
     user_profile = get_object_or_404(Profile, user=request.user)
+    
+    # Get following user IDs using the improved pattern
+    current_user_following = request.user.following.all()
+    following_user_ids = [follow.followed_id for follow in current_user_following]
+    
     campaign = get_object_or_404(Campaign, id=campaign_id)
-    joiners = campaign.user_profiles.all()  # Fetch all profiles that joined the campaign
-    # Optional: If you want to track the last time the user viewed their campaigns
+    joiners = campaign.user_profiles.all()
+    
+    # Update last campaign check time
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
 
-    # Other data to pass to the template (e.g., unread notifications, ads, etc.)
-    form = SubscriptionForm()
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund') \
+        .order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    engaged_users = set()
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    # Notifications and messages
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
     user_chats = Chat.objects.filter(participants=request.user)
     unread_messages_count = Message.objects.filter(chat__in=user_chats).exclude(sender=request.user).count()
-    ads = NativeAd.objects.all()
 
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+    # Suggested users with improved logic
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
     suggested_users = []
     
     for profile in all_profiles:
         similarity_score = calculate_similarity(user_profile, profile)
         if similarity_score >= 0.5:
-            # Get followers count for each suggested user
             followers_count = Follow.objects.filter(followed=profile.user).count()
             suggested_users.append({
                 'user': profile.user,
                 'followers_count': followers_count
             })
-
-    # Limit to only 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
-         
-    return render(request, 'main/joiners.html', {'campaign': campaign, 'joiners': joiners,        'user_profile': user_profile,
+
+    # Other template data
+    form = SubscriptionForm()
+    ads = NativeAd.objects.all()
+
+    context = {
+        'campaign': campaign,
+        'joiners': joiners,
+        'user_profile': user_profile,
         'unread_notifications': unread_notifications,
         'unread_messages_count': unread_messages_count,
         'form': form,
-        'ads': ads,})
-
+        'ads': ads,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
+        'top_contributors': top_contributors,
+    }
+    
+    return render(request, 'main/joiners.html', context)
 
 
 
@@ -478,6 +610,8 @@ class CampaignDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        category_filter = self.request.GET.get('category', '')
+        user_profile = get_object_or_404(Profile, user=self.request.user)
 
         # Unread notifications
         unread_notifications = Notification.objects.filter(user=self.request.user, viewed=False)
@@ -489,7 +623,6 @@ class CampaignDeleteView(LoginRequiredMixin, DeleteView):
         context['unread_messages_count'] = unread_messages_count
 
         # User profile
-        user_profile = get_object_or_404(Profile, user=self.request.user)
         context['user_profile'] = user_profile
 
         # New campaigns from followed users
@@ -505,35 +638,89 @@ class CampaignDeleteView(LoginRequiredMixin, DeleteView):
         user_profile.last_campaign_check = timezone.now()
         user_profile.save()
 
-        # Suggested users
-        current_user_following = user_profile.following.all()
-        all_profiles = Profile.objects.exclude(user=self.request.user).exclude(user__in=current_user_following)
+        # Improved suggested users logic
+        current_user_following = request.user.following.all()  # Get all Follow objects
+        following_user_ids = [follow.followed_id for follow in current_user_following]  # Extract user IDs
+    
+    # Exclude current user and already followed users
+        all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
+    
         suggested_users = []
-
+    
         for profile in all_profiles:
             similarity_score = calculate_similarity(user_profile, profile)
             if similarity_score >= 0.5:
                 followers_count = Follow.objects.filter(followed=profile.user).count()
                 suggested_users.append({
-                    'user': profile.user,
-                    'followers_count': followers_count
+                'user': profile.user,
+                'followers_count': followers_count
                 })
 
-        context['suggested_users'] = suggested_users[:2]  # Limit to 2
+        suggested_users = suggested_users[:2]
 
-        # Top contributors
-        top_contributors = Profile.objects.annotate(
-            campaign_count=Count('user_campaigns'),
-            total_raised=Sum('user_campaigns__target_amount')
-        ).filter(campaign_count__gt=0).order_by('-total_raised')[:10]
-
-        context['top_contributors'] = top_contributors
 
         # Ads
         ads = NativeAd.objects.all()
         context['ads'] = ads
 
+        # 🔥 Trending campaigns (Only those with at least 1 love)
+        trending_campaigns = Campaign.objects.filter(visibility='public') \
+            .annotate(love_count_annotated=Count('loves')) \
+            .filter(love_count_annotated__gte=1) \
+            .select_related('campaignfund')
+
+        # Apply category filter if provided
+        if category_filter:
+            trending_campaigns = trending_campaigns.filter(category=category_filter)
+
+        trending_campaigns = trending_campaigns.order_by('-love_count_annotated')[:10]
+        context['trending_campaigns'] = trending_campaigns
+
+        # Top Contributors logic
+        donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+        love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+        comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+        view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+        brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+        activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+        activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+        # Combine all engagement pairs
+        all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                         brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+        # Count number of unique campaigns each user engaged with
+        user_campaign_map = defaultdict(set)
+        for user_id, campaign_id in all_pairs:
+            user_campaign_map[user_id].add(campaign_id)
+
+        # Build a list of contributors with their campaign engagement count
+        contributor_data = []
+        for user_id, campaign_set in user_campaign_map.items():
+            try:
+                profile = Profile.objects.get(user__id=user_id)
+                contributor_data.append({
+                    'user': profile.user,
+                    'image': profile.image,
+                    'campaign_count': len(campaign_set),
+                })
+            except Profile.DoesNotExist:
+                continue
+
+        # Sort contributors by campaign_count descending
+        top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+        context['top_contributors'] = top_contributors
+
+        # Categories
+        categories = Campaign.objects.values_list('category', flat=True).distinct()
+        context['categories'] = categories
+        context['selected_category'] = category_filter
+
         return context
+
+
+
+
 
 
 
@@ -580,17 +767,13 @@ def library_affiliates(request):
 
     # Limit to only 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
+
           
     return render(request, 'affiliate/library_affiliates.html', {'ads':ads,'libraries': libraries,'user_profile': user_profile,
                                                'unread_notifications': unread_notifications,
     
                                                'new_campaigns_from_follows': new_campaigns_from_follows,  'suggested_users': suggested_users,
-        'top_contributors': top_contributors, })
+         })
 
 def news_affiliates(request):
     following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
@@ -622,17 +805,13 @@ def news_affiliates(request):
 
     # Limit to only 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
+
           
     return render(request, 'affiliate/news_affiliates.html', {'ads':ads,'news_sources': news_sources,'user_profile': user_profile,
                                                'unread_notifications': unread_notifications,
     
                                                'new_campaigns_from_follows': new_campaigns_from_follows,  'suggested_users': suggested_users,
-        'top_contributors': top_contributors, })
+         })
 
 
 
@@ -754,11 +933,7 @@ def platformfund_view(request):
 
     # Limit to only 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
+
           
     return render(request, 'revenue/platformfund.html', {
         'ads': ads,
@@ -767,230 +942,481 @@ def platformfund_view(request):
         'unread_notifications': unread_notifications,
         'new_campaigns_from_follows': new_campaigns_from_follows,
           'suggested_users': suggested_users,
-        'top_contributors': top_contributors,
+        
     })
 
 
 
 
+
+@login_required
 def hadith_list(request):
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
+    # Get following user IDs using the improved pattern
+    current_user_following = request.user.following.all()
+    following_user_ids = [follow.followed_id for follow in current_user_following]
+    
     user_profile = get_object_or_404(Profile, user=request.user)
-    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    # Check if there are new campaigns from follows
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
-
-    # Update last_campaign_check for the user's profile
-    user_profile.last_campaign_check = timezone.now()
-    user_profile.save()
-    ads = NativeAd.objects.all() 
+    
+    # Hadith data
     hadiths = Hadith.objects.all()
+    
+    # Notifications and follows
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__id__in=following_user_ids,
+        visibility='public',
+        timestamp__gt=user_profile.last_campaign_check
+    )
+    user_profile.last_campaign_check = timezone.now()
+    user_profile.save()
 
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund') \
+        .order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    engaged_users = set()
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    # Suggested users with improved logic
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
     suggested_users = []
     
     for profile in all_profiles:
         similarity_score = calculate_similarity(user_profile, profile)
         if similarity_score >= 0.5:
-            # Get followers count for each suggested user
             followers_count = Follow.objects.filter(followed=profile.user).count()
             suggested_users.append({
                 'user': profile.user,
                 'followers_count': followers_count
             })
-
-    # Limit to only 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
-            
-    return render(request, 'main/hadith_list.html', {'hadiths': hadiths,'ads':ads,'user_profile': user_profile,
-                                               'unread_notifications': unread_notifications,
+
+    ads = NativeAd.objects.all()
+
+    context = {
+        'hadiths': hadiths,
+        'ads': ads,
+        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'new_campaigns_from_follows': new_campaigns_from_follows,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
+        'top_contributors': top_contributors,
+    }
     
-                                               'new_campaigns_from_follows': new_campaigns_from_follows,'suggested_users': suggested_users,
-        'top_contributors': top_contributors,})
+    return render(request, 'main/hadith_list.html', context)
 
-
+@login_required
 def hadith_detail(request, hadith_id):
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
-    user_profile = get_object_or_404(Profile, user=request.user)
-    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    # Check if there are new campaigns from follows
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
-
-    # Update last_campaign_check for the user's profile
-    user_profile.last_campaign_check = timezone.now()
-    user_profile.save()
-    ads = NativeAd.objects.all() 
-
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
-    suggested_users = []
+    # Get following user IDs using the improved pattern
+    current_user_following = request.user.following.all()
+    following_user_ids = [follow.followed_id for follow in current_user_following]
     
-    for profile in all_profiles:
-        similarity_score = calculate_similarity(user_profile, profile)
-        if similarity_score >= 0.5:
-            # Get followers count for each suggested user
-            followers_count = Follow.objects.filter(followed=profile.user).count()
-            suggested_users.append({
-                'user': profile.user,
-                'followers_count': followers_count
-            })
-
-    # Limit to only 2 suggested users
-    suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
-          
-    # Retrieve the specific Hadith object or return a 404 error if not found
+    user_profile = get_object_or_404(Profile, user=request.user)
+    
+    # Hadith data
     hadith = get_object_or_404(Hadith, pk=hadith_id)
-    return render(request, 'main/hadith_detail.html', {'hadith': hadith,'ads':ads,'user_profile': user_profile,
-                                               'unread_notifications': unread_notifications,
     
-                                               'new_campaigns_from_follows': new_campaigns_from_follows,'suggested_users': suggested_users,
-        'top_contributors': top_contributors,})
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund') \
+        .order_by('-love_count_annotated')[:10]
 
+    # Top Contributors logic
+    engaged_users = set()
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
 
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    # Notifications and follows
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__id__in=following_user_ids,
+        visibility='public',
+        timestamp__gt=user_profile.last_campaign_check
+    )
+    user_profile.last_campaign_check = timezone.now()
+    user_profile.save()
+
+    # Suggested users with improved logic
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
+    suggested_users = []
+    
+    for profile in all_profiles:
+        similarity_score = calculate_similarity(user_profile, profile)
+        if similarity_score >= 0.5:
+            followers_count = Follow.objects.filter(followed=profile.user).count()
+            suggested_users.append({
+                'user': profile.user,
+                'followers_count': followers_count
+            })
+    suggested_users = suggested_users[:2]
+
+    ads = NativeAd.objects.all()
+
+    context = {
+        'hadith': hadith,
+        'ads': ads,
+        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'new_campaigns_from_follows': new_campaigns_from_follows,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
+        'top_contributors': top_contributors,
+    }
+    
+    return render(request, 'main/hadith_detail.html', context)
+
+@login_required
 def adhkar_list(request):
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
+    # Get following user IDs using the improved pattern
+    current_user_following = request.user.following.all()
+    following_user_ids = [follow.followed_id for follow in current_user_following]
+    
     user_profile = get_object_or_404(Profile, user=request.user)
-    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    # Check if there are new campaigns from follows
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
-
-    # Update last_campaign_check for the user's profile
-    user_profile.last_campaign_check = timezone.now()
-    user_profile.save()
-    ads = NativeAd.objects.all() 
+    
+    # Adhkar data
     adhkars = Adhkar.objects.all()
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
-    suggested_users = []
     
-    for profile in all_profiles:
-        similarity_score = calculate_similarity(user_profile, profile)
-        if similarity_score >= 0.5:
-            # Get followers count for each suggested user
-            followers_count = Follow.objects.filter(followed=profile.user).count()
-            suggested_users.append({
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund') \
+        .order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    engaged_users = set()
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
                 'user': profile.user,
-                'followers_count': followers_count
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
             })
+        except Profile.DoesNotExist:
+            continue
 
-    # Limit to only 2 suggested users
-    suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
-    return render(request, 'main/adhkar_list.html', {'adhkars': adhkars,'ads':ads,'user_profile': user_profile,
-                                               'unread_notifications': unread_notifications,
-    
-                                               'new_campaigns_from_follows': new_campaigns_from_follows,'suggested_users': suggested_users,
-        'top_contributors': top_contributors,})
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
 
-def adhkar_detail(request, adhkar_id):
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
-    user_profile = get_object_or_404(Profile, user=request.user)
+    # Notifications and follows
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    # Check if there are new campaigns from follows
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
-
-    # Update last_campaign_check for the user's profile
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__id__in=following_user_ids,
+        visibility='public',
+        timestamp__gt=user_profile.last_campaign_check
+    )
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
-    ads = NativeAd.objects.all()   
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+
+    # Suggested users with improved logic
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
     suggested_users = []
     
     for profile in all_profiles:
         similarity_score = calculate_similarity(user_profile, profile)
         if similarity_score >= 0.5:
-            # Get followers count for each suggested user
             followers_count = Follow.objects.filter(followed=profile.user).count()
             suggested_users.append({
                 'user': profile.user,
                 'followers_count': followers_count
             })
-
-    # Limit to only 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10   
-    adhkar = get_object_or_404(Adhkar, id=adhkar_id)
-    return render(request, 'main/adhkar_detail.html', {'adhkar': adhkar,'ads':ads,'user_profile': user_profile,
-                                               'unread_notifications': unread_notifications,
+
+    ads = NativeAd.objects.all()
+
+    context = {
+        'adhkars': adhkars,
+        'ads': ads,
+        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'new_campaigns_from_follows': new_campaigns_from_follows,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
+        'top_contributors': top_contributors,
+    }
     
-                                               'new_campaigns_from_follows': new_campaigns_from_follows,'suggested_users': suggested_users,
-        'top_contributors': top_contributors,})
+    return render(request, 'main/adhkar_list.html', context)
+
+
+
+
+@login_required
+def adhkar_detail(request, adhkar_id):
+    # Get following user IDs using the improved pattern
+    current_user_following = request.user.following.all()
+    following_user_ids = [follow.followed_id for follow in current_user_following]
+    
+    user_profile = get_object_or_404(Profile, user=request.user)
+    
+    # Adhkar data
+    adhkar = get_object_or_404(Adhkar, id=adhkar_id)
+    
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund') \
+        .order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    engaged_users = set()
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    # Notifications and follows
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__id__in=following_user_ids,
+        visibility='public',
+        timestamp__gt=user_profile.last_campaign_check
+    )
+    user_profile.last_campaign_check = timezone.now()
+    user_profile.save()
+
+    # Suggested users with improved logic
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
+    suggested_users = []
+    
+    for profile in all_profiles:
+        similarity_score = calculate_similarity(user_profile, profile)
+        if similarity_score >= 0.5:
+            followers_count = Follow.objects.filter(followed=profile.user).count()
+            suggested_users.append({
+                'user': profile.user,
+                'followers_count': followers_count
+            })
+    suggested_users = suggested_users[:2]
+
+    ads = NativeAd.objects.all()
+
+    context = {
+        'adhkar': adhkar,
+        'ads': ads,
+        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'new_campaigns_from_follows': new_campaigns_from_follows,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
+        'top_contributors': top_contributors,
+    }
+    
+    return render(request, 'main/adhkar_detail.html', context)
+
+
 
 
 
 @login_required
 def quran_view(request):
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
+    # Get following user IDs using the improved pattern
+    current_user_following = request.user.following.all()
+    following_user_ids = [follow.followed_id for follow in current_user_following]
+    
     user_profile = get_object_or_404(Profile, user=request.user)
-    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    # Check if there are new campaigns from follows
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
-
-    # Update last_campaign_check for the user's profile
-    user_profile.last_campaign_check = timezone.now()
-    user_profile.save()
-    ads = NativeAd.objects.all() 
+    
+    # Quran data
     surahs = Surah.objects.all()
     quran_verses = QuranVerse.objects.all()
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+    
+    # Notifications and follows
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__id__in=following_user_ids,
+        visibility='public',
+        timestamp__gt=user_profile.last_campaign_check
+    )
+    user_profile.last_campaign_check = timezone.now()
+    user_profile.save()
+
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund') \
+        .order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    engaged_users = set()
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    # Suggested users with improved logic
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
     suggested_users = []
     
     for profile in all_profiles:
         similarity_score = calculate_similarity(user_profile, profile)
         if similarity_score >= 0.5:
-            # Get followers count for each suggested user
             followers_count = Follow.objects.filter(followed=profile.user).count()
             suggested_users.append({
                 'user': profile.user,
                 'followers_count': followers_count
             })
-
-    # Limit to only 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
-    return render(request, 'main/quran.html', {
+
+    ads = NativeAd.objects.all()
+
+    context = {
         'surahs': surahs,
-        'quran_verses': quran_verses ,'ads':ads,'user_profile': user_profile,
-                                               'unread_notifications': unread_notifications,
-    
-                                               'new_campaigns_from_follows': new_campaigns_from_follows,'suggested_users': suggested_users,
+        'quran_verses': quran_verses,
+        'ads': ads,
+        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'new_campaigns_from_follows': new_campaigns_from_follows,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
         'top_contributors': top_contributors,
-    })
-
-
-
-
-
+    }
+    
+    return render(request, 'main/quran.html', context)
 
 
 @login_required
@@ -1009,12 +1435,16 @@ def mark_not_interested(request, campaign_id):
     # Redirect back to the campaign detail page or any other appropriate page
     return redirect('home')
 
-
 @login_required
 def report_campaign(request, campaign_id):
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
+    # Get following user IDs using the improved pattern
+    current_user_following = request.user.following.all()
+    following_user_ids = [follow.followed_id for follow in current_user_following]
+    
     user_profile = get_object_or_404(Profile, user=request.user)
     campaign = get_object_or_404(Campaign, id=campaign_id)
+    
+    # Handle form submission
     if request.method == 'POST':
         form = ReportForm(request.POST)
         if form.is_valid():
@@ -1026,46 +1456,88 @@ def report_campaign(request, campaign_id):
             return redirect('view_campaign', campaign_id=campaign.id)
     else:
         form = ReportForm()
-        # Fetch unread notifications for the user
-    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    # Check if there are new campaigns from follows
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
 
-    # Update last_campaign_check for the user's profile
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund') \
+        .order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    engaged_users = set()
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    # Notifications and follows
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__id__in=following_user_ids,
+        visibility='public',
+        timestamp__gt=user_profile.last_campaign_check
+    )
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
-    ads = NativeAd.objects.all()
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+
+    # Suggested users with improved logic
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
     suggested_users = []
     
     for profile in all_profiles:
         similarity_score = calculate_similarity(user_profile, profile)
         if similarity_score >= 0.5:
-            # Get followers count for each suggested user
             followers_count = Follow.objects.filter(followed=profile.user).count()
             suggested_users.append({
                 'user': profile.user,
                 'followers_count': followers_count
             })
-
-    # Limit to only 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10  
-    return render(request, 'main/report_campaign.html', {'ads':ads,'form': form, 'campaign': campaign,'user_profile': user_profile,
-                                               'unread_notifications': unread_notifications,
+
+    ads = NativeAd.objects.all()
+
+    context = {
+        'ads': ads,
+        'form': form,
+        'campaign': campaign,
+        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'new_campaigns_from_follows': new_campaigns_from_follows,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
+        'top_contributors': top_contributors,
+    }
     
-                                               'new_campaigns_from_follows': new_campaigns_from_follows,'suggested_users': suggested_users,
-        'top_contributors': top_contributors,})
-
-
-
-
+    return render(request, 'main/report_campaign.html', context)
 
 
 
@@ -1081,14 +1553,21 @@ def upload_image(request):
 
 
 
+
+@login_required
 def product_manage(request, campaign_id=None, product_id=None):
+    # Initialize variables
     campaign = None
     product = None
+
+    # Get following user IDs using the improved pattern
+    current_user_following = request.user.following.all()
+    following_user_ids = [follow.followed_id for follow in current_user_following]
+    user_profile = get_object_or_404(Profile, user=request.user)
 
     # Fetch campaign and product if IDs are provided
     if campaign_id:
         campaign = get_object_or_404(Campaign, pk=campaign_id)
-
     if product_id:
         product = get_object_or_404(CampaignProduct, pk=product_id)
 
@@ -1099,7 +1578,6 @@ def product_manage(request, campaign_id=None, product_id=None):
             product = form.save(commit=False)
             product.campaign = campaign
             product.save()
-            # Redirect to manage products
             if campaign:
                 return redirect('product_manage', campaign_id=campaign.id)
             else:
@@ -1107,66 +1585,94 @@ def product_manage(request, campaign_id=None, product_id=None):
     else:
         form = CampaignProductForm(instance=product)
     
-    # Fetch all products for the campaign, ordered by newest first
+    # Fetch all products for the campaign
     products = CampaignProduct.objects.filter(campaign=campaign).order_by('-date_added') if campaign else None
-    product_count = products.count() if products else 0  # Total products in the campaign
+    product_count = products.count() if products else 0
 
-    # Fetch unread notifications for the user
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund') \
+        .order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    engaged_users = set()
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    # User notifications and follows
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-
-    # Fetch user profile and new campaigns from followed users
-    following_users = [follow.followed for follow in request.user.following.all()]
-    user_profile = get_object_or_404(Profile, user=request.user)
     new_campaigns_from_follows = Campaign.objects.filter(
-        user__user__in=following_users, 
+        user__user__id__in=following_user_ids,
         visibility='public', 
         timestamp__gt=user_profile.last_campaign_check
     )
-
-    # Update the last campaign check timestamp for the user
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
 
-    # Fetch native ads
-    ads = NativeAd.objects.all()
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+    # Suggested users with improved logic
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
     suggested_users = []
     
     for profile in all_profiles:
         similarity_score = calculate_similarity(user_profile, profile)
         if similarity_score >= 0.5:
-            # Get followers count for each suggested user
             followers_count = Follow.objects.filter(followed=profile.user).count()
             suggested_users.append({
                 'user': profile.user,
                 'followers_count': followers_count
             })
-
-    # Limit to only 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
-    # Render the template with the updated context
-    return render(request, 'main/product_manage.html', {
+
+    ads = NativeAd.objects.all()
+
+    context = {
         'ads': ads,
         'form': form,
         'product': product,
         'campaign': campaign,
-        'products': products,  # Products ordered by newest first
+        'products': products,
         'product_count': product_count,
         'unread_notifications': unread_notifications,
         'user_profile': user_profile,
         'new_campaigns_from_follows': new_campaigns_from_follows,
         'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
         'top_contributors': top_contributors,
-    })
-
-
+    }
+    
+    return render(request, 'main/product_manage.html', context)
 
 
 def love_activity(request, activity_id):
@@ -1190,22 +1696,29 @@ def love_activity(request, activity_id):
 
 
 
-def activity_detail(request, activity_id):
 
+def activity_detail(request, activity_id):
+    # Get basic objects
     user_profile = get_object_or_404(Profile, user=request.user)
     activity = get_object_or_404(Activity, id=activity_id)
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
-    # You can add any additional context data here if needed
-    # Fetch unread notifications for the user
+    following_users = [follow.followed for follow in request.user.following.all()]
+    category_filter = request.GET.get('category', '')  # Get category filter from request
+    
+    # Notification and messaging data
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    # Check if there are new campaigns from follows
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
-
-    # Update last_campaign_check for the user's profile
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__in=following_users, 
+        visibility='public', 
+        timestamp__gt=user_profile.last_campaign_check
+    )
+    
+    # Update last check time
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
-    ads = NativeAd.objects.all() 
-    # Get suggested users with followers count
+    
+    ads = NativeAd.objects.all()
+    
+    # Suggested users logic
     current_user_following = user_profile.following.all()
     all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
     suggested_users = []
@@ -1213,23 +1726,75 @@ def activity_detail(request, activity_id):
     for profile in all_profiles:
         similarity_score = calculate_similarity(user_profile, profile)
         if similarity_score >= 0.5:
-            # Get followers count for each suggested user
             followers_count = Follow.objects.filter(followed=profile.user).count()
             suggested_users.append({
                 'user': profile.user,
                 'followers_count': followers_count
             })
-
-    # Limit to only 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10 
-    return render(request, 'main/activity_detail.html', {'ads':ads,'activity': activity,'user_profile':user_profile,'unread_notifications':unread_notifications,'new_campaigns_from_follows':new_campaigns_from_follows,'suggested_users': suggested_users,
-        'top_contributors': top_contributors,})
 
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund')
+
+    # Apply category filter if provided
+    if category_filter:
+        trending_campaigns = trending_campaigns.filter(category=category_filter)
+
+    trending_campaigns = trending_campaigns.order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    categories = Campaign.objects.values_list('category', flat=True).distinct()
+
+    context = {
+        'ads': ads,
+        'activity': activity,
+        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'new_campaigns_from_follows': new_campaigns_from_follows,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
+        'top_contributors': top_contributors,
+        'categories': categories,
+        'selected_category': category_filter,
+    }
+    
+    return render(request, 'main/activity_detail.html', context)
 
 
 
@@ -1239,83 +1804,144 @@ def activity_detail(request, activity_id):
 def add_activity_comment(request, activity_id):
     activity = get_object_or_404(Activity, id=activity_id)
     user_profile = get_object_or_404(Profile, user=request.user)
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
+    following_users = [follow.followed for follow in request.user.following.all()]
+    category_filter = request.GET.get('category', '')  # Get category filter from request
+    
     # Fetch unread notifications for the user
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    
     # Check if there are new campaigns from follows
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
-
-    # Update last_campaign_check for the user's profile
-    user_profile.last_campaign_check = timezone.now()
-    user_profile.save() 
-    ads = NativeAd.objects.all()   
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__in=following_users, 
+        visibility='public', 
+        timestamp__gt=user_profile.last_campaign_check
+    )
 
     # Update last_campaign_check for the user's profile
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
-    ads = NativeAd.objects.all() 
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+    
+    ads = NativeAd.objects.all()
+    
+    # Improved suggested users logic
+    current_user_following = request.user.following.all()  # Get all Follow objects
+    following_user_ids = [follow.followed_id for follow in current_user_following]  # Extract user IDs
+    
+    # Exclude current user and already followed users
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
+    
     suggested_users = []
     
     for profile in all_profiles:
         similarity_score = calculate_similarity(user_profile, profile)
         if similarity_score >= 0.5:
-            # Get followers count for each suggested user
             followers_count = Follow.objects.filter(followed=profile.user).count()
             suggested_users.append({
                 'user': profile.user,
                 'followers_count': followers_count
             })
 
-    # Limit to only 2 suggested users
+    # Limit to 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10   
+
+
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund')
+
+    # Apply category filter if provided
+    if category_filter:
+        trending_campaigns = trending_campaigns.filter(category=category_filter)
+
+    trending_campaigns = trending_campaigns.order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    categories = Campaign.objects.values_list('category', flat=True).distinct()
+
     if request.method == 'POST':
         form = ActivityCommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
             comment.activity = activity
-            comment.user = request.user  # Assuming you have user authentication
+            comment.user = request.user
             comment.save()
             return JsonResponse({
                 'success': True, 
                 'content': comment.content, 
                 'username': comment.user.username, 
                 'timestamp': comment.timestamp,
-                'profile_image_url': comment.user.profile.image.url  # Include profile image URL
+                'profile_image_url': comment.user.profile.image.url
             })
         else:
             return JsonResponse({'success': False, 'errors': form.errors})
     else:
-        comments = activity.activitycomment_set.all().order_by('-timestamp')  # Retrieve comments for the activity, ordered by timestamp descending
+        comments = activity.activitycomment_set.all().order_by('-timestamp')
         form = ActivityCommentForm()
-        return render(request, 'main/add_activity_comment.html', {
+        
+        context = {
             'activity': activity, 
             'comments': comments, 
             'form': form,
             'user_profile': user_profile,
             'unread_notifications': unread_notifications,
             'new_campaigns_from_follows': new_campaigns_from_follows,
-            'ads':ads,
+            'ads': ads,
             'suggested_users': suggested_users,
-        'top_contributors': top_contributors,
-        })
+            'trending_campaigns': trending_campaigns,
+            'top_contributors': top_contributors,
+            'categories': categories,
+            'selected_category': category_filter,
+        }
+        
+        return render(request, 'main/add_activity_comment.html', context)
 
 
 
 @login_required
 def suggest(request):
     user_profile = get_object_or_404(Profile, user=request.user)
-    current_user_following = user_profile.following.all()
+    
+    # Improved: Get followed user IDs explicitly
+    current_user_following = request.user.following.all()  # Get all Follow objects
+    following_user_ids = [follow.followed_id for follow in current_user_following]  # Extract user IDs
     
     # Get all profiles except the current user's and those they're following
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
 
     # Suggested users based on similarity score
     suggested_users = []
@@ -1325,17 +1951,19 @@ def suggest(request):
             followers_count = Follow.objects.filter(followed=profile.user).count()
             suggested_users.append({
                 'user': profile.user,
-                'followers_count': followers_count
+                'followers_count': followers_count,
+                'similarity_score': similarity_score  # Optional: include for debugging
             })
-    suggested_users = suggested_users[:2]
+    
+    # Sort by similarity score (highest first) and take top 20 for the suggestions page
+    suggested_users = sorted(suggested_users, key=lambda x: x['similarity_score'], reverse=True)[:20]
 
     # Unread notifications
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
 
-    # New campaigns from followed users
-    following_users = current_user_following
+    # New campaigns from followed users (using the same following_user_ids)
     new_campaigns_from_follows = Campaign.objects.filter(
-        user__user__in=following_users,
+        user__user__id__in=following_user_ids,
         visibility='public',
         timestamp__gt=user_profile.last_campaign_check
     )
@@ -1344,31 +1972,56 @@ def suggest(request):
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
 
-    # Top contributors
-    top_contributors = Profile.objects.annotate(
-        campaign_count=Count('user_campaigns'),
-        total_raised=Sum('user_campaigns__target_amount')
-    ).filter(campaign_count__gt=0).order_by('-total_raised')[:10]
+    # Trending campaigns
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund') \
+        .order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic (unchanged)
+    engaged_users = set()
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
 
     # Ads
     ads = NativeAd.objects.all()
 
     return render(request, 'main/suggest.html', {
         'ads': ads,
-        'suggested_users': suggested_users,
+        'suggested_users': suggested_users,  # Fixed typo from 'suggested_users'
         'user_profile': user_profile,
         'unread_notifications': unread_notifications,
         'new_campaigns_from_follows': new_campaigns_from_follows,
+        'trending_campaigns': trending_campaigns,
         'top_contributors': top_contributors,
     })
-
-
-
-
-
-
-
-
 
 
 
@@ -1407,11 +2060,7 @@ def affiliate_links(request):
 
     # Limit to only 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
+
     # Return the rendered response
     return render(request, 'revenue/affiliate_links.html', {
         'ads': ads,
@@ -1420,7 +2069,7 @@ def affiliate_links(request):
         'unread_notifications': unread_notifications,
         'new_campaigns_from_follows': new_campaigns_from_follows,
           'suggested_users': suggested_users,
-        'top_contributors': top_contributors,
+      
     })
 
 
@@ -1429,23 +2078,25 @@ def affiliate_links(request):
 
 @login_required
 def update_visibility(request, campaign_id):
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
+    # Get following user IDs using the improved pattern
+    current_user_following = request.user.following.all()
+    following_user_ids = [follow.followed_id for follow in current_user_following]
+    
     user_profile = get_object_or_404(Profile, user=request.user)
     
-    # Fetch unread notifications for the user
+    # Fetch unread notifications
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
     
     try:
-        # Get the campaign for which visibility settings are being updated
         campaign = Campaign.objects.get(pk=campaign_id)
     except ObjectDoesNotExist:
         return HttpResponseServerError("Campaign not found")
 
-    # Get all support campaigns associated with the specified campaign ID
+    # Get all support campaigns
     support_campaigns = SupportCampaign.objects.filter(campaign_id=campaign_id)
 
     if request.method == 'POST':
-        # Update visibility settings for each support campaign
+        # Update visibility settings
         for support_campaign in support_campaigns:
             support_campaign.donate_monetary_visible = request.POST.get('donate_monetary_visible', False) == 'on'
             support_campaign.share_social_media_visible = request.POST.get('share_social_media_visible', False) == 'on'
@@ -1453,28 +2104,58 @@ def update_visibility(request, campaign_id):
             support_campaign.brainstorm_idea_visible = request.POST.get('brainstorm_idea_visible', False) == 'on'
             support_campaign.campaign_product_visible = request.POST.get('campaign_product_visible', False) == 'on'
             support_campaign.save()
-
         return redirect('support', campaign_id=campaign_id)
 
-    # Fetch additional data for notifications and new campaigns
-    new_campaigns_from_follows = Campaign.objects.filter(
-        user__user__in=following_users,
-        visibility='public',
-        timestamp__gt=user_profile.last_campaign_check
-    )
-    user_profile.last_campaign_check = timezone.now()
-    user_profile.save()
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund') \
+        .order_by('-love_count_annotated')[:10]
 
-    ads = NativeAd.objects.all()
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+    # Top Contributors logic
+    engaged_users = set()
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    # Get suggested users with improved logic
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
     suggested_users = []
     
     for profile in all_profiles:
         similarity_score = calculate_similarity(user_profile, profile)
         if similarity_score >= 0.5:
-            # Get followers count for each suggested user
             followers_count = Follow.objects.filter(followed=profile.user).count()
             suggested_users.append({
                 'user': profile.user,
@@ -1483,23 +2164,34 @@ def update_visibility(request, campaign_id):
 
     # Limit to only 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
-    # Pass support campaigns to the template
-    return render(request, 'main/update_visibility.html', {
+
+    # New campaigns from follows (using the same following_user_ids)
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__id__in=following_user_ids,
+        visibility='public',
+        timestamp__gt=user_profile.last_campaign_check
+    )
+    user_profile.last_campaign_check = timezone.now()
+    user_profile.save()
+
+    ads = NativeAd.objects.all()
+
+    context = {
         'ads': ads,
         'campaign': campaign,
         'user_profile': user_profile,
         'unread_notifications': unread_notifications,
         'new_campaigns_from_follows': new_campaigns_from_follows,
         'support_campaigns': support_campaigns,
-          # Added this to the context
-            'suggested_users': suggested_users,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
         'top_contributors': top_contributors,
-    })
+    }
+    
+    return render(request, 'main/update_visibility.html', context)
+
+
+
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
@@ -1508,56 +2200,110 @@ from .models import Campaign, Profile, SupportCampaign, CampaignProduct, NativeA
 
 
 
+
+
+
 @login_required
 def support(request, campaign_id):
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
+    following_users = [follow.followed for follow in request.user.following.all()]
+    category_filter = request.GET.get('category', '')  # Get category filter from request
     campaign = get_object_or_404(Campaign, id=campaign_id)
-    
-    # Get the user's profile
     user_profile = get_object_or_404(Profile, user=request.user)
     
-    # Retrieve or create the SupportCampaign object for the current user and campaign
-    support_campaign, created = SupportCampaign.objects.get_or_create(user=request.user, campaign=campaign)
-    
-    # Check if there are new campaigns from follows
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
+    # Retrieve or create the SupportCampaign object
+    support_campaign, created = SupportCampaign.objects.get_or_create(
+        user=request.user, 
+        campaign=campaign
+    )
     
     # Get products related to the campaign
     products = CampaignProduct.objects.filter(campaign=campaign) if campaign else None
     
-    # Update last_campaign_check for the user's profile
+    # Notification and follows data
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__in=following_users,
+        visibility='public',
+        timestamp__gt=user_profile.last_campaign_check
+    )
+    
+    # Update last check time
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
     
-    # Get all ads
     ads = NativeAd.objects.all()
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+    
+    # Improved suggested users logic
+    current_user_following = request.user.following.all()  # Get all Follow objects
+    following_user_ids = [follow.followed_id for follow in current_user_following]  # Extract user IDs
+    
+    # Exclude current user and already followed users
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
+    
     suggested_users = []
     
     for profile in all_profiles:
         similarity_score = calculate_similarity(user_profile, profile)
         if similarity_score >= 0.5:
-            # Get followers count for each suggested user
             followers_count = Follow.objects.filter(followed=profile.user).count()
             suggested_users.append({
                 'user': profile.user,
                 'followers_count': followers_count
             })
 
-    # Limit to only 2 suggested users
+    # Limit to 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
-    # Fetch unread notifications for the user
-    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    
-    # Pass all relevant context data to the template
-    return render(request, 'main/support.html', {
+
+
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund')
+
+    # Apply category filter if provided
+    if category_filter:
+        trending_campaigns = trending_campaigns.filter(category=category_filter)
+
+    trending_campaigns = trending_campaigns.order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    categories = Campaign.objects.values_list('category', flat=True).distinct()
+
+    context = {
         'ads': ads,
         'campaign': campaign,
         'support_campaign': support_campaign,
@@ -1565,9 +2311,17 @@ def support(request, campaign_id):
         'unread_notifications': unread_notifications,
         'new_campaigns_from_follows': new_campaigns_from_follows,
         'products': products,
-          'suggested_users': suggested_users,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
         'top_contributors': top_contributors,
-    })
+        'categories': categories,
+        'selected_category': category_filter,
+    }
+    
+    return render(request, 'main/support.html', context)
+
+
+
 
 
 @login_required
@@ -1601,42 +2355,50 @@ def update_hidden_links(request):
 
 
 
+
+
+
+
 def brainstorm_idea(request, campaign_id):
-    following_users = [follow.followed for follow in request.user.following.all()]  
-    campaign = Campaign.objects.get(id=campaign_id)
+    following_users = [follow.followed for follow in request.user.following.all()]
+    category_filter = request.GET.get('category', '')  # Get category filter from request
+    campaign = get_object_or_404(Campaign, id=campaign_id)
     user_profile = get_object_or_404(Profile, user=request.user)
     
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
     new_campaigns_from_follows = Campaign.objects.filter(
-        user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check
+        user__user__in=following_users, 
+        visibility='public', 
+        timestamp__gt=user_profile.last_campaign_check
     )
 
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
 
     ads = NativeAd.objects.all()
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+    
+    # Improved suggested users logic
+    current_user_following = request.user.following.all()  # Get all Follow objects
+    following_user_ids = [follow.followed_id for follow in current_user_following]  # Extract user IDs
+    
+    # Exclude current user and already followed users
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
+    
     suggested_users = []
     
     for profile in all_profiles:
         similarity_score = calculate_similarity(user_profile, profile)
         if similarity_score >= 0.5:
-            # Get followers count for each suggested user
             followers_count = Follow.objects.filter(followed=profile.user).count()
             suggested_users.append({
                 'user': profile.user,
                 'followers_count': followers_count
             })
 
-    # Limit to only 2 suggested users
+    # Limit to 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
+
+
     if request.method == 'POST':
         form = BrainstormingForm(request.POST, request.FILES)
         if form.is_valid():
@@ -1644,16 +2406,63 @@ def brainstorm_idea(request, campaign_id):
             idea.supporter = request.user
             idea.campaign = campaign
             idea.save()
-            return redirect('brainstorm_idea', campaign_id=campaign.id)  # Redirect to prevent form resubmission
+            return redirect('brainstorm_idea', campaign_id=campaign.id)
         else:
-            # If form is invalid, errors will be included in context
             messages.error(request, "Please fix the errors in your submission.")
-
     else:
         form = BrainstormingForm()
 
     ideas_for_campaign = Brainstorming.objects.filter(campaign=campaign).order_by('-pk')
-    return render(request, 'main/brainstorm.html', {
+
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund')
+
+    # Apply category filter if provided
+    if category_filter:
+        trending_campaigns = trending_campaigns.filter(category=category_filter)
+
+    trending_campaigns = trending_campaigns.order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    categories = Campaign.objects.values_list('category', flat=True).distinct()
+
+    context = {
         'ads': ads,
         'form': form,
         'ideas_for_campaign': ideas_for_campaign,
@@ -1661,49 +2470,125 @@ def brainstorm_idea(request, campaign_id):
         'campaign': campaign,
         'unread_notifications': unread_notifications,
         'new_campaigns_from_follows': new_campaigns_from_follows,
-          'suggested_users': suggested_users,
+        'suggested_users': suggested_users,  # Fixed typo from 'suggested_users'
+        'trending_campaigns': trending_campaigns,
         'top_contributors': top_contributors,
-    })
+        'categories': categories,
+        'selected_category': category_filter,
+    }
+    
+    return render(request, 'main/brainstorm.html', context)
+
+
+
+
+
 
 
 @login_required
 def donate_monetary(request, campaign_id):
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
-
+    following_users = [follow.followed for follow in request.user.following.all()]
+    category_filter = request.GET.get('category', '')  # Get category filter from request
     user_profile = get_object_or_404(Profile, user=request.user)
     campaign = get_object_or_404(Campaign, id=campaign_id)
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    
     # Check if there are new campaigns from follows
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__in=following_users, 
+        visibility='public', 
+        timestamp__gt=user_profile.last_campaign_check
+    )
 
     # Update last_campaign_check for the user's profile
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
-    ads = NativeAd.objects.all()  
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+    
+    ads = NativeAd.objects.all()
+    
+    # Improved suggested users logic
+    current_user_following = request.user.following.all()  # Get all Follow objects
+    following_user_ids = [follow.followed_id for follow in current_user_following]  # Extract user IDs
+    
+    # Exclude current user and already followed users
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
+    
     suggested_users = []
     
     for profile in all_profiles:
         similarity_score = calculate_similarity(user_profile, profile)
         if similarity_score >= 0.5:
-            # Get followers count for each suggested user
             followers_count = Follow.objects.filter(followed=profile.user).count()
             suggested_users.append({
                 'user': profile.user,
                 'followers_count': followers_count
             })
 
-    # Limit to only 2 suggested users
+    # Limit to 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
-    return render(request, 'main/donate_monetary.html', {'ads':ads,'campaign': campaign,'user_profile':user_profile,'unread_notifications':unread_notifications,'new_campaigns_from_follows':new_campaigns_from_follows,  'suggested_users': suggested_users,
-        'top_contributors': top_contributors,})
+
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund')
+
+    # Apply category filter if provided
+    if category_filter:
+        trending_campaigns = trending_campaigns.filter(category=category_filter)
+
+    trending_campaigns = trending_campaigns.order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    categories = Campaign.objects.values_list('category', flat=True).distinct()
+
+    context = {
+        'ads': ads,
+        'campaign': campaign,
+        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'new_campaigns_from_follows': new_campaigns_from_follows,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
+        'top_contributors': top_contributors,
+        'categories': categories,
+        'selected_category': category_filter,
+    }
+    
+    return render(request, 'main/donate_monetary.html', context)
 
 
 
@@ -1739,21 +2624,25 @@ def fill_paypal_account(request):
     return render(request, 'main/fill_paypal_account.html', {'form': form})
 
 
+
+
 @login_required
 def search_campaign(request):
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
-    # Get the user's profile
+    # Get user data with improved following logic
+    current_user_following = request.user.following.all()
+    following_user_ids = [follow.followed_id for follow in current_user_following]
     user_profile = get_object_or_404(Profile, user=request.user)
     query = request.GET.get('search_query')
     
-    # Initialize empty querysets for campaigns, profiles, Quran verses, and Hadiths
+    # Initialize empty querysets for all searchable models
     campaigns = Campaign.objects.none()
     profiles = Profile.objects.none()
     quran_verses = QuranVerse.objects.none()
-    adhkar = Adhkar.objects.none()  # Initialize queryset for Adhkar
-    hadiths = Hadith.objects.none()  # Initialize queryset for Hadiths
+    adhkar = Adhkar.objects.none()
+    hadiths = Hadith.objects.none()
     
     if query:
+        # Search across different models
         campaigns = Campaign.objects.filter(
             Q(title__icontains=query) | 
             Q(content__icontains=query) |
@@ -1769,17 +2658,14 @@ def search_campaign(request):
             Q(verse_text__icontains=query) |
             Q(translation__icontains=query) |
             Q(description__icontains=query) |
-            Q(surah__name__icontains=query)  # Filter based on the name of the Surah
+            Q(surah__name__icontains=query)
         )
-
         adhkar = Adhkar.objects.filter(
-            Q(type__icontains=query) |  # Filter based on the 'type' field
+            Q(type__icontains=query) |
             Q(text__icontains=query) |
             Q(translation__icontains=query) |
             Q(reference__icontains=query)
         )
-
-        # Search for Hadiths based on the query
         hadiths = Hadith.objects.filter(
             Q(narrator__icontains=query) |
             Q(text__icontains=query) |
@@ -1787,67 +2673,107 @@ def search_campaign(request):
             Q(authenticity__icontains=query)
         )
     
-    # Retrieve notifications for the logged-in user
+    # Notifications handling
     notifications = Notification.objects.filter(user=request.user).order_by('-timestamp')
-
-    # Mark notifications as viewed
     unread_notifications = notifications.filter(viewed=False)
     unread_notifications.update(viewed=True)
-    # Count unread notifications
     unread_count = unread_notifications.count()
-    # Fetch unread notifications for the user
-    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    # Check if there are new campaigns from follows
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
-
-    # Update last_campaign_check for the user's profile
+    
+    # New campaigns from follows using consistent following_user_ids
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__id__in=following_user_ids, 
+        visibility='public', 
+        timestamp__gt=user_profile.last_campaign_check
+    )
     user_profile.last_campaign_check = timezone.now()
-    user_profile.save()    
-    ads = NativeAd.objects.all()  
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+    user_profile.save()
+
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund') \
+        .order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    engaged_users = set()
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    # Suggested users with improved logic
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
     suggested_users = []
     
     for profile in all_profiles:
         similarity_score = calculate_similarity(user_profile, profile)
         if similarity_score >= 0.5:
-            # Get followers count for each suggested user
             followers_count = Follow.objects.filter(followed=profile.user).count()
             suggested_users.append({
                 'user': profile.user,
                 'followers_count': followers_count
             })
-
-    # Limit to only 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
-    return render(request, 'main/search_results.html', {
-        'ads':ads,
+
+    ads = NativeAd.objects.all()
+
+    context = {
+        'ads': ads,
         'campaigns': campaigns,
         'profiles': profiles,
         'quran_verses': quran_verses,
         'adhkar': adhkar,
-        'hadiths': hadiths,  # Pass hadiths queryset to the template
+        'hadiths': hadiths,
         'user_profile': user_profile,
         'unread_count': unread_count,
         'unread_notifications': unread_notifications,
         'new_campaigns_from_follows': new_campaigns_from_follows,
-          'suggested_users': suggested_users,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
         'top_contributors': top_contributors,
-    })
-
-
+        'search_query': query,  # Pass the search query back to template
+    }
+    
+    return render(request, 'main/search_results.html', context)
 
 @login_required
 def notification_list(request):
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
-    # Get the user's profile
+    # Get following user IDs using the improved pattern
+    current_user_following = request.user.following.all()
+    following_user_ids = [follow.followed_id for follow in current_user_following]
+    
     user_profile = get_object_or_404(Profile, user=request.user)
+    category_filter = request.GET.get('category', '')  # Get category filter from request
+    
     # Retrieve notifications for the logged-in user
     notifications = Notification.objects.filter(user=request.user).order_by('-timestamp')
 
@@ -1857,24 +2783,73 @@ def notification_list(request):
 
     # Count unread notifications
     unread_count = unread_notifications.count()
-    # Fetch unread notifications for the user
-    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    # Check if there are new campaigns from follows
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
+    
+    # Check if there are new campaigns from follows (using consistent following_user_ids)
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__id__in=following_user_ids, 
+        visibility='public', 
+        timestamp__gt=user_profile.last_campaign_check
+    )
 
     # Update last_campaign_check for the user's profile
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
-    ads = NativeAd.objects.all()  
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund')
+
+    # Apply category filter if provided
+    if category_filter:
+        trending_campaigns = trending_campaigns.filter(category=category_filter)
+
+    trending_campaigns = trending_campaigns.order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    engaged_users = set()
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    # Get suggested users with improved logic
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
     suggested_users = []
     
     for profile in all_profiles:
         similarity_score = calculate_similarity(user_profile, profile)
         if similarity_score >= 0.5:
-            # Get followers count for each suggested user
             followers_count = Follow.objects.filter(followed=profile.user).count()
             suggested_users.append({
                 'user': profile.user,
@@ -1883,69 +2858,139 @@ def notification_list(request):
 
     # Limit to only 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
+
+    ads = NativeAd.objects.all()
+    categories = Campaign.objects.values_list('category', flat=True).distinct()
+
     context = {
-        'ads':ads,
+        'ads': ads,
         'notifications': notifications,
         'user_profile': user_profile,
-        'unread_count': unread_count,  # Pass the unread count to the template
-        'unread_notifications':unread_notifications,
-        'new_campaigns_from_follows':new_campaigns_from_follows,
-          'suggested_users': suggested_users,
+        'unread_count': unread_count,
+        'unread_notifications': unread_notifications,
+        'new_campaigns_from_follows': new_campaigns_from_follows,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
         'top_contributors': top_contributors,
+        'categories': categories,
+        'selected_category': category_filter,
     }
     return render(request, 'main/notification_list.html', context)
 
 
-
 @login_required
 def create_chat(request):
-    following_users = [follow.followed for follow in request.user.following.all()]  
+    following_users = [follow.followed for follow in request.user.following.all()]
+    category_filter = request.GET.get('category', '')  # Get category filter from request
     user_profile = get_object_or_404(Profile, user=request.user)
+    
     if request.method == 'POST':
         form = ChatForm(request.user, request.POST)
         if form.is_valid():
             chat = form.save(commit=False)
-            chat.manager = request.user  
+            chat.manager = request.user
             chat.save()
-            form.save_m2m()  
+            form.save_m2m()
             return redirect('chat_detail', chat_id=chat.id)
     else:
         form = ChatForm(request.user)
+    
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__in=following_users, 
+        visibility='public', 
+        timestamp__gt=user_profile.last_campaign_check
+    )
 
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
-    ads = NativeAd.objects.all()  
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+    
+    ads = NativeAd.objects.all()
+    
+    # Improved suggested users logic
+    current_user_following = request.user.following.all()  # Get all Follow objects
+    following_user_ids = [follow.followed_id for follow in current_user_following]  # Extract user IDs
+    
+    # Exclude current user and already followed users
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
+    
     suggested_users = []
     
     for profile in all_profiles:
         similarity_score = calculate_similarity(user_profile, profile)
         if similarity_score >= 0.5:
-            # Get followers count for each suggested user
             followers_count = Follow.objects.filter(followed=profile.user).count()
             suggested_users.append({
                 'user': profile.user,
                 'followers_count': followers_count
             })
 
-    # Limit to only 2 suggested users
+    # Limit to 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
-    return render(request, 'main/create_chat.html', {'ads':ads,'form': form,'user_profile':user_profile,'unread_notifications':unread_notifications,'new_campaigns_from_follows':new_campaigns_from_follows,  'suggested_users': suggested_users,
-        'top_contributors': top_contributors,})
+
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund')
+
+    # Apply category filter if provided
+    if category_filter:
+        trending_campaigns = trending_campaigns.filter(category=category_filter)
+
+    trending_campaigns = trending_campaigns.order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    categories = Campaign.objects.values_list('category', flat=True).distinct()
+
+    context = {
+        'ads': ads,
+        'form': form,
+        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'new_campaigns_from_follows': new_campaigns_from_follows,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
+        'top_contributors': top_contributors,
+        'categories': categories,
+        'selected_category': category_filter,
+    }
+    
+    return render(request, 'main/create_chat.html', context)
+
 
 
 
@@ -1957,7 +3002,7 @@ def chat_detail(request, chat_id):
         Chat.objects.select_related("manager").prefetch_related("participants"),
         id=chat_id
     )
-
+    category_filter = request.GET.get('category', '')  # Get category filter from request
     user_profile = get_object_or_404(Profile, user=request.user)
     following_users = request.user.following.values_list('followed', flat=True)
     followers = request.user.followers.values_list('follower', flat=True)
@@ -1977,9 +3022,7 @@ def chat_detail(request, chat_id):
             message.sender = request.user
             message.chat = chat
             message.save()
-            # Send a fixed success response
             return JsonResponse({'status': 'success', 'message': 'Message sent successfully!'})
-
         return JsonResponse({'status': 'error', 'message': 'Form data is invalid', 'errors': message_form.errors})
 
     message_form = MessageForm(initial={'chat': chat})
@@ -1993,28 +3036,77 @@ def chat_detail(request, chat_id):
     user_profile.save()
 
     ads = NativeAd.objects.all()
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+    
+    # Improved suggested users logic
+    current_user_following = request.user.following.all()  # Get all Follow objects
+    following_user_ids = [follow.followed_id for follow in current_user_following]  # Extract user IDs
+    
+    # Exclude current user and already followed users
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
+    
     suggested_users = []
     
     for profile in all_profiles:
         similarity_score = calculate_similarity(user_profile, profile)
         if similarity_score >= 0.5:
-            # Get followers count for each suggested user
             followers_count = Follow.objects.filter(followed=profile.user).count()
             suggested_users.append({
                 'user': profile.user,
                 'followers_count': followers_count
             })
 
-    # Limit to only 2 suggested users
+    # Limit to 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
+
+
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund')
+
+    # Apply category filter if provided
+    if category_filter:
+        trending_campaigns = trending_campaigns.filter(category=category_filter)
+
+    trending_campaigns = trending_campaigns.order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    categories = Campaign.objects.values_list('category', flat=True).distinct()
+
     context = {
         'ads': ads,
         'unread_notifications': unread_notifications,
@@ -2024,11 +3116,16 @@ def chat_detail(request, chat_id):
         'message_form': message_form,
         'messages': messages,
         'user_choices': user_choices,
-          'suggested_users': suggested_users,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
         'top_contributors': top_contributors,
+        'categories': categories,
+        'selected_category': category_filter,
     }
 
     return render(request, 'main/chat_detail.html', context)
+
+
 
 
 @login_required
@@ -2036,27 +3133,70 @@ def user_chats(request):
     user_profile = get_object_or_404(Profile, user=request.user)
     last_chat_check = user_profile.last_chat_check
 
+    # Update user's last chat check timestamp
     user_profile.last_chat_check = timezone.now()
     user_profile.save()
-    ads = NativeAd.objects.all()  
 
-    following_users = [follow.followed for follow in request.user.following.all()]  
-    unread_notifications = Notification.objects.filter(user=request.user, viewed=False) 
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
-
+    # Get user chats and check for unread messages
     user_chats = Chat.objects.filter(participants=request.user) | Chat.objects.filter(manager=request.user)
-    
     for chat in user_chats:
         chat.has_unread_messages = chat.messages.filter(timestamp__gt=last_chat_check).exists()
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund') \
+        .order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    engaged_users = set()
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    # Get suggested users with improved logic
+    current_user_following = request.user.following.all()  # Get all Follow objects
+    following_user_ids = [follow.followed_id for follow in current_user_following]  # Extract user IDs
+    
+    # Exclude current user and already followed users
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
+    
     suggested_users = []
     
     for profile in all_profiles:
         similarity_score = calculate_similarity(user_profile, profile)
         if similarity_score >= 0.5:
-            # Get followers count for each suggested user
             followers_count = Follow.objects.filter(followed=profile.user).count()
             suggested_users.append({
                 'user': profile.user,
@@ -2065,20 +3205,30 @@ def user_chats(request):
 
     # Limit to only 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
-    return render(request, 'main/user_chats.html', {
-        'ads':ads,
+
+    # Other data
+    following_users = [follow.followed for follow in request.user.following.all()]
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__id__in=following_user_ids,  # Updated to use the same following_user_ids
+        visibility='public', 
+        timestamp__gt=user_profile.last_campaign_check
+    )
+    ads = NativeAd.objects.all()
+
+    context = {
+        'ads': ads,
         'user_chats': user_chats,
         'user_profile': user_profile,
         'unread_notifications': unread_notifications,
         'new_campaigns_from_follows': new_campaigns_from_follows,
-          'suggested_users': suggested_users,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
         'top_contributors': top_contributors,
-    })
+    }
+    
+    return render(request, 'main/user_chats.html', context)
+
 
 @require_POST
 @login_required
@@ -2110,55 +3260,121 @@ def delete_chat(request, chat_id):
 
 
 
+
+
 @login_required
 def view_campaign(request, campaign_id):
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
+    following_users = [follow.followed for follow in request.user.following.all()]
+    category_filter = request.GET.get('category', '')  # Get category filter from request
     campaign = get_object_or_404(Campaign, pk=campaign_id)
     user_profile = None
     already_loved = False
 
     if request.user.is_authenticated:
         user_profile = request.user.profile
-
-        # Check if the current user has loved the campaign
         already_loved = Love.objects.filter(user=request.user, campaign=campaign).exists()
 
         if not CampaignView.objects.filter(user=user_profile, campaign=campaign).exists():
             CampaignView.objects.create(user=user_profile, campaign=campaign)
-    # Fetch unread notifications for the user
-    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    # Check if there are new campaigns from follows
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
 
-    # Update last_campaign_check for the user's profile
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__in=following_users, 
+        visibility='public', 
+        timestamp__gt=user_profile.last_campaign_check
+    )
+
     user_profile.last_campaign_check = timezone.now()
-    user_profile.save() 
+    user_profile.save()
+    
     ads = NativeAd.objects.all()
+    
     # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+    # Improved suggested users logic
+    current_user_following = request.user.following.all()  # Get all Follow objects
+    following_user_ids = [follow.followed_id for follow in current_user_following]  # Extract user IDs
+    
+    # Exclude current user and already followed users
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
+    
     suggested_users = []
     
     for profile in all_profiles:
         similarity_score = calculate_similarity(user_profile, profile)
         if similarity_score >= 0.5:
-            # Get followers count for each suggested user
             followers_count = Follow.objects.filter(followed=profile.user).count()
             suggested_users.append({
                 'user': profile.user,
                 'followers_count': followers_count
             })
 
-    # Limit to only 2 suggested users
+    # Limit to 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10   
-    return render(request, 'main/campaign_detail.html', {'campaign': campaign, 'ads':ads,'user_profile': user_profile, 'already_loved': already_loved,'unread_notifications':unread_notifications,'new_campaigns_from_follows':new_campaigns_from_follows,  'suggested_users': suggested_users,
-        'top_contributors': top_contributors,})
 
+
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund')
+
+    # Apply category filter if provided
+    if category_filter:
+        trending_campaigns = trending_campaigns.filter(category=category_filter)
+
+    trending_campaigns = trending_campaigns.order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    categories = Campaign.objects.values_list('category', flat=True).distinct()
+
+    context = {
+        'campaign': campaign,
+        'ads': ads,
+        'user_profile': user_profile,
+        'already_loved': already_loved,
+        'unread_notifications': unread_notifications,
+        'new_campaigns_from_follows': new_campaigns_from_follows,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
+        'top_contributors': top_contributors,
+        'categories': categories,
+        'selected_category': category_filter,
+    }
+
+    return render(request, 'main/campaign_detail.html', context)
 
 
 
@@ -2194,80 +3410,123 @@ def thank_you(request):
 
 
 
-
-
-
-
-
-
 def activity_list(request, campaign_id):
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
-    # Get the user's profile
+    # Get data from request
+    following_users = [follow.followed for follow in request.user.following.all()]
+    category_filter = request.GET.get('category', '')  # Get category filter from request
     user_profile = get_object_or_404(Profile, user=request.user)
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
-    # Get the campaign object
-    campaign = Campaign.objects.get(id=campaign_id)
+    campaign = get_object_or_404(Campaign, id=campaign_id)
     
     # Get all activities associated with the campaign
     activities = Activity.objects.filter(campaign=campaign).order_by('-timestamp')
     
-    # Fetch comment count for each activity
+    # Add comment count for each activity
     for activity in activities:
         activity.comment_count = ActivityComment.objects.filter(activity=activity).count()
     
     # List of image extensions
     image_extensions = ['.jpg', '.jpeg', '.png', '.gif']
-    
-    # Count the number of activities
     activity_count = activities.count()
-    # Fetch unread notifications for the user
+    
+    # Notification and messaging data
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    # Check if there are new campaigns from follows
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
-
-    # Update last_campaign_check for the user's profile
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__in=following_users, 
+        visibility='public', 
+        timestamp__gt=user_profile.last_campaign_check
+    )
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
+    
     ads = NativeAd.objects.all()
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+    
+    # Improved suggested users logic
+    current_user_following = request.user.following.all()  # Get all Follow objects
+    following_user_ids = [follow.followed_id for follow in current_user_following]  # Extract user IDs
+    
+    # Exclude current user and already followed users
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
+    
     suggested_users = []
     
     for profile in all_profiles:
         similarity_score = calculate_similarity(user_profile, profile)
         if similarity_score >= 0.5:
-            # Get followers count for each suggested user
             followers_count = Follow.objects.filter(followed=profile.user).count()
             suggested_users.append({
                 'user': profile.user,
                 'followers_count': followers_count
             })
 
-    # Limit to only 2 suggested users
+    # Limit to 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
+
+
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund')
+
+    # Apply category filter if provided
+    if category_filter:
+        trending_campaigns = trending_campaigns.filter(category=category_filter)
+
+    trending_campaigns = trending_campaigns.order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    categories = Campaign.objects.values_list('category', flat=True).distinct()
+
     context = {
-    'ads':ads,
+        'ads': ads,
         'campaign': campaign, 
         'activities': activities, 
         'image_extensions': image_extensions,
         'user_profile': user_profile,
         'activity_count': activity_count,
-        'unread_notifications':unread_notifications,
-        'new_campaigns_from_follows':new_campaigns_from_follows,
-          'suggested_users': suggested_users,
+        'unread_notifications': unread_notifications,
+        'new_campaigns_from_follows': new_campaigns_from_follows,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
         'top_contributors': top_contributors,
+        'categories': categories,
+        'selected_category': category_filter,
     }
     
     return render(request, 'main/activity_list.html', context)
-
-
-
 
 
 
@@ -2506,55 +3765,104 @@ def like_comment_reply(request):
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
 
-
-
 @login_required
 def create_activity(request, campaign_id):
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
-            # Get the user's profile
+    following_users = [follow.followed for follow in request.user.following.all()]
+    category_filter = request.GET.get('category', '')  # Get category filter from request
     user_profile = get_object_or_404(Profile, user=request.user)
-    campaign = Campaign.objects.get(id=campaign_id)
-
+    campaign = get_object_or_404(Campaign, id=campaign_id)
 
     if request.method == 'POST':
         formset = ActivityFormSet(request.POST, request.FILES, instance=campaign)
         if formset.is_valid():
             formset.save()
-            return redirect('activity_list',campaign_id=campaign_id)  # Redirect to campaign detail view
+            return redirect('activity_list', campaign_id=campaign_id)
     else:
         formset = ActivityFormSet(instance=campaign)
-    # Fetch unread notifications for the user
-    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    # Check if there are new campaigns from follows
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
 
-    # Update last_campaign_check for the user's profile
+    # Notification and messaging data
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__in=following_users,
+        visibility='public',
+        timestamp__gt=user_profile.last_campaign_check
+    )
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
+
     ads = NativeAd.objects.all()
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+
+    # Improved suggested users logic
+    current_user_following = request.user.following.all()  # Get all Follow objects
+    following_user_ids = [follow.followed_id for follow in current_user_following]  # Extract user IDs
+    
+    # Exclude current user and already followed users
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
+    
     suggested_users = []
     
     for profile in all_profiles:
         similarity_score = calculate_similarity(user_profile, profile)
         if similarity_score >= 0.5:
-            # Get followers count for each suggested user
             followers_count = Follow.objects.filter(followed=profile.user).count()
             suggested_users.append({
                 'user': profile.user,
                 'followers_count': followers_count
             })
 
-    # Limit to only 2 suggested users
+    # Limit to 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
- # Expanded list of 200 emojis for activities
+
+
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund')
+
+    # Apply category filter if provided
+    if category_filter:
+        trending_campaigns = trending_campaigns.filter(category=category_filter)
+
+    trending_campaigns = trending_campaigns.order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    categories = Campaign.objects.values_list('category', flat=True).distinct()
+
+    # Expanded list of 200 emojis for activities
     emojis = [
     '📢', '🎉', '💼', '📊', '💡', '🔍', '📣', '🎯', '🔔', '📱', '💸', '⭐', '💥', '🌟', 
     '🌳', '🌍', '🌱', '🌲', '🌿', '🍃', '🏞️', '🦋', '🐝', '🐞', '🦜', '🐢', '🐘', '🐆', '🐅', '🐬',  # Environmental and wildlife
@@ -2582,11 +3890,24 @@ def create_activity(request, campaign_id):
     # Split the emojis into two parts: first 10 and the rest
     initial_emojis = emojis[:10]
     additional_emojis = emojis[10:]
-    return render(request, 'main/activity_create.html', {'ads':ads,'formset': formset, 'campaign': campaign,'user_profile':user_profile,'unread_notifications':unread_notifications,'new_campaigns_from_follows':new_campaigns_from_follows,'initial_emojis': initial_emojis,
-        'additional_emojis': additional_emojis,  'suggested_users': suggested_users,
-        'top_contributors': top_contributors,})
 
+    context = {
+        'ads': ads,
+        'formset': formset,
+        'campaign': campaign,
+        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'new_campaigns_from_follows': new_campaigns_from_follows,
+        'initial_emojis': initial_emojis,
+        'additional_emojis': additional_emojis,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
+        'top_contributors': top_contributors,
+        'categories': categories,
+        'selected_category': category_filter,
+    }
 
+    return render(request, 'main/activity_create.html', context)
 
 
 @login_required
@@ -2637,11 +3958,7 @@ def manage_campaigns(request):
 
     # Limit to only 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
+
 
     # Fetch available categories
     categories = Campaign.objects.filter(user=user_profile).values_list('category', flat=True).distinct()
@@ -2655,24 +3972,21 @@ def manage_campaigns(request):
         'categories': categories,  # Pass categories to template
         'selected_category': category_filter,  # Retain selected category
           'suggested_users': suggested_users,
-        'top_contributors': top_contributors,
+ 
     })
-
-
 
 
 @login_required
 def private_campaign(request):
-    # Get the current user's profile
+    # Get user and profile data with improved following logic
     user_profile = get_object_or_404(Profile, user=request.user)
-
-    # Get selected category filter from request
     category_filter = request.GET.get('category', '')
+    
+    # Get following user IDs using the improved pattern
+    current_user_following = request.user.following.all()
+    following_user_ids = [follow.followed_id for follow in current_user_following]
 
-    # Get the users that the current user is following
-    following_users = request.user.following.values_list('followed', flat=True)
-
-    # Get all private campaigns and annotate whether the current user marked them as "not interested"
+    # Get private campaigns with not_interested annotation
     campaigns = Campaign.objects.annotate(
         is_not_interested=Case(
             When(not_interested_by__user=user_profile, then=Value(True)),
@@ -2681,15 +3995,12 @@ def private_campaign(request):
         )
     )
 
-    # Filter to show only private campaigns from followed users or the current user's own private campaigns
+    # Filter visible private campaigns using following_user_ids
     visible_campaigns = campaigns.filter(
-        Q(user__user__in=following_users) | Q(user=user_profile),
+        Q(user__user__id__in=following_user_ids) | Q(user=user_profile),
         visibility='private',
         is_not_interested=False
-    )
-
-    # Additional filter to include campaigns where the current user is in the 'visible_to_followers' list
-    visible_campaigns = visible_campaigns.filter(
+    ).filter(
         Q(visible_to_followers=user_profile) | Q(user=user_profile)
     )
 
@@ -2699,66 +4010,100 @@ def private_campaign(request):
 
     visible_campaigns = visible_campaigns.order_by('-timestamp')
 
-    # Fetch unread notifications, chats, and unread messages
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund') \
+        .order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    engaged_users = set()
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    # Notifications and messages
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
     user_chats = Chat.objects.filter(participants=request.user)
     unread_messages_count = Message.objects.filter(chat__in=user_chats).exclude(sender=request.user).count()
 
-    # Fetch new campaigns from followed users that were added after the user's last check
+    # New campaigns from follows using consistent following_user_ids
     new_campaigns_from_follows = Campaign.objects.filter(
-        user__user__in=following_users, visibility='private', timestamp__gt=user_profile.last_campaign_check
-    ).exclude(id__in=NotInterested.objects.filter(user=user_profile).values_list('campaign_id', flat=True)).order_by('-timestamp')
+        user__user__id__in=following_user_ids, 
+        visibility='private', 
+        timestamp__gt=user_profile.last_campaign_check
+    ).exclude(id__in=NotInterested.objects.filter(user=user_profile).values_list('campaign_id', flat=True)) \
+     .order_by('-timestamp')
 
-    # Update the user's last campaign check time
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
 
-    # Fetch native ads for display on the page
-    ads = NativeAd.objects.all()
-
-    # Fetch available categories from private campaigns
-    categories = Campaign.objects.filter(
-        Q(user__user__in=following_users) | Q(user=user_profile),
-        visibility='private'
-    ).values_list('category', flat=True).distinct()
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+    # Suggested users with improved logic
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
     suggested_users = []
     
     for profile in all_profiles:
         similarity_score = calculate_similarity(user_profile, profile)
         if similarity_score >= 0.5:
-            # Get followers count for each suggested user
             followers_count = Follow.objects.filter(followed=profile.user).count()
             suggested_users.append({
                 'user': profile.user,
                 'followers_count': followers_count
             })
-
-    # Limit to only 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
-    return render(request, 'main/private_campaign.html', {
+
+    # Ads and categories
+    ads = NativeAd.objects.all()
+    categories = Campaign.objects.filter(
+        Q(user__user__id__in=following_user_ids) | Q(user=user_profile),
+        visibility='private'
+    ).values_list('category', flat=True).distinct()
+
+    context = {
         'ads': ads,
-        'private_campaigns': visible_campaigns,  # Filtered private campaigns to display
+        'private_campaigns': visible_campaigns,
         'user_profile': user_profile,
         'unread_notifications': unread_notifications,
         'new_campaigns_from_follows': new_campaigns_from_follows,
         'unread_messages_count': unread_messages_count,
-        'categories': categories,  # Pass categories to template
-        'selected_category': category_filter,  # Retain selected category
-          'suggested_users': suggested_users,
+        'categories': categories,
+        'selected_category': category_filter,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
         'top_contributors': top_contributors,
-    })
-
-
-
-
+    }
+    
+    return render(request, 'main/private_campaign.html', context)
 
 import time
 
@@ -2766,10 +4111,18 @@ import time
 def update_visibilit(request, campaign_id):
     start_time = time.time()  # Start timing
 
+    # Get user and campaign data
     user_profile = get_object_or_404(Profile, user=request.user)
+    
+    # Get following user IDs using the improved pattern
+    current_user_following = request.user.following.all()
+    following_user_ids = [follow.followed_id for follow in current_user_following]
+    
+    # Get followers for visibility settings
     followers = Profile.objects.filter(user__in=Follow.objects.filter(followed=request.user).values('follower'))
     campaign = get_object_or_404(Campaign, pk=campaign_id, user=user_profile)
 
+    # Handle form submission
     if request.method == 'POST':
         form = UpdateVisibilityForm(request.POST, instance=campaign, followers=followers)
         if form.is_valid():
@@ -2781,52 +4134,90 @@ def update_visibilit(request, campaign_id):
     else:
         form = UpdateVisibilityForm(instance=campaign, followers=followers)
 
-    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    following_users = [follow.followed for follow in request.user.following.all()]
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund') \
+        .order_by('-love_count_annotated')[:10]
 
+    # Top Contributors logic
+    engaged_users = set()
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    # Notifications and follows
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__id__in=following_user_ids,
+        visibility='public', 
+        timestamp__gt=user_profile.last_campaign_check
+    )
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
-    ads = NativeAd.objects.all()
 
-    end_time = time.time()  # End timing
-    print(f"Form processing took {end_time - start_time} seconds")
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+    # Suggested users with improved logic
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
     suggested_users = []
     
     for profile in all_profiles:
         similarity_score = calculate_similarity(user_profile, profile)
         if similarity_score >= 0.5:
-            # Get followers count for each suggested user
             followers_count = Follow.objects.filter(followed=profile.user).count()
             suggested_users.append({
                 'user': profile.user,
                 'followers_count': followers_count
             })
-
-    # Limit to only 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
-    return render(request, 'main/manage_campaign_visibility.html', {
+
+    ads = NativeAd.objects.all()
+
+    end_time = time.time()  # End timing
+    print(f"Form processing took {end_time - start_time} seconds")
+
+    context = {
         'form': form,
         'campaign': campaign,
         'ads': ads,
         'user_profile': user_profile,
         'unread_notifications': unread_notifications,
         'new_campaigns_from_follows': new_campaigns_from_follows,
-          'suggested_users': suggested_users,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
         'top_contributors': top_contributors,
-    })
-
-
-
-
+    }
+    
+    return render(request, 'main/manage_campaign_visibility.html', context)
 @login_required
 def delete_campaign(request, campaign_id):
     try:
@@ -2855,70 +4246,6 @@ def success_page(request):
     return render(request, 'main/success_page.html')
 
 
-
-@login_required
-def face(request):
-    form = SubscriptionForm()
-    following_users = [follow.followed for follow in request.user.following.all()]
-
-    campaign = Campaign.objects.last()
-    user_profile = None
-
-    if request.user.is_authenticated:
-        user_profile = get_object_or_404(Profile, user=request.user)
-
-        if user_profile.last_campaign_check is None:
-            user_profile.last_campaign_check = timezone.now()
-            user_profile.save()
-
-        new_private_campaigns_count = Campaign.objects.filter(
-            visibility='private',
-            timestamp__gt=user_profile.last_campaign_check
-        ).count()
-
-        # Debugging output
-        print(f"Last Campaign Check: {user_profile.last_campaign_check}")
-        print(f"New Private Campaigns Count: {new_private_campaigns_count}")
-
-    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-
-    user_profile.last_campaign_check = timezone.now()
-    user_profile.save()
-
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
-    suggested_users = []
-    
-    for profile in all_profiles:
-        similarity_score = calculate_similarity(user_profile, profile)
-        if similarity_score >= 0.5:
-            # Get followers count for each suggested user
-            followers_count = Follow.objects.filter(followed=profile.user).count()
-            suggested_users.append({
-                'user': profile.user,
-                'followers_count': followers_count
-            })
-
-    # Limit to only 2 suggested users
-    suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
-         
-    ads = NativeAd.objects.all()
-    return render(request, 'main/face.html', {
-        'ads': ads,
-        'campaign': campaign,
-        'user_profile': user_profile,
-        'unread_notifications': unread_notifications,
-        'form': form,
-        'new_private_campaigns_count': new_private_campaigns_count,
-        'suggested_users': suggested_users,
-        'top_contributors': top_contributors,
-    })
 
 
 
@@ -3143,6 +4470,14 @@ def get_replies(request, comment_id):
         return JsonResponse({'error': 'Comment not found'}, status=404)
 
 
+
+
+
+
+
+
+
+
 @login_required
 def home(request):
     user_profile = get_object_or_404(Profile, user=request.user)
@@ -3205,8 +4540,8 @@ def home(request):
     categories = Campaign.objects.values_list('category', flat=True).distinct()  # Fetch unique categories
 
     # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+    current_user_following_ids = set(request.user.following.values_list('followed_id', flat=True))
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=current_user_following_ids)
     suggested_users = []
     
     for profile in all_profiles:
@@ -3222,10 +4557,46 @@ def home(request):
     # Limit to only 2 suggested users
     suggested_users = suggested_users[:2]
 # Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
     
-   
-)  # Top 10
+# Collect all user-campaign engagement pairs
+    engaged_users = set()
+
+# Collect engagement user-campaign pairs
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+# Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+        brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+# Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+# Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+            'user': profile.user,
+            'image': profile.image,
+            'campaign_count': len(campaign_set),
+        })
+        except Profile.DoesNotExist:
+            continue
+
+# Sort contributors by campaign_count descending
+        top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]  # Top 5
     return render(request, 'main/home.html', {
         'ads': ads,
         'public_campaigns': campaigns_to_display if campaigns_to_display.exists() else trending_campaigns,
@@ -3240,15 +4611,141 @@ def home(request):
         'trending_campaigns': trending_campaigns,
         'suggested_users': suggested_users,
         'top_contributors': top_contributors,
+        
     })
+
+
+
+
+
+
+
+
+@login_required
+def face(request):
+    form = SubscriptionForm()
+    following_users = [follow.followed for follow in request.user.following.all()]
+    user_profile = get_object_or_404(Profile, user=request.user)
+    category_filter = request.GET.get('category', '')  # Get category filter from request
+
+    campaign = Campaign.objects.last()
+
+    if user_profile.last_campaign_check is None:
+        user_profile.last_campaign_check = timezone.now()
+        user_profile.save()
+
+    new_private_campaigns_count = Campaign.objects.filter(
+        visibility='private',
+        timestamp__gt=user_profile.last_campaign_check
+    ).count()
+
+    # Debugging output
+    print(f"Last Campaign Check: {user_profile.last_campaign_check}")
+    print(f"New Private Campaigns Count: {new_private_campaigns_count}")
+
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+
+    user_profile.last_campaign_check = timezone.now()
+    user_profile.save()
+
+    # Get suggested users with followers count
+    current_user_following = user_profile.following.all()
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+    suggested_users = []
+    
+    for profile in all_profiles:
+        similarity_score = calculate_similarity(user_profile, profile)
+        if similarity_score >= 0.5:
+            # Get followers count for each suggested user
+            followers_count = Follow.objects.filter(followed=profile.user).count()
+            suggested_users.append({
+                'user': profile.user,
+                'followers_count': followers_count
+            })
+
+    # Limit to only 2 suggested users
+    suggested_users = suggested_users[:2]
+
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1)\
+        .select_related('campaignfund')
+
+    # ✅ Apply category filter before slicing
+    if category_filter:
+        trending_campaigns = trending_campaigns.filter(category=category_filter)
+
+    trending_campaigns = trending_campaigns.order_by('-love_count_annotated')[:10]  # Show top 10 trending campaigns
+
+    # Top Contributors logic
+    engaged_users = set()
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+        brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]  # Top 5
+
+    ads = NativeAd.objects.all()
+    categories = Campaign.objects.values_list('category', flat=True).distinct()  # Fetch unique categories
+
+    return render(request, 'main/face.html', {
+        'ads': ads,
+        'campaign': campaign,
+        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'form': form,
+        'new_private_campaigns_count': new_private_campaigns_count,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
+        'top_contributors': top_contributors,
+        'categories': categories,  # Pass categories to template
+        'selected_category': category_filter,  # Pass selected category to retain state
+    })
+
+
+
+
+
+
+
 
 
 @login_required
 def campaign_comments(request, campaign_id):
     # Retrieve campaign object
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
-    # Get the user's profile (assuming the user is authenticated)
+    following_users = [follow.followed for follow in request.user.following.all()]
+    category_filter = request.GET.get('category', '')  # Get category filter from request
     user_profile = get_object_or_404(Profile, user=request.user)
+    
     try:
         campaign = Campaign.objects.get(pk=campaign_id)
     except Campaign.DoesNotExist:
@@ -3258,7 +4755,7 @@ def campaign_comments(request, campaign_id):
         form = CommentForm(request.POST)
         if form.is_valid():
             comment = form.save(commit=False)
-            comment.user = request.user.profile  # Assuming user is authenticated and has a profile
+            comment.user = request.user.profile
             comment.campaign_id = campaign_id
             comment.save()
             return JsonResponse({'success': True})
@@ -3267,248 +4764,609 @@ def campaign_comments(request, campaign_id):
     else:
         form = CommentForm()
 
-    comments = Comment.objects.filter(campaign_id=campaign_id).order_by('-timestamp')  # Newest first
+    comments = Comment.objects.filter(campaign_id=campaign_id).order_by('-timestamp')
+    
     # Fetch unread notifications for the user
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
 
     # Fetch unread messages for the user
     user_chats = Chat.objects.filter(participants=request.user)
-    unread_messages_count = Message.objects.filter(chat__in=user_chats, sender__id=request.user.id).exclude(sender=request.user).count()
+    unread_messages_count = Message.objects.filter(
+        chat__in=user_chats
+    ).exclude(sender=request.user).count()
 
     # Check if there are new campaigns from follows
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
-
-    # Update last_campaign_check for the user's profile
-    user_profile.last_campaign_check = timezone.now()
-    user_profile.save()
-    ads = NativeAd.objects.all()
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
-    suggested_users = []
-    
-    for profile in all_profiles:
-        similarity_score = calculate_similarity(user_profile, profile)
-        if similarity_score >= 0.5:
-            # Get followers count for each suggested user
-            followers_count = Follow.objects.filter(followed=profile.user).count()
-            suggested_users.append({
-                'user': profile.user,
-                'followers_count': followers_count
-            })
-
-    # Limit to only 2 suggested users
-    suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10  
-    return render(request, 'main/campaign_comments.html', {'ads':ads,'campaign': campaign, 'comments': comments, 'form': form,'user_profile':user_profile,'unread_notifications':unread_notifications,'new_campaigns_from_follows':new_campaigns_from_follows,  'suggested_users': suggested_users,
-        'top_contributors': top_contributors,})
-
-
-
-def campaign_support(request, campaign_id):
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
-
-    support_campaign = SupportCampaign.objects.filter(campaign_id=campaign_id).first()
-
-        # Get the user's profile if the user is authenticated
-    user_profile = None
-    if request.user.is_authenticated:
-        user_profile = get_object_or_404(Profile, user=request.user)
-    # Fetch unread notifications for the user
-    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    # Check if there are new campaigns from follows
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
-
-    # Update last_campaign_check for the user's profile
-    user_profile.last_campaign_check = timezone.now()
-    user_profile.save()
-    ads = NativeAd.objects.all()  
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
-    suggested_users = []
-    
-    for profile in all_profiles:
-        similarity_score = calculate_similarity(user_profile, profile)
-        if similarity_score >= 0.5:
-            # Get followers count for each suggested user
-            followers_count = Follow.objects.filter(followed=profile.user).count()
-            suggested_users.append({
-                'user': profile.user,
-                'followers_count': followers_count
-            })
-
-    # Limit to only 2 suggested users
-    suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
-    return render(request, 'main/campaign_support.html', {'ads':ads,'support_campaign': support_campaign,'user_profile':user_profile,'unread_notifications':unread_notifications,'new_campaigns_from_follows':new_campaigns_from_follows,  'suggested_users': suggested_users,
-        'top_contributors': top_contributors,})
-
-
-
-
-def recreate_campaign(request, campaign_id):
-    following_users = [follow.followed for follow in request.user.following.all()]
-    user_profile = get_object_or_404(Profile, user=request.user)
-    categories = Campaign.CATEGORY_CHOICES  
-
-    # Get the existing campaign
-    existing_campaign = get_object_or_404(Campaign, pk=campaign_id)
-
-    if request.method == 'POST':
-        # ✅ Bind form to the existing campaign (allows editing)
-        form = CampaignForm(request.POST, request.FILES, instance=existing_campaign)
-        if form.is_valid():
-            form.save()  # ✅ Saves changes to the existing campaign
-            return redirect('success_page')  # Change to the correct success URL
-
-    else:
-        # ✅ Pre-fill the form with existing campaign data
-        form = CampaignForm(instance=existing_campaign)
-
-    # Fetch unread notifications
-    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    
-    # Check for new campaigns from followed users
     new_campaigns_from_follows = Campaign.objects.filter(
-        user__user__in=following_users,
-        visibility='public',
+        user__user__in=following_users, 
+        visibility='public', 
         timestamp__gt=user_profile.last_campaign_check
     )
 
-    # Update the user's last campaign check timestamp
+    # Update last_campaign_check for the user's profile
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
-
-    ads = NativeAd.objects.all()  
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+    
+    ads = NativeAd.objects.all()
+    
+    # Improved suggested users logic
+    current_user_following = request.user.following.all()  # Get all Follow objects
+    following_user_ids = [follow.followed_id for follow in current_user_following]  # Extract user IDs
+    
+    # Exclude current user and already followed users
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
+    
     suggested_users = []
     
     for profile in all_profiles:
         similarity_score = calculate_similarity(user_profile, profile)
         if similarity_score >= 0.5:
-            # Get followers count for each suggested user
             followers_count = Follow.objects.filter(followed=profile.user).count()
             suggested_users.append({
                 'user': profile.user,
                 'followers_count': followers_count
             })
 
-    # Limit to only 2 suggested users
+    # Limit to 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
 
-    return render(request, 'main/recreatecampaign_form.html', {
+
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund')
+
+    # Apply category filter if provided
+    if category_filter:
+        trending_campaigns = trending_campaigns.filter(category=category_filter)
+
+    trending_campaigns = trending_campaigns.order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    categories = Campaign.objects.values_list('category', flat=True).distinct()
+
+    context = {
+        'ads': ads,
+        'campaign': campaign,
+        'comments': comments,
+        'form': form,
+        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'unread_messages_count': unread_messages_count,
+        'new_campaigns_from_follows': new_campaigns_from_follows,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
+        'top_contributors': top_contributors,
+        'categories': categories,
+        'selected_category': category_filter,
+    }
+    
+    return render(request, 'main/campaign_comments.html', context)
+
+
+def campaign_support(request, campaign_id):
+    # Get basic campaign and user data
+    user_profile = None
+    following_user_ids = []
+    
+    if request.user.is_authenticated:
+        # Get following user IDs using the improved pattern
+        current_user_following = request.user.following.all()
+        following_user_ids = [follow.followed_id for follow in current_user_following]
+        user_profile = get_object_or_404(Profile, user=request.user)
+        # Update last campaign check time
+        user_profile.last_campaign_check = timezone.now()
+        user_profile.save()
+
+    support_campaign = SupportCampaign.objects.filter(campaign_id=campaign_id).first()
+    
+    # Notifications and messages
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False) if request.user.is_authenticated else []
+    
+    # New campaigns from follows
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__id__in=following_user_ids,
+        visibility='public',
+        timestamp__gt=user_profile.last_campaign_check if user_profile else timezone.now()
+    ) if request.user.is_authenticated else []
+
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund') \
+        .order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    engaged_users = set()
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    # Suggested users (only for authenticated users)
+    suggested_users = []
+    if request.user.is_authenticated:
+        all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
+        
+        for profile in all_profiles:
+            similarity_score = calculate_similarity(user_profile, profile)
+            if similarity_score >= 0.5:
+                followers_count = Follow.objects.filter(followed=profile.user).count()
+                suggested_users.append({
+                    'user': profile.user,
+                    'followers_count': followers_count
+                })
+        suggested_users = suggested_users[:2]
+
+    ads = NativeAd.objects.all()
+
+    context = {
+        'ads': ads,
+        'support_campaign': support_campaign,
+        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'new_campaigns_from_follows': new_campaigns_from_follows,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
+        'top_contributors': top_contributors,
+    }
+    
+    return render(request, 'main/campaign_support.html', context)
+
+
+@login_required
+def recreate_campaign(request, campaign_id):
+    # Get following user IDs using the improved pattern
+    current_user_following = request.user.following.all()
+    following_user_ids = [follow.followed_id for follow in current_user_following]
+    
+    user_profile = get_object_or_404(Profile, user=request.user)
+    categories = Campaign.CATEGORY_CHOICES
+    existing_campaign = get_object_or_404(Campaign, pk=campaign_id)
+
+    # Handle form submission
+    if request.method == 'POST':
+        form = CampaignForm(request.POST, request.FILES, instance=existing_campaign)
+        if form.is_valid():
+            form.save()
+            return redirect('success_page')  # Update with your success URL
+    else:
+        form = CampaignForm(instance=existing_campaign)
+
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund') \
+        .order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    engaged_users = set()
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    # Notifications and follows
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__id__in=following_user_ids,
+        visibility='public',
+        timestamp__gt=user_profile.last_campaign_check
+    )
+    user_profile.last_campaign_check = timezone.now()
+    user_profile.save()
+
+    # Suggested users with improved logic
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
+    suggested_users = []
+    
+    for profile in all_profiles:
+        similarity_score = calculate_similarity(user_profile, profile)
+        if similarity_score >= 0.5:
+            followers_count = Follow.objects.filter(followed=profile.user).count()
+            suggested_users.append({
+                'user': profile.user,
+                'followers_count': followers_count
+            })
+    suggested_users = suggested_users[:2]
+
+    ads = NativeAd.objects.all()
+
+    context = {
         'ads': ads,
         'form': form,
         'categories': categories,
         'user_profile': user_profile,
         'unread_notifications': unread_notifications,
         'new_campaigns_from_follows': new_campaigns_from_follows,
-          'suggested_users': suggested_users,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
         'top_contributors': top_contributors,
-    })
+        'existing_campaign': existing_campaign,
+    }
+    
+    return render(request, 'main/recreatecampaign_form.html', context)
 
 
 def success_page(request):
     return render(request, 'main/success.html')
 
 
+
+
 @login_required
 def create_campaign(request):
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
-    user_profile = get_object_or_404(Profile, user=request.user)  # Get the user's profile
-    categories = Campaign.CATEGORY_CHOICES  # Get the category choices from the Campaign model
+    following_users = [follow.followed for follow in request.user.following.all()]
+    user_profile = get_object_or_404(Profile, user=request.user)
+    categories = Campaign.CATEGORY_CHOICES
 
     if request.method == 'POST':
         form = CampaignForm(request.POST, request.FILES)
         if form.is_valid():
             campaign = form.save(commit=False)
-            campaign.user = request.user.profile  # Assuming profile is a one-to-one field on the User model
+            campaign.user = request.user.profile
             campaign.save()
             messages.success(request, 'Campaign created successfully!')
-            return redirect('home')  # Redirect to a success page
+            return redirect('home')
         else:
             messages.error(request, 'There were errors in your form. Please correct them below.')
-
     else:
         form = CampaignForm()
 
     # Fetch unread notifications for the user
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    
     # Check if there are new campaigns from follows
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__in=following_users, 
+        visibility='public', 
+        timestamp__gt=user_profile.last_campaign_check
+    )
 
     # Update last_campaign_check for the user's profile
     user_profile.last_campaign_check = timezone.now()
-    user_profile.save() 
-    ads = NativeAd.objects.all()
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+    user_profile.save()
+
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund') \
+        .order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    engaged_users = set()
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    # Improved suggested users logic
+    current_user_following = request.user.following.all()  # Get all Follow objects
+    following_user_ids = [follow.followed_id for follow in current_user_following]  # Extract user IDs
+    
+    # Exclude current user and already followed users
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
+    
     suggested_users = []
     
     for profile in all_profiles:
         similarity_score = calculate_similarity(user_profile, profile)
         if similarity_score >= 0.5:
-            # Get followers count for each suggested user
             followers_count = Follow.objects.filter(followed=profile.user).count()
             suggested_users.append({
                 'user': profile.user,
                 'followers_count': followers_count
             })
 
-    # Limit to only 2 suggested users
+    # Limit to 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
-    return render(request, 'main/campaign_form.html', {
+
+
+    ads = NativeAd.objects.all()
+
+    context = {
         'ads': ads,
         'form': form,
         'categories': categories,
         'user_profile': user_profile,
         'unread_notifications': unread_notifications,
         'new_campaigns_from_follows': new_campaigns_from_follows,
-          'suggested_users': suggested_users,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
         'top_contributors': top_contributors,
-    })
+    }
+    
+    return render(request, 'main/campaign_form.html', context)
+
+
+
 def poster_canva(request):
     return render(request, 'main/poster_canva.html')
 
 
 
 
-def follower_list(request, username):
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
-    user_profile = get_object_or_404(Profile, user=request.user)
-    user = User.objects.get(username=username)
-    followers = Follow.objects.filter(followed=user)
-    # Fetch unread notifications for the user
-    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    # Check if there are new campaigns from follows
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
 
-    # Update last_campaign_check for the user's profile
+@login_required
+def home(request):
+    user_profile = get_object_or_404(Profile, user=request.user)
+    campaign_id = request.GET.get('campaign_id')
+    category_filter = request.GET.get('category', '')
+    
+    if campaign_id:
+        campaign = get_object_or_404(Campaign, pk=campaign_id)
+    else:
+        campaign = Campaign.objects.first()
+
+    user = request.user
+    already_loved = campaign and user != campaign.user and Love.objects.filter(campaign=campaign, user=user).exists()
+
+    # Get campaigns, annotate whether the user marked them as "not interested"
+    campaigns = Campaign.objects.annotate(
+        is_not_interested=Case(
+            When(not_interested_by__user=user_profile, then=Value(True)),
+            default=Value(False),
+            output_field=BooleanField(),
+        )
+    ).filter(is_not_interested=False, visibility='public').select_related('campaignfund')
+
+    if category_filter:
+        campaigns = campaigns.filter(category=category_filter)
+
+    campaigns = campaigns.order_by('-timestamp')
+
+    # Get users the current user is following
+    following_users = request.user.following.values_list('followed', flat=True)
+    followed_campaigns = campaigns.filter(user__user__in=following_users)
+    own_campaigns = campaigns.filter(user=user_profile)
+    campaigns_to_display = followed_campaigns | own_campaigns
+
+    # Trending campaigns
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1)\
+        .select_related('campaignfund')
+
+    if category_filter:
+        trending_campaigns = trending_campaigns.filter(category=category_filter)
+
+    trending_campaigns = trending_campaigns.order_by('-love_count_annotated')[:10]
+
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    user_chats = Chat.objects.filter(participants=request.user)
+    unread_messages_count = Message.objects.filter(chat__in=user_chats).exclude(sender=request.user).count()
+    
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__in=following_users, 
+        visibility='public', 
+        timestamp__gt=user_profile.last_campaign_check
+    ).exclude(id__in=NotInterested.objects.filter(user=user_profile).values_list('campaign_id', flat=True)).order_by('-timestamp')
+
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
-    ads = NativeAd.objects.all()  
+
+    ads = NativeAd.objects.all()
+    categories = Campaign.objects.values_list('category', flat=True).distinct()
+
+    # Improved suggested users logic
+    current_user_following = request.user.following.all()  # Get all Follow objects
+    following_user_ids = [follow.followed_id for follow in current_user_following]  # Extract user IDs
+    
+    # Exclude current user and already followed users
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
+    
+    suggested_users = []
+    
+    for profile in all_profiles:
+        similarity_score = calculate_similarity(user_profile, profile)
+        if similarity_score >= 0.5:
+            followers_count = Follow.objects.filter(followed=profile.user).count()
+            suggested_users.append({
+                'user': profile.user,
+                'followers_count': followers_count
+            })
+
+    # Limit to 2 suggested users
+    suggested_users = suggested_users[:2]
+
+    # Top Contributors logic
+    engaged_users = set()
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+        brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    return render(request, 'main/home.html', {
+        'ads': ads,
+        'public_campaigns': campaigns_to_display if campaigns_to_display.exists() else trending_campaigns,
+        'campaign': Campaign.objects.last(),
+        'already_loved': already_loved,
+        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'unread_messages_count': unread_messages_count,
+        'new_campaigns_from_follows': new_campaigns_from_follows,
+        'categories': categories,
+        'selected_category': category_filter,
+        'trending_campaigns': trending_campaigns,
+        'suggested_users': suggested_users,
+        'top_contributors': top_contributors,
+    })
+
+
+
+
+
+@login_required
+def face(request):
+    form = SubscriptionForm()
+    following_users = [follow.followed for follow in request.user.following.all()]
+    category_filter = request.GET.get('category', '')  # Get category filter from request
+
+    campaign = Campaign.objects.last()
+    user_profile = None
+
+    if request.user.is_authenticated:
+        user_profile = get_object_or_404(Profile, user=request.user)
+
+        if user_profile.last_campaign_check is None:
+            user_profile.last_campaign_check = timezone.now()
+            user_profile.save()
+
+        new_private_campaigns_count = Campaign.objects.filter(
+            visibility='private',
+            timestamp__gt=user_profile.last_campaign_check
+        ).count()
+
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+
+    user_profile.last_campaign_check = timezone.now()
+    user_profile.save()
+
     # Get suggested users with followers count
     current_user_following = user_profile.following.all()
     all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
@@ -3526,41 +5384,209 @@ def follower_list(request, username):
 
     # Limit to only 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
+
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1)\
+        .select_related('campaignfund')
+
+    # ✅ Apply category filter before slicing
+    if category_filter:
+        trending_campaigns = trending_campaigns.filter(category=category_filter)
+
+    trending_campaigns = trending_campaigns.order_by('-love_count_annotated')[:10]  # Show top 10 trending campaigns
+
+    # Top Contributors logic
+    engaged_users = set()
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+        brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]  # Top 5
+
+    ads = NativeAd.objects.all()
+    categories = Campaign.objects.values_list('category', flat=True).distinct()  # Fetch unique categories
+
+    return render(request, 'main/face.html', {
+        'ads': ads,
+        'campaign': campaign,
+        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'form': form,
+        'new_private_campaigns_count': new_private_campaigns_count,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
+        'top_contributors': top_contributors,
+        'categories': categories,  # Pass categories to template
+        'selected_category': category_filter,  # Pass selected category to retain state
+    })
+
+
+
+def follower_list(request, username):
+    # Get following user IDs using the improved pattern
+    current_user_following = request.user.following.all()
+    following_user_ids = [follow.followed_id for follow in current_user_following]
+    
+    user_profile = get_object_or_404(Profile, user=request.user)
+    user = User.objects.get(username=username)
+    followers = Follow.objects.filter(followed=user)
+    category_filter = request.GET.get('category', '')  # Get category filter from request
+    
+    # Fetch unread notifications for the user
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    
+    # Check if there are new campaigns from follows (using consistent following_user_ids)
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__id__in=following_user_ids, 
+        visibility='public', 
+        timestamp__gt=user_profile.last_campaign_check
+    )
+
+    # Update last_campaign_check for the user's profile
+    user_profile.last_campaign_check = timezone.now()
+    user_profile.save()
+    
+    ads = NativeAd.objects.all()  
+    
+    # Get suggested users with improved logic
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
+    suggested_users = []
+    
+    for profile in all_profiles:
+        similarity_score = calculate_similarity(user_profile, profile)
+        if similarity_score >= 0.5:
+            # Get followers count for each suggested user
+            followers_count = Follow.objects.filter(followed=profile.user).count()
+            suggested_users.append({
+                'user': profile.user,
+                'followers_count': followers_count
+            })
+
+    # Limit to only 2 suggested users
+    suggested_users = suggested_users[:2]
+
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1)\
+        .select_related('campaignfund')
+
+    # Apply category filter if provided
+    if category_filter:
+        trending_campaigns = trending_campaigns.filter(category=category_filter)
+
+    trending_campaigns = trending_campaigns.order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    engaged_users = set()
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+        brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    categories = Campaign.objects.values_list('category', flat=True).distinct()
+
     context = {
-        'ads':ads,
+        'ads': ads,
         'user': user,
         'followers': followers,
-        'user_profile':user_profile,
-        'unread_notifications':unread_notifications,
-        'new_campaigns_from_follows':new_campaigns_from_follows,
-          'suggested_users': suggested_users,
+        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'new_campaigns_from_follows': new_campaigns_from_follows,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
         'top_contributors': top_contributors,
+        'categories': categories,
+        'selected_category': category_filter,
     }
 
     return render(request, 'main/follower_list.html', context)
 
 def following_list(request, username):
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
+    # Get following user IDs using the improved pattern
+    current_user_following = request.user.following.all()
+    following_user_ids = [follow.followed_id for follow in current_user_following]
+    
     user_profile = get_object_or_404(Profile, user=request.user)
     user = User.objects.get(username=username)
     following = Follow.objects.filter(follower=user)
+    category_filter = request.GET.get('category', '')  # Get category filter from request
+    
     # Fetch unread notifications for the user
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    # Check if there are new campaigns from follows
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
+    
+    # Check if there are new campaigns from follows (using consistent following_user_ids)
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__id__in=following_user_ids, 
+        visibility='public', 
+        timestamp__gt=user_profile.last_campaign_check
+    )
 
     # Update last_campaign_check for the user's profile
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
-    ads = NativeAd.objects.all()  
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+    
+    ads = NativeAd.objects.all()
+    
+    # Get suggested users with improved logic
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
     suggested_users = []
     
     for profile in all_profiles:
@@ -3575,22 +5601,75 @@ def following_list(request, username):
 
     # Limit to only 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
+
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1)\
+        .select_related('campaignfund')
+
+    # Apply category filter if provided
+    if category_filter:
+        trending_campaigns = trending_campaigns.filter(category=category_filter)
+
+    trending_campaigns = trending_campaigns.order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    engaged_users = set()
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+        brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    categories = Campaign.objects.values_list('category', flat=True).distinct()
+
     context = {
-        'ads':ads,
+        'ads': ads,
         'user': user,
         'following': following,
-        'user_profile':user_profile,
-        'unread_notifications':unread_notifications,
-        'new_campaigns_from_follows':new_campaigns_from_follows,
-          'suggested_users': suggested_users,
+        'user_profile': user_profile,
+        'unread_notifications': unread_notifications,
+        'new_campaigns_from_follows': new_campaigns_from_follows,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
         'top_contributors': top_contributors,
+        'categories': categories,
+        'selected_category': category_filter,
     }
+
     return render(request, 'main/following_list.html', context)
+
+
+
+
 
 
 
@@ -3617,19 +5696,29 @@ def unfollow_user(request, username):
 
 
 
+
+
+
 @login_required
 def profile_edit(request, username):
-    following_users = [follow.followed for follow in request.user.following.all()]  # Get users the current user is following
-    # Fetch unread notifications for the user
+    following_users = [follow.followed for follow in request.user.following.all()]
+    category_filter = request.GET.get('category', '')  # Get category filter from request
     unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
     user_profile = get_object_or_404(Profile, user=request.user)
     user = get_object_or_404(User, username=username)
     profile, created = Profile.objects.get_or_create(user=user)
+    
     # Update last_campaign_check for the user's profile
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
-    new_campaigns_from_follows = Campaign.objects.filter(user__user__in=following_users, visibility='public', timestamp__gt=user_profile.last_campaign_check)
-    ads = NativeAd.objects.all()  
+    
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__in=following_users, 
+        visibility='public', 
+        timestamp__gt=user_profile.last_campaign_check
+    )
+    
+    ads = NativeAd.objects.all()
     
     if request.method == 'POST':
         user_form = UserForm(request.POST, instance=user)
@@ -3638,33 +5727,80 @@ def profile_edit(request, username):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            return redirect('home')  # Redirect to the home page after successful edit
-            
+            return redirect('home')
     else:
         user_form = UserForm(instance=user)
         profile_form = ProfileForm(instance=profile)
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+
+    # Improved suggested users logic
+    current_user_following = request.user.following.all()  # Get all Follow objects
+    following_user_ids = [follow.followed_id for follow in current_user_following]  # Extract user IDs
+    
+    # Exclude current user and already followed users
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
+    
     suggested_users = []
     
     for profile in all_profiles:
         similarity_score = calculate_similarity(user_profile, profile)
         if similarity_score >= 0.5:
-            # Get followers count for each suggested user
             followers_count = Follow.objects.filter(followed=profile.user).count()
             suggested_users.append({
                 'user': profile.user,
                 'followers_count': followers_count
             })
 
-    # Limit to only 2 suggested users
+    # Limit to 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
+
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund')
+
+    # Apply category filter if provided
+    if category_filter:
+        trending_campaigns = trending_campaigns.filter(category=category_filter)
+
+    trending_campaigns = trending_campaigns.order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    categories = Campaign.objects.values_list('category', flat=True).distinct()
+
     context = {
         'ads': ads,
         'user_form': user_form,
@@ -3674,10 +5810,16 @@ def profile_edit(request, username):
         'user_profile': user_profile,
         'unread_notifications': unread_notifications,
         'new_campaigns_from_follows': new_campaigns_from_follows,
-          'suggested_users': suggested_users,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
         'top_contributors': top_contributors,
+        'categories': categories,
+        'selected_category': category_filter,
     }
+    
     return render(request, 'main/edit_profile.html', context)
+
+
 
 
 
@@ -3722,16 +5864,62 @@ def profile_view(request, username):
     
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
-    ads = NativeAd.objects.all()
-    # Get suggested users with followers count
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+    
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund') \
+        .order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    engaged_users = set()
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    # Get suggested users with followers count (using improved logic)
+    current_user_following = request.user.following.all()  # Get all Follow objects
+    following_user_ids = [follow.followed_id for follow in current_user_following]  # Extract user IDs
+    
+    # Exclude current user and already followed users
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
+    
     suggested_users = []
     
     for profile in all_profiles:
         similarity_score = calculate_similarity(user_profile, profile)
         if similarity_score >= 0.5:
-            # Get followers count for each suggested user
             followers_count = Follow.objects.filter(followed=profile.user).count()
             suggested_users.append({
                 'user': profile.user,
@@ -3740,11 +5928,9 @@ def profile_view(request, username):
 
     # Limit to only 2 suggested users
     suggested_users = suggested_users[:2]
-# Annotate profiles with campaign count and total raised
-    top_contributors = Profile.objects.annotate(
-    campaign_count=Count('user_campaigns'),
-    total_raised=Sum('user_campaigns__target_amount')
-).filter(campaign_count__gt=0).order_by('-total_raised')[:10]  # Top 10
+
+    ads = NativeAd.objects.all()
+
     context = {
         'user_profile': user_profile,
         'following_profile': following_profile,
@@ -3755,11 +5941,14 @@ def profile_view(request, username):
         'changemaker_category': category_display,
         'ads': ads,
         'unread_notifications': unread_notifications,
-          'suggested_users': suggested_users,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
         'top_contributors': top_contributors,
     }
     
     return render(request, 'main/user_profile.html', context)
+
+
 
 def search_profile_results(request):
     if 'search_query' in request.GET:
@@ -3858,12 +6047,16 @@ paypalrestsdk.configure({
     "client_secret": settings.PAYPAL_CLIENT_SECRET
 })
 
+
+
+
+
 def donate(request, campaign_id):
     campaign = get_object_or_404(Campaign, id=campaign_id)
-
-    # Attempt to retrieve the CampaignFund or create one with a default target_amount
-    fund, created = CampaignFund.objects.get_or_create(campaign=campaign, defaults={'target_amount': 0.00, 'paypal_email': 'default_email@example.com'})
-
+    fund, created = CampaignFund.objects.get_or_create(
+        campaign=campaign, 
+        defaults={'target_amount': 0.00, 'paypal_email': 'default_email@example.com'}
+    )
     target_reached = fund.progress_percentage() >= 100
 
     if request.method == 'POST':
@@ -3872,9 +6065,7 @@ def donate(request, campaign_id):
 
         if 'donate' in request.POST and not target_reached:
             if donation_form.is_valid():
-                # Create PayPal payment
                 donation_amount = request.POST.get('amount')
-                
                 payment = paypalrestsdk.Payment({
                     "intent": "sale",
                     "payer": {"payment_method": "paypal"},
@@ -3892,9 +6083,7 @@ def donate(request, campaign_id):
                         }]},
                         "amount": {"total": donation_amount, "currency": "USD"},
                         "description": f"Donation for {campaign.title}",
-                        "payee": {
-                            "email": fund.paypal_email
-                        }
+                        "payee": {"email": fund.paypal_email}
                     }]
                 })
 
@@ -3911,25 +6100,88 @@ def donate(request, campaign_id):
                 messages.success(request, 'Donation info updated successfully.')
             else:
                 messages.error(request, 'Error updating donation info.')
-
     else:
         donation_form = DonationForm()
         fund_form = CampaignFundForm(instance=fund)
 
+    # User data and following
     user_profile = get_object_or_404(Profile, user=request.user)
+    following_users = request.user.following.values_list('followed', flat=True)
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
-    ads = NativeAd.objects.all() 
-    return render(request, 'revenue/donation.html', {
+    
+    ads = NativeAd.objects.all()
+
+    # Suggested users
+    current_user_following = user_profile.following.all()
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+    suggested_users = []
+    
+    for profile in all_profiles:
+        similarity_score = calculate_similarity(user_profile, profile)
+        if similarity_score >= 0.5:
+            followers_count = Follow.objects.filter(followed=profile.user).count()
+            suggested_users.append({
+                'user': profile.user,
+                'followers_count': followers_count
+            })
+    suggested_users = suggested_users[:2]
+
+    # Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund') \
+        .order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    context = {
         'campaign': campaign,
         'form': donation_form,
         'fund_form': fund_form,
         'fund': fund,
         'target_reached': target_reached,
         'user_profile': user_profile,
-        'ads':ads,
-    })
-
+        'ads': ads,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
+        'top_contributors': top_contributors,
+    }
+    
+    return render(request, 'revenue/donation.html', context)
 
 
 from django.urls import reverse

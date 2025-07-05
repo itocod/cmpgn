@@ -445,8 +445,13 @@ body.dark-mode .affiliate-link i {
 
         <div class="form-section">
             <label for="id_poster" class="form-label">Poster:</label>
-            <input type="file" id="id_poster" name="poster" accept="image/*" onchange="previewImage(event)">
-            <span class="form-helper-text">Upload a poster for your campaign.</span>
+            <input type="file" id="id_poster" name="poster" accept="image/png, image/jpeg, image/gif, image/webp" onchange="previewImage(event)">
+
+            <span class="form-helper-text">
+    Upload a campaign poster in one of the following image formats: <strong>JPEG (.jpg, .jpeg), PNG (.png), GIF (.gif), or WebP (.webp)</strong>.
+    Animated GIFs and modern WebP formats are supported. Maximum recommended size: 5MB.
+</span>
+
             <a href="{% url 'poster_canva' %}" target="_blank" class="action-button">Create a poster with Canva</a>
             <div id="posterPreview" class="image-preview-container"></div>
         </div>

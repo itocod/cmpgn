@@ -66,6 +66,10 @@ class DonationAdmin(admin.ModelAdmin):
 
 
 
+
+
+
+
 @admin.register(Campaign)
 class CampaignAdmin(admin.ModelAdmin):
     list_display = ('user', 'title', 'timestamp')
