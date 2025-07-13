@@ -110,9 +110,6 @@ from django.utils import timezone
 from .models import Campaign, Profile, Notification, Chat, Message, NativeAd, NotInterested, Love
 from django.contrib.auth.models import AnonymousUser
 
-
-
-
 @login_required
 def campaign_list(request):
     # Get the current user's profile
@@ -5199,12 +5196,17 @@ def create_campaign(request):
     
     return render(request, 'main/campaign_form.html', context)
 
-
-
 def poster_canva(request):
-    return render(request, 'main/poster_canva.html')
+    return render(request, 'main/poster_canva.html', {
+        'username': request.user.username
+    })
 
 
+
+def video_canva(request):
+    return render(request, 'main/video_canva.html', {
+        'username': request.user.username
+    })
 
 
 

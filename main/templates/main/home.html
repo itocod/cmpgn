@@ -1785,7 +1785,6 @@ body.dark-mode .comment-count {
 .join-prompt i {
     margin-right: 5px;
 }
-
 .donate-button-overlay {
     position: absolute;
     bottom: 60px;
@@ -1804,6 +1803,7 @@ body.dark-mode .comment-count {
     transition: all 0.3s ease;
     width: 40px; /* Fixed width for icon-only state */
     overflow: hidden;
+    border: 1px solid transparent; /* Add for smooth hover transition */
 }
 
 .simple-donate-btn {
@@ -1822,6 +1822,9 @@ body.dark-mode .comment-count {
 .simple-donate-btn:hover {
     width: auto; /* Allow full width on hover */
     padding: 8px 15px;
+    background: white; /* White background on hover */
+    color: #FF5722; /* Orange text on hover */
+    border-color: #FF5722; /* Orange border on hover */
 }
 
 .simple-donate-btn:hover .donate-text {
@@ -1834,12 +1837,9 @@ body.dark-mode .comment-count {
 .simple-donate-btn:focus {
     width: auto;
     padding: 8px 15px;
-}
-
-.simple-donate-btn:focus .donate-text {
-    opacity: 1;
-    width: auto;
-    margin-left: 8px;
+    background: white;
+    color: #FF5722;
+    border-color: #FF5722;
 }
 
 .campaign-basic-info {

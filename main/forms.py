@@ -17,12 +17,6 @@ from .models import UserVerification,CampaignFund
 
 
 
-
-
-
-
-
-
 # Custom validator to check for long words
 def validate_no_long_words(value):
     for word in value.split():

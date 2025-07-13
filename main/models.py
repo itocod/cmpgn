@@ -162,6 +162,11 @@ def update_user_verification_status(sender, instance, created, **kwargs):
             verification.save()
 
 
+
+
+
+
+
 class Follow(models.Model):
     follower = models.ForeignKey(User, related_name='following', on_delete=models.CASCADE)
     followed = models.ForeignKey(User, related_name='followers', on_delete=models.CASCADE)
