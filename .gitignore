@@ -16,3 +16,4 @@ db.sqlite3
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+main/static/main/js/videoplayback.mp4
