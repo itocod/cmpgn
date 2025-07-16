@@ -3539,22 +3539,26 @@ import json
 from .models import ActivityComment, ActivityCommentLike
 from django.db.models import Count
 
+
 @require_GET
 @login_required
 def get_activity_comments(request, activity_id):
     try:
         activity = Activity.objects.get(id=activity_id)
-        load_all = request.GET.get('all', 'false').lower() == 'true'
+        all_comments = request.GET.get('all', 'false').lower() == 'true'
         
         # Get base queryset
-        comments = ActivityComment.objects.filter(activity=activity)
+        comments = ActivityComment.objects.filter(activity=activity, parent_comment__isnull=True)
         
         # Count total comments
         total_comments = comments.count()
         
-        # Get either all or just the 2 most recent comments
-        if not load_all and total_comments > 2:
-            comments = comments.order_by('-timestamp')[:2]
+        # Apply ordering (remove pagination)
+        comments = comments.order_by('-timestamp')
+        
+        # If not requesting all comments, still limit to 5 for initial load
+        if not all_comments and total_comments > 5:
+            comments = comments[:5]
         
         # Prepare comment data
         comments_data = []
@@ -3566,11 +3570,9 @@ def get_activity_comments(request, activity_id):
                 'content': comment.content,
                 'timestamp': timezone.localtime(comment.timestamp).strftime('%b %d, %Y at %I:%M %p'),
                 'like_count': ActivityCommentLike.objects.filter(comment=comment).count(),
-                'liked': ActivityCommentLike.objects.filter(comment=comment, user=request.user).exists()
+                'liked': ActivityCommentLike.objects.filter(comment=comment, user=request.user).exists(),
+                'reply_count': comment.replies.count()
             })
-        
-        # Return newest first
-        comments_data.reverse()
         
         return JsonResponse({
             'success': True,
@@ -3581,6 +3583,10 @@ def get_activity_comments(request, activity_id):
         return JsonResponse({'success': False, 'error': 'Activity not found'}, status=404)
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+
+
+
 
 
 
@@ -4465,6 +4471,12 @@ def get_replies(request, comment_id):
         return JsonResponse({'replies': replies_data})
     except Comment.DoesNotExist:
         return JsonResponse({'error': 'Comment not found'}, status=404)
+
+
+
+
+
+
 
 
 

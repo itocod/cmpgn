@@ -364,6 +364,8 @@
         background-color: #FF6B35 !important;
     }
 </style>
+
+
 <div class="instagram-card">
         <div class="explore-card">
     <h3><i class="fas fa-info-circle"></i> Campaign Details</h3>
@@ -536,27 +538,26 @@
         <h3>Comments</h3>
         
         <!-- Comment Form -->
-      <div class="comment-form-container">
-    <div class="current-user-preview">
-        <img src="{{ user.profile.image.url }}" alt="Your profile picture" class="current-user-img">
-        <span>Posting as {{ user.username }}</span>
-    </div>
-    <form id="commentForm" method="post">
-        {% csrf_token %}
-        <input type="hidden" id="campaignIdInput" name="campaign_id">
-        <textarea name="text" class="comment-textarea" placeholder="Write your comment here..."></textarea>
-        <button type="submit" class="submit-comment-btn">Post Comment</button>
-    </form>
-</div>
-
+        <div class="comment-form-container">
+            <div class="current-user-preview">
+                <img src="{{ user.profile.image.url }}" alt="Your profile picture" class="current-user-img">
+                <span>Posting as {{ user.username }}</span>
+            </div>
+            <form id="commentForm" method="post">
+                {% csrf_token %}
+                <input type="hidden" id="campaignIdInput" name="campaign_id">
+                <textarea name="text" class="comment-textarea" placeholder="Write your comment here..."></textarea>
+                <button type="submit" class="submit-comment-btn">Post Comment</button>
+            </form>
+        </div>
         
         <!-- Comment List -->
         <div class="comment-list-container" id="commentList">
-            <!-- Comments will be loaded here dynamically -->
             <div class="loading-comments">Loading comments...</div>
         </div>
     </div>
 </div>
+
   <!-- Audio player section - Added to match main campaigns -->
         {% if campaign.audio %}
             <audio class="campaign-audio" loop preload="auto" muted autoplay>
@@ -1504,405 +1505,7 @@ function hideSharePopup() {
 }
 </script>
 
-<script type="text/javascript">
-// Function to show comment popup
-function showCommentPopup(campaignId) {
-    const popup = document.getElementById('commentPopup');
-    const campaignIdInput = document.getElementById('campaignIdInput');
-    
-    // Set the campaign ID in the form
-    campaignIdInput.value = campaignId;
-    
-    // Show the popup
-    popup.style.display = 'flex';
-    
-    // Load comments for this campaign
-    loadComments(campaignId);
-}
 
-// Function to load comments
-function loadComments(campaignId) {
-    const commentList = document.getElementById('commentList');
-    commentList.innerHTML = '<div class="loading-comments">Loading comments...</div>';
-    
-    fetch(`/get_comments/?campaign_id=${campaignId}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.comments && data.comments.length > 0) {
-                let commentsHtml = '';
-                
-                data.comments.forEach(comment => {
-                    commentsHtml += createCommentHtml(comment);
-                });
-                
-                commentList.innerHTML = commentsHtml;
-                
-                // Add event listeners for like/dislike buttons
-                document.querySelectorAll('.like-comment-btn').forEach(btn => {
-                    btn.addEventListener('click', handleLikeDislike);
-                });
-                
-                document.querySelectorAll('.dislike-comment-btn').forEach(btn => {
-                    btn.addEventListener('click', handleLikeDislike);
-                });
-                
-                // Add event listeners for reply buttons
-                document.querySelectorAll('.reply-comment-btn').forEach(btn => {
-                    btn.addEventListener('click', showReplyForm);
-                });
-                
-                // Add event listeners for view replies buttons
-                document.querySelectorAll('.view-replies-btn').forEach(btn => {
-                    btn.addEventListener('click', toggleReplies);
-                });
-            } else {
-                commentList.innerHTML = `
-                    <div class="no-comments">
-                        <i class="far fa-comment-dots"></i>
-                        <p>No comments yet. Be the first to comment!</p>
-                    </div>
-                `;
-            }
-        })
-        .catch(error => {
-            console.error('Error loading comments:', error);
-            commentList.innerHTML = `
-                <div class="error-loading-comments">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <p>Error loading comments. Please try again.</p>
-                    <button onclick="loadComments(${campaignId})" class="retry-btn">
-                        <i class="fas fa-sync-alt"></i> Retry
-                    </button>
-                </div>
-            `;
-        });
-}
-
-// Function to create HTML for a comment
-function createCommentHtml(comment) {
-    const timestamp = new Date(comment.timestamp);
-    const formattedDate = timestamp.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
-    
-    // Determine like/dislike button states
-    const likeBtnClass = comment.user_like_status === 'liked' ? 'active' : '';
-    const dislikeBtnClass = comment.user_like_status === 'disliked' ? 'active' : '';
-    
-    return `
-        <div class="comment-item" data-comment-id="${comment.id}">
-            <div class="comment-header">
-                <a href="/user-profile/@${comment.user_username}/" class="comment-user-link">
-                    <img src="${comment.user_profile_image || '/static/images/default_profile.png'}" 
-                         alt="${comment.user_username}'s profile picture" 
-                         class="comment-user-img"
-                         onerror="this.onerror=null;this.src='/static/images/default_profile.png'">
-                </a>
-                <div class="comment-user-info">
-                    <a href="/user-profile/@${comment.user_username}/" class="comment-user">${comment.user_username}</a>
-                    <span class="comment-timestamp" title="${timestamp.toISOString()}">${formattedDate}</span>
-                </div>
-            </div>
-            <div class="comment-text">${comment.text}</div>
-            
-            <div class="comment-actions">
-                <button class="like-comment-btn ${likeBtnClass}" data-comment-id="${comment.id}">
-                    <i class="fas fa-thumbs-up"></i> <span class="like-count">${comment.like_count}</span>
-                </button>
-                <button class="dislike-comment-btn ${dislikeBtnClass}" data-comment-id="${comment.id}">
-                    <i class="fas fa-thumbs-down"></i> <span class="dislike-count">${comment.dislike_count}</span>
-                </button>
-                <button class="reply-comment-btn" data-comment-id="${comment.id}">
-                    <i class="fas fa-reply"></i> Reply
-                </button>
-                
-                ${comment.reply_count > 0 ? `
-                    <button class="view-replies-btn" data-comment-id="${comment.id}">
-                        <i class="fas fa-comments"></i> ${comment.reply_count} ${comment.reply_count === 1 ? 'reply' : 'replies'}
-                    </button>
-                ` : ''}
-            </div>
-            
-            <div class="reply-form-container" id="reply-form-${comment.id}" style="display: none;">
-                <div class="current-user-preview">
-                    <img src="${document.querySelector('.current-user-img').src}" alt="Your profile picture" class="current-user-img">
-                    <span>Replying to ${comment.user_username}</span>
-                </div>
-                <form class="reply-form" data-comment-id="${comment.id}">
-                    <input type="hidden" name="campaign_id" value="${document.getElementById('campaignIdInput').value}">
-                    <input type="hidden" name="parent_comment_id" value="${comment.id}">
-                    <input type="hidden" name="csrfmiddlewaretoken" value="${document.querySelector('[name=csrfmiddlewaretoken]').value}">
-                    <textarea name="text" class="reply-textarea" placeholder="Write your reply here..."></textarea>
-                    <button type="submit" class="submit-reply-btn" data-submitting="false">Post Reply</button>
-                    <button type="button" class="cancel-reply-btn">Cancel</button>
-                </form>
-            </div>
-            
-            <div class="replies-container" id="replies-${comment.id}" style="display: none;"></div>
-        </div>
-    `;
-}
-
-// Handle main comment form submission with double submission prevention
-document.getElementById('commentForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const submitBtn = this.querySelector('button[type="submit"]');
-    if (submitBtn.dataset.submitting === 'true') return;
-    
-    submitBtn.dataset.submitting = 'true';
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Posting...';
-    
-    const formData = new FormData(this);
-    const campaignId = formData.get('campaign_id');
-    
-    fetch('/post_comment/', {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
-        },
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Clear the textarea
-            this.querySelector('textarea').value = '';
-            // Reload comments
-            loadComments(campaignId);
-        } else {
-            alert('Error posting comment: ' + (data.error || 'Unknown error'));
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error posting comment. Please try again.');
-    })
-    .finally(() => {
-        submitBtn.dataset.submitting = 'false';
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = 'Post Comment';
-    });
-});
-
-// Enhanced submitReplyForm with double submission prevention
-function submitReplyForm(form) {
-    const submitBtn = form.querySelector('.submit-reply-btn');
-    if (submitBtn.dataset.submitting === 'true') return;
-    
-    submitBtn.dataset.submitting = 'true';
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Posting...';
-    
-    const formData = new FormData(form);
-    const commentId = form.dataset.commentId;
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-    fetch('/post_comment/', {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'X-CSRFToken': csrfToken,
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.success) {
-            // Clear the textarea
-            form.querySelector('.reply-textarea').value = '';
-            // Refresh the comments to include the new reply
-            const campaignId = document.getElementById('campaignIdInput').value;
-            loadComments(campaignId);
-        } else {
-            alert('Failed to post reply. Please try again.');
-            console.error('Reply post error:', data.error || data);
-        }
-    })
-    .catch(error => {
-        console.error('Error submitting reply:', error);
-        alert('Network error. Please check your connection and try again.');
-    })
-    .finally(() => {
-        submitBtn.dataset.submitting = 'false';
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = 'Post Reply';
-    });
-}
-
-// Rest of your existing functions (handleLikeDislike, showReplyForm, toggleReplies, loadReplies, etc.)
-// ... [keep all other functions exactly as they were] ...
-
-</script>
-<script type="text/javascript">
-// Global flag to track submissions
-let isSubmitting = false;
-
-// Function to show comment popup
-function showCommentPopup(campaignId) {
-    const popup = document.getElementById('commentPopup');
-    const campaignIdInput = document.getElementById('campaignIdInput');
-    
-    campaignIdInput.value = campaignId;
-    popup.style.display = 'flex';
-    loadComments(campaignId);
-}
-
-// Enhanced form submission handler with complete double submission prevention
-function setupFormSubmissionHandlers() {
-    // Main comment form
-    const commentForm = document.getElementById('commentForm');
-    if (commentForm) {
-        commentForm.addEventListener('submit', async function(e) {
-            e.preventDefault();
-            if (isSubmitting) return;
-            
-            const submitBtn = this.querySelector('button[type="submit"]');
-            const originalText = submitBtn.innerHTML;
-            
-            try {
-                isSubmitting = true;
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Posting...';
-                
-                const formData = new FormData(this);
-                const campaignId = formData.get('campaign_id');
-                
-                const response = await fetch('/post_comment/', {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
-                    },
-                });
-                
-                if (!response.ok) throw new Error('Network response was not ok');
-                
-                const data = await response.json();
-                if (data.success) {
-                    this.querySelector('textarea').value = '';
-                    loadComments(campaignId);
-                } else {
-                    throw new Error(data.error || 'Unknown error');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Error posting comment: ' + error.message);
-            } finally {
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-                isSubmitting = false;
-            }
-        });
-    }
-
-    // Dynamic handler for reply forms
-    document.addEventListener('submit', async function(e) {
-        if (e.target.classList.contains('reply-form')) {
-            e.preventDefault();
-            if (isSubmitting) return;
-            
-            const form = e.target;
-            const submitBtn = form.querySelector('.submit-reply-btn');
-            const originalText = submitBtn.innerHTML;
-            
-            try {
-                isSubmitting = true;
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Posting...';
-                
-                const formData = new FormData(form);
-                const response = await fetch('/post_comment/', {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
-                        'X-Requested-With': 'XMLHttpRequest'
-                    },
-                });
-                
-                if (!response.ok) throw new Error('Network response was not ok');
-                
-                const data = await response.json();
-                if (data.success) {
-                    form.querySelector('.reply-textarea').value = '';
-                    const campaignId = document.getElementById('campaignIdInput').value;
-                    loadComments(campaignId);
-                } else {
-                    throw new Error(data.error || 'Failed to post reply');
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('Error: ' + error.message);
-            } finally {
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
-                isSubmitting = false;
-            }
-        }
-    });
-}
-
-// Initialize form handlers when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    setupFormSubmissionHandlers();
-});
-
-// Modified loadComments function to re-establish handlers after dynamic content loads
-function loadComments(campaignId) {
-    const commentList = document.getElementById('commentList');
-    commentList.innerHTML = '<div class="loading-comments">Loading comments...</div>';
-    
-    fetch(`/get_comments/?campaign_id=${campaignId}`)
-        .then(response => {
-            if (!response.ok) throw new Error('Network response was not ok');
-            return response.json();
-        })
-        .then(data => {
-            if (data.comments && data.comments.length > 0) {
-                commentList.innerHTML = data.comments.map(createCommentHtml).join('');
-            } else {
-                commentList.innerHTML = `
-                    <div class="no-comments">
-                        <i class="far fa-comment-dots"></i>
-                        <p>No comments yet. Be the first to comment!</p>
-                    </div>
-                `;
-            }
-            // Re-establish event handlers for new elements
-            setupFormSubmissionHandlers();
-        })
-        .catch(error => {
-            console.error('Error loading comments:', error);
-            commentList.innerHTML = `
-                <div class="error-loading-comments">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <p>Error loading comments. Please try again.</p>
-                    <button onclick="loadComments(${campaignId})" class="retry-btn">
-                        <i class="fas fa-sync-alt"></i> Retry
-                    </button>
-                </div>
-            `;
-        });
-}
-
-// [Keep all other existing functions unchanged]
-</script>
 
 
 <script type="text/javascript">
@@ -1984,5 +1587,5 @@ function createHearts(element) {
     }
 }
 </script>
-
+ <script src="{% static 'main/js/test.js' %}"></script>
 {% endblock %}

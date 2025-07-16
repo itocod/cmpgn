@@ -1008,11 +1008,7 @@
         <button class="btn btn-secondary" id="resetBtn">
             <i class="fas fa-redo"></i> Reset
         </button>
-<div class="gif-video-loop-link">
-    <a href="{% url 'video_canva' %}" class="gif-loop-btn">
-        <i class="fas fa-sync-alt"></i>Create GIF Video Loops
-    </a>
-</div>
+
         <div class="download-link" id="downloadLink">
             <a href="#" id="downloadAnchor"><i class="fas fa-download"></i> Download Output</a>
             <div class="download-options">
@@ -1021,6 +1017,12 @@
                 <a href="#" id="downloadOriginal" class="tooltip">Original <span class="tooltiptext">Original Format</span></a>
             </div>
         </div>
+
+        <div class="gif-video-loop-link">
+    <a href="{% url 'video_canva' %}" class="gif-loop-btn">
+        <i class="fas fa-sync-alt"></i>Create GIF Video Loops
+    </a>
+</div>
     </div>
 
     <!-- Load local GIF library -->

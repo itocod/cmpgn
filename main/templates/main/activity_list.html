@@ -329,6 +329,9 @@ body.dark-mode .view-details-link:hover {
     }
 }
 
+
+
+
 /* Header Styles */
 .cc-header {
     text-align: center;
@@ -479,14 +482,15 @@ body.dark-mode .skeleton {
 }
 
 
-/* Three dots menu */
-.activity-menu {
+
+/* Three dots menu button */
+.activity-menu-btn {
     position: absolute;
     right: 16px;
     top: 12px;
     cursor: pointer;
     padding: 8px;
-    z-index: 1; /* Ensure it's above other elements */
+    z-index: 1;
 }
 
 .activity-menu-dots {
@@ -501,8 +505,8 @@ body.dark-mode .activity-menu-dots {
     color: #f5f5f5;
 }
 
-/* Menu popup */
-.menu-popup {
+/* Activity popup menu */
+.activity-popup {
     position: absolute;
     right: 0;
     top: 100%;
@@ -514,16 +518,17 @@ body.dark-mode .activity-menu-dots {
     z-index: 100;
     display: none;
 }
-body.dark-mode .menu-popup {
+
+body.dark-mode .activity-popup {
     background-color: #1e1e1e;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
-.menu-popup.show {
+.activity-popup.show {
     display: block;
 }
 
-.menu-item {
+.activity-menu-item {
     padding: 8px 16px;
     font-size: 14px;
     color: #262626;
@@ -532,18 +537,20 @@ body.dark-mode .menu-popup {
     white-space: nowrap;
 }
 
-.menu-item:hover {
+.activity-menu-item:hover {
     background-color: #f8f8f8;
 }
 
-body.dark-mode .menu-item {
+body.dark-mode .activity-menu-item {
     color: #f5f5f5;
 }
 
-body.dark-mode .menu-item:hover {
+body.dark-mode .activity-menu-item:hover {
     background-color: #333;
 }
-/* Share System Styles */
+
+
+
 .share-wrapper {
     position: relative;
 }
@@ -571,9 +578,185 @@ body.dark-mode .menu-item:hover {
 
 
 </style>
-
-
-
+<style>
+    /* Comment System Styles */
+    .comment-section {
+        max-width: 614px;
+        margin: 0 auto;
+        padding: 16px;
+        background-color: #fff;
+        border-top: 1px solid #efefef;
+    }
+    
+    body.dark-mode .comment-section {
+        background-color: #1e1e1e;
+        border-top-color: #333;
+    }
+    
+    .comments-container {
+        max-height: 400px;
+        overflow-y: auto;
+        margin-bottom: 16px;
+    }
+    
+    .comment {
+        display: flex;
+        margin-bottom: 16px;
+        padding-right: 8px;
+    }
+    
+    .comment-user-img {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        margin-right: 12px;
+        flex-shrink: 0;
+    }
+    
+    .comment-content {
+        flex-grow: 1;
+    }
+    
+    .comment-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 4px;
+    }
+    
+    .comment-username {
+        font-weight: 600;
+        font-size: 14px;
+        margin-right: 8px;
+    }
+    
+    .comment-text {
+        font-size: 14px;
+        line-height: 1.4;
+        margin-bottom: 4px;
+        word-break: break-word;
+    }
+    
+    .comment-footer {
+        display: flex;
+        align-items: center;
+        font-size: 12px;
+        color: #8e8e8e;
+    }
+    
+    .comment-like-btn {
+        margin-right: 12px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+    
+    .comment-like-btn.liked {
+        color: #ed4956;
+    }
+    
+    .comment-reply-btn {
+        margin-right: 12px;
+        cursor: pointer;
+    }
+    
+    .comment-timestamp {
+        font-size: 10px;
+    }
+    
+    .view-replies-btn {
+        color: #8e8e8e;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 4px;
+        display: inline-block;
+    }
+    
+    .replies-container {
+        margin-left: 44px;
+        border-left: 1px solid #efefef;
+        padding-left: 12px;
+        margin-top: 8px;
+    }
+    
+    body.dark-mode .replies-container {
+        border-left-color: #333;
+    }
+    
+    .comment-form {
+        display: flex;
+        align-items: center;
+        margin-top: 8px;
+    }
+    
+    .comment-input {
+        flex-grow: 1;
+        border: 1px solid #efefef;
+        border-radius: 22px;
+        padding: 12px 16px;
+        font-size: 14px;
+        outline: none;
+        resize: none;
+        max-height: 80px;
+    }
+    
+    body.dark-mode .comment-input {
+        background-color: #2a2a2a;
+        border-color: #333;
+        color: #e0e0e0;
+    }
+    
+    .comment-submit-btn {
+        margin-left: 8px;
+        color: #0095f6;
+        font-weight: 600;
+        cursor: pointer;
+        opacity: 0.5;
+        pointer-events: none;
+    }
+    
+    .comment-submit-btn.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+    
+    .load-more-comments {
+        text-align: center;
+        margin: 12px 0;
+    }
+    
+    .load-more-btn {
+        color: #0095f6;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+    
+    .no-comments {
+        text-align: center;
+        color: #8e8e8e;
+        font-size: 14px;
+        padding: 16px 0;
+    }
+    
+    .reply-form {
+        margin-left: 44px;
+        margin-top: 8px;
+        display: none;
+    }
+    
+    .replying-to {
+        font-size: 12px;
+        color: #8e8e8e;
+        margin-bottom: 4px;
+    }
+    
+    .cancel-reply-btn {
+        color: #0095f6;
+        font-size: 12px;
+        margin-left: 8px;
+        cursor: pointer;
+    }
+</style>
 
 
 <script type="text/javascript">
@@ -696,37 +879,33 @@ body.dark-mode .menu-item:hover {
     });
 </script>
 
-
-
 <script type="text/javascript">
-    // Add this to your existing JavaScript
-    
-    // Function to toggle menu popup
-    function toggleMenu(menuId) {
-        const menu = document.getElementById(menuId);
-        const allMenus = document.querySelectorAll('.menu-popup');
+    // Function to toggle activity popup menu
+    function toggleActivityMenu(event, popupId) {
+        event.stopPropagation(); // Prevent event from bubbling up
+        const popup = document.getElementById(popupId);
+        const allPopups = document.querySelectorAll('.activity-popup');
         
-        // Close all other open menus first
-        allMenus.forEach(m => {
-            if (m.id !== menuId && m.classList.contains('show')) {
-                m.classList.remove('show');
+        // Close all other open popups first
+        allPopups.forEach(p => {
+            if (p.id !== popupId && p.classList.contains('show')) {
+                p.classList.remove('show');
             }
         });
         
-        // Toggle current menu
-        menu.classList.toggle('show');
+        // Toggle current popup
+        popup.classList.toggle('show');
     }
     
-    // Close menu when clicking outside
+    // Close popup when clicking outside
     document.addEventListener('click', function(event) {
-        if (!event.target.closest('.activity-menu') && !event.target.closest('.menu-popup')) {
-            document.querySelectorAll('.menu-popup.show').forEach(menu => {
-                menu.classList.remove('show');
+        if (!event.target.closest('.activity-menu-btn') && !event.target.closest('.activity-popup')) {
+            document.querySelectorAll('.activity-popup.show').forEach(popup => {
+                popup.classList.remove('show');
             });
         }
     });
 </script>
-
 
 {% if user == campaign.user.user %}
     <a href="{% url 'create_activity' campaign_id=campaign.id %}" class="create-activity-link">Create Activity</a>
@@ -743,6 +922,7 @@ body.dark-mode .menu-item:hover {
     <ul class="activity-list">
         {% for activity in activities %}
             <li class="activity-item">
+                <!-- Activity Header Section -->
                 <div class="activity-header">
                     <a href="{% url 'profile_view' username=campaign.user.user.username %}">
                         <div class="profile-pic">
@@ -767,17 +947,15 @@ body.dark-mode .menu-item:hover {
                     </div>
                 </div>
 
-
-<!-- Add this inside each activity-item, right after the activity-header closing div -->
-<div class="activity-menu" onclick="toggleMenu('menu-{{ activity.id }}')">
+<div class="activity-menu-btn" onclick="toggleActivityMenu(event, 'activity-popup-{{ activity.id }}')">
     <span class="activity-menu-dots">⋯</span>
-    <div class="menu-popup" id="menu-{{ activity.id }}">
-        <a href="{% url 'activity_detail' activity_id=activity.id %}" class="menu-item">
+    <div class="activity-popup" id="activity-popup-{{ activity.id }}">
+        <a href="{% url 'activity_detail' activity_id=activity.id %}" class="activity-menu-item">
             <i class="fas fa-info-circle" style="margin-right: 8px;"></i> View Activity Details
         </a>
-        <!-- You can add more menu items here if needed -->
     </div>
 </div>
+                <!-- Activity Content -->
                 <div class="activity-content">
                     {% if activity.content.split|length > 20 %}
                         <div id="activity-content-{{ activity.id }}-short">
@@ -793,6 +971,7 @@ body.dark-mode .menu-item:hover {
                     {% endif %}
                 </div>
 
+                <!-- File/Media Section -->
                 <div class="file-container">
                     {% if activity.file %}
                         {% if activity.file.name|lower|slice:'-4:' == '.mp4' %}
@@ -800,6 +979,8 @@ body.dark-mode .menu-item:hover {
                                 data-src="{{ activity.file.url }}" 
                                 class="activity-media lazy" 
                                 controls
+                                loop
+                                muted
                                 poster="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
                                 Your browser does not support the video tag.
                             </video>
@@ -813,41 +994,26 @@ body.dark-mode .menu-item:hover {
                         {% endif %}
                     {% endif %}
                 </div>
-<div class="activity-interactions">
-    <div class="interaction-container">
-        <div class="interaction-item">
-            <i class="far fa-heart icon love-icon {% if user in activity.loves.all %}loved{% endif %}" 
-               data-activity-id="{{ activity.id }}" 
-               onclick="loveActivity('{{ activity.id }}')"></i>
-            <span class="interaction-count" id="love-count-{{ activity.id }}">
-                {{ activity.loves.count|format_count }}
-            </span>
-        </div>
-        <div class="interaction-item">
-            <i class="far fa-comment icon comment" onclick="toggleCommentSection('{{ activity.id }}'); event.stopPropagation();"></i>
-            <span class="interaction-count">
-                {{ activity.comments.count|format_count }}
-            </span>
-        </div>
-        <div class="interaction-item share-wrapper">
-            <i class="fas fa-share-alt icon share-icon" onclick="showShareOptions('{{ activity.id }}')"></i>
-            <div class="share-options" id="shareOptions-{{ activity.id }}">
-                <a href="javascript:void(0);" onclick="shareToFacebook('{{ activity.id }}')">
-                    <i class="fab fa-facebook"></i> Facebook
-                </a>
-                <a href="javascript:void(0);" onclick="shareToTwitter('{{ activity.id }}')">
-                    <i class="fab fa-twitter"></i> Twitter
-                </a>
-                <a href="javascript:void(0);" onclick="copyActivityLink('{{ activity.id }}')">
-                    <i class="fas fa-link"></i> Copy Link
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
- 
-    
-         </div>
+
+                <!-- Activity Interactions -->
+                <div class="activity-interactions">
+                    <div class="interaction-container">
+                        <div class="interaction-item">
+                            <i class="far fa-heart icon love-icon {% if user in activity.loves.all %}loved{% endif %}" 
+                               data-activity-id="{{ activity.id }}" 
+                               onclick="loveActivity('{{ activity.id }}')"></i>
+                            <span class="interaction-count" id="love-count-{{ activity.id }}">
+                                {{ activity.loves.count|format_count }}
+                            </span>
+                        </div>
+                        <div class="interaction-item">
+                            <i class="far fa-comment icon comment"></i>
+                            <span class="interaction-count">
+                                {{ activity.comments.count|format_count }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </li>
         {% endfor %}
     </ul>
@@ -859,6 +1025,453 @@ body.dark-mode .menu-item:hover {
 
 
 
+<script>
+// Global comment system functions
+window.commentSystem = {
+    init: function() {
+        document.querySelectorAll('.activity-interactions').forEach(section => {
+            const activityId = section.closest('.activity-item').querySelector('.love-icon').dataset.activityId;
+            const commentSection = document.createElement('div');
+            commentSection.className = 'comment-section';
+            commentSection.dataset.activityId = activityId;
+            commentSection.innerHTML = `
+                <div class="comments-container" id="comments-container-${activityId}">
+                    <div class="no-comments">Loading comments...</div>
+                </div>
+                <div class="comment-form">
+                    <textarea class="comment-input" placeholder="Add a comment..." rows="1"></textarea>
+                    <span class="comment-submit-btn">Post</span>
+                </div>
+            `;
+            
+            section.parentNode.insertBefore(commentSection, section.nextSibling);
+            this.initCommentSystem(activityId);
+        });
+    },
+
+    initCommentSystem: function(activityId) {
+        const container = document.querySelector(`#comments-container-${activityId}`);
+        const commentInput = document.querySelector(`[data-activity-id="${activityId}"] .comment-input`);
+        const submitBtn = document.querySelector(`[data-activity-id="${activityId}"] .comment-submit-btn`);
+        
+        // Load only 3 comments initially
+        this.loadComments(activityId, false);
+        
+        commentInput.addEventListener('input', function() {
+            if (this.value.trim()) {
+                submitBtn.classList.add('active');
+            } else {
+                submitBtn.classList.remove('active');
+            }
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+        
+        submitBtn.addEventListener('click', () => {
+            if (!commentInput.value.trim()) return;
+            this.postComment(activityId, commentInput.value.trim());
+            commentInput.value = '';
+            submitBtn.classList.remove('active');
+            commentInput.style.height = 'auto';
+        });
+        
+        commentInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                submitBtn.click();
+            }
+        });
+    },
+
+    loadComments: function(activityId, loadAll = false) {
+        fetch(`/get_activity_comments/${activityId}/?all=true`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    if (!loadAll && data.comments.length > 3) {
+                        const limitedComments = data.comments.slice(0, 3);
+                        this.renderComments(activityId, limitedComments, data.total_comments, true);
+                    } else {
+                        this.renderComments(activityId, data.comments, data.total_comments, false);
+                    }
+                } else {
+                    console.error('Error loading comments:', data.error);
+                    const container = document.querySelector(`#comments-container-${activityId}`);
+                    container.innerHTML = '<div class="no-comments">Error loading comments</div>';
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const container = document.querySelector(`#comments-container-${activityId}`);
+                container.innerHTML = '<div class="no-comments">Error loading comments</div>';
+            });
+    },
+
+    renderComments: function(activityId, comments, totalComments, hasMore = false) {
+        const container = document.querySelector(`#comments-container-${activityId}`);
+        
+        if (comments.length === 0) {
+            container.innerHTML = '<div class="no-comments">No comments yet</div>';
+            return;
+        }
+        
+        let html = '';
+        
+        comments.forEach(comment => {
+            html += `
+                <div class="comment" data-comment-id="${comment.id}">
+                    <a href="/user-profile/@${comment.username}/" class="comment-user-link">
+                        <img src="${comment.user_image || '/static/images/default-profile.png'}" 
+                             class="comment-user-img" 
+                             alt="${comment.username}"
+                             onerror="this.src='/static/images/default-profile.png'">
+                    </a>
+                    <div class="comment-content">
+                        <div class="comment-header">
+                            <a href="/user-profile/@${comment.username}/" class="comment-username">${comment.username}</a>
+                        </div>
+                        <p class="comment-text">${comment.content}</p>
+                        <div class="comment-footer">
+                            <span class="comment-like-btn ${comment.liked ? 'liked' : ''}" 
+                                  onclick="commentSystem.toggleCommentLike(this, ${comment.id})">
+                                Like
+                            </span>
+                            <span class="comment-reply-btn" onclick="commentSystem.showReplyForm(${comment.id}, '${comment.username}')">
+                                Reply
+                            </span>
+                            <span class="comment-timestamp">${comment.timestamp}</span>
+                        </div>
+                        <div class="comment-like-count">${comment.like_count} ${comment.like_count === 1 ? 'like' : 'likes'}</div>
+                        
+                        <div class="reply-form" id="reply-form-${comment.id}">
+                            <div class="replying-to">
+                                Replying to @${comment.username}
+                                <span class="cancel-reply-btn" onclick="commentSystem.hideReplyForm(${comment.id})">Cancel</span>
+                            </div>
+                            <div class="comment-form">
+                                <textarea class="comment-input" placeholder="Write a reply..." rows="1"></textarea>
+                                <span class="comment-submit-btn" onclick="commentSystem.postReply(${comment.id})">Post</span>
+                            </div>
+                        </div>
+                        
+                        <div class="replies-container" id="replies-container-${comment.id}"></div>
+                        
+                        ${comment.reply_count > 0 ? `
+                            <div class="view-replies-btn" onclick="commentSystem.loadReplies(${comment.id})">
+                                View ${comment.reply_count} ${comment.reply_count === 1 ? 'reply' : 'replies'}
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        });
+        
+        if (hasMore) {
+            html += `
+                <div class="load-more-comments">
+                    <span class="load-more-btn" onclick="commentSystem.loadMoreComments('${activityId}')">
+                        Load more comments (${totalComments - comments.length} remaining)
+                    </span>
+                </div>
+            `;
+        }
+        
+        container.innerHTML = html;
+        
+        // Initialize reply forms
+        document.querySelectorAll('.reply-form .comment-input').forEach(input => {
+            input.addEventListener('input', function() {
+                const submitBtn = this.nextElementSibling;
+                if (this.value.trim()) {
+                    submitBtn.classList.add('active');
+                } else {
+                    submitBtn.classList.remove('active');
+                }
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+            
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    const submitBtn = this.nextElementSibling;
+                    if (submitBtn.classList.contains('active')) {
+                        submitBtn.click();
+                    }
+                }
+            });
+        });
+    },
+
+    loadMoreComments: function(activityId) {
+        const container = document.querySelector(`#comments-container-${activityId}`);
+        const loadMoreBtn = container.querySelector('.load-more-btn');
+        
+        if (loadMoreBtn) {
+            loadMoreBtn.textContent = 'Loading...';
+            loadMoreBtn.style.pointerEvents = 'none';
+        }
+        
+        fetch(`/get_activity_comments/${activityId}/?all=true`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    this.renderComments(activityId, data.comments, data.total_comments, false);
+                } else {
+                    console.error('Error loading more comments:', data.error);
+                    if (loadMoreBtn) {
+                        loadMoreBtn.textContent = 'Load more comments';
+                        loadMoreBtn.style.pointerEvents = 'auto';
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                if (loadMoreBtn) {
+                    loadMoreBtn.textContent = 'Load more comments';
+                    loadMoreBtn.style.pointerEvents = 'auto';
+                }
+            });
+    },
+
+    postComment: function(activityId, content) {
+        fetch('/post_activity_comment/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': this.getCookie('csrftoken')
+            },
+            body: JSON.stringify({
+                activity_id: activityId,
+                content: content
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                this.loadComments(activityId, true);
+            } else {
+                console.error('Error posting comment:', data.error);
+                alert('Failed to post comment: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while posting your comment.');
+        });
+    },
+
+    toggleCommentLike: function(element, commentId) {
+        const action = element.classList.contains('liked') ? 'unlike' : 'like';
+        
+        fetch('/like_activity_comment/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': this.getCookie('csrftoken')
+            },
+            body: JSON.stringify({
+                comment_id: commentId,
+                action: action
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const likeCountElement = element.closest('.comment-footer').nextElementSibling;
+                if (likeCountElement && likeCountElement.classList.contains('comment-like-count')) {
+                    likeCountElement.textContent = `${data.like_count} ${data.like_count === 1 ? 'like' : 'likes'}`;
+                }
+                
+                if (action === 'like') {
+                    element.classList.add('liked');
+                    element.textContent = 'Liked';
+                } else {
+                    element.classList.remove('liked');
+                    element.textContent = 'Like';
+                }
+            } else {
+                console.error('Error liking comment:', data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    },
+
+    showReplyForm: function(commentId, username) {
+        const replyForm = document.getElementById(`reply-form-${commentId}`);
+        if (replyForm) {
+            document.querySelectorAll('.reply-form').forEach(form => {
+                form.style.display = 'none';
+            });
+            
+            replyForm.style.display = 'block';
+            const textarea = replyForm.querySelector('.comment-input');
+            textarea.focus();
+        }
+    },
+
+    hideReplyForm: function(commentId) {
+        const replyForm = document.getElementById(`reply-form-${commentId}`);
+        if (replyForm) {
+            replyForm.style.display = 'none';
+            replyForm.querySelector('.comment-input').value = '';
+            replyForm.querySelector('.comment-submit-btn').classList.remove('active');
+        }
+    },
+
+    postReply: function(commentId) {
+        const replyForm = document.getElementById(`reply-form-${commentId}`);
+        if (!replyForm) return;
+        
+        const textarea = replyForm.querySelector('.comment-input');
+        const content = textarea.value.trim();
+        
+        if (!content) return;
+        
+        fetch('/post_comment_reply/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': this.getCookie('csrftoken')
+            },
+            body: JSON.stringify({
+                comment_id: commentId,
+                content: content
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                textarea.value = '';
+                this.hideReplyForm(commentId);
+                this.loadReplies(commentId);
+                
+                const viewRepliesBtn = document.querySelector(`[data-comment-id="${commentId}"] .view-replies-btn`);
+                if (viewRepliesBtn) {
+                    const currentText = viewRepliesBtn.textContent.trim();
+                    const match = currentText.match(/\d+/);
+                    if (match) {
+                        const currentCount = parseInt(match[0]);
+                        viewRepliesBtn.textContent = `View ${currentCount + 1} ${currentCount + 1 === 1 ? 'reply' : 'replies'}`;
+                    }
+                }
+            } else {
+                console.error('Error posting reply:', data.error);
+                alert('Failed to post reply: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while posting your reply.');
+        });
+    },
+
+    loadReplies: function(commentId) {
+        fetch(`/get_comment_replies/${commentId}/`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    this.renderReplies(commentId, data.replies);
+                    
+                    const viewRepliesBtn = document.querySelector(`[data-comment-id="${commentId}"] .view-replies-btn`);
+                    if (viewRepliesBtn) {
+                        if (data.total_replies === data.replies.length) {
+                            viewRepliesBtn.style.display = 'none';
+                        } else {
+                            viewRepliesBtn.textContent = `View all ${data.total_replies} replies`;
+                            viewRepliesBtn.onclick = () => {
+                                this.loadAllReplies(commentId);
+                            };
+                        }
+                    }
+                } else {
+                    console.error('Error loading replies:', data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    },
+
+    loadAllReplies: function(commentId) {
+        fetch(`/get_comment_replies/${commentId}/?all=true`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    this.renderReplies(commentId, data.replies);
+                    
+                    const viewRepliesBtn = document.querySelector(`[data-comment-id="${commentId}"] .view-replies-btn`);
+                    if (viewRepliesBtn) {
+                        viewRepliesBtn.style.display = 'none';
+                    }
+                } else {
+                    console.error('Error loading replies:', data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+    },
+
+    renderReplies: function(commentId, replies) {
+        const container = document.getElementById(`replies-container-${commentId}`);
+        if (!container) return;
+        
+        let html = '';
+        
+        replies.forEach(reply => {
+            html += `
+                <div class="comment" data-comment-id="${reply.id}">
+                    <a href="/user-profile/@${reply.username}/" class="comment-user-link">
+                        <img src="${reply.user_image || '/static/images/default-profile.png'}" 
+                             class="comment-user-img" 
+                             alt="${reply.username}"
+                             onerror="this.src='/static/images/default-profile.png'">
+                    </a>
+                    <div class="comment-content">
+                        <div class="comment-header">
+                            <a href="/user-profile/@${reply.username}/" class="comment-username">${reply.username}</a>
+                        </div>
+                        <p class="comment-text">${reply.content}</p>
+                        <div class="comment-footer">
+                            <span class="comment-like-btn ${reply.liked ? 'liked' : ''}" 
+                                  onclick="commentSystem.toggleCommentLike(this, ${reply.id})">
+                                Like
+                            </span>
+                            <span class="comment-timestamp">${reply.timestamp}</span>
+                        </div>
+                        <div class="comment-like-count">${reply.like_count} ${reply.like_count === 1 ? 'like' : 'likes'}</div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        container.innerHTML = html;
+    },
+
+    getCookie: function(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+};
+
+// Initialize the comment system when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    commentSystem.init();
+});
+</script>
 
 <script>
 function showShareOptions(activityId) {
@@ -931,42 +1544,74 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 
 
-<script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const videos = document.querySelectorAll('video');
-            const options = {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.5
-            };
 
-            const observer = new IntersectionObserver(function(entries, observer) {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        // Play and unmute the video
-                        entry.target.play();
-                        entry.target.muted = false;
-                    } else {
-                        // Pause the video
-                        entry.target.pause();
-                    }
-                });
-            }, options);
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        const videos = document.querySelectorAll('video');
+        const options = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.5
+        };
 
-            videos.forEach(video => {
-                observer.observe(video);
-                
-                // Check if the video is initially in the viewport after page refresh
-                const rect = video.getBoundingClientRect();
-                const windowHeight = window.innerHeight || document.documentElement.clientHeight;
-                if (rect.top >= 0 && rect.bottom <= windowHeight) {
-                    // Play and unmute if video is in the viewport
+        const observer = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    // Play and unmute the video
+                    const video = entry.target;
                     video.play();
-                    video.muted = false;
+                    video.muted = false; // Keep muted for autoplay to work in most browsers
+                    
+                    // Set video to loop
+                    video.loop = true;
+                    
+                    // Ensure video restarts if it reaches the end (extra redundancy)
+                    video.addEventListener('ended', function() {
+                        video.currentTime = 0;
+                        video.play();
+                    }, false);
+                } else {
+                    // Pause the video when not in viewport
+                    entry.target.pause();
                 }
             });
-        });
+        }, options);
 
+        videos.forEach(video => {
+            // Set initial attributes for looping
+            video.loop = true;
+            video.muted = true; // Muted by default for autoplay
+            
+            observer.observe(video);
+            
+            // Check if the video is initially in the viewport after page refresh
+            const rect = video.getBoundingClientRect();
+            const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+            if (rect.top >= 0 && rect.bottom <= windowHeight) {
+                // Play if video is in the viewport
+                video.play();
+            }
+            
+            // Ensure video restarts if it reaches the end (even when not in viewport)
+            video.addEventListener('ended', function() {
+                video.currentTime = 0;
+                if (video.getBoundingClientRect().top >= 0 && 
+                    video.getBoundingClientRect().bottom <= windowHeight) {
+                    video.play();
+                }
+            }, false);
+        });
+    });
+</script>
+
+
+
+
+
+
+
+
+<script>
 
 
 

@@ -25,7 +25,6 @@ urlpatterns = [
     path('libraries/', views.library_affiliates, name='library_affiliates'),
     path('news/', views.news_affiliates, name='news_affiliates'),
 
- 
     path('poster-canva/', views.poster_canva, name='poster_canva'),
 
     path('video-canva/', views.video_canva, name='video_canva'),
