@@ -286,6 +286,7 @@ class CampaignForm(forms.ModelForm):
             'category': 'Category:',
             'duration': 'Duration:',
             'duration_unit': 'Duration Unit:',
+            
            
         }
 
@@ -349,7 +350,16 @@ class CampaignFundForm(forms.ModelForm):
         }
 
 
-
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)  # Get request from kwargs
+        super().__init__(*args, **kwargs)
+        
+        # Only proceed if we have both request and instance
+        if self.request and hasattr(self.instance, 'campaign'):
+            # Disable field if user isn't the campaign owner
+            if self.request.user != self.instance.campaign.user.user:
+                self.fields['paypal_email'].disabled = True
+                self.fields['paypal_email'].help_text = "Only the campaign owner can edit this."
 
 class DonationForm(forms.ModelForm):
     class Meta:
@@ -415,3 +425,35 @@ class UpdateVisibilityForm(forms.ModelForm):
 
         if followers:
             self.fields['followers_visibility'].queryset = followers
+
+
+
+
+from django import forms
+from .models import Pledge
+
+class PledgeForm(forms.ModelForm):
+    class Meta:
+        model = Pledge
+        fields = ['campaign', 'amount', 'contact']
+        widgets = {
+            'campaign': forms.HiddenInput(),  # We'll typically set this in the view
+            'amount': forms.NumberInput(attrs={
+                'min': '1',
+                'step': '0.01',
+                'class': 'form-control'
+            }),
+           
+        }
+    
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        campaign = kwargs.pop('campaign', None)
+        super().__init__(*args, **kwargs)
+        
+        if campaign:
+            self.initial['campaign'] = campaign
+            self.fields['campaign'].widget = forms.HiddenInput()
+        
+        # Set minimum amount validation
+        self.fields['amount'].min_value = 1

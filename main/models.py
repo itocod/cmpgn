@@ -276,6 +276,7 @@ class Campaign(models.Model):
     duration = models.PositiveIntegerField(null=True, blank=True, help_text="Enter duration.")
     duration_unit = models.CharField(max_length=10, choices=DURATION_UNITS, default='days')
 
+   
     @property
     def is_outdated(self):
         """Check if the campaign is outdated based on duration and unit."""
@@ -641,13 +642,12 @@ class SupportCampaign(models.Model):
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='Monetary Donation')
     
     # Visibility fields for support actions
-    donate_monetary_visible = models.BooleanField(default=True)
-    brainstorm_idea_visible = models.BooleanField(default=True)
+    donate_monetary_visible = models.BooleanField(default=False)
+    brainstorm_idea_visible = models.BooleanField(default=False)
       # Visibility for campaign products
-    campaign_product_visible = models.BooleanField(default=True)
+    campaign_product_visible = models.BooleanField(default=False)
    
-
-
+ 
 
 
 
@@ -669,36 +669,72 @@ class CampaignProduct(models.Model):
 
 
 
+
+
+# models.py
+class Pledge(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)  # USD/EUR/etc.
+    contact = models.CharField(max_length=100, blank=True)  # Email/phone
+    is_fulfilled = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    
+    def toggle_fulfilled(self):
+        self.is_fulfilled = not self.is_fulfilled
+        self.save()
+        return self.is_fulfilled
+
+
+
+
+# models.py
+from django.db import models
+from django.core.validators import EmailValidator
+from django.conf import settings
+
 class CampaignFund(models.Model):
-    campaign = models.OneToOneField(Campaign, on_delete=models.CASCADE)
+    campaign = models.OneToOneField('Campaign', on_delete=models.CASCADE)
     target_amount = models.DecimalField(max_digits=10, decimal_places=2)
     amount_raised = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    paypal_email = models.EmailField(default="paypal_email")
+    paypal_email = models.EmailField(
+        validators=[EmailValidator(message="Enter a valid PayPal email.")],
+        help_text="Campaign owner's PayPal email for receiving funds."
+    )
+    email_verified = models.BooleanField(default=False)
+    
 
     def progress_percentage(self):
         if self.target_amount > 0:
             return (self.amount_raised / self.target_amount) * 100
         return 0
 
-
-
-
 class Donation(models.Model):
-    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
-    donor = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    campaign = models.ForeignKey('Campaign', on_delete=models.CASCADE)
+    donor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    donor_name = models.CharField(max_length=255, default="Anonymous")  # Set a default value
+    donor_name = models.CharField(max_length=255, default="Anonymous")
     transaction_id = models.CharField(max_length=255, unique=True, null=True)
-    created_at = models.DateTimeField(default=timezone.now)  # Automatically set the field to now when the donation is created
+    created_at = models.DateTimeField(default=timezone.now)
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        # Remove the fund update from here
-        # This will prevent double counting
+class PayoutRecord(models.Model):
+    PAYOUT_STATUS = (
+        ('pending', 'Pending'),
+        ('completed', 'Completed'),
+        ('failed', 'Failed'),
+    )
+    
+    campaign = models.ForeignKey('Campaign', on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    recipient_email = models.EmailField()
+    payout_id = models.CharField(max_length=255, null=True, blank=True)
+    status = models.CharField(max_length=20, choices=PAYOUT_STATUS, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+    completed_at = models.DateTimeField(null=True, blank=True)
+    notes = models.TextField(blank=True)
 
-
-
-
+    def __str__(self):
+        return f"Payout of ${self.amount} to {self.recipient_email} ({self.status})"
 
 
 

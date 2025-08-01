@@ -1,3 +1,4 @@
+import re
 from django import template
 
 register = template.Library()
@@ -27,3 +28,16 @@ def format_count(value):
 def get_item(dictionary, key):
     return dictionary.get(key)
 
+
+
+@register.filter
+def regex_replace(value, pattern):
+    return re.sub(pattern, '', value)
+
+@register.filter
+def fulfilled_count(pledges):
+    return pledges.filter(is_fulfilled=True).count()
+
+@register.filter
+def pending_count(pledges):
+    return pledges.filter(is_fulfilled=False).count()

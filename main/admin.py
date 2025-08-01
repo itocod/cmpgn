@@ -16,7 +16,6 @@ from .models import AffiliateLibrary, AffiliateNewsSource
 from .models import NativeAd
 
 from .models import Campaign
-from .models import Donation  # Adjust the import based on your project structure
 
 from .models import  ChangemakerAward,UserVerification
 
@@ -56,13 +55,6 @@ class ChangemakerAwardAdmin(admin.ModelAdmin):
 
 admin.site.register(ChangemakerAward, ChangemakerAwardAdmin)
 
-
-
-@admin.register(Donation)
-class DonationAdmin(admin.ModelAdmin):
-    list_display = ('campaign', 'donor_name', 'amount', 'created_at', 'transaction_id')
-    list_filter = ('campaign',)
-    search_fields = ('campaign__title', 'donor_name', 'transaction_id')
 
 
 
@@ -383,5 +375,6 @@ class FAQAdmin(admin.ModelAdmin):
     search_fields = ('question', 'answer')  # Enable search by question and answer
 
 admin.site.register(FAQ, FAQAdmin)
+
 
 

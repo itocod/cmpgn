@@ -209,8 +209,7 @@ def campaign_engagement_data(request, campaign_id):
     unread_messages_count = Message.objects.filter(chat__in=user_chats).exclude(sender=request.user).count()
     ads = NativeAd.objects.all()
     # Pass data to the template
-
-    # Get suggested users with followers count
+    # Suggested users
     current_user_following = user_profile.following.all()
     all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
     suggested_users = []
@@ -218,23 +217,64 @@ def campaign_engagement_data(request, campaign_id):
     for profile in all_profiles:
         similarity_score = calculate_similarity(user_profile, profile)
         if similarity_score >= 0.5:
-            # Get followers count for each suggested user
             followers_count = Follow.objects.filter(followed=profile.user).count()
             suggested_users.append({
                 'user': profile.user,
                 'followers_count': followers_count
             })
-
-    # Limit to only 2 suggested users
     suggested_users = suggested_users[:2]
 
-         
+    # Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund') \
+        .order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
     return render(request, 'revenue/engagement_graph.html', {"campaign": campaign, "engagement_data": engagement_data,'user_profile': user_profile,
         'unread_notifications': unread_notifications,
         'unread_messages_count': unread_messages_count,
         'form': form,
         'ads': ads,
-           'suggested_users': suggested_users,
+           
+                'user_profile': user_profile,
+               'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
+        'top_contributors': top_contributors,
       })
 
 
@@ -2313,6 +2353,7 @@ def support(request, campaign_id):
         'top_contributors': top_contributors,
         'categories': categories,
         'selected_category': category_filter,
+
     }
     
     return render(request, 'main/support.html', context)
@@ -4607,6 +4648,7 @@ def home(request):
 # Sort contributors by campaign_count descending
         top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]  # Top 5
     return render(request, 'main/home.html', {
+        
         'ads': ads,
         'public_campaigns': campaigns_to_display if campaigns_to_display.exists() else trending_campaigns,
         'campaign': Campaign.objects.last(),
@@ -4620,6 +4662,7 @@ def home(request):
         'trending_campaigns': trending_campaigns,
         'suggested_users': suggested_users,
         'top_contributors': top_contributors,
+
         
     })
 
@@ -6085,7 +6128,9 @@ def donate(request, campaign_id):
                     "payer": {"payment_method": "paypal"},
                     "redirect_urls": {
                         "return_url": request.build_absolute_uri(reverse('payment_success', args=[campaign_id])),
-                        "cancel_url": request.build_absolute_uri(reverse('payment_cancel')),
+                        "cancel_url": request.build_absolute_uri(
+            reverse('payment_cancel', args=[campaign_id])  # Now includes campaign_id
+        ),
                     },
                     "transactions": [{
                         "item_list": {"items": [{
@@ -6207,86 +6252,365 @@ import paypalrestsdk
 
 @login_required
 def payment_success(request, campaign_id):
-    # Extract PayPal payment information
+    """
+    Handles successful PayPal payments:
+    1. Verifies payment
+    2. Takes 5% platform commission
+    3. Sends 95% to campaign owner
+    4. Sends email notifications
+    5. Handles errors gracefully
+    """
+    # Get PayPal transaction IDs
     payment_id = request.GET.get('paymentId')
     payer_id = request.GET.get('PayerID')
 
-    # Check if this payment has already been processed
-    if Donation.objects.filter(transaction_id=payment_id).exists():
-        messages.warning(request, 'This payment has already been processed.')
+    # Validate required parameters
+    if not payment_id or not payer_id:
+        messages.error(request, 'Invalid payment confirmation.')
         return redirect('donate', campaign_id=campaign_id)
 
-    payment = paypalrestsdk.Payment.find(payment_id)
+    # Check for duplicate payments
+    if Donation.objects.filter(transaction_id=payment_id).exists():
+        messages.warning(request, 'This payment was already processed.')
+        return redirect('donate', campaign_id=campaign_id)
 
-    if payment.execute({"payer_id": payer_id}):
-        # Payment was successful, update campaign fund
+    try:
+        # Execute PayPal payment
+        payment = paypalrestsdk.Payment.find(payment_id)
+        if not payment.execute({"payer_id": payer_id}):
+            raise Exception(payment.error)
+
+        # Get campaign and fund details
         campaign = get_object_or_404(Campaign, id=campaign_id)
         fund = CampaignFund.objects.get(campaign=campaign)
         amount = Decimal(payment.transactions[0].amount.total)
 
-# Calculate 5% commission fee
-        commission_percentage = Decimal('0.05')  # 5%
-        commission_fee = (amount * commission_percentage).quantize(Decimal('0.01'))  # rounding to cents
+        # Validate amount
+        if amount <= 0:
+            raise Exception("Invalid payment amount")
 
-        net_amount = amount - commission_fee
+        # Calculate amounts (with rounding)
+        commission_percentage = Decimal('0.05')
+        commission_fee = (amount * commission_percentage).quantize(Decimal('0.00'))
+        net_amount = (amount - commission_fee).quantize(Decimal('0.00'))
 
-# Update the amount raised
-        fund.amount_raised += net_amount
-        fund.save()
-        # Create the donation record (with transaction ID to avoid duplicates)
-        Donation.objects.create(
+        # Validate campaign owner's PayPal email
+        if not fund.paypal_email or "@" not in fund.paypal_email:
+            raise Exception("Campaign owner's PayPal email is invalid")
+
+        # ===== CORE TRANSACTION LOGIC =====
+        with transaction.atomic():  # Ensure all or nothing
+            # Update campaign fund
+            fund.amount_raised += net_amount
+            fund.save()
+
+            # Record donation
+            Donation.objects.create(
+                campaign=campaign,
+                donor=request.user,
+                amount=net_amount,
+                transaction_id=payment_id,
+                donor_name=request.user.username,
+            )
+
+            # Prepare payouts
+            payout_items = [
+                # Platform commission (5%)
+                {
+                    "recipient_type": "EMAIL",
+                    "amount": {"value": str(commission_fee), "currency": "USD"},
+                    "receiver": settings.PAYPAL_PLATFORM_EMAIL,
+                    "note": f"Commission for {campaign.title}",
+                    "sender_item_id": f"COMM_{payment_id}",
+                },
+                # Campaign owner payout (95%)
+                {
+                    "recipient_type": "EMAIL",
+                    "amount": {"value": str(net_amount), "currency": "USD"},
+                    "receiver": fund.paypal_email,
+                    "note": f"Donation for {campaign.title}",
+                    "sender_item_id": f"DON_{payment_id}",
+                }
+            ]
+
+            # Execute payouts (async)
+            payout = paypalrestsdk.Payout({
+                "sender_batch_header": {
+                    "sender_batch_id": f"BATCH_{payment_id}",
+                    "email_subject": "Your payment is on the way!",
+                },
+                "items": payout_items
+            })
+
+            if not payout.create(sync_mode=False):
+                raise Exception(f"Payout failed: {payout.error}")
+
+        # ===== SUCCESS ACTIONS =====
+        # Send email notifications
+        send_notification_emails(
             campaign=campaign,
-            amount=net_amount,  # Store the net amount after deductions
-            donor_name=request.user.username,  # or anonymous if you allow it
-            transaction_id=payment_id  # Store the PayPal payment ID
+            donor=request.user,
+            amount=amount,
+            net_amount=net_amount,
+            commission_fee=commission_fee
         )
 
-        # Send commission to your PayPal account
-        payout = paypalrestsdk.Payout({
-            "sender_batch_header": {
-                "sender_batch_id": str(payment_id),
-                "email_subject": "Commission Payment"
-            },
-            "items": [{
-                "recipient_type": "EMAIL",
-                "amount": {
-                    "value": str(commission_fee),
-                    "currency": "USD"
-                },
-                "receiver":settings.PAYPAL_PLATFORM_EMAIL,  # Your PayPal email
-                "note": f"Commission for donation {payment_id}",
-                "sender_item_id": str(payment_id)
-            }]
-        })
+        messages.success(request, f'Success! ${net_amount} sent to {campaign.user.user.username}.')
+        return redirect('campaign_detail', pk=campaign_id)
 
-        # Create payout with asynchronous mode
-        if payout.create(sync_mode=False):
-            messages.success(request, 'Thank you for your donation! A commission has been processed.')
-        else:
-            messages.error(request, f'Failed to process commission. Error: {payout.error}')
-
-        # Calculate the updated progress percentage
-        if fund.target_amount > 0:
-            fund.progress_percentage = (fund.amount_raised / fund.target_amount) * 100
-        else:
-            fund.progress_percentage = 100  # Avoid division by zero
-
-        fund.save()  # Save the updated progress percentage
-
+    except Exception as e:
+        logger.error(f"Payment {payment_id} failed: {str(e)}")
+        messages.error(request, f"Payment processing failed. {str(e)}")
         return redirect('donate', campaign_id=campaign_id)
 
-    # If payment execution failed
-    messages.error(request, 'Payment failed. Please try again.')
-    return redirect('donate', campaign_id=campaign_id)
 
+# Email notification function
+def send_notification_emails(campaign, donor, amount, net_amount, commission_fee):
+    """Sends emails to donor and campaign owner"""
+    try:
+        # Email to Donor
+        send_mail(
+            subject=f"Donation Receipt for {campaign.title}",
+            message=f"""
+            Thank you for your donation of ${amount:.2f}!
+            
+            Breakdown:
+            - Gross Amount: ${amount:.2f}
+            - Platform Fee (5%): -${commission_fee:.2f}
+            - Net to Campaign: ${net_amount:.2f}
+            
+            Transaction will appear as "{settings.PAYPAL_PAYMENT_DESCRIPTOR}".
+            """,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[donor.email],
+            fail_silently=True,
+        )
+
+        # Email to Campaign Owner
+        send_mail(
+            subject=f"New Donation Received for {campaign.title}",
+            message=f"""
+            You received a new donation of ${net_amount:.2f} (after fees)!
+            
+            Donor: {donor.username}
+            Gross Amount: ${amount:.2f}
+            Platform Fee: ${commission_fee:.2f}
+            
+            Funds will arrive in your PayPal account within 1-2 business days.
+            """,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[campaign.user.user.email],
+            fail_silently=True,
+        )
+    except Exception as e:
+        logger.error(f"Email sending failed: {str(e)}")
 
 @login_required
-def payment_cancel(request):
+def payment_cancel(request, campaign_id=None):
     messages.warning(request, 'Payment was cancelled.')
-    return redirect('donate')
+    return redirect('donate', campaign_id=campaign_id)  # Now includes required argument
 
 
 
 
 
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from .models import Pledge, Campaign
+from .forms import PledgeForm
+
+@login_required
+def create_pledge(request, campaign_id):
+    campaign = get_object_or_404(Campaign, id=campaign_id)
+    
+    if request.method == 'POST':
+        form = PledgeForm(request.POST, user=request.user, campaign=campaign)
+        if form.is_valid():
+            pledge = form.save(commit=False)
+            pledge.user = request.user
+            pledge.save()
+            messages.success(request, 'Your pledge has been created successfully!')
+            return redirect('view_campaign', campaign_id=campaign.id)
+    else:
+        form = PledgeForm(user=request.user, campaign=campaign)
+
+    # User data and following
+    user_profile = get_object_or_404(Profile, user=request.user)
+    following_users = request.user.following.values_list('followed', flat=True)
+    user_profile.last_campaign_check = timezone.now()
+    user_profile.save()
+    
+    ads = NativeAd.objects.all()
+
+    # Suggested users
+    current_user_following = user_profile.following.all()
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+    suggested_users = []
+    
+    for profile in all_profiles:
+        similarity_score = calculate_similarity(user_profile, profile)
+        if similarity_score >= 0.5:
+            followers_count = Follow.objects.filter(followed=profile.user).count()
+            suggested_users.append({
+                'user': profile.user,
+                'followers_count': followers_count
+            })
+    suggested_users = suggested_users[:2]
+
+    # Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund') \
+        .order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    context = {
+        'form': form,
+        'campaign': campaign,
+        'user_profile': user_profile,
+        'ads': ads,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
+        'top_contributors': top_contributors,
+    }
+    return render(request, 'main/create_pledge.html', context)
+
+
+
+
+
+    from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, get_object_or_404
+from .models import Campaign, Pledge
+
+@login_required
+def campaign_pledgers_view(request, campaign_id):
+    campaign = get_object_or_404(Campaign, id=campaign_id)
+    pledges = Pledge.objects.filter(campaign=campaign).order_by('-timestamp')
+
+    # User data and following
+    user_profile = get_object_or_404(Profile, user=request.user)
+    following_users = request.user.following.values_list('followed', flat=True)
+    user_profile.last_campaign_check = timezone.now()
+    user_profile.save()
+    
+    ads = NativeAd.objects.all()
+
+    # Suggested users
+    current_user_following = user_profile.following.all()
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
+    suggested_users = []
+    
+    for profile in all_profiles:
+        similarity_score = calculate_similarity(user_profile, profile)
+        if similarity_score >= 0.5:
+            followers_count = Follow.objects.filter(followed=profile.user).count()
+            suggested_users.append({
+                'user': profile.user,
+                'followers_count': followers_count
+            })
+    suggested_users = suggested_users[:2]
+
+    # Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .select_related('campaignfund') \
+        .order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
+                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    return render(request, 'main/pledges.html', {
+        'campaign': campaign,
+        'pledges': pledges,
+        'user_profile': user_profile,
+        'ads': ads,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
+        'top_contributors': top_contributors,
+    })
+
+# views.py
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib import messages
+@login_required
+def toggle_pledge_fulfillment(request, pledge_id):
+    pledge = get_object_or_404(Pledge, id=pledge_id)
+    
+    # Verify the requesting user is the campaign owner
+    if request.user != pledge.campaign.user.user:
+        messages.error(request, "You don't have permission to modify this pledge.")
+        return redirect('view_campaign', campaign_id=pledge.campaign.id)
+    
+    new_status = pledge.toggle_fulfilled()
+    messages.success(request, f"Pledge has been marked as {'fulfilled' if new_status else 'unfulfilled'}.")
+    return redirect('view_campaign', campaign_id=pledge.campaign.id)

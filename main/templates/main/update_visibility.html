@@ -1,281 +1,311 @@
-{% load static %}
+{% extends 'main/face.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
+{% block content %}
+<div class="participation-settings">
+    <div class="settings-header">
+       
+        <h2 class="settings-title">Participation Settings</h2>
+        <p class="settings-subtitle">Choose how people can engage with your campaign</p>
+    </div>
 
-    <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Update Visibility</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-   
-
-    <style>
-        /* Custom checkbox styles */
-        .checkbox-label {
-            display: block;
-            position: relative;
-            padding-left: 35px;
-            margin-bottom: 15px;
-            cursor: pointer;
-            font-size: 1.2em; /* Default font size for web */
-            color: #333;
-            font-family: 'Arial', sans-serif;
-            transition: color 0.3s ease;
-        }
-
-        @media (max-width: 768px) {
-            .checkbox-label {
-                font-size: 1rem; /* Font size for mobile */
-            }
-        }
-
-        .checkbox-label input {
-            position: absolute;
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        .checkbox-custom {
-            position: absolute;
-            top: 2px;
-            left: 0;
-            height: 20px;
-            width: 20px;
-            background-color: #eee;
-            border-radius: 5px;
-            transition: background-color 0.3s ease;
-        }
-
-        .checkbox-label input:checked ~ .checkbox-custom {
-            background-color: #007bff;
-        }
-
-        .checkbox-label input:checked ~ .checkbox-custom:after {
-            content: '';
-            position: absolute;
-            display: block;
-            top: 50%;
-            left: 50%;
-            width: 10px;
-            height: 10px;
-            background-color: #fff;
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            opacity: 0;
-            animation: pulse 0.3s ease forwards;
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(0.8) translate(-50%, -50%);
-                opacity: 0;
-            }
-            50% {
-                transform: scale(1.2) translate(-50%, -50%);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(1) translate(-50%, -50%);
-                opacity: 1;
-            }
-        }
-
-        /* Form and button styles */
-        .visibility-form {
-            max-width: 500px;
-            margin: 40px auto;
-            padding: 20px;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        .submit-btn {
-            display: block;
-            margin-top: 30px;
-            padding: 12px 24px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-        }
-
-        .submit-btn:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
-        }
-
-        .action-item {
-            display: inline-block;
-            padding: 12px 24px;
-            margin-right: 10px;
-            border-radius: 8px;
-            text-align: center;
-            font-size: 14px;
-            background-color: #007bff;
-            color: #fff;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: background-color 0.3s ease;
-        }
-
-        .action-item a {
-            color: #fff;
-            text-decoration: none;
-            font-size: inherit;
-        }
-
-        .action-item i {
-            margin-right: 8px;
-        }
-
-        .action-item:hover {
-            background-color: #0056b3;
-        }
-
-        hr {
-            border: none;
-            border-top: 1px solid #ddd;
-            margin: 30px 0;
-        }
-
-
-
-
-
-/* Styling for the go-back arrow */
-.go-back-arrow {
-    cursor: pointer;
-    font-size: 20px; /* Icon size */
-    color: silver; /* Silver color for the icon */
-    background-color: transparent; /* Transparent background */
-    border: none; /* No border */
-    margin-right: 10px; /* Space between arrow and input field */
-    padding: 20px; /* No padding */
-    transition: color 0.3s ease, transform 0.2s ease; /* Smooth transition */
-}
-
-.go-back-arrow:hover {
-    color: gray; /* Change color to gray on hover */
-    transform: scale(1.1); /* Slight zoom on hover */
-}
-
-/* Dark Mode Styles */
-body.dark-mode {
-    background-color: #121212; /* Dark background */
-    color: #ffffff; /* Light text */
-}
-
-body.dark-mode header,
-body.dark-mode footer,
-body.dark-mode section,
-body.dark-mode .left-aside,
-body.dark-mode .right-aside,
-body.dark-mode .upper-post,
-body.dark-mode .campaign-content,
-body.dark-mode .react div {
-    background-color: #1e1e1e; /* Slightly lighter dark background */
-    color: #ffffff; /* Light text */
-}
-
-body.dark-mode .campaign-category {
-    background-color: #333333; /* Darker background for category */
-    color: #ffffff; /* Light text */
-}
-
-body.dark-mode .objectives-activities {
-    background-color: #262626; /* Dark background for objectives */
-    border-left: 4px solid #3498db; /* Accent border */
-    color: #ffffff; /* Light text */
-}
-
-body.dark-mode .search-container input[type="text"] {
-    background-color: #333333; /* Dark background for input */
-    color: #ffffff; /* Light text */
-    border: 1px solid #444444; /* Dark border */
-}
-
-body.dark-mode .search-container .btn-reset {
-    color: #b0b0b0; /* Light icon color */
-}
-
-body.dark-mode button:not(.btn-search, .btn-reset) {
-    background-color: #262626; /* Dark background for buttons */
-    color: #ffffff; /* Light text */
-}
-
-body.dark-mode .explore-link i {
-    color: #ffffff; /* Light icon color */
-}
-
-body.dark-mode .love-count,
-body.dark-mode #view-count,
-body.dark-mode .comment-count {
-    color: #ffffff; /* Light text for counts */
-}
-
-
-body.dark-mode .affiliate-link {
-    display: inline-block;
-    margin-bottom: 20px;
-    padding: 10px 15px;
-    background-color: #3498db; /* Accent color for buttons */
-    color: #ffffff;
-    border-radius: 5px;
-    text-decoration: none;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
-}
-
-body.dark-mode .affiliate-link:hover {
-    background-color: #2980b9; /* Darker accent color on hover */
-}
-
-body.dark-mode .affiliate-link i {
-    margin-right: 8px; /* Space between icon and text */
-}
-    </style>
-</head>
-<body>
-      
-    <form method="post" class="visibility-form">
-
-        <div class="go-back-arrow" onclick="goBack()">
-            <i class="fas fa-arrow-left"></i> <!-- Font Awesome left arrow icon -->
-        </div>
+    <form method="post" class="settings-form">
         {% csrf_token %}
-        <label class="checkbox-label">
-            <input type="checkbox" name="donate_monetary_visible" {% if campaign.donate_monetary_visible %}checked{% endif %}>
-            <span class="checkbox-custom"></span>
-            Donate to this Campaign
-        </label>
+        <div class="options-grid">
+            <!-- Monetary Donations Option -->
+            <label class="option-card">
+                <input type="checkbox" name="donate_monetary_visible" {% if campaign.donate_monetary_visible %}checked{% endif %}>
+                <span class="checkmark"></span>
+                <div class="option-content">
+                    <i class="fas fa-donate option-icon"></i>
+                    <div>
+                        <h3 class="option-name">Monetary Pledges</h3>
+                        <p class="option-desc">Enable participants to pledge financial contributions</p>
+                    </div>
+                </div>
+            </label>
 
-        <label class="checkbox-label">
-            <input type="checkbox" name="brainstorm_idea_visible" {% if campaign.brainstorm_idea_visible %}checked{% endif %}>
-            <span class="checkbox-custom"></span>
-           Brainstorm ideas for this Campaign
-        </label>
+            <!-- Brainstorm Ideas Option -->
+            <label class="option-card">
+                <input type="checkbox" name="brainstorm_idea_visible" {% if campaign.brainstorm_idea_visible %}checked{% endif %}>
+                <span class="checkmark"></span>
+                <div class="option-content">
+                    <i class="fas fa-lightbulb option-icon"></i>
+                    <div>
+                        <h3 class="option-name">Brainstorm Ideas</h3>
+                        <p class="option-desc">Let community share creative suggestions</p>
+                    </div>
+                </div>
+            </label>
 
-        <label class="checkbox-label">
-            <input type="checkbox" name="campaign_product_visible" {% if campaign.campaign_product_visible %}checked{% endif %}>
-            <span class="checkbox-custom"></span>
-            Buy Products from the Campaign
-        </label>
+            <!-- Campaign Products Option -->
+            <label class="option-card">
+                <input type="checkbox" name="campaign_product_visible" {% if campaign.campaign_product_visible %}checked{% endif %}>
+                <span class="checkmark"></span>
+                <div class="option-content">
+                    <i class="fas fa-shopping-bag option-icon"></i>
+                    <div>
+                        <h3 class="option-name">Campaign Products</h3>
+                        <p class="option-desc">Enable purchase of related merchandise</p>
+                    </div>
+                </div>
+            </label>
+        </div>
 
-        <button type="submit" class="submit-btn">Update Visibility</button>
+        <!-- Form Footer with Save Button -->
+        <div class="form-footer">
+            <button type="submit" class="save-button">
+                <i class="fas fa-save"></i> Save Changes
+            </button>
+        </div>
     </form>
+</div>
 
-    <script>
-    function goBack() {
-        window.history.back(); // Navigates to the previous page
+<style>
+    :root {
+        --primary-color: #4a6bff;
+        --primary-hover: #3a56d4;
+        --text-primary: #2d3748;
+        --text-secondary: #718096;
+        --bg-primary: #ffffff;
+        --bg-secondary: #f8fafc;
+        --border-color: #e2e8f0;
+        --shadow-color: rgba(0, 0, 0, 0.08);
+        --card-hover-border: #c3dafe;
+        --icon-bg: #e0e7ff;
+        --checkmark-border: #cbd5e0;
+        --button-shadow: rgba(74, 107, 255, 0.3);
     }
-</script>
-</body>
-</html>
+
+    .dark-mode {
+        --primary-color: #5d7dff;
+        --primary-hover: #4a6bff;
+        --text-primary: #f7fafc;
+        --text-secondary: #cbd5e0;
+        --bg-primary: #1a202c;
+        --bg-secondary: #2d3748;
+        --border-color: #4a5568;
+        --shadow-color: rgba(0, 0, 0, 0.2);
+        --card-hover-border: #5d7dff;
+        --icon-bg: #2d3748;
+        --checkmark-border: #4a5568;
+        --button-shadow: rgba(93, 125, 255, 0.3);
+    }
+
+    /* Base Styles */
+    .participation-settings {
+        max-width: 850px;
+        margin: 2rem auto;
+        padding: 2.5rem;
+        background: var(--bg-primary);
+        border-radius: 14px;
+        box-shadow: 0 6px 24px var(--shadow-color);
+        transition: all 0.3s ease;
+    }
+    
+    /* Header Styles */
+    .settings-header {
+        margin-bottom: 3rem;
+        position: relative;
+        text-align: center;
+    }
+    
+    .header-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+    
+    .go-back-arrow {
+        cursor: pointer;
+        color: var(--primary-color);
+        font-size: 1.4rem;
+        transition: transform 0.2s;
+        padding: 0.5rem;
+    }
+    
+    .go-back-arrow:hover {
+        transform: translateX(-3px);
+    }
+    
+    .theme-toggle {
+        cursor: pointer;
+        font-size: 1.3rem;
+        color: var(--text-secondary);
+        transition: all 0.3s;
+        position: relative;
+        width: 30px;
+        height: 30px;
+    }
+    
+    .theme-toggle .light-icon {
+        display: none;
+    }
+    
+    .dark-mode .theme-toggle .dark-icon {
+        display: none;
+    }
+    
+    .dark-mode .theme-toggle .light-icon {
+        display: block;
+        color: #f6e05e;
+    }
+    
+    .settings-title {
+        font-size: 2.1rem;
+        color: var(--text-primary);
+        margin-bottom: 0.8rem;
+        font-weight: 600;
+    }
+    
+    .settings-subtitle {
+        color: var(--text-secondary);
+        font-size: 1.15rem;
+        margin-top: 0;
+        line-height: 1.5;
+    }
+    
+    /* Options Grid */
+    .options-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin-bottom: 3rem;
+    }
+    
+    /* Option Card Styles */
+    .option-card {
+        display: block;
+        background: var(--bg-secondary);
+        border-radius: 12px;
+        padding: 2rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 1px solid var(--border-color);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .option-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 28px var(--shadow-color);
+        border-color: var(--card-hover-border);
+    }
+    
+    .option-card input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+    
+    .checkmark {
+        position: absolute;
+        top: 2rem;
+        right: 2rem;
+        height: 24px;
+        width: 24px;
+        background-color: var(--bg-primary);
+        border: 2px solid var(--checkmark-border);
+        border-radius: 6px;
+        transition: all 0.2s;
+    }
+    
+    .option-card input:checked ~ .checkmark {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+    
+    .checkmark:after {
+        content: "";
+        position: absolute;
+        display: none;
+        left: 7px;
+        top: 3px;
+        width: 6px;
+        height: 12px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+    }
+    
+    .option-card input:checked ~ .checkmark:after {
+        display: block;
+    }
+    
+    .option-content {
+        display: flex;
+        align-items: flex-start;
+        gap: 1.5rem;
+    }
+    
+    .option-icon {
+        font-size: 1.8rem;
+        color: var(--primary-color);
+        background: var(--icon-bg);
+        padding: 1.2rem;
+        border-radius: 10px;
+        flex-shrink: 0;
+    }
+    
+    .option-name {
+        font-size: 1.3rem;
+        color: var(--text-primary);
+        margin: 0 0 0.5rem 0;
+        font-weight: 500;
+    }
+    
+    .option-desc {
+        font-size: 1.05rem;
+        color: var(--text-secondary);
+        margin: 0;
+        line-height: 1.5;
+    }
+    
+    /* Save Button */
+    .save-button {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 1rem 2.5rem;
+        font-size: 1.1rem;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        margin: 0 auto;
+        font-weight: 500;
+    }
+    
+    .save-button:hover {
+        background: var(--primary-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px var(--button-shadow);
+    }
+    
+    .form-footer {
+        text-align: center;
+        margin-top: 3rem;
+    }
+
+    @media (max-width: 768px) {
+        .participation-settings {
+            padding: 1.5rem;
+            margin: 1rem;
+        }
+        
+        .options-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .settings-title {
+            font-size: 1.8rem;
+        }
+    }
+</style>
+
+
+{% endblock %}

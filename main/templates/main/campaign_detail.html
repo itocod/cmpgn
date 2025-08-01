@@ -391,15 +391,7 @@
             </div>
             
             <!-- Mini progress bar -->
-            <div class="mini-progress">
-                <div class="progress-container">
-                    <div class="progress-bar" style="width: {% widthratio campaign.amount_raised campaign.target_amount 100 %}%"></div>
-                </div>
-                <div class="progress-stats">
-                    <span>${{ campaign.amount_raised|default:0|floatformat:0 }} raised</span>
-                    <span>{% widthratio campaign.amount_raised campaign.target_amount 100 %}% of ${{ campaign.target_amount|floatformat:0 }}</span>
-                </div>
-            </div>
+            
         </div>
     </div>
     {% endif %}
@@ -509,23 +501,7 @@
             </p>
         </div>
         <div style="text-align: center; margin: 20px 0;">
-    <a href="{% url 'donate' campaign_id=campaign.id %}" 
-       style="display: inline-block;
-              background-color: #FF6B35;  /* Vibrant orange */
-              color: white;
-              padding: 12px 30px;
-              border-radius: 25px;
-              text-decoration: none;
-              font-weight: 600;
-              font-size: 16px;
-              box-shadow: 0 4px 8px rgba(255, 107, 53, 0.3);
-              transition: all 0.3s ease;
-              border: none;
-              cursor: pointer;
-              width: 80%;
-              max-width: 250px;">
-        <i class="fas fa-heart" style="margin-right: 8px;"></i> Donate Now
-    </a>
+
 </div>
     </div>
 </div>

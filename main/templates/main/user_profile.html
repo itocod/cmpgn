@@ -293,63 +293,76 @@
     color: #0056b3;
 }
 
+/* Light Mode - Base Styles */
 .changemakers {
     display: flex;
-    flex-wrap: wrap; /* Allows wrapping for multiple badges */
-    gap: 10px; /* Space between badges */
-    margin-top: 10px;
-    padding: 10px;
-    background-color: #f8f8f8; /* Uniform light silvery-white */
-    border-radius: 5px;
-    border: 1px solid #dcdcdc; /* Subtle gray border for a clean look */
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+    padding: 15px;
+    background-color: #f5f7fa;
+    border-radius: 10px;
+    border: 1px solid #e1e5eb;
+    transition: all 0.3s ease;
 }
-/* Original CSS */
+
 .changemaker-badge {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    font-size: 12px;
-    font-family: 'Arial', sans-serif;
-    padding: 5px 8px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    transition: background-color 0.3s ease;
-}
-
-.changemaker-badge .category-keyboard {
-    margin-left: 10px; /* Adds space between the "Changemaker" and the category */
-}
-
-/* Dark Mode Overrides */
-body.dark-mode .changemaker-badge {
-    background-color: #333333; /* Dark background for the badge */
-    border: 1px solid #444444; /* Darker border */
-    color: #e0e0e0; /* Light text color */
-    box-shadow: 0 1px 3px rgba(255, 255, 255, 0.1); /* Subtle shadow for depth */
-}
-
-body.dark-mode .changemaker-badge .category-keyboard {
-    color: #64b5f6; /* Light blue for the category text */
+    font-size: 13px;
+    font-family: 'Segoe UI', 'Roboto', sans-serif;
+    padding: 7px 12px;
+    background-color: #ffffff;
+    border: 1px solid #e1e5eb;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+    color: #333333; /* Added text color for better contrast */
 }
 
 .changemaker-badge:hover {
-    background-color: #f0f8ff; /* Subtle highlight on hover */
+    background-color: #f0f7ff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .category-keyboard {
-    color: #32CD32; /* Lemon green text color */
-    font-size: 1em; /* Keeps the font smaller */
-    background-color: #f0f8e0; /* Light lemon green background */
-    padding: 4px 6px; /* Increased padding for a more comfortable look */
-    border-radius: 5px; /* Rounded corners */
-    font-family: 'Courier New', Courier, monospace; /* Monospace font */
-    border: 1px solid #228B22; /* Darker green border for contrast */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    margin-left: 8px;
+    color: #2e8b57;
+    font-weight: 600;
+    font-size: 0.9em;
+    background-color: #f0fff4;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-family: 'SF Mono', 'Roboto Mono', monospace;
+    border: 1px solid #c8e6c9;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
 }
 
+/* Dark Mode Overrides */
+body.dark-mode .changemakers {
+    background-color: #1e1e1e;
+    border-color: #2d2d2d;
+}
 
+body.dark-mode .changemaker-badge {
+    background-color: #2d2d2d;
+    border-color: #3d3d3d;
+    color: #e0e0e0; /* Light text for dark mode */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
 
+body.dark-mode .changemaker-badge:hover {
+    background-color: #253341;
+}
+
+body.dark-mode .category-keyboard {
+    color: #4cceac;
+    background-color: #1e3a34;
+    border-color: #2d4a43;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
 .verification-section {
     margin-top: 15px;
     text-align: center;
@@ -615,9 +628,6 @@ body.dark-mode .material-icons {
     vertical-align: middle; /* Align icons with text */
 }
 
-body.dark-mode .changemakers {
-    margin-top: 15px;
-}
 
 body.dark-mode .follow-unfollow-section {
     margin-top: 20px;
@@ -699,21 +709,7 @@ body.dark-mode .objectives-activities {
     margin-top: 15px;
 }
 
-body.dark-mode .changemakers {
-    background-color: #1e1e1e; /* Dark background for the container */
-    padding: 10px;
-    border-radius: 8px;
-    margin-top: 15px;
-}
 
-body.dark-mode .changemaker-badge {
-    background-color: #333333; /* Darker background for the badge */
-    color: #64b5f6; /* Light blue for text */
-    padding: 8px 12px;
-    border-radius: 5px;
-    display: inline-block;
-    font-weight: bold;
-}
 
 body.dark-mode .category-keyboard {
     color: #ffffff; /* White for the category text */
@@ -985,7 +981,7 @@ body.dark-mode .campaign-title {
 
 <div class="campaigns">
     <!-- Title for Campaigns Section -->
-    <h3 class="campaign-title">Public Campaigns</h3>
+    <h3 class="campaign-title">  Public Campaigns ({{ public_campaigns|length }})</h3>
 
     <div class="campaign-list">
         {% for campaign in public_campaigns %}

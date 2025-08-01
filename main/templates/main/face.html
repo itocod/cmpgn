@@ -2786,7 +2786,149 @@ body.dark-mode .comment-count {
 .snap-label {
   transition: all 0.3s ease;
 }
+    .top-navigation-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 24px;
+        position: sticky;
+        top: 0;
+        background: white;
+        z-index: 100;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+/* Show only on mobile (max width 768px) */
+@media (max-width: 768px) {
+    .top-navigation-container {
+        display: flex;
+    }
+}
 
+/* Hide on tablets and desktop (min width 769px) */
+@media (min-width: 769px) {
+    .top-navigation-container {
+        display: none;
+    }
+}
+
+    .back-arrow-container {
+        flex: 0 0 auto;
+    }
+
+    .go-back-arrow {
+        color: #555;
+        font-size: 18px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        padding: 8px;
+    }
+
+    .go-back-arrow:hover {
+        color: #000;
+        background: rgba(0,0,0,0.05);
+        border-radius: 4px;
+    }
+
+    .search-form {
+        flex: 1;
+        max-width: 500px;
+        margin-left: auto;
+    }
+
+    .search-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    #query-field {
+        width: 100%;
+        padding: 8px 40px 8px 15px;
+        border: 1px solid #ddd;
+        border-radius: 20px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+    #query-field:focus {
+        outline: none;
+        border-color: #777;
+        box-shadow: 0 0 0 2px rgba(0,0,0,0.05);
+    }
+
+    .btn-reset, .btn-search {
+        position: absolute;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        color: #777;
+        transition: all 0.2s ease;
+    }
+
+    .btn-reset {
+        right: 35px;
+    }
+
+    .btn-search {
+        right: 10px;
+    }
+
+    .btn-reset:hover, .btn-search:hover {
+        color: #333;
+    }
+
+    .content {
+        padding: 20px;
+    }
+    /* Dark Mode Classes - Add these without changing original code */
+.dark-mode .top-navigation-container {
+  background: #1e1e1e;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.2s ease;
+}
+
+.dark-mode .go-back-arrow {
+  color: #aaa;
+  transition: color 0.2s ease;
+}
+
+.dark-mode .go-back-arrow:hover {
+  color: #64b5f6;
+  background: rgba(100, 181, 246, 0.1);
+}
+
+.dark-mode .search-form {
+  background: transparent;
+}
+
+.dark-mode #query-field {
+  background: #2d2d2d;
+  border-color: #444;
+  color: #e0e0e0;
+  transition: all 0.2s ease;
+}
+
+.dark-mode #query-field:focus {
+  border-color: #64b5f6;
+  box-shadow: 0 0 0 2px rgba(100, 181, 246, 0.1);
+}
+
+.dark-mode .btn-reset,
+.dark-mode .btn-search {
+  color: #aaa;
+  transition: color 0.2s ease;
+}
+
+.dark-mode .btn-reset:hover,
+.dark-mode .btn-search:hover {
+  color: #64b5f6;
+}
+
+.dark-mode .content {
+  background: #121212;
+  color: #e0e0e0;
+  transition: background-color 0.2s ease;
+}
 </style>
 
 
@@ -2816,6 +2958,24 @@ body.dark-mode .comment-count {
 
 
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const queryField = document.getElementById('query-field');
+        const resetBtn = document.getElementById('reset-field');
+        
+        // Show/hide reset button based on input
+        queryField.addEventListener('input', function() {
+            resetBtn.style.display = this.value ? 'block' : 'none';
+        });
+        
+        // Reset field
+        resetBtn.addEventListener('click', function() {
+            queryField.value = '';
+            this.style.display = 'none';
+            queryField.focus();
+        });
+    });
+</script>
 
 <script>
     function handleCreateClick(e) {
@@ -3046,7 +3206,11 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 
-
+<script>
+    function goBack() {
+        window.history.back(); // Navigates to the previous page
+    }
+</script>
 <script>
 function toggleFullContent(button) {
     const fullContent = button.closest('.see-more-container').nextElementSibling;
@@ -3074,52 +3238,7 @@ function toggleFullContent(button) {
 
 
 <header>
-    
-        <div class="header-container">
-  <div class="logo-container">
-    <div class="logo">
-      <span class="logo-initials">R</span>
-    </div>
-    <span class="logo-name">Rallynex</span>
-  </div>
-
-  <!-- Desktop Search -->
-  <div class="search-container">
-    <form action="{% url 'search_campaign' %}" method="get">
-      <div class="search-wrapper">
-        <input type="text" placeholder="Search..." name="search_query" id="query-field">
-        <button type="button" class="btn-reset" id="reset-field">
-          <i class="fas fa-times"></i>
-        </button>
-        <button type="submit" class="btn-search">
-          <i class="fas fa-search"></i>
-        </button>
-      </div>
-    </form>
-  </div>
-
-  <!-- Mobile Search Icon -->
-  <div class="mobile-search-icon">
-    <i class="fas fa-search"></i>
-  </div>
-</div>
-
-<!-- Mobile Search Popup -->
-<div class="mobile-search-popup">
-  <form action="{% url 'search_campaign' %}" method="get" class="mobile-search-wrapper">
-    <input type="text" placeholder="Search..." name="search_query">
-    <button type="submit">
-      <i class="fas fa-search"></i>
-    </button>
-  </form>
-  <div class="close-mobile-search">
-    <i class="fas fa-times"></i>
-  </div>
-</div>
-
-
-
-
+ 
 
 </div>
 
@@ -3194,7 +3313,14 @@ function toggleFullContent(button) {
                     <span>Profile</span>
                 </a>
             </li>
-         
+                 <li>
+            <a href="#" onclick="switchColor()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 3V5M18.36 5.64L16.95 7.05M21 12H19M18.36 18.36L16.95 16.95M12 19V21M7.05 16.95L5.64 18.36M5 12H3M7.05 7.05L5.64 5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Switch Theme</span>
+            </a>
+        </li>
             <li>
                 <a href="{% url 'private_campaign' %}">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -3456,10 +3582,35 @@ function toggleFullContent(button) {
 
 
 
-<div class="sidebar-box ">
+<div class="top-navigation-container">
+    <!-- Back Arrow (Left) -->
+    <div class="back-arrow-container">
+        <div class="go-back-arrow" onclick="goBack()">
+            <i class="fas fa-arrow-left"></i>
+        </div>
+    </div>
 
- {% block content %}{% endblock %}</div>
- 
+    <!-- Search Bar (Right) -->
+    <form action="{% url 'search_campaign' %}" method="get" class="search-form">
+        <div class="search-wrapper">
+            <input type="text" placeholder="Search..." name="search_query" id="query-field">
+            <button type="button" class="btn-reset" id="reset-field">
+                <i class="fas fa-times"></i>
+            </button>
+            <button type="submit" class="btn-search">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Main Content -->
+
+  <div class="sidebar-box ">
+    {% block content %}{% endblock %}
+  
+</div>
+
 
 </section>
 

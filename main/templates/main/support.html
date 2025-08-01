@@ -7,291 +7,290 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Support Campaign</title>
-<style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-    }
-
-    .support-container {
-        padding: 20px;
-    }
-
-    .cc-header {
-        text-align: center;
-        background-color: #ffffff; /* White header */
-        border: 1px solid #ddd;
-        padding: 15px;
-        margin-bottom: 20px;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    .cc-header .activity-title {
-        font-size: 1.5rem;
-        color: #333333; /* Dark text for better contrast */
-        margin-bottom: 5px;
-        font-weight: bold;
-    }
-
-    .cc-header .activity-title a {
-        color: #2980b9; /* Blue link */
-        text-decoration: none;
-    }
-
-    .cc-header .activity-title a:hover {
-        text-decoration: underline;
-    }
-
-    .cc-header .activity-count {
-        font-size: 1.2rem;
-        color: #bbbbbb; /* Light gray text */
-    }
-
-    .support-table {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px auto;
-        background-color: #f4f6f9; /* Light gray background for table */
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    }
-
-    .support-table th, .support-table td {
-        border: 1px solid #ddd;
-        padding: 12px;
-        text-align: left;
-        color: #333; /* Darker text for better readability */
-    }
-
-    .support-table th {
-        background-color: #2980b9; /* Dark blue for header */
-        color: white; /* White text */
-        font-weight: bold;
-    }
-
-    .support-table td {
-        background-color: #ffffff; /* White background for table rows */
-    }
-
-    .support-table td a {
-        color: #2980b9; /* Dark blue links */
-        text-decoration: none;
-        font-weight: bold;
-    }
-
-    .support-table td a:hover {
-        text-decoration: underline;
-        color: #3498db; /* Lighter blue on hover */
-    }
-
-    .no-support-links {
-        text-align: center;
-        background-color: #fbe4e4;
-        color: #d9534f;
-        padding: 15px;
-        border-radius: 8px;
-        margin: 20px 0;
-        border: 1px solid #f5c6cb;
-        font-size: 1rem;
-    }
-
-    .create-activity-link, 
-    .update-visibility-link {
-        display: inline-block;
-        text-align: center;
-        margin-bottom: 20px;
-        width: 100%; /* Full-width buttons */
-        color: #fff;
-        background-color: #4CAF50; /* Green button */
-        padding: 10px 20px;
-        border-radius: 5px;
-        text-decoration: none;
-        font-weight: bold;
-        transition: background-color 0.3s ease, color 0.3s ease;
-    }
-
-    .create-activity-link:hover,
-    .update-visibility-link:hover {
-        background-color: #45a049;
-        color: #fff;
-    }
-
-    .icon {
-        width: 20px;
-        height: 20px;
-    }
-
-    /* Mobile Styles */
-    @media (max-width: 768px) {
+    <style>
+        /* Base Styles */
         body {
-            font-size: 1.3rem; /* Set font size to 1rem for better readability */
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
         }
 
         .support-container {
-            padding: 15px;
+            padding: 20px;
         }
 
+        /* Header Styles */
         .cc-header {
-            padding: 12px;
+            text-align: center;
+            background-color: #ffffff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .cc-header .activity-title {
-            font-size: 1.2rem; /* Ensure titles are slightly larger for clarity */
+            font-size: 1.5rem;
+            color: #333333;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .cc-header .activity-title a {
+            color: #2980b9;
+            text-decoration: none;
+        }
+
+        .cc-header .activity-title a:hover {
+            text-decoration: underline;
         }
 
         .cc-header .activity-count {
-            font-size: 1.2rem; /* Adjust count size for mobile */
+            font-size: 1.2rem;
+            color: #bbbbbb;
         }
 
+        /* Table Styles */
         .support-table {
-            font-size: 1.2rem; /* Set table text to 1rem */
-            margin: 10px auto;
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px auto;
+            background-color: #f4f6f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
-        .support-table th, .support-table td {
-            padding: 10px;
-        }
-
-        .no-support-links {
-            font-size: 1.2rem;
+        .support-table th, 
+        .support-table td {
+            border: 1px solid #ddd;
             padding: 12px;
+            text-align: left;
+            color: #333;
         }
 
-        .create-activity-link, 
-        .update-visibility-link {
-            margin-bottom: 15px; 
-            padding: 10px 20px;
-            font-size: 1rem; /* Use 1rem font size */
-            width: 100%; 
-        }
-    }
-
-    /* Extra Small Screens */
-    @media (max-width: 480px) {
-        .cc-header .activity-title {
-            font-size: 1.3rem;
+        .support-table th {
+            background-color: #2980b9;
+            color: white;
+            font-weight: bold;
         }
 
-        .cc-header .activity-count {
-            font-size: 1.2rem;
+        .support-table td {
+            background-color: #ffffff;
         }
 
-        .support-table th, .support-table td {
-            font-size: 1.2rem;
-            padding: 8px;
+        .support-table td a {
+            color: #2980b9;
+            text-decoration: none;
+            font-weight: bold;
         }
 
+        .support-table td a:hover {
+            text-decoration: underline;
+            color: #3498db;
+        }
+
+        /* Empty State Styles */
         .no-support-links {
-            font-size: 1.2rem;
-            padding: 10px;
+            text-align: center;
+            background-color: #fbe4e4;
+            color: #d9534f;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #f5c6cb;
+            font-size: 1rem;
         }
 
+        /* Button Styles */
         .create-activity-link, 
         .update-visibility-link {
-            font-size: 1rem;
-            padding: 8px 15px;
+            display: inline-block;
+            text-align: center;
+            margin-bottom: 20px;
+            width: 100%;
+            color: #fff;
+            background-color: #4CAF50;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
-    }
 
+        .create-activity-link:hover,
+        .update-visibility-link:hover {
+            background-color: #45a049;
+            color: #fff;
+        }
 
+        .icon {
+            width: 20px;
+            height: 20px;
+        }
 
+        /* Mobile Styles */
+        @media (max-width: 768px) {
+            body {
+                font-size: 1.3rem;
+            }
 
-/* Dark Mode Styles */
-body.dark-mode {
-    background-color: #121212; /* Dark background */
-    color: #ffffff; /* Light text */
-}
+            .support-container {
+                padding: 15px;
+            }
 
-body.dark-mode header,
-body.dark-mode footer,
-body.dark-mode section,
-body.dark-mode .left-aside,
-body.dark-mode .right-aside,
-body.dark-mode .upper-post,
-body.dark-mode .campaign-content,
-body.dark-mode .react div {
-    background-color: #1e1e1e; /* Slightly lighter dark background */
-    color: #ffffff; /* Light text */
-}
+            .cc-header {
+                padding: 12px;
+            }
 
-body.dark-mode .campaign-category {
-    background-color: #333333; /* Darker background for category */
-    color: #ffffff; /* Light text */
-}
+            .cc-header .activity-title {
+                font-size: 1.2rem;
+            }
 
-body.dark-mode .objectives-activities {
-    background-color: #262626; /* Dark background for objectives */
-    border-left: 4px solid #3498db; /* Accent border */
-    color: #ffffff; /* Light text */
-}
+            .cc-header .activity-count {
+                font-size: 1.2rem;
+            }
 
-body.dark-mode .search-container input[type="text"] {
-    background-color: #333333; /* Dark background for input */
-    color: #ffffff; /* Light text */
-    border: 1px solid #444444; /* Dark border */
-}
+            .support-table {
+                font-size: 1.2rem;
+                margin: 10px auto;
+            }
 
-body.dark-mode .search-container .btn-reset {
-    color: #b0b0b0; /* Light icon color */
-}
+            .support-table th, 
+            .support-table td {
+                padding: 10px;
+            }
 
-body.dark-mode button:not(.btn-search, .btn-reset) {
-    background-color: #262626; /* Dark background for buttons */
-    color: #ffffff; /* Light text */
-}
+            .no-support-links {
+                font-size: 1.2rem;
+                padding: 12px;
+            }
 
-body.dark-mode .explore-link i {
-    color: #ffffff; /* Light icon color */
-}
+            .create-activity-link, 
+            .update-visibility-link {
+                margin-bottom: 15px; 
+                padding: 10px 20px;
+                font-size: 1rem;
+                width: 100%; 
+            }
+        }
 
-body.dark-mode .love-count,
-body.dark-mode #view-count,
-body.dark-mode .comment-count {
-    color: #ffffff; /* Light text for counts */
-}
+        /* Extra Small Screens */
+        @media (max-width: 480px) {
+            .cc-header .activity-title {
+                font-size: 1.3rem;
+            }
 
+            .cc-header .activity-count {
+                font-size: 1.2rem;
+            }
 
-body.dark-mode .affiliate-link {
-    display: inline-block;
-    margin-bottom: 20px;
-    padding: 10px 15px;
-    background-color: #3498db; /* Accent color for buttons */
-    color: #ffffff;
-    border-radius: 5px;
-    text-decoration: none;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
-}
+            .support-table th, 
+            .support-table td {
+                font-size: 1.2rem;
+                padding: 8px;
+            }
 
-body.dark-mode .affiliate-link:hover {
-    background-color: #2980b9; /* Darker accent color on hover */
-}
+            .no-support-links {
+                font-size: 1.2rem;
+                padding: 10px;
+            }
 
-body.dark-mode .affiliate-link i {
-    margin-right: 8px; /* Space between icon and text */
-}
+            .create-activity-link, 
+            .update-visibility-link {
+                font-size: 1rem;
+                padding: 8px 15px;
+            }
+        }
 
-</style>
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background-color: #121212;
+            color: #ffffff;
+        }
 
+        body.dark-mode header,
+        body.dark-mode footer,
+        body.dark-mode section,
+        body.dark-mode .left-aside,
+        body.dark-mode .right-aside,
+        body.dark-mode .upper-post,
+        body.dark-mode .campaign-content,
+        body.dark-mode .react div {
+            background-color: #1e1e1e;
+            color: #ffffff;
+        }
+
+        body.dark-mode .campaign-category {
+            background-color: #333333;
+            color: #ffffff;
+        }
+
+        body.dark-mode .objectives-activities {
+            background-color: #262626;
+            border-left: 4px solid #3498db;
+            color: #ffffff;
+        }
+
+        body.dark-mode .search-container input[type="text"] {
+            background-color: #333333;
+            color: #ffffff;
+            border: 1px solid #444444;
+        }
+
+        body.dark-mode .search-container .btn-reset {
+            color: #b0b0b0;
+        }
+
+        body.dark-mode button:not(.btn-search, .btn-reset) {
+            background-color: #262626;
+            color: #ffffff;
+        }
+
+        body.dark-mode .explore-link i {
+            color: #ffffff;
+        }
+
+        body.dark-mode .love-count,
+        body.dark-mode #view-count,
+        body.dark-mode .comment-count {
+            color: #ffffff;
+        }
+
+        body.dark-mode .affiliate-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: #ffffff;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
+
+        body.dark-mode .affiliate-link:hover {
+            background-color: #2980b9;
+        }
+
+        body.dark-mode .affiliate-link i {
+            margin-right: 8px;
+        }
+    </style>
 </head>
 <body>
-<div class="support-container">
-    <div class="cc-header">
-        <div class="activity-title">
-            Participate in, 
-            <a href="{% url 'view_campaign' campaign_id=campaign.pk %}">
-                {{ campaign.title }}
-            </a>
+    <div class="support-container">
+        <div class="cc-header">
+            <div class="activity-title">
+                Participate in, 
+                <a href="{% url 'view_campaign' campaign_id=campaign.pk %}">
+                    {{ campaign.title }}
+                </a>
+            </div>
+            <div class="activity-count">Choose how to participate below:</div>
         </div>
-        <div class="activity-count">Choose how to participate below:</div>
-    </div>
 
-    <!-- Both owners and non-owners will see the support options -->
-    {% if not support_campaign.donate_monetary_visible and not support_campaign.attend_event_visible and not support_campaign.brainstorm_idea_visible and not support_campaign.campaign_product_visible %}
-        <div class="no-support-links">No support options available at the moment.</div>
-    {% else %}
+        <!-- Support Options Table -->
         <table class="support-table">
             <thead>
                 <tr>
@@ -300,53 +299,59 @@ body.dark-mode .affiliate-link i {
                 </tr>
             </thead>
             <tbody>
+                {% if support_campaign.donate_monetary_visible or support_campaign.attend_event_visible or support_campaign.brainstorm_idea_visible or support_campaign.campaign_product_visible %}
                 {% if support_campaign.donate_monetary_visible %}
+    <tr>
+        <td>
+            <a href="{% url 'create_pledge' campaign_id=campaign.id %}" >
+                  <i class="fas fa-hand-holding-usd pledge-icon"></i>
+               make a pledge
+            </a>
+        </td>
+        <td>Visible</td>
+    </tr>
+{% endif %}
+                    {% if support_campaign.attend_event_visible %}
+                        <tr>
+                            <td>
+                                <a href="#">🎟️ Attend Event</a>
+                            </td>
+                            <td>Visible</td>
+                        </tr>
+                    {% endif %}
+                    {% if support_campaign.brainstorm_idea_visible %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'brainstorm_idea' campaign_id=campaign.id %}">💡 Brainstorm Idea</a>
+                            </td>
+                            <td>Visible</td>
+                        </tr>
+                    {% endif %}
+                    {% if support_campaign.campaign_product_visible %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'product_manage' campaign_id=campaign.id %}">📦 Campaign Product</a>
+                            </td>
+                            <td>Visible</td>
+                        </tr>
+                    {% endif %}
+                {% else %}
                     <tr>
-                        <td>
-                            <a href="
-">
-                                💰 Donate to this Campaign
-                            </a>
+                        <td colspan="2" style="text-align: center; font-style: italic; color: #999;">
+                            No participation yet.
                         </td>
-                        <td>Visible</td>
-                    </tr>
-                {% endif %}
-                {% if support_campaign.attend_event_visible %}
-                    <tr>
-                        <td>
-                            <a href="#">🎟️ Attend Event</a>
-                        </td>
-                        <td>Visible</td>
-                    </tr>
-                {% endif %}
-                {% if support_campaign.brainstorm_idea_visible %}
-                    <tr>
-                        <td>
-                            <a href="{% url 'brainstorm_idea' campaign_id=campaign.id %}">💡 Brainstorm Idea</a>
-                        </td>
-                        <td>Visible</td>
-                    </tr>
-                {% endif %}
-                {% if support_campaign.campaign_product_visible %}
-                    <tr>
-                        <td>
-                            <a href="{% url 'product_manage' campaign_id=campaign.id %}">📦 Campaign Product</a>
-                        </td>
-                        <td>Visible</td>
                     </tr>
                 {% endif %}
             </tbody>
         </table>
-    {% endif %}
 
-    <!-- Only display this link for the campaign owner -->
-    {% if request.user == campaign.user.user %}
-        <a href="{% url 'update_visibility' campaign_id=campaign.id %}" class="update-visibility-link" style="font-size:14px;">
-            Update Visibility
-        </a>
-    {% endif %}
-</div>
-
+        <!-- Owner-only Visibility Update Link -->
+        {% if request.user == campaign.user.user %}
+            <a href="{% url 'update_visibility' campaign_id=campaign.id %}" class="update-visibility-link" style="font-size:14px;">
+                Update Visibility
+            </a>
+        {% endif %}
+    </div>
 </body>
 </html>
 {% endblock %}

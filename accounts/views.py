@@ -83,8 +83,8 @@ def index(request):
     # 🔥 Trending campaigns (Only those with at least 1 love)
     trending_campaigns = Campaign.objects.filter(visibility='public') \
         .annotate(love_count_annotated=Count('loves')) \
-        .filter(love_count_annotated__gte=1) \
-        .select_related('campaignfund')
+        .filter(love_count_annotated__gte=1)
+        
 
     if category_filter:
         trending_campaigns = trending_campaigns.filter(category=category_filter)

@@ -246,80 +246,211 @@ section {
     transform: scale(1.05);
   }
 
-  /* Mobile styles */
-  @media (max-width: 768px) {
-    .header-container {
-      padding: 15px;
-    }
+        /* Mobile styles */
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 15px;
+            }
 
-    /* Hide the full search bar by default on mobile */
-    .search-container form {
-      display: none;
-    }
+            /* Hide the full search bar by default on mobile */
+            .search-container form {
+                display: none;
+            }
 
-    /* Show mobile search icon */
-    .mobile-search-icon {
-      display: block !important;
-      font-size: 24px;
-      color: #555;
-      cursor: pointer;
-      padding: 8px;
-    }
+            /* Mobile search icon - silver */
+            .mobile-search-icon {
+                display: block !important;
+                font-size: 24px;
+                color: #c0c0c0;
+                cursor: pointer;
+                padding: 8px;
+                border-radius: 50%;
+                transition: all 0.2s ease;
+            }
 
-    /* Mobile search popup */
-    .mobile-search-popup {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      background: white;
-      padding: 15px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-      z-index: 1000;
-    }
+            .mobile-search-icon:hover {
+                color: #a0a0a0;
+                background: #f8f8f8;
+            }
 
-    .mobile-search-popup.active {
-      display: flex;
-      align-items: center;
-    }
+            /* Mobile search popup - all white */
+            .mobile-search-popup {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                background: white;
+                padding: 15px;
+                box-shadow: 0 2px 5px rgba(192,192,192,0.2);
+                z-index: 1000;
+            }
 
-    .mobile-search-wrapper {
-      flex: 1;
-      display: flex;
-      border: 2px solid #ced4da;
-      border-radius: 20px;
-      overflow: hidden;
-    }
+            .mobile-search-popup.active {
+                display: flex;
+                align-items: center;
+            }
 
-    .mobile-search-wrapper input {
-      flex: 1;
-      padding: 10px 15px;
-      border: none;
-      font-size: 16px;
-    }
+            /* Search wrapper - white with silver accents */
+            .mobile-search-wrapper {
+                flex: 1;
+                display: flex;
+                position: relative;
+                border: 1px solid #e0e0e0;
+                border-radius: 24px;
+                overflow: hidden;
+                background: white;
+                transition: all 0.3s ease;
+            }
 
-    .mobile-search-wrapper button {
-      padding: 10px;
-      background: limegreen;
-      color: white;
-      border: none;
-    }
+            .mobile-search-wrapper:focus-within {
+                border-color: #c0c0c0;
+                box-shadow: 0 0 0 2px rgba(192,192,192,0.1);
+            }
 
-    .close-mobile-search {
-      margin-left: 10px;
-      font-size: 20px;
-      cursor: pointer;
-    }
-  }
+            .mobile-search-wrapper input {
+                flex: 1;
+                padding: 12px 40px 12px 15px;
+                border: none;
+                font-size: 16px;
+                background: white;
+                color: #333;
+            }
 
-  /* Hide mobile elements on desktop */
-  .mobile-search-icon {
-    display: none;
-  }
-.mobile-search-popup {
-  display: none;
-}
+            .mobile-search-wrapper input::placeholder {
+                color: #c0c0c0;
+                opacity: 1;
+            }
+
+            /* Clear button */
+            .clear-search {
+                position: absolute;
+                right: 50px;
+                top: 50%;
+                transform: translateY(-50%);
+                display: none;
+                align-items: center;
+                justify-content: center;
+                width: 20px;
+                height: 20px;
+                cursor: pointer;
+                color: #c0c0c0;
+                background: none;
+                border: none;
+                transition: all 0.2s ease;
+            }
+
+            .clear-search:hover {
+                color: #a0a0a0;
+            }
+
+            /* Search button - silver */
+            .mobile-search-wrapper button[type="submit"] {
+                padding: 0 15px;
+                background: #f0f0f0;
+                color: #707070;
+                border: none;
+                border-left: 1px solid #e0e0e0;
+                transition: all 0.2s ease;
+            }
+
+            .mobile-search-wrapper button[type="submit"]:hover {
+                background: #e0e0e0;
+            }
+
+            /* Close button - silver */
+            .close-mobile-search {
+                margin-left: 12px;
+                font-size: 20px;
+                cursor: pointer;
+                color: #c0c0c0;
+                background: white;
+                border-radius: 50%;
+                padding: 5px;
+                transition: all 0.2s ease;
+            }
+
+            .close-mobile-search:hover {
+                color: #a0a0a0;
+                background: #f8f8f8;
+            }
+        }
+
+        /* Hide mobile elements on desktop */
+        .mobile-search-icon {
+            display: none;
+        }
+        .mobile-search-popup {
+            display: none;
+        }
+
+        /* Dark Mode Mobile styles */
+        @media (max-width: 768px) {
+            .dark-mode .header-container {
+                background-color: #1a1a1a;
+            }
+
+            .dark-mode .mobile-search-icon {
+                color: #8a8a8a;
+            }
+
+            .dark-mode .mobile-search-icon:hover {
+                color: #a0a0a0;
+                background: #2d2d2d;
+            }
+
+            .dark-mode .mobile-search-popup {
+                background: #1e1e1e;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            }
+
+            .dark-mode .mobile-search-wrapper {
+                border: 1px solid #3a3a3a;
+                background: #2d2d2d;
+            }
+
+            .dark-mode .mobile-search-wrapper:focus-within {
+                border-color: #5a5a5a;
+                box-shadow: 0 0 0 2px rgba(90,90,90,0.2);
+            }
+
+            .dark-mode .mobile-search-wrapper input {
+                background: #2d2d2d;
+                color: #e0e0e0;
+            }
+
+            .dark-mode .mobile-search-wrapper input::placeholder {
+                color: #6a6a6a;
+            }
+
+            .dark-mode .clear-search {
+                color: #8a8a8a;
+            }
+
+            .dark-mode .clear-search:hover {
+                color: #a0a0a0;
+            }
+
+            .dark-mode .mobile-search-wrapper button[type="submit"] {
+                background: #3a3a3a;
+                color: #b0b0b0;
+                border-left: 1px solid #3a3a3a;
+            }
+
+            .dark-mode .mobile-search-wrapper button[type="submit"]:hover {
+                background: #4a4a4a;
+            }
+
+            .dark-mode .close-mobile-search {
+                color: #8a8a8a;
+                background: #1e1e1e;
+            }
+
+            .dark-mode .close-mobile-search:hover {
+                color: #a0a0a0;
+                background: #2d2d2d;
+            }
+        }
 
     nav {
       margin-top: 20px;
@@ -3080,7 +3211,45 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </script>
 
-
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Toggle search popup
+            const mobileSearchIcon = document.querySelector('.mobile-search-icon');
+            const mobileSearchPopup = document.querySelector('.mobile-search-popup');
+            const closeMobileSearch = document.querySelector('.close-mobile-search');
+            const searchInput = document.getElementById('mobile-search-input');
+            const clearButton = document.querySelector('.clear-search');
+            
+            if (mobileSearchIcon && mobileSearchPopup) {
+                mobileSearchIcon.addEventListener('click', function() {
+                    mobileSearchPopup.classList.add('active');
+                    searchInput.focus();
+                });
+                
+                closeMobileSearch.addEventListener('click', function() {
+                    mobileSearchPopup.classList.remove('active');
+                });
+            }
+            
+            // Clear search functionality
+            if (searchInput && clearButton) {
+                searchInput.addEventListener('input', function() {
+                    clearButton.style.display = this.value.length > 0 ? 'flex' : 'none';
+                });
+                
+                clearButton.addEventListener('click', function() {
+                    searchInput.value = '';
+                    clearButton.style.display = 'none';
+                    searchInput.focus();
+                });
+            }
+            
+            // Toggle dark mode (example)
+            function toggleDarkMode() {
+                document.body.classList.toggle('dark-mode');
+            }
+        });
+    </script>
 
 <script>
 function toggleFullContent(button) {
@@ -3139,19 +3308,22 @@ function toggleFullContent(button) {
   </div>
 </div>
 
-<!-- Mobile Search Popup -->
-<div class="mobile-search-popup">
-  <form action="{% url 'search_campaign' %}" method="get" class="mobile-search-wrapper">
-    <input type="text" placeholder="Search..." name="search_query">
-    <button type="submit">
-      <i class="fas fa-search"></i>
-    </button>
-  </form>
-  <div class="close-mobile-search">
-    <i class="fas fa-times"></i>
-  </div>
-</div>
 
+    <!-- Mobile search popup -->
+    <div class="mobile-search-popup">
+        <form action="{% url 'search_campaign' %}" method="get" class="mobile-search-wrapper">
+            <input type="text" placeholder="Search..." name="search_query" id="mobile-search-input">
+            <button type="button" class="clear-search" aria-label="Clear search">
+                <i class="fas fa-times"></i>
+            </button>
+            <button type="submit" aria-label="Search">
+                <i class="fas fa-search"></i>
+            </button>
+        </form>
+        <div class="close-mobile-search">
+            <i class="fas fa-times"></i>
+        </div>
+    </div>
 
 
 
@@ -3227,7 +3399,14 @@ function toggleFullContent(button) {
                 <span>Profile</span>
             </a>
         </li>
-     
+             <li>
+            <a href="#" onclick="switchColor()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 3V5M18.36 5.64L16.95 7.05M21 12H19M18.36 18.36L16.95 16.95M12 19V21M7.05 16.95L5.64 18.36M5 12H3M7.05 7.05L5.64 5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Switch Theme</span>
+            </a>
+        </li>
         <li>
             <a href="{% url 'private_campaign' %}">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -3257,14 +3436,7 @@ function toggleFullContent(button) {
                 <span>Explore</span>
             </a>
         </li>
-        <li>
-            <a href="#" onclick="switchColor()">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <span>Switch Color</span>
-            </a>
-        </li>
+      
 <li>
     <a href="{% url 'account_login' %}">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -3601,13 +3773,7 @@ function toggleFullContent(button) {
           
 <div class="image-overlay-bottom">
     <div class="progress-container">
-        <div class="progress-text">
-            <span>{% widthratio campaign.campaignfund.amount_raised campaign.campaignfund.target_amount 100 %}% raised</span>
-            <span>${{ campaign.campaignfund.amount_raised|default:0|floatformat:0 }} of ${{ campaign.campaignfund.target_amount|floatformat:0 }}</span>
-        </div>
-        <div class="progress-bar">
-            <div class="progress-fill" style="width: {% widthratio campaign.campaignfund.amount_raised campaign.campaignfund.target_amount 100 %}%;"></div>
-        </div>
+       
     </div>
     
     <div class="campaign-time-left">
@@ -3625,12 +3791,7 @@ function toggleFullContent(button) {
     <i class="fas fa-lock"></i> Join to see activities
 </div>
                 {% endif %}
-   <div class="donate-button-overlay">
-    <a href="{% url 'donate' campaign_id=campaign.id %}" class="simple-donate-btn" aria-label="Donate Now">
-        <i class="fas fa-donate"></i>
-        <span class="donate-text">Donate Now</span>
-    </a>
-</div>
+
 
             </div>
             {% else %}
@@ -3950,13 +4111,7 @@ function toggleFullContent(button) {
                 
                 <div class="image-overlay-bottom">
                     <div class="progress-container">
-                        <div class="progress-text">
-                            <span>{% widthratio campaign.campaignfund.amount_raised campaign.campaignfund.target_amount 100 %}% raised</span>
-                            <span>${{ campaign.campaignfund.amount_raised|default:0|floatformat:0 }} of ${{ campaign.campaignfund.target_amount|floatformat:0 }}</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" style="width: {% widthratio campaign.campaignfund.amount_raised campaign.campaignfund.target_amount 100 %}%;"></div>
-                        </div>
+                       
                     </div>
                     
                     <div class="campaign-time-left">
@@ -3975,12 +4130,7 @@ function toggleFullContent(button) {
                 </div>
                 {% endif %}
                 
-                <div class="donate-button-overlay">
-                    <a href="{% url 'donate' campaign_id=campaign.id %}" class="simple-donate-btn" aria-label="Donate Now">
-                        <i class="fas fa-donate"></i>
-                        <span class="donate-text">Donate Now</span>
-                    </a>
-                </div>
+              
             </div>
             {% else %}
             <div class="no-image-placeholder">
@@ -7406,11 +7556,14 @@ window.onclick = function(event) {
 </script>
 
 
+
 <script>
     function toggleMenu(event) {
         if (event) {
             event.preventDefault();
+            event.stopPropagation(); // Important to prevent immediate close
         }
+        
         const menu = document.getElementById('navbarDropdownMenu');
         const overlay = document.getElementById('menuOverlay');
         
@@ -7419,11 +7572,19 @@ window.onclick = function(event) {
     }
     
     // Close menu when clicking outside
-    document.getElementById('menuOverlay').addEventListener('click', function() {
-        toggleMenu();
+    document.addEventListener('click', function(event) {
+        const menu = document.getElementById('navbarDropdownMenu');
+        const overlay = document.getElementById('menuOverlay');
+        const toggleBtn = document.querySelector('[onclick*="toggleMenu"]'); // Your menu button
+        
+        // Check if click is outside of menu AND outside of toggle button
+        if (!menu.contains(event.target) && 
+            (!toggleBtn || !toggleBtn.contains(event.target))) {
+            menu.classList.remove('active');
+            overlay.classList.remove('active');
+        }
     });
 </script>
-
 <script>
   function togglaMenu(clickedElement) {
     // Close other open menus

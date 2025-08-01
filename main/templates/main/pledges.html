@@ -1,0 +1,274 @@
+{% extends 'main/face.html' %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+{% if request.user == campaign.user.user %}
+    <div class="pledge-manager">
+        <h3 class="pledge-header">Pledge Management</h3>
+        
+        <div class="pledge-stats">
+            <span class="stat-total">Total Pledges: {{ pledges.count }}</span>
+            <span class="stat-fulfilled">Fulfilled: {{ pledges|fulfilled_count }}</span>
+            <span class="stat-pending">Pending: {{ pledges|pending_count }}</span>
+        </div>
+        
+        {% if pledges %}
+            <div class="pledge-list">
+                {% for pledge in pledges %}
+                <div class="pledge-card {% if pledge.is_fulfilled %}fulfilled{% else %}pending{% endif %}">
+                    <div class="pledge-meta">
+                        <span class="pledge-amount">{{ pledge.amount }} {{ pledge.currency|default:"USD" }}</span>
+                        <span class="pledge-user">from {{ pledge.user.username }}</span>
+                        <span class="pledge-date">{{ pledge.timestamp|date:"M d, Y" }}</span>
+                    </div>
+                    
+                    <div class="pledge-status">
+                        <span class="status-badge">
+                            {% if pledge.is_fulfilled %}
+                                ✓ Fulfilled
+                            {% else %}
+                                ⌛ Pending
+                            {% endif %}
+                        </span>
+                        
+                        <form method="post" action="{% url 'toggle_pledge_fulfillment' pledge.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="status-toggle">
+                                {% if pledge.is_fulfilled %}
+                                    Mark as Pending
+                                {% else %}
+                                    Mark as Fulfilled
+                                {% endif %}
+                            </button>
+                        </form>
+                    </div>
+                    
+                    {% if pledge.contact %}
+                    <div class="pledge-contact">
+                        {% if pledge.contact|slice:":1" == "@" or "@" in pledge.contact %}
+                        <a href="mailto:{{ pledge.contact }}?subject=Payment for {{ campaign.title }} pledge&body=Hi {{ pledge.user.username }},%0D%0A%0D%0AThank you for pledging {{ pledge.amount }} {{ pledge.currency|default:"USD" }} to '{{ campaign.title }}' on RallyNex.%0D%0A%0D%0ALet's discuss how you'd like to make the payment.%0D%0A%0D%0ABest regards,%0D%0A{{ campaign.user.username }}%0D%0AFrom RallyNex"
+                           class="contact-btn email">
+                            <i class="fas fa-envelope"></i> Email {{ pledge.user.username|truncatechars:15 }}
+                        </a>
+                        {% elif pledge.contact|length > 6 %}
+                        <a href="https://wa.me/{{ pledge.contact|regex_replace:'[^0-9]'|safe }}?text=Hi%20{{ pledge.user.username|urlencode }}%2C%20regarding%20your%20pledge%20of%20{{ pledge.amount }}%20{{ pledge.currency|default:"USD"|urlencode }}%20to%20'{{ campaign.title|urlencode }}'%20on%20RallyNex.%0A%0ALet's%20discuss%20payment%20arrangements."
+                           target="_blank" class="contact-btn whatsapp">
+                            <i class="fab fa-whatsapp"></i> WhatsApp {{ pledge.user.username|truncatechars:15 }}
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="no-pledges">
+                <p>No pledges have been made yet.</p>
+                <p>Share your campaign to collect support!</p>
+            </div>
+        {% endif %}
+    </div>
+{% endif %}
+
+<style>
+.pledge-manager {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 15px;
+    font-size: 14px;
+}
+
+.pledge-header {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 1rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.pledge-stats {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9em;
+    flex-wrap: wrap;
+}
+
+.pledge-stats span {
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    font-weight: 500;
+}
+
+.stat-total {
+    background: #ebf8ff;
+    color: #3182ce;
+}
+
+.stat-fulfilled {
+    background: #f0fff4;
+    color: #38a169;
+}
+
+.stat-pending {
+    background: #fffaf0;
+    color: #dd6b20;
+}
+
+.pledge-list {
+    display: grid;
+    gap: 0.8rem;
+}
+
+.pledge-card {
+    background: white;
+    border-radius: 6px;
+    padding: 1rem;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    border-left: 3px solid;
+}
+
+.pledge-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-bottom: 0.8rem;
+    align-items: baseline;
+    font-size: 0.9em;
+}
+
+.pledge-amount {
+    font-weight: 600;
+    font-size: 1.1em;
+    color: #2d3748;
+}
+
+.pledge-user, .pledge-date {
+    color: #718096;
+    font-size: 0.9em;
+}
+
+.pledge-status {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin: 0.8rem 0;
+    font-size: 0.9em;
+}
+
+.status-badge {
+    padding: 0.2rem 0.6rem;
+    border-radius: 9999px;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.status-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9em;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    transition: all 0.2s;
+}
+
+.pledge-contact {
+    margin-top: 0.8rem;
+    padding-top: 0.8rem;
+    border-top: 1px dashed #e2e8f0;
+    font-size: 0.9em;
+}
+
+.contact-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+    text-decoration: none;
+    transition: all 0.2s;
+    gap: 0.4rem;
+}
+
+.contact-btn i {
+    font-size: 0.9em;
+}
+
+.no-pledges {
+    text-align: center;
+    padding: 1.5rem;
+    color: #718096;
+    background: #f8fafc;
+    border-radius: 6px;
+    font-size: 0.9em;
+}
+
+.no-pledges p:first-child {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    font-size: 1em;
+}
+
+/* Status colors remain the same */
+.pledge-card.pending {
+    border-left-color: #f6ad55;
+}
+
+.pledge-card.fulfilled {
+    border-left-color: #68d391;
+}
+
+.pledge-card.pending .status-badge {
+    background: #fffaf0;
+    color: #dd6b20;
+}
+
+.pledge-card.fulfilled .status-badge {
+    background: #f0fff4;
+    color: #38a169;
+}
+
+.pledge-card.pending .status-toggle {
+    background: #f6e05e;
+    color: #744210;
+}
+
+.pledge-card.pending .status-toggle:hover {
+    background: #ecc94b;
+}
+
+.pledge-card.fulfilled .status-toggle {
+    background: #e2e8f0;
+    color: #4a5568;
+}
+
+.pledge-card.fulfilled .status-toggle:hover {
+    background: #cbd5e0;
+}
+
+.contact-btn.email {
+    background: #ebf8ff;
+    color: #3182ce;
+    border: 1px solid #bee3f8;
+}
+
+.contact-btn.email:hover {
+    background: #bee3f8;
+}
+
+.contact-btn.whatsapp {
+    background: #ebfff5;
+    color: #38a169;
+    border: 1px solid #c6f6d5;
+}
+
+.contact-btn.whatsapp:hover {
+    background: #c6f6d5;
+}
+</style>
+
+{% endblock %}

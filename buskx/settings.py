@@ -273,3 +273,9 @@ PAYPAL_PLATFORM_EMAIL = env('PAYPAL_PLATFORM_EMAIL')
 
 if not PAYPAL_PLATFORM_EMAIL or '@' not in PAYPAL_PLATFORM_EMAIL:
     raise ImproperlyConfigured("PAYPAL_PLATFORM_EMAIL must be a valid email address")
+
+# settings.py
+
+# RECOMMENDED Branding Settings (customized for Rallynex)
+PAYPAL_PAYMENT_DESCRIPTOR = "RALLYNEX*DONATION"  # Will appear on bank statements (22 char max)
+DEFAULT_FROM_EMAIL = 'notifications@rallynex.com'  # For donation receipts

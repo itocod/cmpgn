@@ -4,7 +4,7 @@ from .views import CustomLoginView
 from .views import CampaignDeleteView
 # urls.py
 
-
+from django.views.generic.base import RedirectView
 from .views import get_activity_comments, post_activity_comment, like_activity_comment
 
 from .views import campaign_story_list, campaign_story_detail
@@ -132,8 +132,12 @@ path('get_replies/<int:comment_id>/', views.get_replies, name='get_replies'),
 
    path('campaign/<int:campaign_id>/donate/', views.donate, name='donate'),
     path('donation-success/<int:campaign_id>/', views.payment_success, name='payment_success'),
-    path('donation-cancel/', views.payment_cancel, name='payment_cancel'),
-     
+      path('payment/cancel/<int:campaign_id>/', views.payment_cancel, name='payment_cancel'),
+       
+    path('campaign/<int:campaign_id>/pledge/', views.create_pledge, name='create_pledge'), 
+    path('campaign/<int:campaign_id>/pledgers/', views.campaign_pledgers_view, name='campaign_pledgers'),
+# urls.py
+path('pledge/<int:pledge_id>/toggle-fulfillment/', views.toggle_pledge_fulfillment, name='toggle_pledge_fulfillment'),
 ]
 
 

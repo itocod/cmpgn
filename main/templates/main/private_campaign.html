@@ -2740,6 +2740,150 @@ body.dark-mode .comment-count {
 .dark-mode .campaign-members div::-webkit-scrollbar-thumb:hover {
     background: #888;
 }
+
+   .top-navigation-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 24px;
+        position: sticky;
+        top: 0;
+        background: white;
+        z-index: 100;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+/* Show only on mobile (max width 768px) */
+@media (max-width: 768px) {
+    .top-navigation-container {
+        display: flex;
+    }
+}
+
+/* Hide on tablets and desktop (min width 769px) */
+@media (min-width: 769px) {
+    .top-navigation-container {
+        display: none;
+    }
+}
+
+    .back-arrow-container {
+        flex: 0 0 auto;
+    }
+
+    .go-back-arrow {
+        color: #555;
+        font-size: 18px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        padding: 8px;
+    }
+
+    .go-back-arrow:hover {
+        color: #000;
+        background: rgba(0,0,0,0.05);
+        border-radius: 4px;
+    }
+
+    .search-form {
+        flex: 1;
+        max-width: 500px;
+        margin-left: auto;
+    }
+
+    .search-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    #query-field {
+        width: 100%;
+        padding: 8px 40px 8px 15px;
+        border: 1px solid #ddd;
+        border-radius: 20px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+    #query-field:focus {
+        outline: none;
+        border-color: #777;
+        box-shadow: 0 0 0 2px rgba(0,0,0,0.05);
+    }
+
+    .btn-reset, .btn-search {
+        position: absolute;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        color: #777;
+        transition: all 0.2s ease;
+    }
+
+    .btn-reset {
+        right: 35px;
+    }
+
+    .btn-search {
+        right: 10px;
+    }
+
+    .btn-reset:hover, .btn-search:hover {
+        color: #333;
+    }
+
+    .content {
+        padding: 20px;
+    }
+        /* Dark Mode Classes - Add these without changing original code */
+.dark-mode .top-navigation-container {
+  background: #1e1e1e;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.2s ease;
+}
+
+.dark-mode .go-back-arrow {
+  color: #aaa;
+  transition: color 0.2s ease;
+}
+
+.dark-mode .go-back-arrow:hover {
+  color: #64b5f6;
+  background: rgba(100, 181, 246, 0.1);
+}
+
+.dark-mode .search-form {
+  background: transparent;
+}
+
+.dark-mode #query-field {
+  background: #2d2d2d;
+  border-color: #444;
+  color: #e0e0e0;
+  transition: all 0.2s ease;
+}
+
+.dark-mode #query-field:focus {
+  border-color: #64b5f6;
+  box-shadow: 0 0 0 2px rgba(100, 181, 246, 0.1);
+}
+
+.dark-mode .btn-reset,
+.dark-mode .btn-search {
+  color: #aaa;
+  transition: color 0.2s ease;
+}
+
+.dark-mode .btn-reset:hover,
+.dark-mode .btn-search:hover {
+  color: #64b5f6;
+}
+
+.dark-mode .content {
+  background: #121212;
+  color: #e0e0e0;
+  transition: background-color 0.2s ease;
+}
 </style>
 
 
@@ -3114,47 +3258,7 @@ function toggleFullContent(button) {
 
 <header>
     
-        <div class="header-container">
-  <div class="logo-container">
-    <div class="logo">
-      <span class="logo-initials">R</span>
-    </div>
-    <span class="logo-name">Rallynex</span>
-  </div>
-
-  <!-- Desktop Search -->
-  <div class="search-container">
-    <form action="{% url 'search_campaign' %}" method="get">
-      <div class="search-wrapper">
-        <input type="text" placeholder="Search..." name="search_query" id="query-field">
-        <button type="button" class="btn-reset" id="reset-field">
-          <i class="fas fa-times"></i>
-        </button>
-        <button type="submit" class="btn-search">
-          <i class="fas fa-search"></i>
-        </button>
-      </div>
-    </form>
-  </div>
-
-  <!-- Mobile Search Icon -->
-  <div class="mobile-search-icon">
-    <i class="fas fa-search"></i>
-  </div>
-</div>
-
-<!-- Mobile Search Popup -->
-<div class="mobile-search-popup">
-  <form action="{% url 'search_campaign' %}" method="get" class="mobile-search-wrapper">
-    <input type="text" placeholder="Search..." name="search_query">
-    <button type="submit">
-      <i class="fas fa-search"></i>
-    </button>
-  </form>
-  <div class="close-mobile-search">
-    <i class="fas fa-times"></i>
-  </div>
-</div>
+  
 
 
 
@@ -3233,7 +3337,14 @@ function toggleFullContent(button) {
                     <span>Profile</span>
                 </a>
             </li>
-         
+                 <li>
+            <a href="#" onclick="switchColor()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 3V5M18.36 5.64L16.95 7.05M21 12H19M18.36 18.36L16.95 16.95M12 19V21M7.05 16.95L5.64 18.36M5 12H3M7.05 7.05L5.64 5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Switch Theme</span>
+            </a>
+        </li>
             <li>
                 <a href="{% url 'private_campaign' %}">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -3407,73 +3518,32 @@ function toggleFullContent(button) {
 
 <section>
 
-
     </br>
 
-<h4 style="font-size: 19px; padding-left: 20px; display: inline-flex; align-items: center;">
-    Home
-    <a href="{% url 'index' %}" title="Explore" class="explore-link" style="margin-left: 10px;">
-        <i class="fas fa-compass" style="font-size: 14px;"></i>
-    </a>
 
-    <div class="action-item">
-        <a href="#" onclick="switchColor()">
-            <i class="fas fa-sync-alt"></i>
-        </a>
-    </div>
-
-    <div class="profile-widget dark-mode-compatible" style="display: flex; align-items: center; gap: 12px; margin-left: 10px;">
-    <a href="{% url 'profile_view' username=user.username %}" style="text-decoration: none; position: relative;">
-        <!-- VIP Badge (Visual Status Boost) -->
-        <span class="vip-badge" style="
-            position: absolute;
-            right: -5px;
-            bottom: -5px;
-            background: #4CAF50;
-            color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            z-index: 2;
-            box-shadow: 0 2px 3px rgba(0,0,0,0.2);
-        ">✓</span>
-        
-        <img 
-            src="{{ user_profile.image.url }}" 
-            alt="VIP Member" 
-            width="44" 
-            height="44" 
-            class="profile-image"
-            style="
-                border-radius: 50%;
-                border: 2px solid #4CAF50;
-                object-fit: cover;
-                transition: all 0.3s ease;
-                box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
-                position: relative;
-                z-index: 1;
-            "
-            onmouseover="this.style.transform='scale(1.08)'; this.style.boxShadow='0 4px 12px rgba(76, 175, 80, 0.4)';"
-            onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 8px rgba(76, 175, 80, 0.3)';"
-        >
-    </a>
-    <div class="profile-text">
-        <div class="username-text" style="font-weight: 700; color: #222; font-size: 15px; line-height: 1.3;">
-            <span style="color: #4CAF50;">{{ user.username }}</span>, you make a difference! 👑
-        </div>
-        <div class="last-visit" style="font-size: 13px; color: #555; margin-top: 2px;">
-            <span style="font-weight: 600;">Your last visit:</span> 
-            <span style="color: #4CAF50;">{{ user_impact_count }} lives impacted</span>
+<div class="top-navigation-container">
+    <!-- Back Arrow (Left) -->
+    <div class="back-arrow-container">
+        <div class="go-back-arrow" onclick="goBack()">
+            <i class="fas fa-arrow-left"></i>
         </div>
     </div>
+
+    <!-- Search Bar (Right) -->
+    <form action="{% url 'search_campaign' %}" method="get" class="search-form">
+        <div class="search-wrapper">
+            <input type="text" placeholder="Search..." name="search_query" id="query-field">
+            <button type="button" class="btn-reset" id="reset-field">
+                <i class="fas fa-times"></i>
+            </button>
+            <button type="submit" class="btn-search">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </form>
 </div>
-</h4>
 
-
+  <h4>Private Campaigns</h4>
 <form method="GET" action="{% url 'home' %}" class="filter-form">
     <label for="category" class="filter-label">Filter by Category:</label>
  <select name="category" id="category" class="filter-select" onchange="this.form.submit()">
@@ -3487,16 +3557,6 @@ function toggleFullContent(button) {
 
 </form>
 
-<!-- Beautiful upload button -->
-<div class="upload-container hide-on-mobile">
-
-     <div class="upload-btn-wrapper">
-        <button class="btn" style="font-size: 14px;">+ Upload
-            <a href="{% url 'create_campaign' %}" class="overlay-link"></a>
-        </button>
-    </div>
-
-</div>
 
     
 </div><br>
@@ -3541,7 +3601,14 @@ function toggleFullContent(button) {
         <i class="fas fa-edit"></i> Edit
       </a>
     {% endif %}
-
+{% if user == campaign.user.user %}
+    <a href="{% url 'campaign_pledgers' campaign.id %}">
+        <i class="fas fa-donate"></i> Pledgers
+    </a>
+{% endif %}
+     <a href="{% url 'top_participants' campaign_id=campaign.pk %}" class="top-supporters-link">
+    <i class="fas fa-trophy"></i> Top Participants
+</a>
 
           <a href="{% url 'update_visibilit' campaign.pk %}" style="
    
@@ -3599,15 +3666,7 @@ function toggleFullContent(button) {
                 
           
 <div class="image-overlay-bottom">
-    <div class="progress-container">
-        <div class="progress-text">
-            <span>{% widthratio campaign.campaignfund.amount_raised campaign.campaignfund.target_amount 100 %}% raised</span>
-            <span>${{ campaign.campaignfund.amount_raised|default:0|floatformat:0 }} of ${{ campaign.campaignfund.target_amount|floatformat:0 }}</span>
-        </div>
-        <div class="progress-bar">
-            <div class="progress-fill" style="width: {% widthratio campaign.campaignfund.amount_raised campaign.campaignfund.target_amount 100 %}%;"></div>
-        </div>
-    </div>
+   
     
     <div class="campaign-time-left">
         <i class="fas fa-clock"></i>
@@ -3624,12 +3683,7 @@ function toggleFullContent(button) {
     <i class="fas fa-lock"></i> Join to see activities
 </div>
                 {% endif %}
-   <div class="donate-button-overlay">
-    <a href="{% url 'donate' campaign_id=campaign.id %}" class="simple-donate-btn" aria-label="Donate Now">
-        <i class="fas fa-donate"></i>
-        <span class="donate-text">Donate Now</span>
-    </a>
-</div>
+  
 
             </div>
             {% else %}
@@ -3873,8 +3927,8 @@ function toggleFullContent(button) {
     </div>
     {% endfor %}
 </div>
-
-
+{% else %}
+<p>no private campaigns</p>
 
 {% endif %}
 </div>
