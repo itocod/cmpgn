@@ -19,7 +19,7 @@ urlpatterns = [
     path('campaign/<int:campaign_id>/join_leave/', views.join_leave_campaign, name='join_leave_campaign'),
     path('campaign/<int:campaign_id>/joiners/', views.campaign_joiners, name='campaign_joiners'),
 
-
+ path('edit/', views.edit_gif, name='edit_gif'),
 
     path('campaign/delete/<int:pk>/', CampaignDeleteView.as_view(), name='campaign-delete'),
     path('libraries/', views.library_affiliates, name='library_affiliates'),

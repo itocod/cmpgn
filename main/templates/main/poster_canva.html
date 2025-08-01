@@ -1027,145 +1027,141 @@
 
     <!-- Load local GIF library -->
     <script src="{% static 'main/js/gif.js' %}"></script>
+   <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // DOM Elements
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const previewContainer = document.getElementById('previewContainer');
+    const gifCanvas = document.getElementById('gifCanvas');
+    const ctx = gifCanvas.getContext('2d', { willReadFrequently: true });
+    const framesContainer = document.getElementById('framesContainer');
+    const speedControl = document.getElementById('speedControl');
+    const speedValue = document.getElementById('speedValue');
+    const gifSpeedControl = document.getElementById('gifSpeedControl');
+    const gifSpeedValue = document.getElementById('gifSpeedValue');
+    const sizeControl = document.getElementById('sizeControl');
+    const sizeValue = document.getElementById('sizeValue');
+    const createGifBtn = document.getElementById('createGifBtn');
+    const createHdImageBtn = document.getElementById('createHdImageBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const loading = document.getElementById('loading');
+    const downloadLink = document.getElementById('downloadLink');
+    const downloadAnchor = document.getElementById('downloadAnchor');
+    const downloadHd = document.getElementById('downloadHd');
+    const downloadPrint = document.getElementById('downloadPrint');
+    const downloadOriginal = document.getElementById('downloadOriginal');
+    const qualityPreset = document.getElementById('qualityPreset');
+    const qualityControl = document.getElementById('qualityControl');
+    const qualityValue = document.getElementById('qualityValue');
+    const enhanceQuality = document.getElementById('enhanceQuality');
+
+    // Image Editor Elements
+    const editorSection = document.getElementById('editorSection');
+    const toggleEditorBtn = document.getElementById('toggleEditorBtn');
+    const adjustBtn = document.getElementById('adjustBtn');
+    const filtersBtn = document.getElementById('filtersBtn');
+    const cropBtn = document.getElementById('cropBtn');
+    const rotateBtn = document.getElementById('rotateBtn');
+    const textBtn = document.getElementById('textBtn');
+    const watermarkBtn = document.getElementById('watermarkBtn');
+    const adjustControls = document.getElementById('adjustControls');
+    const filterControls = document.getElementById('filterControls');
+    const cropControls = document.getElementById('cropControls');
+    const rotateControls = document.getElementById('rotateControls');
+    const textControls = document.getElementById('textControls');
+    const watermarkControls = document.getElementById('watermarkControls');
+    const brightnessControl = document.getElementById('brightnessControl');
+    const brightnessValue = document.getElementById('brightnessValue');
+    const contrastControl = document.getElementById('contrastControl');
+    const contrastValue = document.getElementById('contrastValue');
+    const saturationControl = document.getElementById('saturationControl');
+    const saturationValue = document.getElementById('saturationValue');
+    const temperatureControl = document.getElementById('temperatureControl');
+    const temperatureValue = document.getElementById('temperatureValue');
+    const resetAdjustBtn = document.getElementById('resetAdjustBtn');
+    const filterPresets = document.querySelectorAll('.filter-preset');
+    const resetFilterBtn = document.getElementById('resetFilterBtn');
+    const cropAspectBtns = document.querySelectorAll('.crop-aspect-btn');
+    const rotateLeftBtn = document.getElementById('rotateLeftBtn');
+    const rotateRightBtn = document.getElementById('rotateRightBtn');
+    const flipHorizontalBtn = document.getElementById('flipHorizontalBtn');
+    const applyCropBtn = document.getElementById('applyCropBtn');
+    const cancelCropBtn = document.getElementById('cancelCropBtn');
+    const rotate90LeftBtn = document.getElementById('rotate90LeftBtn');
+    const rotate90RightBtn = document.getElementById('rotate90RightBtn');
+    const rotate180Btn = document.getElementById('rotate180Btn');
+    const flipVerticalBtn = document.getElementById('flipVerticalBtn');
+    const applyRotateBtn = document.getElementById('applyRotateBtn');
     
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // DOM Elements
-        const uploadArea = document.getElementById('uploadArea');
-        const fileInput = document.getElementById('fileInput');
-        const previewContainer = document.getElementById('previewContainer');
-        const gifCanvas = document.getElementById('gifCanvas');
-        const ctx = gifCanvas.getContext('2d', { willReadFrequently: true });
-        const framesContainer = document.getElementById('framesContainer');
-        const speedControl = document.getElementById('speedControl');
-        const speedValue = document.getElementById('speedValue');
-        const gifSpeedControl = document.getElementById('gifSpeedControl');
-        const gifSpeedValue = document.getElementById('gifSpeedValue');
-        const sizeControl = document.getElementById('sizeControl');
-        const sizeValue = document.getElementById('sizeValue');
-        const createGifBtn = document.getElementById('createGifBtn');
-        const createHdImageBtn = document.getElementById('createHdImageBtn');
-        const resetBtn = document.getElementById('resetBtn');
-        const loading = document.getElementById('loading');
-        const downloadLink = document.getElementById('downloadLink');
-        const downloadAnchor = document.getElementById('downloadAnchor');
-        const downloadHd = document.getElementById('downloadHd');
-        const downloadPrint = document.getElementById('downloadPrint');
-        const downloadOriginal = document.getElementById('downloadOriginal');
-        const qualityPreset = document.getElementById('qualityPreset');
-        const qualityControl = document.getElementById('qualityControl');
-        const qualityValue = document.getElementById('qualityValue');
-        const enhanceQuality = document.getElementById('enhanceQuality');
-
-        // Image Editor Elements
-        const editorSection = document.getElementById('editorSection');
-        const toggleEditorBtn = document.getElementById('toggleEditorBtn');
-        const adjustBtn = document.getElementById('adjustBtn');
-        const filtersBtn = document.getElementById('filtersBtn');
-        const cropBtn = document.getElementById('cropBtn');
-        const rotateBtn = document.getElementById('rotateBtn');
-        const textBtn = document.getElementById('textBtn');
-        const watermarkBtn = document.getElementById('watermarkBtn');
-        const adjustControls = document.getElementById('adjustControls');
-        const filterControls = document.getElementById('filterControls');
-        const cropControls = document.getElementById('cropControls');
-        const rotateControls = document.getElementById('rotateControls');
-        const textControls = document.getElementById('textControls');
-        const watermarkControls = document.getElementById('watermarkControls');
-        const brightnessControl = document.getElementById('brightnessControl');
-        const brightnessValue = document.getElementById('brightnessValue');
-        const contrastControl = document.getElementById('contrastControl');
-        const contrastValue = document.getElementById('contrastValue');
-        const saturationControl = document.getElementById('saturationControl');
-        const saturationValue = document.getElementById('saturationValue');
-        const temperatureControl = document.getElementById('temperatureControl');
-        const temperatureValue = document.getElementById('temperatureValue');
-        const resetAdjustBtn = document.getElementById('resetAdjustBtn');
-        const filterPresets = document.querySelectorAll('.filter-preset');
-        const resetFilterBtn = document.getElementById('resetFilterBtn');
-        const cropAspectBtns = document.querySelectorAll('.crop-aspect-btn');
-        const rotateLeftBtn = document.getElementById('rotateLeftBtn');
-        const rotateRightBtn = document.getElementById('rotateRightBtn');
-        const flipHorizontalBtn = document.getElementById('flipHorizontalBtn');
-        const applyCropBtn = document.getElementById('applyCropBtn');
-        const cancelCropBtn = document.getElementById('cancelCropBtn');
-        const rotate90LeftBtn = document.getElementById('rotate90LeftBtn');
-        const rotate90RightBtn = document.getElementById('rotate90RightBtn');
-        const rotate180Btn = document.getElementById('rotate180Btn');
-        const flipVerticalBtn = document.getElementById('flipVerticalBtn');
-        const applyRotateBtn = document.getElementById('applyRotateBtn');
-        
-        // Text Editor Elements
-        const textInput = document.getElementById('textInput');
-        const textFont = document.getElementById('textFont');
-        const textSize = document.getElementById('textSize');
-        const textSizeValue = document.getElementById('textSizeValue');
-        const textColor = document.getElementById('textColor');
-        const textBgColor = document.getElementById('textBgColor');
-        const textOpacity = document.getElementById('textOpacity');
-        const textOpacityValue = document.getElementById('textOpacityValue');
-        const textPreview = document.getElementById('textPreview');
-        const textPositionBtns = document.querySelectorAll('.text-position-btn');
-        const addTextBtn = document.getElementById('addTextBtn');
-        const clearTextBtn = document.getElementById('clearTextBtn');
-        
-        // Watermark Editor Elements
-        const watermarkText = document.getElementById('watermarkText');
-        const watermarkSize = document.getElementById('watermarkSize');
-        const watermarkSizeValue = document.getElementById('watermarkSizeValue');
-        const watermarkColor = document.getElementById('watermarkColor');
-        const watermarkOpacity = document.getElementById('watermarkOpacity');
-        const watermarkOpacityValue = document.getElementById('watermarkOpacityValue');
-        const watermarkPosition = document.getElementById('watermarkPosition');
-        const applyWatermarkBtn = document.getElementById('applyWatermarkBtn');
-        const removeWatermarkBtn = document.getElementById('removeWatermarkBtn');
-
-        // Variables
-        let images = [];
-        let originalImages = [];
-        let animationInterval = null;
-        let currentDownloadUrl = null;
-        let currentOutputType = null;
-        let currentFilter = 'none';
-        let currentAdjustments = {
-            brightness: 0,
-            contrast: 0,
-            saturation: 0,
-            temperature: 0
-        };
-        let isEditorOpen = true;
-        let isCropping = false;
-        let currentAspectRatio = 'free';
-        let currentRotation = 0;
-        let isFlipped = false;
-        
-        // Text variables
-        let textElements = [];
-        let currentTextPosition = 'bottom-right';
-        let watermarkSettings = {
-            text: "@{{ username }}",
-            size: 16,
-            color: "#ffffff",
-            opacity: 70,
-            position: "bottom-right",
-            enabled: false
-        };
-
-        // Event Listeners
-        
-         // Remove the click event that triggers file input
-    // uploadArea.addEventListener('click', () => fileInput.click());
+    // Text Editor Elements
+    const textInput = document.getElementById('textInput');
+    const textFont = document.getElementById('textFont');
+    const textSize = document.getElementById('textSize');
+    const textSizeValue = document.getElementById('textSizeValue');
+    const textColor = document.getElementById('textColor');
+    const textBgColor = document.getElementById('textBgColor');
+    const textOpacity = document.getElementById('textOpacity');
+    const textOpacityValue = document.getElementById('textOpacityValue');
+    const textPreview = document.getElementById('textPreview');
+    const textPositionBtns = document.querySelectorAll('.text-position-btn');
+    const addTextBtn = document.getElementById('addTextBtn');
+    const clearTextBtn = document.getElementById('clearTextBtn');
     
-    // Keep the drag and drop events
+    // Watermark Editor Elements
+    const watermarkText = document.getElementById('watermarkText');
+    const watermarkSize = document.getElementById('watermarkSize');
+    const watermarkSizeValue = document.getElementById('watermarkSizeValue');
+    const watermarkColor = document.getElementById('watermarkColor');
+    const watermarkOpacity = document.getElementById('watermarkOpacity');
+    const watermarkOpacityValue = document.getElementById('watermarkOpacityValue');
+    const watermarkPosition = document.getElementById('watermarkPosition');
+    const applyWatermarkBtn = document.getElementById('applyWatermarkBtn');
+    const removeWatermarkBtn = document.getElementById('removeWatermarkBtn');
+
+    // Variables
+    let images = [];
+    let originalImages = [];
+    let animationInterval = null;
+    let currentDownloadUrl = null;
+    let currentOutputType = null;
+    let currentFilter = 'none';
+    let currentAdjustments = {
+        brightness: 0,
+        contrast: 0,
+        saturation: 0,
+        temperature: 0
+    };
+    let isEditorOpen = true;
+    let isCropping = false;
+    let currentAspectRatio = 'free';
+    let currentRotation = 0;
+    let isFlipped = false;
+    
+    // Text variables
+    let textElements = [];
+    let currentTextPosition = 'bottom-right';
+    let watermarkSettings = {
+        text: "@{{ username }}",
+        size: 16,
+        color: "#ffffff",
+        opacity: 70,
+        position: "bottom-right",
+        enabled: false
+    };
+
+    // Event Listeners
     uploadArea.addEventListener('dragover', (e) => {
         e.preventDefault();
         uploadArea.style.backgroundColor = 'rgba(162, 155, 254, 0.2)';
         uploadArea.style.borderColor = 'var(--primary)';
     });
+    
     uploadArea.addEventListener('dragleave', () => {
         uploadArea.style.backgroundColor = 'rgba(162, 155, 254, 0.05)';
         uploadArea.style.borderColor = 'var(--secondary)';
     });
+    
     uploadArea.addEventListener('drop', (e) => {
         e.preventDefault();
         uploadArea.style.backgroundColor = 'rgba(162, 155, 254, 0.05)';
@@ -1173,126 +1169,801 @@
         handleFiles(e.dataTransfer.files);
     });
 
-    // Only handle the file input change event
     fileInput.addEventListener('change', () => {
         if (fileInput.files.length > 0) {
             handleFiles(fileInput.files);
         }
     });
 
-        fileInput.addEventListener('change', () => handleFiles(fileInput.files));
-        speedControl.addEventListener('input', updateSpeedValue);
-        gifSpeedControl.addEventListener('input', updateGifSpeedValue);
-        sizeControl.addEventListener('input', updateSizeValue);
-        createGifBtn.addEventListener('click', createGif);
-        createHdImageBtn.addEventListener('click', createHdImage);
-        resetBtn.addEventListener('click', resetAll);
-        qualityPreset.addEventListener('change', updateQualityPreset);
-        qualityControl.addEventListener('input', updateQualityValue);
-        downloadHd.addEventListener('click', downloadHdVersion);
-        downloadPrint.addEventListener('click', downloadPrintVersion);
-        downloadOriginal.addEventListener('click', downloadOriginalVersion);
+    speedControl.addEventListener('input', updateSpeedValue);
+    gifSpeedControl.addEventListener('input', updateGifSpeedValue);
+    sizeControl.addEventListener('input', updateSizeValue);
+    createGifBtn.addEventListener('click', createGif);
+    createHdImageBtn.addEventListener('click', createHdImage);
+    resetBtn.addEventListener('click', resetAll);
+    qualityPreset.addEventListener('change', updateQualityPreset);
+    qualityControl.addEventListener('input', updateQualityValue);
+    downloadHd.addEventListener('click', downloadHdVersion);
+    downloadPrint.addEventListener('click', downloadPrintVersion);
+    downloadOriginal.addEventListener('click', downloadOriginalVersion);
 
-        // Image Editor Event Listeners
-        toggleEditorBtn.addEventListener('click', toggleEditor);
-        adjustBtn.addEventListener('click', () => showEditorControls('adjust'));
-        filtersBtn.addEventListener('click', () => showEditorControls('filter'));
-        cropBtn.addEventListener('click', () => showEditorControls('crop'));
-        rotateBtn.addEventListener('click', () => showEditorControls('rotate'));
-        textBtn.addEventListener('click', () => showEditorControls('text'));
-        watermarkBtn.addEventListener('click', () => showEditorControls('watermark'));
-        brightnessControl.addEventListener('input', updateBrightnessValue);
-        contrastControl.addEventListener('input', updateContrastValue);
-        saturationControl.addEventListener('input', updateSaturationValue);
-        temperatureControl.addEventListener('input', updateTemperatureValue);
-        resetAdjustBtn.addEventListener('click', resetAdjustments);
-        filterPresets.forEach(preset => preset.addEventListener('click', applyFilterPreset));
-        resetFilterBtn.addEventListener('click', resetFilter);
-        cropAspectBtns.forEach(btn => btn.addEventListener('click', setCropAspectRatio));
-        rotateLeftBtn.addEventListener('click', () => rotateImage(-90));
-        rotateRightBtn.addEventListener('click', () => rotateImage(90));
-        flipHorizontalBtn.addEventListener('click', () => flipImage('horizontal'));
-        applyCropBtn.addEventListener('click', applyCrop);
-        cancelCropBtn.addEventListener('click', cancelCrop);
-        rotate90LeftBtn.addEventListener('click', () => rotateImage(-90));
-        rotate90RightBtn.addEventListener('click', () => rotateImage(90));
-        rotate180Btn.addEventListener('click', () => rotateImage(180));
-        flipVerticalBtn.addEventListener('click', () => flipImage('vertical'));
-        applyRotateBtn.addEventListener('click', applyRotation);
-        
-        // Text Editor Event Listeners
-        textInput.addEventListener('input', updateTextPreview);
-        textFont.addEventListener('change', updateTextPreview);
-        textSize.addEventListener('input', updateTextSizeValue);
-        textColor.addEventListener('input', updateTextPreview);
-        textBgColor.addEventListener('input', updateTextPreview);
-        textOpacity.addEventListener('input', updateTextOpacityValue);
-        textPositionBtns.forEach(btn => btn.addEventListener('click', setTextPosition));
-        addTextBtn.addEventListener('click', addTextToImage);
-        clearTextBtn.addEventListener('click', clearAllText);
-        
-        // Watermark Editor Event Listeners
-        watermarkText.addEventListener('input', updateWatermarkSettings);
-        watermarkSize.addEventListener('input', updateWatermarkSizeValue);
-        watermarkColor.addEventListener('input', updateWatermarkSettings);
-        watermarkOpacity.addEventListener('input', updateWatermarkOpacityValue);
-        watermarkPosition.addEventListener('change', updateWatermarkSettings);
-        applyWatermarkBtn.addEventListener('click', applyWatermark);
-        removeWatermarkBtn.addEventListener('click', removeWatermark);
+    // Image Editor Event Listeners
+    toggleEditorBtn.addEventListener('click', toggleEditor);
+    adjustBtn.addEventListener('click', () => showEditorControls('adjust'));
+    filtersBtn.addEventListener('click', () => showEditorControls('filter'));
+    cropBtn.addEventListener('click', () => showEditorControls('crop'));
+    rotateBtn.addEventListener('click', () => showEditorControls('rotate'));
+    textBtn.addEventListener('click', () => showEditorControls('text'));
+    watermarkBtn.addEventListener('click', () => showEditorControls('watermark'));
+    brightnessControl.addEventListener('input', updateBrightnessValue);
+    contrastControl.addEventListener('input', updateContrastValue);
+    saturationControl.addEventListener('input', updateSaturationValue);
+    temperatureControl.addEventListener('input', updateTemperatureValue);
+    resetAdjustBtn.addEventListener('click', resetAdjustments);
+    filterPresets.forEach(preset => preset.addEventListener('click', applyFilterPreset));
+    resetFilterBtn.addEventListener('click', resetFilter);
+    cropAspectBtns.forEach(btn => btn.addEventListener('click', setCropAspectRatio));
+    rotateLeftBtn.addEventListener('click', () => rotateImage(-90));
+    rotateRightBtn.addEventListener('click', () => rotateImage(90));
+    flipHorizontalBtn.addEventListener('click', () => flipImage('horizontal'));
+    applyCropBtn.addEventListener('click', applyCrop);
+    cancelCropBtn.addEventListener('click', cancelCrop);
+    rotate90LeftBtn.addEventListener('click', () => rotateImage(-90));
+    rotate90RightBtn.addEventListener('click', () => rotateImage(90));
+    rotate180Btn.addEventListener('click', () => rotateImage(180));
+    flipVerticalBtn.addEventListener('click', () => flipImage('vertical'));
+    applyRotateBtn.addEventListener('click', applyRotation);
+    
+    // Text Editor Event Listeners
+    textInput.addEventListener('input', updateTextPreview);
+    textFont.addEventListener('change', updateTextPreview);
+    textSize.addEventListener('input', updateTextSizeValue);
+    textColor.addEventListener('input', updateTextPreview);
+    textBgColor.addEventListener('input', updateTextPreview);
+    textOpacity.addEventListener('input', updateTextOpacityValue);
+    textPositionBtns.forEach(btn => btn.addEventListener('click', setTextPosition));
+    addTextBtn.addEventListener('click', addTextToImage);
+    clearTextBtn.addEventListener('click', clearAllText);
+    
+    // Watermark Editor Event Listeners
+    watermarkText.addEventListener('input', updateWatermarkSettings);
+    watermarkSize.addEventListener('input', updateWatermarkSizeValue);
+    watermarkColor.addEventListener('input', updateWatermarkSettings);
+    watermarkOpacity.addEventListener('input', updateWatermarkOpacityValue);
+    watermarkPosition.addEventListener('change', updateWatermarkSettings);
+    applyWatermarkBtn.addEventListener('click', applyWatermark);
+    removeWatermarkBtn.addEventListener('click', removeWatermark);
 
-        // Initial setup
-        updateSpeedValue();
-        updateGifSpeedValue();
-        updateSizeValue();
-        updateQualityValue();
-        downloadLink.style.display = 'none';
+    // Initial setup
+    updateSpeedValue();
+    updateGifSpeedValue();
+    updateSizeValue();
+    updateQualityValue();
+    if (downloadLink) downloadLink.style.display = 'none';
+    hideAllEditorControls();
+    updateTextPreview();
+    updateTextSizeValue();
+    updateTextOpacityValue();
+    updateWatermarkSizeValue();
+    updateWatermarkOpacityValue();
+
+    // Functions
+    function toggleEditor() {
+        isEditorOpen = !isEditorOpen;
+        if (isEditorOpen) {
+            editorSection.style.display = 'block';
+            toggleEditorBtn.innerHTML = '<i class="fas fa-chevron-up"></i>';
+        } else {
+            editorSection.style.display = 'none';
+            toggleEditorBtn.innerHTML = '<i class="fas fa-chevron-down"></i>';
+            hideAllEditorControls();
+        }
+    }
+
+    function showEditorControls(type) {
         hideAllEditorControls();
-        updateTextPreview();
-        updateTextSizeValue();
-        updateTextOpacityValue();
-        updateWatermarkSizeValue();
-        updateWatermarkOpacityValue();
-
-        // Functions
-        function toggleEditor() {
-            isEditorOpen = !isEditorOpen;
-            if (isEditorOpen) {
-                editorSection.style.display = 'block';
-                toggleEditorBtn.innerHTML = '<i class="fas fa-chevron-up"></i>';
-            } else {
-                editorSection.style.display = 'none';
-                toggleEditorBtn.innerHTML = '<i class="fas fa-chevron-down"></i>';
-                hideAllEditorControls();
+        
+        switch(type) {
+            case 'adjust':
+                if (adjustControls) adjustControls.style.display = 'block';
+                break;
+            case 'filter':
+                if (filterControls) filterControls.style.display = 'block';
+                break;
+            case 'crop':
+                if (cropControls) cropControls.style.display = 'block';
+                isCropping = true;
+                break;
+            case 'rotate':
+                if (rotateControls) rotateControls.style.display = 'block';
+                break;
+            case 'text':
+                if (textControls) textControls.style.display = 'block';
+                break;
+            case 'watermark':
+                if (watermarkControls) watermarkControls.style.display = 'block';
+                break;
+        }
+        
+        // Redraw canvas with current settings
+        if (images.length > 0) {
+            const selectedFrame = framesContainer.querySelector('.frame[style*="border-color"]');
+            if (selectedFrame) {
+                const img = new Image();
+                img.src = selectedFrame.src;
+                img.onload = () => drawImageToCanvas(img);
             }
         }
+    }
 
-        function showEditorControls(type) {
-            hideAllEditorControls();
+    function hideAllEditorControls() {
+        if (adjustControls) adjustControls.style.display = 'none';
+        if (filterControls) filterControls.style.display = 'none';
+        if (cropControls) cropControls.style.display = 'none';
+        if (rotateControls) rotateControls.style.display = 'none';
+        if (textControls) textControls.style.display = 'none';
+        if (watermarkControls) watermarkControls.style.display = 'none';
+        isCropping = false;
+    }
+
+    function updateBrightnessValue() {
+        currentAdjustments.brightness = parseInt(brightnessControl.value);
+        if (brightnessValue) brightnessValue.textContent = currentAdjustments.brightness;
+        applyAdjustments();
+    }
+
+    function updateContrastValue() {
+        currentAdjustments.contrast = parseInt(contrastControl.value);
+        if (contrastValue) contrastValue.textContent = currentAdjustments.contrast;
+        applyAdjustments();
+    }
+
+    function updateSaturationValue() {
+        currentAdjustments.saturation = parseInt(saturationControl.value);
+        if (saturationValue) saturationValue.textContent = currentAdjustments.saturation;
+        applyAdjustments();
+    }
+
+    function updateTemperatureValue() {
+        currentAdjustments.temperature = parseInt(temperatureControl.value);
+        if (temperatureValue) temperatureValue.textContent = currentAdjustments.temperature;
+        applyAdjustments();
+    }
+
+    function resetAdjustments() {
+        if (brightnessControl) brightnessControl.value = 0;
+        if (contrastControl) contrastControl.value = 0;
+        if (saturationControl) saturationControl.value = 0;
+        if (temperatureControl) temperatureControl.value = 0;
+        currentAdjustments = {
+            brightness: 0,
+            contrast: 0,
+            saturation: 0,
+            temperature: 0
+        };
+        if (brightnessValue) brightnessValue.textContent = '0';
+        if (contrastValue) contrastValue.textContent = '0';
+        if (saturationValue) saturationValue.textContent = '0';
+        if (temperatureValue) temperatureValue.textContent = '0';
+        applyAdjustments();
+    }
+
+    function applyAdjustments() {
+        if (images.length === 0) return;
+        
+        const selectedFrame = framesContainer.querySelector('.frame[style*="border-color"]');
+        if (!selectedFrame) return;
+        
+        const img = new Image();
+        img.src = selectedFrame.src;
+        img.onload = function() {
+            drawImageToCanvas(img);
+        };
+    }
+
+    function applyFilterPreset(e) {
+        filterPresets.forEach(p => p.classList.remove('filter-active'));
+        this.classList.add('filter-active');
+        currentFilter = this.dataset.filter;
+        
+        if (images.length === 0) return;
+        
+        const selectedFrame = framesContainer.querySelector('.frame[style*="border-color"]');
+        if (!selectedFrame) return;
+        
+        const img = new Image();
+        img.src = selectedFrame.src;
+        img.onload = function() {
+            drawImageToCanvas(img);
+        };
+    }
+
+    function resetFilter() {
+        filterPresets.forEach(p => p.classList.remove('filter-active'));
+        currentFilter = 'none';
+        
+        if (images.length === 0) return;
+        
+        const selectedFrame = framesContainer.querySelector('.frame[style*="border-color"]');
+        if (!selectedFrame) return;
+        
+        const img = new Image();
+        img.src = selectedFrame.src;
+        img.onload = function() {
+            drawImageToCanvas(img);
+        };
+    }
+
+    function setCropAspectRatio(e) {
+        cropAspectBtns.forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+        currentAspectRatio = this.dataset.ratio;
+        
+        // In a real implementation, you would show crop handles on the canvas
+        console.log('Selected aspect ratio:', currentAspectRatio);
+    }
+
+    function rotateImage(degrees) {
+        currentRotation += degrees;
+        
+        if (images.length === 0) return;
+        
+        const selectedFrame = framesContainer.querySelector('.frame[style*="border-color"]');
+        if (!selectedFrame) return;
+        
+        const img = new Image();
+        img.src = selectedFrame.src;
+        img.onload = function() {
+            drawImageToCanvas(img);
+        };
+    }
+
+    function flipImage(direction) {
+        if (direction === 'horizontal') {
+            isFlipped = !isFlipped;
+        } else if (direction === 'vertical') {
+            // Vertical flip logic would go here
+        }
+        
+        if (images.length === 0) return;
+        
+        const selectedFrame = framesContainer.querySelector('.frame[style*="border-color"]');
+        if (!selectedFrame) return;
+        
+        const img = new Image();
+        img.src = selectedFrame.src;
+        img.onload = function() {
+            drawImageToCanvas(img);
+        };
+    }
+
+    function applyCrop() {
+        console.log('Applying crop with aspect ratio:', currentAspectRatio);
+        isCropping = false;
+        hideAllEditorControls();
+        
+        if (images.length === 0) return;
+        
+        const selectedFrame = framesContainer.querySelector('.frame[style*="border-color"]');
+        if (!selectedFrame) return;
+        
+        const img = new Image();
+        img.src = selectedFrame.src;
+        img.onload = function() {
+            drawImageToCanvas(img);
+        };
+    }
+
+    function cancelCrop() {
+        isCropping = false;
+        hideAllEditorControls();
+        
+        if (images.length === 0) return;
+        
+        const selectedFrame = framesContainer.querySelector('.frame[style*="border-color"]');
+        if (!selectedFrame) return;
+        
+        const img = new Image();
+        img.src = selectedFrame.src;
+        img.onload = function() {
+            drawImageToCanvas(img);
+        };
+    }
+
+    function applyRotation() {
+        hideAllEditorControls();
+        
+        if (images.length === 0) return;
+        
+        const selectedFrame = framesContainer.querySelector('.frame[style*="border-color"]');
+        if (!selectedFrame) return;
+        
+        const img = new Image();
+        img.src = selectedFrame.src;
+        img.onload = function() {
+            drawImageToCanvas(img);
+        };
+    }
+
+    function applyImageEffects(image, size) {
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = size;
+        tempCanvas.height = size;
+        const tempCtx = tempCanvas.getContext('2d');
+        
+        // Apply rotation and flip
+        tempCtx.save();
+        tempCtx.translate(size / 2, size / 2);
+        tempCtx.rotate(currentRotation * Math.PI / 180);
+        if (isFlipped) {
+            tempCtx.scale(-1, 1);
+        }
+        
+        const ratio = Math.min(size / image.width, size / image.height);
+        const width = image.width * ratio;
+        const height = image.height * ratio;
+        const x = -width / 2;
+        const y = -height / 2;
+        
+        // Always use black background
+        tempCtx.fillStyle = '#000000';
+        tempCtx.fillRect(-size / 2, -size / 2, size, size);
+        
+        tempCtx.drawImage(image, x, y, width, height);
+        tempCtx.restore();
+        
+        // Apply filters and adjustments
+        if (currentFilter !== 'none' || 
+            currentAdjustments.brightness !== 0 || 
+            currentAdjustments.contrast !== 0 || 
+            currentAdjustments.saturation !== 0 || 
+            currentAdjustments.temperature !== 0) {
             
-            switch(type) {
-                case 'adjust':
-                    adjustControls.style.display = 'block';
-                    break;
-                case 'filter':
-                    filterControls.style.display = 'block';
-                    break;
-                case 'crop':
-                    cropControls.style.display = 'block';
-                    isCropping = true;
-                    break;
-                case 'rotate':
-                    rotateControls.style.display = 'block';
-                    break;
-                case 'text':
-                    textControls.style.display = 'block';
-                    break;
-                case 'watermark':
-                    watermarkControls.style.display = 'block';
-                    break;
+            const imageData = tempCtx.getImageData(0, 0, size, size);
+            const data = imageData.data;
+            
+            // Apply brightness
+            if (currentAdjustments.brightness !== 0) {
+                const brightness = currentAdjustments.brightness / 100;
+                for (let i = 0; i < data.length; i += 4) {
+                    data[i] += 255 * brightness;
+                    data[i + 1] += 255 * brightness;
+                    data[i + 2] += 255 * brightness;
+                }
             }
             
-            // Redraw canvas with current settings
-            if (images.length > 0) {
+            // Apply contrast
+            if (currentAdjustments.contrast !== 0) {
+                const contrast = (currentAdjustments.contrast + 100) / 100;
+                const intercept = 128 * (1 - contrast);
+                for (let i = 0; i < data.length; i += 4) {
+                    data[i] = data[i] * contrast + intercept;
+                    data[i + 1] = data[i + 1] * contrast + intercept;
+                    data[i + 2] = data[i + 2] * contrast + intercept;
+                }
+            }
+            
+            // Apply saturation
+            if (currentAdjustments.saturation !== 0) {
+                const saturation = (currentAdjustments.saturation + 100) / 100;
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i];
+                    const g = data[i + 1];
+                    const b = data[i + 2];
+                    const gray = 0.2989 * r + 0.5870 * g + 0.1140 * b;
+                    data[i] = gray + saturation * (r - gray);
+                    data[i + 1] = gray + saturation * (g - gray);
+                    data[i + 2] = gray + saturation * (b - gray);
+                }
+            }
+            
+            // Apply temperature (warm/cool)
+            if (currentAdjustments.temperature !== 0) {
+                const temp = currentAdjustments.temperature / 100;
+                for (let i = 0; i < data.length; i += 4) {
+                    if (temp > 0) {
+                        // Warm (increase red, decrease blue)
+                        data[i] += 255 * temp;
+                        data[i + 2] -= 255 * temp;
+                    } else {
+                        // Cool (increase blue, decrease red)
+                        data[i] += 255 * temp;
+                        data[i + 2] -= 255 * temp;
+                    }
+                }
+            }
+            
+            // Apply Instagram-like filters
+            if (currentFilter !== 'none') {
+                switch(currentFilter) {
+                    case 'clarendon':
+                        for (let i = 0; i < data.length; i += 4) {
+                            data[i] = Math.min(255, data[i] * 1.1);
+                            data[i + 1] = Math.min(255, data[i + 1] * 1.05);
+                            data[i + 2] = Math.max(0, data[i + 2] * 0.95);
+                        }
+                        break;
+                    case 'gingham':
+                        for (let i = 0; i < data.length; i += 4) {
+                            data[i] = Math.min(255, data[i] * 0.9 + 50);
+                            data[i + 1] = Math.min(255, data[i + 1] * 0.9 + 50);
+                            data[i + 2] = Math.min(255, data[i + 2] * 0.9 + 50);
+                        }
+                        break;
+                    case 'moon':
+                        for (let i = 0; i < data.length; i += 4) {
+                            const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
+                            data[i] = avg;
+                            data[i + 1] = avg;
+                            data[i + 2] = avg;
+                        }
+                        break;
+                    case 'lark':
+                        for (let i = 0; i < data.length; i += 4) {
+                            data[i] = Math.min(255, data[i] * 1.2);
+                            data[i + 1] = Math.min(255, data[i + 1] * 1.1);
+                            data[i + 2] = Math.min(255, data[i + 2] * 0.9);
+                        }
+                        break;
+                    case 'reyes':
+                        for (let i = 0; i < data.length; i += 4) {
+                            data[i] = Math.min(255, data[i] * 1.2);
+                            data[i + 1] = Math.min(255, data[i + 1] * 1.1);
+                            data[i + 2] = Math.max(0, data[i + 2] * 0.8);
+                        }
+                        break;
+                    case 'juno':
+                        for (let i = 0; i < data.length; i += 4) {
+                            data[i] = Math.min(255, data[i] * 1.1);
+                            data[i + 1] = Math.max(0, data[i + 1] * 0.9);
+                            data[i + 2] = Math.min(255, data[i + 2] * 1.05);
+                        }
+                        break;
+                }
+            }
+            
+            tempCtx.putImageData(imageData, 0, 0);
+        }
+        
+        return tempCanvas;
+    }
+
+    function updateQualityPreset() {
+        const preset = qualityPreset.value;
+        switch(preset) {
+            case 'low':
+                qualityControl.value = 5;
+                break;
+            case 'medium':
+                qualityControl.value = 10;
+                break;
+            case 'high':
+                qualityControl.value = 15;
+                break;
+            case 'ultra':
+                qualityControl.value = 20;
+                break;
+        }
+        updateQualityValue();
+    }
+
+    function updateQualityValue() {
+        if (qualityValue) qualityValue.textContent = qualityControl.value;
+    }
+
+    function enhanceImage(image, size, isForPrint = false) {
+        const tempCanvas = document.createElement('canvas');
+        const targetSize = isForPrint ? size * 2 : size;
+        tempCanvas.width = targetSize;
+        tempCanvas.height = targetSize;
+        const tempCtx = tempCanvas.getContext('2d');
+        
+        tempCtx.imageSmoothingEnabled = true;
+        tempCtx.imageSmoothingQuality = 'high';
+        
+        // Apply all image effects (rotations, filters, adjustments)
+        const processedCanvas = applyImageEffects(image, targetSize);
+        tempCtx.drawImage(processedCanvas, 0, 0);
+        
+        // Add text elements
+        if (textElements.length > 0) {
+            textElements.forEach(text => {
+                drawTextElement(tempCtx, text, targetSize);
+            });
+        }
+        
+        // Add watermark if enabled
+        if (watermarkSettings.enabled) {
+            drawWatermark(tempCtx, targetSize);
+        }
+        
+        if (enhanceQuality && enhanceQuality.checked) {
+            tempCtx.filter = 'contrast(1.1) saturate(1.1) brightness(1.02)';
+            tempCtx.drawImage(tempCanvas, 0, 0);
+            tempCtx.filter = 'none';
+            
+            if (isForPrint) {
+                sharpenImage(tempCanvas, 0.5);
+            }
+        }
+        
+        return tempCanvas;
+    }
+
+    function drawTextElement(ctx, text, canvasSize) {
+        ctx.save();
+        
+        // Set font properties
+        const fontSize = text.size * (canvasSize / 500);
+        ctx.font = `${text.fontWeight} ${fontSize}px ${text.fontFamily}`;
+        
+        // Calculate text position
+        const textMetrics = ctx.measureText(text.content);
+        const textWidth = textMetrics.width;
+        const textHeight = fontSize;
+        
+        let x, y;
+        const padding = 10 * (canvasSize / 500);
+        
+        switch(text.position) {
+            case 'top-left':
+                x = padding;
+                y = padding + textHeight;
+                break;
+            case 'top-center':
+                x = canvasSize / 2 - textWidth / 2;
+                y = padding + textHeight;
+                break;
+            case 'top-right':
+                x = canvasSize - textWidth - padding;
+                y = padding + textHeight;
+                break;
+            case 'middle-left':
+                x = padding;
+                y = canvasSize / 2 + textHeight / 2;
+                break;
+            case 'middle-center':
+                x = canvasSize / 2 - textWidth / 2;
+                y = canvasSize / 2 + textHeight / 2;
+                break;
+            case 'middle-right':
+                x = canvasSize - textWidth - padding;
+                y = canvasSize / 2 + textHeight / 2;
+                break;
+            case 'bottom-left':
+                x = padding;
+                y = canvasSize - padding;
+                break;
+            case 'bottom-center':
+                x = canvasSize / 2 - textWidth / 2;
+                y = canvasSize - padding;
+                break;
+            case 'bottom-right':
+                x = canvasSize - textWidth - padding;
+                y = canvasSize - padding;
+                break;
+            default:
+                x = canvasSize - textWidth - padding;
+                y = canvasSize - padding;
+        }
+        
+        // Draw background if not fully transparent
+        if (text.bgColor !== '#00000000') {
+            const bgPadding = 5 * (canvasSize / 500);
+            const bgWidth = textWidth + bgPadding * 2;
+            const bgHeight = textHeight + bgPadding * 2;
+            
+            ctx.fillStyle = text.bgColor;
+            ctx.globalAlpha = text.opacity / 100;
+            ctx.fillRect(
+                x - bgPadding, 
+                y - textHeight - bgPadding, 
+                bgWidth, 
+                bgHeight
+            );
+        }
+        
+        // Draw text
+        ctx.fillStyle = text.color;
+        ctx.globalAlpha = text.opacity / 100;
+        ctx.textBaseline = 'bottom';
+        ctx.fillText(text.content, x, y);
+        
+        ctx.restore();
+    }
+
+    function drawWatermark(ctx, canvasSize) {
+        ctx.save();
+        
+        // Set font properties
+        const fontSize = watermarkSettings.size * (canvasSize / 500);
+        ctx.font = `bold ${fontSize}px Arial`;
+        ctx.fillStyle = watermarkSettings.color;
+        ctx.globalAlpha = watermarkSettings.opacity / 100;
+        
+        // Calculate text position
+        const textMetrics = ctx.measureText(watermarkSettings.text);
+        const textWidth = textMetrics.width;
+        const textHeight = fontSize;
+        
+        let x, y;
+        const padding = 10 * (canvasSize / 500);
+        
+        switch(watermarkSettings.position) {
+            case 'top-left':
+                x = padding;
+                y = padding + textHeight;
+                break;
+            case 'top-right':
+                x = canvasSize - textWidth - padding;
+                y = padding + textHeight;
+                break;
+            case 'bottom-left':
+                x = padding;
+                y = canvasSize - padding;
+                break;
+            case 'bottom-right':
+                x = canvasSize - textWidth - padding;
+                y = canvasSize - padding;
+                break;
+            case 'center':
+                x = canvasSize / 2 - textWidth / 2;
+                y = canvasSize / 2 + textHeight / 2;
+                break;
+            default:
+                x = canvasSize - textWidth - padding;
+                y = canvasSize - padding;
+        }
+        
+        // Draw text with stroke for better visibility
+        ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
+        ctx.lineWidth = 1 * (canvasSize / 500);
+        ctx.strokeText(watermarkSettings.text, x, y);
+        ctx.fillText(watermarkSettings.text, x, y);
+        
+        ctx.restore();
+    }
+
+    function sharpenImage(canvas, amount) {
+        const ctx = canvas.getContext('2d');
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const data = imageData.data;
+        
+        for (let i = 0; i < data.length; i += 4) {
+            if (i > canvas.width * 4 && i < data.length - canvas.width * 4) {
+                data[i] = Math.max(0, Math.min(255, data[i] + (data[i] - data[i - 4]) * amount));
+                data[i+1] = Math.max(0, Math.min(255, data[i+1] + (data[i+1] - data[i+1 - 4]) * amount));
+                data[i+2] = Math.max(0, Math.min(255, data[i+2] + (data[i+2] - data[i+2 - 4]) * amount));
+            }
+        }
+        
+        ctx.putImageData(imageData, 0, 0);
+    }
+
+    function handleFiles(files) {
+        if (files.length === 0) return;
+        
+        if (animationInterval) {
+            clearInterval(animationInterval);
+            animationInterval = null;
+        }
+        
+        images = [];
+        originalImages = [];
+        framesContainer.innerHTML = '';
+        
+        Array.from(files).forEach(file => {
+            if (!file.type.match('image.*')) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const img = new Image();
+                img.src = e.target.result;
+                img.onload = function() {
+                    images.push(img);
+                    originalImages.push({
+                        src: e.target.result,
+                        file: file,
+                        name: file.name
+                    });
+                    addFrameToContainer(img);
+                    updateCreateButton();
+                    
+                    // Show editor section when first image is loaded
+                    if (images.length === 1 && editorSection) {
+                        editorSection.style.display = 'block';
+                    }
+                };
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function addFrameToContainer(img) {
+        const frame = document.createElement('img');
+        frame.className = 'frame';
+        frame.src = img.src;
+        frame.addEventListener('click', () => {
+            document.querySelectorAll('.frame').forEach(f => f.style.borderColor = '#444444');
+            frame.style.borderColor = 'var(--primary)';
+            drawImageToCanvas(img);
+            if (previewContainer) previewContainer.style.display = 'block';
+        });
+        framesContainer.appendChild(frame);
+        
+        // Select the first frame by default
+        if (framesContainer.children.length === 1) {
+            frame.style.borderColor = 'var(--primary)';
+            drawImageToCanvas(img);
+            if (previewContainer) previewContainer.style.display = 'block';
+        }
+    }
+
+    function drawImageToCanvas(img) {
+        const size = parseInt(sizeControl.value);
+        gifCanvas.width = size;
+        gifCanvas.height = size;
+        
+        // Apply all image effects
+        const processedCanvas = applyImageEffects(img, size);
+        ctx.clearRect(0, 0, gifCanvas.width, gifCanvas.height);
+        
+        // Always use black background
+        ctx.fillStyle = '#111111';
+        ctx.fillRect(0, 0, gifCanvas.width, gifCanvas.height);
+        
+        ctx.drawImage(processedCanvas, 0, 0);
+        
+        // Draw text elements
+        if (textElements.length > 0) {
+            textElements.forEach(text => {
+                drawTextElement(ctx, text, size);
+            });
+        }
+        
+        // Draw watermark if enabled
+        if (watermarkSettings.enabled) {
+            drawWatermark(ctx, size);
+        }
+    }
+
+    function updateSpeedValue() {
+        const speed = parseInt(speedControl.value);
+        let speedDescription = "";
+        
+        if (speed < 200) speedDescription = " (Very Fast)";
+        else if (speed < 400) speedDescription = " (Fast)";
+        else if (speed < 700) speedDescription = " (Normal)";
+        else if (speed < 1000) speedDescription = " (Slow)";
+        else speedDescription = " (Very Slow)";
+        
+        if (speedValue) speedValue.textContent = speed + "ms" + speedDescription;
+        
+        if (animationInterval) {
+            clearInterval(animationInterval);
+            startAnimation();
+        }
+    }
+
+    function updateGifSpeedValue() {
+        const speed = parseInt(gifSpeedControl.value);
+        let speedDescription = "";
+        
+        if (speed < 500) speedDescription = " (Fast)";
+        else if (speed < 1000) speedDescription = " (Normal)";
+        else if (speed < 3000) speedDescription = " (Slow)";
+        else if (speed < 8000) speedDescription = " (Very Slow)";
+        else speedDescription = " (Extremely Slow)";
+        
+        if (gifSpeedValue) gifSpeedValue.textContent = speed + "ms" + speedDescription;
+    }
+
+    function updateSizeValue() {
+        if (sizeValue) sizeValue.textContent = sizeControl.value;
+        if (images.length > 0) {
+            if (animationInterval) {
+                drawImageToCanvas(images[0]);
+            } else if (framesContainer.querySelector('.frame')) {
                 const selectedFrame = framesContainer.querySelector('.frame[style*="border-color"]');
                 if (selectedFrame) {
                     const img = new Image();
@@ -1301,1133 +1972,467 @@
                 }
             }
         }
+    }
 
-        function hideAllEditorControls() {
-            adjustControls.style.display = 'none';
-            filterControls.style.display = 'none';
-            cropControls.style.display = 'none';
-            rotateControls.style.display = 'none';
-            textControls.style.display = 'none';
-            watermarkControls.style.display = 'none';
-            isCropping = false;
+    function updateCreateButton() {
+        if (createGifBtn) createGifBtn.disabled = images.length < 2;
+    }
+
+    function startAnimation() {
+        const delay = parseInt(speedControl.value);
+        let currentIndex = 0;
+        
+        if (images.length > 0) {
+            drawImageToCanvas(images[0]);
+            if (previewContainer) previewContainer.style.display = 'block';
         }
+        
+        animationInterval = setInterval(() => {
+            currentIndex = (currentIndex + 1) % images.length;
+            drawImageToCanvas(images[currentIndex]);
+        }, delay);
+    }
 
-        function updateBrightnessValue() {
-            currentAdjustments.brightness = parseInt(brightnessControl.value);
-            brightnessValue.textContent = currentAdjustments.brightness;
-            applyAdjustments();
+    function createGif() {
+        if (images.length < 2) return;
+        
+        if (loading) loading.style.display = 'block';
+        if (createGifBtn) createGifBtn.disabled = true;
+        if (createHdImageBtn) createHdImageBtn.disabled = true;
+        if (downloadLink) downloadLink.style.display = 'none';
+        
+        if (animationInterval) {
+            clearInterval(animationInterval);
+            animationInterval = null;
         }
-
-        function updateContrastValue() {
-            currentAdjustments.contrast = parseInt(contrastControl.value);
-            contrastValue.textContent = currentAdjustments.contrast;
-            applyAdjustments();
-        }
-
-        function updateSaturationValue() {
-            currentAdjustments.saturation = parseInt(saturationControl.value);
-            saturationValue.textContent = currentAdjustments.saturation;
-            applyAdjustments();
-        }
-
-        function updateTemperatureValue() {
-            currentAdjustments.temperature = parseInt(temperatureControl.value);
-            temperatureValue.textContent = currentAdjustments.temperature;
-            applyAdjustments();
-        }
-
-        function resetAdjustments() {
-            brightnessControl.value = 0;
-            contrastControl.value = 0;
-            saturationControl.value = 0;
-            temperatureControl.value = 0;
-            currentAdjustments = {
-                brightness: 0,
-                contrast: 0,
-                saturation: 0,
-                temperature: 0
-            };
-            brightnessValue.textContent = '0';
-            contrastValue.textContent = '0';
-            saturationValue.textContent = '0';
-            temperatureValue.textContent = '0';
-            applyAdjustments();
-        }
-
-        function applyAdjustments() {
-            if (images.length === 0) return;
+        
+        const size = parseInt(sizeControl.value);
+        const gifDelay = parseInt(gifSpeedControl.value);
+        const quality = parseInt(qualityControl.value);
+        
+        const gif = new GIF({
+            workers: 4,
+            quality: 21 - quality,
+            width: size,
+            height: size,
+            workerScript: "{% static 'main/js/gif.worker.js' %}",
+            repeat: 0,
+            background: '#000000',
+            dither: 'FloydSteinberg-serpentine',
+            optimize: true,
+            maxWorkers: 4
+        });
+        
+        images.forEach(img => {
+            const enhancedCanvas = enhanceImage(img, size);
+            const frameCanvas = document.createElement('canvas');
+            frameCanvas.width = size;
+            frameCanvas.height = size;
+            const frameCtx = frameCanvas.getContext('2d');
             
-            const selectedFrame = framesContainer.querySelector('.frame[style*="border-color"]');
-            if (!selectedFrame) return;
+            frameCtx.fillStyle = '#000000';
+            frameCtx.fillRect(0, 0, size, size);
+            frameCtx.shadowColor = 'rgba(255,255,255,0.1)';
+            frameCtx.shadowBlur = 8;
+            frameCtx.shadowOffsetY = 4;
             
-            const img = new Image();
-            img.src = selectedFrame.src;
-            img.onload = function() {
-                drawImageToCanvas(img);
-            };
-        }
-
-        function applyFilterPreset(e) {
-            filterPresets.forEach(p => p.classList.remove('filter-active'));
-            this.classList.add('filter-active');
-            currentFilter = this.dataset.filter;
+            frameCtx.drawImage(enhancedCanvas, 0, 0);
+            frameCtx.shadowColor = 'transparent';
             
-            if (images.length === 0) return;
-            
-            const selectedFrame = framesContainer.querySelector('.frame[style*="border-color"]');
-            if (!selectedFrame) return;
-            
-            const img = new Image();
-            img.src = selectedFrame.src;
-            img.onload = function() {
-                drawImageToCanvas(img);
-            };
-        }
-
-        function resetFilter() {
-            filterPresets.forEach(p => p.classList.remove('filter-active'));
-            currentFilter = 'none';
-            
-            if (images.length === 0) return;
-            
-            const selectedFrame = framesContainer.querySelector('.frame[style*="border-color"]');
-            if (!selectedFrame) return;
-            
-            const img = new Image();
-            img.src = selectedFrame.src;
-            img.onload = function() {
-                drawImageToCanvas(img);
-            };
-        }
-
-        function setCropAspectRatio(e) {
-            cropAspectBtns.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
-            currentAspectRatio = this.dataset.ratio;
-            
-            // In a real implementation, you would show crop handles on the canvas
-            // For this example, we'll just log the selected aspect ratio
-            console.log('Selected aspect ratio:', currentAspectRatio);
-        }
-
-        function rotateImage(degrees) {
-            currentRotation += degrees;
-            
-            if (images.length === 0) return;
-            
-            const selectedFrame = framesContainer.querySelector('.frame[style*="border-color"]');
-            if (!selectedFrame) return;
-            
-            const img = new Image();
-            img.src = selectedFrame.src;
-            img.onload = function() {
-                drawImageToCanvas(img);
-            };
-        }
-
-        function flipImage(direction) {
-            if (direction === 'horizontal') {
-                isFlipped = !isFlipped;
-            } else if (direction === 'vertical') {
-                // Vertical flip logic would go here
-            }
-            
-            if (images.length === 0) return;
-            
-            const selectedFrame = framesContainer.querySelector('.frame[style*="border-color"]');
-            if (!selectedFrame) return;
-            
-            const img = new Image();
-            img.src = selectedFrame.src;
-            img.onload = function() {
-                drawImageToCanvas(img);
-            };
-        }
-
-        function applyCrop() {
-            // In a real implementation, this would apply the crop to the image
-            console.log('Applying crop with aspect ratio:', currentAspectRatio);
-            isCropping = false;
-            hideAllEditorControls();
-            
-            if (images.length === 0) return;
-            
-            const selectedFrame = framesContainer.querySelector('.frame[style*="border-color"]');
-            if (!selectedFrame) return;
-            
-            const img = new Image();
-            img.src = selectedFrame.src;
-            img.onload = function() {
-                drawImageToCanvas(img);
-            };
-        }
-
-        function cancelCrop() {
-            isCropping = false;
-            hideAllEditorControls();
-            
-            if (images.length === 0) return;
-            
-            const selectedFrame = framesContainer.querySelector('.frame[style*="border-color"]');
-            if (!selectedFrame) return;
-            
-            const img = new Image();
-            img.src = selectedFrame.src;
-            img.onload = function() {
-                drawImageToCanvas(img);
-            };
-        }
-
-        function applyRotation() {
-            // In a real implementation, this would permanently apply the rotation
-            hideAllEditorControls();
-            
-            if (images.length === 0) return;
-            
-            const selectedFrame = framesContainer.querySelector('.frame[style*="border-color"]');
-            if (!selectedFrame) return;
-            
-            const img = new Image();
-            img.src = selectedFrame.src;
-            img.onload = function() {
-                drawImageToCanvas(img);
-            };
-        }
-
-        function applyImageEffects(image, size) {
-            const tempCanvas = document.createElement('canvas');
-            tempCanvas.width = size;
-            tempCanvas.height = size;
-            const tempCtx = tempCanvas.getContext('2d');
-            
-            // Apply rotation and flip
-            tempCtx.save();
-            tempCtx.translate(size / 2, size / 2);
-            tempCtx.rotate(currentRotation * Math.PI / 180);
-            if (isFlipped) {
-                tempCtx.scale(-1, 1);
-            }
-            
-            const ratio = Math.min(size / image.width, size / image.height);
-            const width = image.width * ratio;
-            const height = image.height * ratio;
-            const x = -width / 2;
-            const y = -height / 2;
-            
-            // Always use black background
-            tempCtx.fillStyle = '#000000';
-            tempCtx.fillRect(-size / 2, -size / 2, size, size);
-            
-            tempCtx.drawImage(image, x, y, width, height);
-            tempCtx.restore();
-            
-            // Apply filters and adjustments
-            if (currentFilter !== 'none' || 
-                currentAdjustments.brightness !== 0 || 
-                currentAdjustments.contrast !== 0 || 
-                currentAdjustments.saturation !== 0 || 
-                currentAdjustments.temperature !== 0) {
-                
-                const imageData = tempCtx.getImageData(0, 0, size, size);
-                const data = imageData.data;
-                
-                // Apply brightness
-                if (currentAdjustments.brightness !== 0) {
-                    const brightness = currentAdjustments.brightness / 100;
-                    for (let i = 0; i < data.length; i += 4) {
-                        data[i] += 255 * brightness;
-                        data[i + 1] += 255 * brightness;
-                        data[i + 2] += 255 * brightness;
-                    }
-                }
-                
-                // Apply contrast
-                if (currentAdjustments.contrast !== 0) {
-                    const contrast = (currentAdjustments.contrast + 100) / 100;
-                    const intercept = 128 * (1 - contrast);
-                    for (let i = 0; i < data.length; i += 4) {
-                        data[i] = data[i] * contrast + intercept;
-                        data[i + 1] = data[i + 1] * contrast + intercept;
-                        data[i + 2] = data[i + 2] * contrast + intercept;
-                    }
-                }
-                
-                // Apply saturation
-                if (currentAdjustments.saturation !== 0) {
-                    const saturation = (currentAdjustments.saturation + 100) / 100;
-                    for (let i = 0; i < data.length; i += 4) {
-                        const r = data[i];
-                        const g = data[i + 1];
-                        const b = data[i + 2];
-                        const gray = 0.2989 * r + 0.5870 * g + 0.1140 * b;
-                        data[i] = gray + saturation * (r - gray);
-                        data[i + 1] = gray + saturation * (g - gray);
-                        data[i + 2] = gray + saturation * (b - gray);
-                    }
-                }
-                
-                // Apply temperature (warm/cool)
-                if (currentAdjustments.temperature !== 0) {
-                    const temp = currentAdjustments.temperature / 100;
-                    for (let i = 0; i < data.length; i += 4) {
-                        if (temp > 0) {
-                            // Warm (increase red, decrease blue)
-                            data[i] += 255 * temp;
-                            data[i + 2] -= 255 * temp;
-                        } else {
-                            // Cool (increase blue, decrease red)
-                            data[i] += 255 * temp;
-                            data[i + 2] -= 255 * temp;
-                        }
-                    }
-                }
-                
-                // Apply Instagram-like filters
-                if (currentFilter !== 'none') {
-                    switch(currentFilter) {
-                        case 'clarendon':
-                            // Increase contrast and saturation slightly
-                            for (let i = 0; i < data.length; i += 4) {
-                                data[i] = Math.min(255, data[i] * 1.1);
-                                data[i + 1] = Math.min(255, data[i + 1] * 1.05);
-                                data[i + 2] = Math.max(0, data[i + 2] * 0.95);
-                            }
-                            break;
-                        case 'gingham':
-                            // Vintage washed out look
-                            for (let i = 0; i < data.length; i += 4) {
-                                data[i] = Math.min(255, data[i] * 0.9 + 50);
-                                data[i + 1] = Math.min(255, data[i + 1] * 0.9 + 50);
-                                data[i + 2] = Math.min(255, data[i + 2] * 0.9 + 50);
-                            }
-                            break;
-                        case 'moon':
-                            // Black and white
-                            for (let i = 0; i < data.length; i += 4) {
-                                const avg = (data[i] + data[i + 1] + data[i + 2]) / 3;
-                                data[i] = avg;
-                                data[i + 1] = avg;
-                                data[i + 2] = avg;
-                            }
-                            break;
-                        case 'lark':
-                            // Bright and airy
-                            for (let i = 0; i < data.length; i += 4) {
-                                data[i] = Math.min(255, data[i] * 1.2);
-                                data[i + 1] = Math.min(255, data[i + 1] * 1.1);
-                                data[i + 2] = Math.min(255, data[i + 2] * 0.9);
-                            }
-                            break;
-                        case 'reyes':
-                            // Warm vintage
-                            for (let i = 0; i < data.length; i += 4) {
-                                data[i] = Math.min(255, data[i] * 1.2);
-                                data[i + 1] = Math.min(255, data[i + 1] * 1.1);
-                                data[i + 2] = Math.max(0, data[i + 2] * 0.8);
-                            }
-                            break;
-                        case 'juno':
-                            // Cool tones with magenta tint
-                            for (let i = 0; i < data.length; i += 4) {
-                                data[i] = Math.min(255, data[i] * 1.1);
-                                data[i + 1] = Math.max(0, data[i + 1] * 0.9);
-                                data[i + 2] = Math.min(255, data[i + 2] * 1.05);
-                            }
-                            break;
-                    }
-                }
-                
-                tempCtx.putImageData(imageData, 0, 0);
-            }
-            
-            return tempCanvas;
-        }
-
-        function updateQualityPreset() {
-            const preset = qualityPreset.value;
-            switch(preset) {
-                case 'low':
-                    qualityControl.value = 5;
-                    break;
-                case 'medium':
-                    qualityControl.value = 10;
-                    break;
-                case 'high':
-                    qualityControl.value = 15;
-                    break;
-                case 'ultra':
-                    qualityControl.value = 20;
-                    break;
-            }
-            updateQualityValue();
-        }
-
-        function updateQualityValue() {
-            qualityValue.textContent = qualityControl.value;
-        }
-
-        function enhanceImage(image, size, isForPrint = false) {
-            const tempCanvas = document.createElement('canvas');
-            const targetSize = isForPrint ? size * 2 : size;
-            tempCanvas.width = targetSize;
-            tempCanvas.height = targetSize;
-            const tempCtx = tempCanvas.getContext('2d');
-            
-            tempCtx.imageSmoothingEnabled = true;
-            tempCtx.imageSmoothingQuality = 'high';
-            
-            // Apply all image effects (rotations, filters, adjustments)
-            const processedCanvas = applyImageEffects(image, targetSize);
-            tempCtx.drawImage(processedCanvas, 0, 0);
-            
-            // Add text elements
-            if (textElements.length > 0) {
-                textElements.forEach(text => {
-                    drawTextElement(tempCtx, text, targetSize);
-                });
-            }
-            
-            // Add watermark if enabled
-            if (watermarkSettings.enabled) {
-                drawWatermark(tempCtx, targetSize);
-            }
-            
-            if (enhanceQuality.checked) {
-                tempCtx.filter = 'contrast(1.1) saturate(1.1) brightness(1.02)';
-                tempCtx.drawImage(tempCanvas, 0, 0);
-                tempCtx.filter = 'none';
-                
-                if (isForPrint) {
-                    sharpenImage(tempCanvas, 0.5);
-                }
-            }
-            
-            return tempCanvas;
-        }
-
-        function drawTextElement(ctx, text, canvasSize) {
-            ctx.save();
-            
-            // Set font properties
-            const fontSize = text.size * (canvasSize / 500); // Scale font size based on canvas size
-            ctx.font = `${text.fontWeight} ${fontSize}px ${text.fontFamily}`;
-            
-            // Calculate text position
-            const textMetrics = ctx.measureText(text.content);
-            const textWidth = textMetrics.width;
-            const textHeight = fontSize;
-            
-            let x, y;
-            const padding = 10 * (canvasSize / 500); // Scale padding
-            
-            switch(text.position) {
-                case 'top-left':
-                    x = padding;
-                    y = padding + textHeight;
-                    break;
-                case 'top-center':
-                    x = canvasSize / 2 - textWidth / 2;
-                    y = padding + textHeight;
-                    break;
-                case 'top-right':
-                    x = canvasSize - textWidth - padding;
-                    y = padding + textHeight;
-                    break;
-                case 'middle-left':
-                    x = padding;
-                    y = canvasSize / 2 + textHeight / 2;
-                    break;
-                case 'middle-center':
-                    x = canvasSize / 2 - textWidth / 2;
-                    y = canvasSize / 2 + textHeight / 2;
-                    break;
-                case 'middle-right':
-                    x = canvasSize - textWidth - padding;
-                    y = canvasSize / 2 + textHeight / 2;
-                    break;
-                case 'bottom-left':
-                    x = padding;
-                    y = canvasSize - padding;
-                    break;
-                case 'bottom-center':
-                    x = canvasSize / 2 - textWidth / 2;
-                    y = canvasSize - padding;
-                    break;
-                case 'bottom-right':
-                    x = canvasSize - textWidth - padding;
-                    y = canvasSize - padding;
-                    break;
-                default:
-                    x = canvasSize - textWidth - padding;
-                    y = canvasSize - padding;
-            }
-            
-            // Draw background if not fully transparent
-            if (text.bgColor !== '#00000000') {
-                const bgPadding = 5 * (canvasSize / 500);
-                const bgWidth = textWidth + bgPadding * 2;
-                const bgHeight = textHeight + bgPadding * 2;
-                
-                ctx.fillStyle = text.bgColor;
-                ctx.globalAlpha = text.opacity / 100;
-                ctx.fillRect(
-                    x - bgPadding, 
-                    y - textHeight - bgPadding, 
-                    bgWidth, 
-                    bgHeight
-                );
-            }
-            
-            // Draw text
-            ctx.fillStyle = text.color;
-            ctx.globalAlpha = text.opacity / 100;
-            ctx.textBaseline = 'bottom';
-            ctx.fillText(text.content, x, y);
-            
-            ctx.restore();
-        }
-
-        function drawWatermark(ctx, canvasSize) {
-            ctx.save();
-            
-            // Set font properties
-            const fontSize = watermarkSettings.size * (canvasSize / 500); // Scale font size based on canvas size
-            ctx.font = `bold ${fontSize}px Arial`;
-            ctx.fillStyle = watermarkSettings.color;
-            ctx.globalAlpha = watermarkSettings.opacity / 100;
-            
-            // Calculate text position
-            const textMetrics = ctx.measureText(watermarkSettings.text);
-            const textWidth = textMetrics.width;
-            const textHeight = fontSize;
-            
-            let x, y;
-            const padding = 10 * (canvasSize / 500); // Scale padding
-            
-            switch(watermarkSettings.position) {
-                case 'top-left':
-                    x = padding;
-                    y = padding + textHeight;
-                    break;
-                case 'top-right':
-                    x = canvasSize - textWidth - padding;
-                    y = padding + textHeight;
-                    break;
-                case 'bottom-left':
-                    x = padding;
-                    y = canvasSize - padding;
-                    break;
-                case 'bottom-right':
-                    x = canvasSize - textWidth - padding;
-                    y = canvasSize - padding;
-                    break;
-                case 'center':
-                    x = canvasSize / 2 - textWidth / 2;
-                    y = canvasSize / 2 + textHeight / 2;
-                    break;
-                default:
-                    x = canvasSize - textWidth - padding;
-                    y = canvasSize - padding;
-            }
-            
-            // Draw text with stroke for better visibility
-            ctx.strokeStyle = 'rgba(0, 0, 0, 0.5)';
-            ctx.lineWidth = 1 * (canvasSize / 500);
-            ctx.strokeText(watermarkSettings.text, x, y);
-            ctx.fillText(watermarkSettings.text, x, y);
-            
-            ctx.restore();
-        }
-
-        function sharpenImage(canvas, amount) {
-            const ctx = canvas.getContext('2d');
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const data = imageData.data;
-            
-            for (let i = 0; i < data.length; i += 4) {
-                if (i > canvas.width * 4 && i < data.length - canvas.width * 4) {
-                    data[i] = Math.max(0, Math.min(255, data[i] + (data[i] - data[i - 4]) * amount));
-                    data[i+1] = Math.max(0, Math.min(255, data[i+1] + (data[i+1] - data[i+1 - 4]) * amount));
-                    data[i+2] = Math.max(0, Math.min(255, data[i+2] + (data[i+2] - data[i+2 - 4]) * amount));
-                }
-            }
-            
-            ctx.putImageData(imageData, 0, 0);
-        }
-
-        function handleFiles(files) {
-            if (files.length === 0) return;
-            
-            if (animationInterval) {
-                clearInterval(animationInterval);
-                animationInterval = null;
-            }
-            
-            images = [];
-            originalImages = [];
-            framesContainer.innerHTML = '';
-            
-            Array.from(files).forEach(file => {
-                if (!file.type.match('image.*')) return;
-                
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const img = new Image();
-                    img.src = e.target.result;
-                    img.onload = function() {
-                        images.push(img);
-                        originalImages.push({
-                            src: e.target.result,
-                            file: file,
-                            name: file.name
-                        });
-                        addFrameToContainer(img);
-                        updateCreateButton();
-                        
-                        // Show editor section when first image is loaded
-                        if (images.length === 1) {
-                            editorSection.style.display = 'block';
-                        }
-                    };
-                };
-                reader.readAsDataURL(file);
+            gif.addFrame(frameCanvas, {
+                delay: Math.max(1, Math.round(gifDelay / 10)),
+                copy: true,
+                dispose: 1
             });
-        }
-
-        function addFrameToContainer(img) {
-            const frame = document.createElement('img');
-            frame.className = 'frame';
-            frame.src = img.src;
-            frame.addEventListener('click', () => {
-                document.querySelectorAll('.frame').forEach(f => f.style.borderColor = '#444444');
-                frame.style.borderColor = 'var(--primary)';
-                drawImageToCanvas(img);
-                previewContainer.style.display = 'block';
-            });
-            framesContainer.appendChild(frame);
+        });
+        
+        gif.on('finished', function(blob) {
+            if (loading) loading.style.display = 'none';
+            if (createGifBtn) createGifBtn.disabled = false;
+            if (createHdImageBtn) createHdImageBtn.disabled = false;
             
-            // Select the first frame by default
-            if (framesContainer.children.length === 1) {
-                frame.style.borderColor = 'var(--primary)';
-                drawImageToCanvas(img);
-                previewContainer.style.display = 'block';
-            }
-        }
-
-        function drawImageToCanvas(img) {
-            const size = parseInt(sizeControl.value);
-            gifCanvas.width = size;
-            gifCanvas.height = size;
-            
-            // Apply all image effects
-            const processedCanvas = applyImageEffects(img, size);
-            ctx.clearRect(0, 0, gifCanvas.width, gifCanvas.height);
-            
-            // Always use black background
-            ctx.fillStyle = '#111111';
-            ctx.fillRect(0, 0, gifCanvas.width, gifCanvas.height);
-            
-            ctx.drawImage(processedCanvas, 0, 0);
-            
-            // Draw text elements
-            if (textElements.length > 0) {
-                textElements.forEach(text => {
-                    drawTextElement(ctx, text, size);
-                });
+            if (currentDownloadUrl) {
+                URL.revokeObjectURL(currentDownloadUrl);
             }
             
-            // Draw watermark if enabled
-            if (watermarkSettings.enabled) {
-                drawWatermark(ctx, size);
+            currentDownloadUrl = URL.createObjectURL(blob);
+            currentOutputType = 'gif';
+            
+            if (downloadAnchor) {
+                downloadAnchor.href = currentDownloadUrl;
+                downloadAnchor.download = `professional-quality-${Date.now()}.gif`;
             }
-        }
-
-        function updateSpeedValue() {
-            const speed = parseInt(speedControl.value);
-            let speedDescription = "";
-            
-            if (speed < 200) speedDescription = " (Very Fast)";
-            else if (speed < 400) speedDescription = " (Fast)";
-            else if (speed < 700) speedDescription = " (Normal)";
-            else if (speed < 1000) speedDescription = " (Slow)";
-            else speedDescription = " (Very Slow)";
-            
-            speedValue.textContent = speed + "ms" + speedDescription;
-            
-            if (animationInterval) {
-                clearInterval(animationInterval);
-                startAnimation();
+            if (downloadHd) {
+                downloadHd.href = currentDownloadUrl;
+                downloadHd.download = `professional-quality-${Date.now()}.gif`;
             }
-        }
-
-        function updateGifSpeedValue() {
-            const speed = parseInt(gifSpeedControl.value);
-            let speedDescription = "";
-            
-            if (speed < 500) speedDescription = " (Fast)";
-            else if (speed < 1000) speedDescription = " (Normal)";
-            else if (speed < 3000) speedDescription = " (Slow)";
-            else if (speed < 8000) speedDescription = " (Very Slow)";
-            else speedDescription = " (Extremely Slow)";
-            
-            gifSpeedValue.textContent = speed + "ms" + speedDescription;
-        }
-
-        function updateSizeValue() {
-            sizeValue.textContent = sizeControl.value;
-            if (images.length > 0) {
-                if (animationInterval) {
-                    drawImageToCanvas(images[0]);
-                } else if (framesContainer.querySelector('.frame')) {
-                    const selectedFrame = framesContainer.querySelector('.frame[style*="border-color"]');
-                    if (selectedFrame) {
-                        const img = new Image();
-                        img.src = selectedFrame.src;
-                        img.onload = () => drawImageToCanvas(img);
-                    }
-                }
-            }
-        }
-
-        function updateCreateButton() {
-            createGifBtn.disabled = images.length < 2;
-        }
-
-        function startAnimation() {
-            const delay = parseInt(speedControl.value);
-            let currentIndex = 0;
-            
-            if (images.length > 0) {
-                drawImageToCanvas(images[0]);
-                previewContainer.style.display = 'block';
+            if (downloadPrint) {
+                downloadPrint.href = currentDownloadUrl;
+                downloadPrint.download = `professional-quality-${Date.now()}.gif`;
             }
             
-            animationInterval = setInterval(() => {
-                currentIndex = (currentIndex + 1) % images.length;
-                drawImageToCanvas(images[currentIndex]);
-            }, delay);
-        }
+            if (downloadLink) downloadLink.style.display = 'block';
+            
+            const previewImg = new Image();
+            previewImg.src = currentDownloadUrl;
+            previewImg.onload = () => {
+                drawImageToCanvas(previewImg);
+                if (previewContainer) previewContainer.style.display = 'block';
+            };
+        });
 
-        function createGif() {
-            if (images.length < 2) return;
-            
-            loading.style.display = 'block';
-            createGifBtn.disabled = true;
-            createHdImageBtn.disabled = true;
-            downloadLink.style.display = 'none';
-            
-            if (animationInterval) {
-                clearInterval(animationInterval);
-                animationInterval = null;
-            }
-            
-            const size = parseInt(sizeControl.value);
-            const gifDelay = parseInt(gifSpeedControl.value);
-            const quality = parseInt(qualityControl.value);
-            
-            const gif = new GIF({
-                workers: 4,
-                quality: 21 - quality,
-                width: size,
-                height: size,
-                workerScript: "{% static 'main/js/gif.worker.js' %}",
-                repeat: 0,
-                background: '#000000',
-                dither: 'FloydSteinberg-serpentine',
-                optimize: true,
-                maxWorkers: 4
-            });
-            
-            images.forEach(img => {
-                const enhancedCanvas = enhanceImage(img, size);
-                const frameCanvas = document.createElement('canvas');
-                frameCanvas.width = size;
-                frameCanvas.height = size;
-                const frameCtx = frameCanvas.getContext('2d');
-                
-                frameCtx.fillStyle = '#000000';
-                frameCtx.fillRect(0, 0, size, size);
-                frameCtx.shadowColor = 'rgba(255,255,255,0.1)';
-                frameCtx.shadowBlur = 8;
-                frameCtx.shadowOffsetY = 4;
-                
-                frameCtx.drawImage(enhancedCanvas, 0, 0);
-                frameCtx.shadowColor = 'transparent';
-                
-                gif.addFrame(frameCanvas, {
-                    delay: Math.max(1, Math.round(gifDelay / 10)),
-                    copy: true,
-                    dispose: 1
-                });
-            });
-            
-            gif.on('finished', function(blob) {
-                loading.style.display = 'none';
-                createGifBtn.disabled = false;
-                createHdImageBtn.disabled = false;
+        gif.on('error', function(error) {
+            if (loading) loading.style.display = 'none';
+            if (createGifBtn) createGifBtn.disabled = false;
+            if (createHdImageBtn) createHdImageBtn.disabled = false;
+            console.error('GIF creation error:', error);
+            alert("Error creating GIF: " + error.message);
+        });
+        
+        gif.render();
+    }
+
+    function createHdImage() {
+        if (images.length === 0) return;
+        
+        if (loading) loading.style.display = 'block';
+        if (createGifBtn) createGifBtn.disabled = true;
+        if (createHdImageBtn) createHdImageBtn.disabled = true;
+        if (downloadLink) downloadLink.style.display = 'none';
+        
+        const selectedFrame = framesContainer.querySelector('.frame[style*="border-color"]');
+        const selectedIndex = selectedFrame ? Array.from(framesContainer.children).indexOf(selectedFrame) : 0;
+        const img = images[selectedIndex];
+        const originalImage = originalImages[selectedIndex];
+        
+        const size = parseInt(sizeControl.value);
+        const quality = parseInt(qualityControl.value);
+        
+        setTimeout(() => {
+            try {
+                const hdCanvas = enhanceImage(img, size, true);
                 
                 if (currentDownloadUrl) {
                     URL.revokeObjectURL(currentDownloadUrl);
                 }
                 
-                currentDownloadUrl = URL.createObjectURL(blob);
-                currentOutputType = 'gif';
+                currentOutputType = 'image';
                 
-                downloadAnchor.href = currentDownloadUrl;
-                downloadAnchor.download = `professional-quality-${Date.now()}.gif`;
-                downloadHd.href = currentDownloadUrl;
-                downloadHd.download = `professional-quality-${Date.now()}.gif`;
-                downloadPrint.href = currentDownloadUrl;
-                downloadPrint.download = `professional-quality-${Date.now()}.gif`;
-                
-                downloadLink.style.display = 'block';
-                
-                const previewImg = new Image();
-                previewImg.src = currentDownloadUrl;
-                previewImg.onload = () => {
-                    drawImageToCanvas(previewImg);
-                    previewContainer.style.display = 'block';
-                };
-            });
-
-            gif.on('error', function(error) {
-                loading.style.display = 'none';
-                createGifBtn.disabled = false;
-                createHdImageBtn.disabled = false;
-                console.error('GIF creation error:', error);
-                alert("Error creating GIF: " + error.message);
-            });
-            
-            gif.render();
-        }
-
-        function createHdImage() {
-            if (images.length === 0) return;
-            
-            loading.style.display = 'block';
-            createGifBtn.disabled = true;
-            createHdImageBtn.disabled = true;
-            downloadLink.style.display = 'none';
-            
-            const selectedFrame = framesContainer.querySelector('.frame[style*="border-color"]');
-            const selectedIndex = selectedFrame ? Array.from(framesContainer.children).indexOf(selectedFrame) : 0;
-            const img = images[selectedIndex];
-            const originalImage = originalImages[selectedIndex];
-            
-            const size = parseInt(sizeControl.value);
-            const quality = parseInt(qualityControl.value);
-            
-            setTimeout(() => {
-                try {
-                    const hdCanvas = enhanceImage(img, size, true);
-                    
-                    if (currentDownloadUrl) {
-                        URL.revokeObjectURL(currentDownloadUrl);
-                    }
-                    
-                    currentOutputType = 'image';
-                    
-                    // For non-transparent, offer both WebP and PNG
-                    hdCanvas.toBlob(blob => {
-                        const webPUrl = URL.createObjectURL(blob);
+                // For non-transparent, offer both WebP and PNG
+                hdCanvas.toBlob(blob => {
+                    const webPUrl = URL.createObjectURL(blob);
+                    if (downloadHd) {
                         downloadHd.href = webPUrl;
                         downloadHd.download = `ultra-hd-${Date.now()}.webp`;
-                        
-                        hdCanvas.toBlob(blob => {
-                            const pngUrl = URL.createObjectURL(blob);
+                    }
+                    
+                    hdCanvas.toBlob(blob => {
+                        const pngUrl = URL.createObjectURL(blob);
+                        if (downloadPrint) {
                             downloadPrint.href = pngUrl;
                             downloadPrint.download = `print-quality-${Date.now()}.png`;
-                            
-                            // Original version
+                        }
+                        
+                        // Original version
+                        if (downloadOriginal) {
                             downloadOriginal.href = originalImage.src;
                             downloadOriginal.download = originalImage.name;
-                            
-                            // Set WebP as default for non-transparent
-                            currentDownloadUrl = webPUrl;
+                        }
+                        
+                        // Set WebP as default for non-transparent
+                        currentDownloadUrl = webPUrl;
+                        if (downloadAnchor) {
                             downloadAnchor.href = webPUrl;
                             downloadAnchor.download = `ultra-hd-${Date.now()}.webp`;
-                            
-                            loading.style.display = 'none';
-                            createGifBtn.disabled = false;
-                            createHdImageBtn.disabled = false;
-                            downloadLink.style.display = 'block';
-                            
-                            drawImageToCanvas(img);
-                            previewContainer.style.display = 'block';
-                        }, 'image/png', 1.0);
-                    }, 'image/webp', quality / 20);
-                    
-                } catch (error) {
-                    loading.style.display = 'none';
-                    createGifBtn.disabled = false;
-                    createHdImageBtn.disabled = false;
-                    console.error('HD image creation error:', error);
-                    alert("Error creating HD image: " + error.message);
-                }
-            }, 100);
-        }
-
-        function downloadHdVersion(e) {
-            e.preventDefault();
-            if (!currentDownloadUrl) return;
-            
-            if (currentOutputType === 'gif') {
-                downloadAnchor.click();
-                return;
+                        }
+                        
+                        if (loading) loading.style.display = 'none';
+                        if (createGifBtn) createGifBtn.disabled = false;
+                        if (createHdImageBtn) createHdImageBtn.disabled = false;
+                        if (downloadLink) downloadLink.style.display = 'block';
+                        
+                        drawImageToCanvas(img);
+                        if (previewContainer) previewContainer.style.display = 'block';
+                    }, 'image/png', 1.0);
+                }, 'image/webp', quality / 20);
+                
+            } catch (error) {
+                if (loading) loading.style.display = 'none';
+                if (createGifBtn) createGifBtn.disabled = false;
+                if (createHdImageBtn) createHdImageBtn.disabled = false;
+                console.error('HD image creation error:', error);
+                alert("Error creating HD image: " + error.message);
             }
-            
-            const link = document.createElement('a');
-            link.href = downloadHd.href;
-            link.download = downloadHd.download;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
+        }, 100);
+    }
 
-        function downloadPrintVersion(e) {
-            e.preventDefault();
-            if (!currentDownloadUrl) return;
-            
-            if (currentOutputType === 'gif') {
-                downloadAnchor.click();
-                return;
-            }
-            
-            const link = document.createElement('a');
-            link.href = downloadPrint.href;
-            link.download = downloadPrint.download;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+    function downloadHdVersion(e) {
+        e.preventDefault();
+        if (!currentDownloadUrl) return;
+        
+        if (currentOutputType === 'gif') {
+            if (downloadAnchor) downloadAnchor.click();
+            return;
         }
+        
+        const link = document.createElement('a');
+        link.href = downloadHd.href;
+        link.download = downloadHd.download;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
 
-        function downloadOriginalVersion(e) {
-            e.preventDefault();
-            if (!currentDownloadUrl) return;
-            
-            if (currentOutputType === 'gif') {
-                downloadAnchor.click();
-                return;
-            }
-            
+    function downloadPrintVersion(e) {
+        e.preventDefault();
+        if (!currentDownloadUrl) return;
+        
+        if (currentOutputType === 'gif') {
+            if (downloadAnchor) downloadAnchor.click();
+            return;
+        }
+        
+        const link = document.createElement('a');
+        link.href = downloadPrint.href;
+        link.download = downloadPrint.download;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function downloadOriginalVersion(e) {
+        e.preventDefault();
+        if (!currentDownloadUrl) return;
+        
+        if (currentOutputType === 'gif') {
+            if (downloadAnchor) downloadAnchor.click();
+            return;
+        }
+        
+        const selectedFrame = framesContainer.querySelector('.frame[style*="border-color"]');
+        const selectedIndex = selectedFrame ? Array.from(framesContainer.children).indexOf(selectedFrame) : 0;
+        const originalImage = originalImages[selectedIndex];
+        
+        const link = document.createElement('a');
+        link.href = originalImage.src;
+        link.download = originalImage.name;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function resetAll() {
+        if (animationInterval) {
+            clearInterval(animationInterval);
+            animationInterval = null;
+        }
+        
+        ctx.clearRect(0, 0, gifCanvas.width, gifCanvas.height);
+        images = [];
+        originalImages = [];
+        if (framesContainer) framesContainer.innerHTML = '';
+        if (previewContainer) previewContainer.style.display = 'none';
+        if (downloadLink) downloadLink.style.display = 'none';
+        if (fileInput) fileInput.value = '';
+        if (createGifBtn) createGifBtn.disabled = true;
+        if (createHdImageBtn) createHdImageBtn.disabled = false;
+        if (speedControl) speedControl.value = 500;
+        if (gifSpeedControl) gifSpeedControl.value = 2000;
+        updateSpeedValue();
+        updateGifSpeedValue();
+        if (sizeControl) sizeControl.value = 300;
+        updateSizeValue();
+        if (qualityPreset) qualityPreset.value = 'medium';
+        if (qualityControl) qualityControl.value = 10;
+        updateQualityValue();
+        if (loading) loading.style.display = 'none';
+        if (enhanceQuality) enhanceQuality.checked = true;
+        
+        // Reset editor settings
+        resetAdjustments();
+        resetFilter();
+        currentRotation = 0;
+        isFlipped = false;
+        isCropping = false;
+        hideAllEditorControls();
+        
+        // Reset text settings
+        textElements = [];
+        if (textInput) textInput.value = '';
+        if (textFont) textFont.value = 'Arial';
+        if (textSize) textSize.value = 24;
+        if (textColor) textColor.value = '#ffffff';
+        if (textBgColor) textBgColor.value = '#00000000';
+        if (textOpacity) textOpacity.value = 100;
+        updateTextPreview();
+        updateTextSizeValue();
+        updateTextOpacityValue();
+        
+        // Reset watermark settings
+        watermarkSettings = {
+            text: "@{{ username }}",
+            size: 16,
+            color: "#ffffff",
+            opacity: 70,
+            position: "bottom-right",
+            enabled: false
+        };
+        if (watermarkText) watermarkText.value = "@{{ username }}";
+        if (watermarkSize) watermarkSize.value = 16;
+        if (watermarkColor) watermarkColor.value = "#ffffff";
+        if (watermarkOpacity) watermarkOpacity.value = 70;
+        if (watermarkPosition) watermarkPosition.value = "bottom-right";
+        updateWatermarkSizeValue();
+        updateWatermarkOpacityValue();
+        
+        if (currentDownloadUrl) {
+            URL.revokeObjectURL(currentDownloadUrl);
+            currentDownloadUrl = null;
+        }
+    }
+    
+    /* Text Editor Functions */
+    function updateTextPreview() {
+        if (!textPreview || !textInput || !textFont || !textSize || !textColor || !textBgColor || !textOpacity) return;
+        
+        const content = textInput.value || 'Text Preview';
+        const font = textFont.value;
+        const size = parseInt(textSize.value);
+        const color = textColor.value;
+        const bgColor = textBgColor.value;
+        const opacity = parseInt(textOpacity.value);
+        
+        textPreview.innerHTML = '';
+        
+        const previewText = document.createElement('span');
+        previewText.textContent = content;
+        previewText.style.fontFamily = font;
+        previewText.style.fontSize = `${size}px`;
+        previewText.style.color = color;
+        previewText.style.backgroundColor = bgColor;
+        previewText.style.opacity = opacity / 100;
+        previewText.style.padding = '5px';
+        previewText.style.borderRadius = '3px';
+        
+        textPreview.appendChild(previewText);
+    }
+    
+    function updateTextSizeValue() {
+        if (textSizeValue && textSize) textSizeValue.textContent = textSize.value;
+        updateTextPreview();
+    }
+    
+    function updateTextOpacityValue() {
+        if (textOpacityValue && textOpacity) textOpacityValue.textContent = textOpacity.value;
+        updateTextPreview();
+    }
+    
+    function setTextPosition(e) {
+        textPositionBtns.forEach(btn => btn.classList.remove('active'));
+        this.classList.add('active');
+        currentTextPosition = this.dataset.position;
+    }
+    
+    function addTextToImage() {
+        if (!textInput) return;
+        
+        const content = textInput.value.trim();
+        if (!content) {
+            alert('Please enter some text');
+            return;
+        }
+        
+        const textElement = {
+            content: content,
+            fontFamily: textFont ? textFont.value : 'Arial',
+            fontWeight: 'normal',
+            size: textSize ? parseInt(textSize.value) : 24,
+            color: textColor ? textColor.value : '#ffffff',
+            bgColor: textBgColor ? textBgColor.value : '#00000000',
+            opacity: textOpacity ? parseInt(textOpacity.value) : 100,
+            position: currentTextPosition
+        };
+        
+        textElements.push(textElement);
+        
+        // Redraw canvas with the new text
+        if (images.length > 0) {
             const selectedFrame = framesContainer.querySelector('.frame[style*="border-color"]');
-            const selectedIndex = selectedFrame ? Array.from(framesContainer.children).indexOf(selectedFrame) : 0;
-            const originalImage = originalImages[selectedIndex];
-            
-            const link = document.createElement('a');
-            link.href = originalImage.src;
-            link.download = originalImage.name;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        function resetAll() {
-            if (animationInterval) {
-                clearInterval(animationInterval);
-                animationInterval = null;
-            }
-            
-            ctx.clearRect(0, 0, gifCanvas.width, gifCanvas.height);
-            images = [];
-            originalImages = [];
-            framesContainer.innerHTML = '';
-            previewContainer.style.display = 'none';
-            downloadLink.style.display = 'none';
-            fileInput.value = '';
-            createGifBtn.disabled = true;
-            createHdImageBtn.disabled = false;
-            speedControl.value = 500;
-            gifSpeedControl.value = 2000;
-            updateSpeedValue();
-            updateGifSpeedValue();
-            sizeControl.value = 300;
-            updateSizeValue();
-            qualityPreset.value = 'medium';
-            qualityControl.value = 10;
-            updateQualityValue();
-            loading.style.display = 'none';
-            enhanceQuality.checked = true;
-            
-            // Reset editor settings
-            resetAdjustments();
-            resetFilter();
-            currentRotation = 0;
-            isFlipped = false;
-            isCropping = false;
-            hideAllEditorControls();
-            
-            // Reset text settings
-            textElements = [];
-            textInput.value = '';
-            textFont.value = 'Arial';
-            textSize.value = 24;
-            textColor.value = '#ffffff';
-            textBgColor.value = '#00000000';
-            textOpacity.value = 100;
-            updateTextPreview();
-            updateTextSizeValue();
-            updateTextOpacityValue();
-            
-            // Reset watermark settings
-            watermarkSettings = {
-                text: "@{{ username }}",
-                size: 16,
-                color: "#ffffff",
-                opacity: 70,
-                position: "bottom-right",
-                enabled: false
-            };
-            watermarkText.value = "@{{ username }}";
-            watermarkSize.value = 16;
-            watermarkColor.value = "#ffffff";
-            watermarkOpacity.value = 70;
-            watermarkPosition.value = "bottom-right";
-            updateWatermarkSizeValue();
-            updateWatermarkOpacityValue();
-            
-            if (currentDownloadUrl) {
-                URL.revokeObjectURL(currentDownloadUrl);
-                currentDownloadUrl = null;
+            if (selectedFrame) {
+                const img = new Image();
+                img.src = selectedFrame.src;
+                img.onload = () => drawImageToCanvas(img);
             }
         }
         
-        /* Text Editor Functions */
-        function updateTextPreview() {
-            const content = textInput.value || 'Text Preview';
-            const font = textFont.value;
-            const size = parseInt(textSize.value);
-            const color = textColor.value;
-            const bgColor = textBgColor.value;
-            const opacity = parseInt(textOpacity.value);
-            
-            textPreview.innerHTML = '';
-            
-            const previewText = document.createElement('span');
-            previewText.textContent = content;
-            previewText.style.fontFamily = font;
-            previewText.style.fontSize = `${size}px`;
-            previewText.style.color = color;
-            previewText.style.backgroundColor = bgColor;
-            previewText.style.opacity = opacity / 100;
-            previewText.style.padding = '5px';
-            previewText.style.borderRadius = '3px';
-            
-            textPreview.appendChild(previewText);
-        }
+        // Clear the input field but keep other settings
+        if (textInput) textInput.value = '';
+        updateTextPreview();
+    }
+    
+    function clearAllText() {
+        textElements = [];
         
-        function updateTextSizeValue() {
-            textSizeValue.textContent = textSize.value;
-            updateTextPreview();
-        }
-        
-        function updateTextOpacityValue() {
-            textOpacityValue.textContent = textOpacity.value;
-            updateTextPreview();
-        }
-        
-        function setTextPosition(e) {
-            textPositionBtns.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
-            currentTextPosition = this.dataset.position;
-        }
-        
-        function addTextToImage() {
-            const content = textInput.value.trim();
-            if (!content) {
-                alert('Please enter some text');
-                return;
-            }
-            
-            const textElement = {
-                content: content,
-                fontFamily: textFont.value,
-                fontWeight: 'normal',
-                size: parseInt(textSize.value),
-                color: textColor.value,
-                bgColor: textBgColor.value,
-                opacity: parseInt(textOpacity.value),
-                position: currentTextPosition
-            };
-            
-            textElements.push(textElement);
-            
-            // Redraw canvas with the new text
-            if (images.length > 0) {
-                const selectedFrame = framesContainer.querySelector('.frame[style*="border-color"]');
-                if (selectedFrame) {
-                    const img = new Image();
-                    img.src = selectedFrame.src;
-                    img.onload = () => drawImageToCanvas(img);
-                }
-            }
-            
-            // Clear the input field but keep other settings
-            textInput.value = '';
-            updateTextPreview();
-        }
-        
-        function clearAllText() {
-            textElements = [];
-            
-            // Redraw canvas without text
-            if (images.length > 0) {
-                const selectedFrame = framesContainer.querySelector('.frame[style*="border-color"]');
-                if (selectedFrame) {
-                    const img = new Image();
-                    img.src = selectedFrame.src;
-                    img.onload = () => drawImageToCanvas(img);
-                }
+        // Redraw canvas without text
+        if (images.length > 0) {
+            const selectedFrame = framesContainer.querySelector('.frame[style*="border-color"]');
+            if (selectedFrame) {
+                const img = new Image();
+                img.src = selectedFrame.src;
+                img.onload = () => drawImageToCanvas(img);
             }
         }
+    }
+    
+    /* Watermark Editor Functions */
+    function updateWatermarkSettings() {
+        if (!watermarkText || !watermarkSize || !watermarkColor || !watermarkOpacity || !watermarkPosition) return;
         
-        /* Watermark Editor Functions */
-        function updateWatermarkSettings() {
-            watermarkSettings.text = watermarkText.value;
-            watermarkSettings.size = parseInt(watermarkSize.value);
-            watermarkSettings.color = watermarkColor.value;
-            watermarkSettings.opacity = parseInt(watermarkOpacity.value);
-            watermarkSettings.position = watermarkPosition.value;
-        }
+        watermarkSettings.text = watermarkText.value;
+        watermarkSettings.size = parseInt(watermarkSize.value);
+        watermarkSettings.color = watermarkColor.value;
+        watermarkSettings.opacity = parseInt(watermarkOpacity.value);
+        watermarkSettings.position = watermarkPosition.value;
+    }
+    
+    function updateWatermarkSizeValue() {
+        if (watermarkSizeValue && watermarkSize) watermarkSizeValue.textContent = watermarkSize.value;
+    }
+    
+    function updateWatermarkOpacityValue() {
+        if (watermarkOpacityValue && watermarkOpacity) watermarkOpacityValue.textContent = watermarkOpacity.value;
+    }
+    
+    function applyWatermark() {
+        updateWatermarkSettings();
+        watermarkSettings.enabled = true;
         
-        function updateWatermarkSizeValue() {
-            watermarkSizeValue.textContent = watermarkSize.value;
-        }
-        
-        function updateWatermarkOpacityValue() {
-            watermarkOpacityValue.textContent = watermarkOpacity.value;
-        }
-        
-        function applyWatermark() {
-            updateWatermarkSettings();
-            watermarkSettings.enabled = true;
-            
-            // Redraw canvas with watermark
-            if (images.length > 0) {
-                const selectedFrame = framesContainer.querySelector('.frame[style*="border-color"]');
-                if (selectedFrame) {
-                    const img = new Image();
-                    img.src = selectedFrame.src;
-                    img.onload = () => drawImageToCanvas(img);
-                }
+        // Redraw canvas with watermark
+        if (images.length > 0) {
+            const selectedFrame = framesContainer.querySelector('.frame[style*="border-color"]');
+            if (selectedFrame) {
+                const img = new Image();
+                img.src = selectedFrame.src;
+                img.onload = () => drawImageToCanvas(img);
             }
         }
+    }
+    
+    function removeWatermark() {
+        watermarkSettings.enabled = false;
         
-        function removeWatermark() {
-            watermarkSettings.enabled = false;
-            
-            // Redraw canvas without watermark
-            if (images.length > 0) {
-                const selectedFrame = framesContainer.querySelector('.frame[style*="border-color"]');
-                if (selectedFrame) {
-                    const img = new Image();
-                    img.src = selectedFrame.src;
-                    img.onload = () => drawImageToCanvas(img);
-                }
+        // Redraw canvas without watermark
+        if (images.length > 0) {
+            const selectedFrame = framesContainer.querySelector('.frame[style*="border-color"]');
+            if (selectedFrame) {
+                const img = new Image();
+                img.src = selectedFrame.src;
+                img.onload = () => drawImageToCanvas(img);
             }
         }
-    });
-    </script>
+    }
+});
+</script>
 </body>
 </html>
 

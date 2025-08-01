@@ -538,6 +538,110 @@ body.dark-mode .affiliate-link:hover {
 body.dark-mode .affiliate-link i {
     margin-right: 8px; /* Space between icon and text */
 }
+
+:root {
+    /* Light mode defaults */
+    --bg-color: #ffffff;
+    --text-color: #2c3e50;
+    --heading-color: #2c3e50;
+    --accent-color: #3498db;
+    --success-color: #2ecc71;
+    --danger-color: #e74c3c;
+    --border-color: #dcdcdc;
+    --container-bg: #ffffff;
+    --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    --checkbox-color: inherit;
+  }
+
+  .dark-mode {
+    /* Dark mode overrides */
+    --bg-color: #1e1e1e;
+    --text-color: #e0e0e0;
+    --heading-color: #f0f0f0;
+    --accent-color: #4dabf7;
+    --success-color: #2b8a3e;
+    --danger-color: #c92a2a;
+    --border-color: #444;
+    --container-bg: #2a2a2a;
+    --shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    --checkbox-color: #4dabf7;
+  }
+
+  .theme-toggle-container {
+    text-align: right;
+    margin-bottom: 10px;
+  }
+
+  .theme-toggle {
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 2px 8px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 12px;
+  }
+
+  .manage-participants-section {
+    background: var(--bg-color);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+  }
+
+  .manage-participants-section h3 {
+    color: var(--heading-color);
+    font-size: 18px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .manage-participants-section h4 {
+    color: var(--accent-color);
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  .participants-list {
+    border: 1px solid var(--border-color);
+    padding: 10px;
+    max-height: 120px;
+    overflow-y: auto;
+    border-radius: 5px;
+    background: var(--container-bg);
+  }
+
+  .participants-list label {
+    display: block;
+    font-size: 12px;
+    color: var(--text-color);
+  }
+
+  .participants-list input[type="checkbox"] {
+    margin-right: 5px;
+    accent-color: var(--checkbox-color);
+  }
+
+  .add-btn {
+    background: var(--success-color);
+    color: #fff;
+  }
+
+  .remove-btn, .delete-btn {
+    background: var(--danger-color);
+    color: #fff;
+  }
+
+  .action-btn {
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-top: 10px;
+  }
 </style>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -764,65 +868,59 @@ function switchColor() {
 
 </div>
 
+<div class="manage-participants-section" id="manageParticipants">
+ 
+  
+  <h3>Manage Participants</h3>
 
-{% if user == chat.manager %}
-<div class="manage-participants-section" id="manageParticipants" 
-     style="background: #ffffff; padding: 20px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-    <h3 style="color: #2c3e50; font-size: 18px; margin-bottom: 20px; text-align: center;">Manage Participants</h3>
+  <!-- Add Participants Form -->
+  <div style="margin-bottom: 20px;">
+    <h4>Add Participants:</h4>
+    <form method="post" action="{% url 'add_participants' chat.id %}">
+      {% csrf_token %}
+      <div class="participants-list">
+        {% for user_choice in user_choices %}
+          <label>
+            <input type="checkbox" name="participants" value="{{ user_choice.pk }}">
+            {{ user_choice.username }}
+          </label>
+        {% endfor %}
+      </div>
+      <button type="submit" class="action-btn add-btn">
+        ➕ Add Participants
+      </button>
+    </form>
+  </div>
 
-    <!-- Add Participants Form -->
-    <div style="margin-bottom: 20px;">
-        <h4 style="color: #3498db; font-size: 16px; margin-bottom: 10px;">Add Participants:</h4>
-        <form method="post" action="{% url 'add_participants' chat.id %}">
-            {% csrf_token %}
-            <div style="border: 1px solid #dcdcdc; padding: 10px; max-height: 120px; overflow-y: auto; border-radius: 5px;">
-                {% for user_choice in user_choices %}
-                    <label style="display: block; font-size: 12px; color: #2c3e50;">
-                        <input type="checkbox" name="participants" value="{{ user_choice.pk }}" style="margin-right: 5px;">
-                        {{ user_choice.username }}
-                    </label>
-                {% endfor %}
-            </div>
-            <button type="submit" 
-                    style="margin-top: 10px; background: #2ecc71; color: #fff; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 12px;">
-                ➕ Add Participants
-            </button>
-        </form>
-    </div>
+  <!-- Remove Participants Form -->
+  <div style="margin-bottom: 20px;">
+    <h4>Remove Participants:</h4>
+    <form method="post" action="{% url 'remove_participants' chat.id %}">
+      {% csrf_token %}
+      <div class="participants-list">
+        {% for participant in chat.participants.all %}
+          <label>
+            <input type="checkbox" name="participants" value="{{ participant.id }}">
+            {{ participant.username }}
+          </label>
+        {% endfor %}
+      </div>
+      <button type="submit" class="action-btn remove-btn">
+        ❌ Remove Participants
+      </button>
+    </form>
+  </div>
 
-    <!-- Remove Participants Form -->
-    <div style="margin-bottom: 20px;">
-        <h4 style="color: #3498db; font-size: 16px; margin-bottom: 10px;">Remove Participants:</h4>
-        <form method="post" action="{% url 'remove_participants' chat.id %}">
-            {% csrf_token %}
-            <div style="border: 1px solid #dcdcdc; padding: 10px; max-height: 120px; overflow-y: auto; border-radius: 5px;">
-                {% for participant in chat.participants.all %}
-                    <label style="display: block; font-size: 12px; color: #2c3e50;">
-                        <input type="checkbox" name="participants" value="{{ participant.id }}" style="margin-right: 5px;">
-                        {{ participant.username }}
-                    </label>
-                {% endfor %}
-            </div>
-            <button type="submit" 
-                    style="margin-top: 10px; background: #e74c3c; color: #fff; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 12px;">
-                ❌ Remove Participants
-            </button>
-        </form>
-    </div>
-
-    <!-- Delete Chat Form -->
-    <div style="margin-top: 20px; text-align: center;">
-        <form method="post" action="{% url 'delete_chat' chat.id %}">
-            {% csrf_token %}
-            <button type="submit" 
-                    style="background: #e74c3c; color: #fff; border: none; padding: 5px 15px; border-radius: 5px; cursor: pointer; font-size: 12px;">
-                🗑️ Delete Chat
-            </button>
-        </form>
-    </div>
+  <!-- Delete Chat Form -->
+  <div style="margin-top: 20px; text-align: center;">
+    <form method="post" action="{% url 'delete_chat' chat.id %}">
+      {% csrf_token %}
+      <button type="submit" class="action-btn delete-btn">
+        🗑️ Delete Chat
+      </button>
+    </form>
+  </div>
 </div>
-{% endif %}
-
 
 <script>
 var quill = new Quill('#editor-container', {

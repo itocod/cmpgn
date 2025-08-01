@@ -6614,3 +6614,20 @@ def toggle_pledge_fulfillment(request, pledge_id):
     new_status = pledge.toggle_fulfilled()
     messages.success(request, f"Pledge has been marked as {'fulfilled' if new_status else 'unfulfilled'}.")
     return redirect('view_campaign', campaign_id=pledge.campaign.id)
+
+
+
+
+def edit_gif(request):
+
+   return render(request, 'main/edit.html', {
+       
+    })
+
+
+
+
+
+
+
+
