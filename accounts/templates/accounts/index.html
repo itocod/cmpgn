@@ -128,329 +128,224 @@ section {
 
 
 
-  .header-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px;
-    margin: 0 auto;
-    box-sizing: border-box;
-    border-bottom: 1px solid #e1e1e1;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  }
+@media (min-width: 769px) {
+    .rallynex-header-container {
+        display: none !important;
+    }
+}
 
-  /* Logo container */
-  .logo-container {
-    display: flex;
-    align-items: center;
-    flex: 1;
-  }
+/* Mobile styles */
+@media (max-width: 768px) {
+    .rallynex-header-container {
+        padding: 15px;
+    }
 
-  /* Logo styling */
-  .logo {
-    margin-right: 15px;
-    background: none;
-    border: none;
-    box-shadow: none;
-  }
+    /* Hide the full search bar by default on mobile */
+    .rallynex-search-container form {
+        display: none;
+    }
 
-  /* Logo initials styling */
-  .logo-initials {
-    color: #28a745;
-    font-size: 60px;
-    font-weight: bold;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    text-shadow: 
-        2px 2px 0 #28a745,
-        -2px -2px 0 #28a745,
-        2px -2px 0 #28a745,
-        -2px 2px 0 #28a745,
-        4px 4px 0 black,
-        -4px -4px 0 black,
-        4px -4px 0 black,
-        -4px 4px 0 black;
-  }
+    /* Mobile search icon - silver */
+    .rallynex-mobile-search-icon {
+        display: block !important;
+        font-size: 24px;
+        color: #c0c0c0;
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 50%;
+        transition: all 0.2s ease;
+    }
 
-  /* Logo name styling */
-  .logo-name {
-    font-size: 24px;
-    margin-top: 5px;
-    opacity: 0.9;
-  }
+    .rallynex-mobile-search-icon:hover {
+        color: #a0a0a0;
+        background: #f8f8f8;
+    }
 
-  /* Search container */
-  .search-container {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-  }
+    /* Mobile search popup - all white */
+    .rallynex-mobile-search-popup {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        background: white;
+        padding: 15px;
+        box-shadow: 0 2px 5px rgba(192,192,192,0.2);
+        z-index: 1000;
+    }
 
-  /* Search wrapper */
-  .search-wrapper {
-    display: flex;
-    border: 2px solid #ced4da;
-    border-radius: 25px;
-    overflow: hidden;
-    width: 100%;
-    max-width: 600px;
-    box-sizing: border-box;
-  }
+    .rallynex-mobile-search-popup.active {
+        display: flex;
+        align-items: center;
+    }
 
-  /* Input field */
-  #query-field {
-    flex: 1;
-    padding: 12px 20px;
-    border: none;
-    font-size: 16px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    transition: box-shadow 0.3s ease, border-color 0.3s ease;
-  }
+    /* Search wrapper - white with silver accents */
+    .rallynex-mobile-search-wrapper {
+        flex: 1;
+        display: flex;
+        position: relative;
+        border: 1px solid #e0e0e0;
+        border-radius: 24px;
+        overflow: hidden;
+        background: white;
+        transition: all 0.3s ease;
+    }
 
-  #query-field:focus {
-    outline: none;
-    box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
-    border-color: #007bff;
-  }
+    .rallynex-mobile-search-wrapper:focus-within {
+        border-color: #c0c0c0;
+        box-shadow: 0 0 0 2px rgba(192,192,192,0.1);
+    }
 
-  /* Buttons */
-  .btn-search {
-    border: none;
-    background: limegreen;
-    color: white;
-    font-size: 20px;
-    cursor: pointer;
-    transition: background 0.3s ease, transform 0.2s ease;
-    padding: 12px;
-  }
+    .rallynex-mobile-search-wrapper input {
+        flex: 1;
+        padding: 12px 40px 12px 15px;
+        border: none;
+        font-size: 16px;
+        background: white;
+        color: #333;
+    }
 
-  .btn-search:hover {
-    background: #4CAF50;
-    transform: scale(1.05);
-  }
+    .rallynex-mobile-search-wrapper input::placeholder {
+        color: #c0c0c0;
+        opacity: 1;
+    }
 
-  .btn-reset {
-    border: none;
-    background: #f5f5f5;
-    color: #b0b0b0;
-    font-size: 18px;
-    cursor: pointer;
-    transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
-    padding: 12px;
-  }
+    /* Clear button */
+    .rallynex-clear-search {
+        position: absolute;
+        right: 50px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        color: #c0c0c0;
+        background: none;
+        border: none;
+        transition: all 0.2s ease;
+    }
 
-  .btn-reset:hover {
-    background: #eeeeee;
-    color: #a0a0a0;
-    transform: scale(1.05);
-  }
+    .rallynex-clear-search:hover {
+        color: #a0a0a0;
+    }
 
-        /* Mobile styles */
-        @media (max-width: 768px) {
-            .header-container {
-                padding: 15px;
-            }
+    /* Search button - silver */
+    .rallynex-mobile-search-wrapper button[type="submit"] {
+        padding: 0 15px;
+        background: #f0f0f0;
+        color: #707070;
+        border: none;
+        border-left: 1px solid #e0e0e0;
+        transition: all 0.2s ease;
+    }
 
-            /* Hide the full search bar by default on mobile */
-            .search-container form {
-                display: none;
-            }
+    .rallynex-mobile-search-wrapper button[type="submit"]:hover {
+        background: #e0e0e0;
+    }
 
-            /* Mobile search icon - silver */
-            .mobile-search-icon {
-                display: block !important;
-                font-size: 24px;
-                color: #c0c0c0;
-                cursor: pointer;
-                padding: 8px;
-                border-radius: 50%;
-                transition: all 0.2s ease;
-            }
+    /* Close button - silver */
+    .rallynex-close-mobile-search {
+        margin-left: 12px;
+        font-size: 20px;
+        cursor: pointer;
+        color: #c0c0c0;
+        background: white;
+        border-radius: 50%;
+        padding: 5px;
+        transition: all 0.2s ease;
+    }
 
-            .mobile-search-icon:hover {
-                color: #a0a0a0;
-                background: #f8f8f8;
-            }
+    .rallynex-close-mobile-search:hover {
+        color: #a0a0a0;
+        background: #f8f8f8;
+    }
+}
 
-            /* Mobile search popup - all white */
-            .mobile-search-popup {
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                background: white;
-                padding: 15px;
-                box-shadow: 0 2px 5px rgba(192,192,192,0.2);
-                z-index: 1000;
-            }
+/* Hide mobile elements on desktop */
+.rallynex-mobile-search-icon {
+    display: none;
+}
+.rallynex-mobile-search-popup {
+    display: none;
+}
 
-            .mobile-search-popup.active {
-                display: flex;
-                align-items: center;
-            }
+/* Dark Mode Mobile styles */
+@media (max-width: 768px) {
+    .dark-mode .rallynex-header-container {
+        background-color: #1a1a1a;
+    }
 
-            /* Search wrapper - white with silver accents */
-            .mobile-search-wrapper {
-                flex: 1;
-                display: flex;
-                position: relative;
-                border: 1px solid #e0e0e0;
-                border-radius: 24px;
-                overflow: hidden;
-                background: white;
-                transition: all 0.3s ease;
-            }
+    .dark-mode .rallynex-mobile-search-icon {
+        color: #8a8a8a;
+    }
 
-            .mobile-search-wrapper:focus-within {
-                border-color: #c0c0c0;
-                box-shadow: 0 0 0 2px rgba(192,192,192,0.1);
-            }
+    .dark-mode .rallynex-mobile-search-icon:hover {
+        color: #a0a0a0;
+        background: #2d2d2d;
+    }
 
-            .mobile-search-wrapper input {
-                flex: 1;
-                padding: 12px 40px 12px 15px;
-                border: none;
-                font-size: 16px;
-                background: white;
-                color: #333;
-            }
+    .dark-mode .rallynex-mobile-search-popup {
+        background: #1e1e1e;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+    }
 
-            .mobile-search-wrapper input::placeholder {
-                color: #c0c0c0;
-                opacity: 1;
-            }
+    .dark-mode .rallynex-mobile-search-wrapper {
+        border: 1px solid #3a3a3a;
+        background: #2d2d2d;
+    }
 
-            /* Clear button */
-            .clear-search {
-                position: absolute;
-                right: 50px;
-                top: 50%;
-                transform: translateY(-50%);
-                display: none;
-                align-items: center;
-                justify-content: center;
-                width: 20px;
-                height: 20px;
-                cursor: pointer;
-                color: #c0c0c0;
-                background: none;
-                border: none;
-                transition: all 0.2s ease;
-            }
+    .dark-mode .rallynex-mobile-search-wrapper:focus-within {
+        border-color: #5a5a5a;
+        box-shadow: 0 0 0 2px rgba(90,90,90,0.2);
+    }
 
-            .clear-search:hover {
-                color: #a0a0a0;
-            }
+    .dark-mode .rallynex-mobile-search-wrapper input {
+        background: #2d2d2d;
+        color: #e0e0e0;
+    }
 
-            /* Search button - silver */
-            .mobile-search-wrapper button[type="submit"] {
-                padding: 0 15px;
-                background: #f0f0f0;
-                color: #707070;
-                border: none;
-                border-left: 1px solid #e0e0e0;
-                transition: all 0.2s ease;
-            }
+    .dark-mode .rallynex-mobile-search-wrapper input::placeholder {
+        color: #6a6a6a;
+    }
 
-            .mobile-search-wrapper button[type="submit"]:hover {
-                background: #e0e0e0;
-            }
+    .dark-mode .rallynex-clear-search {
+        color: #8a8a8a;
+    }
 
-            /* Close button - silver */
-            .close-mobile-search {
-                margin-left: 12px;
-                font-size: 20px;
-                cursor: pointer;
-                color: #c0c0c0;
-                background: white;
-                border-radius: 50%;
-                padding: 5px;
-                transition: all 0.2s ease;
-            }
+    .dark-mode .rallynex-clear-search:hover {
+        color: #a0a0a0;
+    }
 
-            .close-mobile-search:hover {
-                color: #a0a0a0;
-                background: #f8f8f8;
-            }
-        }
+    .dark-mode .rallynex-mobile-search-wrapper button[type="submit"] {
+        background: #3a3a3a;
+        color: #b0b0b0;
+        border-left: 1px solid #3a3a3a;
+    }
 
-        /* Hide mobile elements on desktop */
-        .mobile-search-icon {
-            display: none;
-        }
-        .mobile-search-popup {
-            display: none;
-        }
+    .dark-mode .rallynex-mobile-search-wrapper button[type="submit"]:hover {
+        background: #4a4a4a;
+    }
 
-        /* Dark Mode Mobile styles */
-        @media (max-width: 768px) {
-            .dark-mode .header-container {
-                background-color: #1a1a1a;
-            }
+    .dark-mode .rallynex-close-mobile-search {
+        color: #8a8a8a;
+        background: #1e1e1e;
+    }
 
-            .dark-mode .mobile-search-icon {
-                color: #8a8a8a;
-            }
+    .dark-mode .rallynex-close-mobile-search:hover {
+        color: #a0a0a0;
+        background: #2d2d2d;
+    }
+}
 
-            .dark-mode .mobile-search-icon:hover {
-                color: #a0a0a0;
-                background: #2d2d2d;
-            }
-
-            .dark-mode .mobile-search-popup {
-                background: #1e1e1e;
-                box-shadow: 0 2px 5px rgba(0,0,0,0.3);
-            }
-
-            .dark-mode .mobile-search-wrapper {
-                border: 1px solid #3a3a3a;
-                background: #2d2d2d;
-            }
-
-            .dark-mode .mobile-search-wrapper:focus-within {
-                border-color: #5a5a5a;
-                box-shadow: 0 0 0 2px rgba(90,90,90,0.2);
-            }
-
-            .dark-mode .mobile-search-wrapper input {
-                background: #2d2d2d;
-                color: #e0e0e0;
-            }
-
-            .dark-mode .mobile-search-wrapper input::placeholder {
-                color: #6a6a6a;
-            }
-
-            .dark-mode .clear-search {
-                color: #8a8a8a;
-            }
-
-            .dark-mode .clear-search:hover {
-                color: #a0a0a0;
-            }
-
-            .dark-mode .mobile-search-wrapper button[type="submit"] {
-                background: #3a3a3a;
-                color: #b0b0b0;
-                border-left: 1px solid #3a3a3a;
-            }
-
-            .dark-mode .mobile-search-wrapper button[type="submit"]:hover {
-                background: #4a4a4a;
-            }
-
-            .dark-mode .close-mobile-search {
-                color: #8a8a8a;
-                background: #1e1e1e;
-            }
-
-            .dark-mode .close-mobile-search:hover {
-                color: #a0a0a0;
-                background: #2d2d2d;
-            }
-        }
+@media (min-width: 769px) {
+    .rallynex-mobile-search-icon,
+    .rallynex-mobile-search-popup {
+        display: none !important;
+    }
+}
 
     nav {
       margin-top: 20px;
@@ -561,9 +456,7 @@ border: 1px solid silver;
             cursor: pointer;
             border-radius: 5px;
         }
-        button:hover {
-            background-color: #0056b3;
-        }
+    
 
 
   .file-container {
@@ -1474,16 +1367,6 @@ body.dark-theme .explore-link i {
     }
 }
 
-.search-container input[type="text"] {
-    background-color: white;
-    color: black;
-    border: 1px solid #ccc;
-}
-
-.search-container {
-    color: black;
-}
-
 
 /* Hide the button on mobile screens */
 @media (max-width: 768px) {
@@ -1533,10 +1416,6 @@ body.dark-mode .search-container .btn-reset {
     color: #b0b0b0; /* Light icon color */
 }
 
-body.dark-mode button:not(.btn-search, .btn-reset) {
-    background-color: #262626; /* Dark background for buttons */
-    color: #ffffff; /* Light text */
-}
 
 body.dark-mode .explore-link i {
     color: #ffffff; /* Light icon color */
@@ -2671,26 +2550,6 @@ body.dark-mode .comment-count {
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* ===== Header Styles ===== */
-        .header-container {
-            /* Add your header container styles here */
-        }
-
-        .logo-container {
-            /* Add your logo container styles here */
-        }
-
-        .search-container {
-            /* Add your desktop search styles here */
-        }
-
-        .mobile-search-icon {
-            /* Add your mobile search icon styles here */
-        }
-
-        .mobile-search-popup {
-            /* Add your mobile search popup styles here */
-        }
 
         /* ===== Navbar Styles ===== */
         .navbar {
@@ -2959,6 +2818,66 @@ body.dark-mode .comment-count {
         }
     </style>
 
+
+
+
+<style>
+ .search-container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .search-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  #query-field {
+    width: 100%;
+    padding: 10px 50px 10px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 20px; /* Only border radius on input */
+    font-size: 14px;
+    color: #333;
+    outline: none;
+    transition: border 0.2s;
+  }
+  
+  #query-field:focus {
+    border-color: #aaa;
+  }
+  
+  .search-icons {
+    position: absolute;
+    right: 5px;
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+  
+  .btn-reset, .btn-search {
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: transparent;
+    color: #999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+  }
+  
+  .btn-reset:hover, .btn-search:hover {
+    color: #555;
+  }
+  
+  .fa-search, .fa-times {
+    font-size: 14px;
+  }
+</style>
+
 <script>
   // Mobile search toggle
   document.addEventListener('DOMContentLoaded', function() {
@@ -3211,45 +3130,77 @@ document.addEventListener('DOMContentLoaded', function() {
 
 </script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Toggle search popup
-            const mobileSearchIcon = document.querySelector('.mobile-search-icon');
-            const mobileSearchPopup = document.querySelector('.mobile-search-popup');
-            const closeMobileSearch = document.querySelector('.close-mobile-search');
-            const searchInput = document.getElementById('mobile-search-input');
-            const clearButton = document.querySelector('.clear-search');
+
+
+
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('mobile-search-input');
+  const clearButton = document.querySelector('.clear-search');
+  
+  if (searchInput && clearButton) {
+    // Show/hide clear button based on input
+    searchInput.addEventListener('input', function() {
+      clearButton.style.display = this.value.length > 0 ? 'flex' : 'none';
+    });
+    
+    // Clear input when X is clicked
+    clearButton.addEventListener('click', function() {
+      searchInput.value = '';
+      clearButton.style.display = 'none';
+      searchInput.focus();
+    });
+    
+    // Handle when popup is opened (in case there's existing text)
+    const mobileSearchIcon = document.querySelector('.mobile-search-icon');
+    if (mobileSearchIcon) {
+      mobileSearchIcon.addEventListener('click', function() {
+        setTimeout(() => {
+          clearButton.style.display = searchInput.value.length > 0 ? 'flex' : 'none';
+        }, 100);
+      });
+    }
+  }
+});
+</script>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Toggle search popup
+        const mobileSearchIcon = document.querySelector('.rallynex-mobile-search-icon');
+        const mobileSearchPopup = document.querySelector('.rallynex-mobile-search-popup');
+        const closeMobileSearch = document.querySelector('.rallynex-close-mobile-search');
+        const searchInput = document.getElementById('mobile-search-input');
+        const clearButton = document.querySelector('.rallynex-clear-search');
+        
+        if (mobileSearchIcon && mobileSearchPopup) {
+            mobileSearchIcon.addEventListener('click', function() {
+                mobileSearchPopup.classList.add('active');
+                if (searchInput) searchInput.focus();
+            });
             
-            if (mobileSearchIcon && mobileSearchPopup) {
-                mobileSearchIcon.addEventListener('click', function() {
-                    mobileSearchPopup.classList.add('active');
-                    searchInput.focus();
-                });
-                
-                closeMobileSearch.addEventListener('click', function() {
-                    mobileSearchPopup.classList.remove('active');
-                });
-            }
+            closeMobileSearch.addEventListener('click', function() {
+                mobileSearchPopup.classList.remove('active');
+            });
+        }
+        
+        // Clear search functionality
+        if (searchInput && clearButton) {
+            searchInput.addEventListener('input', function() {
+                clearButton.style.display = this.value.length > 0 ? 'flex' : 'none';
+            });
             
-            // Clear search functionality
-            if (searchInput && clearButton) {
-                searchInput.addEventListener('input', function() {
-                    clearButton.style.display = this.value.length > 0 ? 'flex' : 'none';
-                });
-                
-                clearButton.addEventListener('click', function() {
-                    searchInput.value = '';
-                    clearButton.style.display = 'none';
-                    searchInput.focus();
-                });
-            }
-            
-            // Toggle dark mode (example)
-            function toggleDarkMode() {
-                document.body.classList.toggle('dark-mode');
-            }
-        });
-    </script>
+            clearButton.addEventListener('click', function() {
+                searchInput.value = '';
+                clearButton.style.display = 'none';
+                searchInput.focus();
+            });
+        }
+    });
+</script>
+
 
 <script>
 function toggleFullContent(button) {
@@ -3279,55 +3230,48 @@ function toggleFullContent(button) {
 
 <header>
     
-        <div class="header-container">
-  <div class="logo-container">
-    <div class="logo">
-      <span class="logo-initials">R</span>
+
+<div class="rallynex-header-container" style="display: flex; justify-content: space-between; align-items: center; padding: 15px;">
+    <!-- Rallynex Logo/Name on the left -->
+    <div class="rallynex-name" style="
+        font-family: 'Courier New', monospace;
+        color: #ffffff;
+        background: linear-gradient(135deg, #c0c0c0, #f8f8f8);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 
+            0 1px 1px rgba(0,0,0,0.3),
+            0 0 8px rgba(255,255,255,0.4);
+        font-weight: bold;
+        letter-spacing: 3px;
+        font-size: 24px;
+        padding: 4px 12px;
+        display: inline-block;
+        border-radius: 3px;
+        backdrop-filter: brightness(1.2);
+    "><img src="{% static 'main/files/lg.png' %}" alt="Rallynex Logo" style="height: 50px; width: 50px;">RALLYNEX</div>
+
+    <!-- Mobile Search Icon on the right -->
+    <div class="rallynex-mobile-search-icon">
+        <i class="fas fa-search"></i>
     </div>
-    <span class="logo-name">Rallynex</span>
-  </div>
-
-  <!-- Desktop Search -->
-  <div class="search-container">
-    <form action="{% url 'search_campaign' %}" method="get">
-      <div class="search-wrapper">
-        <input type="text" placeholder="Search..." name="search_query" id="query-field">
-        <button type="button" class="btn-reset" id="reset-field">
-          <i class="fas fa-times"></i>
-        </button>
-        <button type="submit" class="btn-search">
-          <i class="fas fa-search"></i>
-        </button>
-      </div>
-    </form>
-  </div>
-
-  <!-- Mobile Search Icon -->
-  <div class="mobile-search-icon">
-    <i class="fas fa-search"></i>
-  </div>
 </div>
 
-
-    <!-- Mobile search popup -->
-    <div class="mobile-search-popup">
-        <form action="{% url 'search_campaign' %}" method="get" class="mobile-search-wrapper">
-            <input type="text" placeholder="Search..." name="search_query" id="mobile-search-input">
-            <button type="button" class="clear-search" aria-label="Clear search">
-                <i class="fas fa-times"></i>
-            </button>
-            <button type="submit" aria-label="Search">
-                <i class="fas fa-search"></i>
-            </button>
-        </form>
-        <div class="close-mobile-search">
+<!-- Mobile search popup -->
+<div class="rallynex-mobile-search-popup">
+    <form action="{% url 'search_campaign' %}" method="get" class="rallynex-mobile-search-wrapper">
+        <input type="text" placeholder="Search..." name="search_query" id="mobile-search-input">
+        <button type="button" class="rallynex-clear-search" aria-label="Clear search">
             <i class="fas fa-times"></i>
-        </div>
+        </button>
+        <button type="submit" aria-label="Search">
+            <i class="fas fa-search"></i>
+        </button>
+    </form>
+    <div class="rallynex-close-mobile-search">
+        <i class="fas fa-times"></i>
     </div>
-
-
-
-
 </div>
 
 <nav id="navbar" class="navbar">
@@ -3467,9 +3411,27 @@ function toggleFullContent(button) {
 <aside class="left-aside">
        
 
-    <div>
-        <a href="{% url 'affiliate_links' %}" class="affiliate-link"><i class="fas fa-tools"></i> Campaign Advancement Tools</a>
-    </div>
+<h3 style="
+    font-family: 'Courier New', monospace;
+    color: #ffffff;
+    background: linear-gradient(135deg, #c0c0c0, #f8f8f8);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 
+        0 1px 1px rgba(0,0,0,0.3),
+        0 0 8px rgba(255,255,255,0.4);
+    font-weight: bold;
+    letter-spacing: 3px;
+    font-size: 24px;
+    padding: 4px 12px; /* reduced top/bottom padding (4px), kept left/right (12px) */
+    display: inline-block;
+    border-radius: 3px;
+    backdrop-filter: brightness(1.2);
+    margin: 0;
+    z-index: 1000;
+"><img src="{% static 'main/files/lg.png' %}" alt="Rallynex Logo" style="height: 50px; width: 50px;">RALLYNEX</h3>
+  
 
     <!-- Updated the <nav> tag to <nav class="campaign-nav"> -->
     <nav class="campaign-nav">
@@ -3483,7 +3445,14 @@ function toggleFullContent(button) {
                     {% endif %}
                 </a>
             </li>
-
+      <li>
+            <a href="#" onclick="switchColor()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 3V5M18.36 5.64L16.95 7.05M21 12H19M18.36 18.36L16.95 16.95M12 19V21M7.05 16.95L5.64 18.36M5 12H3M7.05 7.05L5.64 5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Switch Theme</span>
+            </a>
+        </li>
           
             <li><a href="{% url 'private_campaign' %}" style="color: black;"><i class="fas fa-lock"></i> Private </a></li>
 
@@ -3515,6 +3484,8 @@ function toggleFullContent(button) {
         <i class="fas fa-compass" style="font-size: 14px;"> Explore</i>
     </a>
 </li>
+       
+    
             <!-- Login link -->
            <li>
     <a href="{% url 'account_login' %}">
@@ -3530,6 +3501,16 @@ function toggleFullContent(button) {
   
 
 
+
+    <div class="upload-container hide-on-mobile">
+
+     <div class="upload-btn-wrapper">
+        <button class="btn" style="font-size: 14px;">+ Upload
+            <a href="{% url 'create_campaign' %}" class="overlay-link"></a>
+        </button>
+    </div>
+
+</div>
 
 
 <div class="dashboard-snaps">
@@ -3553,10 +3534,14 @@ function toggleFullContent(button) {
       <span class="snap-label">My Chats</span>
     </a>
 
-    <a href="{% url 'notification_list' %}" class="snap-link">
-      <i class="snap-icon fas fa-bell"></i>
-      <span class="snap-label">Alerts</span>
+{% if not user.is_anonymous %}
+    <a href="{% url 'profile_view' username=request.user.username %}" class="snap-link">
+        <i class="snap-icon fas fa-user"></i>
+        <span class="snap-label">Visit Profile</span>
     </a>
+{% else %}
+    <span class="anonymous-label">Anonymous User</span>
+{% endif %}
   </div>
 </div>
 
@@ -3595,60 +3580,11 @@ function toggleFullContent(button) {
 
 
 <section>
-
-
-    </br>
-
-<h4 class="desktop-only" style="font-size: 19px; padding-left: 20px; display: inline-flex; align-items: center;">
-    Explore
-    <a href="{% url 'index' %}" title="Explore" class="explore-link" style="margin-left: 10px;">
-        <i class="fas fa-compass" style="font-size: 14px;"></i>
-    </a>
-
-    <div class="action-item">
-        <a href="#" onclick="switchColor()">
-            <i class="fas fa-sync-alt"></i>
-        </a>
-    </div>
-
-    <div class="profile-widget dark-mode-compatible" style="display: flex; align-items: center; gap: 12px; margin-left: 10px;">
- 
-  
-  <img 
-    src="{% if user.is_anonymous %}{% static 'main/files/pp.png' %}{% else %}{{ user_profile.image.url }}{% endif %}" 
-    alt="{% if user.is_anonymous %}Anonymous User{% else %}VIP Member{% endif %}" 
-    width="44" 
-    height="44" 
-    class="profile-image"
-    style="
-        border-radius: 50%;
-        border: 2px solid #4CAF50;
-        object-fit: cover;
-        transition: all 0.3s ease;
-        box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
-        position: relative;
-        z-index: 1;
-    "
-    onmouseover="this.style.transform='scale(1.08)'; this.style.boxShadow='0 4px 12px rgba(76, 175, 80, 0.4)';"
-    onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 2px 8px rgba(76, 175, 80, 0.3)';"
->
-</a>
-<div class="profile-text">
-    <div class="username-text" style="font-weight: 700; color: #222; font-size: 15px; line-height: 1.3;">
-        {% if user.is_anonymous %}
-            <span style="color: #4CAF50;">Anonymous Hero</span>, you make a difference! 👑
-        {% else %}
-            <span style="color: #4CAF50;">{{ user.username }}</span>, you make a difference! 👑
-        {% endif %}
-    </div>
-    <div class="last-visit" style="font-size: 13px; color: #555; margin-top: 2px;">
-        <span style="font-weight: 600;">Your last visit:</span> 
-        <span style="color: #4CAF50;">{{ user_impact_count }} lives impacted</span>
-    </div>
+<br>
+ <div class="explore-card">
+    <h3><i class="fas fa-compact"></i> Explore</h3>
+    <p>Find campaigns to support</p>
 </div>
-</div>
-</h4>
-
 
 <form method="GET" action="{% url 'home' %}" class="filter-form">
     <label for="category" class="filter-label">Filter by Category:</label>
@@ -3663,16 +3599,7 @@ function toggleFullContent(button) {
 
 </form>
 
-<!-- Beautiful upload button -->
-<div class="upload-container hide-on-mobile">
 
-     <div class="upload-btn-wrapper">
-        <button class="btn" style="font-size: 14px;">+ Upload
-            <a href="{% url 'create_campaign' %}" class="overlay-link"></a>
-        </button>
-    </div>
-
-</div>
 
     
 </div><br>
@@ -3759,7 +3686,16 @@ function toggleFullContent(button) {
         <div class="campaign-image-section">
             {% if campaign.poster %}
             <div class="campaign-image-container">
-                <img src="{{ campaign.poster.url }}" alt="{{ campaign.title }}" class="main-campaign-image">
+                    {% if user.is_authenticated and user.profile in campaign.user_profiles.all %}
+    <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="campaign-poster-link">
+{% endif %}
+        <img src="{{ campaign.poster.url }}" 
+             alt="{{ campaign.title }}" 
+             class="main-campaign-image {% if user.profile in campaign.user_profiles.all %}clickable-poster{% endif %}"
+             style="{% if user.profile in campaign.user_profiles.all %}cursor: pointer;{% endif %}">
+{% if user.is_authenticated and user.profile in campaign.user_profiles.all %}
+    </a>
+{% endif %}
 <div class="campaign-views-overlay" aria-label="Total campaign views">
     <i class="far fa-eye"></i>
     <span>{{ campaign.campaignview_set.count|format_count }}</span>
@@ -4015,10 +3951,7 @@ function toggleFullContent(button) {
 {% if not public_campaigns %}
 <div class="simple-campaigns-container">
        <!-- Mobile-optimized title section with left padding -->
- <div class="explore-card">
-    <h3><i class="fas fa-compact"></i> Explore</h3>
-    <p>Find campaigns to support</p>
-</div>
+
     {% for campaign in campaigns %}
   <div class="simple-campaign-card">
         <!-- Top Section - Creator Info -->
@@ -4097,7 +4030,16 @@ function toggleFullContent(button) {
         <div class="campaign-image-section">
             {% if campaign.poster %}
             <div class="campaign-image-container">
-                <img src="{{ campaign.poster.url }}" alt="{{ campaign.title }}" class="main-campaign-image">
+                    {% if user.is_authenticated and user.profile in campaign.user_profiles.all %}
+    <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="campaign-poster-link">
+{% endif %}
+        <img src="{{ campaign.poster.url }}" 
+             alt="{{ campaign.title }}" 
+             class="main-campaign-image {% if user.profile in campaign.user_profiles.all %}clickable-poster{% endif %}"
+             style="{% if user.profile in campaign.user_profiles.all %}cursor: pointer;{% endif %}">
+{% if user.is_authenticated and user.profile in campaign.user_profiles.all %}
+    </a>
+{% endif %}
                 <div class="campaign-views-overlay" aria-label="Total campaign views">
                     <i class="far fa-eye"></i>
                     <span>{{ campaign.campaignview_set.count|format_count }}</span>
@@ -4380,6 +4322,22 @@ function toggleFullContent(button) {
 
 
 <aside class="right-aside">
+<div class="search-container">
+  <form action="{% url 'search_campaign' %}" method="get">
+    <div class="search-wrapper">
+      <input type="text" placeholder="Search..." name="search_query" id="query-field">
+      <div class="search-icons">
+        <button type="button" class="btn-reset" id="reset-field">
+          <i class="fas fa-times"></i>
+        </button>
+        <button type="submit" class="btn-search">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+<br>
   <!-- Suggested Users Section -->
   <div class="suggested-users">
     <div class="section-header">
@@ -5273,11 +5231,11 @@ document.addEventListener('DOMContentLoaded', function() {
   margin-top: 24px;
   background: #fff;
   border-radius: 12px;
-  padding: 16px;
+  padding-left: 8px;
+  padding-top: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
-
 .snaps-header {
   margin-bottom: 12px;
 }

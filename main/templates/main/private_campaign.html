@@ -126,124 +126,6 @@ section {
 
 
 
-  .header-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px;
-    margin: 0 auto;
-    box-sizing: border-box;
-    border-bottom: 1px solid #e1e1e1;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-  }
-
-  /* Logo container */
-  .logo-container {
-    display: flex;
-    align-items: center;
-    flex: 1;
-  }
-
-  /* Logo styling */
-  .logo {
-    margin-right: 15px;
-    background: none;
-    border: none;
-    box-shadow: none;
-  }
-
-  /* Logo initials styling */
-  .logo-initials {
-    color: #28a745;
-    font-size: 60px;
-    font-weight: bold;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    text-shadow: 
-        2px 2px 0 #28a745,
-        -2px -2px 0 #28a745,
-        2px -2px 0 #28a745,
-        -2px 2px 0 #28a745,
-        4px 4px 0 black,
-        -4px -4px 0 black,
-        4px -4px 0 black,
-        -4px 4px 0 black;
-  }
-
-  /* Logo name styling */
-  .logo-name {
-    font-size: 24px;
-    margin-top: 5px;
-    opacity: 0.9;
-  }
-
-  /* Search container */
-  .search-container {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-  }
-
-  /* Search wrapper */
-  .search-wrapper {
-    display: flex;
-    border: 2px solid #ced4da;
-    border-radius: 25px;
-    overflow: hidden;
-    width: 100%;
-    max-width: 600px;
-    box-sizing: border-box;
-  }
-
-  /* Input field */
-  #query-field {
-    flex: 1;
-    padding: 12px 20px;
-    border: none;
-    font-size: 16px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    transition: box-shadow 0.3s ease, border-color 0.3s ease;
-  }
-
-  #query-field:focus {
-    outline: none;
-    box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
-    border-color: #007bff;
-  }
-
-  /* Buttons */
-  .btn-search {
-    border: none;
-    background: limegreen;
-    color: white;
-    font-size: 20px;
-    cursor: pointer;
-    transition: background 0.3s ease, transform 0.2s ease;
-    padding: 12px;
-  }
-
-  .btn-search:hover {
-    background: #4CAF50;
-    transform: scale(1.05);
-  }
-
-  .btn-reset {
-    border: none;
-    background: #f5f5f5;
-    color: #b0b0b0;
-    font-size: 18px;
-    cursor: pointer;
-    transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
-    padding: 12px;
-  }
-
-  .btn-reset:hover {
-    background: #eeeeee;
-    color: #a0a0a0;
-    transform: scale(1.05);
-  }
-
   /* Mobile styles */
   @media (max-width: 768px) {
     .header-container {
@@ -428,9 +310,7 @@ border: 1px solid silver;
             cursor: pointer;
             border-radius: 5px;
         }
-        button:hover {
-            background-color: #0056b3;
-        }
+      
 
 
   .file-container {
@@ -1218,15 +1098,6 @@ body.dark-theme .explore-link i {
     }
 }
 
-.search-container input[type="text"] {
-    background-color: white;
-    color: black;
-    border: 1px solid #ccc;
-}
-
-.search-container {
-    color: black;
-}
 
 
 /* Hide the button on mobile screens */
@@ -1273,14 +1144,7 @@ body.dark-mode .search-container input[type="text"] {
     border: 1px solid #444444; /* Dark border */
 }
 
-body.dark-mode .search-container .btn-reset {
-    color: #b0b0b0; /* Light icon color */
-}
 
-body.dark-mode button:not(.btn-search, .btn-reset) {
-    background-color: #262626; /* Dark background for buttons */
-    color: #ffffff; /* Light text */
-}
 
 body.dark-mode .explore-link i {
     color: #ffffff; /* Light icon color */
@@ -1301,26 +1165,6 @@ body.dark-mode .comment-count {
             transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* ===== Header Styles ===== */
-        .header-container {
-            /* Add your header container styles here */
-        }
-
-        .logo-container {
-            /* Add your logo container styles here */
-        }
-
-        .search-container {
-            /* Add your desktop search styles here */
-        }
-
-        .mobile-search-icon {
-            /* Add your mobile search icon styles here */
-        }
-
-        .mobile-search-popup {
-            /* Add your mobile search popup styles here */
-        }
 
         /* ===== Navbar Styles ===== */
         .navbar {
@@ -2887,7 +2731,62 @@ body.dark-mode .comment-count {
 </style>
 
 
-
+<style>
+  .search-container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .search-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  #query-field {
+    width: 100%;
+    padding: 10px 50px 10px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 20px; /* Only border radius on input */
+    font-size: 14px;
+    color: #333;
+    outline: none;
+    transition: border 0.2s;
+  }
+  
+  #query-field:focus {
+    border-color: #aaa;
+  }
+  
+  .search-icons {
+    position: absolute;
+    right: 5px;
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+  
+  .btn-reset, .btn-search {
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: transparent;
+    color: #999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+  }
+  
+  .btn-reset:hover, .btn-search:hover {
+    color: #555;
+  }
+  
+  .fa-search, .fa-times {
+    font-size: 14px;
+  }
+</style>
 
 
 <style>
@@ -2895,7 +2794,8 @@ body.dark-mode .comment-count {
   margin-top: 24px;
   background: #fff;
   border-radius: 12px;
-  padding: 16px;
+  padding-left: 8px;
+  padding-top: 2px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
@@ -3399,67 +3299,113 @@ function toggleFullContent(button) {
 
 
 
+
 <aside class="left-aside">
 
-    <div>
-        <a href="{% url 'affiliate_links' %}" class="affiliate-link"><i class="fas fa-tools"></i> Campaign Advancement Tools</a>
-    </div>
+<h3 style="
+    font-family: 'Courier New', monospace;
+    color: #ffffff;
+    background: linear-gradient(135deg, #c0c0c0, #f8f8f8);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 
+        0 1px 1px rgba(0,0,0,0.3),
+        0 0 8px rgba(255,255,255,0.4);
+    font-weight: bold;
+    letter-spacing: 3px;
+    font-size: 24px;
+    padding: 4px 12px; /* reduced top/bottom padding (4px), kept left/right (12px) */
+    display: inline-block;
+    border-radius: 3px;
+    backdrop-filter: brightness(1.2);
+    margin: 0;
+    z-index: 1000;
+"><img src="{% static 'main/files/lg.png' %}" alt="Rallynex Logo" style="height: 50px; width: 50px;">RALLYNEX</h3>
 
     <!-- Updated the <nav> tag to <nav class="campaign-nav"> -->
-    <nav class="campaign-nav">
-        <ul>
-            <!-- Home link with red spot -->
-            <li>
-                <a href="{% url 'home' %}" style="color: black; position: relative;">
-                    <i class="fas fa-home"></i> Home
-                    {% if new_campaigns_from_follows %}
-                        <span id="home-alert" class="alert-badge">{{ new_campaigns_from_follows.count }}</span> <!-- Red alert spot -->
-                    {% endif %}
-                </a>
-            </li>
+<nav class="campaign-nav">
+    <ul>
+        <!-- Home link with red spot -->
+        <li>
+            <a href="{% url 'home' %}" style="color: black; position: relative;">
+                <i class="fas fa-home"></i> Home
+                {% if new_campaigns_from_follows %}
+                    <span id="home-alert" class="alert-badge">{{ new_campaigns_from_follows.count }}</span> <!-- Red alert spot -->
+                {% endif %}
+            </a>
+        </li>
 
-          
-            <li><a href="{% url 'private_campaign' %}" style="color: black;"><i class="fas fa-lock"></i> Private </a></li>
+        <li>
+            <a href="#" onclick="switchColor()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 3V5M18.36 5.64L16.95 7.05M21 12H19M18.36 18.36L16.95 16.95M12 19V21M7.05 16.95L5.64 18.36M5 12H3M7.05 7.05L5.64 5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Switch Theme</span>
+            </a>
+        </li>
+        
+        <li><a href="{% url 'private_campaign' %}" style="color: black;"><i class="fas fa-lock"></i> Private </a></li>
 
-            <!-- Chat Table link with red spot -->
-            <li>
-                <a href="{% url 'user_chats' %}" style="color: black; position: relative;">
-                    <i class="fas fa-comment-alt"></i> Chat Table
-                    {% if unread_messages_count %}
-                        <span id="chat-alert" class="alert-badge" style="background-color: red;">{{ unread_messages_count }}</span>
-                    {% endif %}
-                </a>
-            </li>
+        <!-- Chat Table link with red spot -->
+        <li>
+            <a href="{% url 'user_chats' %}" style="color: black; position: relative;">
+                <i class="fas fa-comment-alt"></i> Chat Table
+                {% if unread_messages_count %}
+                    <span id="chat-alert" class="alert-badge" style="background-color: red;">{{ unread_messages_count }}</span>
+                {% endif %}
+            </a>
+        </li>
 
-            <!-- Notification icon with red spot -->
-            <li>
-                <a href="{% url 'notification_list' %}" style="color: black; position: relative;">
-                    <i class="fas fa-bell"></i>
-                    {% if unread_notifications %}
-                        <span id="notification-alert" class="alert-badge">{{ unread_notifications.count }}</span>
-                    {% endif %}
-                    Notification
-                </a>
-            </li>
+        <!-- Notification icon with red spot -->
+        <li>
+            <a href="{% url 'notification_list' %}" style="color: black; position: relative;">
+                <i class="fas fa-bell"></i>
+                {% if unread_notifications %}
+                    <span id="notification-alert" class="alert-badge">{{ unread_notifications.count }}</span>
+                {% endif %}
+                Notification
+            </a>
+        </li>
 
-            <li><a href="{% url 'suggest' %}" style="color: black;"><i class="fas fa-user-friends"></i> Suggested Users</a></li>
+        <li><a href="{% url 'suggest' %}" style="color: black;"><i class="fas fa-user-friends"></i> Suggested Users</a></li>
 
-<li>
-     <a href="{% url 'index' %}" title="Explore"  style="color: black;">
-        <i class="fas fa-compass" style="font-size: 14px;"> Explore</i>
-    </a>
-</li>
-            <!-- Logout link -->
-            <li>
-                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
-                <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
-                    {% csrf_token %}
-                </form>
-            </li>
-        </ul>
-    </nav>
+        <li>
+            <a href="{% url 'index' %}" title="Explore" style="color: black;">
+                <i class="fas fa-compass" style="font-size: 14px;"> Explore</i>
+            </a>
+        </li>
+        
+        <!-- User Profile link -->
+        <li>
+            <a href="{% url 'profile_view' username=request.user.username %}" style="color: black;">
+                <i class="fas fa-user-circle"></i> My Profile
+            </a>
+        </li>
+
+        <!-- Logout link -->
+        <li>
+            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+            <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+                {% csrf_token %}
+            </form>
+        </li>
+    </ul>
+</nav>
+      
+
+    <div class="upload-container hide-on-mobile">
+
+     <div class="upload-btn-wrapper">
+        <button class="btn" style="font-size: 14px;">+ Upload
+            <a href="{% url 'create_campaign' %}" class="overlay-link"></a>
+        </button>
+    </div>
+
+</div>
+
 <div class="dashboard-snaps">
   <div class="snaps-header">
     <h3 class="snaps-title"><i class="fas fa-bolt"></i> Quick Actions</h3>
@@ -3481,13 +3427,12 @@ function toggleFullContent(button) {
       <span class="snap-label">My Chats</span>
     </a>
 
-    <a href="{% url 'notification_list' %}" class="snap-link">
-      <i class="snap-icon fas fa-bell"></i>
-      <span class="snap-label">Alerts</span>
+    <a href="{% url 'profile_view' username=request.user.username %}" class="snap-link">
+      <i class="snap-icon fas fa-user"></i>
+      <span class="snap-label">Visit Profile</span>
     </a>
   </div>
 </div>
-
 
 <!-- Carousel for Ads -->
 <div class="carousel" onmouseover="pauseCarousel()" onmouseout="resumeCarousel()">
@@ -3511,7 +3456,6 @@ function toggleFullContent(button) {
   </div>
 
 </aside>
-
 
 
 
@@ -3653,7 +3597,16 @@ function toggleFullContent(button) {
         <div class="campaign-image-section">
             {% if campaign.poster %}
             <div class="campaign-image-container">
-                <img src="{{ campaign.poster.url }}" alt="{{ campaign.title }}" class="main-campaign-image">
+                  {% if user.is_authenticated and user.profile in campaign.user_profiles.all %}
+    <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="campaign-poster-link">
+{% endif %}
+        <img src="{{ campaign.poster.url }}" 
+             alt="{{ campaign.title }}" 
+             class="main-campaign-image {% if user.profile in campaign.user_profiles.all %}clickable-poster{% endif %}"
+             style="{% if user.profile in campaign.user_profiles.all %}cursor: pointer;{% endif %}">
+{% if user.is_authenticated and user.profile in campaign.user_profiles.all %}
+    </a>
+{% endif %}
 <div class="campaign-views-overlay" aria-label="Total campaign views">
     <i class="far fa-eye"></i>
     <span>{{ campaign.campaignview_set.count|format_count }}</span>
@@ -3992,6 +3945,23 @@ function toggleFullContent(button) {
 </section>
 
 <aside class="right-aside">
+
+  <div class="search-container">
+  <form action="{% url 'search_campaign' %}" method="get">
+    <div class="search-wrapper">
+      <input type="text" placeholder="Search..." name="search_query" id="query-field">
+      <div class="search-icons">
+        <button type="button" class="btn-reset" id="reset-field">
+          <i class="fas fa-times"></i>
+        </button>
+        <button type="submit" class="btn-search">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </div>
+  </form>
+</div><br>
+
   <!-- Suggested Users Section -->
   <div class="suggested-users">
     <div class="section-header">

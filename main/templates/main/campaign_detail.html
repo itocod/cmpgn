@@ -374,7 +374,16 @@
     <!-- Poster as the main focus -->
     {% if campaign.poster %}
     <div class="poster-hero">
-        <img src="{{ campaign.poster.url }}" alt="{{ campaign.title }}">
+       {% if user.is_authenticated and user.profile in campaign.user_profiles.all %}
+    <a href="{% url 'activity_list' campaign_id=campaign.id %}">
+{% endif %}
+        <img src="{{ campaign.poster.url }}" 
+             alt="{{ campaign.title }}" 
+             class="main-campaign-image{% if user.profile in campaign.user_profiles.all %} clickable-poster{% endif %}"
+             style="{% if user.profile in campaign.user_profiles.all %}cursor: pointer;{% endif %}">
+{% if user.is_authenticated and user.profile in campaign.user_profiles.all %}
+    </a>
+{% endif %}
         <div class="poster-overlay">
             <h2 class="campaign-title">{{ campaign.title }}</h2>
             <div class="campaign-creator">
