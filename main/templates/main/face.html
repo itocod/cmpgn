@@ -868,34 +868,6 @@ border: 1px solid silver;
 
 
 
-  /* Unified sidebar style for both web and mobile */
-  .sidebar-box {
-    border: none;
-    height: auto;
-    overflow: visible;
-    border-radius: 0;
-    box-shadow: none;
-    padding: 0;
-    background-color: transparent;
-    transition: all 0.3s ease;
-  }
-
-  /* Dark mode styles - now consistent across devices */
-  .dark-mode .sidebar-box {
-    background-color: transparent;
-    color: inherit;
-  }
-
-  /* Web-specific enhancements (optional) */
-  @media (min-width: 768px) {
-    .sidebar-box {
-      /* Add any web-specific enhancements here without changing the base style */
-      /* For example, you might want to add some subtle spacing: */
-      padding: 10px 0;
-    }
-  }
-
-
 /* Styles for the "Activities" label (left-centered) */
 .activity-label {
     visibility: hidden;
@@ -1042,6 +1014,53 @@ body.light-theme .explore-link i {
 body.dark-theme .explore-link i {
     color: white;  /* White icon for dark backgrounds */
 }
+
+
+
+/* Light mode (default) styles remain the same */
+.sidebar-box {
+    border-left: 2px solid #c0c0c0;
+    height: 800px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(192, 192, 192, 0.3);
+    padding: 0;
+    background-color: transparent;
+}
+.sidebar-box {
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+/* Dark mode styles */
+.dark-mode .sidebar-box {
+    border-left: 2px solid #444; /* Darker border */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Darker shadow */
+    background-color: #2d2d2d; /* Dark background */
+    color: #e0e0e0; /* Light text color */
+}
+
+/* Mobile styles remain the same */
+@media (max-width: 767px) {
+    .sidebar-box {
+        border: none;
+        height: auto;
+        overflow: visible;
+        border-radius: 0;
+        box-shadow: none;
+        padding: 0;
+        background-color: transparent;
+    }
+    
+    /* Dark mode mobile override */
+    .dark-mode .sidebar-box {
+        background-color: transparent; /* Keep transparent in dark mode on mobile */
+        color: inherit; /* Inherit text color from parent */
+    }
+}
+
+
+
+
 
 
 /* Styling for the go-back arrow */
@@ -2578,6 +2597,8 @@ body.dark-mode .comment-count {
 .snap-label {
   transition: all 0.3s ease;
 }
+
+
     .top-navigation-container {
         display: flex;
         justify-content: space-between;
@@ -2720,6 +2741,397 @@ body.dark-mode .comment-count {
   background: #121212;
   color: #e0e0e0;
   transition: background-color 0.2s ease;
+}
+</style>
+
+
+
+
+<style>
+    .affiliate-products-section {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    
+    .product-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 12px;
+    }
+    
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
+    }
+    
+    .product-image {
+        height: 180px;
+        object-fit: cover;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+    .product-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        z-index: 2;
+    }
+    
+    .ribbon {
+        width: 150px;
+        height: 150px;
+        overflow: hidden;
+        position: absolute;
+        z-index: 1;
+    }
+    
+    .ribbon span {
+        position: absolute;
+        display: block;
+        width: 225px;
+        padding: 8px 0;
+        background-color: #4e66f8;
+        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 600;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+        text-transform: uppercase;
+        text-align: center;
+        right: -25px;
+        top: 30px;
+        transform: rotate(45deg);
+    }
+    
+    .ribbon-top-right {
+        top: -10px;
+        right: -10px;
+    }
+    
+    .product-features {
+        background-color: #f9fafc;
+        padding: 12px;
+        border-radius: 8px;
+    }
+    
+    .feature-item {
+        padding: 6px 0;
+        font-size: 14px;
+    }
+    
+    .rating {
+        white-space: nowrap;
+    }
+    
+    .bg-primary-soft {
+        background-color: rgba(78, 102, 248, 0.1);
+    }
+    
+    .bg-success-soft {
+        background-color: rgba(40, 167, 69, 0.1);
+    }
+    
+    .btn-link-arrow {
+        color: #4e66f8;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-link-arrow:hover {
+        color: #3a56e8;
+        transform: translateX(3px);
+    }
+
+      /* Custom Button Classes */
+    .affiliate-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 500;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        user-select: none;
+        border: 1px solid transparent;
+        padding: 0.5rem 1.25rem;
+        font-size: 0.875rem;
+        line-height: 1.5;
+        border-radius: 50px;
+        transition: all 0.3s ease;
+        text-decoration: none !important;
+    }
+    
+    .affiliate-btn-primary {
+        color: #fff;
+        background-color: #4e66f8;
+        border-color: #4e66f8;
+        box-shadow: 0 4px 6px rgba(78, 102, 248, 0.1);
+    }
+    
+    .affiliate-btn-primary:hover {
+        background-color: #3a56e8;
+        border-color: #3a56e8;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(78, 102, 248, 0.15);
+    }
+    
+    .affiliate-btn-outline {
+        color: #4e66f8;
+        background-color: transparent;
+        border-color: #4e66f8;
+    }
+    
+    .affiliate-btn-outline:hover {
+        color: #fff;
+        background-color: #4e66f8;
+    }
+
+      /* Add these new styles to your existing CSS */
+    .section-badge {
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+    }
+    
+    .section-badge:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(78, 102, 248, 0.1);
+    }
+    
+    .section-title {
+        color: #2a3042;
+        padding-bottom: 10px;
+    }
+    
+    .title-decoration {
+        width: 60px;
+        height: 3px;
+        background: linear-gradient(90deg, #4e66f8 0%, #3a56e8 100%);
+        border-radius: 3px;
+    }
+    
+    .section-subtitle {
+        position: relative;
+        padding-top: 15px;
+        max-width: 700px;
+    }
+    
+    .section-subtitle::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 1px;
+        background: linear-gradient(90deg, rgba(78, 102, 248, 0) 0%, rgba(78, 102, 248, 0.4) 50%, rgba(78, 102, 248, 0) 100%);
+    }
+    
+    /* If you want to add a subtle animation */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .affiliate-products-section {
+        animation: fadeInUp 0.6s ease-out;
+    }
+
+    .affiliate-btn-outline {
+    color: #4e66f8;
+    background-color: transparent;
+    border: 2px solid #4e66f8;
+    padding: 0.625rem 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s ease;
+}
+
+.affiliate-btn-outline:hover {
+    color: #fff;
+    background-color: #4e66f8;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(78, 102, 248, 0.2);
+}
+
+/* Optional hover effect - subtle background wave */
+.affiliate-btn-outline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: 0.5s;
+}
+
+.affiliate-btn-outline:hover::before {
+    left: 100%;
+}
+
+/* If you want the arrow to animate on hover */
+.affiliate-btn-outline i {
+    transition: transform 0.3s ease;
+}
+
+.affiliate-btn-outline:hover i {
+    transform: translateX(3px);
+}
+.affiliate-btn-primary {
+   min-height: 48px;      /* Safe touch target */
+   padding: 12px 24px;    /* Generous padding */
+   font-size: 1rem;       /* Readable text */
+}
+.affiliate-btn-outline {
+   min-height: 44px;      /* Still safe, but less prominent */
+   padding: 10px 20px;    /* Slightly smaller */
+   font-size: 0.95rem;    /* Slightly smaller text */
+}
+    /* ===== Light Mode (Existing Styles) ===== */
+    .affiliate-products-section {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background-color: #f8f9fa;
+    }
+    
+    .product-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border-radius: 12px;
+        background-color: #ffffff;
+    }
+    
+    .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
+    }
+    
+    .product-image {
+        height: 180px;
+        object-fit: cover;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+    
+ 
+    
+    .ribbon span {
+        background-color: #4e66f8;
+        color: #fff;
+    }
+    
+    .product-features {
+        background-color: #f9fafc;
+        color: #495057;
+    }
+    
+    .section-title {
+        color: #2a3042;
+    }
+    
+    .section-subtitle {
+        color: #6c757d;
+    }
+    
+    /* ===== Dark Mode Overrides ===== */
+    .dark-mode .affiliate-products-section {
+        background-color: #1a1a1a;
+    }
+    
+    .dark-mode .product-card {
+        background-color: #2d2d2d;
+        border-color: #383838;
+    }
+    
+    .dark-mode .product-card:hover {
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3) !important;
+    }
+    
+    .dark-mode .product-image {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        filter: brightness(0.9);
+    }
+    
+    .dark-mode .product-badge {
+        background-color: #383838;
+    }
+    
+    .dark-mode .ribbon span {
+        background-color: #3a56e8;
+    }
+    
+    .dark-mode .product-features {
+        background-color: #383838;
+        color: #e9ecef;
+    }
+    
+    .dark-mode .feature-item {
+        color: #dee2e6;
+    }
+    
+    .dark-mode .section-title {
+        color: #f8f9fa;
+    }
+    
+    .dark-mode .section-subtitle {
+        color: #adb5bd;
+    }
+    
+    .dark-mode .section-subtitle::before {
+        background: linear-gradient(90deg, rgba(78, 102, 248, 0) 0%, rgba(78, 102, 248, 0.2) 50%, rgba(78, 102, 248, 0) 100%);
+    }
+    
+    .dark-mode .section-badge {
+        background-color: rgba(78, 102, 248, 0.2);
+        color: #64b5f6;
+    }
+    
+    .dark-mode .card-footer {
+        background-color: #2d2d2d !important;
+        border-top: 1px solid #383838 !important;
+    }
+    
+    .dark-mode .text-muted {
+        color: #868e96 !important;
+    }
+    
+    .dark-mode .text-primary {
+        color: #64b5f6 !important;
+    }
+    
+    /* Dark mode buttons */
+    .dark-mode .affiliate-btn-primary {
+        background-color: #3a56e8;
+        border-color: #3a56e8;
+    }
+    
+    .dark-mode .affiliate-btn-primary:hover {
+        background-color: #4e66f8;
+        border-color: #4e66f8;
+    }
+    
+    .dark-mode .affiliate-btn-outline {
+        color: #64b5f6;
+        border-color: #64b5f6;
+    }
+    
+    .dark-mode .affiliate-btn-outline:hover {
+        color: #fff;
+        background-color: #64b5f6;
+    }
+.affiliate-btn-primary:focus, 
+.affiliate-btn-outline:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(78, 102, 248, 0.3);
 }
 </style>
 
@@ -3325,9 +3737,7 @@ function toggleFullContent(button) {
   
 
 
-</select>
 
-</form>
 
 <br>
 
@@ -3361,6 +3771,177 @@ function toggleFullContent(button) {
   <div class="sidebar-box ">
     {% block content %}{% endblock %}
   
+</div>
+
+<div class="affiliate-products-section py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <span class="section-badge bg-primary-soft text-primary px-3 py-2 rounded-pill d-inline-block mb-3">
+                <i class="fas fa-star me-2"></i>Recommended Tools
+            </span>
+            <h2 class="section-title display-5 fw-bold mb-3 position-relative d-inline-block">
+                Rallynex Essentials
+                <span class="title-decoration position-absolute bottom-0 start-50 translate-middle-x"></span>
+            </h2>
+            <p class="section-subtitle lead text-muted mx-auto">
+               Tools and offers to help you boost and manage your campaigns like a pro.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            <!-- Product 1 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card product-card h-100 border-0 shadow-sm overflow-hidden">
+                    <div class="ribbon ribbon-top-right"><span>Top Pick</span></div>
+                    <div class="product-badge bg-success">Limited Offer</div>
+                    <img src="{% static 'main/files/dc.jpg' %}" class="card-img-top product-image" alt="SkyHost Premium Web Hosting">
+                    <div class="card-body position-relative">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h3 class="h5 mb-0">SkyHost Premium</h3>
+                            <div class="rating small text-warning">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                                <span class="text-muted ms-1">(4.8)</span>
+                            </div>
+                        </div>
+                        <p class="card-text text-muted mb-4">Blazing-fast hosting with 24/7 expert support and free SSL certificates.</p>
+                        
+                        <div class="product-features mb-4">
+                            <div class="feature-item">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <span>99.9% Uptime</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <span>Free Migration</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <span>Unlimited Bandwidth</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-0 pt-0 pb-4 px-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="text-muted text-decoration-line-through">$12.99</span>
+                                <span class="h4 text-primary ms-2">$8.99<span class="text-muted small">/mo</span></span>
+                            </div>
+                            <a href="YOUR_AFFILIATE_LINK_1" class="affiliate-btn affiliate-btn-primary">
+                                Get Offer <i class="fas fa-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Product 2 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card product-card h-100 border-0 shadow-sm overflow-hidden">
+                    <div class="product-badge bg-info">Popular</div>
+                    <img src="{% static 'main/files/dc.jpg' %}" class="card-img-top product-image" alt="MailCraft Pro Email Suite">
+                    <div class="card-body position-relative">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h3 class="h5 mb-0">MailCraft Pro</h3>
+                            <div class="rating small text-warning">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <span class="text-muted ms-1">(5.0)</span>
+                            </div>
+                        </div>
+                        <p class="card-text text-muted mb-4">Advanced email marketing platform with AI-powered automation and analytics.</p>
+                        
+                        <div class="product-features mb-4">
+                            <div class="feature-item">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <span>10,000 emails/mo</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <span>Drag & Drop Editor</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <span>AI Subject Lines</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-0 pt-0 pb-4 px-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="h4 text-primary">$15<span class="text-muted small">/mo</span></span>
+                            </div>
+                            <a href="YOUR_AFFILIATE_LINK_2" class="affiliate-btn affiliate-btn-primary" target="_blank">
+                                Explore <i class="fas fa-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Product 3 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="card product-card h-100 border-0 shadow-sm overflow-hidden">
+                    <div class="ribbon ribbon-top-right"><span>Best Value</span></div>
+                    <div class="product-badge bg-warning text-dark">Exclusive</div>
+                    <img src="{% static 'main/files/dc.jpg' %}" class="card-img-top product-image" alt="RankMaster SEO Suite">
+                    <div class="card-body position-relative">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h3 class="h5 mb-0">RankMaster Pro</h3>
+                            <div class="rating small text-warning">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="far fa-star"></i>
+                                <span class="text-muted ms-1">(4.2)</span>
+                            </div>
+                        </div>
+                        <p class="card-text text-muted mb-4">Comprehensive SEO toolkit with real-time tracking and optimization recommendations.</p>
+                        
+                        <div class="product-features mb-4">
+                            <div class="feature-item">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <span>Keyword Research</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <span>Competitor Analysis</span>
+                            </div>
+                            <div class="feature-item">
+                                <i class="fas fa-check-circle text-success me-2"></i>
+                                <span>Rank Tracking</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white border-0 pt-0 pb-4 px-4">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="text-muted text-decoration-line-through">$36</span>
+                                <span class="h4 text-primary ms-2">$29<span class="text-muted small">/mo</span></span>
+                                <span class="badge bg-success-soft text-success ms-2">Save 20%</span>
+                            </div>
+                            <a href="YOUR_AFFILIATE_LINK_3" class="affiliate-btn affiliate-btn-primary" target="_blank">
+                                Try Free <i class="fas fa-arrow-right ms-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+      <div class="text-center mt-5 pt-3">
+    <a href="#" class="affiliate-btn affiliate-btn-outline">
+        View All Recommended Tools <i class="fas fa-chevron-right ms-2"></i>
+    </a>
+</div>
+    </div>
 </div>
 
 

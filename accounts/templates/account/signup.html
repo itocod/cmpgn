@@ -114,163 +114,6 @@ section {
 }
 
 
-.header-container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px; /* Increased padding for a more spacious look */
-    margin: 0 auto;
-    box-sizing: border-box;
-    
-    border-bottom: 1px solid #e1e1e1; /* Subtle border for separation */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Light shadow for a soft border shade effect */
-   
-}
-
-
-
-/* Logo container */
-.logo-container {
-    display: flex;
-    align-items: center;
-    flex: 1;
-}
-
-/* Logo styling */
-.logo {
-    margin-right: 15px; /* Increased space between logo and name */
-    background: none;
-    border: none;
-    box-shadow: none;
-}
-
-/* Logo initials styling */
-.logo-initials {
-    color: #28a745; /* Updated color for a fresher look */
-    font-size: 60px; /* Increased font size for prominence */
-    font-weight: bold;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    text-shadow: 
-        2px 2px 0 #28a745,
-        -2px -2px 0 #28a745,
-        2px -2px 0 #28a745,
-        -2px 2px 0 #28a745,
-        4px 4px 0 black,
-        -4px -4px 0 black,
-        4px -4px 0 black,
-        -4px 4px 0 black;
-}
-
-/* Logo name styling */
-.logo-name {
-    font-size: 24px; /* Increased font size */
-    margin-top: 5px; /* Slightly increased space */
-   
-    opacity: 0.9;
-}
-
-/* Search container */
-.search-container {
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-}
-
-/* Search wrapper */
-.search-wrapper {
-    display: flex;
-    border: 2px solid #ced4da; /* Updated border color */
-    border-radius: 25px; /* Rounded corners for a modern look */
-    overflow: hidden;
-    width: 100%;
-    max-width: 600px; /* Restrict max width for better appearance */
-    box-sizing: border-box;
-}
-
-/* Input field */
-#query-field {
-    flex: 1;
-    padding: 12px 20px; /* Increased padding for a more comfortable input */
-    border: none;
-    font-size: 16px; /* Larger font size for readability */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    transition: box-shadow 0.3s ease, border-color 0.3s ease;
-}
-
-/* Input field focus */
-#query-field:focus {
-    outline: none;
-    box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
-    border-color: #007bff; /* Add border color on focus */
-}
-
-/* Submit button (search icon) */
-.btn-search {
-    border: none;
-    background: limegreen; /* Primary button color */
-    color: white;
-    font-size: 20px;
-    cursor: pointer;
-    transition: background 0.3s ease, transform 0.2s ease;
-    padding: 12px; /* Increased size for better click area */
-}
-
-/* Submit button hover */
-.btn-search:hover {
-    background: #4CAF50; /* Darker lime green on hover */
-    transform: scale(1.05); /* Slightly scale up on hover */
-}
-
-/* Reset button */
-.btn-reset {
-    border: none;
-    background: #f5f5f5; /* Smokewhite background */
-    color: #b0b0b0; /* Softer light silver text color */
-    font-size: 18px;
-    cursor: pointer;
-    transition: background 0.3s ease, color 0.3s ease, transform 0.2s ease;
-    padding: 12px; /* Increased size for better click area */
-}
-
-/* Reset button hover */
-.btn-reset:hover {
-    background: #eeeeee; /* Very light gray for hover */
-    color: #a0a0a0; /* Slightly darker but still soft text color */
-    transform: scale(1.05); /* Slightly scale up on hover */
-}
-
-
-/* Mobile styles */
-@media (max-width: 768px) {
-    .header-container {
-        flex-direction: column;
-        align-items: stretch;
-        padding: 15px; /* Adjusted padding for smaller screens */
-    }
-
-    .logo-container {
-        display: none; /* Hide the logo container on mobile screens */
-    }
-
-    .search-wrapper {
-        border-radius: 20px; /* Adjusted border radius for mobile */
-    }
-
-    .btn-search, .btn-reset {
-        padding: 10px; /* Adjusted padding for mobile */
-        font-size: 16px; /* Adjusted font size */
-    }
-
-    #query-field {
-        padding: 10px 15px; /* Adjusted padding */
-        font-size: 14px; /* Smaller font size for mobile */
-    }
-}
-
-
     nav {
       margin-top: 20px;
       border: 1px solid #808080;
@@ -1779,18 +1622,7 @@ body.dark-theme .explore-link i {
     transform: scale(1.1); /* Slight zoom on hover */
 }
 
-/* Mobile-specific styles */
-@media (max-width: 768px) {
-    .search-container {
-        display: flex;
-        align-items: center;
-    }
 
-    .search-wrapper {
-        display: flex;
-        flex: 1; /* Make the search input fill the available space */
-        align-items: center;
-    }
 
     .go-back-arrow {
         display: inline-block; /* Show the arrow only on mobile */
@@ -1802,16 +1634,6 @@ body.dark-theme .explore-link i {
     .go-back-arrow {
         display: none; /* Hide the go-back arrow on larger screens */
     }
-}
-
-.search-container input[type="text"] {
-    background-color: white;
-    color: black;
-    border: 1px solid #ccc;
-}
-
-.search-container {
-    color: black;
 }
 
 
@@ -1832,8 +1654,10 @@ body.dark-theme .explore-link i {
   font-family: 'Arial', sans-serif;
 }
 
+
 /* Login & Signup Container */
 .login-container, .signup-container {
+  width: 100%;
   max-width: 400px;
   padding: 30px;
   background: #ffffff;
@@ -1944,6 +1768,20 @@ body.dark-theme .explore-link i {
   border-color: #ccc;
 }
 
+/* Mobile Responsiveness */
+@media (max-width: 480px) {
+  body {
+    padding: 10px;
+    align-items: flex-start; /* Better for very small devices */
+  }
+  
+  .login-container, .signup-container {
+    max-width: 100%;
+    border-radius: 0;
+    padding: 20px;
+    box-shadow: none;
+  }
+}
 
  .explore-link:hover i {
         transform: rotate(15deg); /* Subtle rotation on hover */
@@ -2114,8 +1952,244 @@ body.dark-mode .affiliate-link:hover {
 body.dark-mode .affiliate-link i {
     margin-right: 8px; /* Space between icon and text */
 }
+
+
+
+    .top-navigation-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 24px;
+        position: sticky;
+        top: 0;
+        background: white;
+        z-index: 100;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+/* Show only on mobile (max width 768px) */
+@media (max-width: 768px) {
+    .top-navigation-container {
+        display: flex;
+    }
+}
+
+/* Hide on tablets and desktop (min width 769px) */
+@media (min-width: 769px) {
+    .top-navigation-container {
+        display: none;
+    }
+}
+
+    .back-arrow-container {
+        flex: 0 0 auto;
+    }
+
+    .go-back-arrow {
+        color: #555;
+        font-size: 18px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        padding: 8px;
+    }
+
+    .go-back-arrow:hover {
+        color: #000;
+        background: rgba(0,0,0,0.05);
+        border-radius: 4px;
+    }
+
+    .search-form {
+        flex: 1;
+        max-width: 500px;
+        margin-left: auto;
+    }
+
+    .search-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    #query-field {
+        width: 100%;
+        padding: 8px 40px 8px 15px;
+        border: 1px solid #ddd;
+        border-radius: 20px;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+    #query-field:focus {
+        outline: none;
+        border-color: #777;
+        box-shadow: 0 0 0 2px rgba(0,0,0,0.05);
+    }
+
+    .btn-reset, .btn-search {
+        position: absolute;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+        color: #777;
+        transition: all 0.2s ease;
+    }
+
+    .btn-reset {
+        right: 35px;
+    }
+
+    .btn-search {
+        right: 10px;
+    }
+
+    .btn-reset:hover, .btn-search:hover {
+        color: #333;
+    }
+
+    .content {
+        padding: 20px;
+    }
+    /* Dark Mode Classes - Add these without changing original code */
+.dark-mode .top-navigation-container {
+  background: #1e1e1e;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.2s ease;
+}
+
+.dark-mode .go-back-arrow {
+  color: #aaa;
+  transition: color 0.2s ease;
+}
+
+.dark-mode .go-back-arrow:hover {
+  color: #64b5f6;
+  background: rgba(100, 181, 246, 0.1);
+}
+
+.dark-mode .search-form {
+  background: transparent;
+}
+
+.dark-mode #query-field {
+  background: #2d2d2d;
+  border-color: #444;
+  color: #e0e0e0;
+  transition: all 0.2s ease;
+}
+
+.dark-mode #query-field:focus {
+  border-color: #64b5f6;
+  box-shadow: 0 0 0 2px rgba(100, 181, 246, 0.1);
+}
+
+.dark-mode .btn-reset,
+.dark-mode .btn-search {
+  color: #aaa;
+  transition: color 0.2s ease;
+}
+
+.dark-mode .btn-reset:hover,
+.dark-mode .btn-search:hover {
+  color: #64b5f6;
+}
+
+.dark-mode .content {
+  background: #121212;
+  color: #e0e0e0;
+  transition: background-color 0.2s ease;
+}
+
+
   </style>
 
+<style>
+
+
+.dashboard-snaps {
+  margin-top: 24px;
+  background: #fff;
+  border-radius: 12px;
+  padding-left: 8px;
+  padding-top: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+.snaps-header {
+  margin-bottom: 12px;
+}
+
+.snaps-title {
+  font-size: 18px;
+  color: #333;
+  font-weight: 600;
+}
+
+.snaps-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.snap-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 12px;
+  background: #f0f2f5;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.snap-icon {
+  font-size: 20px;
+  margin-bottom: 8px;
+  color: #1877f2;
+}
+
+.snap-label {
+  display: block;
+  font-size: 13px;
+  color: #000;
+  font-weight: 500;
+}
+
+/* === Dark Mode === */
+.dark-mode .dashboard-snaps {
+  background: #1e1e1e;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dark-mode .snap-link {
+  background: #2d2d2d;
+  transition: background-color 0.2s ease;
+}
+
+.dark-mode .snap-link:hover {
+  background: #383838;
+}
+
+.dark-mode .snap-icon {
+  color: #64b5f6;
+}
+
+.dark-mode .snap-label {
+  color: #e0e0e0;
+}
+
+/* Smooth transitions */
+.dashboard-snaps,
+.snap-link,
+.snap-icon,
+.snap-label {
+  transition: all 0.3s ease;
+}
+@media (max-width: 767px) {
+    .desktop-only {
+        display: none !important;
+    }
+}
+
+</style>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -2359,36 +2433,6 @@ document.addEventListener("DOMContentLoaded", function() {
 <header>
 
 
-           
-<div class="header-container">
-    <div class="logo-container">
-        <div class="logo">
-            <span class="logo-initials">R</span>
-        </div>
-        <span class="logo-name">Rallynex</span>
-    </div>
-
-    <div class="search-container">
-        <div class="go-back-arrow" onclick="goBack()">
-            <i class="fas fa-arrow-left"></i> <!-- Font Awesome left arrow icon -->
-        </div>
-        <form action="{% url 'search_campaign' %}" method="get">
-            <div class="search-wrapper">
-                <input type="text" placeholder="Search..." name="search_query" id="query-field">
-                <button type="button" class="btn-reset" id="reset-field">
-                    <i class="fas fa-times"></i>
-                </button>
-                <button type="submit" class="btn-search">
-                    <i class="fas fa-search"></i>
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
-
-
-
-
          <nav id="navbar" class="navbar">
          <span id="popupClose" class="popup-close">&times;</span>
     <ul>
@@ -2441,11 +2485,31 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 
-<aside class="left-aside">
 
-    <div>
-        <a href="{% url 'affiliate_links' %}" class="affiliate-link"><i class="fas fa-tools"></i> Campaign Advancement Tools</a>
-    </div>
+<aside class="left-aside">
+       
+
+<h3 style="
+    font-family: 'Courier New', monospace;
+    color: #ffffff;
+    background: linear-gradient(135deg, #c0c0c0, #f8f8f8);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 
+        0 1px 1px rgba(0,0,0,0.3),
+        0 0 8px rgba(255,255,255,0.4);
+    font-weight: bold;
+    letter-spacing: 3px;
+    font-size: 24px;
+    padding: 4px 12px; /* reduced top/bottom padding (4px), kept left/right (12px) */
+    display: inline-block;
+    border-radius: 3px;
+    backdrop-filter: brightness(1.2);
+    margin: 0;
+    z-index: 1000;
+"><img src="{% static 'main/files/lg.png' %}" alt="Rallynex Logo" style="height: 50px; width: 50px;">RALLYNEX</h3>
+  
 
     <!-- Updated the <nav> tag to <nav class="campaign-nav"> -->
     <nav class="campaign-nav">
@@ -2454,13 +2518,20 @@ document.addEventListener("DOMContentLoaded", function() {
             <li>
                 <a href="{% url 'home' %}" style="color: black; position: relative;">
                     <i class="fas fa-home"></i> Home
-                    
-                        
-                    
+                    {% if new_campaigns_from_follows %}
+                        <span id="home-alert" class="alert-badge">{{ new_campaigns_from_follows.count }}</span> <!-- Red alert spot -->
+                    {% endif %}
                 </a>
             </li>
-
-            <li><a href="{% url 'manage_campaigns' %}" style="color: black;"><i class="fas fa-cog"></i> Manage </a></li>
+      <li>
+            <a href="#" onclick="switchColor()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 3V5M18.36 5.64L16.95 7.05M21 12H19M18.36 18.36L16.95 16.95M12 19V21M7.05 16.95L5.64 18.36M5 12H3M7.05 7.05L5.64 5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Switch Theme</span>
+            </a>
+        </li>
+          
             <li><a href="{% url 'private_campaign' %}" style="color: black;"><i class="fas fa-lock"></i> Private </a></li>
 
             <!-- Chat Table link with red spot -->
@@ -2477,20 +2548,24 @@ document.addEventListener("DOMContentLoaded", function() {
             <li>
                 <a href="{% url 'notification_list' %}" style="color: black; position: relative;">
                     <i class="fas fa-bell"></i>
-                    
-                    
+                    {% if unread_notifications %}
+                        <span id="notification-alert" class="alert-badge">{{ unread_notifications.count }}</span>
+                    {% endif %}
                     Notification
                 </a>
             </li>
 
             <li><a href="{% url 'suggest' %}" style="color: black;"><i class="fas fa-user-friends"></i> Suggested Users</a></li>
+
 <li>
      <a href="{% url 'index' %}" title="Explore"  style="color: black;">
         <i class="fas fa-compass" style="font-size: 14px;"> Explore</i>
     </a>
 </li>
+       
+    
             <!-- Login link -->
-                   <li>
+           <li>
     <a href="{% url 'account_login' %}">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
             <path d="M13 12h9m-9-3l3 3-3 3m5-9V5a2 2 0 00-2-2H6a2 2 0 00-2 2v14a2 2 0 002 2h8a2 2 0 002-2v-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -2501,7 +2576,59 @@ document.addEventListener("DOMContentLoaded", function() {
         </ul>
     </nav>
 
-    <br>
+  
+
+
+
+    <div class="upload-container hide-on-mobile">
+
+     <div class="upload-btn-wrapper">
+        <button class="btn" style="font-size: 14px;">+ Upload
+            <a href="{% url 'create_campaign' %}" class="overlay-link"></a>
+        </button>
+    </div>
+
+</div>
+
+
+<div class="dashboard-snaps">
+  <div class="snaps-header">
+    <h3 class="snaps-title"><i class="fas fa-bolt"></i> Quick Actions</h3>
+  </div>
+
+  <div class="snaps-grid">
+    <a href="{% url 'create_campaign' %}" class="snap-link">
+      <i class="snap-icon fas fa-bullhorn"></i>
+      <span class="snap-label">Start Campaign</span>
+    </a>
+
+    <a href="{% url 'index' %}" class="snap-link">
+      <i class="snap-icon fas fa-search"></i>
+      <span class="snap-label">Explore</span>
+    </a>
+
+    <a href="{% url 'user_chats' %}" class="snap-link">
+      <i class="snap-icon fas fa-comments"></i>
+      <span class="snap-label">My Chats</span>
+    </a>
+
+{% if not user.is_anonymous %}
+    <a href="{% url 'profile_view' username=request.user.username %}" class="snap-link">
+        <i class="snap-icon fas fa-user"></i>
+        <span class="snap-label">Visit Profile</span>
+    </a>
+{% else %}
+    <span class="anonymous-label">Anonymous User</span>
+{% endif %}
+  </div>
+</div>
+
+
+
+
+
+
+
 
 <!-- Carousel for Ads -->
 <div class="carousel" onmouseover="pauseCarousel()" onmouseout="resumeCarousel()">
@@ -2523,7 +2650,9 @@ document.addEventListener("DOMContentLoaded", function() {
   <div class="aside-footer">
     <a href="#">About</a> • <a href="#">Help</a> • <a href="#">Terms</a> • <a href="#">Privacy</a>
   </div>
+
 </aside>
+
 
 
 
@@ -2532,6 +2661,29 @@ document.addEventListener("DOMContentLoaded", function() {
 <section>
 
 
+
+
+<div class="top-navigation-container">
+    <!-- Back Arrow (Left) -->
+    <div class="back-arrow-container">
+        <div class="go-back-arrow" onclick="goBack()">
+            <i class="fas fa-arrow-left"></i>
+        </div>
+    </div>
+
+    <!-- Search Bar (Right) -->
+    <form action="{% url 'search_campaign' %}" method="get" class="search-form">
+        <div class="search-wrapper">
+            <input type="text" placeholder="Search..." name="search_query" id="query-field">
+            <button type="button" class="btn-reset" id="reset-field">
+                <i class="fas fa-times"></i>
+            </button>
+            <button type="submit" class="btn-search">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </form>
+</div>
 
 
 <div class="sidebar-box ">
