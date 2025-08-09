@@ -1581,6 +1581,85 @@ body.dark-mode .comment-count {
     </style>
 
 
+<style type="text/css">
+  .follow-btn {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid #1DA1F2;
+    background: white;
+    color: #1DA1F2;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    margin-left: 10px;
+    min-width: 80px;
+    text-align: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.follow-btn:hover {
+    background: rgba(29, 161, 242, 0.1);
+}
+
+.follow-btn.following {
+    background: #1DA1F2;
+    color: white;
+}
+
+.follow-btn.following:hover {
+    background: #e0245e;
+}
+
+/* Simple text swap - no fancy transitions */
+.follow-btn .btn-text {
+    display: block;
+}
+
+.follow-btn .unfollow-text {
+    display: none;
+}
+
+.follow-btn.following:hover .btn-text {
+    display: none;
+}
+
+.follow-btn.following:hover .unfollow-text {
+    display: block;
+}
+
+.follow-btn.loading {
+    opacity: 0.7;
+    pointer-events: none;
+    padding-left: 30px;
+}
+
+.follow-btn.loading:before {
+    content: "";
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    width: 16px;
+    height: 16px;
+    margin-top: -8px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.followers-count {
+    font-size: 12px;
+    color: #666;
+    margin-left: 15px;
+    display: inline-block;
+}
+</style>
 
 <style>
 /* Simple, accessible styling */
@@ -1671,8 +1750,6 @@ body.dark-mode .comment-count {
 .menu-dropdown a:hover {
     background: #f5f5f5;
 }
-
-
 
 .campaign-image-section {
     position: relative;
@@ -1894,8 +1971,6 @@ body.dark-mode .comment-count {
     display: flex;
 }
 
-
-
 .simple-action-btn {
     background: none;
     border: none;
@@ -1917,7 +1992,6 @@ body.dark-mode .comment-count {
 .simple-action-btn.love-btn {
     color: #E91E63;
 }
-
 
 /* Add hover effects to action buttons */
 .simple-action-btn:hover {
@@ -1955,6 +2029,16 @@ body.dark-mode .comment-count {
     box-shadow: none;
 }
 
+/* Follow button in creator info section */
+.creator-follow {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+
+.creator-follow .follow-btn {
+    margin-left: 10px;
+}
 
 @media (max-width: 480px) {
     .simple-campaign-card {
@@ -1966,10 +2050,17 @@ body.dark-mode .comment-count {
     .simple-action-btn .label {
         display: none;
     }
+    
+    .creator-follow {
+        flex-direction: column;
+        align-items: flex-end;
+    }
+    
+    .creator-follow .followers-count {
+        margin-left: 0;
+        margin-top: 4px;
+    }
 }
-
-
-
 
 .campaign-participation-links {
     display: flex;
@@ -2087,9 +2178,6 @@ body.dark-mode .comment-count {
     to { opacity: 1; }
 }
 
-
-
-
 /* ===== Dark Mode Styles ===== */
 .dark-mode .simple-campaigns-container {
     background-color: #121212;
@@ -2191,6 +2279,30 @@ body.dark-mode .comment-count {
     color: #90caf9;
 }
 
+/* Dark mode follow button styles */
+.dark-mode .follow-btn {
+    background: #1e1e1e;
+    color: #1DA1F2;
+    border-color: #1DA1F2;
+}
+
+.dark-mode .follow-btn:hover {
+    background: rgba(29, 161, 242, 0.2);
+}
+
+.dark-mode .follow-btn.following {
+    background: #1DA1F2;
+    color: white;
+}
+
+.dark-mode .follow-btn.following:hover {
+    background: #e0245e;
+}
+
+.dark-mode .followers-count {
+    color: #b0b0b0;
+}
+
 /* Overlay elements in dark mode */
 .dark-mode .join-prompt,
 .dark-mode .campaign-views-overlay {
@@ -2231,9 +2343,6 @@ body.dark-mode .comment-count {
         border-color: #333;
     }
 }
-
-
-
 
 /* Views Counter with Tooltip */
 .campaign-views-overlay {
@@ -2410,7 +2519,6 @@ body.dark-mode .comment-count {
     }
 }
 
-
 /* Light mode (default) */
 .filter-form {
     margin-bottom: 20px;
@@ -2485,9 +2593,9 @@ body.dark-mode .comment-count {
     }
 
     .filter-label {
-        font-size
-
-
+        font-size: 13px;
+    }
+}
 </style>
 <style>
     /* Dark mode styles */
@@ -2837,392 +2945,285 @@ body.dark-mode .comment-count {
 </style>
 
 
+
+
+
+
+<style type="text/css">
+/* Light mode styles */
+.follow-text {
+    color: #1DA1F2;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    margin-left: 10px;
+    text-align: center;
+    display: inline-block;
+}
+
+.follow-text:hover {
+    text-decoration: underline;
+    opacity: 0.8;
+}
+
+.follow-text.following {
+    color: #1DA1F2;
+}
+
+.follow-text.following:hover {
+    color: #e0245e;
+}
+
+/* Dark mode styles */
+.dark-mode .follow-text {
+    color: #64b5f6;
+}
+
+.dark-mode .follow-text:hover {
+    color: #90caf9;
+    opacity: 1;
+}
+
+.dark-mode .follow-text.following {
+    color: #64b5f6;
+}
+
+.dark-mode .follow-text.following:hover {
+    color: #ef9a9a;
+}
+
+/* Common styles */
+.follow-text.loading {
+    opacity: 0.7;
+    pointer-events: none;
+    position: relative;
+    padding-left: 20px;
+}
+
+.follow-text.loading:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    margin-top: -6px;
+    border: 2px solid rgba(29, 161, 242, 0.3);
+    border-top-color: #1DA1F2;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.dark-mode .follow-text.loading:before {
+    border: 2px solid rgba(100, 181, 246, 0.3);
+    border-top-color: #64b5f6;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.followers-count {
+    font-size: 12px;
+    color: #666;
+    margin-left: 15px;
+    display: inline-block;
+}
+
+.dark-mode .followers-count {
+    color: #aaa;
+}
+</style>
+
+
 <style>
-    .affiliate-products-section {
+    .affiliate-essentials {
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background-color: rgba(0, 149, 246, 0.03);
+        border-radius: 16px;
+        padding: 30px;
+        margin: 40px 0;
+        border: 1px solid rgba(0, 149, 246, 0.1);
     }
     
-    .product-card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    .affiliate-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .affiliate-badge {
+        background: rgba(0, 149, 246, 0.08);
+        color: #0095f6;
+        border: 1px solid rgba(0, 149, 246, 0.2);
+        padding: 6px 12px;
         border-radius: 12px;
+        font-size: 13px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 15px;
     }
     
-    .product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
+    .affiliate-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: #2a3042;
+        margin-bottom: 12px;
     }
     
-    .product-image {
-        height: 180px;
-        object-fit: cover;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    .affiliate-subtitle {
+        color: #6c757d;
+        font-size: 15px;
+        max-width: 600px;
+        margin: 0 auto;
     }
     
-    .product-badge {
+    .affiliate-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    @media (min-width: 768px) {
+        .affiliate-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+    }
+    
+    .affiliate-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .affiliate-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+        border-color: rgba(0, 149, 246, 0.2);
+    }
+    
+    .affiliate-tag {
         position: absolute;
         top: 15px;
         right: 15px;
-        padding: 5px 10px;
-        border-radius: 20px;
-        font-size: 12px;
+        background: #ff4757;
+        color: white;
+        font-size: 11px;
         font-weight: 600;
-        z-index: 2;
+        padding: 3px 8px;
+        border-radius: 4px;
     }
     
-    .ribbon {
-        width: 150px;
-        height: 150px;
-        overflow: hidden;
-        position: absolute;
-        z-index: 1;
+    .affiliate-icon {
+        width: 40px;
+        height: 40px;
+        background: rgba(0, 149, 246, 0.1);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #0095f6;
+        font-size: 18px;
+        margin-bottom: 15px;
     }
     
-    .ribbon span {
-        position: absolute;
-        display: block;
-        width: 225px;
-        padding: 8px 0;
-        background-color: #4e66f8;
-        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-        color: #fff;
-        font-size: 12px;
+    .affiliate-name {
         font-weight: 600;
-        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-        text-transform: uppercase;
-        text-align: center;
-        right: -25px;
-        top: 30px;
-        transform: rotate(45deg);
+        font-size: 16px;
+        margin-bottom: 8px;
+        color: #2a3042;
     }
     
-    .ribbon-top-right {
-        top: -10px;
-        right: -10px;
-    }
-    
-    .product-features {
-        background-color: #f9fafc;
-        padding: 12px;
-        border-radius: 8px;
-    }
-    
-    .feature-item {
-        padding: 6px 0;
+    .affiliate-desc {
         font-size: 14px;
+        color: #6c757d;
+        margin-bottom: 15px;
+        line-height: 1.5;
     }
     
-    .rating {
-        white-space: nowrap;
+    .affiliate-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
     }
     
-    .bg-primary-soft {
-        background-color: rgba(78, 102, 248, 0.1);
+    .affiliate-price {
+        font-weight: 700;
+        color: #2a3042;
     }
     
-    .bg-success-soft {
-        background-color: rgba(40, 167, 69, 0.1);
+    .affiliate-discount {
+        background: rgba(40, 167, 69, 0.1);
+        color: #28a745;
+        font-size: 12px;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-weight: 600;
     }
     
-    .btn-link-arrow {
-        color: #4e66f8;
-        text-decoration: none;
-        font-weight: 500;
-        transition: all 0.3s ease;
-    }
-    
-    .btn-link-arrow:hover {
-        color: #3a56e8;
-        transform: translateX(3px);
-    }
-
-      /* Custom Button Classes */
     .affiliate-btn {
         display: inline-flex;
         align-items: center;
         justify-content: center;
+        width: 100%;
+        padding: 10px 15px;
+        background: #0095f6;
+        color: white;
+        border-radius: 8px;
         font-weight: 500;
-        text-align: center;
-        white-space: nowrap;
-        vertical-align: middle;
-        user-select: none;
-        border: 1px solid transparent;
-        padding: 0.5rem 1.25rem;
-        font-size: 0.875rem;
-        line-height: 1.5;
-        border-radius: 50px;
+        font-size: 14px;
         transition: all 0.3s ease;
-        text-decoration: none !important;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
     }
     
-    .affiliate-btn-primary {
-        color: #fff;
-        background-color: #4e66f8;
-        border-color: #4e66f8;
-        box-shadow: 0 4px 6px rgba(78, 102, 248, 0.1);
-    }
-    
-    .affiliate-btn-primary:hover {
-        background-color: #3a56e8;
-        border-color: #3a56e8;
+    .affiliate-btn:hover {
+        background: #0077cc;
         transform: translateY(-2px);
-        box-shadow: 0 6px 12px rgba(78, 102, 248, 0.15);
+        box-shadow: 0 4px 8px rgba(0, 149, 246, 0.2);
     }
     
-    .affiliate-btn-outline {
-        color: #4e66f8;
-        background-color: transparent;
-        border-color: #4e66f8;
+    .affiliate-btn i {
+        margin-left: 8px;
+        font-size: 12px;
     }
     
-    .affiliate-btn-outline:hover {
-        color: #fff;
-        background-color: #4e66f8;
-    }
-
-      /* Add these new styles to your existing CSS */
-    .section-badge {
-        font-size: 0.85rem;
-        font-weight: 600;
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
+    .view-all-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 25px;
+        padding: 10px 20px;
+        background: white;
+        border: 1px solid rgba(0, 149, 246, 0.3);
+        color: #0095f6;
+        border-radius: 8px;
+        font-weight: 500;
         transition: all 0.3s ease;
+        text-decoration: none;
     }
     
-    .section-badge:hover {
+    .view-all-btn:hover {
+        background: rgba(0, 149, 246, 0.05);
+        border-color: rgba(0, 149, 246, 0.5);
         transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(78, 102, 248, 0.1);
     }
     
-    .section-title {
-        color: #2a3042;
-        padding-bottom: 10px;
+    .view-all-btn i {
+        margin-left: 8px;
+        font-size: 12px;
     }
-    
-    .title-decoration {
-        width: 60px;
-        height: 3px;
-        background: linear-gradient(90deg, #4e66f8 0%, #3a56e8 100%);
-        border-radius: 3px;
-    }
-    
-    .section-subtitle {
-        position: relative;
-        padding-top: 15px;
-        max-width: 700px;
-    }
-    
-    .section-subtitle::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 100px;
-        height: 1px;
-        background: linear-gradient(90deg, rgba(78, 102, 248, 0) 0%, rgba(78, 102, 248, 0.4) 50%, rgba(78, 102, 248, 0) 100%);
-    }
-    
-    /* If you want to add a subtle animation */
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    .affiliate-products-section {
-        animation: fadeInUp 0.6s ease-out;
-    }
-
-    .affiliate-btn-outline {
-    color: #4e66f8;
-    background-color: transparent;
-    border: 2px solid #4e66f8;
-    padding: 0.625rem 1.5rem;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.4s ease;
-}
-
-.affiliate-btn-outline:hover {
-    color: #fff;
-    background-color: #4e66f8;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(78, 102, 248, 0.2);
-}
-
-/* Optional hover effect - subtle background wave */
-.affiliate-btn-outline::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition: 0.5s;
-}
-
-.affiliate-btn-outline:hover::before {
-    left: 100%;
-}
-
-/* If you want the arrow to animate on hover */
-.affiliate-btn-outline i {
-    transition: transform 0.3s ease;
-}
-
-.affiliate-btn-outline:hover i {
-    transform: translateX(3px);
-}
-.affiliate-btn-primary {
-   min-height: 48px;      /* Safe touch target */
-   padding: 12px 24px;    /* Generous padding */
-   font-size: 1rem;       /* Readable text */
-}
-.affiliate-btn-outline {
-   min-height: 44px;      /* Still safe, but less prominent */
-   padding: 10px 20px;    /* Slightly smaller */
-   font-size: 0.95rem;    /* Slightly smaller text */
-}
-    /* ===== Light Mode (Existing Styles) ===== */
-    .affiliate-products-section {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        background-color: #f8f9fa;
-    }
-    
-    .product-card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        border-radius: 12px;
-        background-color: #ffffff;
-    }
-    
-    .product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
-    }
-    
-    .product-image {
-        height: 180px;
-        object-fit: cover;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    }
-    
- 
-    
-    .ribbon span {
-        background-color: #4e66f8;
-        color: #fff;
-    }
-    
-    .product-features {
-        background-color: #f9fafc;
-        color: #495057;
-    }
-    
-    .section-title {
-        color: #2a3042;
-    }
-    
-    .section-subtitle {
-        color: #6c757d;
-    }
-    
-    /* ===== Dark Mode Overrides ===== */
-    .dark-mode .affiliate-products-section {
-        background-color: #1a1a1a;
-    }
-    
-    .dark-mode .product-card {
-        background-color: #2d2d2d;
-        border-color: #383838;
-    }
-    
-    .dark-mode .product-card:hover {
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3) !important;
-    }
-    
-    .dark-mode .product-image {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        filter: brightness(0.9);
-    }
-    
-    .dark-mode .product-badge {
-        background-color: #383838;
-    }
-    
-    .dark-mode .ribbon span {
-        background-color: #3a56e8;
-    }
-    
-    .dark-mode .product-features {
-        background-color: #383838;
-        color: #e9ecef;
-    }
-    
-    .dark-mode .feature-item {
-        color: #dee2e6;
-    }
-    
-    .dark-mode .section-title {
-        color: #f8f9fa;
-    }
-    
-    .dark-mode .section-subtitle {
-        color: #adb5bd;
-    }
-    
-    .dark-mode .section-subtitle::before {
-        background: linear-gradient(90deg, rgba(78, 102, 248, 0) 0%, rgba(78, 102, 248, 0.2) 50%, rgba(78, 102, 248, 0) 100%);
-    }
-    
-    .dark-mode .section-badge {
-        background-color: rgba(78, 102, 248, 0.2);
-        color: #64b5f6;
-    }
-    
-    .dark-mode .card-footer {
-        background-color: #2d2d2d !important;
-        border-top: 1px solid #383838 !important;
-    }
-    
-    .dark-mode .text-muted {
-        color: #868e96 !important;
-    }
-    
-    .dark-mode .text-primary {
-        color: #64b5f6 !important;
-    }
-    
-    /* Dark mode buttons */
-    .dark-mode .affiliate-btn-primary {
-        background-color: #3a56e8;
-        border-color: #3a56e8;
-    }
-    
-    .dark-mode .affiliate-btn-primary:hover {
-        background-color: #4e66f8;
-        border-color: #4e66f8;
-    }
-    
-    .dark-mode .affiliate-btn-outline {
-        color: #64b5f6;
-        border-color: #64b5f6;
-    }
-    
-    .dark-mode .affiliate-btn-outline:hover {
-        color: #fff;
-        background-color: #64b5f6;
-    }
-.affiliate-btn-primary:focus, 
-.affiliate-btn-outline:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(78, 102, 248, 0.3);
-}
 </style>
 
 
@@ -3548,6 +3549,90 @@ function toggleFullContent(button) {
 }
 </script>
 
+
+
+<script>
+// Store follow state in localStorage
+function updateFollowState(userId, isFollowing) {
+    const storageKey = `followState_${userId}`;
+    localStorage.setItem(storageKey, isFollowing ? 'true' : 'false');
+}
+
+// Retrieve follow state from localStorage
+function getFollowState(userId) {
+    const storageKey = `followState_${userId}`;
+    return localStorage.getItem(storageKey) === 'true';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize text elements with correct state
+    document.querySelectorAll('.follow-text').forEach(element => {
+        const userId = element.getAttribute('data-user-id');
+        const storedState = getFollowState(userId);
+        const currentState = element.getAttribute('data-is-following') === 'true';
+        
+        // Use stored state if available, otherwise use server state
+        const finalState = storedState !== null ? storedState : currentState;
+        
+        if (finalState) {
+            element.classList.add('following');
+            element.textContent = '• Following';
+            element.setAttribute('data-is-following', 'true');
+        } else {
+            element.classList.remove('following');
+            element.textContent = '• Follow';
+            element.setAttribute('data-is-following', 'false');
+        }
+    });
+
+    // Handle follow text clicks
+    document.querySelectorAll('.follow-text').forEach(element => {
+        element.addEventListener('click', async function() {
+            const userId = this.getAttribute('data-user-id');
+            const isFollowing = this.getAttribute('data-is-following') === 'true';
+            const action = isFollowing ? 'unfollow' : 'follow';
+            
+            try {
+                const response = await fetch('/toggle_follow/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({
+                        'user_id': userId,
+                        'action': action
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    // Update text state
+                    const newState = data.action === 'followed';
+                    this.classList.toggle('following', newState);
+                    this.textContent = newState ? '• Following' : '• Follow';
+                    this.setAttribute('data-is-following', newState.toString());
+                    
+                    // Update followers count
+                    const followersCount = document.getElementById(`followers-count-${userId}`);
+                    if (followersCount) {
+                        followersCount.textContent = `(${data.followers_count} followers)`;
+                    }
+                    
+                    // Persist state in localStorage
+                    updateFollowState(userId, newState);
+                } else {
+                    console.error('Error:', data.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            }
+        });
+    });
+});
+</script>
 
 
 
@@ -3890,10 +3975,15 @@ function toggleFullContent(button) {
             </div>
         {% endfor %}
     </div>
-</div>
+</div><br>
   <div class="aside-footer">
-    <a href="#">About</a> • <a href="#">Help</a> • <a href="#">Terms</a> • <a href="#">Privacy</a>
-  </div>
+    <a href="{% url 'aboutus' %}">About</a> • 
+    <a href="{% url 'hiw' %}">Help</a> • 
+    <a href="{% url 'terms_of_service' %}">Terms</a> • 
+    <a href="{% url 'privacy_policy' %}">Privacy</a> • 
+    <a href="{% url 'faq' %}">FAQ</a> • 
+    <a href="{% url 'project_support' %}">Support</a>
+</div>
 
 </aside>
 
@@ -3943,18 +4033,43 @@ function toggleFullContent(button) {
                 <img src="{{ campaign.user.image.url }}" alt="{{ campaign.user.user.username }}">
             </a>
             <div class="creator-details">
-                <div class="creator-name">
-                    {{ campaign.user.user.username }}
+             <div class="creator-container" style="display: flex; justify-content: space-between; align-items: center;">
+    <div>
+
+<div class="creator-info">
+    <span class="creator-name">
+       {{ campaign.user.user.username }}
                     {% if campaign.user.profile_verified %}
-                    <span class="verified-badge"><i class="material-icons">verified_user</i></span>
+                    <span class="verified-badge"><i class="material-icons">verified_user</i></span> 
                     {% endif %}
                     {% if campaign.is_changemaker %}
-                    <span class="changemaker-badge"><i class="far fa-star"></i> Changemaker</span>
+                    <span class="changemaker-badge"><i class="far fa-star"></i>Changemaker</span>
                     {% endif %}
-                </div>
-                <div class="campaign-time">
-                    {{ campaign.timestamp|timesince }} ago • {{ campaign.user.location }}
-                </div>
+    </span>
+{% if request.user != campaign.user.user %}
+<span id="follow-btn-{{ campaign.user.user.id }}" 
+      class="follow-text {% if request.user in campaign.user.user.followers.all %}following{% endif %}" 
+      data-user-id="{{ campaign.user.user.id }}"
+      data-is-following="{% if request.user in campaign.user.user.followers.all %}true{% else %}false{% endif %}">
+    {% if request.user in campaign.user.user.followers.all %}
+        • Following
+    {% else %}
+        • Follow
+    {% endif %}
+</span>
+{% endif %}
+
+</div>
+
+
+
+
+        <div class="campaign-time">
+            {{ campaign.timestamp|timesince }} ago • {{ campaign.user.location }}
+        </div>
+    </div>
+
+</div>
             </div>
 
 <div class="campaign-menu" onclick="togglaMenu(this)" style="position: relative;">
@@ -4706,178 +4821,92 @@ function toggleFullContent(button) {
         </div>
     </div>
 </div>
-<div class="affiliate-products-section py-5 bg-light">
-    <div class="container">
-        <div class="text-center mb-5">
-            <span class="section-badge bg-primary-soft text-primary px-3 py-2 rounded-pill d-inline-block mb-3">
-                <i class="fas fa-star me-2"></i>Recommended Tools
-            </span>
-            <h2 class="section-title display-5 fw-bold mb-3 position-relative d-inline-block">
-                Rallynex Essentials
-                <span class="title-decoration position-absolute bottom-0 start-50 translate-middle-x"></span>
-            </h2>
-            <p class="section-subtitle lead text-muted mx-auto">
-               Tools and offers to help you boost and manage your campaigns like a pro.
-            </p>
-        </div>
 
-        <div class="row g-4">
-            <!-- Product 1 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="card product-card h-100 border-0 shadow-sm overflow-hidden">
-                    <div class="ribbon ribbon-top-right"><span>Top Pick</span></div>
-                    <div class="product-badge bg-success">Limited Offer</div>
-                    <img src="{% static 'main/files/dc.jpg' %}" class="card-img-top product-image" alt="SkyHost Premium Web Hosting">
-                    <div class="card-body position-relative">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <h3 class="h5 mb-0">SkyHost Premium</h3>
-                            <div class="rating small text-warning">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                                <span class="text-muted ms-1">(4.8)</span>
-                            </div>
-                        </div>
-                        <p class="card-text text-muted mb-4">Blazing-fast hosting with 24/7 expert support and free SSL certificates.</p>
-                        
-                        <div class="product-features mb-4">
-                            <div class="feature-item">
-                                <i class="fas fa-check-circle text-success me-2"></i>
-                                <span>99.9% Uptime</span>
-                            </div>
-                            <div class="feature-item">
-                                <i class="fas fa-check-circle text-success me-2"></i>
-                                <span>Free Migration</span>
-                            </div>
-                            <div class="feature-item">
-                                <i class="fas fa-check-circle text-success me-2"></i>
-                                <span>Unlimited Bandwidth</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-white border-0 pt-0 pb-4 px-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <span class="text-muted text-decoration-line-through">$12.99</span>
-                                <span class="h4 text-primary ms-2">$8.99<span class="text-muted small">/mo</span></span>
-                            </div>
-                            <a href="YOUR_AFFILIATE_LINK_1" class="affiliate-btn affiliate-btn-primary">
-                                Get Offer <i class="fas fa-arrow-right ms-2"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+<div class="affiliate-essentials">
+    <div class="affiliate-header">
+        <div class="affiliate-badge">
+            <i class="fas fa-gem"></i>
+            <span>Premium Partners</span>
+        </div>
+        <h3 class="affiliate-title">Essential Tools for Campaign Success</h3>
+        <p class="affiliate-subtitle">These trusted tools help our top creators maximize their impact (we earn a small commission at no extra cost to you)</p>
+    </div>
+    
+    <div class="affiliate-grid">
+        <!-- Tool 1 -->
+        <div class="affiliate-card">
+            <span class="affiliate-tag">BEST VALUE</span>
+            <div class="affiliate-icon">
+                <i class="fas fa-chart-line"></i>
             </div>
-            
-            <!-- Product 2 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="card product-card h-100 border-0 shadow-sm overflow-hidden">
-                    <div class="product-badge bg-info">Popular</div>
-                    <img src="{% static 'main/files/dc.jpg' %}" class="card-img-top product-image" alt="MailCraft Pro Email Suite">
-                    <div class="card-body position-relative">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <h3 class="h5 mb-0">MailCraft Pro</h3>
-                            <div class="rating small text-warning">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <span class="text-muted ms-1">(5.0)</span>
-                            </div>
-                        </div>
-                        <p class="card-text text-muted mb-4">Advanced email marketing platform with AI-powered automation and analytics.</p>
-                        
-                        <div class="product-features mb-4">
-                            <div class="feature-item">
-                                <i class="fas fa-check-circle text-success me-2"></i>
-                                <span>10,000 emails/mo</span>
-                            </div>
-                            <div class="feature-item">
-                                <i class="fas fa-check-circle text-success me-2"></i>
-                                <span>Drag & Drop Editor</span>
-                            </div>
-                            <div class="feature-item">
-                                <i class="fas fa-check-circle text-success me-2"></i>
-                                <span>AI Subject Lines</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-white border-0 pt-0 pb-4 px-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <span class="h4 text-primary">$15<span class="text-muted small">/mo</span></span>
-                            </div>
-                            <a href="YOUR_AFFILIATE_LINK_2" class="affiliate-btn affiliate-btn-primary" target="_blank">
-                                Explore <i class="fas fa-arrow-right ms-2"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+            <h4 class="affiliate-name">AnalyticsPro+</h4>
+            <p class="affiliate-desc">Track campaign performance with real-time analytics and AI-powered insights to optimize your strategy.</p>
+            <div class="affiliate-meta">
+                <span class="affiliate-price">$29/mo</span>
+                <span class="affiliate-discount">Save 30%</span>
             </div>
-            
-            <!-- Product 3 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="card product-card h-100 border-0 shadow-sm overflow-hidden">
-                    <div class="ribbon ribbon-top-right"><span>Best Value</span></div>
-                    <div class="product-badge bg-warning text-dark">Exclusive</div>
-                    <img src="{% static 'main/files/dc.jpg' %}" class="card-img-top product-image" alt="RankMaster SEO Suite">
-                    <div class="card-body position-relative">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <h3 class="h5 mb-0">RankMaster Pro</h3>
-                            <div class="rating small text-warning">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="far fa-star"></i>
-                                <span class="text-muted ms-1">(4.2)</span>
-                            </div>
-                        </div>
-                        <p class="card-text text-muted mb-4">Comprehensive SEO toolkit with real-time tracking and optimization recommendations.</p>
-                        
-                        <div class="product-features mb-4">
-                            <div class="feature-item">
-                                <i class="fas fa-check-circle text-success me-2"></i>
-                                <span>Keyword Research</span>
-                            </div>
-                            <div class="feature-item">
-                                <i class="fas fa-check-circle text-success me-2"></i>
-                                <span>Competitor Analysis</span>
-                            </div>
-                            <div class="feature-item">
-                                <i class="fas fa-check-circle text-success me-2"></i>
-                                <span>Rank Tracking</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-white border-0 pt-0 pb-4 px-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <span class="text-muted text-decoration-line-through">$36</span>
-                                <span class="h4 text-primary ms-2">$29<span class="text-muted small">/mo</span></span>
-                                <span class="badge bg-success-soft text-success ms-2">Save 20%</span>
-                            </div>
-                            <a href="YOUR_AFFILIATE_LINK_3" class="affiliate-btn affiliate-btn-primary" target="_blank">
-                                Try Free <i class="fas fa-arrow-right ms-2"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <a href="YOUR_AFFILIATE_LINK_1" class="affiliate-btn" target="_blank" rel="noopener noreferrer">
+                Get Started <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
         
-      <div class="text-center mt-5 pt-3">
-    <a href="#" class="affiliate-btn affiliate-btn-outline">
-        View All Recommended Tools <i class="fas fa-chevron-right ms-2"></i>
-    </a>
-</div>
+        <!-- Tool 2 -->
+        <div class="affiliate-card">
+            <span class="affiliate-tag">POPULAR</span>
+            <div class="affiliate-icon">
+                <i class="fas fa-bullhorn"></i>
+            </div>
+            <h4 class="affiliate-name">Amplify Suite</h4>
+            <p class="affiliate-desc">Automatically distribute your campaign to 50+ platforms with intelligent targeting.</p>
+            <div class="affiliate-meta">
+                <span class="affiliate-price">$49/mo</span>
+                <span class="affiliate-discount">7-day free trial</span>
+            </div>
+            <a href="YOUR_AFFILIATE_LINK_2" class="affiliate-btn" target="_blank" rel="noopener noreferrer">
+                Try For Free <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        
+        <!-- Tool 3 -->
+        <div class="affiliate-card">
+            <div class="affiliate-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <h4 class="affiliate-name">EngageMaster</h4>
+            <p class="affiliate-desc">Boost audience interaction with automated responses and community management tools.</p>
+            <div class="affiliate-meta">
+                <span class="affiliate-price">$19/mo</span>
+                <span class="affiliate-discount">LIMITED OFFER</span>
+            </div>
+            <a href="YOUR_AFFILIATE_LINK_3" class="affiliate-btn" target="_blank" rel="noopener noreferrer">
+                Start Engaging <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        
+        <!-- Tool 4 -->
+        <div class="affiliate-card">
+            <span class="affiliate-tag">NEW</span>
+            <div class="affiliate-icon">
+                <i class="fas fa-lightbulb"></i>
+            </div>
+            <h4 class="affiliate-name">ContentGenius AI</h4>
+            <p class="affiliate-desc">Generate high-converting campaign content in minutes with our AI writer.</p>
+            <div class="affiliate-meta">
+                <span class="affiliate-price">$37/mo</span>
+                <span class="affiliate-discount">Save 40%</span>
+            </div>
+            <a href="YOUR_AFFILIATE_LINK_4" class="affiliate-btn" target="_blank" rel="noopener noreferrer">
+                Create Content <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+    
+    <div class="text-center">
+        <a href="#" class="view-all-btn">
+            View all recommended tools <i class="fas fa-arrow-right"></i>
+        </a>
     </div>
 </div>
-
-
 </section>
 
 <aside class="right-aside">
@@ -4907,7 +4936,6 @@ function toggleFullContent(button) {
         {% endif %}
     </div>
     {% for suggested in suggested_users %}
-    
     {% with user=suggested.user followers_count=suggested.followers_count %}
     <div class="user-card">
       <div class="user-avatar">
@@ -4925,22 +4953,29 @@ function toggleFullContent(button) {
           <span class="verified-badge">✓</span>
           {% endif %}
         </div>
-        <button class="follow-btn" onclick="followUser('{{ user.username }}')">
-          <a href="{% url 'profile_view' username=user.username %}">                                                         
-            <span class="btn-text">Visit</span>
+        <div class="user-actions">
+          {% if request.user != user %}
+          <span id="follow-btn-{{ user.id }}" 
+                class="follow-text {% if request.user in user.followers.all %}following{% endif %}" 
+                data-user-id="{{ user.id }}"
+                data-is-following="{% if request.user in user.followers.all %}true{% else %}false{% endif %}">
+              {% if request.user in user.followers.all %}
+                  Following 
+              {% else %}
+                  Follow 
+              {% endif %}
+          </span>
+          {% endif %}
+          <a href="{% url 'profile_view' username=user.username %}" class="visit-btn">
+              <span class="btn-text">Visit</span>
           </a>
-          <span class="btn-icon"></span>
-        </button>
+        </div>
       </div>
     </div>
     {% endwith %}
 {% empty %}
     <p class="no-suggestions">No suggestions available. Follow more people to get better recommendations.</p>
 {% endfor %}
-
-
-
-  
 <div class="trending-now">
   <div class="trending-header">
     <h3 class="trending-title"><i class="fas fa-fire"></i> Trending Now</h3>
@@ -5823,12 +5858,33 @@ function toggleFullContent(button) {
   display: flex;
   padding: 12px;
   border-radius: 8px;
-  transition: background-color 0.2s;
+  transition: all 0.3s ease;
   margin-bottom: 8px;
+  background: linear-gradient(135deg, rgba(240, 242, 245, 0.4) 0%, rgba(255, 255, 255, 0.8) 100%);
+  backdrop-filter: blur(2px);
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .user-card:hover {
-  background-color: #f0f2f5;
+  background: linear-gradient(135deg, rgba(224, 227, 233, 0.6) 0%, rgba(240, 242, 245, 0.9) 100%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transform: translateY(-1px);
+}
+
+/* Dark mode adjustments */
+.dark-mode .user-card {
+  background: linear-gradient(135deg, rgba(45, 45, 45, 0.4) 0%, rgba(30, 30, 30, 0.8) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dark-mode .user-card:hover {
+  background: linear-gradient(135deg, rgba(60, 60, 60, 0.6) 0%, rgba(45, 45, 45, 0.9) 100%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Add this to your existing transitions */
+.user-card {
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
 }
 
 .user-avatar {
@@ -5891,30 +5947,77 @@ function toggleFullContent(button) {
   font-size: 14px;
 }
 
-.follow-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #e7f3ff;
-  color: #1877f2;
-  border: none;
-  border-radius: 6px;
-  padding: 6px 12px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  width: 100%;
+.visit-btn {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #f0f2f5;
+    color: #050505;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.2s;
+    margin-left: 4px; /* Added left margin for better spacing */
 }
 
-.follow-btn:hover {
-  background-color: #dbe7f2;
+.visit-btn:hover {
+    background-color: #e4e6eb;
+    text-decoration: none;
 }
 
-.btn-text {
-  margin-right: 4px;
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Added gap property for consistent spacing */
 }
 
+/* Dark mode styles */
+.dark-mode .follow-text {
+    color: #64b5f6;
+    background-color: rgba(100, 181, 246, 0.1);
+}
+
+.dark-mode .follow-text:hover {
+    background-color: rgba(100, 181, 246, 0.2);
+}
+
+.dark-mode .follow-text.following {
+    color: #64b5f6;
+    background-color: rgba(100, 181, 246, 0.1);
+}
+
+.dark-mode .visit-btn {
+    background-color: #2d2d2d;
+    color: #e4e6eb;
+}
+
+.dark-mode .visit-btn:hover {
+    background-color: #3d3d3d;
+}
+
+/* Dark mode styles */
+.dark-mode .suggested-follow-btn {
+    color: #64b5f6;
+    background-color: rgba(100, 181, 246, 0.1);
+}
+
+.dark-mode .suggested-follow-btn:hover {
+    background-color: rgba(100, 181, 246, 0.2);
+}
+
+.dark-mode .suggested-follow-btn.suggested-following {
+    color: #64b5f6;
+    background-color: rgba(100, 181, 246, 0.1);
+}
+
+.dark-mode .suggested-visit-btn {
+    background-color: #2d2d2d;
+    color: #e4e6eb;
+}
+
+.dark-mode .suggested-visit-btn:hover {
+    background-color: #3d3d3d;
+}
 /* ===== Dark Mode Styles ===== */
 .dark-mode .section-title {
   color: #e0e0e0;

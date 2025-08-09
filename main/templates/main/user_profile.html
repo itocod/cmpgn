@@ -856,9 +856,88 @@ body.dark-mode .campaign-title {
   color: #a0a0a0;
   transform: scale(1.1);
 }
+
 </style>
 
+<style type="text/css">
+  .follow-btn {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid #1DA1F2;
+    background: white;
+    color: #1DA1F2;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    margin-left: 10px;
+    min-width: 80px;
+    text-align: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
 
+.follow-btn:hover {
+    background: rgba(29, 161, 242, 0.1);
+}
+
+.follow-btn.following {
+    background: #1DA1F2;
+    color: white;
+}
+
+.follow-btn.following:hover {
+    background: #e0245e;
+}
+
+/* Simple text swap - no fancy transitions */
+.follow-btn .btn-text {
+    display: block;
+}
+
+.follow-btn .unfollow-text {
+    display: none;
+}
+
+.follow-btn.following:hover .btn-text {
+    display: none;
+}
+
+.follow-btn.following:hover .unfollow-text {
+    display: block;
+}
+
+.follow-btn.loading {
+    opacity: 0.7;
+    pointer-events: none;
+    padding-left: 30px;
+}
+
+.follow-btn.loading:before {
+    content: "";
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    width: 16px;
+    height: 16px;
+    margin-top: -8px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.followers-count {
+    font-size: 12px;
+    color: #666;
+    margin-left: 15px;
+    display: inline-block;
+}
+</style>
 
   
   
@@ -917,23 +996,17 @@ body.dark-mode .campaign-title {
     </div>
 {% endif %}
     
+<div><br>
 
+{% if not user_profile.user == request.user %}
+<button class="follow-btn {% if following_profile %}following{% endif %}" 
+        data-user-id="{{ user_profile.user.id }}"
+        data-is-following="{% if following_profile %}true{% else %}false{% endif %}">
+    <span class="btn-text">{% if following_profile %}Following{% else %}Follow{% endif %}</span>
+    <span class="unfollow-text">Unfollow</span>
+</button>
 
-<div>
-  
-    {% if not user_profile.user == request.user %}
-        {% if not following_profile %}
-            <form method="POST" action="{% url 'follow_user' user_profile.user.username %}">
-                {% csrf_token %}
-                <button class="custom-btn" type="submit">Follow</button>
-            </form>
-        {% else %}
-            <form method="POST" action="{% url 'unfollow_user' user_profile.user.username %}">
-                {% csrf_token %}
-                <button class="custom-btn" type="submit">Unfollow</button>
-            </form>
-        {% endif %}
-    {% endif %}
+{% endif %}
 </div>
 </div>
 
@@ -1009,6 +1082,49 @@ body.dark-mode .campaign-title {
       
     </div>
     
+    <script>
+function toggleFollow(button) {
+    const userId = button.dataset.userId;
+    const isFollowing = button.dataset.following === 'true';
+    const url = isFollowing ? `/unfollow_user/${userId}/` : `/follow_user/${userId}/`;
+    
+    // Add loading state
+    const originalText = button.textContent;
+    button.disabled = true;
+    button.textContent = '...';
+    
+    fetch(url, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}',
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `csrfmiddlewaretoken={{ csrf_token }}`
+    })
+    .then(response => {
+        if (response.ok) {
+            // Toggle button state
+            button.dataset.following = isFollowing ? 'false' : 'true';
+            button.textContent = isFollowing ? 'Follow' : 'Unfollow';
+            
+            // Optional: Update follower count dynamically
+            const followerCount = document.getElementById('follower-count');
+            if (followerCount) {
+                const currentCount = parseInt(followerCount.textContent);
+                followerCount.textContent = isFollowing ? currentCount - 1 : currentCount + 1;
+            }
+        }
+        return response.json();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        button.textContent = originalText; // Revert on error
+    })
+    .finally(() => {
+        button.disabled = false;
+    });
+}
+</script>
 <script type="text/javascript">
 function switchColor() {
     const body = document.body;
@@ -1166,8 +1282,88 @@ function switchColor() {
             }
         };</script>
 
+<script src="{% static 'main/js/base.js' %}"></script>
+<script>
+// Persistent follow state management
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize all follow buttons
+    document.querySelectorAll('.follow-btn').forEach(button => {
+        const userId = button.getAttribute('data-user-id');
+        
+        // Get server-side initial state
+        const serverState = button.getAttribute('data-is-following') === 'true';
+        
+        // Check localStorage for updated state
+        const storageKey = `followState_${userId}`;
+        const storedState = localStorage.getItem(storageKey);
+        
+        // Determine which state to use (stored state takes precedence)
+        const initialState = storedState !== null ? 
+            storedState === 'true' : 
+            serverState;
+        
+        // Apply initial state
+        button.classList.toggle('following', initialState);
+        button.textContent = initialState ? 'Following' : 'Follow';
+        button.setAttribute('data-is-following', initialState.toString());
 
+        // Add click handler
+        button.addEventListener('click', async function() {
+            const userId = this.getAttribute('data-user-id');
+            const isFollowing = this.getAttribute('data-is-following') === 'true';
+            const action = isFollowing ? 'unfollow' : 'follow';
+            
+            // Add loading state
+            const originalText = this.textContent;
+            this.disabled = true;
+            this.classList.add('loading');
+            this.textContent = '...';
+            
+            try {
+                const response = await fetch('/toggle_follow/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({
+                        'user_id': userId,
+                        'action': action
+                    })
+                });
 
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    // Update button state
+                    const newState = data.is_following;
+                    this.classList.toggle('following', newState);
+                    this.textContent = newState ? 'Following' : 'Follow';
+                    this.setAttribute('data-is-following', newState.toString());
+                    
+                    // Update followers count
+                    const followersCount = document.getElementById(`followers-count-${userId}`);
+                    if (followersCount) {
+                        followersCount.textContent = `(${data.followers_count} followers)`;
+                    }
+                    
+                    // Persist state in localStorage
+                    localStorage.setItem(`followState_${userId}`, newState.toString());
+                } else {
+                    console.error('Error:', data.message);
+                    this.textContent = originalText;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                this.textContent = originalText;
+            } finally {
+                this.disabled = false;
+                this.classList.remove('loading');
+            }
+        });
+    });
+});
+</script>
 {% endblock %}
 
 

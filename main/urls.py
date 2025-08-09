@@ -92,8 +92,9 @@ path('add_activity_comment/<int:activity_id>/', views.add_activity_comment, name
     path('create_campaign/', views.create_campaign, name='create_campaign'),
     path('edit-profile/<str:username>/', views.profile_edit, name='edit_profile'),
   path('user-profile/@<str:username>/', views.profile_view, name='profile_view'),
-    path('follow/<str:username>/', views.follow_user, name='follow_user'),
-    path('unfollow/<str:username>/', views.unfollow_user, name='unfollow_user'),
+path('toggle_follow/', views.toggle_follow, name='toggle_follow'),
+      path('follow_user/<int:user_id>/', views.follow_user, name='follow_user'),
+    path('unfollow_user/<int:user_id>/', views.unfollow_user, name='unfollow_user'),
     path('followers/<str:username>/', views.follower_list, name='follower_list'),
     path('following/<str:username>/', views.following_list, name='following_list'),
     path('private-campaign/', views.private_campaign, name='private_campaign'),
@@ -117,11 +118,13 @@ path('get_replies/<int:comment_id>/', views.get_replies, name='get_replies'),
   
 
     path('testimonial/', views.testimonial, name='testimonial'),
-
+ path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
+    path('terms-of-service/', views.terms_of_service, name='terms_of_service'),
+    path('project_support/', views.project_support, name='project_support'),
     path('hiw/', views.hiw, name='hiw'),
     path('faq/', views.faq_view, name='faq'),
      path('about/', views.aboutus, name='aboutus'),
-     
+         path('fund/', views.fund, name='fund'),
        path('geno/', views.geno, name='geno'),
       path('get_activity_comments/<int:activity_id>/', views.get_activity_comments, name='get_activity_comments'),
     path('post_activity_comment/', views.post_activity_comment, name='post_activity_comment'),

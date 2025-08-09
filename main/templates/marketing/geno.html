@@ -21,21 +21,7 @@
             color: inherit;
         }
 
-        /* Header Styles */
-        header {
-            background-color: #007BFF;
-            color: white;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+     
         .site-name {
             font-size: 1.5rem;
             font-weight: bold;
@@ -57,18 +43,7 @@
         .explore-link:hover {
             opacity: 0.8;
         }
-        .donate-button {
-            background: white;
-            color: #007BFF;
-            padding: 8px 15px;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: background 0.3s ease, color 0.3s ease;
-        }
-        .donate-button:hover {
-            background: #0056b3;
-            color: white;
-        }
+      
 
         /* Body Styles */
         main {
@@ -154,21 +129,154 @@
                 padding: 10px;
             }
         }
+
+/* Header Styles */
+header {
+    background-color: #007BFF;
+    color: white;
+    padding: 15px 5%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+/* Logo and Branding */
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.logo-wrapper {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    gap: 12px;
+    transition: transform 0.3s ease;
+}
+
+.logo-wrapper:hover {
+    transform: translateX(-2px);
+}
+
+.logo {
+    height: 80px;
+    width: auto;
+    transition: transform 0.3s ease;
+}
+
+.logo:hover {
+    transform: scale(1.05);
+}
+
+.logo-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+}
+
+.site-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: white;
+}
+
+.inspiration {
+    font-size: 0.85rem;
+    opacity: 0.9;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Navigation */
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.header-nav {
+    display: flex;
+    gap: 25px;
+}
+
+.nav-link {
+    position: relative;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 1rem;
+    padding: 8px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.link-underline {
+    height: 2px;
+    width: 0;
+    background: white;
+    transition: width 0.3s ease, background 0.3s ease;
+    margin-top: 4px;
+    border-radius: 2px;
+}
+
+.nav-link:hover .link-underline {
+    width: 100%;
+}
+
+/* Donate Button */
+.donate-button {
+    background: white;
+    color: #007BFF;
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.donate-button:hover {
+    background: #f0f0f0;
+    color: #0062cc;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.donate-button .link-underline {
+    display: none;
+}
+
     </style>
 </head>
 <body>
     <!-- Header -->
-    <header>
-        <div class="header-left">
-            <div class="site-name">Rallynex</div>
-            <div class="inspiration"> - Act Small, Change Big.</div>
-        </div>
-        <div class="header-right">
-            <a href="{% url 'index' %}" class="explore-link">Explore</a>
-            <a href="{% url 'fund' %}#fuel-movement" class="donate-button">Donate</a>
-
-        </div>
-    </header>
+<header>
+    <div class="header-left">
+        <a href="{% url 'index' %}" class="logo-wrapper">
+            <img src="{% static 'main/files/lg.png' %}" alt="Rallynex Logo" class="logo">
+            <div class="logo-text">
+                <span class="site-name">Rallynex</span>
+                <span class="inspiration">Act Small, Change Big</span>
+            </div>
+        </a>
+    </div>
+    <div class="header-right">
+        <nav class="header-nav">
+            <a href="{% url 'index' %}" class="nav-link explore-link">
+                <span>Explore</span>
+                <div class="link-underline"></div>
+            </a>
+          <a href="{% url 'fund' %}#fuel-movement" class="nav-link donate-button">
+    <span>Donate</span>
+    <div class="link-underline"></div>
+</a>
+        </nav>
+    </div>
+</header>
 
     <!-- Body -->
     <main>

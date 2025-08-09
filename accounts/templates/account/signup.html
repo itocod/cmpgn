@@ -2189,6 +2189,19 @@ body.dark-mode .affiliate-link i {
     }
 }
 
+/* Terms agreement checkbox styling */
+.form-field label input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+.form-field label a {
+    color: #4CAF50;
+    text-decoration: none;
+}
+
+.form-field label a:hover {
+    text-decoration: underline;
+}
 </style>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -2705,6 +2718,17 @@ document.addEventListener("DOMContentLoaded", function() {
         {% endif %}
       </div>
       {% endfor %}
+              <!-- Add this terms agreement checkbox -->
+        <div class="form-field" style="margin-top: 15px;">
+            <label>
+                <input type="checkbox" name="terms_agreement" required>
+                I agree to the <a href="{% url 'terms_of_service' %}" target="_blank">Terms of Service</a> 
+                and <a href="{% url 'privacy_policy' %}" target="_blank">Privacy Policy</a>
+            </label>
+            {% if form.terms_agreement.errors %}
+            <p class="text-danger">{{ form.terms_agreement.errors.as_text }}</p>
+            {% endif %}
+        </div>
       <button type="submit" class="btn-signup">Sign Up</button>
     </form>
 

@@ -3268,6 +3268,280 @@ body.dark-mode .comment-count {
 }
 </style>
 
+<style>
+    .affiliate-essentials {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background-color: rgba(0, 149, 246, 0.03);
+        border-radius: 16px;
+        padding: 30px;
+        margin: 40px 0;
+        border: 1px solid rgba(0, 149, 246, 0.1);
+    }
+    
+    .affiliate-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .affiliate-badge {
+        background: rgba(0, 149, 246, 0.08);
+        color: #0095f6;
+        border: 1px solid rgba(0, 149, 246, 0.2);
+        padding: 6px 12px;
+        border-radius: 12px;
+        font-size: 13px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 15px;
+    }
+    
+    .affiliate-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: #2a3042;
+        margin-bottom: 12px;
+    }
+    
+    .affiliate-subtitle {
+        color: #6c757d;
+        font-size: 15px;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    .affiliate-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    @media (min-width: 768px) {
+        .affiliate-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+    }
+    
+    .affiliate-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .affiliate-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+        border-color: rgba(0, 149, 246, 0.2);
+    }
+    
+    .affiliate-tag {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: #ff4757;
+        color: white;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 3px 8px;
+        border-radius: 4px;
+    }
+    
+    .affiliate-icon {
+        width: 40px;
+        height: 40px;
+        background: rgba(0, 149, 246, 0.1);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #0095f6;
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+    
+    .affiliate-name {
+        font-weight: 600;
+        font-size: 16px;
+        margin-bottom: 8px;
+        color: #2a3042;
+    }
+    
+    .affiliate-desc {
+        font-size: 14px;
+        color: #6c757d;
+        margin-bottom: 15px;
+        line-height: 1.5;
+    }
+    
+    .affiliate-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    
+    .affiliate-price {
+        font-weight: 700;
+        color: #2a3042;
+    }
+    
+    .affiliate-discount {
+        background: rgba(40, 167, 69, 0.1);
+        color: #28a745;
+        font-size: 12px;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-weight: 600;
+    }
+    
+    .affiliate-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 10px 15px;
+        background: #0095f6;
+        color: white;
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+    }
+    
+    .affiliate-btn:hover {
+        background: #0077cc;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 149, 246, 0.2);
+    }
+    
+    .affiliate-btn i {
+        margin-left: 8px;
+        font-size: 12px;
+    }
+    
+    .view-all-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 25px;
+        padding: 10px 20px;
+        background: white;
+        border: 1px solid rgba(0, 149, 246, 0.3);
+        color: #0095f6;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+    
+    .view-all-btn:hover {
+        background: rgba(0, 149, 246, 0.05);
+        border-color: rgba(0, 149, 246, 0.5);
+        transform: translateY(-2px);
+    }
+    
+    .view-all-btn i {
+        margin-left: 8px;
+        font-size: 12px;
+    }
+</style>
+
+
+
+<script>
+// Store follow state in localStorage
+function updateFollowState(userId, isFollowing) {
+    const storageKey = `followState_${userId}`;
+    localStorage.setItem(storageKey, isFollowing ? 'true' : 'false');
+}
+
+// Retrieve follow state from localStorage
+function getFollowState(userId) {
+    const storageKey = `followState_${userId}`;
+    return localStorage.getItem(storageKey) === 'true';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize text elements with correct state
+    document.querySelectorAll('.follow-text').forEach(element => {
+        const userId = element.getAttribute('data-user-id');
+        const storedState = getFollowState(userId);
+        const currentState = element.getAttribute('data-is-following') === 'true';
+        
+        // Use stored state if available, otherwise use server state
+        const finalState = storedState !== null ? storedState : currentState;
+        
+        if (finalState) {
+            element.classList.add('following');
+            element.textContent = '• Following';
+            element.setAttribute('data-is-following', 'true');
+        } else {
+            element.classList.remove('following');
+            element.textContent = '• Follow';
+            element.setAttribute('data-is-following', 'false');
+        }
+    });
+
+    // Handle follow text clicks
+    document.querySelectorAll('.follow-text').forEach(element => {
+        element.addEventListener('click', async function() {
+            const userId = this.getAttribute('data-user-id');
+            const isFollowing = this.getAttribute('data-is-following') === 'true';
+            const action = isFollowing ? 'unfollow' : 'follow';
+            
+            try {
+                const response = await fetch('/toggle_follow/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({
+                        'user_id': userId,
+                        'action': action
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    // Update text state
+                    const newState = data.action === 'followed';
+                    this.classList.toggle('following', newState);
+                    this.textContent = newState ? '• Following' : '• Follow';
+                    this.setAttribute('data-is-following', newState.toString());
+                    
+                    // Update followers count
+                    const followersCount = document.getElementById(`followers-count-${userId}`);
+                    if (followersCount) {
+                        followersCount.textContent = `(${data.followers_count} followers)`;
+                    }
+                    
+                    // Persist state in localStorage
+                    updateFollowState(userId, newState);
+                } else {
+                    console.error('Error:', data.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            }
+        });
+    });
+});
+</script>
+
+
 
 <script>
   // Mobile search toggle
@@ -3959,10 +4233,15 @@ function toggleFullContent(button) {
             </div>
         {% endfor %}
     </div>
+</div><br>
+<div class="aside-footer">
+    <a href="{% url 'aboutus' %}">About</a> • 
+    <a href="{% url 'hiw' %}">Help</a> • 
+    <a href="{% url 'terms_of_service' %}">Terms</a> • 
+    <a href="{% url 'privacy_policy' %}">Privacy</a> • 
+    <a href="{% url 'faq' %}">FAQ</a> • 
+    <a href="{% url 'project_support' %}">Support</a>
 </div>
-  <div class="aside-footer">
-    <a href="#">About</a> • <a href="#">Help</a> • <a href="#">Terms</a> • <a href="#">Privacy</a>
-  </div>
 
 </aside>
 
@@ -4706,177 +4985,93 @@ function toggleFullContent(button) {
     </div>
 </div>
 
-<div class="affiliate-products-section py-5 bg-light">
-    <div class="container">
-        <div class="text-center mb-5">
-            <span class="section-badge bg-primary-soft text-primary px-3 py-2 rounded-pill d-inline-block mb-3">
-                <i class="fas fa-star me-2"></i>Recommended Tools
-            </span>
-            <h2 class="section-title display-5 fw-bold mb-3 position-relative d-inline-block">
-                Rallynex Essentials
-                <span class="title-decoration position-absolute bottom-0 start-50 translate-middle-x"></span>
-            </h2>
-            <p class="section-subtitle lead text-muted mx-auto">
-               Tools and offers to help you boost and manage your campaigns like a pro.
-            </p>
-        </div>
 
-        <div class="row g-4">
-            <!-- Product 1 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="card product-card h-100 border-0 shadow-sm overflow-hidden">
-                    <div class="ribbon ribbon-top-right"><span>Top Pick</span></div>
-                    <div class="product-badge bg-success">Limited Offer</div>
-                    <img src="{% static 'main/files/dc.jpg' %}" class="card-img-top product-image" alt="SkyHost Premium Web Hosting">
-                    <div class="card-body position-relative">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <h3 class="h5 mb-0">SkyHost Premium</h3>
-                            <div class="rating small text-warning">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star-half-alt"></i>
-                                <span class="text-muted ms-1">(4.8)</span>
-                            </div>
-                        </div>
-                        <p class="card-text text-muted mb-4">Blazing-fast hosting with 24/7 expert support and free SSL certificates.</p>
-                        
-                        <div class="product-features mb-4">
-                            <div class="feature-item">
-                                <i class="fas fa-check-circle text-success me-2"></i>
-                                <span>99.9% Uptime</span>
-                            </div>
-                            <div class="feature-item">
-                                <i class="fas fa-check-circle text-success me-2"></i>
-                                <span>Free Migration</span>
-                            </div>
-                            <div class="feature-item">
-                                <i class="fas fa-check-circle text-success me-2"></i>
-                                <span>Unlimited Bandwidth</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-white border-0 pt-0 pb-4 px-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <span class="text-muted text-decoration-line-through">$12.99</span>
-                                <span class="h4 text-primary ms-2">$8.99<span class="text-muted small">/mo</span></span>
-                            </div>
-                            <a href="YOUR_AFFILIATE_LINK_1" class="affiliate-btn affiliate-btn-primary">
-                                Get Offer <i class="fas fa-arrow-right ms-2"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+
+<div class="affiliate-essentials">
+    <div class="affiliate-header">
+        <div class="affiliate-badge">
+            <i class="fas fa-gem"></i>
+            <span>Premium Partners</span>
+        </div>
+        <h3 class="affiliate-title">Essential Tools for Campaign Success</h3>
+        <p class="affiliate-subtitle">These trusted tools help our top creators maximize their impact (we earn a small commission at no extra cost to you)</p>
+    </div>
+    
+    <div class="affiliate-grid">
+        <!-- Tool 1 -->
+        <div class="affiliate-card">
+            <span class="affiliate-tag">BEST VALUE</span>
+            <div class="affiliate-icon">
+                <i class="fas fa-chart-line"></i>
             </div>
-            
-            <!-- Product 2 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="card product-card h-100 border-0 shadow-sm overflow-hidden">
-                    <div class="product-badge bg-info">Popular</div>
-                    <img src="{% static 'main/files/dc.jpg' %}" class="card-img-top product-image" alt="MailCraft Pro Email Suite">
-                    <div class="card-body position-relative">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <h3 class="h5 mb-0">MailCraft Pro</h3>
-                            <div class="rating small text-warning">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <span class="text-muted ms-1">(5.0)</span>
-                            </div>
-                        </div>
-                        <p class="card-text text-muted mb-4">Advanced email marketing platform with AI-powered automation and analytics.</p>
-                        
-                        <div class="product-features mb-4">
-                            <div class="feature-item">
-                                <i class="fas fa-check-circle text-success me-2"></i>
-                                <span>10,000 emails/mo</span>
-                            </div>
-                            <div class="feature-item">
-                                <i class="fas fa-check-circle text-success me-2"></i>
-                                <span>Drag & Drop Editor</span>
-                            </div>
-                            <div class="feature-item">
-                                <i class="fas fa-check-circle text-success me-2"></i>
-                                <span>AI Subject Lines</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-white border-0 pt-0 pb-4 px-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <span class="h4 text-primary">$15<span class="text-muted small">/mo</span></span>
-                            </div>
-                            <a href="YOUR_AFFILIATE_LINK_2" class="affiliate-btn affiliate-btn-primary" target="_blank">
-                                Explore <i class="fas fa-arrow-right ms-2"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
+            <h4 class="affiliate-name">AnalyticsPro+</h4>
+            <p class="affiliate-desc">Track campaign performance with real-time analytics and AI-powered insights to optimize your strategy.</p>
+            <div class="affiliate-meta">
+                <span class="affiliate-price">$29/mo</span>
+                <span class="affiliate-discount">Save 30%</span>
             </div>
-            
-            <!-- Product 3 -->
-            <div class="col-lg-4 col-md-6">
-                <div class="card product-card h-100 border-0 shadow-sm overflow-hidden">
-                    <div class="ribbon ribbon-top-right"><span>Best Value</span></div>
-                    <div class="product-badge bg-warning text-dark">Exclusive</div>
-                    <img src="{% static 'main/files/dc.jpg' %}" class="card-img-top product-image" alt="RankMaster SEO Suite">
-                    <div class="card-body position-relative">
-                        <div class="d-flex justify-content-between align-items-start mb-3">
-                            <h3 class="h5 mb-0">RankMaster Pro</h3>
-                            <div class="rating small text-warning">
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="fas fa-star"></i>
-                                <i class="far fa-star"></i>
-                                <span class="text-muted ms-1">(4.2)</span>
-                            </div>
-                        </div>
-                        <p class="card-text text-muted mb-4">Comprehensive SEO toolkit with real-time tracking and optimization recommendations.</p>
-                        
-                        <div class="product-features mb-4">
-                            <div class="feature-item">
-                                <i class="fas fa-check-circle text-success me-2"></i>
-                                <span>Keyword Research</span>
-                            </div>
-                            <div class="feature-item">
-                                <i class="fas fa-check-circle text-success me-2"></i>
-                                <span>Competitor Analysis</span>
-                            </div>
-                            <div class="feature-item">
-                                <i class="fas fa-check-circle text-success me-2"></i>
-                                <span>Rank Tracking</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer bg-white border-0 pt-0 pb-4 px-4">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div>
-                                <span class="text-muted text-decoration-line-through">$36</span>
-                                <span class="h4 text-primary ms-2">$29<span class="text-muted small">/mo</span></span>
-                                <span class="badge bg-success-soft text-success ms-2">Save 20%</span>
-                            </div>
-                            <a href="YOUR_AFFILIATE_LINK_3" class="affiliate-btn affiliate-btn-primary" target="_blank">
-                                Try Free <i class="fas fa-arrow-right ms-2"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <a href="YOUR_AFFILIATE_LINK_1" class="affiliate-btn" target="_blank" rel="noopener noreferrer">
+                Get Started <i class="fas fa-arrow-right"></i>
+            </a>
         </div>
         
-      <div class="text-center mt-5 pt-3">
-    <a href="#" class="affiliate-btn affiliate-btn-outline">
-        View All Recommended Tools <i class="fas fa-chevron-right ms-2"></i>
-    </a>
-</div>
+        <!-- Tool 2 -->
+        <div class="affiliate-card">
+            <span class="affiliate-tag">POPULAR</span>
+            <div class="affiliate-icon">
+                <i class="fas fa-bullhorn"></i>
+            </div>
+            <h4 class="affiliate-name">Amplify Suite</h4>
+            <p class="affiliate-desc">Automatically distribute your campaign to 50+ platforms with intelligent targeting.</p>
+            <div class="affiliate-meta">
+                <span class="affiliate-price">$49/mo</span>
+                <span class="affiliate-discount">7-day free trial</span>
+            </div>
+            <a href="YOUR_AFFILIATE_LINK_2" class="affiliate-btn" target="_blank" rel="noopener noreferrer">
+                Try For Free <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        
+        <!-- Tool 3 -->
+        <div class="affiliate-card">
+            <div class="affiliate-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <h4 class="affiliate-name">EngageMaster</h4>
+            <p class="affiliate-desc">Boost audience interaction with automated responses and community management tools.</p>
+            <div class="affiliate-meta">
+                <span class="affiliate-price">$19/mo</span>
+                <span class="affiliate-discount">LIMITED OFFER</span>
+            </div>
+            <a href="YOUR_AFFILIATE_LINK_3" class="affiliate-btn" target="_blank" rel="noopener noreferrer">
+                Start Engaging <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        
+        <!-- Tool 4 -->
+        <div class="affiliate-card">
+            <span class="affiliate-tag">NEW</span>
+            <div class="affiliate-icon">
+                <i class="fas fa-lightbulb"></i>
+            </div>
+            <h4 class="affiliate-name">ContentGenius AI</h4>
+            <p class="affiliate-desc">Generate high-converting campaign content in minutes with our AI writer.</p>
+            <div class="affiliate-meta">
+                <span class="affiliate-price">$37/mo</span>
+                <span class="affiliate-discount">Save 40%</span>
+            </div>
+            <a href="YOUR_AFFILIATE_LINK_4" class="affiliate-btn" target="_blank" rel="noopener noreferrer">
+                Create Content <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+    
+    <div class="text-center">
+        <a href="#" class="view-all-btn">
+            View all recommended tools <i class="fas fa-arrow-right"></i>
+        </a>
     </div>
 </div>
-
 
 
 </section>
@@ -4927,21 +5122,29 @@ function toggleFullContent(button) {
           <span class="verified-badge">✓</span>
           {% endif %}
         </div>
-        <button class="follow-btn" onclick="followUser('{{ user.username }}')">
-          <a href="{% url 'profile_view' username=user.username %}">                                                         
-            <span class="btn-text">Visit</span>
+        <div class="user-actions">
+          {% if request.user != user %}
+          <span id="follow-btn-{{ user.id }}" 
+                class="follow-text {% if request.user in user.followers.all %}following{% endif %}" 
+                data-user-id="{{ user.id }}"
+                data-is-following="{% if request.user in user.followers.all %}true{% else %}false{% endif %}">
+              {% if request.user in user.followers.all %}
+                  Following 
+              {% else %}
+                  Follow 
+              {% endif %}
+          </span>
+          {% endif %}
+          <a href="{% url 'profile_view' username=user.username %}" class="visit-btn">
+              <span class="btn-text">Visit</span>
           </a>
-          <span class="btn-icon"></span>
-        </button>
+        </div>
       </div>
     </div>
     {% endwith %}
 {% empty %}
     <p class="no-suggestions">No suggestions available. Follow more people to get better recommendations.</p>
 {% endfor %}
-
-
-
   
 <div class="trending-now">
   <div class="trending-header">
@@ -5245,16 +5448,38 @@ function toggleFullContent(button) {
   text-decoration: underline;
 }
 
+
 .user-card {
   display: flex;
   padding: 12px;
   border-radius: 8px;
-  transition: background-color 0.2s;
+  transition: all 0.3s ease;
   margin-bottom: 8px;
+  background: linear-gradient(135deg, rgba(240, 242, 245, 0.4) 0%, rgba(255, 255, 255, 0.8) 100%);
+  backdrop-filter: blur(2px);
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .user-card:hover {
-  background-color: #f0f2f5;
+  background: linear-gradient(135deg, rgba(224, 227, 233, 0.6) 0%, rgba(240, 242, 245, 0.9) 100%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transform: translateY(-1px);
+}
+
+/* Dark mode adjustments */
+.dark-mode .user-card {
+  background: linear-gradient(135deg, rgba(45, 45, 45, 0.4) 0%, rgba(30, 30, 30, 0.8) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dark-mode .user-card:hover {
+  background: linear-gradient(135deg, rgba(60, 60, 60, 0.6) 0%, rgba(45, 45, 45, 0.9) 100%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Add this to your existing transitions */
+.user-card {
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
 }
 
 .user-avatar {
@@ -5316,29 +5541,76 @@ function toggleFullContent(button) {
   color: #1877f2;
   font-size: 14px;
 }
-
-.follow-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #e7f3ff;
-  color: #1877f2;
-  border: none;
-  border-radius: 6px;
-  padding: 6px 12px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  width: 100%;
+.visit-btn {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #f0f2f5;
+    color: #050505;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.2s;
+    margin-left: 4px; /* Added left margin for better spacing */
 }
 
-.follow-btn:hover {
-  background-color: #dbe7f2;
+.visit-btn:hover {
+    background-color: #e4e6eb;
+    text-decoration: none;
 }
 
-.btn-text {
-  margin-right: 4px;
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Added gap property for consistent spacing */
+}
+
+/* Dark mode styles */
+.dark-mode .follow-text {
+    color: #64b5f6;
+    background-color: rgba(100, 181, 246, 0.1);
+}
+
+.dark-mode .follow-text:hover {
+    background-color: rgba(100, 181, 246, 0.2);
+}
+
+.dark-mode .follow-text.following {
+    color: #64b5f6;
+    background-color: rgba(100, 181, 246, 0.1);
+}
+
+.dark-mode .visit-btn {
+    background-color: #2d2d2d;
+    color: #e4e6eb;
+}
+
+.dark-mode .visit-btn:hover {
+    background-color: #3d3d3d;
+}
+
+/* Dark mode styles */
+.dark-mode .suggested-follow-btn {
+    color: #64b5f6;
+    background-color: rgba(100, 181, 246, 0.1);
+}
+
+.dark-mode .suggested-follow-btn:hover {
+    background-color: rgba(100, 181, 246, 0.2);
+}
+
+.dark-mode .suggested-follow-btn.suggested-following {
+    color: #64b5f6;
+    background-color: rgba(100, 181, 246, 0.1);
+}
+
+.dark-mode .suggested-visit-btn {
+    background-color: #2d2d2d;
+    color: #e4e6eb;
+}
+
+.dark-mode .suggested-visit-btn:hover {
+    background-color: #3d3d3d;
 }
 
 /* ===== Dark Mode Styles ===== */
@@ -5406,6 +5678,93 @@ function toggleFullContent(button) {
 </style>
 
 
+<style type="text/css">
+/* Light mode styles */
+.follow-text {
+    color: #1DA1F2;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    margin-left: 10px;
+    text-align: center;
+    display: inline-block;
+}
+
+.follow-text:hover {
+    text-decoration: underline;
+    opacity: 0.8;
+}
+
+.follow-text.following {
+    color: #1DA1F2;
+}
+
+.follow-text.following:hover {
+    color: #e0245e;
+}
+
+/* Dark mode styles */
+.dark-mode .follow-text {
+    color: #64b5f6;
+}
+
+.dark-mode .follow-text:hover {
+    color: #90caf9;
+    opacity: 1;
+}
+
+.dark-mode .follow-text.following {
+    color: #64b5f6;
+}
+
+.dark-mode .follow-text.following:hover {
+    color: #ef9a9a;
+}
+
+/* Common styles */
+.follow-text.loading {
+    opacity: 0.7;
+    pointer-events: none;
+    position: relative;
+    padding-left: 20px;
+}
+
+.follow-text.loading:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    margin-top: -6px;
+    border: 2px solid rgba(29, 161, 242, 0.3);
+    border-top-color: #1DA1F2;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.dark-mode .follow-text.loading:before {
+    border: 2px solid rgba(100, 181, 246, 0.3);
+    border-top-color: #64b5f6;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.followers-count {
+    font-size: 12px;
+    color: #666;
+    margin-left: 15px;
+    display: inline-block;
+}
+
+.dark-mode .followers-count {
+    color: #aaa;
+}
+</style>
 <style>
 .trending-now {
   margin-top: 24px;

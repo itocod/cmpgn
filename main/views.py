@@ -5377,7 +5377,7 @@ def home(request):
             continue
 
     top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
-
+ 
     return render(request, 'main/home.html', {
         'ads': ads,
         'public_campaigns': campaigns_to_display if campaigns_to_display.exists() else trending_campaigns,
@@ -5387,6 +5387,7 @@ def home(request):
         'unread_notifications': unread_notifications,
         'unread_messages_count': unread_messages_count,
         'new_campaigns_from_follows': new_campaigns_from_follows,
+      
         'categories': categories,
         'selected_category': category_filter,
         'trending_campaigns': trending_campaigns,
@@ -5725,35 +5726,89 @@ def following_list(request, username):
     return render(request, 'main/following_list.html', context)
 
 
-
-
-
-
-
 @login_required
-def follow_user(request, username):
-    user_to_follow = get_object_or_404(User, username=username)
-    if request.user == user_to_follow:
-        messages.error(request, "You cannot follow yourself.")
-    else:
-        follow, created = Follow.objects.get_or_create(follower=request.user, followed=user_to_follow)
-        if created:
-            messages.success(request, f"You are now following {username}.")
+@require_POST
+def toggle_follow(request):
+    try:
+        data = json.loads(request.body)
+        user_to_follow_id = data.get('user_id')
+        
+        if not user_to_follow_id:
+            return JsonResponse({'status': 'error', 'message': 'User ID required'}, status=400)
+
+        try:
+            user_to_follow = User.objects.get(pk=user_to_follow_id)
+        except User.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'User not found'}, status=404)
+
+        if request.user == user_to_follow:
+            return JsonResponse({'status': 'error', 'message': 'Cannot follow yourself'}, status=400)
+
+        follow, created = Follow.objects.get_or_create(
+            follower=request.user,
+            followed=user_to_follow
+        )
+
+        if not created:
+            follow.delete()
+            action = 'unfollowed'
+            is_following = False
         else:
-            messages.info(request, f"You are already following {username}.")
-    return redirect('profile_view', username=username)
+            action = 'followed'
+            is_following = True
 
-@login_required
-def unfollow_user(request, username):
-    user_to_unfollow = get_object_or_404(User, username=username)
-    Follow.objects.filter(follower=request.user, followed=user_to_unfollow).delete()
-    messages.success(request, f"You have unfollowed {username}.")
-    return redirect('profile_view', username=username)
+        return JsonResponse({
+            'status': 'success',
+            'action': action,
+            'followers_count': user_to_follow.followers.count(),
+            'is_following': is_following  # Explicit state
+        })
+
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
 
 
+# views.py
+from django.http import JsonResponse
 
+@require_POST
+def follow_user(request, user_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({'status': 'error', 'message': 'Login required'}, status=403)
+    
+    user_to_follow = get_object_or_404(User, id=user_id)
+    
+    if request.user == user_to_follow:
+        return JsonResponse({'status': 'error', 'message': 'Cannot follow yourself'}, status=400)
+    
+    _, created = Follow.objects.get_or_create(
+        follower=request.user,
+        followed=user_to_follow
+    )
+    
+    return JsonResponse({
+        'status': 'success',
+        'action': 'follow',
+        'followed_id': user_id
+    })
 
+@require_POST
+def unfollow_user(request, user_id):
+    if not request.user.is_authenticated:
+        return JsonResponse({'status': 'error', 'message': 'Login required'}, status=403)
+    
+    user_to_unfollow = get_object_or_404(User, id=user_id)
+    deleted, _ = Follow.objects.filter(
+        follower=request.user,
+        followed=user_to_unfollow
+    ).delete()
+    
+    return JsonResponse({
+        'status': 'success',
+        'action': 'unfollow',
+        'unfollowed_id': user_id
+    })
 
 
 @login_required
