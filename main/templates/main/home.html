@@ -835,124 +835,223 @@ border: 1px solid silver;
     
 }
 
+        .carousel {
+            position: relative;
+            overflow: hidden;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            border-radius: 18px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            background: #fff;
+        }
 
-.carousel {
-    position: relative;
-    overflow: hidden;
-    width: 250px;
-    height: 400px;
-    margin: 0 auto;
-}
+        .slides {
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.16, 0.85, 0.45, 1);
+            height: 100%;
+        }
 
-.slides {
-    display: flex;
-    transition: transform 0.5s ease-in-out;
-}
+        .slide {
+            min-width: 100%;
+            flex: 1;
+            text-align: center;
+            overflow: hidden;
+            padding: 10px;
+            box-sizing: border-box;
+        }
 
-.slide {
-    min-width: 100%;
-    flex: 1;
-    text-align: center;
-    overflow: hidden;
-}
+        .ad {
+            padding: 20px;
+            border: none;
+            border-radius: 14px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.09);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s ease;
+            height: 100%;
+            overflow-y: auto;
+            background: #fff;
+            position: relative;
+        }
 
-/* Your other CSS styles for the .ad, .ad:hover, and image behavior */
+        .ad:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
 
+        .ad h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin: 15px 0 12px;
+            text-align: center;
+            line-height: 1.3;
+        }
 
-.ad {
-    
-    padding: 15px; /* Adjusted padding */
-    border: 1px solid #e0e0e0;
-    border-radius: 8px; /* Adjusted border-radius */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column; /* Ensure content stacks vertically */
-    align-items: center; /* Center align content */
-    transition: transform 0.3s ease; /* Smooth scaling on hover */
-    height: 100%; /* Make the ad take the full height of the slide */
-    overflow-y: auto; /* Enable vertical scrolling */
-}
+        .ad .content {
+            margin-bottom: 18px;
+            color: #4a5568;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            text-align: center;
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
 
-.ad:hover {
-    transform: scale(1.02); /* Slightly enlarge on hover */
-    box-shadow: 0 6px 12px rgba(0,0,0,0.2); /* Enhanced shadow on hover */
-}
+        .ad img {
+            width: calc(100% + 40px);
+            height: 170px;
+            object-fit: cover;
+            margin: -20px -20px 15px -20px;
+            border-radius: 14px 14px 0 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            position: relative;
+            transition: transform 0.4s ease;
+        }
 
-.ad h2 {
-    font-size: 1.5rem; /* Smaller font size */
-    font-weight: 600;
-    color: #333;
-    margin: 10px 0 8px; /* Adjusted margin */
-    text-align: center;
-}
+        .ad img:hover {
+            transform: scale(1.06);
+        }
 
-.ad .content {
-    margin-bottom: 12px; /* Adjusted margin */
-    color: #666;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 3; /* Limit to 3 lines */
-    -webkit-box-orient: vertical;
-    text-align: center;
-    line-height: 1.4;
-}
+        .ad .sponsored-by {
+            font-size: 0.9rem;
+            color: #718096;
+            margin-bottom: 15px;
+            text-align: center;
+            font-style: italic;
+        }
 
-.ad img {
-    width: calc(100% + 30px); /* Extend width by padding on both sides */
-    height: auto;
-    margin: -15px -15px 10px -15px; /* Compensate for the padding and add bottom margin */
-    border-radius: 8px 8px 0 0; /* Rounded corners only on top */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Added subtle shadow */
-    position: relative; /* Required for the CTA text */
-    transition: transform 0.3s ease; /* Smooth scaling on hover */
-}
+        .ad .sponsored-by strong {
+            color: #4a5568;
+            font-weight: 600;
+        }
 
-.ad img:hover {
-    transform: scale(1.05); /* Slight scale on hover */
-}
+        .ad a {
+            display: block;
+            width: 100%;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+        }
 
-.ad .sponsored-by {
-    font-size: 1.2rem; /* Smaller font size */
-    color: #888;
-    margin-bottom: 8px;
-    text-align: center;
-}
-
-.ad .sponsored-by strong {
-    color: #444; /* Optional: Add a different color for the bold text */
-    font-weight: bold;
-}
-
-
-.ad a {
-    display: block;
-    width: 100%;
-    text-decoration: none;
-    color: inherit;
-    position: relative; /* Required for the CTA text */
-}
-
-.ad a::after {
-    content: "Visit"; /* CTA text */
+ .ad a::after {
+    content: "Visit \f061";
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
     position: absolute;
-    top: 50%; /* Center vertically */
-    left: 50%; /* Center horizontally */
-    transform: translate(-50%, -50%); /* Center text */
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-    color: white; /* Text color */
-    padding: 5px 10px; /* Padding */
-    border-radius: 5px; /* Rounded corners */
-    opacity: 0; /* Initially hidden */
-    transition: opacity 0.3s ease; /* Smooth transition */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.75);
+    color: white;
+    padding: 12px 26px; /* slightly bigger for balance */
+    border-radius: 30px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    font-size: 1.2rem;   /* increased */
+    font-weight: 600;    /* stronger */
 }
 
-.ad a:hover::after {
-    opacity: 1; /* Show on hover */
+        .ad a:hover::after {
+            opacity: 1;
+        }
+
+        /* Custom scrollbar for the ad content */
+        .ad::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .ad::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .ad::-webkit-scrollbar-thumb {
+            background: #cbd5e0;
+            border-radius: 10px;
+        }
+
+        .ad::-webkit-scrollbar-thumb:hover {
+            background: #a0aec0;
+        }
+
+        .boosted-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: linear-gradient(135deg, #000000, #434343); /* black gradient */
+    color: #ffffff; /* white text */
+    font-size: 0.8rem;
+    font-weight: bold;
+    padding: 5px 12px;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+    z-index: 2;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
+.hidden-carousel {
+    display: none; /* hidden by default */
+}
 
-
+        
+        /* Navigation arrows */
+        .carousel-nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .carousel-nav button {
+            background: #fff;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            color: #4a5568;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .carousel-nav button:hover {
+            background: #4a5568;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* Indicators */
+        .indicators {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+        
+        .indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #cbd5e0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .indicator.active {
+            background: #4a5568;
+            transform: scale(1.2);
+        }
   .left-aside, .right-aside {
     flex: 1;
     background-color: #fff;
@@ -1002,7 +1101,7 @@ border: 1px solid silver;
 /* Light mode (default) styles remain the same */
 .sidebar-box {
     border-left: 2px solid #c0c0c0;
-    height: 800px;
+    height: 1000px;
     overflow-y: auto;
     overflow-x: hidden;
     border-radius: 5px;
@@ -1302,6 +1401,8 @@ body.dark-mode #view-count,
 body.dark-mode .comment-count {
     color: #ffffff; /* Light text for counts */
 }
+
+
   </style>
 
 
@@ -3227,1938 +3328,310 @@ body.dark-mode .comment-count {
 </style>
 
 
-
-
-
-<script type="text/javascript">
-  document.addEventListener('DOMContentLoaded', function() {
-  const searchInput = document.getElementById('mobile-search-input');
-  const clearButton = document.querySelector('.clear-search');
-  
-  if (searchInput && clearButton) {
-    // Show/hide clear button based on input
-    searchInput.addEventListener('input', function() {
-      clearButton.style.display = this.value.length > 0 ? 'flex' : 'none';
-    });
-    
-    // Clear input when X is clicked
-    clearButton.addEventListener('click', function() {
-      searchInput.value = '';
-      clearButton.style.display = 'none';
-      searchInput.focus();
-    });
-    
-    // Handle when popup is opened (in case there's existing text)
-    const mobileSearchIcon = document.querySelector('.mobile-search-icon');
-    if (mobileSearchIcon) {
-      mobileSearchIcon.addEventListener('click', function() {
-        setTimeout(() => {
-          clearButton.style.display = searchInput.value.length > 0 ? 'flex' : 'none';
-        }, 100);
-      });
-    }
-  }
-});
-</script>
-
-
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Toggle search popup
-        const mobileSearchIcon = document.querySelector('.rallynex-mobile-search-icon');
-        const mobileSearchPopup = document.querySelector('.rallynex-mobile-search-popup');
-        const closeMobileSearch = document.querySelector('.rallynex-close-mobile-search');
-        const searchInput = document.getElementById('mobile-search-input');
-        const clearButton = document.querySelector('.rallynex-clear-search');
-        
-        if (mobileSearchIcon && mobileSearchPopup) {
-            mobileSearchIcon.addEventListener('click', function() {
-                mobileSearchPopup.classList.add('active');
-                if (searchInput) searchInput.focus();
-            });
-            
-            closeMobileSearch.addEventListener('click', function() {
-                mobileSearchPopup.classList.remove('active');
-            });
-        }
-        
-        // Clear search functionality
-        if (searchInput && clearButton) {
-            searchInput.addEventListener('input', function() {
-                clearButton.style.display = this.value.length > 0 ? 'flex' : 'none';
-            });
-            
-            clearButton.addEventListener('click', function() {
-                searchInput.value = '';
-                clearButton.style.display = 'none';
-                searchInput.focus();
-            });
-        }
-    });
-</script>
-
-<script>
-    function handleCreateClick(e) {
-        // Optional: Add any animation or pre-submit logic here
-        // e.preventDefault(); // Uncomment if you want to handle with AJAX
-        
-        // Example animation:
-        const btn = e.target;
-        btn.style.transform = 'scale(0.9)';
-        setTimeout(() => {
-            btn.style.transform = 'scale(1)';
-        }, 100);
-    }
-</script>
-<script>
-// In your script tags or JS file
-function blinkJoinPrompt() {
-    const prompt = document.querySelector('.join-prompt');
-    if (prompt) {
-        setInterval(() => {
-            prompt.style.opacity = prompt.style.opacity === '0' ? '1' : '0';
-        }, 5000); // Toggle every 5 seconds
-    }
-}
-
-// Call on page load
-window.addEventListener('DOMContentLoaded', blinkJoinPrompt);
-</script>
-
-
-
-
-
-
-<script>
-
-// Your existing functions
-function toggleLove(campaignId) {
-    // Existing love toggle functionality
-}
-
-function showSharePopup(campaignId) {
-    // Existing share functionality
-}
-</script>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const queryField = document.getElementById('query-field');
-        const resetBtn = document.getElementById('reset-field');
-        
-        // Show/hide reset button based on input
-        queryField.addEventListener('input', function() {
-            resetBtn.style.display = this.value ? 'block' : 'none';
-        });
-        
-        // Reset field
-        resetBtn.addEventListener('click', function() {
-            queryField.value = '';
-            this.style.display = 'none';
-            queryField.focus();
-        });
-    });
-</script>
-
-
-
-<script type="text/javascript">
-function switchColor() {
-    const body = document.body;
-    const isDarkMode = body.classList.toggle('dark-mode'); // Toggle dark mode class
-    var reactDivs = document.querySelectorAll('.react');
-  // Add this line to toggle dark mode on the funding card
-    document.querySelector('.funding-progress-card')?.classList.toggle('dark-mode', isDarkMode);
-    // Update background and text colors for all elements
-    const elementsToUpdate = document.querySelectorAll(
-        'header, footer, section, .left-aside, .right-aside, .upper-post, .campaign-content, .react, .search-container input, .search-container .btn-reset'
-    );
-
-    elementsToUpdate.forEach(element => {
-        element.classList.toggle('dark-mode', isDarkMode);
-    });
-
-    // Update text colors for specific elements
-    const textElements = document.querySelectorAll(
-        'h1, h2, h3, h4, p, li, .campaign-nav, .campaign-nav a, .btn, .reaction, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link, .love-count, #view-count, .comment-count'
-    );
-
-    textElements.forEach(element => {
-        element.style.color = isDarkMode ? '#ffffff' : '#000000';
-    });
-
-    // Update buttons
-    const buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)');
-    buttons.forEach(button => {
-        button.style.backgroundColor = isDarkMode ? '#262626' : '';
-        button.style.color = isDarkMode ? '#ffffff' : '#000000';
-    });
-
-    // Update `.react` divs
-    if (reactDivs.length > 0) {
-        reactDivs.forEach(function(reactDiv) {
-            reactDiv.style.backgroundColor = isDarkMode ? "#262626" : "";
-            reactDiv.style.color = isDarkMode ? "white" : "black";
-
-            if (isDarkMode) {
-                reactDiv.classList.add('react-hover');
-            } else {
-                reactDiv.classList.remove('react-hover');
-                reactDiv.style.backgroundColor = "";
-            }
-        });
-    }
-
-    // Update input field and reset button
-    const inputField = document.querySelector('.search-container input[type="text"]');
-    const inputResetButton = document.querySelector('.search-container .btn-reset');
-
-    if (inputField) {
-        inputField.style.backgroundColor = isDarkMode ? '#333333' : '#ffffff';
-        inputField.style.color = isDarkMode ? '#ffffff' : '#000000';
-    }
-
-    if (inputResetButton) {
-        inputResetButton.style.color = '#b0b0b0';
-    }
-}
-
-</script>
-
-
-<script>
-
-
-
-function toggleCommentForm() {
-    var popup = document.getElementById("commentFormPopup");
-    popup.style.display = "block";
-}
-
-function closeCommentForm() {
-    var popup = document.getElementById("commentFormPopup");
-    popup.style.display = "none";
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    var campaignElement = document.querySelector('.campaign-details');
-    var campaignId = {{ campaign.id }};
-    var startTime;
-
-    function recordCampaignView() {
-        var endTime = Math.floor(Date.now() / 1000); // Get current time in seconds
-        var timeSpent = endTime - startTime;
-        
-        fetch(`/record_campaign_view/${campaignId}/`, {
-            method: 'POST',
-            credentials: 'same-origin',
-            headers: {
-                'X-CSRFToken': '{{ csrf_token }}',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ time_spent: timeSpent })
-        })
-        .then(response => {
-            if (response.ok) {
-                console.log('View recorded successfully');
-            } else {
-                console.error('Failed to record view');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    }
-
-    function handleVisibilityChange() {
-        if (document.visibilityState === 'visible') {
-            startTime = Math.floor(Date.now() / 1000); // Get current time in seconds
-        } else {
-            recordCampaignView();
-        }
-    }
-
-    function isInViewport(element) {
-        var rect = element.getBoundingClientRect();
-        return (
-            rect.top >= 0 &&
-            rect.left >= 0 &&
-            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-        );
-    }
-
-    function handleScroll() {
-        if (isInViewport(campaignElement)) {
-            startTime = Math.floor(Date.now() / 1000); // Get current time in seconds
-        } else {
-            recordCampaignView();
-        }
-    }
-
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    document.addEventListener('scroll', handleScroll);
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    var mediaQuery = window.matchMedia('(max-width: 768px)');
-    var leftAside = document.querySelector('.left-aside');
-    var rightAside = document.querySelector('.right-aside');
-
-    function handleMediaQueryChange(e) {
-        if (e.matches) {
-            leftAside.style.display = 'none';
-            rightAside.style.display = 'none';
-        } else {
-            leftAside.style.display = 'block';
-            rightAside.style.display = 'block';
-        }
-    }
-
-    mediaQuery.addListener(handleMediaQueryChange);
-    handleMediaQueryChange(mediaQuery);
-});
-
-
-</script>
-
-<script type="text/javascript">
-  function handleCreateClick() {
-    console.log("Create button clicked!");
-    // Add your custom logic here, if needed
-}
-
-</script>
-
-
-
-<script>
-function toggleFullContent(button) {
-    const fullContent = button.closest('.see-more-container').nextElementSibling;
-    if (fullContent.style.display === 'none') {
-        fullContent.style.display = 'block';
-        button.innerHTML = 'See Less <i class="fas fa-chevron-up"></i>';
-    } else {
-        fullContent.style.display = 'none';
-        button.innerHTML = 'See More <i class="fas fa-chevron-down"></i>';
-    }
-}
-</script>
-
-
-
-<script>
-// Store follow state in localStorage
-function updateFollowState(userId, isFollowing) {
-    const storageKey = `followState_${userId}`;
-    localStorage.setItem(storageKey, isFollowing ? 'true' : 'false');
-}
-
-// Retrieve follow state from localStorage
-function getFollowState(userId) {
-    const storageKey = `followState_${userId}`;
-    return localStorage.getItem(storageKey) === 'true';
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize text elements with correct state
-    document.querySelectorAll('.follow-text').forEach(element => {
-        const userId = element.getAttribute('data-user-id');
-        const storedState = getFollowState(userId);
-        const currentState = element.getAttribute('data-is-following') === 'true';
-        
-        // Use stored state if available, otherwise use server state
-        const finalState = storedState !== null ? storedState : currentState;
-        
-        if (finalState) {
-            element.classList.add('following');
-            element.textContent = '• Following';
-            element.setAttribute('data-is-following', 'true');
-        } else {
-            element.classList.remove('following');
-            element.textContent = '• Follow';
-            element.setAttribute('data-is-following', 'false');
-        }
-    });
-
-    // Handle follow text clicks
-    document.querySelectorAll('.follow-text').forEach(element => {
-        element.addEventListener('click', async function() {
-            const userId = this.getAttribute('data-user-id');
-            const isFollowing = this.getAttribute('data-is-following') === 'true';
-            const action = isFollowing ? 'unfollow' : 'follow';
-            
-            try {
-                const response = await fetch('/toggle_follow/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': '{{ csrf_token }}'
-                    },
-                    body: JSON.stringify({
-                        'user_id': userId,
-                        'action': action
-                    })
-                });
-
-                const data = await response.json();
-                
-                if (data.status === 'success') {
-                    // Update text state
-                    const newState = data.action === 'followed';
-                    this.classList.toggle('following', newState);
-                    this.textContent = newState ? '• Following' : '• Follow';
-                    this.setAttribute('data-is-following', newState.toString());
-                    
-                    // Update followers count
-                    const followersCount = document.getElementById(`followers-count-${userId}`);
-                    if (followersCount) {
-                        followersCount.textContent = `(${data.followers_count} followers)`;
-                    }
-                    
-                    // Persist state in localStorage
-                    updateFollowState(userId, newState);
-                } else {
-                    console.error('Error:', data.message);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('An error occurred. Please try again.');
-            }
-        });
-    });
-});
-</script>
-
-
-
-</head>
-
-
-
-<body id="mainBody" >
-
-
-
-
-
-<header>
-    
-<div class="rallynex-header-container" style="display: flex; justify-content: space-between; align-items: center; padding: 15px;">
-    <!-- Rallynex Logo/Name on the left -->
-    <div class="rallynex-name" style="
-        font-family: 'Courier New', monospace;
-        color: #ffffff;
-        background: linear-gradient(135deg, #c0c0c0, #f8f8f8);
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-shadow: 
-            0 1px 1px rgba(0,0,0,0.3),
-            0 0 8px rgba(255,255,255,0.4);
-        font-weight: bold;
-        letter-spacing: 3px;
-        font-size: 24px;
-        padding: 4px 12px;
-        display: inline-block;
-        border-radius: 3px;
-        backdrop-filter: brightness(1.2);
-    "><img src="{% static 'main/files/lg.png' %}" alt="Rallynex Logo" style="height: 50px; width: 50px;">RALLYNEX</div>
-
-    <!-- Mobile Search Icon on the right -->
-    <div class="rallynex-mobile-search-icon">
-        <i class="fas fa-search"></i>
-    </div>
-</div>
-
-<!-- Mobile search popup -->
-<div class="rallynex-mobile-search-popup">
-    <form action="{% url 'search_campaign' %}" method="get" class="rallynex-mobile-search-wrapper">
-        <input type="text" placeholder="Search..." name="search_query" id="mobile-search-input">
-        <button type="button" class="rallynex-clear-search" aria-label="Clear search">
-            <i class="fas fa-times"></i>
-        </button>
-        <button type="submit" aria-label="Search">
-            <i class="fas fa-search"></i>
-        </button>
-    </form>
-    <div class="rallynex-close-mobile-search">
-        <i class="fas fa-times"></i>
-    </div>
-</div>
-
-
-    <nav id="navbar" class="navbar">
-        <!-- Main bottom navigation (5 items) -->
-        <ul class="bottom-nav">
-            <li>
-                <a href="{% url 'home' %}" class="{% if request.path == '/' %}active{% endif %}">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 2L2 7V22H22V7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                        <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                    </svg>
-                    {% if new_campaigns_from_follows %}
-                        <span class="alert-badge">{{ new_campaigns_from_follows.count }}</span>
-                    {% endif %}
-                </a>
-            </li>
-            
-            <li>
-                <a href="{% url 'suggest' %}" class="{% if 'suggest' in request.path %}active{% endif %}">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M8.5 11C10.7091 11 12.5 9.20914 12.5 7C12.5 4.79086 10.7091 3 8.5 3C6.29086 3 4.5 4.79086 4.5 7C4.5 9.20914 6.29086 11 8.5 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M17 3.13C17.8604 3.35031 18.623 3.85071 19.1676 4.55232C19.7122 5.25392 20.0078 6.11683 20.0078 7.005C20.0078 7.89318 19.7122 8.75608 19.1676 9.45769C18.623 10.1593 17.8604 10.6597 17 10.88" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </a>
-            </li>
-            
-            <li class="create-btn-container">
-                <a href="{% url 'create_campaign' %}" class="create-btn" onclick="handleCreateClick(event)">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 4V20M4 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                </a>
-            </li>
-            
-            <li>
-                <a href="{% url 'notification_list' %}" class="{% if 'notification' in request.path %}active{% endif %}">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M18 8C18 6.4087 17.3679 4.88258 16.2426 3.75736C15.1174 2.63214 13.5913 2 12 2C10.4087 2 8.88258 2.63214 7.75736 3.75736C6.63214 4.88258 6 6.4087 6 8C6 15 3 17 3 17H21C21 17 18 15 18 8Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                        <path d="M13.73 21C13.5542 21.3031 13.3019 21.5547 12.9982 21.7295C12.6946 21.9044 12.3504 21.9965 12 21.9965C11.6496 21.9965 11.3054 21.9044 11.0018 21.7295C10.6982 21.5547 10.4458 21.3031 10.27 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                    {% if unread_notifications %}
-                        <span class="alert-badge">{{ unread_notifications.count }}</span>
-                    {% endif %}
-                </a>
-            </li>
-            
-            <li class="menu-toggle">
-                <a href="#" onclick="toggleMenu(event)">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                </a>
-            </li>
-        </ul>
-    </nav>
-
-    <!-- Hidden menu that appears when hamburger is clicked -->
-    <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
-
-    <div class="navbar-dropdown-menu" id="navbarDropdownMenu">
-        <ul>
-            <li>
-                <a href="{% url 'profile_view' username=request.user.username %}" class="{% if 'profile' in request.path %}active{% endif %}">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <span>Profile</span>
-                </a>
-            </li>
-                    <li>
-            <a href="#" onclick="switchColor()">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 3V5M18.36 5.64L16.95 7.05M21 12H19M18.36 18.36L16.95 16.95M12 19V21M7.05 16.95L5.64 18.36M5 12H3M7.05 7.05L5.64 5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <span>Switch Theme</span>
-            </a>
-        </li>
-         
-            <li>
-                <a href="{% url 'private_campaign' %}">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M19 11H5C3.89543 11 3 11.8954 3 13V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V13C21 11.8954 20.1046 11 19 11Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                        <path d="M7 11V7C7 5.67392 7.52678 4.40215 8.46447 3.46447C9.40215 2.52678 10.6739 2 12 2C13.3261 2 14.5979 2.52678 15.5355 3.46447C16.4732 4.40215 17 5.67392 17 7V11" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                    </svg>
-                    <span>Private</span>
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'user_chats' %}">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                    </svg>
-                    <span>Chat Table</span>
-                    {% if unread_messages_count %}
-                        <span class="alert-badge chat-alert">{{ unread_messages_count }}</span>
-                    {% endif %}
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'index' %}" title="Explore" class="explore-link" style="margin-left: 10px;">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <span>Explore</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <span>Logout</span>
-                </a>
-                <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
-                    {% csrf_token %}
-                </form>
-            </li>
-        </ul>
-    </div>
-
-<!-- Search container can be removed since search is now in the bottom nav -->
-</header>
-
-
-
-  <main>
-
-
-
-<aside class="left-aside">
-
-<h3 style="
-    font-family: 'Courier New', monospace;
-    color: #ffffff;
-    background: linear-gradient(135deg, #c0c0c0, #f8f8f8);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 
-        0 1px 1px rgba(0,0,0,0.3),
-        0 0 8px rgba(255,255,255,0.4);
-    font-weight: bold;
-    letter-spacing: 3px;
-    font-size: 24px;
-    padding: 4px 12px; /* reduced top/bottom padding (4px), kept left/right (12px) */
-    display: inline-block;
-    border-radius: 3px;
-    backdrop-filter: brightness(1.2);
-    margin: 0;
-    z-index: 1000;
-"><img src="{% static 'main/files/lg.png' %}" alt="Rallynex Logo" style="height: 50px; width: 50px;">RALLYNEX</h3>
-
-    <!-- Updated the <nav> tag to <nav class="campaign-nav"> -->
-<nav class="campaign-nav">
-    <ul>
-        <!-- Home link with red spot -->
-        <li>
-            <a href="{% url 'home' %}" style="color: black; position: relative;">
-                <i class="fas fa-home"></i> Home
-                {% if new_campaigns_from_follows %}
-                    <span id="home-alert" class="alert-badge">{{ new_campaigns_from_follows.count }}</span> <!-- Red alert spot -->
-                {% endif %}
-            </a>
-        </li>
-
-        <li>
-            <a href="#" onclick="switchColor()">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 3V5M18.36 5.64L16.95 7.05M21 12H19M18.36 18.36L16.95 16.95M12 19V21M7.05 16.95L5.64 18.36M5 12H3M7.05 7.05L5.64 5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <span>Switch Theme</span>
-            </a>
-        </li>
-        
-        <li><a href="{% url 'private_campaign' %}" style="color: black;"><i class="fas fa-lock"></i> Private </a></li>
-
-        <!-- Chat Table link with red spot -->
-        <li>
-            <a href="{% url 'user_chats' %}" style="color: black; position: relative;">
-                <i class="fas fa-comment-alt"></i> Chat Table
-                {% if unread_messages_count %}
-                    <span id="chat-alert" class="alert-badge" style="background-color: red;">{{ unread_messages_count }}</span>
-                {% endif %}
-            </a>
-        </li>
-
-        <!-- Notification icon with red spot -->
-        <li>
-            <a href="{% url 'notification_list' %}" style="color: black; position: relative;">
-                <i class="fas fa-bell"></i>
-                {% if unread_notifications %}
-                    <span id="notification-alert" class="alert-badge">{{ unread_notifications.count }}</span>
-                {% endif %}
-                Notification
-            </a>
-        </li>
-
-        <li><a href="{% url 'suggest' %}" style="color: black;"><i class="fas fa-user-friends"></i> Suggested Users</a></li>
-
-        <li>
-            <a href="{% url 'index' %}" title="Explore" style="color: black;">
-                <i class="fas fa-compass" style="font-size: 14px;"> Explore</i>
-            </a>
-        </li>
-        
-        <!-- User Profile link -->
-        <li>
-            <a href="{% url 'profile_view' username=request.user.username %}" style="color: black;">
-                <i class="fas fa-user-circle"></i> My Profile
-            </a>
-        </li>
-
-        <!-- Logout link -->
-        <li>
-            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
-            <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
-                {% csrf_token %}
-            </form>
-        </li>
-    </ul>
-</nav>
+     <style>
       
-
-    <div class="upload-container hide-on-mobile">
-
-     <div class="upload-btn-wrapper">
-        <button class="btn" style="font-size: 14px;">+ Upload
-            <a href="{% url 'create_campaign' %}" class="overlay-link"></a>
-        </button>
-    </div>
-
-</div>
-
-<div class="dashboard-snaps">
-  <div class="snaps-header">
-    <h3 class="snaps-title"><i class="fas fa-bolt"></i> Quick Actions</h3>
-  </div>
-
-  <div class="snaps-grid">
-    <a href="{% url 'create_campaign' %}" class="snap-link">
-      <i class="snap-icon fas fa-bullhorn"></i>
-      <span class="snap-label">Start Campaign</span>
-    </a>
-
-    <a href="{% url 'index' %}" class="snap-link">
-      <i class="snap-icon fas fa-search"></i>
-      <span class="snap-label">Explore</span>
-    </a>
-
-    <a href="{% url 'user_chats' %}" class="snap-link">
-      <i class="snap-icon fas fa-comments"></i>
-      <span class="snap-label">My Chats</span>
-    </a>
-
-    <a href="{% url 'profile_view' username=request.user.username %}" class="snap-link">
-      <i class="snap-icon fas fa-user"></i>
-      <span class="snap-label">Visit Profile</span>
-    </a>
-  </div>
-</div><br>
-
-<!-- Carousel for Ads -->
-<div class="carousel" onmouseover="pauseCarousel()" onmouseout="resumeCarousel()">
-    <div class="slides">
-        {% for ad in ads %}
-            <div class="slide">
-                <div class="ad">
-                    <a href="{{ ad.link }}">
-                        <img src="{{ ad.image.url }}" alt="{{ ad.title }}">
-                    </a>
-                    <h2>{{ ad.title }}</h2>
-                    <p class="content">{{ ad.content | truncatewords:30 }}</p>
-                    <p class="sponsored-by"><strong>Sponsored by:</strong> {{ ad.sponsored_by }}.</p>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
-</div><br>
-  <div class="aside-footer">
-    <a href="{% url 'aboutus' %}">About</a> • 
-    <a href="{% url 'hiw' %}">Help</a> • 
-    <a href="{% url 'terms_of_service' %}">Terms</a> • 
-    <a href="{% url 'privacy_policy' %}">Privacy</a> • 
-    <a href="{% url 'faq' %}">FAQ</a> • 
-    <a href="{% url 'project_support' %}">Support</a>
-</div>
-
-</aside>
-
-
-
-
-
-<section>
-
-
-    </br>
-
- <div class="explore-card">
-    <h3><i class="fas fa-compact"></i> Explore</h3>
-    <p>Find campaigns to support</p>
-</div>
-
-
-<form method="GET" action="{% url 'home' %}" class="filter-form">
-    <label for="category" class="filter-label">Filter by Category:</label>
- <select name="category" id="category" class="filter-select" onchange="this.form.submit()">
-    <option value="">All Categories</option>
-    {% for category in categories %}
-        <option value="{{ category }}" {% if category == selected_category %}selected{% endif %}>
-            {{ category }}
-        </option>
-    {% endfor %}
-</select>
-
-</form>
-
-<!-- Beautiful upload button -->
-
-    
-</div><br>
-
-<div class="sidebar-box ">
-
-   {% if public_campaigns %}
-<div class="simple-campaigns-container">
-    
-    {% for campaign in public_campaigns %}
-    <div class="simple-campaign-card">
-        <!-- Top Section - Creator Info -->
-        <div class="creator-info">
-            <a href="{% url 'profile_view' username=campaign.user.user.username %}" class="creator-pic">
-                <img src="{{ campaign.user.image.url }}" alt="{{ campaign.user.user.username }}">
-            </a>
-            <div class="creator-details">
-             <div class="creator-container" style="display: flex; justify-content: space-between; align-items: center;">
-    <div>
-
-<div class="creator-info">
-    <span class="creator-name">
-       {{ campaign.user.user.username }}
-                    {% if campaign.user.profile_verified %}
-                    <span class="verified-badge"><i class="material-icons">verified_user</i></span> 
-                    {% endif %}
-                    {% if campaign.is_changemaker %}
-                    <span class="changemaker-badge"><i class="far fa-star"></i>Changemaker</span>
-                    {% endif %}
-    </span>
-{% if request.user != campaign.user.user %}
-<span id="follow-btn-{{ campaign.user.user.id }}" 
-      class="follow-text {% if request.user in campaign.user.user.followers.all %}following{% endif %}" 
-      data-user-id="{{ campaign.user.user.id }}"
-      data-is-following="{% if request.user in campaign.user.user.followers.all %}true{% else %}false{% endif %}">
-    {% if request.user in campaign.user.user.followers.all %}
-        • Following
-    {% else %}
-        • Follow
-    {% endif %}
-</span>
-{% endif %}
-
-</div>
-
-
-
-
-        <div class="campaign-time">
-            {{ campaign.timestamp|timesince }} ago • {{ campaign.user.location }}
-        </div>
-    </div>
-
-</div>
-            </div>
-
-<div class="campaign-menu" onclick="togglaMenu(this)" style="position: relative;">
-  <i class="fas fa-ellipsis-v"></i>
-  <div class="menu-dropdown">
-    <a href="{% url 'view_campaign' campaign_id=campaign.pk %}">
-      <i class="fas fa-eye"></i> View Details
-    </a>
-    <a href="{% url 'campaign_joiners' campaign.id %}" class="comment-count" aria-label="View joiners of this campaign">
-      <i class="fas fa-user-plus"></i> Joiners ({{ campaign.user_profiles.count|format_count }})
-    </a>
-  
-    {% if user == campaign.user.user %}
-      <a href="{% url 'recreate_campaign' campaign.id %}">
-        <i class="fas fa-edit"></i> Edit
-      </a>
-    {% endif %}
-
-{% if user == campaign.user.user %}
-    <a href="{% url 'campaign_pledgers' campaign.id %}">
-        <i class="fas fa-donate"></i> Pledgers
-    </a>
-{% endif %}
-
-     <a href="{% url 'top_participants' campaign_id=campaign.pk %}" class="top-supporters-link">
-    <i class="fas fa-trophy"></i> Top Participants
-</a>
-          <a href="{% url 'update_visibilit' campaign.pk %}" style="
-   
-">
-    <i class="fas fa-lock" ></i> Visibility
-</a>
-
- <a href="{% url 'campaign_engagement' campaign.id %}">
-        <i class="fas fa-chart-bar"></i> Engagement
-    </a>
-
-
-  <a href="{% url 'report_campaign' campaign.id %}">
-      <i class="fas fa-flag"></i> Report
-    </a>
-
-     <a href="{% url 'campaign-delete' campaign.pk %}" class="delete-link">
-        <i class="fas fa-trash"></i> Delete
-    </a>
-    
-    <div class="not-interested-container">
-        <form action="{% url 'mark_not_interested' campaign_id=campaign.pk %}" method="post" class="not-interested-form">
-            {% csrf_token %}
-            <div class="form-row">
-                <label for="not-interested" class="form-label">
-                    <i class="fas fa-times-circle"></i> Not Interested
-                </label>
-                <div class="form-controls">
-                    <input type="checkbox" id="not-interested" name="not_interested" class="form-checkbox">
-                </div>
-            </div>
-            <button type="submit" class="form-submit-button">
-                Submit
-            </button>
-        </form>
-    </div>
-  </div>
-</div>
-        </div>
-
-        <!-- Campaign Image - Dominant Space -->
-        <div class="campaign-image-section">
-            {% if campaign.poster %}
-            <div class="campaign-image-container">
-       {% if user.is_authenticated and user.profile in campaign.user_profiles.all %}
-    <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="campaign-poster-link">
-{% endif %}
-        <img src="{{ campaign.poster.url }}" 
-             alt="{{ campaign.title }}" 
-             class="main-campaign-image {% if user.profile in campaign.user_profiles.all %}clickable-poster{% endif %}"
-             style="{% if user.profile in campaign.user_profiles.all %}cursor: pointer;{% endif %}">
-{% if user.is_authenticated and user.profile in campaign.user_profiles.all %}
-    </a>
-{% endif %}
-<div class="campaign-views-overlay" aria-label="Total campaign views">
-    <i class="far fa-eye"></i>
-    <span>{{ campaign.campaignview_set.count|format_count }}</span>
-    <span class="views-tooltip">Views</span>
-</div>   
-                <!-- Image Overlay Info -->
-                <div class="image-overlay-top">
-                    <span class="campaign-category">{{ campaign.category }} Campaign</span>
-                </div>
-                
-          
-<div class="image-overlay-bottom">
-    <div class="progress-container">
-       
-    </div>
-    
-    <div class="campaign-time-left">
-        <i class="fas fa-clock"></i>
-        {% if campaign.days_left != None %}
-            {{ campaign.days_left }} {% if campaign.days_left == 1 %}day{% else %}days{% endif %} left
-        {% else %}
-            Ongoing
-        {% endif %}
-    </div>
-</div>
-                
-                {% if not user.profile in campaign.user_profiles.all %}
-          <div class="join-prompt blink-5s">
-    <i class="fas fa-lock"></i> Join to see activities
-</div>
-                {% endif %}
-  
-
-            </div>
-            {% else %}
-            <div class="no-image-placeholder">
-                <i class="fas fa-image"></i>
-                <p>No image available</p>
-            </div>
-            {% endif %}
-        </div>
-
-        <!-- Campaign Title and Objective - Simplified -->
-      <div class="campaign-caption">
-   <!-- Replace the title section with this: -->
-<div class="campaign-content-points">
-<ul>
-    {# Desktop/Web version - 30 words #}
-    <li class="web-version">{{ campaign.content|truncatewords:30 }}</li>
-
-    {# Mobile version - 8 words #}
-    <li class="mobile-version">{{ campaign.content|truncatewords:8 }}</li>
-</ul>
-
-{% if campaign.content|wordcount > 30 %}
-<div class="see-more-container">
-    <button class="see-more-btn" onclick="toggleFullContent(this)">
-        See More <i class="fas fa-chevron-down"></i>
-    </button>
-</div>
-
-<div class="full-content" style="display: none;">
-    <p>{{ campaign.content }}</p>
-</div>
-{% endif %}
-
-    
-    <!-- Hidden full content -->
-    <div class="full-content" style="display:none;">
-        <ul>
-            {% for point in campaign.content.splitlines %}
-                <li>{{ point }}</li>
-            {% endfor %}
-        </ul>
-        <button class="see-less-btn" onclick="toggleContent(this.parentElement)">
-            See Less <i class="fas fa-chevron-up"></i>
-        </button>
-    </div>
-</div>
-    Objectives:{{ campaign.get_objective_and_activities.Objectives|truncatechars:80 }}
-</div>
-
-        <!-- Campaign Status - Visual Indicators -->
-        <div class="campaign-status">
-            {% if campaign.is_outdated %}
-            <div class="status-badge outdated">
-                <i class="fas fa-exclamation-circle"></i> Campaign Ended
-            </div>
-            {% else %}
-            <div class="status-badge active">
-                <i class="fas fa-check-circle"></i> Active Now
-            </div>
-            {% endif %}
-            
-            <div class="runtime-info">
-                <i class="fas fa-calendar-alt"></i>
-                {% if campaign.duration %}
-                    {{ campaign.duration }} {{ campaign.duration_unit }}
-                {% else %}
-                    Ongoing
-                {% endif %}
-            </div>
-        </div>
-
-<!-- After campaign-status, before simple-actions -->
-{% if user.profile in campaign.user_profiles.all %}
-<div class="campaign-participation-links">
-    <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="participation-link">
-        <i class="fas fa-tasks"></i> View Activities
-    </a>
-    <a href="{% url 'support' campaign_id=campaign.id %}" class="participation-link">
-        <i class="fas fa-hands-helping"></i> Participate Now
-    </a>
-</div>
-{% endif %}
-        <!-- Simple Action Buttons -->
-        <div class="simple-actions">
-<div class="action-group">
-    <button class="simple-action-btn love-btn" onclick="toggleLove({{ campaign.id }})">
-        <i id="love-icon-{{ campaign.id }}" class="fas fa-heart"></i> 
-        <span id="love-count-{{ campaign.id }}">{{ campaign.love_count|format_count }}</span>
-        <span class="action-label">Like</span>
-    </button>
-    
-    <button class="simple-action-btn" onclick="showCommentPopup({{ campaign.id }})">
-        <i class="far fa-comment"></i> 
-        <span id="comment-count-{{ campaign.id }}">{{ campaign.comments.count|default:0 }}</span>
-        <span class="action-label">Comment</span>
-    </button>
-    
-    <button class="simple-action-btn" onclick="showSharePopup({{ campaign.id }})">
-        <i class="fas fa-share-alt"></i> 
-        <span class="action-label">Share</span>
-    </button>
-</div>
-        {% if user.profile in campaign.user_profiles.all %}
-<a href="{% url 'join_leave_campaign' campaign.id %}" 
-   class="simple-join-btn leave-btn"
-   style="background: rgba(237, 73, 86, 0.08);
-          color: #ed4956;
-          border: 1px solid rgba(237, 73, 86, 0.2);
-          padding: 4px 10px;
-          border-radius: 12px;
-          font-size: 12px;
-          transition: all 0.2s ease;
-          display: inline-flex;
-          align-items: center;
-          gap: 5px;
-          text-decoration: none;">
-    <i class="fas fa-user-minus" style="font-size: 13px;"></i>
-    <span>Leave</span>
-</a>
-{% else %}
-<a href="{% url 'join_leave_campaign' campaign.id %}" 
-   class="simple-join-btn"
-   style="background: rgba(0, 149, 246, 0.08);
-          color: #0095f6;
-          border: 1px solid rgba(0, 149, 246, 0.2);
-          padding: 4px 10px;
-          border-radius: 12px;
-          font-size: 12px;
-          transition: all 0.2s ease;
-          display: inline-flex;
-          align-items: center;
-          gap: 5px;
-          text-decoration: none;">
-    <i class="fas fa-user-plus" style="font-size: 13px;"></i>
-    <span>Join</span>
-</a>
-{% endif %}
-        </div>
-        
-        <!-- Hidden content that was in your original HTML -->
-        <div class="hidden-content" style="display:none;">
-            <!-- All your original content that we're keeping but hiding -->
-            <div class="campaign-content" data-campaign-id="{{ campaign.id }}">
-                <ul>
-                    {% for point in campaign.content.splitlines %}
-                        <li>{{ point }}</li>
-                    {% endfor %}
-                </ul>
-            </div>
-            
-            <div class="funding-progress-card">
-                <!-- Your original funding progress card -->
-            </div>
-            
-            <div class="activity-links">
-                {% if user.profile in campaign.user_profiles.all %}
-                <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="activity-link">
-                    <i class='fas'>&#xf6e3;</i> Activities
-                </a>
-                <a href="{% url 'support' campaign_id=campaign.id %}" class="support-link">
-                    <i class="material-icons">&#xe925;</i> Participate
-                </a>
-                {% endif %}
-            </div>
-            
-            <!-- Audio player -->
-            
-<!-- Audio player -->
-{% if campaign.audio %}
-    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-        <source src="{{ campaign.audio.url }}" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-{% else %}
-    <div class="audio-player">
-        {% if campaign.category == 'Poverty and Hunger' %}
-            <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                <source src="{% static 'main/audio/peace.mp3' %}" type="audio/mpeg">
-            </audio>
-        {% elif campaign.category == 'Clean Water and Sanitation' %}
-            <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                <source src="{% static 'main/audio/art.mp3' %}" type="audio/mpeg">
-            </audio>
-        {% elif campaign.category == 'Disaster Relief' %}
-            <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                <source src="{% static 'main/audio/Humanitarian Aid.mp3' %}" type="audio/mpeg">
-            </audio>
-        {% elif campaign.category == 'Healthcare and Medicine' %}
-            <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                <source src="{% static 'main/audio/health.mp3' %}" type="audio/mpeg">
-            </audio>
-        {% elif campaign.category == 'Mental Health' %}
-            <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                <source src="{% static 'main/audio/environment.mp3' %}" type="audio/mpeg">
-            </audio>
-        {% elif campaign.category == 'Human Rights and Equality' %}
-            <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                <source src="{% static 'main/audio/Equality1.mp3' %}" type="audio/mpeg">
-            </audio>
-        {% elif campaign.category == 'Peace and Justice' %}
-            <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                <source src="{% static 'main/audio/Policy.mp3' %}" type="audio/mpeg">
-            </audio>
-        {% elif campaign.category == 'Education for All' %}
-            <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                <source src="{% static 'main/audio/education1.mp3' %}" type="audio/mpeg">
-            </audio>
-        {% elif campaign.category == 'Economic Empowerment' %}
-            <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                <source src="{% static 'main/audio/economic.mp3' %}" type="audio/mpeg">
-            </audio>
-        {% elif campaign.category == 'Climate Action' %}
-            <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                <source src="{% static 'main/audio/Sustainable.mp3' %}" type="audio/mpeg">
-            </audio>
-        {% elif campaign.category == 'Save Our Planet' %}
-            <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                <source src="{% static 'main/audio/animal.mp3' %}" type="audio/mpeg">
-            </audio>
-        {% elif campaign.category == 'Tech for Humanity' %}
-            <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                <source src="{% static 'main/audio/digital.mp3' %}" type="audio/mpeg">
-            </audio>
-        {% elif campaign.category == 'Community Development' %}
-            <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                <source src="{% static 'main/audio/community.mp3' %}" type="audio/mpeg">
-            </audio>
-        {% else %}
-            <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                <source src="{% static 'main/audio/default.mp3' %}" type="audio/mpeg">
-            </audio>
-        {% endif %}
-    </div>
-{% endif %}
-
-
-       
-        </div>
-    </div>
-    {% endfor %}
-</div>
-
-
-<!-- Replace the current "else" block with this updated version -->
-{% else %}
-
-<!-- Default campaign display for when there are no public campaigns -->
-{% if not public_campaigns %}
-<div class="simple-campaigns-container">
-    {% for campaign in campaigns %}
-    <div class="simple-campaign-card">
-        <!-- Top Section - Creator Info -->
-        <div class="creator-info">
-            <div class="creator-details">
-                <div class="creator-name">
-                    {{ campaign.user.user.username }}
-                    {% if campaign.user.profile_verified %}
-                    <span class="verified-badge"><i class="material-icons">verified_user</i></span>
-                    {% endif %}
-                    {% if campaign.is_changemaker %}
-                    <span class="changemaker-badge"><i class="far fa-star"></i> Changemaker</span>
-                    {% endif %}
-                </div>
-                <div class="campaign-time">
-                    {{ campaign.timestamp|timesince }} ago • {{ campaign.user.location }}
-                </div>
-            </div>
-<div class="campaign-menu" onclick="togglaMenu(this)" style="position: relative;">
-    <i class="fas fa-ellipsis-v"></i>
-    <div class="menu-dropdown">
-        <a href="{% url 'view_campaign' campaign_id=campaign.pk %}">
-            <i class="fas fa-eye"></i> View Details
-        </a>
-        <a href="{% url 'campaign_joiners' campaign.id %}" class="comment-count" aria-label="View joiners of this campaign">
-            <i class="fas fa-user-plus"></i> Joiners ({{ campaign.user_profiles.count|format_count }})
-        </a>
-
-        {% if user == campaign.user.user %}
-            <a href="{% url 'recreate_campaign' campaign.id %}">
-                <i class="fas fa-edit"></i> Edit
-            </a>
-
-          
-        {% endif %}
-
-  <a href="{% url 'campaign_pledgers' campaign.id %}">
-                <i class="fas fa-donate"></i> Pledgers
-            </a>
-                 <a href="{% url 'top_participants' campaign_id=campaign.pk %}" class="top-supporters-link">
-    <i class="fas fa-trophy"></i> Top Participants
-</a>
-        <a href="{% url 'update_visibilit' campaign.pk %}">
-            <i class="fas fa-lock"></i> Visibility
-        </a>
-
-        <a href="{% url 'campaign_engagement' campaign.id %}">
-            <i class="fas fa-chart-bar"></i> Engagement
-        </a>
-
-        <a href="{% url 'report_campaign' campaign.id %}">
-            <i class="fas fa-flag"></i> Report
-        </a>
-
-        <a href="{% url 'campaign-delete' campaign.pk %}" class="delete-link">
-            <i class="fas fa-trash"></i> Delete
-        </a>
-
-        <div class="not-interested-container">
-            <form action="{% url 'mark_not_interested' campaign_id=campaign.pk %}" method="post" class="not-interested-form">
-                {% csrf_token %}
-                <div class="form-row">
-                    <label for="not-interested" class="form-label">
-                        <i class="fas fa-times-circle"></i> Not Interested
-                    </label>
-                    <div class="form-controls">
-                        <input type="checkbox" id="not-interested" name="not_interested" class="form-checkbox">
-                    </div>
-                </div>
-                <button type="submit" class="form-submit-button">
-                    Submit
-                </button>
-            </form>
-        </div>
-    </div>
-</div>
-
-
-        <!-- Campaign Image - Dominant Space -->
-        <div class="campaign-image-section">
-            {% if campaign.poster %}
-            <div class="campaign-image-container">
-      {% if user.is_authenticated and user.profile in campaign.user_profiles.all %}
-    <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="campaign-poster-link">
-{% endif %}
-        <img src="{{ campaign.poster.url }}" 
-             alt="{{ campaign.title }}" 
-             class="main-campaign-image {% if user.profile in campaign.user_profiles.all %}clickable-poster{% endif %}"
-             style="{% if user.profile in campaign.user_profiles.all %}cursor: pointer;{% endif %}">
-{% if user.is_authenticated and user.profile in campaign.user_profiles.all %}
-    </a>
-{% endif %}
-                <div class="campaign-views-overlay" aria-label="Total campaign views">
-                    <i class="far fa-eye"></i>
-                    <span>{{ campaign.campaignview_set.count|format_count }}</span>
-                    <span class="views-tooltip">Views</span>
-                </div>   
-                
-                <!-- Image Overlay Info -->
-                <div class="image-overlay-top">
-                    <span class="campaign-category">{{ campaign.category }} Campaign</span>
-                </div>
-                
-                <div class="image-overlay-bottom">
-                    <div class="progress-container">
-                      
-                    </div>
-                    
-                    <div class="campaign-time-left">
-                        <i class="fas fa-clock"></i>
-                        {% if campaign.days_left != None %}
-                            {{ campaign.days_left }} {% if campaign.days_left == 1 %}day{% else %}days{% endif %} left
-                        {% else %}
-                            Ongoing
-                        {% endif %}
-                    </div>
-                </div>
-                
-                {% if not user.profile in campaign.user_profiles.all %}
-                <div class="join-prompt blink-5s">
-                    <i class="fas fa-lock"></i> Join to see activities
-                </div>
-                {% endif %}
-               
-            </div>
-            {% else %}
-            <div class="no-image-placeholder">
-                <i class="fas fa-image"></i>
-                <p>No image available</p>
-            </div>
-            {% endif %}
-        </div>
-
-        <!-- Campaign Title and Objective - Simplified -->
-        <div class="campaign-caption">
-            <div class="campaign-content-points">
-                <ul>
-                    {# Desktop/Web version - 30 words #}
-                    <li class="web-version">{{ campaign.content|truncatewords:30 }}</li>
-
-                    {# Mobile version - 8 words #}
-                    <li class="mobile-version">{{ campaign.content|truncatewords:8 }}</li>
-                </ul>
-
-                {% if campaign.content|wordcount > 30 %}
-                <div class="see-more-container">
-                    <button class="see-more-btn" onclick="toggleFullContent(this)">
-                        See More <i class="fas fa-chevron-down"></i>
-                    </button>
-                </div>
-
-                <div class="full-content" style="display: none;">
-                    <p>{{ campaign.content }}</p>
-                </div>
-                {% endif %}
-
-                <!-- Hidden full content -->
-                <div class="full-content" style="display:none;">
-                    <ul>
-                        {% for point in campaign.content.splitlines %}
-                            <li>{{ point }}</li>
-                        {% endfor %}
-                    </ul>
-                    <button class="see-less-btn" onclick="toggleContent(this.parentElement)">
-                        See Less <i class="fas fa-chevron-up"></i>
-                    </button>
-                </div>
-            </div>
-            Objectives: {{ campaign.get_objective_and_activities.Objectives|truncatechars:80 }}
-        </div>
-
-        <!-- Campaign Status - Visual Indicators -->
-        <div class="campaign-status">
-            {% if campaign.is_outdated %}
-            <div class="status-badge outdated">
-                <i class="fas fa-exclamation-circle"></i> Campaign Ended
-            </div>
-            {% else %}
-            <div class="status-badge active">
-                <i class="fas fa-check-circle"></i> Active Now
-            </div>
-            {% endif %}
-            
-            <div class="runtime-info">
-                <i class="fas fa-calendar-alt"></i>
-                {% if campaign.duration %}
-                    {{ campaign.duration }} {{ campaign.duration_unit }}
-                {% else %}
-                    Ongoing
-                {% endif %}
-            </div>
-        </div>
-
-        <!-- After campaign-status, before simple-actions -->
-        {% if user.profile in campaign.user_profiles.all %}
-        <div class="campaign-participation-links">
-            <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="participation-link">
-                <i class="fas fa-tasks"></i> View Activities
-            </a>
-            <a href="{% url 'support' campaign_id=campaign.id %}" class="participation-link">
-                <i class="fas fa-hands-helping"></i> Participate Now
-            </a>
-        </div>
-        {% endif %}
-        
-        <!-- Simple Action Buttons -->
-        <div class="simple-actions">
-            <div class="action-group">
-                <button class="simple-action-btn love-btn" onclick="toggleLove({{ campaign.id }})">
-                    <i id="love-icon-{{ campaign.id }}" class="fas fa-heart"></i> 
-                    <span id="love-count-{{ campaign.id }}">{{ campaign.love_count|format_count }}</span>
-                    <span class="action-label">Like</span>
-                </button>
-                
-                <button class="simple-action-btn" onclick="showCommentPopup({{ campaign.id }})">
-                    <i class="far fa-comment"></i> 
-                    <span id="comment-count-{{ campaign.id }}">{{ campaign.comments.count|default:0 }}</span>
-                    <span class="action-label">Comment</span>
-                </button>
-                
-                <button class="simple-action-btn" onclick="showSharePopup({{ campaign.id }})">
-                    <i class="fas fa-share-alt"></i> 
-                    <span class="action-label">Share</span>
-                </button>
-            </div>
-         {% if user.profile in campaign.user_profiles.all %}
-<a href="{% url 'join_leave_campaign' campaign.id %}" 
-   class="simple-join-btn leave-btn"
-   style="background: rgba(237, 73, 86, 0.08);
-          color: #ed4956;
-          border: 1px solid rgba(237, 73, 86, 0.2);
-          padding: 4px 10px;
-          border-radius: 12px;
-          font-size: 12px;
-          transition: all 0.2s ease;
-          display: inline-flex;
-          align-items: center;
-          gap: 5px;
-          text-decoration: none;">
-    <i class="fas fa-user-minus" style="font-size: 13px;"></i>
-    <span>Leave</span>
-</a>
-{% else %}
-<a href="{% url 'join_leave_campaign' campaign.id %}" 
-   class="simple-join-btn"
-   style="background: rgba(0, 149, 246, 0.08);
-          color: #0095f6;
-          border: 1px solid rgba(0, 149, 246, 0.2);
-          padding: 4px 10px;
-          border-radius: 12px;
-          font-size: 12px;
-          transition: all 0.2s ease;
-          display: inline-flex;
-          align-items: center;
-          gap: 5px;
-          text-decoration: none;">
-    <i class="fas fa-user-plus" style="font-size: 13px;"></i>
-    <span>Join</span>
-</a>
-{% endif %}
-        </div>
-        
-        <!-- Audio player section - Added to match main campaigns -->
-        {% if campaign.audio %}
-            <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                <source src="{{ campaign.audio.url }}" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-        {% else %}
-            <div class="audio-player">
-                {% if campaign.category == 'Poverty and Hunger' %}
-                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                        <source src="{% static 'main/audio/peace.mp3' %}" type="audio/mpeg">
-                    </audio>
-                {% elif campaign.category == 'Clean Water and Sanitation' %}
-                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                        <source src="{% static 'main/audio/art.mp3' %}" type="audio/mpeg">
-                    </audio>
-                {% elif campaign.category == 'Disaster Relief' %}
-                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                        <source src="{% static 'main/audio/Humanitarian Aid.mp3' %}" type="audio/mpeg">
-                    </audio>
-                {% elif campaign.category == 'Healthcare and Medicine' %}
-                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                        <source src="{% static 'main/audio/health.mp3' %}" type="audio/mpeg">
-                    </audio>
-                {% elif campaign.category == 'Mental Health' %}
-                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                        <source src="{% static 'main/audio/environment.mp3' %}" type="audio/mpeg">
-                    </audio>
-                {% elif campaign.category == 'Human Rights and Equality' %}
-                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                        <source src="{% static 'main/audio/Equality1.mp3' %}" type="audio/mpeg">
-                    </audio>
-                {% elif campaign.category == 'Peace and Justice' %}
-                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                        <source src="{% static 'main/audio/Policy.mp3' %}" type="audio/mpeg">
-                    </audio>
-                {% elif campaign.category == 'Education for All' %}
-                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                        <source src="{% static 'main/audio/education1.mp3' %}" type="audio/mpeg">
-                    </audio>
-                {% elif campaign.category == 'Economic Empowerment' %}
-                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                        <source src="{% static 'main/audio/economic.mp3' %}" type="audio/mpeg">
-                    </audio>
-                {% elif campaign.category == 'Climate Action' %}
-                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                        <source src="{% static 'main/audio/Sustainable.mp3' %}" type="audio/mpeg">
-                    </audio>
-                {% elif campaign.category == 'Save Our Planet' %}
-                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                        <source src="{% static 'main/audio/animal.mp3' %}" type="audio/mpeg">
-                    </audio>
-                {% elif campaign.category == 'Tech for Humanity' %}
-                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                        <source src="{% static 'main/audio/digital.mp3' %}" type="audio/mpeg">
-                    </audio>
-                {% elif campaign.category == 'Community Development' %}
-                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                        <source src="{% static 'main/audio/community.mp3' %}" type="audio/mpeg">
-                    </audio>
-                {% else %}
-                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                        <source src="{% static 'main/audio/default.mp3' %}" type="audio/mpeg">
-                    </audio>
-                {% endif %}
-            </div>
-        {% endif %}
-    </div>
-    {% endfor %}
-</div>
-{% endif %}
-{% endif %}
-</div>
-
-
-<!-- Share Popup Container -->
-<div id="sharePopup" class="share-popup">
-    <div class="share-popup-content">
-        <span class="close-share" onclick="hideSharePopup()">×</span>
-        <h3>Share This Campaign</h3>
-        <div class="share-buttons">
-            <a href="#" class="share-facebook" onclick="shareOnFacebook()"><i class="fab fa-facebook-f"></i> Facebook</a>
-            <a href="#" class="share-twitter" onclick="shareOnTwitter()"><i class="fab fa-twitter"></i> Twitter</a>
-            <a href="#" class="share-linkedin" onclick="shareOnLinkedIn()"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
-            <a href="#" class="share-whatsapp" onclick="shareOnWhatsApp()"><i class="fab fa-whatsapp"></i> WhatsApp</a>
-            <a href="#" class="share-reddit" onclick="shareOnReddit()"><i class="fab fa-reddit-alien"></i> Reddit</a>
-            <a href="#" class="share-telegram" onclick="shareOnTelegram()"><i class="fab fa-telegram-plane"></i> Telegram</a>
-            <a href="#" class="share-pinterest" onclick="shareOnPinterest()"><i class="fab fa-pinterest-p"></i> Pinterest</a>
-            <a href="#" class="share-email" onclick="shareViaEmail()"><i class="fas fa-envelope"></i> Email</a>
-        </div>
-        <div class="copy-link-container">
-            <span class="copy-link-title">Or copy the link directly</span>
-            <div class="copy-link">
-                <input type="text" id="campaignUrl" readonly>
-                <button onclick="copyCampaignUrl()"><i class="fas fa-copy"></i> Copy</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Comment Popup Container -->
-<div id="commentPopup" class="comment-popup-container" style="display: none;">
-    <div class="comment-popup-content">
-        <span class="close-comment-popup">&times;</span>
-        <h3>Comments</h3>
-        
-        <!-- Comment Form -->
-      <div class="comment-form-container">
-    <div class="current-user-preview">
-        <img src="{{ user.profile.image.url }}" alt="Your profile picture" class="current-user-img">
-        <span>Posting as {{ user.username }}</span>
-    </div>
-    <form id="commentForm" method="post">
-        {% csrf_token %}
-        <input type="hidden" id="campaignIdInput" name="campaign_id">
-        <textarea name="text" class="comment-textarea" placeholder="Write your comment here..."></textarea>
-        <button type="submit" class="submit-comment-btn">Post Comment</button>
-    </form>
-</div>
-
-        
-        <!-- Comment List -->
-        <div class="comment-list-container" id="commentList">
-            <!-- Comments will be loaded here dynamically -->
-            <div class="loading-comments">Loading comments...</div>
-        </div>
-    </div>
-</div>
-
-<div class="affiliate-essentials">
-    <div class="affiliate-header">
-        <div class="affiliate-badge">
-            <i class="fas fa-gem"></i>
-            <span>Premium Partners</span>
-        </div>
-        <h3 class="affiliate-title">Essential Tools for Campaign Success</h3>
-        <p class="affiliate-subtitle">These trusted tools help our top creators maximize their impact (we earn a small commission at no extra cost to you)</p>
-    </div>
-    
-    <div class="affiliate-grid">
-        <!-- Tool 1 -->
-        <div class="affiliate-card">
-            <span class="affiliate-tag">BEST VALUE</span>
-            <div class="affiliate-icon">
-                <i class="fas fa-chart-line"></i>
-            </div>
-            <h4 class="affiliate-name">AnalyticsPro+</h4>
-            <p class="affiliate-desc">Track campaign performance with real-time analytics and AI-powered insights to optimize your strategy.</p>
-            <div class="affiliate-meta">
-                <span class="affiliate-price">$29/mo</span>
-                <span class="affiliate-discount">Save 30%</span>
-            </div>
-            <a href="YOUR_AFFILIATE_LINK_1" class="affiliate-btn" target="_blank" rel="noopener noreferrer">
-                Get Started <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-        
-        <!-- Tool 2 -->
-        <div class="affiliate-card">
-            <span class="affiliate-tag">POPULAR</span>
-            <div class="affiliate-icon">
-                <i class="fas fa-bullhorn"></i>
-            </div>
-            <h4 class="affiliate-name">Amplify Suite</h4>
-            <p class="affiliate-desc">Automatically distribute your campaign to 50+ platforms with intelligent targeting.</p>
-            <div class="affiliate-meta">
-                <span class="affiliate-price">$49/mo</span>
-                <span class="affiliate-discount">7-day free trial</span>
-            </div>
-            <a href="YOUR_AFFILIATE_LINK_2" class="affiliate-btn" target="_blank" rel="noopener noreferrer">
-                Try For Free <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-        
-        <!-- Tool 3 -->
-        <div class="affiliate-card">
-            <div class="affiliate-icon">
-                <i class="fas fa-users"></i>
-            </div>
-            <h4 class="affiliate-name">EngageMaster</h4>
-            <p class="affiliate-desc">Boost audience interaction with automated responses and community management tools.</p>
-            <div class="affiliate-meta">
-                <span class="affiliate-price">$19/mo</span>
-                <span class="affiliate-discount">LIMITED OFFER</span>
-            </div>
-            <a href="YOUR_AFFILIATE_LINK_3" class="affiliate-btn" target="_blank" rel="noopener noreferrer">
-                Start Engaging <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-        
-        <!-- Tool 4 -->
-        <div class="affiliate-card">
-            <span class="affiliate-tag">NEW</span>
-            <div class="affiliate-icon">
-                <i class="fas fa-lightbulb"></i>
-            </div>
-            <h4 class="affiliate-name">ContentGenius AI</h4>
-            <p class="affiliate-desc">Generate high-converting campaign content in minutes with our AI writer.</p>
-            <div class="affiliate-meta">
-                <span class="affiliate-price">$37/mo</span>
-                <span class="affiliate-discount">Save 40%</span>
-            </div>
-            <a href="YOUR_AFFILIATE_LINK_4" class="affiliate-btn" target="_blank" rel="noopener noreferrer">
-                Create Content <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-    </div>
-    
-    <div class="text-center">
-        <a href="#" class="view-all-btn">
-            View all recommended tools <i class="fas fa-arrow-right"></i>
-        </a>
-    </div>
-</div>
-</section>
-
-<aside class="right-aside">
-<div class="search-container">
-  <form action="{% url 'search_campaign' %}" method="get">
-    <div class="search-wrapper">
-      <input type="text" placeholder="Search..." name="search_query" id="query-field">
-      <div class="search-icons">
-        <button type="button" class="btn-reset" id="reset-field">
-          <i class="fas fa-times"></i>
-        </button>
-        <button type="submit" class="btn-search">
-          <i class="fas fa-search"></i>
-        </button>
-      </div>
-    </div>
-  </form>
-</div>
-
-<br>
-  <!-- Suggested Users Section -->
-  <div class="suggested-users">
-    <div class="section-header">
-      <h3 class="section-title">Suggested for You</h3>
-       {% if suggested_users|length >= 2 %}
-            <a href="{% url 'suggest' %}" class="see-all">See All</a>
-        {% endif %}
-    </div>
-    {% for suggested in suggested_users %}
-    {% with user=suggested.user followers_count=suggested.followers_count %}
-    <div class="user-card">
-      <div class="user-avatar">
-        <img src="{{ user.profile.image.url }}" alt="{{ user.username }}" class="avatar-img">
-        {% if user.profile.is_online %}
-        <span class="online-status"></span>
-        {% endif %}
-      </div>
-      <div class="user-info">
-        <h4 class="user-name">{{ user.get_full_name|default:user.username }}</h4>
-        <p class="user-bio">{{ user.profile.bio|truncatechars:30 }}</p>
-        <div class="user-meta">
-          <span class="followers">{{ followers_count }} followers</span>
-          {% if user.profile.is_verified %}
-          <span class="verified-badge">✓</span>
-          {% endif %}
-        </div>
-        <div class="user-actions">
-          {% if request.user != user %}
-          <span id="follow-btn-{{ user.id }}" 
-                class="follow-text {% if request.user in user.followers.all %}following{% endif %}" 
-                data-user-id="{{ user.id }}"
-                data-is-following="{% if request.user in user.followers.all %}true{% else %}false{% endif %}">
-              {% if request.user in user.followers.all %}
-                  Following 
-              {% else %}
-                  Follow 
-              {% endif %}
-          </span>
-          {% endif %}
-          <a href="{% url 'profile_view' username=user.username %}" class="visit-btn">
-              <span class="btn-text">Visit</span>
-          </a>
-        </div>
-      </div>
-    </div>
-    {% endwith %}
-{% empty %}
-    <p class="no-suggestions">No suggestions available. Follow more people to get better recommendations.</p>
-{% endfor %}
-<div class="trending-now">
-  <div class="trending-header">
-    <h3 class="trending-title"><i class="fas fa-fire"></i> Trending Now</h3>
-   
-  </div>
-  
-  <ul class="trending-list">
-    {% for campaign in trending_campaigns|slice:":5" %}
-    <li class="trending-item">
-      <span class="trending-rank trending-rank-{{ forloop.counter }}">{{ forloop.counter }}</span>
-      {% if forloop.counter <= 3 %}
-      <span class="trending-hot">HOT</span>
-      {% endif %}
-      
-      <div class="trending-content">
-        <h4 class="trending-topic">
-          <a href="{% url 'view_campaign' campaign_id=campaign.pk %}" style="color: inherit; text-decoration: none;">
-            {{ campaign.title|truncatechars:40 }}
-          </a>
-          {% if campaign.user.profile_verified %}
-          <i class="fas fa-check-circle"></i>
-          {% endif %}
-        </h4>
-        <div class="trending-meta">
-          <span class="trending-posts">
-            <i class="fas fa-heart" style="color: #ff4d4f;"></i>
-            {{ campaign.love_count|default:0 }} loves
-          </span>
-          <span class="trending-posts">
-            <i class="fas fa-comment" style="color: #1890ff;"></i>
-            {{ campaign.comments.count|default:0 }} comments
-          </span>
-          <span class="trending-category">{{ campaign.category }}</span>
-        </div>
-      </div>
-    </li>
-    {% endfor %}
-  </ul>
-  
- 
-</div>
-
-
-
-
-
-
- <div class="top-contributors">
-  <div class="contributors-header">
-    <h3 class="contributors-title"><i class="fas fa-trophy"></i> Top Contributors</h3>
-  </div>
-  
-  <div class="contributors-list">
-    {% for contributor in top_contributors %}
-    <div class="contributor-item">
-      <div class="contributor-avatar">
-        <img src="{{ contributor.image.url }}" class="contributor-img" alt="{{ contributor.user.get_full_name }}">
-        <div class="contributor-badge">{{ forloop.counter }}</div>
-      </div>
-      <div class="contributor-info">
-        <h4 class="contributor-name">
-          {{ contributor.user.get_full_name|default:contributor.user.username }}
-        </h4>
-        <div class="contributor-stats">
-          {{ contributor.campaign_count }} Campaign{{ contributor.campaign_count|pluralize }}
-        </div>
-      </div>
-    </div>
-    {% endfor %}
-  </div>
-</div>
-
-
-
-  <!-- Footer Links -->
-
-</aside>
-
-
-
-  </main>
-
-
-
-<footer class="footer">
-    <div class="footer-content">
-        <!-- Existing footer sections -->
-        <div class="footer-section">
-            <h2>Contact Us</h2>
-            <p>Email: rallynex1@gmail.com</p>
-            <p style="display:none;">Address: 123 Networking St, Net City</p>
-        </div>
-        <div class="footer-section" style="display: none;">
-            <h2>Follow Us</h2>
-            <div class="social-icons">
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                <a href="#"><i class="fab fa-github"></i></a>
-            </div>
-        </div>
-        <div class="footer-section">
-            <h2>Subscribe</h2>
-            <!-- Include subscription form -->
-        
-            <p><a href="{% url 'subscribe' %}" class="subscribe-link">Subscribe Now</a></p>
-        </div>
-        <div class="footer-section">
-            <h2>Legal</h2>
-            <a href="{% url 'privacy_policy' %}">Privacy Policy|</a>
-            <a href="{% url 'terms_of_service' %}">Terms of Service|</a>
-            <a href="{% url 'project_support' %}">Support|</a>
-            <a href="{% url 'hiw' %}">How It Works|</a>
-            <a href="{% url 'faq' %}">FAQ|</a>
-            <a href="{% url 'aboutus' %}">About Us|</a>
-            
-        </div>
-    </div>
-    <div class="footer-bottom">
-        <p>&copy; 2024 Networking Site. All rights reserved.</p>
-        <p class="mystery-text"></p>
-    </div>
-</footer>
-
-
-<script>
-    function toggleMenu(event) {
-        if (event) {
-            event.preventDefault();
-            event.stopPropagation(); // Important to prevent immediate close
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
         }
         
-        const menu = document.getElementById('navbarDropdownMenu');
-        const overlay = document.getElementById('menuOverlay');
-        
-        menu.classList.toggle('active');
-        overlay.classList.toggle('active');
-    }
-    
-    // Close menu when clicking outside
-    document.addEventListener('click', function(event) {
-        const menu = document.getElementById('navbarDropdownMenu');
-        const overlay = document.getElementById('menuOverlay');
-        const toggleBtn = document.querySelector('[onclick*="toggleMenu"]'); // Your menu button
-        
-        // Check if click is outside of menu AND outside of toggle button
-        if (!menu.contains(event.target) && 
-            (!toggleBtn || !toggleBtn.contains(event.target))) {
-            menu.classList.remove('active');
-            overlay.classList.remove('active');
+        h1 {
+            margin-bottom: 30px;
+            font-weight: 600;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
-    });
-</script>
-
-
-<script>
-  function togglaMenu(clickedElement) {
-    // Close other open menus
-    document.querySelectorAll('.menu-dropdown.active').forEach(menu => {
-      if (!clickedElement.contains(menu)) {
-        menu.classList.remove('active');
-      }
-    });
-
-    // Toggle the clicked one
-    const dropdown = clickedElement.querySelector('.menu-dropdown');
-    dropdown.classList.toggle('active');
-  }
-
-  // Close the menu if clicked outside
-  document.addEventListener('click', function(event) {
-    const isClickInside = event.target.closest('.campaign-menu');
-    if (!isClickInside) {
-      document.querySelectorAll('.menu-dropdown.active').forEach(menu => {
-        menu.classList.remove('active');
-      });
-    }
-  });
-</script>
-
-
-
+        
+        .campaign-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            margin-bottom: 30px;
+        }
+        
+        .campaign-image {
+            height: 300px;
+            position: relative;
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        
+       .image-overlay-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
+            color: white;
+        }
+        
+        /* Fixed Action icons styles */
+        .campaign-action-icons {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .action-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            background-color: transparent;
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            position: relative;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+        }
+        
+        .action-icon:hover {
+            transform: translateY(-8px) scale(1.05);
+            border: 2px solid rgba(255, 255, 255, 1);
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.25),
+                        0 0 30px rgba(255, 215, 100, 0.5);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .action-icon i {
+            font-size: 32px;
+            transition: all 0.3s ease;
+        }
+        
+        .action-icon:hover i {
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+        }
+        
+        /* Custom tooltip styling - fixed position */
+        .action-icon .tooltip {
+            content: attr(data-title);
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 100;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .action-icon:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+            bottom: -35px;
+        }
+        
+        /* Icon specific hover effects */
+        .action-icon:nth-child(1):hover {
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.25),
+                        0 0 30px rgba(255, 100, 100, 0.5);
+        }
+        
+        .action-icon:nth-child(2):hover {
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.25),
+                        0 0 30px rgba(100, 200, 255, 0.5);
+        }
+        
+        .action-icon:nth-child(3):hover {
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.25),
+                        0 0 30px rgba(100, 255, 150, 0.5);
+        }
+        
+        /* Progress bar styles */
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4ECDC4, #42b883);
+            border-radius: 5px;
+            width: 65%;
+            position: relative;
+        }
+        
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
+            background-size: 10px 10px;
+            animation: move 1s linear infinite;
+            border-radius: 5px;
+        }
+        
+        @keyframes move {
+            0% { background-position: 0 0; }
+            100% { background-position: 10px 0; }
+        }
+        
+        .campaign-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .campaign-time-left {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        .campaign-time-left i {
+            margin-right: 8px;
+            color: #FFD700;
+        }
+        
+        /* Mobile-specific styles */
+        .mobile-goal-display {
+            display: none;
+        }
+        
+        /* Campaign content below image */
+        .campaign-content {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .campaign-title {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+        
+        .campaign-description {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .campaign-creator {
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .creator-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+            background: #4ECDC4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .campaigns-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .campaign-action-icons {
+                gap: 25px;
+            }
+            
+            .action-icon {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .action-icon i {
+                font-size: 28px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .campaign-image {
+                height: 250px;
+            }
+            
+            .campaign-action-icons {
+                gap: 15px;
+            }
+            
+            .action-icon {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .action-icon i {
+                font-size: 24px;
+            }
+            
+            .image-overlay-bottom {
+                padding: 15px;
+            }
+            
+            /* Hide detailed progress info on mobile */
+            .progress-info, .campaign-stats {
+                display: none;
+            }
+            
+            /* Show simplified goal display on mobile */
+            .mobile-goal-display {
+                display: block;
+                margin-top: 15px;
+                font-size: 16px;
+                font-weight: 600;
+                color: #4ECDC4;
+                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            }
+            
+            /* Adjust progress bar for mobile */
+            .progress-container {
+                margin-bottom: 0;
+                height: 8px;
+            }
+            
+            /* Simplify the time display */
+            .campaign-time-left {
+                font-size: 13px;
+                margin-top: 8px;
+            }
+        }
+        
+   
+    </style>
 
 <style>
 .top-contributors {
@@ -5299,6 +3772,8 @@ document.addEventListener('DOMContentLoaded', function() {
 </style>
 
 <style type="text/css">
+
+
     .explore-card {
         padding: 10px 15px;
         margin-bottom: 12px;
@@ -6944,9 +5419,2031 @@ document.addEventListener('DOMContentLoaded', function() {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+        /* Enhanced transition effects */
+        body, 
+        header, 
+        footer, 
+        section, 
+        .left-aside, 
+        .right-aside, 
+        .upper-post, 
+        .campaign-content, 
+        .react, 
+        .search-container input, 
+        .search-container .btn-reset, 
+        .funding-progress-card, 
+        button, 
+        h1, h2, h3, h4, p, li, 
+        .campaign-nav, 
+        .campaign-nav a, 
+        .btn, 
+        .reaction, 
+        .action-item, 
+        .action-item a, 
+        .carousel, 
+        .ad, 
+        .slide, 
+        .ad a, 
+        .explore-link, 
+        .love-count, 
+        #view-count, 
+        .comment-count {
+            transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+                        color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                        border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                        box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                        transform 0.3s ease;
+        }
 
 
 </style>
+</head>
+
+
+
+<body id="mainBody" >
+
+
+
+
+
+<header>
+    
+<div class="rallynex-header-container" style="display: flex; justify-content: space-between; align-items: center; padding: 15px;">
+    <!-- Rallynex Logo/Name on the left -->
+    <div class="rallynex-name" style="
+        font-family: 'Courier New', monospace;
+        color: #ffffff;
+        background: linear-gradient(135deg, #c0c0c0, #f8f8f8);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-shadow: 
+            0 1px 1px rgba(0,0,0,0.3),
+            0 0 8px rgba(255,255,255,0.4);
+        font-weight: bold;
+        letter-spacing: 3px;
+        font-size: 24px;
+        padding: 4px 12px;
+        display: inline-block;
+        border-radius: 3px;
+        backdrop-filter: brightness(1.2);
+    "><img src="{% static 'main/files/lg.png' %}" alt="Rallynex Logo" style="height: 50px; width: 50px;">RALLYNEX</div>
+
+    <!-- Mobile Search Icon on the right -->
+    <div class="rallynex-mobile-search-icon">
+        <i class="fas fa-search"></i>
+    </div>
+</div>
+
+<!-- Mobile search popup -->
+<div class="rallynex-mobile-search-popup">
+    <form action="{% url 'search_campaign' %}" method="get" class="rallynex-mobile-search-wrapper">
+        <input type="text" placeholder="Search..." name="search_query" id="mobile-search-input">
+        <button type="button" class="rallynex-clear-search" aria-label="Clear search">
+            <i class="fas fa-times"></i>
+        </button>
+        <button type="submit" aria-label="Search">
+            <i class="fas fa-search"></i>
+        </button>
+    </form>
+    <div class="rallynex-close-mobile-search">
+        <i class="fas fa-times"></i>
+    </div>
+</div>
+
+
+    <nav id="navbar" class="navbar">
+        <!-- Main bottom navigation (5 items) -->
+        <ul class="bottom-nav">
+            <li>
+                <a href="{% url 'home' %}" class="{% if request.path == '/' %}active{% endif %}">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2L2 7V22H22V7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                    </svg>
+                    {% if new_campaigns_from_follows %}
+                        <span class="alert-badge">{{ new_campaigns_from_follows.count }}</span>
+                    {% endif %}
+                </a>
+            </li>
+            
+            <li>
+                <a href="{% url 'suggest' %}" class="{% if 'suggest' in request.path %}active{% endif %}">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8.5 11C10.7091 11 12.5 9.20914 12.5 7C12.5 4.79086 10.7091 3 8.5 3C6.29086 3 4.5 4.79086 4.5 7C4.5 9.20914 6.29086 11 8.5 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M17 3.13C17.8604 3.35031 18.623 3.85071 19.1676 4.55232C19.7122 5.25392 20.0078 6.11683 20.0078 7.005C20.0078 7.89318 19.7122 8.75608 19.1676 9.45769C18.623 10.1593 17.8604 10.6597 17 10.88" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+            </li>
+            
+            <li class="create-btn-container">
+                <a href="{% url 'create_campaign' %}" class="create-btn" onclick="handleCreateClick(event)">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 4V20M4 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </a>
+            </li>
+            
+            <li>
+                <a href="{% url 'notification_list' %}" class="{% if 'notification' in request.path %}active{% endif %}">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M18 8C18 6.4087 17.3679 4.88258 16.2426 3.75736C15.1174 2.63214 13.5913 2 12 2C10.4087 2 8.88258 2.63214 7.75736 3.75736C6.63214 4.88258 6 6.4087 6 8C6 15 3 17 3 17H21C21 17 18 15 18 8Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M13.73 21C13.5542 21.3031 13.3019 21.5547 12.9982 21.7295C12.6946 21.9044 12.3504 21.9965 12 21.9965C11.6496 21.9965 11.3054 21.9044 11.0018 21.7295C10.6982 21.5547 10.4458 21.3031 10.27 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    {% if unread_notifications %}
+                        <span class="alert-badge">{{ unread_notifications.count }}</span>
+                    {% endif %}
+                </a>
+            </li>
+            
+            <li class="menu-toggle">
+                <a href="#" onclick="toggleMenu(event)">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Hidden menu that appears when hamburger is clicked -->
+    <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+
+    <div class="navbar-dropdown-menu" id="navbarDropdownMenu">
+        <ul>
+            <li>
+                <a href="{% url 'profile_view' username=request.user.username %}" class="{% if 'profile' in request.path %}active{% endif %}">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Profile</span>
+                </a>
+            </li>
+                    <li>
+            <a href="#" onclick="switchColor()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 3V5M18.36 5.64L16.95 7.05M21 12H19M18.36 18.36L16.95 16.95M12 19V21M7.05 16.95L5.64 18.36M5 12H3M7.05 7.05L5.64 5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Switch Mode</span>
+            </a>
+        </li>
+         
+            <li>
+                <a href="{% url 'private_campaign' %}">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M19 11H5C3.89543 11 3 11.8954 3 13V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V13C21 11.8954 20.1046 11 19 11Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M7 11V7C7 5.67392 7.52678 4.40215 8.46447 3.46447C9.40215 2.52678 10.6739 2 12 2C13.3261 2 14.5979 2.52678 15.5355 3.46447C16.4732 4.40215 17 5.67392 17 7V11" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Private</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'user_chats' %}">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Chat Room</span>
+                    {% if unread_messages_count %}
+                        <span class="alert-badge chat-alert">{{ unread_messages_count }}</span>
+                    {% endif %}
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'index' %}" title="Explore" class="explore-link" style="margin-left: 10px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Explore</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Logout</span>
+                </a>
+                <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+                    {% csrf_token %}
+                </form>
+            </li>
+        </ul>
+    </div>
+
+<!-- Search container can be removed since search is now in the bottom nav -->
+</header>
+
+
+
+  <main>
+
+
+
+<aside class="left-aside">
+
+<h3 style="
+    font-family: 'Courier New', monospace;
+    color: #ffffff;
+    background: linear-gradient(135deg, #c0c0c0, #f8f8f8);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 
+        0 1px 1px rgba(0,0,0,0.3),
+        0 0 8px rgba(255,255,255,0.4);
+    font-weight: bold;
+    letter-spacing: 3px;
+    font-size: 24px;
+    padding: 4px 12px; /* reduced top/bottom padding (4px), kept left/right (12px) */
+    display: inline-block;
+    border-radius: 3px;
+    backdrop-filter: brightness(1.2);
+    margin: 0;
+    z-index: 1000;
+"><img src="{% static 'main/files/lg.png' %}" alt="Rallynex Logo" style="height: 50px; width: 50px;">RALLYNEX</h3>
+
+    <!-- Updated the <nav> tag to <nav class="campaign-nav"> -->
+<nav class="campaign-nav">
+    <ul>
+        <!-- Home link with red spot -->
+        <li>
+            <a href="{% url 'home' %}" style="color: black; position: relative;">
+                <i class="fas fa-home"></i> Home
+                {% if new_campaigns_from_follows %}
+                    <span id="home-alert" class="alert-badge">{{ new_campaigns_from_follows.count }}</span> <!-- Red alert spot -->
+                {% endif %}
+            </a>
+        </li>
+
+        <li>
+            <a href="#" onclick="switchColor()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 3V5M18.36 5.64L16.95 7.05M21 12H19M18.36 18.36L16.95 16.95M12 19V21M7.05 16.95L5.64 18.36M5 12H3M7.05 7.05L5.64 5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Switch Mode</span>
+            </a>
+        </li>
+        
+        <li><a href="{% url 'private_campaign' %}" style="color: black;"><i class="fas fa-lock"></i> Private </a></li>
+
+        <!-- Chat Table link with red spot -->
+        <li>
+            <a href="{% url 'user_chats' %}" style="color: black; position: relative;">
+                <i class="fas fa-comment-alt"></i> Chat Room
+                {% if unread_messages_count %}
+                    <span id="chat-alert" class="alert-badge" style="background-color: red;">{{ unread_messages_count }}</span>
+                {% endif %}
+            </a>
+        </li>
+
+        <!-- Notification icon with red spot -->
+        <li>
+            <a href="{% url 'notification_list' %}" style="color: black; position: relative;">
+                <i class="fas fa-bell"></i>
+                {% if unread_notifications %}
+                    <span id="notification-alert" class="alert-badge">{{ unread_notifications.count }}</span>
+                {% endif %}
+                Notification
+            </a>
+        </li>
+
+        <li><a href="{% url 'suggest' %}" style="color: black;"><i class="fas fa-user-friends"></i> Suggested Users</a></li>
+
+        <li>
+            <a href="{% url 'index' %}" title="Explore" style="color: black;">
+                <i class="fas fa-compass" style="font-size: 14px;"> Explore</i>
+            </a>
+        </li>
+        
+        <!-- User Profile link -->
+        <li>
+            <a href="{% url 'profile_view' username=request.user.username %}" style="color: black;">
+                <i class="fas fa-user-circle"></i> My Profile
+            </a>
+        </li>
+
+        <!-- Logout link -->
+        <li>
+            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+            <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+                {% csrf_token %}
+            </form>
+        </li>
+    </ul>
+</nav>
+      
+
+    <div class="upload-container hide-on-mobile">
+
+     <div class="upload-btn-wrapper">
+        <button class="btn" style="font-size: 14px;">+ Upload
+            <a href="{% url 'create_campaign' %}" class="overlay-link"></a>
+        </button>
+    </div>
+
+</div>
+
+<div class="dashboard-snaps">
+  <div class="snaps-header">
+    <h3 class="snaps-title"><i class="fas fa-bolt"></i> Quick Actions</h3>
+  </div>
+
+  <div class="snaps-grid">
+    <a href="{% url 'create_campaign' %}" class="snap-link">
+      <i class="snap-icon fas fa-bullhorn"></i>
+      <span class="snap-label">Start Campaign</span>
+    </a>
+
+
+    <a href="{% url 'profile_view' username=request.user.username %}" class="snap-link">
+      <i class="snap-icon fas fa-user"></i>
+      <span class="snap-label">Visit Profile</span>
+    </a>
+
+    <a href="{% url 'index' %}" class="snap-link">
+      <i class="snap-icon fas fa-search"></i>
+      <span class="snap-label">Explore</span>
+    </a>
+
+    <a href="{% url 'user_chats' %}" class="snap-link">
+      <i class="snap-icon fas fa-comments"></i>
+      <span class="snap-label">My Chats</span>
+    </a>
+
+
+  </div>
+</div><br>
+
+
+  <div class="aside-footer">
+    <a href="{% url 'aboutus' %}">About</a> • 
+    <a href="{% url 'hiw' %}">Help</a> • 
+    <a href="{% url 'terms_of_service' %}">Terms</a> • 
+    <a href="{% url 'privacy_policy' %}">Privacy</a> • 
+    <a href="{% url 'faq' %}">FAQ</a> • 
+    <a href="{% url 'project_support' %}">Support</a>
+</div>
+
+</aside>
+
+
+
+
+
+<section>
+
+
+    </br>
+
+ <div class="explore-card">
+    <h3><i class="fas fa-compass"></i>Explore</h3>
+    <p>Explore campaigns to be part of.</p>
+</div>
+
+
+<form method="GET" action="{% url 'home' %}" class="filter-form">
+    <label for="category" class="filter-label">Filter by Category:</label>
+ <select name="category" id="category" class="filter-select" onchange="this.form.submit()">
+    <option value="">All Categories</option>
+    {% for category in categories %}
+        <option value="{{ category }}" {% if category == selected_category %}selected{% endif %}>
+            {{ category }}
+        </option>
+    {% endfor %}
+</select>
+
+</form>
+
+<!-- Beautiful upload button -->
+
+    
+</div><br>
+
+<div class="sidebar-box ">
+
+   {% if public_campaigns %}
+<div class="simple-campaigns-container">
+    
+    {% for campaign in public_campaigns %}
+    <div class="simple-campaign-card">
+        <!-- Top Section - Creator Info -->
+        <div class="creator-info">
+            <a href="{% url 'profile_view' username=campaign.user.user.username %}" class="creator-pic">
+                <img src="{{ campaign.user.image.url }}" alt="{{ campaign.user.user.username }}">
+            </a>
+            <div class="creator-details">
+             <div class="creator-container" style="display: flex; justify-content: space-between; align-items: center;">
+    <div>
+
+<div class="creator-info">
+    <span class="creator-name">
+       {{ campaign.user.user.username }}
+                    {% if campaign.user.profile_verified %}
+                    <span class="verified-badge"><i class="material-icons">verified_user</i></span> 
+                    {% endif %}
+                    {% if campaign.is_changemaker %}
+                    <span class="changemaker-badge"><i class="far fa-star"></i>Changemaker</span>
+                    {% endif %}
+    </span>
+{% if request.user != campaign.user.user %}
+<span id="follow-btn-{{ campaign.user.user.id }}" 
+      class="follow-text {% if request.user in campaign.user.user.followers.all %}following{% endif %}" 
+      data-user-id="{{ campaign.user.user.id }}"
+      data-is-following="{% if request.user in campaign.user.user.followers.all %}true{% else %}false{% endif %}">
+    {% if request.user in campaign.user.user.followers.all %}
+        • Following
+    {% else %}
+        • Follow
+    {% endif %}
+</span>
+{% endif %}
+
+</div>
+
+
+
+
+        <div class="campaign-time">
+            {{ campaign.timestamp|timesince }} ago • {{ campaign.user.location }}
+        </div>
+    </div>
+
+</div>
+            </div>
+
+<div class="campaign-menu" onclick="togglaMenu(this)" style="position: relative;">
+  <i class="fas fa-ellipsis-v"></i>
+  <div class="menu-dropdown">
+    <a href="{% url 'view_campaign' campaign_id=campaign.pk %}">
+      <i class="fas fa-eye"></i> View Details
+    </a>
+    <a href="{% url 'campaign_joiners' campaign.id %}" class="comment-count" aria-label="View joiners of this campaign">
+      <i class="fas fa-user-plus"></i> Joiners ({{ campaign.user_profiles.count|format_count }})
+    </a>
+  
+    {% if user == campaign.user.user %}
+      <a href="{% url 'recreate_campaign' campaign.id %}">
+        <i class="fas fa-edit"></i> Edit
+      </a>
+    {% endif %}
+
+{% if user == campaign.user.user %}
+    <a href="{% url 'campaign_pledgers' campaign.id %}">
+        <i class="fas fa-donate"></i> Pledgers
+    </a>
+{% endif %}
+
+     <a href="{% url 'top_participants' campaign_id=campaign.pk %}" class="top-supporters-link">
+    <i class="fas fa-trophy"></i> Top Participants
+</a>
+          <a href="{% url 'update_visibilit' campaign.pk %}" style="
+   
+">
+    <i class="fas fa-lock" ></i> Visibility
+</a>
+
+ <a href="{% url 'campaign_engagement' campaign.id %}">
+        <i class="fas fa-chart-bar"></i> Engagement
+    </a>
+
+
+  <a href="{% url 'report_campaign' campaign.id %}">
+      <i class="fas fa-flag"></i> Report
+    </a>
+
+     <a href="{% url 'campaign-delete' campaign.pk %}" class="delete-link">
+        <i class="fas fa-trash"></i> Delete
+    </a>
+    
+    <div class="not-interested-container">
+        <form action="{% url 'mark_not_interested' campaign_id=campaign.pk %}" method="post" class="not-interested-form">
+            {% csrf_token %}
+            <div class="form-row">
+                <label for="not-interested" class="form-label">
+                    <i class="fas fa-times-circle"></i> Not Interested
+                </label>
+                <div class="form-controls">
+                    <input type="checkbox" id="not-interested" name="not_interested" class="form-checkbox">
+                </div>
+            </div>
+            <button type="submit" class="form-submit-button">
+                Submit
+            </button>
+        </form>
+    </div>
+  </div>
+</div>
+        </div>
+
+        <!-- Campaign Image - Dominant Space -->
+        <div class="campaign-image-section">
+            {% if campaign.poster %}
+            <div class="campaign-image-container">
+       {% if user.is_authenticated and user.profile in campaign.user_profiles.all %}
+    <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="campaign-poster-link">
+{% endif %}
+        <img src="{{ campaign.poster.url }}" 
+             alt="{{ campaign.title }}" 
+             class="main-campaign-image {% if user.profile in campaign.user_profiles.all %}clickable-poster{% endif %}"
+             style="{% if user.profile in campaign.user_profiles.all %}cursor: pointer;{% endif %}">
+{% if user.is_authenticated and user.profile in campaign.user_profiles.all %}
+    </a>
+{% endif %}
+<div class="campaign-views-overlay" aria-label="Total campaign views">
+    <i class="far fa-eye"></i>
+    <span>{{ campaign.campaignview_set.count|format_count }}</span>
+    <span class="views-tooltip">Views</span>
+</div>   
+                <!-- Image Overlay Info -->
+                <div class="image-overlay-top">
+                    <span class="campaign-category">{{ campaign.category }}</span>
+                </div>
+<div class="image-overlay-bottom">
+    <!-- Action icons with data-title instead of title -->
+    <div class="campaign-action-icons">
+
+        <!-- Donate icon - only show if donation is enabled -->
+        {% if campaign.supportcampaign_set.first.donate_monetary_visible %}
+            <a href="{% url 'create_donation' campaign_id=campaign.id %}" class="action-icon" data-title="Donate">
+                <i class="fas fa-hand-holding-heart"></i>
+                <span class="tooltip">Donate</span>
+            </a>
+        {% endif %}
+
+        <!-- Pledge icon - only show if pledge is enabled -->
+        {% if campaign.supportcampaign_set.first.pledge_visible %}
+            <a href="{% url 'create_pledge' campaign_id=campaign.id %}" class="action-icon" data-title="Pledge">
+                <i class="fas fa-handshake"></i>
+                <span class="tooltip">Pledge</span>
+            </a>
+        {% endif %}
+
+        <!-- Purchase Products icon - only show if campaign product is enabled -->
+        {% if campaign.supportcampaign_set.first.campaign_product_visible %}
+            <a href="{% url 'product_manage' campaign_id=campaign.id %}" class="action-icon" data-title="Purchase Products">
+                <i class="fas fa-shopping-bag"></i>
+                <span class="tooltip">Purchase Products</span>
+            </a>
+        {% endif %}
+
+    </div>
+
+    {% if campaign.supportcampaign_set.first.donate_monetary_visible %}
+        <!-- Progress bar section -->
+        <div class="progress-info">
+            <span>Raised: ${{ campaign.total_donations }}</span>
+            <span>Goal: ${{ campaign.funding_goal }}</span>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-fill" style="width: {{ campaign.donation_percentage }}%;"></div>
+        </div>
+
+        <div class="campaign-stats">
+            <span>{{ campaign.donation_percentage }}% funded</span>
+            <span>${{ campaign.donation_remaining }} to go</span>
+        </div>
+
+        <!-- Mobile-specific simplified display -->
+        <div class="mobile-goal-display">
+            {{ campaign.donation_percentage }}% funded • ${{ campaign.donation_remaining }} to go
+        </div>
+    {% endif %}
+
+    <div class="campaign-time-left">
+        <i class="fas fa-clock"></i>
+        <span>
+            {% if campaign.days_left != None %}
+                {{ campaign.days_left }} {% if campaign.days_left == 1 %}day{% else %}days{% endif %} left
+            {% else %}
+                Ongoing
+            {% endif %}
+        </span>
+    </div>
+</div>
+
+                {% if not user.profile in campaign.user_profiles.all %}
+          <div class="join-prompt blink-5s">
+    <i class="fas fa-lock"></i> Join to see activities
+</div>
+                {% endif %}
+  
+
+            </div>
+            {% else %}
+            <div class="no-image-placeholder">
+                <i class="fas fa-image"></i>
+                <p>No image available</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Campaign Title and Objective - Simplified -->
+      <div class="campaign-caption">
+   <!-- Replace the title section with this: -->
+<div class="campaign-content-points">
+<ul>
+    {# Desktop/Web version - 30 words #}
+    <li class="web-version">{{ campaign.content|truncatewords:30 }}</li>
+
+    {# Mobile version - 8 words #}
+    <li class="mobile-version">{{ campaign.content|truncatewords:8 }}</li>
+</ul>
+
+{% if campaign.content|wordcount > 30 %}
+<div class="see-more-container">
+    <button class="see-more-btn" onclick="toggleFullContent(this)">
+        See More <i class="fas fa-chevron-down"></i>
+    </button>
+</div>
+
+<div class="full-content" style="display: none;">
+    <p>{{ campaign.content }}</p>
+</div>
+{% endif %}
+
+    
+    <!-- Hidden full content -->
+    <div class="full-content" style="display:none;">
+        <ul>
+            {% for point in campaign.content.splitlines %}
+                <li>{{ point }}</li>
+            {% endfor %}
+        </ul>
+        <button class="see-less-btn" onclick="toggleContent(this.parentElement)">
+            See Less <i class="fas fa-chevron-up"></i>
+        </button>
+    </div>
+</div>
+  Goals: {{ campaign.get_goals_and_activities.Goals.0|default:"No goal specified"|truncatechars:80 }}
+</div>
+
+        <!-- Campaign Status - Visual Indicators -->
+        <div class="campaign-status">
+            {% if campaign.is_outdated %}
+            <div class="status-badge outdated">
+                <i class="fas fa-exclamation-circle"></i> Campaign Ended
+            </div>
+            {% else %}
+            <div class="status-badge active">
+                <i class="fas fa-check-circle"></i> Active Now
+            </div>
+            {% endif %}
+            
+            <div class="runtime-info">
+                <i class="fas fa-calendar-alt"></i>
+                {% if campaign.duration %}
+                    {{ campaign.duration }} {{ campaign.duration_unit }}
+                {% else %}
+                    Ongoing
+                {% endif %}
+            </div>
+        </div>
+
+<!-- After campaign-status, before simple-actions -->
+{% if user.profile in campaign.user_profiles.all %}
+<div class="campaign-participation-links">
+    <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="participation-link">
+        <i class="fas fa-tasks"></i> View Activities
+    </a>
+    <a href="{% url 'support' campaign_id=campaign.id %}" class="participation-link">
+        <i class="fas fa-hands-helping"></i> Participate Now
+    </a>
+</div>
+{% endif %}
+        <!-- Simple Action Buttons -->
+        <div class="simple-actions">
+<div class="action-group">
+    <button class="simple-action-btn love-btn" onclick="toggleLove({{ campaign.id }})">
+        <i id="love-icon-{{ campaign.id }}" class="fas fa-heart"></i> 
+        <span id="love-count-{{ campaign.id }}">{{ campaign.love_count|format_count }}</span>
+        <span class="action-label">Like</span>
+    </button>
+    
+    <button class="simple-action-btn" onclick="showCommentPopup({{ campaign.id }})">
+        <i class="far fa-comment"></i> 
+        <span id="comment-count-{{ campaign.id }}">{{ campaign.comments.count|default:0 }}</span>
+        <span class="action-label">Comment</span>
+    </button>
+    
+    <button class="simple-action-btn" onclick="showSharePopup({{ campaign.id }})">
+        <i class="fas fa-share-alt"></i> 
+        <span class="action-label">Share</span>
+    </button>
+</div>
+        {% if user.profile in campaign.user_profiles.all %}
+<a href="{% url 'join_leave_campaign' campaign.id %}" 
+   class="simple-join-btn leave-btn"
+   style="background: rgba(237, 73, 86, 0.08);
+          color: #ed4956;
+          border: 1px solid rgba(237, 73, 86, 0.2);
+          padding: 4px 10px;
+          border-radius: 12px;
+          font-size: 12px;
+          transition: all 0.2s ease;
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          text-decoration: none;">
+    <i class="fas fa-user-minus" style="font-size: 13px;"></i>
+    <span>Leave</span>
+</a>
+{% else %}
+<a href="{% url 'join_leave_campaign' campaign.id %}" 
+   class="simple-join-btn"
+   style="background: rgba(0, 149, 246, 0.08);
+          color: #0095f6;
+          border: 1px solid rgba(0, 149, 246, 0.2);
+          padding: 4px 10px;
+          border-radius: 12px;
+          font-size: 12px;
+          transition: all 0.2s ease;
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          text-decoration: none;">
+    <i class="fas fa-user-plus" style="font-size: 13px;"></i>
+    <span>Join</span>
+</a>
+{% endif %}
+        </div>
+        
+        <!-- Hidden content that was in your original HTML -->
+        <div class="hidden-content" style="display:none;">
+            <!-- All your original content that we're keeping but hiding -->
+            <div class="campaign-content" data-campaign-id="{{ campaign.id }}">
+                <ul>
+                    {% for point in campaign.content.splitlines %}
+                        <li>{{ point }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            
+            <div class="funding-progress-card">
+                <!-- Your original funding progress card -->
+            </div>
+            
+            <div class="activity-links">
+                {% if user.profile in campaign.user_profiles.all %}
+                <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="activity-link">
+                    <i class='fas'>&#xf6e3;</i> Activities
+                </a>
+                <a href="{% url 'support' campaign_id=campaign.id %}" class="support-link">
+                    <i class="material-icons">&#xe925;</i> Participate
+                </a>
+                {% endif %}
+            </div>
+            
+            <!-- Audio player -->
+            
+<!-- Audio player -->
+{% if campaign.audio %}
+    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+        <source src="{{ campaign.audio.url }}" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+{% else %}
+    <div class="audio-player">
+        {% if campaign.category == 'Poverty and Hunger' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/peace.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Clean Water and Sanitation' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/art.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Disaster Relief' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/Humanitarian Aid.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Healthcare and Medicine' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/health.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Mental Health' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/environment.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Human Rights and Equality' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/Equality1.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Peace and Justice' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/Policy.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Education for All' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/education1.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Economic Empowerment' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/economic.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Climate Action' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/Sustainable.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Save Our Planet' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/animal.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Tech for Humanity' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/digital.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Community Development' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/community.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% else %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/default.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% endif %}
+    </div>
+{% endif %}
+
+
+       
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+
+<!-- Replace the current "else" block with this updated version -->
+{% else %}
+
+<!-- Default campaign display for when there are no public campaigns -->
+{% if not public_campaigns %}
+<div class="simple-campaigns-container">
+    {% for campaign in campaigns %}
+    <div class="simple-campaign-card">
+        <!-- Top Section - Creator Info -->
+        <div class="creator-info">
+            <div class="creator-details">
+                <div class="creator-name">
+                    {{ campaign.user.user.username }}
+                    {% if campaign.user.profile_verified %}
+                    <span class="verified-badge"><i class="material-icons">verified_user</i></span>
+                    {% endif %}
+                    {% if campaign.is_changemaker %}
+                    <span class="changemaker-badge"><i class="far fa-star"></i> Changemaker</span>
+                    {% endif %}
+                </div>
+                <div class="campaign-time">
+                    {{ campaign.timestamp|timesince }} ago • {{ campaign.user.location }}
+                </div>
+            </div>
+<div class="campaign-menu" onclick="togglaMenu(this)" style="position: relative;">
+    <i class="fas fa-ellipsis-v"></i>
+    <div class="menu-dropdown">
+        <a href="{% url 'view_campaign' campaign_id=campaign.pk %}">
+            <i class="fas fa-eye"></i> View Details
+        </a>
+        <a href="{% url 'campaign_joiners' campaign.id %}" class="comment-count" aria-label="View joiners of this campaign">
+            <i class="fas fa-user-plus"></i> Joiners ({{ campaign.user_profiles.count|format_count }})
+        </a>
+
+        {% if user == campaign.user.user %}
+            <a href="{% url 'recreate_campaign' campaign.id %}">
+                <i class="fas fa-edit"></i> Edit
+            </a>
+
+          
+        {% endif %}
+
+  <a href="{% url 'campaign_pledgers' campaign.id %}">
+                <i class="fas fa-donate"></i> Pledgers
+            </a>
+                 <a href="{% url 'top_participants' campaign_id=campaign.pk %}" class="top-supporters-link">
+    <i class="fas fa-trophy"></i> Top Participants
+</a>
+        <a href="{% url 'update_visibilit' campaign.pk %}">
+            <i class="fas fa-lock"></i> Visibility
+        </a>
+
+        <a href="{% url 'campaign_engagement' campaign.id %}">
+            <i class="fas fa-chart-bar"></i> Engagement
+        </a>
+
+        <a href="{% url 'report_campaign' campaign.id %}">
+            <i class="fas fa-flag"></i> Report
+        </a>
+
+        <a href="{% url 'campaign-delete' campaign.pk %}" class="delete-link">
+            <i class="fas fa-trash"></i> Delete
+        </a>
+
+        <div class="not-interested-container">
+            <form action="{% url 'mark_not_interested' campaign_id=campaign.pk %}" method="post" class="not-interested-form">
+                {% csrf_token %}
+                <div class="form-row">
+                    <label for="not-interested" class="form-label">
+                        <i class="fas fa-times-circle"></i> Not Interested
+                    </label>
+                    <div class="form-controls">
+                        <input type="checkbox" id="not-interested" name="not_interested" class="form-checkbox">
+                    </div>
+                </div>
+                <button type="submit" class="form-submit-button">
+                    Submit
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+        <!-- Campaign Image - Dominant Space -->
+        <div class="campaign-image-section">
+            {% if campaign.poster %}
+            <div class="campaign-image-container">
+      {% if user.is_authenticated and user.profile in campaign.user_profiles.all %}
+    <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="campaign-poster-link">
+{% endif %}
+        <img src="{{ campaign.poster.url }}" 
+             alt="{{ campaign.title }}" 
+             class="main-campaign-image {% if user.profile in campaign.user_profiles.all %}clickable-poster{% endif %}"
+             style="{% if user.profile in campaign.user_profiles.all %}cursor: pointer;{% endif %}">
+{% if user.is_authenticated and user.profile in campaign.user_profiles.all %}
+    </a>
+{% endif %}
+                <div class="campaign-views-overlay" aria-label="Total campaign views">
+                    <i class="far fa-eye"></i>
+                    <span>{{ campaign.campaignview_set.count|format_count }}</span>
+                    <span class="views-tooltip">Views</span>
+                </div>   
+                
+                <!-- Image Overlay Info -->
+                <div class="image-overlay-top">
+                    <span class="campaign-category">{{ campaign.category }} Campaign</span>
+                </div>
+             <div class="image-overlay-bottom">
+    <!-- Action icons with data-title instead of title -->
+    <div class="campaign-action-icons">
+
+        <!-- Donate icon - only show if donation is enabled -->
+        {% if campaign.supportcampaign_set.first.donate_monetary_visible %}
+            <a href="{% url 'create_donation' campaign_id=campaign.id %}" class="action-icon" data-title="Donate">
+                <i class="fas fa-hand-holding-heart"></i>
+                <span class="tooltip">Donate</span>
+            </a>
+        {% endif %}
+
+        <!-- Pledge icon - only show if pledge is enabled -->
+        {% if campaign.supportcampaign_set.first.pledge_visible %}
+            <a href="{% url 'create_pledge' campaign_id=campaign.id %}" class="action-icon" data-title="Pledge">
+                <i class="fas fa-handshake"></i>
+                <span class="tooltip">Pledge</span>
+            </a>
+        {% endif %}
+
+        <!-- Purchase Products icon - only show if campaign product is enabled -->
+        {% if campaign.supportcampaign_set.first.campaign_product_visible %}
+            <a href="{% url 'product_manage' campaign_id=campaign.id %}" class="action-icon" data-title="Purchase Products">
+                <i class="fas fa-shopping-bag"></i>
+                <span class="tooltip">Purchase Products</span>
+            </a>
+        {% endif %}
+
+    </div>
+
+    {% if campaign.supportcampaign_set.first.donate_monetary_visible %}
+        <!-- Progress bar section -->
+        <div class="progress-info">
+            <span>Raised: ${{ campaign.total_donations }}</span>
+            <span>Goal: ${{ campaign.funding_goal }}</span>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-fill" style="width: {{ campaign.donation_percentage }}%;"></div>
+        </div>
+
+        <div class="campaign-stats">
+            <span>{{ campaign.donation_percentage }}% funded</span>
+            <span>${{ campaign.donation_remaining }} to go</span>
+        </div>
+
+        <!-- Mobile-specific simplified display -->
+        <div class="mobile-goal-display">
+            {{ campaign.donation_percentage }}% funded • ${{ campaign.donation_remaining }} to go
+        </div>
+    {% endif %}
+
+    <div class="campaign-time-left">
+        <i class="fas fa-clock"></i>
+        <span>
+            {% if campaign.days_left != None %}
+                {{ campaign.days_left }} {% if campaign.days_left == 1 %}day{% else %}days{% endif %} left
+            {% else %}
+                Ongoing
+            {% endif %}
+        </span>
+    </div>
+</div>
+
+               
+                {% if not user.profile in campaign.user_profiles.all %}
+                <div class="join-prompt blink-5s">
+                    <i class="fas fa-lock"></i> Join to see activities
+                </div>
+                {% endif %}
+               
+            </div>
+            {% else %}
+            <div class="no-image-placeholder">
+                <i class="fas fa-image"></i>
+                <p>No image available</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Campaign Title and Objective - Simplified -->
+        <div class="campaign-caption">
+            <div class="campaign-content-points">
+                <ul>
+                    {# Desktop/Web version - 30 words #}
+                    <li class="web-version">{{ campaign.content|truncatewords:30 }}</li>
+
+                    {# Mobile version - 8 words #}
+                    <li class="mobile-version">{{ campaign.content|truncatewords:8 }}</li>
+                </ul>
+
+                {% if campaign.content|wordcount > 30 %}
+                <div class="see-more-container">
+                    <button class="see-more-btn" onclick="toggleFullContent(this)">
+                        See More <i class="fas fa-chevron-down"></i>
+                    </button>
+                </div>
+
+                <div class="full-content" style="display: none;">
+                    <p>{{ campaign.content }}</p>
+                </div>
+                {% endif %}
+
+                <!-- Hidden full content -->
+                <div class="full-content" style="display:none;">
+                    <ul>
+                        {% for point in campaign.content.splitlines %}
+                            <li>{{ point }}</li>
+                        {% endfor %}
+                    </ul>
+                    <button class="see-less-btn" onclick="toggleContent(this.parentElement)">
+                        See Less <i class="fas fa-chevron-up"></i>
+                    </button>
+                </div>
+            </div>
+             Goals: {{ campaign.get_goals_and_activities.Goals.0|default:"No goal specified"|truncatechars:80 }}        </div>
+
+        <!-- Campaign Status - Visual Indicators -->
+        <div class="campaign-status">
+            {% if campaign.is_outdated %}
+            <div class="status-badge outdated">
+                <i class="fas fa-exclamation-circle"></i> Campaign Ended
+            </div>
+            {% else %}
+            <div class="status-badge active">
+                <i class="fas fa-check-circle"></i> Active Now
+            </div>
+            {% endif %}
+            
+            <div class="runtime-info">
+                <i class="fas fa-calendar-alt"></i>
+                {% if campaign.duration %}
+                    {{ campaign.duration }} {{ campaign.duration_unit }}
+                {% else %}
+                    Ongoing
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- After campaign-status, before simple-actions -->
+        {% if user.profile in campaign.user_profiles.all %}
+        <div class="campaign-participation-links">
+            <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="participation-link">
+                <i class="fas fa-tasks"></i> View Activities
+            </a>
+            <a href="{% url 'support' campaign_id=campaign.id %}" class="participation-link">
+                <i class="fas fa-hands-helping"></i> Participate Now
+            </a>
+        </div>
+        {% endif %}
+        
+        <!-- Simple Action Buttons -->
+        <div class="simple-actions">
+            <div class="action-group">
+                <button class="simple-action-btn love-btn" onclick="toggleLove({{ campaign.id }})">
+                    <i id="love-icon-{{ campaign.id }}" class="fas fa-heart"></i> 
+                    <span id="love-count-{{ campaign.id }}">{{ campaign.love_count|format_count }}</span>
+                    <span class="action-label">Like</span>
+                </button>
+                
+                <button class="simple-action-btn" onclick="showCommentPopup({{ campaign.id }})">
+                    <i class="far fa-comment"></i> 
+                    <span id="comment-count-{{ campaign.id }}">{{ campaign.comments.count|default:0 }}</span>
+                    <span class="action-label">Comment</span>
+                </button>
+                
+                <button class="simple-action-btn" onclick="showSharePopup({{ campaign.id }})">
+                    <i class="fas fa-share-alt"></i> 
+                    <span class="action-label">Share</span>
+                </button>
+            </div>
+         {% if user.profile in campaign.user_profiles.all %}
+<a href="{% url 'join_leave_campaign' campaign.id %}" 
+   class="simple-join-btn leave-btn"
+   style="background: rgba(237, 73, 86, 0.08);
+          color: #ed4956;
+          border: 1px solid rgba(237, 73, 86, 0.2);
+          padding: 4px 10px;
+          border-radius: 12px;
+          font-size: 12px;
+          transition: all 0.2s ease;
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          text-decoration: none;">
+    <i class="fas fa-user-minus" style="font-size: 13px;"></i>
+    <span>Leave</span>
+</a>
+{% else %}
+<a href="{% url 'join_leave_campaign' campaign.id %}" 
+   class="simple-join-btn"
+   style="background: rgba(0, 149, 246, 0.08);
+          color: #0095f6;
+          border: 1px solid rgba(0, 149, 246, 0.2);
+          padding: 4px 10px;
+          border-radius: 12px;
+          font-size: 12px;
+          transition: all 0.2s ease;
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          text-decoration: none;">
+    <i class="fas fa-user-plus" style="font-size: 13px;"></i>
+    <span>Join</span>
+</a>
+{% endif %}
+        </div>
+        
+        <!-- Audio player section - Added to match main campaigns -->
+        {% if campaign.audio %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{{ campaign.audio.url }}" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        {% else %}
+            <div class="audio-player">
+                {% if campaign.category == 'Poverty and Hunger' %}
+                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                        <source src="{% static 'main/audio/peace.mp3' %}" type="audio/mpeg">
+                    </audio>
+                {% elif campaign.category == 'Clean Water and Sanitation' %}
+                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                        <source src="{% static 'main/audio/art.mp3' %}" type="audio/mpeg">
+                    </audio>
+                {% elif campaign.category == 'Disaster Relief' %}
+                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                        <source src="{% static 'main/audio/Humanitarian Aid.mp3' %}" type="audio/mpeg">
+                    </audio>
+                {% elif campaign.category == 'Healthcare and Medicine' %}
+                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                        <source src="{% static 'main/audio/health.mp3' %}" type="audio/mpeg">
+                    </audio>
+                {% elif campaign.category == 'Mental Health' %}
+                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                        <source src="{% static 'main/audio/environment.mp3' %}" type="audio/mpeg">
+                    </audio>
+                {% elif campaign.category == 'Human Rights and Equality' %}
+                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                        <source src="{% static 'main/audio/Equality1.mp3' %}" type="audio/mpeg">
+                    </audio>
+                {% elif campaign.category == 'Peace and Justice' %}
+                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                        <source src="{% static 'main/audio/Policy.mp3' %}" type="audio/mpeg">
+                    </audio>
+                {% elif campaign.category == 'Education for All' %}
+                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                        <source src="{% static 'main/audio/education1.mp3' %}" type="audio/mpeg">
+                    </audio>
+                {% elif campaign.category == 'Economic Empowerment' %}
+                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                        <source src="{% static 'main/audio/economic.mp3' %}" type="audio/mpeg">
+                    </audio>
+                {% elif campaign.category == 'Climate Action' %}
+                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                        <source src="{% static 'main/audio/Sustainable.mp3' %}" type="audio/mpeg">
+                    </audio>
+                {% elif campaign.category == 'Save Our Planet' %}
+                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                        <source src="{% static 'main/audio/animal.mp3' %}" type="audio/mpeg">
+                    </audio>
+                {% elif campaign.category == 'Tech for Humanity' %}
+                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                        <source src="{% static 'main/audio/digital.mp3' %}" type="audio/mpeg">
+                    </audio>
+                {% elif campaign.category == 'Community Development' %}
+                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                        <source src="{% static 'main/audio/community.mp3' %}" type="audio/mpeg">
+                    </audio>
+                {% else %}
+                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                        <source src="{% static 'main/audio/default.mp3' %}" type="audio/mpeg">
+                    </audio>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+{% endif %}
+</div>
+
+
+<!-- Share Popup Container -->
+<div id="sharePopup" class="share-popup">
+    <div class="share-popup-content">
+        <span class="close-share" onclick="hideSharePopup()">×</span>
+        <h3>Share This Campaign</h3>
+        <div class="share-buttons">
+            <a href="#" class="share-facebook" onclick="shareOnFacebook()"><i class="fab fa-facebook-f"></i> Facebook</a>
+            <a href="#" class="share-twitter" onclick="shareOnTwitter()"><i class="fab fa-twitter"></i> Twitter</a>
+            <a href="#" class="share-linkedin" onclick="shareOnLinkedIn()"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
+            <a href="#" class="share-whatsapp" onclick="shareOnWhatsApp()"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+            <a href="#" class="share-reddit" onclick="shareOnReddit()"><i class="fab fa-reddit-alien"></i> Reddit</a>
+            <a href="#" class="share-telegram" onclick="shareOnTelegram()"><i class="fab fa-telegram-plane"></i> Telegram</a>
+            <a href="#" class="share-pinterest" onclick="shareOnPinterest()"><i class="fab fa-pinterest-p"></i> Pinterest</a>
+            <a href="#" class="share-email" onclick="shareViaEmail()"><i class="fas fa-envelope"></i> Email</a>
+        </div>
+        <div class="copy-link-container">
+            <span class="copy-link-title">Or copy the link directly</span>
+            <div class="copy-link">
+                <input type="text" id="campaignUrl" readonly>
+                <button onclick="copyCampaignUrl()"><i class="fas fa-copy"></i> Copy</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Comment Popup Container -->
+<div id="commentPopup" class="comment-popup-container" style="display: none;">
+    <div class="comment-popup-content">
+        <span class="close-comment-popup">&times;</span>
+        <h3>Comments</h3>
+        
+        <!-- Comment Form -->
+      <div class="comment-form-container">
+    <div class="current-user-preview">
+        <img src="{{ user.profile.image.url }}" alt="Your profile picture" class="current-user-img">
+        <span>Posting as {{ user.username }}</span>
+    </div>
+    <form id="commentForm" method="post">
+        {% csrf_token %}
+        <input type="hidden" id="campaignIdInput" name="campaign_id">
+        <textarea name="text" class="comment-textarea" placeholder="Write your comment here..."></textarea>
+        <button type="submit" class="submit-comment-btn">Post Comment</button>
+    </form>
+</div>
+
+        
+        <!-- Comment List -->
+        <div class="comment-list-container" id="commentList">
+            <!-- Comments will be loaded here dynamically -->
+            <div class="loading-comments">Loading comments...</div>
+        </div>
+    </div>
+</div>
+
+
+</section>
+
+<aside class="right-aside">
+<div class="search-container">
+  <form action="{% url 'search_campaign' %}" method="get">
+    <div class="search-wrapper">
+      <input type="text" placeholder="Search..." name="search_query" id="query-field">
+      <div class="search-icons">
+        <button type="button" class="btn-reset" id="reset-field">
+          <i class="fas fa-times"></i>
+        </button>
+        <button type="submit" class="btn-search">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<br>
+
+
+<!-- Carousel for Ads -->
+<!-- Carousel for Ads -->
+<div class="carousel hidden-carousel" onmouseover="pauseCarousel()" onmouseout="resumeCarousel()">
+    <div class="slides">
+        {% for ad in ads %}
+            <div class="slide">
+                <div class="ad">
+                   <div class="boosted-badge">Boosted</div>
+                    <a href="{{ ad.link }}">
+                        <img src="{{ ad.image.url }}" alt="{{ ad.title }}">
+                    </a>
+                    <h2>{{ ad.title }}</h2>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+  <!-- Suggested Users Section -->
+  <div class="suggested-users">
+    <div class="section-header">
+      <h3 class="section-title">Suggested for You</h3>
+       {% if suggested_users|length >= 2 %}
+            <a href="{% url 'suggest' %}" class="see-all">See All</a>
+        {% endif %}
+    </div>
+    {% for suggested in suggested_users %}
+    {% with user=suggested.user followers_count=suggested.followers_count %}
+    <div class="user-card">
+      <div class="user-avatar">
+        <img src="{{ user.profile.image.url }}" alt="{{ user.username }}" class="avatar-img">
+        {% if user.profile.is_online %}
+        <span class="online-status"></span>
+        {% endif %}
+      </div>
+      <div class="user-info">
+        <h4 class="user-name">{{ user.get_full_name|default:user.username }}</h4>
+        <p class="user-bio">{{ user.profile.bio|truncatechars:30 }}</p>
+        <div class="user-meta">
+          <span class="followers">{{ followers_count }} followers</span>
+          {% if user.profile.is_verified %}
+          <span class="verified-badge">✓</span>
+          {% endif %}
+        </div>
+        <div class="user-actions">
+          {% if request.user != user %}
+          <span id="follow-btn-{{ user.id }}" 
+                class="follow-text {% if request.user in user.followers.all %}following{% endif %}" 
+                data-user-id="{{ user.id }}"
+                data-is-following="{% if request.user in user.followers.all %}true{% else %}false{% endif %}">
+              {% if request.user in user.followers.all %}
+                  Following 
+              {% else %}
+                  Follow 
+              {% endif %}
+          </span>
+          {% endif %}
+          <a href="{% url 'profile_view' username=user.username %}" class="visit-btn">
+              <span class="btn-text">Visit</span>
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endwith %}
+{% empty %}
+    <p class="no-suggestions">No suggestions available. Follow more people to get better recommendations.</p>
+{% endfor %}
+<div class="trending-now">
+  <div class="trending-header">
+    <h3 class="trending-title"><i class="fas fa-fire"></i> Trending Now</h3>
+   
+  </div>
+  
+  <ul class="trending-list">
+    {% for campaign in trending_campaigns|slice:":5" %}
+    <li class="trending-item">
+      <span class="trending-rank trending-rank-{{ forloop.counter }}">{{ forloop.counter }}</span>
+      {% if forloop.counter <= 3 %}
+      <span class="trending-hot">HOT</span>
+      {% endif %}
+      
+      <div class="trending-content">
+        <h4 class="trending-topic">
+          <a href="{% url 'view_campaign' campaign_id=campaign.pk %}" style="color: inherit; text-decoration: none;">
+            {{ campaign.title|truncatechars:40 }}
+          </a>
+          {% if campaign.user.profile_verified %}
+          <i class="fas fa-check-circle"></i>
+          {% endif %}
+        </h4>
+        <div class="trending-meta">
+          <span class="trending-posts">
+            <i class="fas fa-heart" style="color: #ff4d4f;"></i>
+            {{ campaign.love_count|default:0 }} loves
+          </span>
+          <span class="trending-posts">
+            <i class="fas fa-comment" style="color: #1890ff;"></i>
+            {{ campaign.comments.count|default:0 }} comments
+          </span>
+          <span class="trending-category">{{ campaign.category }}</span>
+        </div>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  
+ 
+</div>
+
+
+
+
+
+
+ <div class="top-contributors">
+  <div class="contributors-header">
+    <h3 class="contributors-title"><i class="fas fa-trophy"></i> Top Contributors</h3>
+  </div>
+  
+  <div class="contributors-list">
+    {% for contributor in top_contributors %}
+    <div class="contributor-item">
+      <div class="contributor-avatar">
+        <img src="{{ contributor.image.url }}" class="contributor-img" alt="{{ contributor.user.get_full_name }}">
+        <div class="contributor-badge">{{ forloop.counter }}</div>
+      </div>
+      <div class="contributor-info">
+        <h4 class="contributor-name">
+          {{ contributor.user.get_full_name|default:contributor.user.username }}
+        </h4>
+        <div class="contributor-stats">
+          {{ contributor.campaign_count }} Campaign{{ contributor.campaign_count|pluralize }}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+
+  <!-- Footer Links -->
+
+</aside>
+
+
+
+  </main>
+
+
+
+<footer class="footer">
+    <div class="footer-content">
+        <!-- Existing footer sections -->
+        <div class="footer-section">
+            <h2>Contact Us</h2>
+            <p>Email: rallynex1@gmail.com</p>
+            <p style="display:none;">Address: 123 Networking St, Net City</p>
+        </div>
+        <div class="footer-section" style="display: none;">
+            <h2>Follow Us</h2>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+        <div class="footer-section">
+            <h2>Subscribe</h2>
+            <!-- Include subscription form -->
+        
+            <p><a href="{% url 'subscribe' %}" class="subscribe-link">Subscribe Now</a></p>
+        </div>
+        <div class="footer-section">
+            <h2>Legal</h2>
+            <a href="{% url 'privacy_policy' %}">Privacy Policy|</a>
+            <a href="{% url 'terms_of_service' %}">Terms of Service|</a>
+            <a href="{% url 'project_support' %}">Support|</a>
+            <a href="{% url 'hiw' %}">How It Works|</a>
+            <a href="{% url 'faq' %}">FAQ|</a>
+            <a href="{% url 'aboutus' %}">About Us|</a>
+            
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2024 Networking Site. All rights reserved.</p>
+        <p class="mystery-text"></p>
+    </div>
+</footer>
+
+
+    <script>
+        // Prevent default title tooltip from showing
+        document.addEventListener('DOMContentLoaded', function() {
+            const icons = document.querySelectorAll('.action-icon');
+            
+            icons.forEach(icon => {
+                // Remove title attribute to prevent default tooltip
+                icon.removeAttribute('title');
+                
+                // Add hover effect with slight 3D tilt
+                icon.addEventListener('mousemove', function(e) {
+                    const x = e.offsetX;
+                    const y = e.offsetY;
+                    
+                    const rotateY = -1/5 * x + 20;
+                    const rotateX = 1/5 * y - 20;
+                    
+                    this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px) scale(1.05)`;
+                });
+                
+                icon.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(-8px) scale(1.05)';
+                });
+            });
+        });
+    </script>
+
+
+
+
+<script>
+    function toggleMenu(event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation(); // Important to prevent immediate close
+        }
+        
+        const menu = document.getElementById('navbarDropdownMenu');
+        const overlay = document.getElementById('menuOverlay');
+        
+        menu.classList.toggle('active');
+        overlay.classList.toggle('active');
+    }
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+        const menu = document.getElementById('navbarDropdownMenu');
+        const overlay = document.getElementById('menuOverlay');
+        const toggleBtn = document.querySelector('[onclick*="toggleMenu"]'); // Your menu button
+        
+        // Check if click is outside of menu AND outside of toggle button
+        if (!menu.contains(event.target) && 
+            (!toggleBtn || !toggleBtn.contains(event.target))) {
+            menu.classList.remove('active');
+            overlay.classList.remove('active');
+        }
+    });
+</script>
+
+
+<script>
+  function togglaMenu(clickedElement) {
+    // Close other open menus
+    document.querySelectorAll('.menu-dropdown.active').forEach(menu => {
+      if (!clickedElement.contains(menu)) {
+        menu.classList.remove('active');
+      }
+    });
+
+    // Toggle the clicked one
+    const dropdown = clickedElement.querySelector('.menu-dropdown');
+    dropdown.classList.toggle('active');
+  }
+
+  // Close the menu if clicked outside
+  document.addEventListener('click', function(event) {
+    const isClickInside = event.target.closest('.campaign-menu');
+    if (!isClickInside) {
+      document.querySelectorAll('.menu-dropdown.active').forEach(menu => {
+        menu.classList.remove('active');
+      });
+    }
+  });
+</script>
+
+
+
+
+
+
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('mobile-search-input');
+  const clearButton = document.querySelector('.clear-search');
+  
+  if (searchInput && clearButton) {
+    // Show/hide clear button based on input
+    searchInput.addEventListener('input', function() {
+      clearButton.style.display = this.value.length > 0 ? 'flex' : 'none';
+    });
+    
+    // Clear input when X is clicked
+    clearButton.addEventListener('click', function() {
+      searchInput.value = '';
+      clearButton.style.display = 'none';
+      searchInput.focus();
+    });
+    
+    // Handle when popup is opened (in case there's existing text)
+    const mobileSearchIcon = document.querySelector('.mobile-search-icon');
+    if (mobileSearchIcon) {
+      mobileSearchIcon.addEventListener('click', function() {
+        setTimeout(() => {
+          clearButton.style.display = searchInput.value.length > 0 ? 'flex' : 'none';
+        }, 100);
+      });
+    }
+  }
+});
+</script>
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Toggle search popup
+        const mobileSearchIcon = document.querySelector('.rallynex-mobile-search-icon');
+        const mobileSearchPopup = document.querySelector('.rallynex-mobile-search-popup');
+        const closeMobileSearch = document.querySelector('.rallynex-close-mobile-search');
+        const searchInput = document.getElementById('mobile-search-input');
+        const clearButton = document.querySelector('.rallynex-clear-search');
+        
+        if (mobileSearchIcon && mobileSearchPopup) {
+            mobileSearchIcon.addEventListener('click', function() {
+                mobileSearchPopup.classList.add('active');
+                if (searchInput) searchInput.focus();
+            });
+            
+            closeMobileSearch.addEventListener('click', function() {
+                mobileSearchPopup.classList.remove('active');
+            });
+        }
+        
+        // Clear search functionality
+        if (searchInput && clearButton) {
+            searchInput.addEventListener('input', function() {
+                clearButton.style.display = this.value.length > 0 ? 'flex' : 'none';
+            });
+            
+            clearButton.addEventListener('click', function() {
+                searchInput.value = '';
+                clearButton.style.display = 'none';
+                searchInput.focus();
+            });
+        }
+    });
+</script>
+
+<script>
+    function handleCreateClick(e) {
+        // Optional: Add any animation or pre-submit logic here
+        // e.preventDefault(); // Uncomment if you want to handle with AJAX
+        
+        // Example animation:
+        const btn = e.target;
+        btn.style.transform = 'scale(0.9)';
+        setTimeout(() => {
+            btn.style.transform = 'scale(1)';
+        }, 100);
+    }
+</script>
+<script>
+// In your script tags or JS file
+function blinkJoinPrompt() {
+    const prompt = document.querySelector('.join-prompt');
+    if (prompt) {
+        setInterval(() => {
+            prompt.style.opacity = prompt.style.opacity === '0' ? '1' : '0';
+        }, 5000); // Toggle every 5 seconds
+    }
+}
+
+// Call on page load
+window.addEventListener('DOMContentLoaded', blinkJoinPrompt);
+</script>
+
+
+
+
+
+
+<script>
+
+// Your existing functions
+function toggleLove(campaignId) {
+    // Existing love toggle functionality
+}
+
+function showSharePopup(campaignId) {
+    // Existing share functionality
+}
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const queryField = document.getElementById('query-field');
+        const resetBtn = document.getElementById('reset-field');
+        
+        // Show/hide reset button based on input
+        queryField.addEventListener('input', function() {
+            resetBtn.style.display = this.value ? 'block' : 'none';
+        });
+        
+        // Reset field
+        resetBtn.addEventListener('click', function() {
+            queryField.value = '';
+            this.style.display = 'none';
+            queryField.focus();
+        });
+    });
+</script>
+
+<script type="text/javascript">
+// Helper functions for cookies
+function setCookie(name, value, days) {
+    const expires = new Date(Date.now() + days*24*60*60*1000).toUTCString();
+    document.cookie = `${name}=${value}; expires=${expires}; path=/`;
+}
+
+function getCookie(name) {
+    const cookies = document.cookie.split(';').map(c => c.trim());
+    for (let c of cookies) {
+        if (c.startsWith(name + '=')) return c.split('=')[1];
+    }
+    return null;
+}
+
+// Function to toggle dark mode
+function switchColor() {
+    const body = document.body;
+    const isDarkMode = body.classList.toggle('dark-mode'); // Toggle dark mode class
+
+    // Save preference to cookie for 1 year
+    setCookie('dark_mode', isDarkMode, 365);
+
+    // Funding progress card
+    document.querySelector('.funding-progress-card')?.classList.toggle('dark-mode', isDarkMode);
+
+    // Elements to update background and text colors
+    const elementsToUpdate = document.querySelectorAll(
+        'header, footer, section, .left-aside, .right-aside, .upper-post, .campaign-content, .react, .search-container input, .search-container .btn-reset'
+    );
+    elementsToUpdate.forEach(el => el.classList.toggle('dark-mode', isDarkMode));
+
+    // Text color updates
+    const textElements = document.querySelectorAll(
+        'h1, h2, h3, h4, p, li, .campaign-nav, .campaign-nav a, .btn, .reaction, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link, .love-count, #view-count, .comment-count'
+    );
+    textElements.forEach(el => el.style.color = isDarkMode ? '#ffffff' : '#000000');
+
+    // Buttons
+    const buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)');
+    buttons.forEach(btn => {
+        btn.style.backgroundColor = isDarkMode ? '#262626' : '';
+        btn.style.color = isDarkMode ? '#ffffff' : '#000000';
+    });
+
+    // `.react` divs
+    const reactDivs = document.querySelectorAll('.react');
+    reactDivs.forEach(div => {
+        div.style.backgroundColor = isDarkMode ? "#262626" : "";
+        div.style.color = isDarkMode ? "white" : "black";
+        if (isDarkMode) div.classList.add('react-hover');
+        else div.classList.remove('react-hover');
+    });
+
+    // Input field and reset button
+    const inputField = document.querySelector('.search-container input[type="text"]');
+    if (inputField) {
+        inputField.style.backgroundColor = isDarkMode ? '#333333' : '#ffffff';
+        inputField.style.color = isDarkMode ? '#ffffff' : '#000000';
+    }
+    const inputResetButton = document.querySelector('.search-container .btn-reset');
+    if (inputResetButton) inputResetButton.style.color = '#b0b0b0';
+}
+
+// Apply dark mode on page load based on cookie
+window.addEventListener('DOMContentLoaded', () => {
+    const darkModeCookie = getCookie('dark_mode');
+    if (darkModeCookie === 'true') {
+        switchColor();
+    }
+});
+</script>
+
+
+
+<script>
+
+
+
+function toggleCommentForm() {
+    var popup = document.getElementById("commentFormPopup");
+    popup.style.display = "block";
+}
+
+function closeCommentForm() {
+    var popup = document.getElementById("commentFormPopup");
+    popup.style.display = "none";
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var campaignElement = document.querySelector('.campaign-details');
+    var campaignId = {{ campaign.id }};
+    var startTime;
+
+    function recordCampaignView() {
+        var endTime = Math.floor(Date.now() / 1000); // Get current time in seconds
+        var timeSpent = endTime - startTime;
+        
+        fetch(`/record_campaign_view/${campaignId}/`, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ time_spent: timeSpent })
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('View recorded successfully');
+            } else {
+                console.error('Failed to record view');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    function handleVisibilityChange() {
+        if (document.visibilityState === 'visible') {
+            startTime = Math.floor(Date.now() / 1000); // Get current time in seconds
+        } else {
+            recordCampaignView();
+        }
+    }
+
+    function isInViewport(element) {
+        var rect = element.getBoundingClientRect();
+        return (
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+        );
+    }
+
+    function handleScroll() {
+        if (isInViewport(campaignElement)) {
+            startTime = Math.floor(Date.now() / 1000); // Get current time in seconds
+        } else {
+            recordCampaignView();
+        }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    document.addEventListener('scroll', handleScroll);
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    var mediaQuery = window.matchMedia('(max-width: 768px)');
+    var leftAside = document.querySelector('.left-aside');
+    var rightAside = document.querySelector('.right-aside');
+
+    function handleMediaQueryChange(e) {
+        if (e.matches) {
+            leftAside.style.display = 'none';
+            rightAside.style.display = 'none';
+        } else {
+            leftAside.style.display = 'block';
+            rightAside.style.display = 'block';
+        }
+    }
+
+    mediaQuery.addListener(handleMediaQueryChange);
+    handleMediaQueryChange(mediaQuery);
+});
+
+
+</script>
+
+<script type="text/javascript">
+  function handleCreateClick() {
+    console.log("Create button clicked!");
+    // Add your custom logic here, if needed
+}
+
+</script>
+
+
+
+<script>
+function toggleFullContent(button) {
+    const fullContent = button.closest('.see-more-container').nextElementSibling;
+    if (fullContent.style.display === 'none') {
+        fullContent.style.display = 'block';
+        button.innerHTML = 'See Less <i class="fas fa-chevron-up"></i>';
+    } else {
+        fullContent.style.display = 'none';
+        button.innerHTML = 'See More <i class="fas fa-chevron-down"></i>';
+    }
+}
+</script>
+
+
+
+<script>
+// Store follow state in localStorage
+function updateFollowState(userId, isFollowing) {
+    const storageKey = `followState_${userId}`;
+    localStorage.setItem(storageKey, isFollowing ? 'true' : 'false');
+}
+
+// Retrieve follow state from localStorage
+function getFollowState(userId) {
+    const storageKey = `followState_${userId}`;
+    return localStorage.getItem(storageKey) === 'true';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize text elements with correct state
+    document.querySelectorAll('.follow-text').forEach(element => {
+        const userId = element.getAttribute('data-user-id');
+        const storedState = getFollowState(userId);
+        const currentState = element.getAttribute('data-is-following') === 'true';
+        
+        // Use stored state if available, otherwise use server state
+        const finalState = storedState !== null ? storedState : currentState;
+        
+        if (finalState) {
+            element.classList.add('following');
+            element.textContent = '• Following';
+            element.setAttribute('data-is-following', 'true');
+        } else {
+            element.classList.remove('following');
+            element.textContent = '• Follow';
+            element.setAttribute('data-is-following', 'false');
+        }
+    });
+
+    // Handle follow text clicks
+    document.querySelectorAll('.follow-text').forEach(element => {
+        element.addEventListener('click', async function() {
+            const userId = this.getAttribute('data-user-id');
+            const isFollowing = this.getAttribute('data-is-following') === 'true';
+            const action = isFollowing ? 'unfollow' : 'follow';
+            
+            try {
+                const response = await fetch('/toggle_follow/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({
+                        'user_id': userId,
+                        'action': action
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    // Update text state
+                    const newState = data.action === 'followed';
+                    this.classList.toggle('following', newState);
+                    this.textContent = newState ? '• Following' : '• Follow';
+                    this.setAttribute('data-is-following', newState.toString());
+                    
+                    // Update followers count
+                    const followersCount = document.getElementById(`followers-count-${userId}`);
+                    if (followersCount) {
+                        followersCount.textContent = `(${data.followers_count} followers)`;
+                    }
+                    
+                    // Persist state in localStorage
+                    updateFollowState(userId, newState);
+                } else {
+                    console.error('Error:', data.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            }
+        });
+    });
+});
+</script>
+
 
 
 <script>
@@ -7352,37 +7849,49 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-
-<script>
-let currentIndex = 0; // Track the current slide index
-const slides = document.querySelector('.slides');
-const totalSlides = slides.children.length; // Get total number of slides
-const slideWidth = 250; // Width of each slide (same as .carousel width)
-let interval;
-
-function startCarousel() {
-    interval = setInterval(() => {
-        currentIndex = (currentIndex + 1) % totalSlides; // Move to the next slide
-        updateSlidePosition(); // Update the position of the slides
-    }, 3000); // Change slide every 3 seconds
-}
-
-function pauseCarousel() {
-    clearInterval(interval); // Stop the automatic sliding
-}
-
-function resumeCarousel() {
-    startCarousel(); // Resume the automatic sliding
-}
-
-function updateSlidePosition() {
-    slides.style.transform = `translateX(-${currentIndex * slideWidth}px)`; // Slide to the current index
-    slides.style.transition = 'transform 0.5s ease-in-out'; // Add transition for smooth effect
-}
-
-startCarousel(); // Start the carousel on page load
-</script>
-
+  <script>
+        let currentSlide = 0;
+        const slides = document.querySelector('.slides');
+        const slideCount = document.querySelectorAll('.slide').length;
+        const indicators = document.querySelectorAll('.indicator');
+        
+        function pauseCarousel() {
+            clearInterval(carouselInterval);
+        }
+        
+        function resumeCarousel() {
+            carouselInterval = setInterval(nextSlide, 4000);
+        }
+        
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slideCount;
+            updateCarousel();
+        }
+        
+        function moveSlide(direction) {
+            currentSlide = (currentSlide + direction + slideCount) % slideCount;
+            updateCarousel();
+        }
+        
+        function updateCarousel() {
+            slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            // Update indicators
+            indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === currentSlide);
+            });
+        }
+        
+        let carouselInterval = setInterval(nextSlide, 4000);
+        
+        // Click on indicator to navigate to specific slide
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => {
+                currentSlide = index;
+                updateCarousel();
+            });
+        });
+    </script>
 
 <script type="text/javascript">
 

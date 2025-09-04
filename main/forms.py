@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from .models import Profile, Campaign, Comment, Activity, SupportCampaign, Chat, Message, Follow
-from .models import   Brainstorming
+
 from django.forms import inlineformset_factory
 
 from .models import ActivityComment,CampaignProduct
@@ -9,11 +9,11 @@ from .models import ActivityComment,CampaignProduct
 from tinymce.widgets import TinyMCE
 from .models import Report
 from .models import NotInterested
-from .models import Subscriber,Donation
+from .models import Subscriber
 
 from django.core.exceptions import ValidationError
 from django import forms
-from .models import UserVerification,CampaignFund
+from .models import UserVerification
 
 
 
@@ -73,13 +73,6 @@ class ActivityCommentForm(forms.ModelForm):
         return content
 
 
-# BrainstormingForm
-
-class BrainstormingForm(forms.ModelForm):
-    class Meta:
-        model = Brainstorming
-        fields = ['idea', 'attachment']  # Added attachment field
-
 
 # ActivityForm
 class ActivityForm(forms.ModelForm):
@@ -132,19 +125,24 @@ class ProfileForm(forms.ModelForm):
 
 
 
-from django_summernote.widgets import SummernoteWidget  # Alternative rich editor
 
+# forms.py
 class MessageForm(forms.ModelForm):
     class Meta:
         model = Message
-        fields = ['content']
+        fields = ['content', 'file']
         widgets = {
-            'content': forms.Textarea(attrs={'class': 'quill-editor'}),
+            'content': forms.Textarea(attrs={
+                'rows': 1,
+                'placeholder': 'Type a message...',
+                'id': 'messageInput'
+            }),
+            'file': forms.FileInput(attrs={
+                'id': 'fileInput',
+                'style': 'display: none;',
+                'accept': 'image/*,.pdf,.doc,.docx,.txt'
+            })
         }
-
-
-
-
 
 # CommentForm
 class CommentForm(forms.ModelForm):
@@ -330,57 +328,6 @@ class CampaignForm(forms.ModelForm):
 
 
 
-class CampaignFundForm(forms.ModelForm):
-    class Meta:
-        model = CampaignFund
-        fields = ['target_amount', 'paypal_email']
-        labels = {
-            'target_amount': 'Target Amount:',
-            'paypal_email': 'PayPal Email:'
-        }
-        widgets = {
-            'target_amount': forms.TextInput(attrs={
-                'class': 'form-control',  
-                'placeholder': 'Enter target amount'
-            }),
-            'paypal_email': forms.EmailInput(attrs={
-                'class': 'form-control', 
-                'placeholder': 'Enter PayPal email'
-            })
-        }
-
-
-    def __init__(self, *args, **kwargs):
-        self.request = kwargs.pop('request', None)  # Get request from kwargs
-        super().__init__(*args, **kwargs)
-        
-        # Only proceed if we have both request and instance
-        if self.request and hasattr(self.instance, 'campaign'):
-            # Disable field if user isn't the campaign owner
-            if self.request.user != self.instance.campaign.user.user:
-                self.fields['paypal_email'].disabled = True
-                self.fields['paypal_email'].help_text = "Only the campaign owner can edit this."
-
-class DonationForm(forms.ModelForm):
-    class Meta:
-        model = Donation
-        fields = ['donor_name', 'amount']
-        labels = {
-            'donor_name': 'Your Name (optional):',
-            'amount': 'Donation Amount:',
-        }
-        widgets = {
-            'donor_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Enter your name'}),
-            'amount': forms.NumberInput(attrs={'class': 'form-control', 'placeholder': 'Enter donation amount'}),
-        }
-
-
-
-
-
-
-
-
 
 
 class ChatForm(forms.ModelForm):
@@ -457,3 +404,28 @@ class PledgeForm(forms.ModelForm):
         
         # Set minimum amount validation
         self.fields['amount'].min_value = 1
+
+
+
+
+# forms.py
+from django import forms
+from .models import Donation
+
+class DonationForm(forms.ModelForm):
+    class Meta:
+        model = Donation
+        fields = ['amount', 'destination']
+        widgets = {
+            'amount': forms.NumberInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Enter donation amount',
+                'step': '0.01',
+                'min': '1'
+            }),
+            'destination': forms.RadioSelect(attrs={'class': 'form-check-input'}),
+        }
+        labels = {
+            'amount': 'Donation Amount',
+            'destination': 'Where should your donation go?',
+        }

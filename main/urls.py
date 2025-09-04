@@ -3,7 +3,7 @@ from . import views
 from .views import CustomLoginView
 from .views import CampaignDeleteView
 # urls.py
-
+from .views import ChatDetailView
 from django.views.generic.base import RedirectView
 from .views import get_activity_comments, post_activity_comment, like_activity_comment
 
@@ -71,13 +71,13 @@ path('add_activity_comment/<int:activity_id>/', views.add_activity_comment, name
     path('update_visibility/<int:campaign_id>/', views.update_visibility, name='update_visibility'),
     path('update_hidden_links/', views.update_hidden_links, name='update_hidden_links'),
  path('upload/', views.upload_file, name='upload_file'),
-    path('brainstorm_idea/<int:campaign_id>/', views.brainstorm_idea, name='brainstorm_idea'),
+      path('campaign/<int:campaign_id>/donate/', views.create_donation, name='create_donation'),
  
     path('search_profile_results/', views.search_profile_results, name='search_profile_results'),
     path('search/', views.search_campaign, name='search_campaign'),
     path('notifications/', views.notification_list, name='notification_list'),
     path('create-chat/', views.create_chat, name='create_chat'),
-    path('chat-detail/<int:chat_id>/', views.chat_detail, name='chat_detail'),
+   path('chat/<int:chat_id>/', ChatDetailView.as_view(), name='chat_detail'),
     path('user/chats/', views.user_chats, name='user_chats'),
     path('chat/<int:chat_id>/add_participants/', views.add_participants, name='add_participants'),
     path('chat/<int:chat_id>/remove_participants/', views.remove_participants, name='remove_participants'),
@@ -116,7 +116,7 @@ path('get_replies/<int:comment_id>/', views.get_replies, name='get_replies'),
     path('campaign-stories/', campaign_story_list, name='campaign_story_list'),
     path('campaign-stories/<slug:slug>/', campaign_story_detail, name='campaign_story_detail'),
   
-
+ path('chat/<int:chat_id>/send/', views.send_message, name='send_message'),
     path('testimonial/', views.testimonial, name='testimonial'),
  path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
     path('terms-of-service/', views.terms_of_service, name='terms_of_service'),
@@ -133,10 +133,6 @@ path('get_replies/<int:comment_id>/', views.get_replies, name='get_replies'),
     path('get_comment_replies/<int:comment_id>/', views.get_comment_replies, name='get_comment_replies'),
     path('like_comment_reply/', views.like_comment_reply, name='like_comment_reply'),
 
-   path('campaign/<int:campaign_id>/donate/', views.donate, name='donate'),
-    path('donation-success/<int:campaign_id>/', views.payment_success, name='payment_success'),
-      path('payment/cancel/<int:campaign_id>/', views.payment_cancel, name='payment_cancel'),
-       
     path('campaign/<int:campaign_id>/pledge/', views.create_pledge, name='create_pledge'), 
     path('campaign/<int:campaign_id>/pledgers/', views.campaign_pledgers_view, name='campaign_pledgers'),
 # urls.py

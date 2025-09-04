@@ -1017,16 +1017,17 @@ body.dark-theme .explore-link i {
 
 
 
+
 /* Light mode (default) styles remain the same */
 .sidebar-box {
     border-left: 2px solid #c0c0c0;
-    height: 800px;
+    height: 1500px;
     overflow-y: auto;
     overflow-x: hidden;
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(192, 192, 192, 0.3);
     padding: 0;
-    background-color: transparent;
+    background-color: #f8f8f8;
 }
 .sidebar-box {
     transition: background-color 0.3s ease, border-color 0.3s ease;
@@ -1055,6 +1056,12 @@ body.dark-theme .explore-link i {
     .dark-mode .sidebar-box {
         background-color: transparent; /* Keep transparent in dark mode on mobile */
         color: inherit; /* Inherit text color from parent */
+    }
+}
+
+@media (max-width: 767px) {
+    .desktop-only {
+        display: none !important;
     }
 }
 
@@ -3326,1038 +3333,6 @@ body.dark-mode .comment-count {
 
 
 
-<script>
-// Store follow state in localStorage
-function updateFollowState(userId, isFollowing) {
-    const storageKey = `followState_${userId}`;
-    localStorage.setItem(storageKey, isFollowing ? 'true' : 'false');
-}
-
-// Retrieve follow state from localStorage
-function getFollowState(userId) {
-    const storageKey = `followState_${userId}`;
-    return localStorage.getItem(storageKey) === 'true';
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize text elements with correct state
-    document.querySelectorAll('.follow-text').forEach(element => {
-        const userId = element.getAttribute('data-user-id');
-        const storedState = getFollowState(userId);
-        const currentState = element.getAttribute('data-is-following') === 'true';
-        
-        // Use stored state if available, otherwise use server state
-        const finalState = storedState !== null ? storedState : currentState;
-        
-        if (finalState) {
-            element.classList.add('following');
-            element.textContent = '• Following';
-            element.setAttribute('data-is-following', 'true');
-        } else {
-            element.classList.remove('following');
-            element.textContent = '• Follow';
-            element.setAttribute('data-is-following', 'false');
-        }
-    });
-
-    // Handle follow text clicks
-    document.querySelectorAll('.follow-text').forEach(element => {
-        element.addEventListener('click', async function() {
-            const userId = this.getAttribute('data-user-id');
-            const isFollowing = this.getAttribute('data-is-following') === 'true';
-            const action = isFollowing ? 'unfollow' : 'follow';
-            
-            try {
-                const response = await fetch('/toggle_follow/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': '{{ csrf_token }}'
-                    },
-                    body: JSON.stringify({
-                        'user_id': userId,
-                        'action': action
-                    })
-                });
-
-                const data = await response.json();
-                
-                if (data.status === 'success') {
-                    // Update text state
-                    const newState = data.action === 'followed';
-                    this.classList.toggle('following', newState);
-                    this.textContent = newState ? '• Following' : '• Follow';
-                    this.setAttribute('data-is-following', newState.toString());
-                    
-                    // Update followers count
-                    const followersCount = document.getElementById(`followers-count-${userId}`);
-                    if (followersCount) {
-                        followersCount.textContent = `(${data.followers_count} followers)`;
-                    }
-                    
-                    // Persist state in localStorage
-                    updateFollowState(userId, newState);
-                } else {
-                    console.error('Error:', data.message);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('An error occurred. Please try again.');
-            }
-        });
-    });
-});
-</script>
-
-
-
-
-<script>
-  // Mobile search toggle
-  document.addEventListener('DOMContentLoaded', function() {
-    const mobileSearchIcon = document.querySelector('.mobile-search-icon');
-    const mobileSearchPopup = document.querySelector('.mobile-search-popup');
-    const closeMobileSearch = document.querySelector('.close-mobile-search');
-
-    if (mobileSearchIcon && mobileSearchPopup) {
-      mobileSearchIcon.addEventListener('click', function() {
-        mobileSearchPopup.classList.add('active');
-        mobileSearchPopup.querySelector('input').focus();
-      });
-
-      closeMobileSearch.addEventListener('click', function() {
-        mobileSearchPopup.classList.remove('active');
-      });
-    }
-  });
-</script>
-
-
-
-
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const queryField = document.getElementById('query-field');
-        const resetBtn = document.getElementById('reset-field');
-        
-        // Show/hide reset button based on input
-        queryField.addEventListener('input', function() {
-            resetBtn.style.display = this.value ? 'block' : 'none';
-        });
-        
-        // Reset field
-        resetBtn.addEventListener('click', function() {
-            queryField.value = '';
-            this.style.display = 'none';
-            queryField.focus();
-        });
-    });
-</script>
-
-<script>
-    function handleCreateClick(e) {
-        // Optional: Add any animation or pre-submit logic here
-        // e.preventDefault(); // Uncomment if you want to handle with AJAX
-        
-        // Example animation:
-        const btn = e.target;
-        btn.style.transform = 'scale(0.9)';
-        setTimeout(() => {
-            btn.style.transform = 'scale(1)';
-        }, 100);
-    }
-</script>
-<script>
-// In your script tags or JS file
-function blinkJoinPrompt() {
-    const prompt = document.querySelector('.join-prompt');
-    if (prompt) {
-        setInterval(() => {
-            prompt.style.opacity = prompt.style.opacity === '0' ? '1' : '0';
-        }, 5000); // Toggle every 5 seconds
-    }
-}
-
-// Call on page load
-window.addEventListener('DOMContentLoaded', blinkJoinPrompt);
-</script>
-
-
-
-
-
-
-<script>
-
-// Your existing functions
-function toggleLove(campaignId) {
-    // Existing love toggle functionality
-}
-
-function showSharePopup(campaignId) {
-    // Existing share functionality
-}
-</script>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-
-
-
-<script type="text/javascript">
-function switchColor() {
-    const body = document.body;
-    const isDarkMode = body.classList.toggle('dark-mode'); // Toggle dark mode class
-    var reactDivs = document.querySelectorAll('.react');
-  // Add this line to toggle dark mode on the funding card
-    document.querySelector('.funding-progress-card')?.classList.toggle('dark-mode', isDarkMode);
-    // Update background and text colors for all elements
-    const elementsToUpdate = document.querySelectorAll(
-        'header, footer, section, .left-aside, .right-aside, .upper-post, .campaign-content, .react, .search-container input, .search-container .btn-reset'
-    );
-
-    elementsToUpdate.forEach(element => {
-        element.classList.toggle('dark-mode', isDarkMode);
-    });
-
-    // Update text colors for specific elements
-    const textElements = document.querySelectorAll(
-        'h1, h2, h3, h4, p, li, .campaign-nav, .campaign-nav a, .btn, .reaction, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link, .love-count, #view-count, .comment-count'
-    );
-
-    textElements.forEach(element => {
-        element.style.color = isDarkMode ? '#ffffff' : '#000000';
-    });
-
-    // Update buttons
-    const buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)');
-    buttons.forEach(button => {
-        button.style.backgroundColor = isDarkMode ? '#262626' : '';
-        button.style.color = isDarkMode ? '#ffffff' : '#000000';
-    });
-
-    // Update `.react` divs
-    if (reactDivs.length > 0) {
-        reactDivs.forEach(function(reactDiv) {
-            reactDiv.style.backgroundColor = isDarkMode ? "#262626" : "";
-            reactDiv.style.color = isDarkMode ? "white" : "black";
-
-            if (isDarkMode) {
-                reactDiv.classList.add('react-hover');
-            } else {
-                reactDiv.classList.remove('react-hover');
-                reactDiv.style.backgroundColor = "";
-            }
-        });
-    }
-
-    // Update input field and reset button
-    const inputField = document.querySelector('.search-container input[type="text"]');
-    const inputResetButton = document.querySelector('.search-container .btn-reset');
-
-    if (inputField) {
-        inputField.style.backgroundColor = isDarkMode ? '#333333' : '#ffffff';
-        inputField.style.color = isDarkMode ? '#ffffff' : '#000000';
-    }
-
-    if (inputResetButton) {
-        inputResetButton.style.color = '#b0b0b0';
-    }
-}
-
-</script>
-
-
-<script>
-
-
-
-function toggleCommentForm() {
-    var popup = document.getElementById("commentFormPopup");
-    popup.style.display = "block";
-}
-
-function closeCommentForm() {
-    var popup = document.getElementById("commentFormPopup");
-    popup.style.display = "none";
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    var campaignElement = document.querySelector('.campaign-details');
-    var campaignId = {{ campaign.id }};
-    var startTime;
-
-    function recordCampaignView() {
-        var endTime = Math.floor(Date.now() / 1000); // Get current time in seconds
-        var timeSpent = endTime - startTime;
-        
-        fetch(`/record_campaign_view/${campaignId}/`, {
-            method: 'POST',
-            credentials: 'same-origin',
-            headers: {
-                'X-CSRFToken': '{{ csrf_token }}',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ time_spent: timeSpent })
-        })
-        .then(response => {
-            if (response.ok) {
-                console.log('View recorded successfully');
-            } else {
-                console.error('Failed to record view');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    }
-
-    function handleVisibilityChange() {
-        if (document.visibilityState === 'visible') {
-            startTime = Math.floor(Date.now() / 1000); // Get current time in seconds
-        } else {
-            recordCampaignView();
-        }
-    }
-
-    function isInViewport(element) {
-        var rect = element.getBoundingClientRect();
-        return (
-            rect.top >= 0 &&
-            rect.left >= 0 &&
-            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-        );
-    }
-
-    function handleScroll() {
-        if (isInViewport(campaignElement)) {
-            startTime = Math.floor(Date.now() / 1000); // Get current time in seconds
-        } else {
-            recordCampaignView();
-        }
-    }
-
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    document.addEventListener('scroll', handleScroll);
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    var mediaQuery = window.matchMedia('(max-width: 768px)');
-    var leftAside = document.querySelector('.left-aside');
-    var rightAside = document.querySelector('.right-aside');
-
-    function handleMediaQueryChange(e) {
-        if (e.matches) {
-            leftAside.style.display = 'none';
-            rightAside.style.display = 'none';
-        } else {
-            leftAside.style.display = 'block';
-            rightAside.style.display = 'block';
-        }
-    }
-
-    mediaQuery.addListener(handleMediaQueryChange);
-    handleMediaQueryChange(mediaQuery);
-});
-
-
-</script>
-
-<script type="text/javascript">
-  function handleCreateClick() {
-    console.log("Create button clicked!");
-    // Add your custom logic here, if needed
-}
-
-</script>
-
-
-<script>
-    function goBack() {
-        window.history.back(); // Navigates to the previous page
-    }
-</script>
-<script>
-function toggleFullContent(button) {
-    const fullContent = button.closest('.see-more-container').nextElementSibling;
-    if (fullContent.style.display === 'none') {
-        fullContent.style.display = 'block';
-        button.innerHTML = 'See Less <i class="fas fa-chevron-up"></i>';
-    } else {
-        fullContent.style.display = 'none';
-        button.innerHTML = 'See More <i class="fas fa-chevron-down"></i>';
-    }
-}
-</script>
-
-
-
-
-</head>
-
-
-
-<body id="mainBody" >
-
-
-
-
-
-<header>
- 
-
-</div>
-
-
-    <nav id="navbar" class="navbar">
-        <!-- Main bottom navigation (5 items) -->
-        <ul class="bottom-nav">
-            <li>
-                <a href="{% url 'home' %}" class="{% if request.path == '/' %}active{% endif %}">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 2L2 7V22H22V7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                        <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                    </svg>
-                    {% if new_campaigns_from_follows %}
-                        <span class="alert-badge">{{ new_campaigns_from_follows.count }}</span>
-                    {% endif %}
-                </a>
-            </li>
-            
-            <li>
-                <a href="{% url 'suggest' %}" class="{% if 'suggest' in request.path %}active{% endif %}">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M8.5 11C10.7091 11 12.5 9.20914 12.5 7C12.5 4.79086 10.7091 3 8.5 3C6.29086 3 4.5 4.79086 4.5 7C4.5 9.20914 6.29086 11 8.5 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M17 3.13C17.8604 3.35031 18.623 3.85071 19.1676 4.55232C19.7122 5.25392 20.0078 6.11683 20.0078 7.005C20.0078 7.89318 19.7122 8.75608 19.1676 9.45769C18.623 10.1593 17.8604 10.6597 17 10.88" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </a>
-            </li>
-            
-            <li class="create-btn-container">
-                <a href="{% url 'create_campaign' %}" class="create-btn" onclick="handleCreateClick(event)">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 4V20M4 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                </a>
-            </li>
-            
-            <li>
-                <a href="{% url 'notification_list' %}" class="{% if 'notification' in request.path %}active{% endif %}">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M18 8C18 6.4087 17.3679 4.88258 16.2426 3.75736C15.1174 2.63214 13.5913 2 12 2C10.4087 2 8.88258 2.63214 7.75736 3.75736C6.63214 4.88258 6 6.4087 6 8C6 15 3 17 3 17H21C21 17 18 15 18 8Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                        <path d="M13.73 21C13.5542 21.3031 13.3019 21.5547 12.9982 21.7295C12.6946 21.9044 12.3504 21.9965 12 21.9965C11.6496 21.9965 11.3054 21.9044 11.0018 21.7295C10.6982 21.5547 10.4458 21.3031 10.27 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                    {% if unread_notifications %}
-                        <span class="alert-badge">{{ unread_notifications.count }}</span>
-                    {% endif %}
-                </a>
-            </li>
-            
-            <li class="menu-toggle">
-                <a href="#" onclick="toggleMenu(event)">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                </a>
-            </li>
-        </ul>
-    </nav>
-
-    <!-- Hidden menu that appears when hamburger is clicked -->
-    <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
-
-    <div class="navbar-dropdown-menu" id="navbarDropdownMenu">
-        <ul>
-            <li>
-                <a href="{% url 'profile_view' username=request.user.username %}" class="{% if 'profile' in request.path %}active{% endif %}">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <span>Profile</span>
-                </a>
-            </li>
-                 <li>
-            <a href="#" onclick="switchColor()">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 3V5M18.36 5.64L16.95 7.05M21 12H19M18.36 18.36L16.95 16.95M12 19V21M7.05 16.95L5.64 18.36M5 12H3M7.05 7.05L5.64 5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <span>Switch Theme</span>
-            </a>
-        </li>
-            <li>
-                <a href="{% url 'private_campaign' %}">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M19 11H5C3.89543 11 3 11.8954 3 13V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V13C21 11.8954 20.1046 11 19 11Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                        <path d="M7 11V7C7 5.67392 7.52678 4.40215 8.46447 3.46447C9.40215 2.52678 10.6739 2 12 2C13.3261 2 14.5979 2.52678 15.5355 3.46447C16.4732 4.40215 17 5.67392 17 7V11" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                    </svg>
-                    <span>Private</span>
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'user_chats' %}">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                    </svg>
-                    <span>Chat Table</span>
-                    {% if unread_messages_count %}
-                        <span class="alert-badge chat-alert">{{ unread_messages_count }}</span>
-                    {% endif %}
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'index' %}" title="Explore" class="explore-link" style="margin-left: 10px;">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <span>Explore</span>
-                </a>
-            </li>
-            <li>
-                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                        <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <path d="M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <span>Logout</span>
-                </a>
-                <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
-                    {% csrf_token %}
-                </form>
-            </li>
-        </ul>
-    </div>
-
-<!-- Search container can be removed since search is now in the bottom nav -->
-</header>
-
-
-
-  <main>
-
-<aside class="left-aside">
-
-<h3 style="
-    font-family: 'Courier New', monospace;
-    color: #ffffff;
-    background: linear-gradient(135deg, #c0c0c0, #f8f8f8);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 
-        0 1px 1px rgba(0,0,0,0.3),
-        0 0 8px rgba(255,255,255,0.4);
-    font-weight: bold;
-    letter-spacing: 3px;
-    font-size: 24px;
-    padding: 4px 12px; /* reduced top/bottom padding (4px), kept left/right (12px) */
-    display: inline-block;
-    border-radius: 3px;
-    backdrop-filter: brightness(1.2);
-    margin: 0;
-    z-index: 1000;
-"><img src="{% static 'main/files/lg.png' %}" alt="Rallynex Logo" style="height: 50px; width: 50px;">RALLYNEX</h3>
-
-    <!-- Updated the <nav> tag to <nav class="campaign-nav"> -->
-<nav class="campaign-nav">
-    <ul>
-        <!-- Home link with red spot -->
-        <li>
-            <a href="{% url 'home' %}" style="color: black; position: relative;">
-                <i class="fas fa-home"></i> Home
-                {% if new_campaigns_from_follows %}
-                    <span id="home-alert" class="alert-badge">{{ new_campaigns_from_follows.count }}</span> <!-- Red alert spot -->
-                {% endif %}
-            </a>
-        </li>
-
-        <li>
-            <a href="#" onclick="switchColor()">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                    <path d="M12 3V5M18.36 5.64L16.95 7.05M21 12H19M18.36 18.36L16.95 16.95M12 19V21M7.05 16.95L5.64 18.36M5 12H3M7.05 7.05L5.64 5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <span>Switch Theme</span>
-            </a>
-        </li>
-        
-        <li><a href="{% url 'private_campaign' %}" style="color: black;"><i class="fas fa-lock"></i> Private </a></li>
-
-        <!-- Chat Table link with red spot -->
-        <li>
-            <a href="{% url 'user_chats' %}" style="color: black; position: relative;">
-                <i class="fas fa-comment-alt"></i> Chat Table
-                {% if unread_messages_count %}
-                    <span id="chat-alert" class="alert-badge" style="background-color: red;">{{ unread_messages_count }}</span>
-                {% endif %}
-            </a>
-        </li>
-
-        <!-- Notification icon with red spot -->
-        <li>
-            <a href="{% url 'notification_list' %}" style="color: black; position: relative;">
-                <i class="fas fa-bell"></i>
-                {% if unread_notifications %}
-                    <span id="notification-alert" class="alert-badge">{{ unread_notifications.count }}</span>
-                {% endif %}
-                Notification
-            </a>
-        </li>
-
-        <li><a href="{% url 'suggest' %}" style="color: black;"><i class="fas fa-user-friends"></i> Suggested Users</a></li>
-
-        <li>
-            <a href="{% url 'index' %}" title="Explore" style="color: black;">
-                <i class="fas fa-compass" style="font-size: 14px;"> Explore</i>
-            </a>
-        </li>
-        
-        <!-- User Profile link -->
-        <li>
-            <a href="{% url 'profile_view' username=request.user.username %}" style="color: black;">
-                <i class="fas fa-user-circle"></i> My Profile
-            </a>
-        </li>
-
-        <!-- Logout link -->
-        <li>
-            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
-            <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
-                {% csrf_token %}
-            </form>
-        </li>
-    </ul>
-</nav>
-      
-
-    <div class="upload-container hide-on-mobile">
-
-     <div class="upload-btn-wrapper">
-        <button class="btn" style="font-size: 14px;">+ Upload
-            <a href="{% url 'create_campaign' %}" class="overlay-link"></a>
-        </button>
-    </div>
-
-</div>
-
-<div class="dashboard-snaps">
-  <div class="snaps-header">
-    <h3 class="snaps-title"><i class="fas fa-bolt"></i> Quick Actions</h3>
-  </div>
-
-  <div class="snaps-grid">
-    <a href="{% url 'create_campaign' %}" class="snap-link">
-      <i class="snap-icon fas fa-bullhorn"></i>
-      <span class="snap-label">Start Campaign</span>
-    </a>
-
-    <a href="{% url 'index' %}" class="snap-link">
-      <i class="snap-icon fas fa-search"></i>
-      <span class="snap-label">Explore</span>
-    </a>
-
-    <a href="{% url 'user_chats' %}" class="snap-link">
-      <i class="snap-icon fas fa-comments"></i>
-      <span class="snap-label">My Chats</span>
-    </a>
-
-    <a href="{% url 'profile_view' username=request.user.username %}" class="snap-link">
-      <i class="snap-icon fas fa-user"></i>
-      <span class="snap-label">Visit Profile</span>
-    </a>
-  </div>
-</div>
-
-<!-- Carousel for Ads -->
-<div class="carousel" onmouseover="pauseCarousel()" onmouseout="resumeCarousel()">
-    <div class="slides">
-        {% for ad in ads %}
-            <div class="slide">
-                <div class="ad">
-                    <a href="{{ ad.link }}">
-                        <img src="{{ ad.image.url }}" alt="{{ ad.title }}">
-                    </a>
-                    <h2>{{ ad.title }}</h2>
-                    <p class="content">{{ ad.content | truncatewords:30 }}</p>
-                    <p class="sponsored-by"><strong>Sponsored by:</strong> {{ ad.sponsored_by }}.</p>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
-</div><br>
-  <div class="aside-footer">
-    <a href="{% url 'aboutus' %}">About</a> • 
-    <a href="{% url 'hiw' %}">Help</a> • 
-    <a href="{% url 'terms_of_service' %}">Terms</a> • 
-    <a href="{% url 'privacy_policy' %}">Privacy</a> • 
-    <a href="{% url 'faq' %}">FAQ</a> • 
-    <a href="{% url 'project_support' %}">Support</a>
-</div>
-
-</aside>
-
-
-
-
-
-
-
-
-<section>
-
-
-  
-
-
-
-
-<br>
-
-
-
-
-<div class="top-navigation-container">
-    <!-- Back Arrow (Left) -->
-    <div class="back-arrow-container">
-        <div class="go-back-arrow" onclick="goBack()">
-            <i class="fas fa-arrow-left"></i>
-        </div>
-    </div>
-
-    <!-- Search Bar (Right) -->
-    <form action="{% url 'search_campaign' %}" method="get" class="search-form">
-        <div class="search-wrapper">
-            <input type="text" placeholder="Search..." name="search_query" id="query-field">
-            <button type="button" class="btn-reset" id="reset-field">
-                <i class="fas fa-times"></i>
-            </button>
-            <button type="submit" class="btn-search">
-                <i class="fas fa-search"></i>
-            </button>
-        </div>
-    </form>
-</div>
-
-<!-- Main Content -->
-
-  <div class="sidebar-box ">
-    {% block content %}{% endblock %}
-  
-</div>
-
-
-<div class="affiliate-essentials">
-    <div class="affiliate-header">
-        <div class="affiliate-badge">
-            <i class="fas fa-gem"></i>
-            <span>Premium Partners</span>
-        </div>
-        <h3 class="affiliate-title">Essential Tools for Campaign Success</h3>
-        <p class="affiliate-subtitle">These trusted tools help our top creators maximize their impact (we earn a small commission at no extra cost to you)</p>
-    </div>
-    
-    <div class="affiliate-grid">
-        <!-- Tool 1 -->
-        <div class="affiliate-card">
-            <span class="affiliate-tag">BEST VALUE</span>
-            <div class="affiliate-icon">
-                <i class="fas fa-chart-line"></i>
-            </div>
-            <h4 class="affiliate-name">AnalyticsPro+</h4>
-            <p class="affiliate-desc">Track campaign performance with real-time analytics and AI-powered insights to optimize your strategy.</p>
-            <div class="affiliate-meta">
-                <span class="affiliate-price">$29/mo</span>
-                <span class="affiliate-discount">Save 30%</span>
-            </div>
-            <a href="YOUR_AFFILIATE_LINK_1" class="affiliate-btn" target="_blank" rel="noopener noreferrer">
-                Get Started <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-        
-        <!-- Tool 2 -->
-        <div class="affiliate-card">
-            <span class="affiliate-tag">POPULAR</span>
-            <div class="affiliate-icon">
-                <i class="fas fa-bullhorn"></i>
-            </div>
-            <h4 class="affiliate-name">Amplify Suite</h4>
-            <p class="affiliate-desc">Automatically distribute your campaign to 50+ platforms with intelligent targeting.</p>
-            <div class="affiliate-meta">
-                <span class="affiliate-price">$49/mo</span>
-                <span class="affiliate-discount">7-day free trial</span>
-            </div>
-            <a href="YOUR_AFFILIATE_LINK_2" class="affiliate-btn" target="_blank" rel="noopener noreferrer">
-                Try For Free <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-        
-        <!-- Tool 3 -->
-        <div class="affiliate-card">
-            <div class="affiliate-icon">
-                <i class="fas fa-users"></i>
-            </div>
-            <h4 class="affiliate-name">EngageMaster</h4>
-            <p class="affiliate-desc">Boost audience interaction with automated responses and community management tools.</p>
-            <div class="affiliate-meta">
-                <span class="affiliate-price">$19/mo</span>
-                <span class="affiliate-discount">LIMITED OFFER</span>
-            </div>
-            <a href="YOUR_AFFILIATE_LINK_3" class="affiliate-btn" target="_blank" rel="noopener noreferrer">
-                Start Engaging <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-        
-        <!-- Tool 4 -->
-        <div class="affiliate-card">
-            <span class="affiliate-tag">NEW</span>
-            <div class="affiliate-icon">
-                <i class="fas fa-lightbulb"></i>
-            </div>
-            <h4 class="affiliate-name">ContentGenius AI</h4>
-            <p class="affiliate-desc">Generate high-converting campaign content in minutes with our AI writer.</p>
-            <div class="affiliate-meta">
-                <span class="affiliate-price">$37/mo</span>
-                <span class="affiliate-discount">Save 40%</span>
-            </div>
-            <a href="YOUR_AFFILIATE_LINK_4" class="affiliate-btn" target="_blank" rel="noopener noreferrer">
-                Create Content <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-    </div>
-    
-    <div class="text-center">
-        <a href="#" class="view-all-btn">
-            View all recommended tools <i class="fas fa-arrow-right"></i>
-        </a>
-    </div>
-</div>
-
-</section>
-
-
-
-</section>
-
-<aside class="right-aside">
-   <div class="search-container">
-    <form action="{% url 'search_campaign' %}" method="get">
-      <div class="search-wrapper">
-        <input type="text" placeholder="Search..." name="search_query" id="query-field">
-        <button type="button" class="btn-reset" id="reset-field">
-          <i class="fas fa-times"></i>
-        </button>
-        <button type="submit" class="btn-search">
-          <i class="fas fa-search"></i>
-        </button>
-      </div>
-    </form>
-  </div><br>
-  <!-- Suggested Users Section -->
-  <div class="suggested-users">
-    <div class="section-header">
-      <h3 class="section-title">Suggested for You</h3>
-       {% if suggested_users|length >= 2 %}
-            <a href="{% url 'suggest' %}" class="see-all">See All</a>
-        {% endif %}
-    </div>
-  {% for suggested in suggested_users %}
-    {% with user=suggested.user followers_count=suggested.followers_count %}
-    <div class="user-card">
-      <div class="user-avatar">
-        <img src="{{ user.profile.image.url }}" alt="{{ user.username }}" class="avatar-img">
-        {% if user.profile.is_online %}
-        <span class="online-status"></span>
-        {% endif %}
-      </div>
-      <div class="user-info">
-        <h4 class="user-name">{{ user.get_full_name|default:user.username }}</h4>
-        <p class="user-bio">{{ user.profile.bio|truncatechars:30 }}</p>
-        <div class="user-meta">
-          <span class="followers">{{ followers_count }} followers</span>
-          {% if user.profile.is_verified %}
-          <span class="verified-badge">✓</span>
-          {% endif %}
-        </div>
-        <div class="user-actions">
-          {% if request.user != user %}
-          <span id="follow-btn-{{ user.id }}" 
-                class="follow-text {% if request.user in user.followers.all %}following{% endif %}" 
-                data-user-id="{{ user.id }}"
-                data-is-following="{% if request.user in user.followers.all %}true{% else %}false{% endif %}">
-              {% if request.user in user.followers.all %}
-                  Following 
-              {% else %}
-                  Follow 
-              {% endif %}
-          </span>
-          {% endif %}
-          <a href="{% url 'profile_view' username=user.username %}" class="visit-btn">
-              <span class="btn-text">Visit</span>
-          </a>
-        </div>
-      </div>
-    </div>
-    {% endwith %}
-{% empty %}
-    <p class="no-suggestions">No suggestions available. Follow more people to get better recommendations.</p>
-{% endfor %}
-
-  
-<div class="trending-now">
-  <div class="trending-header">
-    <h3 class="trending-title"><i class="fas fa-fire"></i> Trending Now</h3>
-   
-  </div>
-  
-  <ul class="trending-list">
-    {% for campaign in trending_campaigns|slice:":5" %}
-    <li class="trending-item">
-      <span class="trending-rank trending-rank-{{ forloop.counter }}">{{ forloop.counter }}</span>
-      {% if forloop.counter <= 3 %}
-      <span class="trending-hot">HOT</span>
-      {% endif %}
-      
-      <div class="trending-content">
-        <h4 class="trending-topic">
-          <a href="{% url 'view_campaign' campaign_id=campaign.pk %}" style="color: inherit; text-decoration: none;">
-            {{ campaign.title|truncatechars:40 }}
-          </a>
-          {% if campaign.user.profile_verified %}
-          <i class="fas fa-check-circle"></i>
-          {% endif %}
-        </h4>
-        <div class="trending-meta">
-          <span class="trending-posts">
-            <i class="fas fa-heart" style="color: #ff4d4f;"></i>
-            {{ campaign.love_count|default:0 }} loves
-          </span>
-          <span class="trending-posts">
-            <i class="fas fa-comment" style="color: #1890ff;"></i>
-            {{ campaign.comments.count|default:0 }} comments
-          </span>
-          <span class="trending-category">{{ campaign.category }}</span>
-        </div>
-      </div>
-    </li>
-    {% endfor %}
-  </ul>
-  
- 
-</div>
-
-
-
-
-
-
- <div class="top-contributors">
-  <div class="contributors-header">
-    <h3 class="contributors-title"><i class="fas fa-trophy"></i> Top Contributors</h3>
-  </div>
-  
-  <div class="contributors-list">
-    {% for contributor in top_contributors %}
-    <div class="contributor-item">
-      <div class="contributor-avatar">
-        <img src="{{ contributor.image.url }}" class="contributor-img" alt="{{ contributor.user.get_full_name }}">
-        <div class="contributor-badge">{{ forloop.counter }}</div>
-      </div>
-      <div class="contributor-info">
-        <h4 class="contributor-name">
-          {{ contributor.user.get_full_name|default:contributor.user.username }}
-        </h4>
-        <div class="contributor-stats">
-          {{ contributor.campaign_count }} Campaign{{ contributor.campaign_count|pluralize }}
-        </div>
-      </div>
-    </div>
-    {% endfor %}
-  </div>
-</div>
-
-
-
-  <!-- Footer Links -->
-
-</aside>
-
-
-
-
-  </main>
-
-
-
-<footer class="footer">
-    <div class="footer-content">
-        <!-- Existing footer sections -->
-        <div class="footer-section">
-            <h2>Contact Us</h2>
-            <p>Email: rallynex1@gmail.com</p>
-            <p style="display:none;">Address: 123 Networking St, Net City</p>
-        </div>
-        <div class="footer-section" style="display: none;">
-            <h2>Follow Us</h2>
-            <div class="social-icons">
-                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                <a href="#"><i class="fab fa-twitter"></i></a>
-                <a href="#"><i class="fab fa-instagram"></i></a>
-                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                <a href="#"><i class="fab fa-github"></i></a>
-            </div>
-        </div>
-        <div class="footer-section">
-            <h2>Subscribe</h2>
-            <!-- Include subscription form -->
-        
-            <p><a href="{% url 'subscribe' %}" class="subscribe-link">Subscribe Now</a></p>
-        </div>
-        <div class="footer-section">
-            <h2>Legal</h2>
-            <a href="{% url 'privacy_policy' %}">Privacy Policy|</a>
-            <a href="{% url 'terms_of_service' %}">Terms of Service|</a>
-            <a href="{% url 'project_support' %}">Support|</a>
-            <a href="{% url 'hiw' %}">How It Works|</a>
-            <a href="{% url 'faq' %}">FAQ|</a>
-            <a href="{% url 'aboutus' %}">About Us|</a>
-            
-        </div>
-    </div>
-    <div class="footer-bottom">
-        <p>&copy; 2024 Networking Site. All rights reserved.</p>
-        <p class="mystery-text"></p>
-    </div>
-</footer>
-
-
-
-    <script>
-        // Add your JavaScript functionality here
-        function toggleMenu(event) {
-            if (event) event.preventDefault();
-            const menu = document.getElementById('navbarDropdownMenu');
-            const overlay = document.getElementById('menuOverlay');
-            
-            menu.classList.toggle('active');
-            overlay.classList.toggle('active');
-        }
-
-        function handleCreateClick(event) {
-            // Your create click handler logic
-        }
-    </script>
-
-
-
-
-
 
 <style>
 .top-contributors {
@@ -6190,9 +5165,1005 @@ function toggleFullContent(button) {
         grid-template-columns: repeat(2, 1fr);
     }
 }
-
+        /* Enhanced transition effects */
+        body, 
+        header, 
+        footer, 
+        section, 
+        .left-aside, 
+        .right-aside, 
+        .upper-post, 
+        .campaign-content, 
+        .react, 
+        .search-container input, 
+        .search-container .btn-reset, 
+        .funding-progress-card, 
+        button, 
+        h1, h2, h3, h4, p, li, 
+        .campaign-nav, 
+        .campaign-nav a, 
+        .btn, 
+        .reaction, 
+        .action-item, 
+        .action-item a, 
+        .carousel, 
+        .ad, 
+        .slide, 
+        .ad a, 
+        .explore-link, 
+        .love-count, 
+        #view-count, 
+        .comment-count {
+            transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+                        color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                        border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                        box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                        transform 0.3s ease;
+        }
 
 </style>
+
+
+
+</head>
+
+
+
+<body id="mainBody" >
+
+
+
+
+
+<header>
+ 
+
+</div>
+
+
+    <nav id="navbar" class="navbar">
+        <!-- Main bottom navigation (5 items) -->
+        <ul class="bottom-nav">
+            <li>
+                <a href="{% url 'home' %}" class="{% if request.path == '/' %}active{% endif %}">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 2L2 7V22H22V7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                    </svg>
+                    {% if new_campaigns_from_follows %}
+                        <span class="alert-badge">{{ new_campaigns_from_follows.count }}</span>
+                    {% endif %}
+                </a>
+            </li>
+            
+            <li>
+                <a href="{% url 'suggest' %}" class="{% if 'suggest' in request.path %}active{% endif %}">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M8.5 11C10.7091 11 12.5 9.20914 12.5 7C12.5 4.79086 10.7091 3 8.5 3C6.29086 3 4.5 4.79086 4.5 7C4.5 9.20914 6.29086 11 8.5 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M17 3.13C17.8604 3.35031 18.623 3.85071 19.1676 4.55232C19.7122 5.25392 20.0078 6.11683 20.0078 7.005C20.0078 7.89318 19.7122 8.75608 19.1676 9.45769C18.623 10.1593 17.8604 10.6597 17 10.88" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+            </li>
+            
+            <li class="create-btn-container">
+                <a href="{% url 'create_campaign' %}" class="create-btn" onclick="handleCreateClick(event)">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 4V20M4 12H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </a>
+            </li>
+            
+            <li>
+                <a href="{% url 'notification_list' %}" class="{% if 'notification' in request.path %}active{% endif %}">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M18 8C18 6.4087 17.3679 4.88258 16.2426 3.75736C15.1174 2.63214 13.5913 2 12 2C10.4087 2 8.88258 2.63214 7.75736 3.75736C6.63214 4.88258 6 6.4087 6 8C6 15 3 17 3 17H21C21 17 18 15 18 8Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M13.73 21C13.5542 21.3031 13.3019 21.5547 12.9982 21.7295C12.6946 21.9044 12.3504 21.9965 12 21.9965C11.6496 21.9965 11.3054 21.9044 11.0018 21.7295C10.6982 21.5547 10.4458 21.3031 10.27 21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    {% if unread_notifications %}
+                        <span class="alert-badge">{{ unread_notifications.count }}</span>
+                    {% endif %}
+                </a>
+            </li>
+            
+            <li class="menu-toggle">
+                <a href="#" onclick="toggleMenu(event)">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M3 12H21M3 6H21M3 18H21" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    <!-- Hidden menu that appears when hamburger is clicked -->
+    <div class="menu-overlay" id="menuOverlay" onclick="toggleMenu()"></div>
+
+    <div class="navbar-dropdown-menu" id="navbarDropdownMenu">
+        <ul>
+            <li>
+                     {% if not user.is_anonymous %}
+    
+    <a href="{% url 'profile_view' username=request.user.username %}" class="{% if 'profile' in request.path %}active{% endif %}">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Profile</span>
+                </a>
+                {% else %}
+    <span class="anonymous-label">Anonymous User</span>
+{% endif %}
+            
+            </li>
+                 <li>
+            <a href="#" onclick="switchColor()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 3V5M18.36 5.64L16.95 7.05M21 12H19M18.36 18.36L16.95 16.95M12 19V21M7.05 16.95L5.64 18.36M5 12H3M7.05 7.05L5.64 5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Switch Mode</span>
+            </a>
+        </li>
+            <li>
+                <a href="{% url 'private_campaign' %}">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M19 11H5C3.89543 11 3 11.8954 3 13V20C3 21.1046 3.89543 22 5 22H19C20.1046 22 21 21.1046 21 20V13C21 11.8954 20.1046 11 19 11Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M7 11V7C7 5.67392 7.52678 4.40215 8.46447 3.46447C9.40215 2.52678 10.6739 2 12 2C13.3261 2 14.5979 2.52678 15.5355 3.46447C16.4732 4.40215 17 5.67392 17 7V11" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Private</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'user_chats' %}">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Chat Room</span>
+                    {% if unread_messages_count %}
+                        <span class="alert-badge chat-alert">{{ unread_messages_count }}</span>
+                    {% endif %}
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'index' %}" title="Explore" class="explore-link" style="margin-left: 10px;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M11 19C15.4183 19 19 15.4183 19 11C19 6.58172 15.4183 3 11 3C6.58172 3 3 6.58172 3 11C3 15.4183 6.58172 19 11 19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Explore</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M21 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span>Logout</span>
+                </a>
+                <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+                    {% csrf_token %}
+                </form>
+            </li>
+        </ul>
+    </div>
+
+<!-- Search container can be removed since search is now in the bottom nav -->
+</header>
+
+
+
+  <main>
+
+<aside class="left-aside">
+
+<h3 style="
+    font-family: 'Courier New', monospace;
+    color: #ffffff;
+    background: linear-gradient(135deg, #c0c0c0, #f8f8f8);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 
+        0 1px 1px rgba(0,0,0,0.3),
+        0 0 8px rgba(255,255,255,0.4);
+    font-weight: bold;
+    letter-spacing: 3px;
+    font-size: 24px;
+    padding: 4px 12px; /* reduced top/bottom padding (4px), kept left/right (12px) */
+    display: inline-block;
+    border-radius: 3px;
+    backdrop-filter: brightness(1.2);
+    margin: 0;
+    z-index: 1000;
+"><img src="{% static 'main/files/lg.png' %}" alt="Rallynex Logo" style="height: 50px; width: 50px;">RALLYNEX</h3>
+
+    <!-- Updated the <nav> tag to <nav class="campaign-nav"> -->
+<nav class="campaign-nav">
+    <ul>
+        <!-- Home link with red spot -->
+        <li>
+            <a href="{% url 'home' %}" style="color: black; position: relative;">
+                <i class="fas fa-home"></i> Home
+                {% if new_campaigns_from_follows %}
+                    <span id="home-alert" class="alert-badge">{{ new_campaigns_from_follows.count }}</span> <!-- Red alert spot -->
+                {% endif %}
+            </a>
+        </li>
+
+        <li>
+            <a href="#" onclick="switchColor()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M12 3V5M18.36 5.64L16.95 7.05M21 12H19M18.36 18.36L16.95 16.95M12 19V21M7.05 16.95L5.64 18.36M5 12H3M7.05 7.05L5.64 5.64" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Switch Mode</span>
+            </a>
+        </li>
+        
+        <li><a href="{% url 'private_campaign' %}" style="color: black;"><i class="fas fa-lock"></i> Private </a></li>
+
+        <!-- Chat Table link with red spot -->
+        <li>
+            <a href="{% url 'user_chats' %}" style="color: black; position: relative;">
+                <i class="fas fa-comment-alt"></i> Chat Room
+                {% if unread_messages_count %}
+                    <span id="chat-alert" class="alert-badge" style="background-color: red;">{{ unread_messages_count }}</span>
+                {% endif %}
+            </a>
+        </li>
+
+        <!-- Notification icon with red spot -->
+        <li>
+            <a href="{% url 'notification_list' %}" style="color: black; position: relative;">
+                <i class="fas fa-bell"></i>
+                {% if unread_notifications %}
+                    <span id="notification-alert" class="alert-badge">{{ unread_notifications.count }}</span>
+                {% endif %}
+                Notification
+            </a>
+        </li>
+
+        <li><a href="{% url 'suggest' %}" style="color: black;"><i class="fas fa-user-friends"></i> Suggested Users</a></li>
+
+        <li>
+            <a href="{% url 'index' %}" title="Explore" style="color: black;">
+                <i class="fas fa-compass" style="font-size: 14px;"> Explore</i>
+            </a>
+        </li>
+        
+        <!-- User Profile link -->
+        <li>
+          {% if not user.is_anonymous %}
+ <a href="{% url 'profile_view' username=request.user.username %}" style="color: black;">
+                <i class="fas fa-user-circle"></i> My Profile
+            </a>
+{% else %}
+    <span class="anonymous-label">Anonymous User</span>
+{% endif %}
+            
+        </li>
+
+        <!-- Logout link -->
+        <li>
+            <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+            <form id="logout-form" action="{% url 'logout' %}" method="post" style="display: none;">
+                {% csrf_token %}
+            </form>
+        </li>
+    </ul>
+</nav>
+      
+
+    <div class="upload-container hide-on-mobile">
+
+     <div class="upload-btn-wrapper">
+        <button class="btn" style="font-size: 14px;">+ Upload
+            <a href="{% url 'create_campaign' %}" class="overlay-link"></a>
+        </button>
+    </div>
+
+</div>
+
+<div class="dashboard-snaps">
+  <div class="snaps-header">
+    <h3 class="snaps-title"><i class="fas fa-bolt"></i> Quick Actions</h3>
+  </div>
+
+  <div class="snaps-grid">
+    <a href="{% url 'create_campaign' %}" class="snap-link">
+      <i class="snap-icon fas fa-bullhorn"></i>
+      <span class="snap-label">Start Campaign</span>
+    </a>
+       {% if not user.is_anonymous %}
+    <a href="{% url 'profile_view' username=request.user.username %}" class="snap-link">
+        <i class="snap-icon fas fa-user"></i>
+        <span class="snap-label">Visit Profile</span>
+    </a>
+{% else %}
+    <span class="anonymous-label">Anonymous User</span>
+{% endif %}
+
+    <a href="{% url 'index' %}" class="snap-link">
+      <i class="snap-icon fas fa-search"></i>
+      <span class="snap-label">Explore</span>
+    </a>
+
+    <a href="{% url 'user_chats' %}" class="snap-link">
+      <i class="snap-icon fas fa-comments"></i>
+      <span class="snap-label">My Chats</span>
+    </a>
+
+
+  </div>
+</div>
+
+
+  <div class="aside-footer">
+    <a href="{% url 'aboutus' %}">About</a> • 
+    <a href="{% url 'hiw' %}">Help</a> • 
+    <a href="{% url 'terms_of_service' %}">Terms</a> • 
+    <a href="{% url 'privacy_policy' %}">Privacy</a> • 
+    <a href="{% url 'faq' %}">FAQ</a> • 
+    <a href="{% url 'project_support' %}">Support</a>
+</div>
+
+</aside>
+
+
+
+
+
+
+
+
+<section>
+
+
+  
+
+
+
+
+<br>
+
+
+
+
+<div class="top-navigation-container">
+    <!-- Back Arrow (Left) -->
+    <div class="back-arrow-container">
+        <div class="go-back-arrow" onclick="goBack()">
+            <i class="fas fa-arrow-left"></i>
+        </div>
+    </div>
+
+    <!-- Search Bar (Right) -->
+    <form action="{% url 'search_campaign' %}" method="get" class="search-form">
+        <div class="search-wrapper">
+            <input type="text" placeholder="Search..." name="search_query" id="query-field">
+            <button type="button" class="btn-reset" id="reset-field">
+                <i class="fas fa-times"></i>
+            </button>
+            <button type="submit" class="btn-search">
+                <i class="fas fa-search"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Main Content -->
+
+  <div class="sidebar-box ">
+    {% block content %}{% endblock %}
+  
+</div>
+
+
+</section>
+
+
+
+</section>
+
+<aside class="right-aside">
+   <div class="search-container">
+    <form action="{% url 'search_campaign' %}" method="get">
+      <div class="search-wrapper">
+        <input type="text" placeholder="Search..." name="search_query" id="query-field">
+        <button type="button" class="btn-reset" id="reset-field">
+          <i class="fas fa-times"></i>
+        </button>
+        <button type="submit" class="btn-search">
+          <i class="fas fa-search"></i>
+        </button>
+      </div>
+    </form>
+  </div><br>
+  <!-- Suggested Users Section -->
+  <div class="suggested-users">
+    <div class="section-header">
+      <h3 class="section-title">Suggested for You</h3>
+       {% if suggested_users|length >= 2 %}
+            <a href="{% url 'suggest' %}" class="see-all">See All</a>
+        {% endif %}
+    </div>
+  {% for suggested in suggested_users %}
+    {% with user=suggested.user followers_count=suggested.followers_count %}
+    <div class="user-card">
+      <div class="user-avatar">
+        <img src="{{ user.profile.image.url }}" alt="{{ user.username }}" class="avatar-img">
+        {% if user.profile.is_online %}
+        <span class="online-status"></span>
+        {% endif %}
+      </div>
+      <div class="user-info">
+        <h4 class="user-name">{{ user.get_full_name|default:user.username }}</h4>
+        <p class="user-bio">{{ user.profile.bio|truncatechars:30 }}</p>
+        <div class="user-meta">
+          <span class="followers">{{ followers_count }} followers</span>
+          {% if user.profile.is_verified %}
+          <span class="verified-badge">✓</span>
+          {% endif %}
+        </div>
+        <div class="user-actions">
+          {% if request.user != user %}
+          <span id="follow-btn-{{ user.id }}" 
+                class="follow-text {% if request.user in user.followers.all %}following{% endif %}" 
+                data-user-id="{{ user.id }}"
+                data-is-following="{% if request.user in user.followers.all %}true{% else %}false{% endif %}">
+              {% if request.user in user.followers.all %}
+                  Following 
+              {% else %}
+                  Follow 
+              {% endif %}
+          </span>
+          {% endif %}
+
+          {% if not user.is_anonymous %}
+    <a href="{% url 'profile_view' username=user.username %}" class="visit-btn">
+              <span class="btn-text">Visit</span>
+          </a>
+{% else %}
+    <span class="anonymous-label">Anonymous User</span>
+{% endif %}
+        
+        </div>
+      </div>
+    </div>
+    {% endwith %}
+{% empty %}
+    <p class="no-suggestions">No suggestions available. Follow more people to get better recommendations.</p>
+{% endfor %}
+
+  
+<div class="trending-now">
+  <div class="trending-header">
+    <h3 class="trending-title"><i class="fas fa-fire"></i> Trending Now</h3>
+   
+  </div>
+  
+  <ul class="trending-list">
+    {% for campaign in trending_campaigns|slice:":5" %}
+    <li class="trending-item">
+      <span class="trending-rank trending-rank-{{ forloop.counter }}">{{ forloop.counter }}</span>
+      {% if forloop.counter <= 3 %}
+      <span class="trending-hot">HOT</span>
+      {% endif %}
+      
+      <div class="trending-content">
+        <h4 class="trending-topic">
+          <a href="{% url 'view_campaign' campaign_id=campaign.pk %}" style="color: inherit; text-decoration: none;">
+            {{ campaign.title|truncatechars:40 }}
+          </a>
+          {% if campaign.user.profile_verified %}
+          <i class="fas fa-check-circle"></i>
+          {% endif %}
+        </h4>
+        <div class="trending-meta">
+          <span class="trending-posts">
+            <i class="fas fa-heart" style="color: #ff4d4f;"></i>
+            {{ campaign.love_count|default:0 }} loves
+          </span>
+          <span class="trending-posts">
+            <i class="fas fa-comment" style="color: #1890ff;"></i>
+            {{ campaign.comments.count|default:0 }} comments
+          </span>
+          <span class="trending-category">{{ campaign.category }}</span>
+        </div>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  
+ 
+</div>
+
+
+
+
+
+
+ <div class="top-contributors">
+  <div class="contributors-header">
+    <h3 class="contributors-title"><i class="fas fa-trophy"></i> Top Contributors</h3>
+  </div>
+  
+  <div class="contributors-list">
+    {% for contributor in top_contributors %}
+    <div class="contributor-item">
+      <div class="contributor-avatar">
+        <img src="{{ contributor.image.url }}" class="contributor-img" alt="{{ contributor.user.get_full_name }}">
+        <div class="contributor-badge">{{ forloop.counter }}</div>
+      </div>
+      <div class="contributor-info">
+        <h4 class="contributor-name">
+          {{ contributor.user.get_full_name|default:contributor.user.username }}
+        </h4>
+        <div class="contributor-stats">
+          {{ contributor.campaign_count }} Campaign{{ contributor.campaign_count|pluralize }}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+
+  <!-- Footer Links -->
+
+</aside>
+
+
+
+
+  </main>
+
+
+
+<footer class="footer">
+    <div class="footer-content">
+        <!-- Existing footer sections -->
+        <div class="footer-section">
+            <h2>Contact Us</h2>
+            <p>Email: rallynex1@gmail.com</p>
+            <p style="display:none;">Address: 123 Networking St, Net City</p>
+        </div>
+        <div class="footer-section" style="display: none;">
+            <h2>Follow Us</h2>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                <a href="#"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+        <div class="footer-section">
+            <h2>Subscribe</h2>
+            <!-- Include subscription form -->
+        
+            <p><a href="{% url 'subscribe' %}" class="subscribe-link">Subscribe Now</a></p>
+        </div>
+        <div class="footer-section">
+            <h2>Legal</h2>
+            <a href="{% url 'privacy_policy' %}">Privacy Policy|</a>
+            <a href="{% url 'terms_of_service' %}">Terms of Service|</a>
+            <a href="{% url 'project_support' %}">Support|</a>
+            <a href="{% url 'hiw' %}">How It Works|</a>
+            <a href="{% url 'faq' %}">FAQ|</a>
+            <a href="{% url 'aboutus' %}">About Us|</a>
+            
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2024 Networking Site. All rights reserved.</p>
+        <p class="mystery-text"></p>
+    </div>
+</footer>
+
+<script type="text/javascript">
+// Helper functions for cookies
+function setCookie(name, value, days) {
+    const expires = new Date(Date.now() + days*24*60*60*1000).toUTCString();
+    document.cookie = `${name}=${value}; expires=${expires}; path=/`;
+}
+
+function getCookie(name) {
+    const cookies = document.cookie.split(';').map(c => c.trim());
+    for (let c of cookies) {
+        if (c.startsWith(name + '=')) return c.split('=')[1];
+    }
+    return null;
+}
+
+// Function to toggle dark mode
+function switchColor() {
+    const body = document.body;
+    const isDarkMode = body.classList.toggle('dark-mode'); // Toggle dark mode class
+
+    // Save preference to cookie for 1 year
+    setCookie('dark_mode', isDarkMode, 365);
+
+    // Funding progress card
+    document.querySelector('.funding-progress-card')?.classList.toggle('dark-mode', isDarkMode);
+
+    // Elements to update background and text colors
+    const elementsToUpdate = document.querySelectorAll(
+        'header, footer, section, .left-aside, .right-aside, .upper-post, .campaign-content, .react, .search-container input, .search-container .btn-reset'
+    );
+    elementsToUpdate.forEach(el => el.classList.toggle('dark-mode', isDarkMode));
+
+    // Text color updates
+    const textElements = document.querySelectorAll(
+        'h1, h2, h3, h4, p, li, .campaign-nav, .campaign-nav a, .btn, .reaction, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link, .love-count, #view-count, .comment-count'
+    );
+    textElements.forEach(el => el.style.color = isDarkMode ? '#ffffff' : '#000000');
+
+    // Buttons
+    const buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)');
+    buttons.forEach(btn => {
+        btn.style.backgroundColor = isDarkMode ? '#262626' : '';
+        btn.style.color = isDarkMode ? '#ffffff' : '#000000';
+    });
+
+    // `.react` divs
+    const reactDivs = document.querySelectorAll('.react');
+    reactDivs.forEach(div => {
+        div.style.backgroundColor = isDarkMode ? "#262626" : "";
+        div.style.color = isDarkMode ? "white" : "black";
+        if (isDarkMode) div.classList.add('react-hover');
+        else div.classList.remove('react-hover');
+    });
+
+    // Input field and reset button
+    const inputField = document.querySelector('.search-container input[type="text"]');
+    if (inputField) {
+        inputField.style.backgroundColor = isDarkMode ? '#333333' : '#ffffff';
+        inputField.style.color = isDarkMode ? '#ffffff' : '#000000';
+    }
+    const inputResetButton = document.querySelector('.search-container .btn-reset');
+    if (inputResetButton) inputResetButton.style.color = '#b0b0b0';
+}
+
+// Apply dark mode on page load based on cookie
+window.addEventListener('DOMContentLoaded', () => {
+    const darkModeCookie = getCookie('dark_mode');
+    if (darkModeCookie === 'true') {
+        switchColor();
+    }
+});
+</script>
+
+
+
+    <script>
+        // Add your JavaScript functionality here
+        function toggleMenu(event) {
+            if (event) event.preventDefault();
+            const menu = document.getElementById('navbarDropdownMenu');
+            const overlay = document.getElementById('menuOverlay');
+            
+            menu.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        function handleCreateClick(event) {
+            // Your create click handler logic
+        }
+    </script>
+
+
+
+
+
+<script>
+// Store follow state in localStorage
+function updateFollowState(userId, isFollowing) {
+    const storageKey = `followState_${userId}`;
+    localStorage.setItem(storageKey, isFollowing ? 'true' : 'false');
+}
+
+// Retrieve follow state from localStorage
+function getFollowState(userId) {
+    const storageKey = `followState_${userId}`;
+    return localStorage.getItem(storageKey) === 'true';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize text elements with correct state
+    document.querySelectorAll('.follow-text').forEach(element => {
+        const userId = element.getAttribute('data-user-id');
+        const storedState = getFollowState(userId);
+        const currentState = element.getAttribute('data-is-following') === 'true';
+        
+        // Use stored state if available, otherwise use server state
+        const finalState = storedState !== null ? storedState : currentState;
+        
+        if (finalState) {
+            element.classList.add('following');
+            element.textContent = '• Following';
+            element.setAttribute('data-is-following', 'true');
+        } else {
+            element.classList.remove('following');
+            element.textContent = '• Follow';
+            element.setAttribute('data-is-following', 'false');
+        }
+    });
+
+    // Handle follow text clicks
+    document.querySelectorAll('.follow-text').forEach(element => {
+        element.addEventListener('click', async function() {
+            const userId = this.getAttribute('data-user-id');
+            const isFollowing = this.getAttribute('data-is-following') === 'true';
+            const action = isFollowing ? 'unfollow' : 'follow';
+            
+            try {
+                const response = await fetch('/toggle_follow/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({
+                        'user_id': userId,
+                        'action': action
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    // Update text state
+                    const newState = data.action === 'followed';
+                    this.classList.toggle('following', newState);
+                    this.textContent = newState ? '• Following' : '• Follow';
+                    this.setAttribute('data-is-following', newState.toString());
+                    
+                    // Update followers count
+                    const followersCount = document.getElementById(`followers-count-${userId}`);
+                    if (followersCount) {
+                        followersCount.textContent = `(${data.followers_count} followers)`;
+                    }
+                    
+                    // Persist state in localStorage
+                    updateFollowState(userId, newState);
+                } else {
+                    console.error('Error:', data.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            }
+        });
+    });
+});
+</script>
+
+
+
+
+<script>
+  // Mobile search toggle
+  document.addEventListener('DOMContentLoaded', function() {
+    const mobileSearchIcon = document.querySelector('.mobile-search-icon');
+    const mobileSearchPopup = document.querySelector('.mobile-search-popup');
+    const closeMobileSearch = document.querySelector('.close-mobile-search');
+
+    if (mobileSearchIcon && mobileSearchPopup) {
+      mobileSearchIcon.addEventListener('click', function() {
+        mobileSearchPopup.classList.add('active');
+        mobileSearchPopup.querySelector('input').focus();
+      });
+
+      closeMobileSearch.addEventListener('click', function() {
+        mobileSearchPopup.classList.remove('active');
+      });
+    }
+  });
+</script>
+
+
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const queryField = document.getElementById('query-field');
+        const resetBtn = document.getElementById('reset-field');
+        
+        // Show/hide reset button based on input
+        queryField.addEventListener('input', function() {
+            resetBtn.style.display = this.value ? 'block' : 'none';
+        });
+        
+        // Reset field
+        resetBtn.addEventListener('click', function() {
+            queryField.value = '';
+            this.style.display = 'none';
+            queryField.focus();
+        });
+    });
+</script>
+
+<script>
+    function handleCreateClick(e) {
+        // Optional: Add any animation or pre-submit logic here
+        // e.preventDefault(); // Uncomment if you want to handle with AJAX
+        
+        // Example animation:
+        const btn = e.target;
+        btn.style.transform = 'scale(0.9)';
+        setTimeout(() => {
+            btn.style.transform = 'scale(1)';
+        }, 100);
+    }
+</script>
+<script>
+// In your script tags or JS file
+function blinkJoinPrompt() {
+    const prompt = document.querySelector('.join-prompt');
+    if (prompt) {
+        setInterval(() => {
+            prompt.style.opacity = prompt.style.opacity === '0' ? '1' : '0';
+        }, 5000); // Toggle every 5 seconds
+    }
+}
+
+// Call on page load
+window.addEventListener('DOMContentLoaded', blinkJoinPrompt);
+</script>
+
+
+
+
+
+
+<script>
+
+// Your existing functions
+function toggleLove(campaignId) {
+    // Existing love toggle functionality
+}
+
+function showSharePopup(campaignId) {
+    // Existing share functionality
+}
+</script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+
+
+
+<script>
+
+
+
+function toggleCommentForm() {
+    var popup = document.getElementById("commentFormPopup");
+    popup.style.display = "block";
+}
+
+function closeCommentForm() {
+    var popup = document.getElementById("commentFormPopup");
+    popup.style.display = "none";
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    var campaignElement = document.querySelector('.campaign-details');
+    var campaignId = {{ campaign.id }};
+    var startTime;
+
+    function recordCampaignView() {
+        var endTime = Math.floor(Date.now() / 1000); // Get current time in seconds
+        var timeSpent = endTime - startTime;
+        
+        fetch(`/record_campaign_view/${campaignId}/`, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ time_spent: timeSpent })
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('View recorded successfully');
+            } else {
+                console.error('Failed to record view');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    function handleVisibilityChange() {
+        if (document.visibilityState === 'visible') {
+            startTime = Math.floor(Date.now() / 1000); // Get current time in seconds
+        } else {
+            recordCampaignView();
+        }
+    }
+
+    function isInViewport(element) {
+        var rect = element.getBoundingClientRect();
+        return (
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+        );
+    }
+
+    function handleScroll() {
+        if (isInViewport(campaignElement)) {
+            startTime = Math.floor(Date.now() / 1000); // Get current time in seconds
+        } else {
+            recordCampaignView();
+        }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    document.addEventListener('scroll', handleScroll);
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    var mediaQuery = window.matchMedia('(max-width: 768px)');
+    var leftAside = document.querySelector('.left-aside');
+    var rightAside = document.querySelector('.right-aside');
+
+    function handleMediaQueryChange(e) {
+        if (e.matches) {
+            leftAside.style.display = 'none';
+            rightAside.style.display = 'none';
+        } else {
+            leftAside.style.display = 'block';
+            rightAside.style.display = 'block';
+        }
+    }
+
+    mediaQuery.addListener(handleMediaQueryChange);
+    handleMediaQueryChange(mediaQuery);
+});
+
+
+</script>
+
+<script type="text/javascript">
+  function handleCreateClick() {
+    console.log("Create button clicked!");
+    // Add your custom logic here, if needed
+}
+
+</script>
+
+
+<script>
+    function goBack() {
+        window.history.back(); // Navigates to the previous page
+    }
+</script>
+<script>
+function toggleFullContent(button) {
+    const fullContent = button.closest('.see-more-container').nextElementSibling;
+    if (fullContent.style.display === 'none') {
+        fullContent.style.display = 'block';
+        button.innerHTML = 'See Less <i class="fas fa-chevron-up"></i>';
+    } else {
+        fullContent.style.display = 'none';
+        button.innerHTML = 'See More <i class="fas fa-chevron-down"></i>';
+    }
+}
+</script>
+
 
 
 <script>

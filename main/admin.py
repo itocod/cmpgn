@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Profile, Follow, Comment, Activity, SupportCampaign, Love, CampaignView, Chat, Message
-from .models import  Brainstorming,  AffiliateLink
+from .models import  AffiliateLink
 from .models import ActivityLove, ActivityComment,CampaignProduct
 from .models import Notification,Report,NotInterested 
 from django.contrib import messages
@@ -210,13 +210,6 @@ class CampaignProductAdmin(admin.ModelAdmin):
 
 
 
-
-
-@admin.register(Brainstorming)
-class BrainstormingAdmin(admin.ModelAdmin):
-    list_display = ('idea', 'supporter', 'campaign')
-    search_fields = ('supporter__username', 'campaign__title')
-    list_filter = ('campaign',)
 
 
 

@@ -229,7 +229,70 @@ body.dark-mode .affiliate-link i {
         100% { transform: rotate(360deg); }
     }
     </style>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+</head>
+<body>
+    
+    <div style="border-left: 2px solid #3498db; height: 250px; overflow-y: auto; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
+
+<h4 style="padding-left: 10px;" 
+    class="activity-comments-heading">
+    Total Activity Comments: {{ comments.count }}
+</h4>
+
+
+        <ul id="commentsList">
+            {% for comment in comments %}
+                <li>
+
+
+                    <div class="profile-pic">
+    <a href="{% url 'profile_view' username=comment.user.username %}">
+        <img src="{{ comment.user.profile.image.url }}" alt="Profile Picture" class="profile-pic-hover">
+    </a>
+</div>
+                  
+                    <strong>{{ comment.user.username }}
+                    {% if comment.user.profile.profile_verified %}
+                        <span class="verified-status" style="font-size: 12px;"><span> . verified</span><i class="material-icons" style="font-size:12px;color:green">verified_user</i></span></span>
+                    {% endif %}
+                    </strong> <span style="font-size:14px;">commented  - {{ comment.timestamp|timesince }} ago -</span>
+                    <p style="font-size:16px;">{{ comment.content }}</p>
+                </li>
+            {% empty %}
+                <li  class="no-suggested-users">No comments yet.</li>
+            {% endfor %}
+
+        </ul>
+        <hr>
+    </div>
+    <hr>
+    <div id="successMessage"></div>
+
+   <form id="commentForm" action="{% url 'add_activity_comment' activity.id %}" method="post">
+    <h4 style="
+        font-size: 16px;
+        color: #007BFF;
+        font-family: 'Arial', sans-serif;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        margin: 10px 0;
+        padding: 5px;
+        border-bottom: 2px solid #007BFF;
+        display: inline-block;">
+        Comment to activity
+    </h4>
+
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit" id="submitButton">
+        Submit Comment
+        <span id="spinner" class="spinner" style="display: none;"></span>
+    </button>
+</form>
+    
+
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/emojionearea/dist/emojionearea.min.js"></script>
    
 <script>
@@ -344,65 +407,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
     </script>
-</head>
-<body>
-    
-    <div style="border-left: 2px solid #3498db; height: 250px; overflow-y: auto; border-radius: 5px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);">
 
-<h4 style="padding-left: 10px;" 
-    class="activity-comments-heading">
-    Total Activity Comments: {{ comments.count }}
-</h4>
-
-
-        <ul id="commentsList">
-            {% for comment in comments %}
-                <li>
-
-
-                    <div class="profile-pic">
-    <a href="{% url 'profile_view' username=comment.user.username %}">
-        <img src="{{ comment.user.profile.image.url }}" alt="Profile Picture" class="profile-pic-hover">
-    </a>
-</div>
-                  
-                    <strong>{{ comment.user.username }}
-                    {% if comment.user.profile.profile_verified %}
-                        <span class="verified-status" style="font-size: 12px;"><span> . verified</span><i class="material-icons" style="font-size:12px;color:green">verified_user</i></span></span>
-                    {% endif %}
-                    </strong> <span style="font-size:14px;">commented  - {{ comment.timestamp|timesince }} ago -</span>
-                    <p style="font-size:16px;">{{ comment.content }}</p>
-                </li>
-            {% empty %}
-                <li  class="no-suggested-users">No comments yet.</li>
-            {% endfor %}
-
-        </ul>
-        <hr>
-    </div>
-    <hr>
-    <div id="successMessage"></div>
-
-   <form id="commentForm" action="{% url 'add_activity_comment' activity.id %}" method="post">
-    <h4 style="
-        font-size: 16px;
-        color: #007BFF;
-        font-family: 'Arial', sans-serif;
-        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-        margin: 10px 0;
-        padding: 5px;
-        border-bottom: 2px solid #007BFF;
-        display: inline-block;">
-        Comment to activity
-    </h4>
-
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit" id="submitButton">
-        Submit Comment
-        <span id="spinner" class="spinner" style="display: none;"></span>
-    </button>
-</form>
     
 <script type="text/javascript">
 function switchColor() {

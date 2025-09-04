@@ -394,7 +394,7 @@ body.dark-mode .affiliate-link i {
     </form><br>    <div class="campaign-activities-container">
                         <h4 class="campaign-activities-header">Examples of Activities to Post</h4>
                         <div id="campaignActivitiesList" class="campaign-activities-list">
-                            {% for activity in campaign.get_objective_and_activities.Activities %}
+                            {% for activity in campaign.get_goals_and_activities.Activities %}
                                 <activity-text class="campaign-activity-item">{{ activity }}</activity-text>
                             {% endfor %}
                         </div>

@@ -8,56 +8,58 @@
         <p class="settings-subtitle">Choose how people can engage with your campaign</p>
     </div>
 
-    <form method="post" class="settings-form">
-        {% csrf_token %}
-        <div class="options-grid">
-            <!-- Monetary Donations Option -->
-            <label class="option-card">
-                <input type="checkbox" name="donate_monetary_visible" {% if campaign.donate_monetary_visible %}checked{% endif %}>
-                <span class="checkmark"></span>
-                <div class="option-content">
-                    <i class="fas fa-donate option-icon"></i>
-                    <div>
-                        <h3 class="option-name">Monetary Pledges</h3>
-                        <p class="option-desc">Enable participants to pledge financial contributions</p>
-                    </div>
-                </div>
-            </label>
+  <form method="post" class="settings-form">
+    {% csrf_token %}
+    <div class="options-grid">
 
-            <!-- Brainstorm Ideas Option -->
-            <label class="option-card">
-                <input type="checkbox" name="brainstorm_idea_visible" {% if campaign.brainstorm_idea_visible %}checked{% endif %}>
-                <span class="checkmark"></span>
-                <div class="option-content">
-                    <i class="fas fa-lightbulb option-icon"></i>
-                    <div>
-                        <h3 class="option-name">Brainstorm Ideas</h3>
-                        <p class="option-desc">Let community share creative suggestions</p>
-                    </div>
+        <!-- Monetary Donations Option -->
+        <label class="option-card">
+            <input type="checkbox" name="donate_monetary_visible" {% if campaign.donate_monetary_visible %}checked{% endif %}>
+            <span class="checkmark"></span>
+            <div class="option-content">
+                <i class="fas fa-donate option-icon"></i>
+                <div>
+                    <h3 class="option-name">Monetary Donations</h3>
+                    <p class="option-desc">Enable participants to contribute financially</p>
                 </div>
-            </label>
+            </div>
+        </label>
 
-            <!-- Campaign Products Option -->
-            <label class="option-card">
-                <input type="checkbox" name="campaign_product_visible" {% if campaign.campaign_product_visible %}checked{% endif %}>
-                <span class="checkmark"></span>
-                <div class="option-content">
-                    <i class="fas fa-shopping-bag option-icon"></i>
-                    <div>
-                        <h3 class="option-name">Campaign Products</h3>
-                        <p class="option-desc">Enable purchase of related merchandise</p>
-                    </div>
+        <!-- Pledge Option -->
+        <label class="option-card">
+            <input type="checkbox" name="pledge_visible" {% if campaign.pledge_visible %}checked{% endif %}>
+            <span class="checkmark"></span>
+            <div class="option-content">
+                <i class="fas fa-handshake option-icon"></i>
+                <div>
+                    <h3 class="option-name">Pledges</h3>
+                    <p class="option-desc">Enable participants to pledge support without immediate payment</p>
                 </div>
-            </label>
-        </div>
+            </div>
+        </label>
 
-        <!-- Form Footer with Save Button -->
-        <div class="form-footer">
-            <button type="submit" class="save-button">
-                <i class="fas fa-save"></i> Save Changes
-            </button>
-        </div>
-    </form>
+        <!-- Campaign Products Option -->
+        <label class="option-card">
+            <input type="checkbox" name="campaign_product_visible" {% if campaign.campaign_product_visible %}checked{% endif %}>
+            <span class="checkmark"></span>
+            <div class="option-content">
+                <i class="fas fa-shopping-bag option-icon"></i>
+                <div>
+                    <h3 class="option-name">Campaign Products</h3>
+                    <p class="option-desc">Enable purchase of related merchandise</p>
+                </div>
+            </div>
+        </label>
+    </div>
+
+    <!-- Form Footer with Save Button -->
+    <div class="form-footer">
+        <button type="submit" class="save-button">
+            <i class="fas fa-save"></i> Save Changes
+        </button>
+    </div>
+</form>
+
 </div>
 
 <style>

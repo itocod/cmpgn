@@ -8,6 +8,59 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Create Chat</title>
+
+    <style type="text/css">
+    .explore-card {
+        padding: 10px 15px;
+        margin-bottom: 12px;
+        background: #f5f9ff;
+        border-left: 3px solid #4CAF50;
+    }
+    
+    .explore-card h3 {
+        margin: 0;
+        font-size: 16px;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+    }
+    
+    .explore-card p {
+        margin: 2px 0 0;
+        font-size: 12px;
+        color: #666;
+    }
+    
+    /* Dark mode - Balanced Black */
+    .dark-mode .explore-card {
+        background: #1a1a1a;  /* Slightly lighter than pure black */
+        border-left-color: #4CAF50;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    }
+    
+    .dark-mode .explore-card h3 { 
+        color: #f0f0f0;  /* Soft white */
+    }
+    
+    .dark-mode .explore-card p { 
+        color: #cccccc;  /* Light gray for better readability */
+    }
+    
+    /* Desktop */
+    @media (min-width: 768px) {
+        .explore-card {
+            border-radius: 6px;
+            border-left: none;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+        
+        .dark-mode .explore-card {
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+    }
+</style>
     <style type="text/css">
         /* Add your custom CSS styles here */
         body {
@@ -286,8 +339,12 @@ body.dark-mode .custom-form .custom-button:hover {
     </style>
 </head>
 <body>
+<div class="explore-card">
+    <h3><i class="fas fa-comment-alt"></i> Create Chat Room</h3>
+    <p>Start a new chat, add participants, and begin conversations.</p>
+</div>
 
-    <h2 style="font-size: 16px; padding-left: 40px;">Create_Chat_Table (CT)</h2>
+
     <form class="custom-form" method="post">
         {% csrf_token %}
         {{ form.title.errors }}
@@ -303,7 +360,7 @@ body.dark-mode .custom-form .custom-button:hover {
             {% endfor %}
         </div>
         <br>
-        <button class="custom-button" type="submit">Create CT</button>
+        <button class="custom-button" type="submit">Create Chat Room</button>
     </form>
 
 

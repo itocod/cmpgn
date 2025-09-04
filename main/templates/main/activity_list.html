@@ -759,154 +759,6 @@ body.dark-mode .activity-menu-item:hover {
 </style>
 
 
-<script type="text/javascript">
-    // Function to handle loving an activity
-    function loveActivity(activityId) {
-        const loveIcon = document.querySelector(`.love-icon[data-activity-id="${activityId}"]`);
-        const loveCount = document.getElementById(`love-count-${activityId}`);
-        const spinner = document.createElement('div');
-        spinner.className = 'loading-spinner';
-        loveIcon.parentNode.appendChild(spinner);
-        loveIcon.style.display = 'none';
-        
-        // Toggle loved state
-        const isLoved = loveIcon.classList.contains('loved');
-        if (!isLoved) {
-            loveIcon.classList.add('loved');
-            loveIcon.classList.add('heart-animation');
-        }
-        
-        // Send AJAX request
-        fetch(`/love_activity/${activityId}/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': '{{ csrf_token }}'
-            },
-            body: JSON.stringify({})
-        })
-        .then(response => {
-            if (!response.ok) throw new Error('Network response was not ok');
-            return response.json();
-        })
-        .then(data => {
-            if (data.love_count !== undefined) {
-                loveCount.textContent = data.love_count + ' likes';
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            // Revert UI if error
-            if (!isLoved) {
-                loveIcon.classList.remove('loved');
-            }
-            // Show error to user
-            alert('Failed to update like. Please try again.');
-        })
-        .finally(() => {
-            spinner.remove();
-            loveIcon.style.display = 'block';
-            setTimeout(() => {
-                loveIcon.classList.remove('heart-animation');
-            }, 500);
-        });
-    }
-
-    // Function to toggle content visibility
-    function toggleContent(activityId) {
-        const shortContent = document.getElementById(`activity-content-${activityId}-short`);
-        const fullContent = document.getElementById(`activity-content-${activityId}-full`);
-        
-        if (shortContent.style.display === 'none') {
-            shortContent.style.display = 'block';
-            fullContent.style.display = 'none';
-        } else {
-            shortContent.style.display = 'none';
-            fullContent.style.display = 'block';
-        }
-    }
-
-    // Back to Top Button
-    document.addEventListener('DOMContentLoaded', function() {
-        const backToTopButton = document.createElement('div');
-        backToTopButton.className = 'back-to-top';
-        backToTopButton.innerHTML = '<i class="fas fa-arrow-up"></i>';
-        backToTopButton.onclick = function() {
-            window.scrollTo({top: 0, behavior: 'smooth'});
-        };
-        document.body.appendChild(backToTopButton);
-        
-        window.addEventListener('scroll', function() {
-            if (window.pageYOffset > 300) {
-                backToTopButton.classList.add('visible');
-            } else {
-                backToTopButton.classList.remove('visible');
-            }
-        });
-
-        // Lazy load images
-        const lazyLoadImages = function() {
-            const lazyImages = [].slice.call(document.querySelectorAll('img.lazy, video.lazy'));
-            
-            if ('IntersectionObserver' in window) {
-                let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
-                    entries.forEach(function(entry) {
-                        if (entry.isIntersecting) {
-                            let lazyImage = entry.target;
-                            lazyImage.src = lazyImage.dataset.src;
-                            lazyImage.classList.remove('lazy');
-                            lazyImage.classList.add('loaded');
-                            lazyImageObserver.unobserve(lazyImage);
-                        }
-                    });
-                });
-
-                lazyImages.forEach(function(lazyImage) {
-                    lazyImageObserver.observe(lazyImage);
-                });
-            } else {
-                // Fallback for browsers without IntersectionObserver
-                lazyImages.forEach(function(lazyImage) {
-                    lazyImage.src = lazyImage.dataset.src;
-                    lazyImage.classList.remove('lazy');
-                    lazyImage.classList.add('loaded');
-                });
-            }
-        };
-
-        // Initialize lazy loading
-        lazyLoadImages();
-    });
-</script>
-
-<script type="text/javascript">
-    // Function to toggle activity popup menu
-    function toggleActivityMenu(event, popupId) {
-        event.stopPropagation(); // Prevent event from bubbling up
-        const popup = document.getElementById(popupId);
-        const allPopups = document.querySelectorAll('.activity-popup');
-        
-        // Close all other open popups first
-        allPopups.forEach(p => {
-            if (p.id !== popupId && p.classList.contains('show')) {
-                p.classList.remove('show');
-            }
-        });
-        
-        // Toggle current popup
-        popup.classList.toggle('show');
-    }
-    
-    // Close popup when clicking outside
-    document.addEventListener('click', function(event) {
-        if (!event.target.closest('.activity-menu-btn') && !event.target.closest('.activity-popup')) {
-            document.querySelectorAll('.activity-popup.show').forEach(popup => {
-                popup.classList.remove('show');
-            });
-        }
-    });
-</script>
-
 {% if user == campaign.user.user %}
     <a href="{% url 'create_activity' campaign_id=campaign.id %}" class="create-activity-link">Create Activity</a>
 {% endif %}
@@ -1605,6 +1457,154 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 
 
+
+<script type="text/javascript">
+    // Function to handle loving an activity
+    function loveActivity(activityId) {
+        const loveIcon = document.querySelector(`.love-icon[data-activity-id="${activityId}"]`);
+        const loveCount = document.getElementById(`love-count-${activityId}`);
+        const spinner = document.createElement('div');
+        spinner.className = 'loading-spinner';
+        loveIcon.parentNode.appendChild(spinner);
+        loveIcon.style.display = 'none';
+        
+        // Toggle loved state
+        const isLoved = loveIcon.classList.contains('loved');
+        if (!isLoved) {
+            loveIcon.classList.add('loved');
+            loveIcon.classList.add('heart-animation');
+        }
+        
+        // Send AJAX request
+        fetch(`/love_activity/${activityId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            body: JSON.stringify({})
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Network response was not ok');
+            return response.json();
+        })
+        .then(data => {
+            if (data.love_count !== undefined) {
+                loveCount.textContent = data.love_count + ' likes';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Revert UI if error
+            if (!isLoved) {
+                loveIcon.classList.remove('loved');
+            }
+            // Show error to user
+            alert('Failed to update like. Please try again.');
+        })
+        .finally(() => {
+            spinner.remove();
+            loveIcon.style.display = 'block';
+            setTimeout(() => {
+                loveIcon.classList.remove('heart-animation');
+            }, 500);
+        });
+    }
+
+    // Function to toggle content visibility
+    function toggleContent(activityId) {
+        const shortContent = document.getElementById(`activity-content-${activityId}-short`);
+        const fullContent = document.getElementById(`activity-content-${activityId}-full`);
+        
+        if (shortContent.style.display === 'none') {
+            shortContent.style.display = 'block';
+            fullContent.style.display = 'none';
+        } else {
+            shortContent.style.display = 'none';
+            fullContent.style.display = 'block';
+        }
+    }
+
+    // Back to Top Button
+    document.addEventListener('DOMContentLoaded', function() {
+        const backToTopButton = document.createElement('div');
+        backToTopButton.className = 'back-to-top';
+        backToTopButton.innerHTML = '<i class="fas fa-arrow-up"></i>';
+        backToTopButton.onclick = function() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        };
+        document.body.appendChild(backToTopButton);
+        
+        window.addEventListener('scroll', function() {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('visible');
+            } else {
+                backToTopButton.classList.remove('visible');
+            }
+        });
+
+        // Lazy load images
+        const lazyLoadImages = function() {
+            const lazyImages = [].slice.call(document.querySelectorAll('img.lazy, video.lazy'));
+            
+            if ('IntersectionObserver' in window) {
+                let lazyImageObserver = new IntersectionObserver(function(entries, observer) {
+                    entries.forEach(function(entry) {
+                        if (entry.isIntersecting) {
+                            let lazyImage = entry.target;
+                            lazyImage.src = lazyImage.dataset.src;
+                            lazyImage.classList.remove('lazy');
+                            lazyImage.classList.add('loaded');
+                            lazyImageObserver.unobserve(lazyImage);
+                        }
+                    });
+                });
+
+                lazyImages.forEach(function(lazyImage) {
+                    lazyImageObserver.observe(lazyImage);
+                });
+            } else {
+                // Fallback for browsers without IntersectionObserver
+                lazyImages.forEach(function(lazyImage) {
+                    lazyImage.src = lazyImage.dataset.src;
+                    lazyImage.classList.remove('lazy');
+                    lazyImage.classList.add('loaded');
+                });
+            }
+        };
+
+        // Initialize lazy loading
+        lazyLoadImages();
+    });
+</script>
+
+<script type="text/javascript">
+    // Function to toggle activity popup menu
+    function toggleActivityMenu(event, popupId) {
+        event.stopPropagation(); // Prevent event from bubbling up
+        const popup = document.getElementById(popupId);
+        const allPopups = document.querySelectorAll('.activity-popup');
+        
+        // Close all other open popups first
+        allPopups.forEach(p => {
+            if (p.id !== popupId && p.classList.contains('show')) {
+                p.classList.remove('show');
+            }
+        });
+        
+        // Toggle current popup
+        popup.classList.toggle('show');
+    }
+    
+    // Close popup when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!event.target.closest('.activity-menu-btn') && !event.target.closest('.activity-popup')) {
+            document.querySelectorAll('.activity-popup.show').forEach(popup => {
+                popup.classList.remove('show');
+            });
+        }
+    });
+</script>
 
 
 

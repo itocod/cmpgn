@@ -1,0 +1,36 @@
+{% extends 'main/face.html' %}
+
+{% load static %}
+
+{% block content %}
+<div class="donation-container" style="max-width: 500px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+    <h2>Support the Campaign</h2>
+    <p>Choose an amount to donate and where your donation should go.</p>
+
+    <form method="POST" action="">
+        {% csrf_token %}
+        <div class="form-group mb-3">
+            {{ form.amount.label_tag }}
+            {{ form.amount }}
+            {% if form.amount.errors %}
+                <div class="text-danger">{{ form.amount.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group mb-3">
+            {{ form.destination.label_tag }}
+            {% for radio in form.destination %}
+                <div class="form-check">
+                    {{ radio.tag }}
+                    <label class="form-check-label">{{ radio.choice_label }}</label>
+                </div>
+            {% endfor %}
+            {% if form.destination.errors %}
+                <div class="text-danger">{{ form.destination.errors }}</div>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Donate</button>
+    </form>
+</div>
+{% endblock %}

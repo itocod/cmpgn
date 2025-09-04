@@ -72,6 +72,15 @@
 {% endif %}
 
 <style>
+:root {
+    --dark-bg: #1a1a1a;
+    --dark-card: #2d2d2d;
+    --dark-text: #e0e0e0;
+    --dark-border: #3d3d3d;
+    --dark-accent: #4a4a4a;
+    --dark-hover: #383838;
+}
+
 .pledge-manager {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     max-width: 800px;
@@ -129,6 +138,7 @@
     padding: 1rem;
     box-shadow: 0 1px 2px rgba(0,0,0,0.1);
     border-left: 3px solid;
+    transition: all 0.2s ease;
 }
 
 .pledge-meta {
@@ -213,7 +223,7 @@
     font-size: 1em;
 }
 
-/* Status colors remain the same */
+/* Status colors */
 .pledge-card.pending {
     border-left-color: #f6ad55;
 }
@@ -268,6 +278,106 @@
 
 .contact-btn.whatsapp:hover {
     background: #c6f6d5;
+}
+
+/* Dark Mode Styles */
+body.dark-mode .pledge-manager {
+    background-color: var(--dark-bg);
+    color: var(--dark-text);
+}
+
+body.dark-mode .pledge-header {
+    color: var(--dark-text);
+    border-bottom-color: var(--dark-border);
+}
+
+body.dark-mode .pledge-card {
+    background-color: var(--dark-card);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+
+body.dark-mode .pledge-amount {
+    color: var(--dark-text);
+}
+
+body.dark-mode .pledge-user,
+body.dark-mode .pledge-date {
+    color: #a0a0a0;
+}
+
+body.dark-mode .pledge-contact {
+    border-top-color: var(--dark-border);
+}
+
+body.dark-mode .no-pledges {
+    background-color: var(--dark-card);
+    color: #b0b0b0;
+}
+
+/* Dark Mode Stats */
+body.dark-mode .stat-total {
+    background: rgba(49, 130, 206, 0.2);
+    color: #7ab4ff;
+}
+
+body.dark-mode .stat-fulfilled {
+    background: rgba(56, 161, 105, 0.2);
+    color: #68d391;
+}
+
+body.dark-mode .stat-pending {
+    background: rgba(221, 107, 32, 0.2);
+    color: #f6ad55;
+}
+
+/* Dark Mode Status Cards */
+body.dark-mode .pledge-card.pending .status-badge {
+    background: rgba(221, 107, 32, 0.2);
+    color: #f6ad55;
+}
+
+body.dark-mode .pledge-card.fulfilled .status-badge {
+    background: rgba(56, 161, 105, 0.2);
+    color: #68d391;
+}
+
+body.dark-mode .pledge-card.pending .status-toggle {
+    background: rgba(246, 224, 94, 0.2);
+    color: #f6e05e;
+}
+
+body.dark-mode .pledge-card.pending .status-toggle:hover {
+    background: rgba(236, 201, 75, 0.3);
+}
+
+body.dark-mode .pledge-card.fulfilled .status-toggle {
+    background: rgba(226, 232, 240, 0.2);
+    color: #e2e8f0;
+}
+
+body.dark-mode .pledge-card.fulfilled .status-toggle:hover {
+    background: rgba(203, 213, 224, 0.3);
+}
+
+/* Dark Mode Contact Buttons */
+body.dark-mode .contact-btn.email {
+    background: rgba(49, 130, 206, 0.2);
+    color: #7ab4ff;
+    border-color: rgba(190, 227, 248, 0.3);
+}
+
+body.dark-mode .contact-btn.email:hover {
+    background: rgba(49, 130, 206, 0.3);
+}
+
+body.dark-mode .contact-btn.whatsapp {
+    background: rgba(56, 161, 105, 0.2);
+    color: #68d391;
+    border-color: rgba(198, 246, 213, 0.3);
+}
+
+body.dark-mode .contact-btn.whatsapp:hover {
+    background: rgba(56, 161, 105, 0.3);
 }
 </style>
 

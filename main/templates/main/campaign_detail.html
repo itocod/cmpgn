@@ -6,237 +6,2000 @@
 {% block content %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<style type="text/css">
-    /* Instagram-style container */
-    .instagram-card {
-        max-width: 470px;
-        margin: 0 auto 20px;
-        background: #fff;
-        border: 1px solid #e6e6e6;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+
+
+
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+        background-color: #f9f9f9; /* Light background */
+        padding-bottom: 60px;
     }
-    
-    /* Poster as the hero element */
-    .poster-hero {
-        position: relative;
-        width: 100%;
-        aspect-ratio: 1/1;
-        overflow: hidden;
+
+    header {
+      background-color: 
+      color: grey;
+      padding: 0;
+      text-align: center;
     }
+main {
+  display: flex;
+  justify-content: space-around;
+  padding: 0;
+}
+
+
     
-    .poster-hero img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: transform 0.3s ease;
+section {
+  flex: 3; /* Ensure it remains flexible within its parent */
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%; /* Ensure it takes full width of its container */
+  max-width: 750px; /* Set the maximum width you desire */
+  padding: 0; /* Remove padding */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  border: 1px solid whitesmoke; /* Optional: Set border */
+  margin: 0 auto; /* Center the section horizontally within its container */
+  
+}
+
+
+/* Media query for smaller screens */
+@media (max-width: 768px) {
+  section {
+    width: calc(100vw - 2px); /* Calculate 100% viewport width minus any border */
+   */
+  }
+}
+
+.left-aside, .right-aside {
+  flex: 1; /* Keep the asides smaller */
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+
+@media (min-width: 769px) {
+    .rallynex-header-container {
+        display: none !important;
     }
-    
-    .poster-hero:hover img {
-        transform: scale(1.02);
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+    .rallynex-header-container {
+        padding: 15px;
     }
-    
-    .poster-overlay {
-        position: absolute;
-        bottom: 0;
+
+    /* Hide the full search bar by default on mobile */
+    .rallynex-search-container form {
+        display: none;
+    }
+
+    /* Mobile search icon - silver */
+    .rallynex-mobile-search-icon {
+        display: block !important;
+        font-size: 24px;
+        color: #c0c0c0;
+        cursor: pointer;
+        padding: 8px;
+        border-radius: 50%;
+        transition: all 0.2s ease;
+    }
+
+    .rallynex-mobile-search-icon:hover {
+        color: #a0a0a0;
+        background: #f8f8f8;
+    }
+
+    /* Mobile search popup - all white */
+    .rallynex-mobile-search-popup {
+        display: none;
+        position: fixed;
+        top: 0;
         left: 0;
         right: 0;
+        background: white;
         padding: 15px;
-        background: linear-gradient(transparent, rgba(0,0,0,0.7));
-        color: white;
+        box-shadow: 0 2px 5px rgba(192,192,192,0.2);
+        z-index: 1000;
     }
-    
-    .campaign-title {
-        font-size: 20px;
-        font-weight: 600;
-        margin: 0 0 5px;
-        text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-    }
-    
-    .campaign-creator {
+
+    .rallynex-mobile-search-popup.active {
         display: flex;
         align-items: center;
-        gap: 8px;
-        font-size: 14px;
     }
-    
-    .creator-avatar {
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
+
+    /* Search wrapper - white with silver accents */
+    .rallynex-mobile-search-wrapper {
+        flex: 1;
+        display: flex;
+        position: relative;
+        border: 1px solid #e0e0e0;
+        border-radius: 24px;
         overflow: hidden;
+        background: white;
+        transition: all 0.3s ease;
     }
-    
-    .creator-avatar img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+
+    .rallynex-mobile-search-wrapper:focus-within {
+        border-color: #c0c0c0;
+        box-shadow: 0 0 0 2px rgba(192,192,192,0.1);
     }
-    
-    /* Compact progress bar */
-    .mini-progress {
-        margin: 12px 0;
+
+    .rallynex-mobile-search-wrapper input {
+        flex: 1;
+        padding: 12px 40px 12px 15px;
+        border: none;
+        font-size: 16px;
+        background: white;
+        color: #333;
     }
-    
-    .progress-container {
-        height: 6px;
+
+    .rallynex-mobile-search-wrapper input::placeholder {
+        color: #c0c0c0;
+        opacity: 1;
+    }
+
+    /* Clear button */
+    .rallynex-clear-search {
+        position: absolute;
+        right: 50px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+        color: #c0c0c0;
+        background: none;
+        border: none;
+        transition: all 0.2s ease;
+    }
+
+    .rallynex-clear-search:hover {
+        color: #a0a0a0;
+    }
+
+    /* Search button - silver */
+    .rallynex-mobile-search-wrapper button[type="submit"] {
+        padding: 0 15px;
+        background: #f0f0f0;
+        color: #707070;
+        border: none;
+        border-left: 1px solid #e0e0e0;
+        transition: all 0.2s ease;
+    }
+
+    .rallynex-mobile-search-wrapper button[type="submit"]:hover {
         background: #e0e0e0;
-        border-radius: 3px;
-        overflow: hidden;
     }
-    
-    .progress-bar {
-        height: 100%;
-        background: linear-gradient(90deg, #4CAF50, #8BC34A);
-        border-radius: 3px;
-    }
-    
-    .progress-stats {
-        display: flex;
-        justify-content: space-between;
-        font-size: 12px;
-        color: #fff;
-        margin-top: 5px;
-    }
-    
-    /* Engagement buttons */
-    .engagement-buttons {
-        display: flex;
-        padding: 8px 15px;
-        border-top: 1px solid #efefef;
-        justify-content: space-between;
-    }
-    
-    .engagement-btn {
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        padding: 8px 12px;
-        font-size: 14px;
-        color: #262626;
-    }
-    
-    .engagement-btn i {
+
+    /* Close button - silver */
+    .rallynex-close-mobile-search {
+        margin-left: 12px;
         font-size: 20px;
+        cursor: pointer;
+        color: #c0c0c0;
+        background: white;
+        border-radius: 50%;
+        padding: 5px;
+        transition: all 0.2s ease;
     }
-    
- .love-btn.active i {
-    color: #ed4956 !important; /* This will override the silver color when active */
+
+    .rallynex-close-mobile-search:hover {
+        color: #a0a0a0;
+        background: #f8f8f8;
+    }
 }
-    
-    .join-btn {
-        background: #0095f6;
-        color: white;
-        border-radius: 4px;
-        padding: 6px 12px;
+
+/* Hide mobile elements on desktop */
+.rallynex-mobile-search-icon {
+    display: none;
+}
+.rallynex-mobile-search-popup {
+    display: none;
+}
+
+/* Dark Mode Mobile styles */
+@media (max-width: 768px) {
+    .dark-mode .rallynex-header-container {
+        background-color: #1a1a1a;
     }
-    
-    /* Campaign info section */
-    .campaign-info {
-        padding: 15px;
+
+    .dark-mode .rallynex-mobile-search-icon {
+        color: #8a8a8a;
     }
-    
-    .info-section {
-        margin-bottom: 15px;
+
+    .dark-mode .rallynex-mobile-search-icon:hover {
+        color: #a0a0a0;
+        background: #2d2d2d;
     }
-    
-    .info-section h4 {
-        margin: 0 0 8px;
-        font-size: 15px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
+
+    .dark-mode .rallynex-mobile-search-popup {
+        background: #1e1e1e;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
     }
-    
-    .info-section p, .info-section ul {
-        margin: 0;
-        font-size: 14px;
-        line-height: 1.5;
-        color: #262626;
+
+    .dark-mode .rallynex-mobile-search-wrapper {
+        border: 1px solid #3a3a3a;
+        background: #2d2d2d;
     }
-    
-    .info-section ul {
-        padding-left: 20px;
+
+    .dark-mode .rallynex-mobile-search-wrapper:focus-within {
+        border-color: #5a5a5a;
+        box-shadow: 0 0 0 2px rgba(90,90,90,0.2);
     }
-    
-    /* Dark mode adjustments */
-    .dark-mode .instagram-card {
-        background: #121212;
-        border-color: #363636;
-    }
-    
-    .dark-mode .engagement-buttons {
-        border-color: #363636;
-    }
-    
-    .dark-mode .engagement-btn {
-        color: #f5f5f5;
-    }
-    
-    .dark-mode .info-section p, 
-    .dark-mode .info-section ul {
+
+    .dark-mode .rallynex-mobile-search-wrapper input {
+        background: #2d2d2d;
         color: #e0e0e0;
     }
 
-/* Silver theme hover effects */
-.cta-btn {
-    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    .dark-mode .rallynex-mobile-search-wrapper input::placeholder {
+        color: #6a6a6a;
+    }
+
+    .dark-mode .rallynex-clear-search {
+        color: #8a8a8a;
+    }
+
+    .dark-mode .rallynex-clear-search:hover {
+        color: #a0a0a0;
+    }
+
+    .dark-mode .rallynex-mobile-search-wrapper button[type="submit"] {
+        background: #3a3a3a;
+        color: #b0b0b0;
+        border-left: 1px solid #3a3a3a;
+    }
+
+    .dark-mode .rallynex-mobile-search-wrapper button[type="submit"]:hover {
+        background: #4a4a4a;
+    }
+
+    .dark-mode .rallynex-close-mobile-search {
+        color: #8a8a8a;
+        background: #1e1e1e;
+    }
+
+    .dark-mode .rallynex-close-mobile-search:hover {
+        color: #a0a0a0;
+        background: #2d2d2d;
+    }
+}
+
+@media (min-width: 769px) {
+    .rallynex-mobile-search-icon,
+    .rallynex-mobile-search-popup {
+        display: none !important;
+    }
+}
+    nav a {
+      text-decoration: none;
+      font-weight: bold;
+      padding: 8px 10px;
+      display: block;
+      transition: background-color 0.3s ease;
+      border-bottom: 1px solid #e6e6e6;
+    }
+
+    nav a:hover {
+      background-color:limegreen; /* Light lime green on hover */
+
+    }
+
+
+    /* Beautiful upload button styles */
+    .upload-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+    }
+
+    .upload-btn-wrapper {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+    }
+
+
+        .btn-submit {
+            display: block;
+            width: calc(100% - 20px);
+            padding: 10px;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-submit:hover {
+            background-color: #2980b9;
+        }
+
+
+
+
+    .btn {
+      border: 2px solid gray;
+    color: #333333;
+      background-color: white;
+      padding: 8px 20px;
+      border-radius: 8px;
+      font-size: 20px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+
+    .btn:hover {
+      background-color: #eee; /* Change the color on hover */
+    }
+    .upload-btn-wrapper input[type=file] {
+      font-size: 100px;
+      position: absolute;
+      left: 0;
+      top: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+
+
+border: 1px solid silver;
+    hr {
+      border: 1px solid silver; /* Set border to 1px solid silver for a silver color */
+      margin: 10px 0; /* Add some margin for spacing */
+    }
+
+
+
+.overlay-link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+       
+
+  .file-container {
+    position: relative;
+    border: 1px solid silver; /* Border color */
+    border-radius: 5px;
+    overflow: hidden; /* Ensure the border doesn't overflow */
+  }
+
+  #campaign-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px; /* Border radius for the image */
+    transition: transform 0.3s ease; /* Add transition for smooth transformation */
+  }
+
+  /* Apply styles when hovering over the image */
+  #campaign-image:hover {
+    transform: scale(1.05); /* Scale the image slightly on hover */
+  }
+
+
+
+
+
+
+   .comment-count {
+        text-decoration: none; /* Remove underline */
+        color: gray; /* Inherit color from parent */
+    }
+
+
+/* Base styles for both activity and support links */
+.activity-link, .support-link {
+    position: absolute;
+    top: 10px;
+    padding: 10px;
+    border-radius: 50%;
+    z-index: 2;
+    text-decoration: none;
+    font-weight: bold;
+    display: inline-block;
+    text-align: center;
+    font-size: 14px;
+}
+
+/* Specific styles for the Activities link (left side) */
+.activity-link {
+    left: 10px;
+    color: white;
+    background-color: black;
+}
+
+/* Specific styles for the Support link (right side) */
+.support-link {
+    right: 10px;
+    color: black;
+    background-color: white;
+}
+
+
+
+
+/* Hover effect to show the label */
+.activity-link:hover .icon-label, .support-link:hover .icon-label {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-50%) translateY(5px);
+}
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+    .activity-link, .support-link {
+        padding: 8px;
+    }
+    .icon-label {
+        max-width: 100px;
+        font-size: 10px;
+        padding: 4px 8px;
+    }
+    .icon-label::after {
+        border-width: 5px;
+    }
+}
+
+
+
+
+
+
+.sponsored-text {
+    font-weight: bold;
+    color: #3498db; /* You can adjust the color as needed */
+}
+
+
+
+
+    .affiliate-link {
+      color: #3498db; /* Set the text color */
+      text-decoration: none; /* Remove the default underline */
+      font-weight: bold; /* Make the text bold */
+      transition: color 0.3s; /* Smooth transition for color change */
+    }
+
+    /* Hover effect for the affiliate link */
+    .affiliate-link:hover {
+      color: #1abc9c; /* Change the text color on hover */
+    }
+
+
+
+  .donate-link {
+    text-align: center;
+    margin-top: 20px;
+    background-color: #32CD32;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 25px;
+    display: inline-block;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+  }
+
+  .donate-link:hover {
+   
+    color: whitesmoke;
+  }
+.profile-pic-hover:hover {
+    transform: scale(1.5); /* Adjust the scale factor as needed */
+    transition: transform 0.2s ease-in-out; /* Smooth transition */
+}
+
+
+
+
+.cm {
+  font-size: 14px;
+}
+
+
+
+.container-with-border {
+    border: 1px solid silver;
+    border-radius: 10px;
+    padding: 0; /* Adjust padding as needed */
+    margin-bottom: 40px; /* Adjust margin as needed */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.05); /* Soft shadow */
+}
+
+
+
+    .love-icon-size {
+        font-size: 30px !important; /* Ensure that the font size is at least 30px */
+    }
+
+
+    .alert-badge {
+        background-color: red;
+        color: white;
+        border-radius: 50%;
+        padding: 5px 8px;
+        position: absolute;
+        top: -5px;
+        right: 1px;
+        font-size: 10px;
+    }
+
+
+
+
+
+
+
+.campaign-actions {
+    display: flex;
+    justify-content: space-between; /* Align items with space between */
+    align-items: center; /* Vertically center items */
+    margin-bottom: 20px; /* Add some space below the campaign actions */
+}
+
+/* Style for the "Report Campaign" link */
+.report-link {
+    color: #007bff; /* Set link color */
+    text-decoration: none; /* Remove default underline */
+    font-weight: bold; /* Make the text bold */
+}
+
+/* Style for the "Not Interested" form */
+.not-interested-form {
+    display: flex; /* Display form items in a row */
+    align-items: center; /* Vertically center items */
+}
+
+/* Style for the checkbox label */
+.not-interested-form label {
+    margin-right: 10px; /* Add space between the checkbox and label */
+}
+
+/* Style for the submit button */
+.submit-button {
+    background-color: #007bff; /* Set button background color */
+    color: #fff; /* Set button text color */
+    border: none; /* Remove default button border */
+    padding: 8px 16px; /* Add padding to the button */
+    border-radius: 5px; /* Add some border radius */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    transition: background-color 0.3s ease; /* Add smooth transition */
+}
+
+/* Hover effect for the submit button */
+.submit-button:hover {
+    background-color: #0056b3; /* Darken button background color on hover */
+}
+
+
+
+.share-buttons {
+    margin-top: 20px;
+}
+
+.share-buttons span {
+    margin-right: 10px;
+}
+
+.share-buttons a {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 40px;
+    margin-right: 10px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.share-buttons a:hover {
+    background-color: #0056b3;
+}
+
+       .action-item {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-right: 10px;
+            border-radius: 5px;
+            text-align: center;
+            font-size: 12px; /* Adjust the font size as needed */
+        }
+        .action-item a {
+           color: #000;
+            text-decoration: none;
+            font-size: inherit;
+        }
+        .action-item i {
+            margin-right: 5px;
+        }
+
+
+.footer {
+  
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px;
+}
+
+/* Other CSS rules remain the same */
+
+.footer-section {
+    flex: 1;
+    margin: 20px;
+}
+
+.footer-section h2 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    color: limegreen;
+}
+
+.footer-section p, .footer-section a {
+    color: #2c3e50;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.footer-section a {
+    text-decoration: none;
+}
+
+.footer-section a:hover {
+    color: #34495e;
+}
+
+.social-icons a {
+    margin: 0 10px;
+    color: #2c3e50;
+    font-size: 20px;
+}
+
+.social-icons a:hover {
+    color: #34495e;
+}
+
+.subscribe-form {
+    display: flex;
+    justify-content: center;
+}
+
+.subscribe-form input {
+    padding: 10px;
+    border: 1px solid #bdc3c7;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+    width: 200px;
+    background-color: white;
+}
+
+
+.footer-bottom {
+    margin-top: 20px;
+}
+
+.footer-bottom p {
+    font-size: 12px;
+    color: #bdc3c7;
+}
+
+
+@media (min-width: 768px) {
+  .footer {
+    display: none;
+  }
+}
+
+.mystery-text {
+    color: #ecf0f1;
+    font-size: 14px;
+    margin-top: 10px;
+    animation: fadeIn 5s infinite;
+}
+
+@keyframes fadeIn {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
+}
+
+
+
+.square-with-arrow {
+  position: relative;
+  display: inline-block;
+}
+
+.square-with-arrow .fa-square {
+  position: relative;
+  display: inline-block;
+}
+
+.square-with-arrow .fa-arrow-right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-top: -5px; /* Adjust this value as needed */
+  margin-right: -10px; /* Adjust this value as needed */
+  transform: rotate(-45deg);
+}
+
+
+
+.tagline {
+    display: block;
+    font-size: 18px; /* Adjust size as needed */
+    margin-top: 10px; /* Space between name and tagline */
+    opacity: 0.7; /* Slightly transparent */
+    
+}
+
+
+.carousel {
+    position: relative;
+    overflow: hidden;
+    width: 250px;
+    height: 400px;
+    margin: 0 auto;
+}
+
+.slides {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
+.slide {
+    min-width: 100%;
+    flex: 1;
+    text-align: center;
+    overflow: hidden;
+}
+
+/* Your other CSS styles for the .ad, .ad:hover, and image behavior */
+
+
+.ad {
+    
+    padding: 15px; /* Adjusted padding */
+    border: 1px solid #e0e0e0;
+    border-radius: 8px; /* Adjusted border-radius */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column; /* Ensure content stacks vertically */
+    align-items: center; /* Center align content */
+    transition: transform 0.3s ease; /* Smooth scaling on hover */
+    height: 100%; /* Make the ad take the full height of the slide */
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.ad:hover {
+    transform: scale(1.02); /* Slightly enlarge on hover */
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2); /* Enhanced shadow on hover */
+}
+
+.ad h2 {
+    font-size: 1.5rem; /* Smaller font size */
+    font-weight: 600;
+    color: #333;
+    margin: 10px 0 8px; /* Adjusted margin */
+    text-align: center;
+}
+
+.ad .content {
+    margin-bottom: 12px; /* Adjusted margin */
+    color: #666;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Limit to 3 lines */
+    -webkit-box-orient: vertical;
+    text-align: center;
+    line-height: 1.4;
+}
+
+.ad img {
+    width: calc(100% + 30px); /* Extend width by padding on both sides */
+    height: auto;
+    margin: -15px -15px 10px -15px; /* Compensate for the padding and add bottom margin */
+    border-radius: 8px 8px 0 0; /* Rounded corners only on top */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Added subtle shadow */
+    position: relative; /* Required for the CTA text */
+    transition: transform 0.3s ease; /* Smooth scaling on hover */
+}
+
+.ad img:hover {
+    transform: scale(1.05); /* Slight scale on hover */
+}
+
+.ad .sponsored-by {
+    font-size: 1.2rem; /* Smaller font size */
+    color: #888;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.ad .sponsored-by strong {
+    color: #444; /* Optional: Add a different color for the bold text */
+    font-weight: bold;
+}
+
+
+.ad a {
+    display: block;
+    width: 100%;
+    text-decoration: none;
+    color: inherit;
+    position: relative; /* Required for the CTA text */
+}
+
+.ad a::after {
+    content: "Visit"; /* CTA text */
+    position: absolute;
+    top: 50%; /* Center vertically */
+    left: 50%; /* Center horizontally */
+    transform: translate(-50%, -50%); /* Center text */
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    color: white; /* Text color */
+    padding: 5px 10px; /* Padding */
+    border-radius: 5px; /* Rounded corners */
+    opacity: 0; /* Initially hidden */
+    transition: opacity 0.3s ease; /* Smooth transition */
+}
+
+.ad a:hover::after {
+    opacity: 1; /* Show on hover */
+}
+
+
+
+  .left-aside, .right-aside {
+    flex: 1;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .left-aside, .right-aside {
+      display: none;
+    }
+  }
+
+.header {
+    background-color: white;
+    color: black;
+    text-align: left;
+
+    padding: 10px;
+}
+
+.header::before {
+    content: "•"; /* Unicode character for a bullet point */
+   
+    left: 10px; /* Adjust the position as needed */
+    font-size: 20px; /* Adjust the size of the bullet point */
+    line-height: 1;
+    color: black; /* Ensure the bullet color matches the text */
+}
+
+
+  .changemaker-text {
+        visibility: hidden; /* Initially hide the text */
+        font-size: 16px;
+        color: #333;
+        position: absolute;
+        margin-left: 5px; /* Adjust positioning next to the star */
+    }
+
+    .cm:hover .changemaker-text {
+        visibility: visible; /* Show text on hover */
+    }
+
+
+
+
+/* Light mode (default) styles remain the same */
+.sidebar-box {
+    border-left: 2px solid #c0c0c0;
+    height: 800px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(192, 192, 192, 0.3);
+    padding: 0;
+    background-color: #f8f8f8;
+}
+.sidebar-box {
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+/* Dark mode styles */
+.dark-mode .sidebar-box {
+    border-left: 2px solid #444; /* Darker border */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Darker shadow */
+    background-color: #2d2d2d; /* Dark background */
+    color: #e0e0e0; /* Light text color */
+}
+
+/* Mobile styles remain the same */
+@media (max-width: 767px) {
+    .sidebar-box {
+        border: none;
+        height: auto;
+        overflow: visible;
+        border-radius: 0;
+        box-shadow: none;
+        padding: 0;
+        background-color: transparent;
+    }
+    
+    /* Dark mode mobile override */
+    .dark-mode .sidebar-box {
+        background-color: transparent; /* Keep transparent in dark mode on mobile */
+        color: inherit; /* Inherit text color from parent */
+    }
+}
+
+@media (max-width: 767px) {
+    .desktop-only {
+        display: none !important;
+    }
+}
+
+
+/* Styles for the "Activities" label (left-centered) */
+.activity-label {
+    visibility: hidden;
+    max-width: 120px;
+    background: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
+    color: white;
+    text-align: center;
+    border-radius: 12px;
+    padding: 12px 12px 8px; /* Increased top padding */
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    left: 80%; /* Centered below the icon */
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+    font-size: 11px;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    word-wrap: break-word;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Styles for the "Participate" label (right-aligned) */
+.participate-label {
+    visibility: hidden;
+    max-width: 120px;
+    background: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
+    color: white;
+    text-align: center;
+    border-radius: 12px;
+    padding: 12px 12px 8px; /* Increased top padding */
+    position: absolute;
+    z-index: 1;
+    top: 100%;
+    right: 0; /* Positioned to the right */
+    transform: translateX(0); /* No centering needed */
+    opacity: 0;
+    transition: opacity 0.3s, transform 0.3s, visibility 0.3s;
+    font-size: 11px;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    word-wrap: break-word;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Hover effect for the "Activities" label */
+.activity-link:hover .activity-label {
+    visibility: visible;
+    opacity: 1;
+    transform: translateX(-50%) translateY(-10px); /* Slight upward motion */
+}
+
+/* Hover effect for the "Participate" label */
+.support-link:hover .participate-label {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(-10px); /* Slight upward motion */
+}
+
+/* Tooltip arrow pointing up, located below the "Activities" icon */
+.activity-label::after {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    right: 60%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: transparent transparent rgba(0, 0, 0, 0.7) transparent;
+}
+
+/* Tooltip arrow pointing up, located below the "Participate" icon */
+.participate-label::after {
+    content: '';
+    position: absolute;
+    bottom: 100%;
+    left: 80%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: transparent transparent rgba(0, 0, 0, 0.7) transparent;
+}
+
+
+/* Updated the nav styles to .campaign-nav */
+.campaign-nav {
+    margin-top: 20px;
+    border: 1px solid #808080;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.campaign-nav a {
+    text-decoration: none;
+    font-weight: bold;
+    padding: 8px 10px;
+    display: block;
+    transition: background-color 0.3s ease;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.campaign-nav a:hover {
+    background-color: limegreen; /* Light lime green on hover */
+}
+
+
+/* For larger screens (desktop) */
+h4 {
+    font-size: 19px;
+    padding-left: 20px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.explore-link i {
+    font-size: 14px;  /* Smaller icon size */
+    color: black;  /* Default icon color is black */
+    transition: transform 0.3s ease, color 0.3s ease;  /* Smooth transition for hover and color change */
+}
+
+/* For smaller screens (mobile) */
+@media (max-width: 768px) {
+    h4 {
+        font-size: 16px;  /* Smaller text on mobile */
+        padding-left: 15px;  /* Reduced padding */
+    }
+
+    .explore-link i {
+        font-size: 12px;  /* Even smaller icon on mobile */
+    }
+}
+
+/* Hover effect for icon */
+.explore-link:hover i {
+    transform: scale(1.1);  /* Slightly enlarge the icon on hover */
+}
+
+/* Adjust the icon color depending on the background (for both light and dark backgrounds) */
+body.light-theme .explore-link i {
+    color: black;  /* Black icon for light backgrounds */
+}
+
+body.dark-theme .explore-link i {
+    color: white;  /* White icon for dark backgrounds */
+}
+
+
+/* Styling for the go-back arrow */
+.go-back-arrow {
+    cursor: pointer;
+    font-size: 20px; /* Icon size */
+    color: silver; /* Silver color for the icon */
+    background-color: transparent; /* Transparent background */
+    border: none; /* No border */
+    margin-right: 10px; /* Space between arrow and input field */
+    padding: 0; /* No padding */
+    transition: color 0.3s ease, transform 0.2s ease; /* Smooth transition */
+}
+
+.go-back-arrow:hover {
+    color: gray; /* Change color to gray on hover */
+    transform: scale(1.1); /* Slight zoom on hover */
+}
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+    .search-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .search-wrapper {
+        display: flex;
+        flex: 1; /* Make the search input fill the available space */
+        align-items: center;
+    }
+
+    .go-back-arrow {
+        display: inline-block; /* Show the arrow only on mobile */
+    }
+}
+
+/* Default: hide go-back arrow for larger screens */
+@media (min-width: 769px) {
+    .go-back-arrow {
+        display: none; /* Hide the go-back arrow on larger screens */
+    }
+}
+
+.search-container input[type="text"] {
+    background-color: white;
+    color: black;
+    border: 1px solid #ccc;
+}
+
+.search-container {
+    color: black;
+}
+
+
+/* Hide the button on mobile screens */
+@media (max-width: 768px) {
+    .hide-on-mobile {
+        display: none;
+    }
+}
+
+
+
+/* Dark Mode Styles */
+body.dark-mode {
+    background-color: #121212; /* Dark background */
+    color: #ffffff; /* Light text */
+}
+
+body.dark-mode header,
+body.dark-mode footer,
+body.dark-mode section,
+body.dark-mode .left-aside,
+body.dark-mode .right-aside,
+body.dark-mode .upper-post,
+body.dark-mode .campaign-content,
+body.dark-mode .react div {
+    background-color: #1e1e1e; /* Slightly lighter dark background */
+    color: #ffffff; /* Light text */
+}
+
+body.dark-mode .campaign-category {
+    background-color: #333333; /* Darker background for category */
+    color: #ffffff; /* Light text */
+}
+
+body.dark-mode .objectives-activities {
+    background-color: #262626; /* Dark background for objectives */
+    border-left: 4px solid #3498db; /* Accent border */
+    color: #ffffff; /* Light text */
+}
+
+body.dark-mode .search-container input[type="text"] {
+    background-color: #333333; /* Dark background for input */
+    color: #ffffff; /* Light text */
+    border: 1px solid #444444; /* Dark border */
+}
+
+
+body.dark-mode .explore-link i {
+    color: #ffffff; /* Light icon color */
+}
+
+body.dark-mode .love-count,
+body.dark-mode #view-count,
+body.dark-mode .comment-count {
+    color: #ffffff; /* Light text for counts */
+}
+  </style>
+
+
+
+    <style type="text/css">
+        /* ===== Base Styles ===== */
+        html, body {
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+
+        /* ===== Navbar Styles ===== */
+        .navbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            border-top: 1px solid #dbdbdb;
+            z-index: 1000;
+            padding: 0;
+            width: 100%;
+            transform: translateZ(0);
+            backface-visibility: hidden;
+            margin: 0;
+            box-sizing: border-box;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .bottom-nav li {
+            flex: 1;
+            text-align: center;
+        }
+
+        .bottom-nav a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #262626;
+            text-decoration: none;
+            position: relative;
+            padding: 12px 0 8px;
+            transition: color 0.3s ease;
+        }
+
+        .bottom-nav a.active {
+            color: #0095f6;
+        }
+
+        .bottom-nav svg {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 4px;
+        }
+
+        .create-btn-container {
+            /* Special styles for create button */
+        }
+
+        /* ===== Dropdown Menu Styles ===== */
+        .navbar-dropdown-menu {
+            position: fixed;
+            bottom: 60px;
+            left: 0;
+            right: 0;
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 12px 12px 0 0;
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+            padding: 16px;
+            transform: translateY(100%);
+            opacity: 0;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            z-index: 999;
+            pointer-events: none;
+        }
+
+        .navbar-dropdown-menu.active {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .navbar-dropdown-menu ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .navbar-dropdown-menu li {
+            margin-bottom: 12px;
+        }
+
+        .navbar-dropdown-menu li:last-child {
+            margin-bottom: 0;
+        }
+
+        .navbar-dropdown-menu a {
+            display: flex;
+            align-items: center;
+            color: #262626;
+            text-decoration: none;
+            padding: 12px 16px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+        }
+
+        .navbar-dropdown-menu a:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .navbar-dropdown-menu svg {
+            margin-right: 16px;
+            width: 24px;
+            height: 24px;
+        }
+
+        /* ===== Overlay Styles ===== */
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 998;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .menu-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* ===== Desktop Menu Dropdown Styles ===== */
+        .menu-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            background-color: #fff;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.12);
+            padding: 8px 0;
+            z-index: 100;
+            border-radius: 8px;
+            min-width: 200px;
+            transform: translateY(5px);
+            transition: all 0.25s cubic-bezier(0.23, 1, 0.32, 1);
+            opacity: 0;
+            pointer-events: none;
+            margin-top: 5px;
+        }
+
+        .menu-dropdown.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .menu-dropdown a {
+            display: flex;
+            align-items: center;
+            padding: 10px 16px;
+            color: #444;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            gap: 10px;
+        }
+
+        .menu-dropdown a:hover {
+            background-color: #f8f8f8;
+            color: #000;
+        }
+
+        .menu-dropdown a i {
+            width: 20px;
+            text-align: center;
+            font-size: 15px;
+            color: #666;
+        }
+
+        /* ===== Badge Styles ===== */
+        .alert-badge {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            background-color: #ff3040;
+            color: white;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        /* ===== Responsive Styles ===== */
+        @media screen and (min-width: 768px) {
+            .navbar {
+                display: none;
+            }
+        }
+
+        /* ===== Dark Mode Styles ===== */
+        .dark-mode {
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+
+        .dark-mode .navbar {
+            background-color: #1e1e1e;
+            border-top-color: #333;
+        }
+
+        .dark-mode .bottom-nav a {
+            color: #b0b0b0;
+        }
+
+        .dark-mode .bottom-nav a.active {
+            color: #0095f6;
+        }
+
+        .dark-mode .navbar-dropdown-menu {
+            background-color: rgba(30, 30, 30, 0.95);
+            box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .dark-mode .navbar-dropdown-menu a {
+            color: #e0e0e0;
+        }
+
+        .dark-mode .navbar-dropdown-menu a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .dark-mode .menu-dropdown {
+            background-color: #262626;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .dark-mode .menu-dropdown a {
+            color: #e0e0e0;
+        }
+
+        .dark-mode .menu-dropdown a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+        }
+
+        .dark-mode .menu-dropdown a i {
+            color: #b0b0b0;
+        }
+
+        .dark-mode .menu-overlay {
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .dark-mode .navbar-dropdown-menu svg path {
+            stroke: #e0e0e0;
+        }
+    </style>
+
+
+<style type="text/css">
+  .follow-btn {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid #1DA1F2;
+    background: white;
+    color: #1DA1F2;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    margin-left: 10px;
+    min-width: 80px;
+    text-align: center;
     box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
-.cta-btn:hover {
-    background: rgba(255, 255, 255, 0.9) !important;
-    border-color: rgba(180, 180, 180, 0.7) !important;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+.follow-btn:hover {
+    background: rgba(29, 161, 242, 0.1);
 }
 
-.cta-btn:active {
-    transform: translateY(0);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+.follow-btn.following {
+    background: #1DA1F2;
+    color: white;
 }
 
-/* Dark mode adjustments */
-.dark-mode .participation-cta {
-    background: rgba(60, 60, 60, 0.9) !important;
-    border-color: rgba(100, 100, 100, 0.5) !important;
+.follow-btn.following:hover {
+    background: #e0245e;
 }
 
-.dark-mode .cta-btn {
-    background: rgba(80, 80, 80, 0.7) !important;
-    color: #eee !important;
-    border-color: rgba(120, 120, 120, 0.5) !important;
+/* Simple text swap - no fancy transitions */
+.follow-btn .btn-text {
+    display: block;
 }
 
-.dark-mode .cta-btn:hover {
-    background: rgba(90, 90, 90, 0.9) !important;
+.follow-btn .unfollow-text {
+    display: none;
 }
 
-.dark-mode .cta-note {
-    color: #bbb !important;
+.follow-btn.following:hover .btn-text {
+    display: none;
 }
-/* Hover effects */
-.engagement-btn.join-btn:hover {
+
+.follow-btn.following:hover .unfollow-text {
+    display: block;
+}
+
+.follow-btn.loading {
+    opacity: 0.7;
+    pointer-events: none;
+    padding-left: 30px;
+}
+
+.follow-btn.loading:before {
+    content: "";
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    width: 16px;
+    height: 16px;
+    margin-top: -8px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.followers-count {
+    font-size: 12px;
+    color: #666;
+    margin-left: 15px;
+    display: inline-block;
+}
+</style>
+
+<style>
+/* Simple, accessible styling */
+.simple-campaigns-container {
+    max-width: 600px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+}
+
+.simple-campaign-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.creator-info {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    position: relative;
+}
+
+.creator-pic img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.creator-details {
+    flex-grow: 1;
+}
+
+.creator-name {
+    font-weight: bold;
+    font-size: 15px;
+    color: #333;
+}
+
+.verified-badge {
+    color: #1DA1F2;
+    font-size: 14px;
+}
+
+.changemaker-badge {
+    background: #FF5252;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 11px;
+    margin-left: 5px;
+}
+
+.campaign-time {
+    font-size: 12px;
+    color: #777;
+}
+
+.campaign-menu {
+    color: #666;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.menu-dropdown {
+    display: none;
+    position: absolute;
+    right: 10px;
+    top: 40px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 10;
+}
+
+.menu-dropdown a {
+    display: block;
+    padding: 8px 15px;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.menu-dropdown a:hover {
+    background: #f5f5f5;
+}
+
+.campaign-image-section {
+    position: relative;
+}
+
+.main-campaign-image {
+    width: 100%;
+    max-height: 500px;
+    object-fit: cover;
+    display: block;
+}
+
+.no-image-placeholder {
+    height: 200px;
+    background: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+}
+
+.no-image-placeholder i {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.image-overlay-top, .image-overlay-bottom {
+    position: absolute;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    color: white;
+}
+
+.image-overlay-top {
+    top: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 100%);
+}
+
+.image-overlay-bottom {
+    bottom: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
+}
+
+.campaign-category {
+    font-weight: bold;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+.progress-container {
+    margin-bottom: 10px;
+}
+
+.progress-text {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.progress-bar {
+    height: 5px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 3px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #4CAF50;
+    border-radius: 3px;
+}
+
+.campaign-time-left {
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+}
+
+.campaign-time-left i {
+    margin-right: 5px;
+}
+
+.join-prompt {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0,0,0,0.7);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+.join-prompt i {
+    margin-right: 5px;
+}
+.donate-button-overlay {
+    position: absolute;
+    bottom: 60px;
+    left: 10px;
+}
+
+.simple-donate-btn {
+    background: #FF5722;
+    color: white;
+    padding: 8px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    width: 40px; /* Fixed width for icon-only state */
+    overflow: hidden;
+    border: 1px solid transparent; /* Add for smooth hover transition */
+}
+
+.simple-donate-btn {
+    min-width: 40px;
+    width: 40px;
+}
+
+.donate-text {
+    margin-left: 8px;
+    white-space: nowrap;
+    opacity: 0;
+    width: 0;
+    transition: all 0.3s ease;
+}
+
+.simple-donate-btn:hover {
+    width: auto; /* Allow full width on hover */
+    padding: 8px 15px;
+    background: white; /* White background on hover */
+    color: #FF5722; /* Orange text on hover */
+    border-color: #FF5722; /* Orange border on hover */
+}
+
+.simple-donate-btn:hover .donate-text {
+    opacity: 1;
+    width: auto;
+    margin-left: 8px;
+}
+
+/* For accessibility - ensure text is readable when focused */
+.simple-donate-btn:focus {
+    width: auto;
+    padding: 8px 15px;
+    background: white;
+    color: #FF5722;
+    border-color: #FF5722;
+}
+
+.campaign-basic-info {
+    padding: 12px;
+}
+
+.simple-campaign-title {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.simple-campaign-objective {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.4;
+}
+
+.campaign-status {
+    display: flex;
+    padding: 0 12px 12px;
+    align-items: center;
+}
+
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 15px;
+    font-size: 13px;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.status-badge i {
+    margin-right: 5px;
+}
+
+.status-badge.active {
+    background: #E8F5E9;
+    color: #2E7D32;
+}
+
+.status-badge.outdated {
+    background: #FFEBEE;
+    color: #C62828;
+}
+
+.runtime-info {
+    font-size: 13px;
+    color: #666;
+}
+
+.runtime-info i {
+    margin-right: 5px;
+}
+
+.simple-actions {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 12px 12px;
+    border-top: 1px solid #eee;
+    padding-top: 12px;
+}
+
+.action-group {
+    display: flex;
+}
+
+.simple-action-btn {
+    background: none;
+    border: none;
+    color: #555;
+    font-size: 14px;
+    padding: 5px 10px;
+    margin-right: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.simple-action-btn i {
+    margin-right: 5px;
+    font-size: 16px;
+}
+
+.simple-action-btn.love-btn {
+    color: #E91E63;
+}
+
+/* Add hover effects to action buttons */
+.simple-action-btn:hover {
+    color: #c0c0c0; /* Silver white color */
+    background-color: rgba(192, 192, 192, 0.1); /* Optional: slight background on hover */
+    transition: color 0.2s ease; /* Smooth transition */
+}
+
+/* Specific hover for love button - keeps red color but changes to silver on hover */
+.simple-action-btn.love-btn:hover {
+    color: #c0c0c0; /* Override the red color on hover */
+}
+
+.simple-join-btn {
+    /* Base styles are now inline */
+}
+
+.simple-join-btn:hover {
     transform: translateY(-1px);
     box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
 
-.engagement-btn.join-btn.leave:hover {
+.leave-btn:hover {
     background: rgba(237, 73, 86, 0.15) !important;
     border-color: rgba(237, 73, 86, 0.4) !important;
 }
 
-.engagement-btn.join-btn:not(.leave):hover {
+.simple-join-btn:not(.leave-btn):hover {
     background: rgba(0, 149, 246, 0.15) !important;
     border-color: rgba(0, 149, 246, 0.4) !important;
 }
 
-/* Active/pressed state */
-.engagement-btn.join-btn:active {
+.simple-join-btn:active {
     transform: translateY(0);
     box-shadow: none;
 }
+
+/* Follow button in creator info section */
+.creator-follow {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+
+.creator-follow .follow-btn {
+    margin-left: 10px;
+}
+
+@media (max-width: 480px) {
+    .simple-campaign-card {
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
+
+    .simple-action-btn .label {
+        display: none;
+    }
+    
+    .creator-follow {
+        flex-direction: column;
+        align-items: flex-end;
+    }
+    
+    .creator-follow .followers-count {
+        margin-left: 0;
+        margin-top: 4px;
+    }
+}
+
 .campaign-participation-links {
     display: flex;
     padding: 0 12px 12px;
@@ -255,40 +2018,1373 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 14px;
-    transition: all 0.2s ease;
-    border: 1px solid rgba(0,0,0,0.05);
 }
 
 .participation-link i {
     margin-right: 8px;
     color: #2196F3;
-    font-size: 14px;
 }
 
 .participation-link:hover {
     background: #e0e0e0;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
-/* Dark mode support */
-.dark-mode .participation-link {
+.campaign-caption {
+    font-size: 15px;
+    line-height: 1.4;
+    padding: 8px 12px;
+    color: #333;
+}
+
+.campaign-caption strong {
+    color: #000;
+    display: block;
+    margin-bottom: 3px;
+}
+
+.campaign-content-points {
+    padding: 0 12px 12px;
+    font-size: 15px;
+    line-height: 1.4;
+    color: #333;
+}
+
+.campaign-content-points ul {
+    padding-left: 20px;
+    margin: 0;
+    list-style-type: none;
+}
+
+.campaign-content-points li {
+    position: relative;
+    padding-left: 15px;
+    margin-bottom: 8px;
+}
+
+.campaign-content-points li:before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #666;
+}
+
+.see-more-container {
+    text-align: center;
+    margin-top: 8px;
+}
+
+.see-more-btn, .see-less-btn {
+    background: none;
+    border: none;
+    color: #3897f0;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 5px 10px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.see-more-btn:hover, .see-less-btn:hover {
+    background: rgba(245, 245, 245, 0.7); /* Silver-white */
+    color: #1877f2; /* Slightly darker blue on hover */
+    text-decoration: none;
+}
+
+.see-more-btn i, .see-less-btn i {
+    margin-left: 5px;
+    font-size: 12px;
+    transition: transform 0.2s ease;
+}
+
+.see-more-btn:hover i {
+    transform: translateY(1px);
+}
+
+.see-less-btn:hover i {
+    transform: translateY(-1px);
+}
+
+.full-content {
+    margin-top: 10px;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* ===== Dark Mode Styles ===== */
+.dark-mode .simple-campaigns-container {
+    background-color: #121212;
+}
+
+.dark-mode .simple-campaign-card {
+    background: #1e1e1e;
+    border-color: #333;
+}
+
+.dark-mode .creator-name,
+.dark-mode .simple-campaign-title,
+.dark-mode .campaign-caption strong {
+    color: #f0f0f0;
+}
+
+.dark-mode .campaign-time,
+.dark-mode .simple-campaign-objective,
+.dark-mode .campaign-caption,
+.dark-mode .campaign-content-points,
+.dark-mode .runtime-info {
+    color: #b0b0b0;
+}
+
+.dark-mode .campaign-menu {
+    color: #b0b0b0;
+}
+
+.dark-mode .menu-dropdown {
     background: #2d2d2d;
-    color: #eee;
-    border-color: rgba(255,255,255,0.05);
+    border-color: #444;
+}
+
+.dark-mode .menu-dropdown a {
+    color: #e0e0e0;
+}
+
+.dark-mode .menu-dropdown a:hover {
+    background: #383838;
+}
+
+.dark-mode .no-image-placeholder {
+    background: #2a2a2a;
+    color: #666;
+}
+
+.dark-mode .status-badge.active {
+    background: #1b5e20;
+    color: #a5d6a7;
+}
+
+.dark-mode .status-badge.outdated {
+    background: #b71c1c;
+    color: #ffcdd2;
+}
+
+.dark-mode .simple-actions {
+    border-top-color: #333;
+}
+
+.dark-mode .simple-action-btn {
+    color: #b0b0b0;
+}
+
+.dark-mode .simple-action-btn:hover {
+    color: #e0e0e0;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.dark-mode .simple-action-btn.love-btn {
+    color: #ff2d55;
+}
+
+.dark-mode .simple-action-btn.love-btn:hover {
+    color: #ff6b8b;
+}
+
+.dark-mode .participation-link {
+    background: #2a2a2a;
+    color: #e0e0e0;
 }
 
 .dark-mode .participation-link:hover {
-    background: #3d3d3d;
+    background: #383838;
 }
 
 .dark-mode .participation-link i {
-    color: #64B5F6;
+    color: #64b5f6;
+}
+
+.dark-mode .see-more-btn,
+.dark-mode .see-less-btn {
+    color: #64b5f6;
+}
+
+.dark-mode .see-more-btn:hover,
+.dark-mode .see-less-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #90caf9;
+}
+
+/* Dark mode follow button styles */
+.dark-mode .follow-btn {
+    background: #1e1e1e;
+    color: #1DA1F2;
+    border-color: #1DA1F2;
+}
+
+.dark-mode .follow-btn:hover {
+    background: rgba(29, 161, 242, 0.2);
+}
+
+.dark-mode .follow-btn.following {
+    background: #1DA1F2;
+    color: white;
+}
+
+.dark-mode .follow-btn.following:hover {
+    background: #e0245e;
+}
+
+.dark-mode .followers-count {
+    color: #b0b0b0;
+}
+
+/* Overlay elements in dark mode */
+.dark-mode .join-prompt,
+.dark-mode .campaign-views-overlay {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.dark-mode .campaign-views-overlay:hover {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+/* Progress bar adjustments */
+.dark-mode .progress-bar {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Donate button in dark mode */
+.dark-mode .simple-donate-btn {
+    background: #ff7043;
+}
+
+/* Join/Leave buttons in dark mode */
+.dark-mode .simple-join-btn {
+    background: #1976d2;
+}
+
+.dark-mode .simple-join-btn.leave-btn {
+    background: #d32f2f;
+}
+
+/* List bullets in dark mode */
+.dark-mode .campaign-content-points li:before {
+    color: #666;
+}
+
+/* Mobile adjustments for dark mode */
+@media (max-width: 480px) {
+    .dark-mode .simple-campaign-card {
+        border-color: #333;
+    }
+}
+
+/* Views Counter with Tooltip */
+.campaign-views-overlay {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    backdrop-filter: blur(2px);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 2;
+}
+
+.campaign-views-overlay:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.campaign-views-overlay i {
+    font-size: 12px;
+}
+
+.views-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    margin-bottom: 8px;
+    pointer-events: none;
+}
+
+.views-tooltip:after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgba(0,0,0,0.8) transparent transparent transparent;
+}
+
+.campaign-views-overlay:hover .views-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Blinking Animation */
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.blink-5s {
+    animation: blink 5s infinite;
+    /* Optional: Add these for smoother transitions */
+    transition: opacity 0.5s ease;
+    animation-timing-function: ease-in-out;
+}
+
+/* If you want it to fade instead of blink sharply */
+@keyframes gentleBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+/* Alternative: Fade in/out every 5s */
+@keyframes fadePulse {
+    0%, 100% { 
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.95);
+    }
+}
+
+/* Apply the animation */
+.join-prompt {
+    /* Your existing styles */
+    animation: fadePulse 5s infinite;
+}
+.heart {
+    position: fixed;
+    pointer-events: none;
+    background-color: #ff2d55;
+    display: inline-block;
+    transform: rotate(-45deg);
+    z-index: 1000;
+}
+
+.heart:before, .heart:after {
+    content: "";
+    background-color: #ff2d55;
+    border-radius: 50%;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.heart:before {
+    top: -50%;
+    left: 0;
+}
+
+.heart:after {
+    top: 0;
+    left: 50%;
+}
+
+@keyframes float {
+    0% {
+        transform: translate(0, 0) rotate(-45deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(
+            calc(var(--random-x) * 100px), 
+            calc(var(--random-y) * -150px)
+        ) rotate(-45deg);
+        opacity: 0;
+    }
+}
+
+/* Love button styles */
+.loved {
+    color: #ff2d55 !important;
+}
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+    .love-btn {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    
+    .love-count-mobile {
+        display: inline-block;
+        font-size: 14px;
+    }
+    
+    /* Hide desktop count on mobile if needed */
+    .love-count-desktop {
+        display: none;
+    }
+}
+
+/* Desktop styles */
+@media (min-width: 769px) {
+    .love-count-mobile {
+        display: none;
+    }
+    
+    .love-count-desktop {
+        display: inline-block;
+    }
+}
+
+/* Light mode (default) */
+.filter-form {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 20px;
+}
+
+.filter-label {
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+}
+
+.filter-select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    font-size: 14px;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.filter-select:hover {
+    border-color: #bbb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+/* Dark mode */
+.dark-mode .filter-form {
+    background-color: transparent; /* Ensure form background doesn't conflict */
+}
+
+.dark-mode .filter-label {
+    color: #f0f0f0; /* Light text for dark mode */
+}
+
+.dark-mode .filter-select {
+    background-color: #333; /* Dark background for select */
+    border-color: #555; /* Darker border */
+    color: #f0f0f0; /* Light text */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Darker shadow */
+}
+
+.dark-mode .filter-select:hover {
+    border-color: #777; /* Lighter border on hover */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); /* Stronger shadow on hover */
+}
+
+.dark-mode .filter-select:focus {
+    border-color: #007bff; /* Keep focus color consistent */
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Brighter focus shadow */
+}
+
+/* Mobile version */
+@media (max-width: 768px) {
+    .filter-form {
+        flex-direction: column; /* Stack elements vertically */
+        align-items: flex-start; /* Align items to the start */
+        padding-left: 10px; /* Reduce padding */
+        gap: 8px; /* Reduce gap between elements */
+    }
+
+    .filter-label {
+        font-size: 13px;
+    }
+}
+</style>
+<style>
+    /* Dark mode styles */
+    .dark-mode .profile-widget .username-text {
+        color: #e0e0e0 !important;
+    }
+    
+    .dark-mode .profile-widget .last-visit {
+        color: #b0b0b0 !important;
+    }
+    
+    .dark-mode .profile-widget .last-visit span[style="font-weight: 600;"] {
+        color: #d0d0d0 !important;
+    }
+    
+    /* Keep the green accent colors the same in both modes */
+    .dark-mode .profile-widget span[style="color: #4CAF50;"],
+    .dark-mode .profile-widget .profile-image {
+        border-color: #4CAF50 !important;
+    }
+    
+    /* Adjust badge shadow for dark mode */
+    .dark-mode .vip-badge {
+        box-shadow: 0 2px 3px rgba(0,0,0,0.4) !important;
+    }
+</style>
+<style>
+    .dark-mode .dark-mode-compatible {
+        background-color: #1E1E1E;
+        padding: 8px 12px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    
+    .dark-mode .dark-mode-compatible:hover {
+        background-color: #252525;
+    }
+</style>
+
+<style type="text/css">
+  .action-group {
+    display: flex;
+    gap: 8px;
+    position: relative;
+}
+
+.simple-action-btn {
+    position: relative; /* Essential for absolute positioning of label */
+    background: none;
+    border: none;
+    color: #555;
+    font-size: 14px;
+    padding: 5px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.simple-action-btn i {
+    margin-right: 5px;
+    font-size: 16px;
+}
+
+.simple-action-btn.love-btn {
+    color: #E91E63;
+}
+
+/* Label styling - positioned ABOVE the icon */
+.action-label {
+    position: absolute;
+    left: 50%;
+    top: -25px; /* Position above the button */
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 12px;
+    background: #c0c0c0; /* Silver background */
+    color: #000 !important; /* Black text with important to override dark mode */
+    padding: 3px 10px;
+    border-radius: 15px;
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    z-index: 100;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    border: 1px solid #808080;
+}
+
+/* Tooltip arrow */
+.action-label::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px 5px 0;
+    border-style: solid;
+    border-color: #c0c0c0 transparent transparent;
+}
+
+/* Show label on hover */
+.simple-action-btn:hover .action-label {
+    opacity: 1;
+    top: -30px; /* Final raised position */
+}
+
+/* Show label on touch for mobile devices */
+.simple-action-btn:active .action-label,
+.simple-action-btn:focus .action-label {
+    opacity: 1;
+    top: -30px;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 480px) {
+    .simple-action-btn {
+        padding: 5px 10px;
+    }
+    
+    .action-label {
+        font-size: 10px;
+        padding: 2px 8px;
+        top: -22px;
+    }
+    
+    .simple-action-btn:hover .action-label,
+    .simple-action-btn:active .action-label {
+        top: -25px;
+    }
+}
+
+/* ===== Dark Mode Styles ===== */
+.dark-mode .action-label {
+    background: #c0c0c0 !important; /* Force silver background */
+    color: #000 !important; /* Force black text */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .action-label::after {
+    border-color: #c0c0c0 transparent transparent !important;
+}
+
+/* Adjust hover states in dark mode */
+.dark-mode .simple-action-btn:hover .action-label,
+.dark-mode .simple-action-btn:active .action-label,
+.dark-mode .simple-action-btn:focus .action-label {
+    background: #d0d0d0 !important; /* Slightly lighter silver */
+    color: #000 !important; /* Maintain black text */
+}
+
+/* Love button tooltip special case */
+.dark-mode .simple-action-btn.love-btn:hover .action-label,
+.dark-mode .simple-action-btn.love-btn:active .action-label,
+.dark-mode .simple-action-btn.love-btn:focus .action-label {
+    background: #d0d0d0 !important;
+    color: #000 !important;
+}
+
+/* Mobile adjustments for dark mode */
+@media (max-width: 480px) {
+    .dark-mode .action-label {
+        background: #c0c0c0 !important;
+        color: #000 !important;
+    }
+}
+
+/* Additional button styles */
+.simple-action-btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.dark-mode .simple-action-btn {
+    color: #aaa;
+}
+
+.dark-mode .simple-action-btn:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.simple-action-btn.love-btn:hover {
+    background-color: rgba(233, 30, 99, 0.1);
+}
+
+.dark-mode .simple-action-btn.love-btn:hover {
+    background-color: rgba(233, 30, 99, 0.2);
+}
+
+
+/* Hide mobile version by default, show web version */
+.mobile-version { display: none; }
+.web-version { display: block; }
+
+/* On screens smaller than 768px (mobile) */
+@media (max-width: 768px) {
+    .mobile-version { display: block; }
+    .web-version { display: none; }
 }
 
 </style>
+
+
+
+
+
+<style>
+.dashboard-snaps {
+  margin-top: 24px;
+  background: #fff;
+  border-radius: 12px;
+  padding-left: 8px;
+  padding-top: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+.snaps-header {
+  margin-bottom: 12px;
+}
+
+.snaps-title {
+  font-size: 18px;
+  color: #333;
+  font-weight: 600;
+}
+
+.snaps-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.snap-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 12px;
+  background: #f0f2f5;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.snap-icon {
+  font-size: 20px;
+  margin-bottom: 8px;
+  color: #1877f2;
+}
+
+.snap-label {
+  display: block;
+  font-size: 13px;
+  color: #000;
+  font-weight: 500;
+}
+
+/* === Dark Mode === */
+.dark-mode .dashboard-snaps {
+  background: #1e1e1e;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dark-mode .snap-link {
+  background: #2d2d2d;
+  transition: background-color 0.2s ease;
+}
+
+.dark-mode .snap-link:hover {
+  background: #383838;
+}
+
+.dark-mode .snap-icon {
+  color: #64b5f6;
+}
+
+.dark-mode .snap-label {
+  color: #e0e0e0;
+}
+
+/* Smooth transitions */
+.dashboard-snaps,
+.snap-link,
+.snap-icon,
+.snap-label {
+  transition: all 0.3s ease;
+}
+
+</style>
+
+
+
+<style>
+ .search-container {
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .search-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  #query-field {
+    width: 100%;
+    padding: 10px 50px 10px 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 20px; /* Only border radius on input */
+    font-size: 14px;
+    color: #333;
+    outline: none;
+    transition: border 0.2s;
+  }
+  
+  #query-field:focus {
+    border-color: #aaa;
+  }
+  
+  .search-icons {
+    position: absolute;
+    right: 5px;
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+  
+  .btn-reset, .btn-search {
+    width: 30px;
+    height: 30px;
+    border: none;
+    background: transparent;
+    color: #999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+  }
+  
+  .btn-reset:hover, .btn-search:hover {
+    color: #555;
+  }
+  
+  .fa-search, .fa-times {
+    font-size: 14px;
+  }
+
+  
+</style>
+
+
+
+
+
+
 <style type="text/css">
+/* Light mode styles */
+.follow-text {
+    color: #1DA1F2;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    margin-left: 10px;
+    text-align: center;
+    display: inline-block;
+}
+
+.follow-text:hover {
+    text-decoration: underline;
+    opacity: 0.8;
+}
+
+.follow-text.following {
+    color: #1DA1F2;
+}
+
+.follow-text.following:hover {
+    color: #e0245e;
+}
+
+/* Dark mode styles */
+.dark-mode .follow-text {
+    color: #64b5f6;
+}
+
+.dark-mode .follow-text:hover {
+    color: #90caf9;
+    opacity: 1;
+}
+
+.dark-mode .follow-text.following {
+    color: #64b5f6;
+}
+
+.dark-mode .follow-text.following:hover {
+    color: #ef9a9a;
+}
+
+/* Common styles */
+.follow-text.loading {
+    opacity: 0.7;
+    pointer-events: none;
+    position: relative;
+    padding-left: 20px;
+}
+
+.follow-text.loading:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    margin-top: -6px;
+    border: 2px solid rgba(29, 161, 242, 0.3);
+    border-top-color: #1DA1F2;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.dark-mode .follow-text.loading:before {
+    border: 2px solid rgba(100, 181, 246, 0.3);
+    border-top-color: #64b5f6;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.followers-count {
+    font-size: 12px;
+    color: #666;
+    margin-left: 15px;
+    display: inline-block;
+}
+
+.dark-mode .followers-count {
+    color: #aaa;
+}
+</style>
+
+
+<style>
+    .affiliate-essentials {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background-color: rgba(0, 149, 246, 0.03);
+        border-radius: 16px;
+        padding: 30px;
+        margin: 40px 0;
+        border: 1px solid rgba(0, 149, 246, 0.1);
+    }
+    
+    .affiliate-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+    
+    .affiliate-badge {
+        background: rgba(0, 149, 246, 0.08);
+        color: #0095f6;
+        border: 1px solid rgba(0, 149, 246, 0.2);
+        padding: 6px 12px;
+        border-radius: 12px;
+        font-size: 13px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 15px;
+    }
+    
+    .affiliate-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: #2a3042;
+        margin-bottom: 12px;
+    }
+    
+    .affiliate-subtitle {
+        color: #6c757d;
+        font-size: 15px;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    .affiliate-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    @media (min-width: 768px) {
+        .affiliate-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+    }
+    
+    .affiliate-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .affiliate-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+        border-color: rgba(0, 149, 246, 0.2);
+    }
+    
+    .affiliate-tag {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: #ff4757;
+        color: white;
+        font-size: 11px;
+        font-weight: 600;
+        padding: 3px 8px;
+        border-radius: 4px;
+    }
+    
+    .affiliate-icon {
+        width: 40px;
+        height: 40px;
+        background: rgba(0, 149, 246, 0.1);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #0095f6;
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+    
+    .affiliate-name {
+        font-weight: 600;
+        font-size: 16px;
+        margin-bottom: 8px;
+        color: #2a3042;
+    }
+    
+    .affiliate-desc {
+        font-size: 14px;
+        color: #6c757d;
+        margin-bottom: 15px;
+        line-height: 1.5;
+    }
+    
+    .affiliate-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    
+    .affiliate-price {
+        font-weight: 700;
+        color: #2a3042;
+    }
+    
+    .affiliate-discount {
+        background: rgba(40, 167, 69, 0.1);
+        color: #28a745;
+        font-size: 12px;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-weight: 600;
+    }
+    
+    .affiliate-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 10px 15px;
+        background: #0095f6;
+        color: white;
+        border-radius: 8px;
+        font-weight: 500;
+        font-size: 14px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+    }
+    
+    .affiliate-btn:hover {
+        background: #0077cc;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 149, 246, 0.2);
+    }
+    
+    .affiliate-btn i {
+        margin-left: 8px;
+        font-size: 12px;
+    }
+    
+    .view-all-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 25px;
+        padding: 10px 20px;
+        background: white;
+        border: 1px solid rgba(0, 149, 246, 0.3);
+        color: #0095f6;
+        border-radius: 8px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+    
+    .view-all-btn:hover {
+        background: rgba(0, 149, 246, 0.05);
+        border-color: rgba(0, 149, 246, 0.5);
+        transform: translateY(-2px);
+    }
+    
+    .view-all-btn i {
+        margin-left: 8px;
+        font-size: 12px;
+    }
+</style>
+
+
+     <style>
+      
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        h1 {
+            margin-bottom: 30px;
+            font-weight: 600;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .campaign-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            margin-bottom: 30px;
+        }
+        
+        .campaign-image {
+            height: 300px;
+            position: relative;
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .image-overlay-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
+            color: white;
+        }
+        
+        .campaign-action-icons {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 20px;
+        }
+        
+        .action-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+        }
+        
+        .action-icon:hover {
+            background-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .action-icon i {
+            font-size: 20px;
+        }
+        
+        /* Tooltip for better UX */
+        .action-icon::after {
+            content: attr(title);
+            position: absolute;
+            bottom: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
+            pointer-events: none;
+        }
+        
+        .action-icon:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* Progress bar styles */
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4ECDC4, #42b883);
+            border-radius: 5px;
+            width: 65%; /* This would be dynamic in a real application */
+            position: relative;
+        }
+        
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
+            background-size: 10px 10px;
+            animation: move 1s linear infinite;
+            border-radius: 5px;
+        }
+        
+        @keyframes move {
+            0% { background-position: 0 0; }
+            100% { background-position: 10px 0; }
+        }
+        
+        .campaign-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .campaign-time-left {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        .campaign-time-left i {
+            margin-right: 8px;
+            color: #FFD700;
+        }
+        
+        /* Mobile-specific styles */
+        .mobile-goal-display {
+            display: none;
+        }
+        
+        @media (max-width: 600px) {
+            .campaign-action-icons {
+                gap: 15px;
+            }
+            
+            .action-icon {
+                width: 45px;
+                height: 45px;
+            }
+            
+            .action-icon i {
+                font-size: 18px;
+            }
+            
+            /* Hide detailed progress info on mobile */
+            .progress-info, .campaign-stats {
+                display: none;
+            }
+            
+            /* Show simplified goal display on mobile */
+            .mobile-goal-display {
+                display: block;
+                margin-top: 15px;
+                font-size: 16px;
+                font-weight: 600;
+                color: #4ECDC4;
+                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            }
+            
+            /* Adjust progress bar for mobile */
+            .progress-container {
+                margin-bottom: 0;
+                height: 8px;
+            }
+            
+            /* Simplify the time display */
+            .campaign-time-left {
+                font-size: 13px;
+                margin-top: 8px;
+            }
+            
+            /* Adjust image height for mobile */
+            .campaign-image {
+                height: 250px;
+            }
+            
+            /* Reduce padding on mobile */
+            .image-overlay-bottom {
+                padding: 15px;
+            }
+        }
+    </style>
+
+    <style type="text/css">
     .explore-card {
         padding: 10px 15px;
         margin-bottom: 12px;
@@ -339,125 +3435,286 @@
             box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
         }
     }
+
+
+
 </style>
 
-
-<style>
-    /* Hover effects for the button */
-    a[style*="FF6B35"]:hover {
-        background-color: #FF8C42 !important;  /* Lighter orange on hover */
-        transform: translateY(-2px);
-        box-shadow: 0 6px 12px rgba(255, 107, 53, 0.4) !important;
-    }
-    
-    a[style*="FF6B35"]:active {
-        transform: translateY(0);
-        box-shadow: 0 2px 4px rgba(255, 107, 53, 0.3) !important;
-    }
-    
-    /* Dark mode adaptation */
-    .dark-mode a[style*="FF6B35"] {
-        background-color: #E85D04 !important;  /* Darker orange for dark mode */
-    }
-    
-    .dark-mode a[style*="FF6B35"]:hover {
-        background-color: #FF6B35 !important;
-    }
-</style>
-
-
-<div class="instagram-card">
-        <div class="explore-card">
+     <div class="explore-card">
     <h3><i class="fas fa-info-circle"></i> Campaign Details</h3>
     <p>Discover all the exciting details about our current campaign and how you can participate! </p>
 </div>
-    <!-- Poster as the main focus -->
-    {% if campaign.poster %}
-    <div class="poster-hero">
+
+
+
+<div class="simple-campaigns-container">
+    
+    <div class="simple-campaign-card">
+        <!-- Top Section - Creator Info -->
+        <div class="creator-info">
+            <a href="{% url 'profile_view' username=campaign.user.user.username %}" class="creator-pic">
+                <img src="{{ campaign.user.image.url }}" alt="{{ campaign.user.user.username }}">
+            </a>
+            <div class="creator-details">
+             <div class="creator-container" style="display: flex; justify-content: space-between; align-items: center;">
+    <div>
+
+<div class="creator-info">
+    <span class="creator-name">
+       {{ campaign.user.user.username }}
+                    {% if campaign.user.profile_verified %}
+                    <span class="verified-badge"><i class="material-icons">verified_user</i></span> 
+                    {% endif %}
+                    {% if campaign.is_changemaker %}
+                    <span class="changemaker-badge"><i class="far fa-star"></i>Changemaker</span>
+                    {% endif %}
+    </span>
+{% if request.user != campaign.user.user %}
+<span id="follow-btn-{{ campaign.user.user.id }}" 
+      class="follow-text {% if request.user in campaign.user.user.followers.all %}following{% endif %}" 
+      data-user-id="{{ campaign.user.user.id }}"
+      data-is-following="{% if request.user in campaign.user.user.followers.all %}true{% else %}false{% endif %}">
+    {% if request.user in campaign.user.user.followers.all %}
+        • Following
+    {% else %}
+        • Follow
+    {% endif %}
+</span>
+{% endif %}
+
+</div>
+
+
+
+
+        <div class="campaign-time">
+            {{ campaign.timestamp|timesince }} ago • {{ campaign.user.location }}
+        </div>
+    </div>
+
+</div>
+            </div>
+
+
+
+
+
+<div class="campaign-menu" onclick="togglaMenu(this)" style="position: relative;">
+  <i class="fas fa-ellipsis-v"></i>
+  <div class="menu-dropdown">
+    <a href="{% url 'view_campaign' campaign_id=campaign.pk %}">
+      <i class="fas fa-eye"></i> View Details
+    </a>
+    <a href="{% url 'campaign_joiners' campaign.id %}" class="comment-count" aria-label="View joiners of this campaign">
+      <i class="fas fa-user-plus"></i> Joiners ({{ campaign.user_profiles.count|format_count }})
+    </a>
+  
+    {% if user == campaign.user.user %}
+      <a href="{% url 'recreate_campaign' campaign.id %}">
+        <i class="fas fa-edit"></i> Edit
+      </a>
+    {% endif %}
+
+{% if user == campaign.user.user %}
+    <a href="{% url 'campaign_pledgers' campaign.id %}">
+        <i class="fas fa-donate"></i> Pledgers
+    </a>
+{% endif %}
+
+     <a href="{% url 'top_participants' campaign_id=campaign.pk %}" class="top-supporters-link">
+    <i class="fas fa-trophy"></i> Top Participants
+</a>
+          <a href="{% url 'update_visibilit' campaign.pk %}" style="
+   
+">
+    <i class="fas fa-lock" ></i> Visibility
+</a>
+
+ <a href="{% url 'campaign_engagement' campaign.id %}">
+        <i class="fas fa-chart-bar"></i> Engagement
+    </a>
+
+
+  <a href="{% url 'report_campaign' campaign.id %}">
+      <i class="fas fa-flag"></i> Report
+    </a>
+
+     <a href="{% url 'campaign-delete' campaign.pk %}" class="delete-link">
+        <i class="fas fa-trash"></i> Delete
+    </a>
+    
+    <div class="not-interested-container">
+        <form action="{% url 'mark_not_interested' campaign_id=campaign.pk %}" method="post" class="not-interested-form">
+            {% csrf_token %}
+            <div class="form-row">
+                <label for="not-interested" class="form-label">
+                    <i class="fas fa-times-circle"></i> Not Interested
+                </label>
+                <div class="form-controls">
+                    <input type="checkbox" id="not-interested" name="not_interested" class="form-checkbox">
+                </div>
+            </div>
+            <button type="submit" class="form-submit-button">
+                Submit
+            </button>
+        </form>
+    </div>
+  </div>
+</div>
+        </div>
+
+
+                      <!-- Campaign Title Here -->
+ <div class="campaign-title-container" style="text-align: center; margin: 15px 0; padding: 0 20px;">
+    <h2 class="campaign-title" style="font-size: 1.8rem; font-weight: 700; color: #2c3e50;">
+        {{ campaign.title }}
+    </h2>
+</div>
+
+        <!-- Campaign Image - Dominant Space -->
+        <div class="campaign-image-section">
+            {% if campaign.poster %}
+            <div class="campaign-image-container">
        {% if user.is_authenticated and user.profile in campaign.user_profiles.all %}
-    <a href="{% url 'activity_list' campaign_id=campaign.id %}">
+    <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="campaign-poster-link">
 {% endif %}
         <img src="{{ campaign.poster.url }}" 
              alt="{{ campaign.title }}" 
-             class="main-campaign-image{% if user.profile in campaign.user_profiles.all %} clickable-poster{% endif %}"
+             class="main-campaign-image {% if user.profile in campaign.user_profiles.all %}clickable-poster{% endif %}"
              style="{% if user.profile in campaign.user_profiles.all %}cursor: pointer;{% endif %}">
 {% if user.is_authenticated and user.profile in campaign.user_profiles.all %}
     </a>
 {% endif %}
-        <div class="poster-overlay">
-            <h2 class="campaign-title">{{ campaign.title }}</h2>
-            <div class="campaign-creator">
-                <div class="creator-avatar">
-                    <img src="{{ campaign.user.image.url }}" alt="{{ campaign.user.user.username }}">
+<div class="campaign-views-overlay" aria-label="Total campaign views">
+    <i class="far fa-eye"></i>
+    <span>{{ campaign.campaignview_set.count|format_count }}</span>
+    <span class="views-tooltip">Views</span>
+</div>   
+                <!-- Image Overlay Info -->
+                <div class="image-overlay-top">
+                    <span class="campaign-category">{{ campaign.category }} Campaign</span>
                 </div>
-                <span>@{{ campaign.user.user.username }}</span>
-                {% if campaign.user.profile_verified %}
-                <i class="fas fa-check-circle verified-badge" style="color: #0095f6; font-size: 12px;"></i>
+   
+
+ <div class="image-overlay-bottom">
+                    <!-- Action icons -->
+                    <div class="campaign-action-icons">
+                        <a href="#" class="action-icon" title="Donate">
+                            <i class="fas fa-hand-holding-heart"></i>
+                        </a>
+                        <a href="#" class="action-icon" title="Purchase Products">
+                            <i class="fas fa-shopping-bag"></i>
+                        </a>
+                        <a href="#" class="action-icon" title="Make a Pledge">
+                            <i class="fas fa-handshake"></i>
+                        </a>
+                    </div>
+                    
+                    <!-- Progress bar section -->
+                    <div class="progress-info">
+                        <span>Raised: $8,450</span>
+                        <span>Goal: $13,000</span>
+                    </div>
+                    
+                    <div class="progress-container">
+                        <div class="progress-fill"></div>
+                    </div>
+                    
+                    <div class="campaign-stats">
+                        <span>65% funded</span>
+                        <span>$4,550 to go</span>
+                    </div>
+                    
+                    <!-- Mobile-specific simplified display -->
+                    <div class="mobile-goal-display">
+                        65% funded • $4,550 to go
+                    </div>
+                    
+                    <div class="campaign-time-left">
+                        <i class="fas fa-clock"></i>
+                        <span>24 days left</span>
+                    </div>
+                </div>
+
+                {% if not user.profile in campaign.user_profiles.all %}
+          <div class="join-prompt blink-5s">
+    <i class="fas fa-lock"></i> Join to see activities
+</div>
                 {% endif %}
-                {% if campaign.is_changemaker %}
-                <span style="font-size: 12px; background: linear-gradient(135deg, #ff5e62, #ff9966); color: white; padding: 2px 6px; border-radius: 10px;">Changemaker</span>
+  
+
+            </div>
+            {% else %}
+            <div class="no-image-placeholder">
+                <i class="fas fa-image"></i>
+                <p>No image available</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Campaign Title and Objective - Simplified -->
+      <div class="campaign-caption">
+   <!-- Replace the title section with this: -->
+<div class="campaign-content-points">
+<ul>
+    {# Desktop/Web version - 30 words #}
+    <li class="web-version">{{ campaign.content|truncatewords:30 }}</li>
+
+    {# Mobile version - 8 words #}
+    <li class="mobile-version">{{ campaign.content|truncatewords:8 }}</li>
+</ul>
+
+{% if campaign.content|wordcount > 30 %}
+<div class="see-more-container">
+    <button class="see-more-btn" onclick="toggleFullContent(this)">
+        See More <i class="fas fa-chevron-down"></i>
+    </button>
+</div>
+
+<div class="full-content" style="display: none;">
+    <p>{{ campaign.content }}</p>
+</div>
+{% endif %}
+
+    
+    <!-- Hidden full content -->
+    <div class="full-content" style="display:none;">
+        <ul>
+            {% for point in campaign.content.splitlines %}
+                <li>{{ point }}</li>
+            {% endfor %}
+        </ul>
+        <button class="see-less-btn" onclick="toggleContent(this.parentElement)">
+            See Less <i class="fas fa-chevron-up"></i>
+        </button>
+    </div>
+</div>
+  Goals: {{ campaign.get_goals_and_activities.Goals.0|default:"No goal specified"|truncatechars:80 }}
+</div>
+
+        <!-- Campaign Status - Visual Indicators -->
+        <div class="campaign-status">
+            {% if campaign.is_outdated %}
+            <div class="status-badge outdated">
+                <i class="fas fa-exclamation-circle"></i> Campaign Ended
+            </div>
+            {% else %}
+            <div class="status-badge active">
+                <i class="fas fa-check-circle"></i> Active Now
+            </div>
+            {% endif %}
+            
+            <div class="runtime-info">
+                <i class="fas fa-calendar-alt"></i>
+                {% if campaign.duration %}
+                    {{ campaign.duration }} {{ campaign.duration_unit }}
+                {% else %}
+                    Ongoing
                 {% endif %}
             </div>
-            
-            <!-- Mini progress bar -->
-            
         </div>
-    </div>
-    {% endif %}
-    
-    <!-- Engagement buttons -->
-    <div class="engagement-buttons">
-<div class="engagement-btn love-btn" onclick="toggleLove({{ campaign.id }})" style="cursor: pointer;">
-    <i id="love-icon-{{ campaign.id }}" class="fas fa-heart {% if user.is_authenticated and already_loved %}active{% endif %}" style="color: silver;"></i>
-    <span id="love-count-{{ campaign.id }}">{{ campaign.love_count|format_count }}</span>
-</div>
-        
-<a href="#" class="engagement-btn comment-btn" onclick="showCommentPopup({{ campaign.id }}); return false;">
-    <i class="far fa-comment"></i>
-    <span>
-        {% if user.is_authenticated %}
-            {{ campaign.comments.count|default:0 }}
-        {% else %}
-            585.3K
-        {% endif %}
-    </span>
-</a>
-        
-<!-- Keep your existing share button, just remove any visibility classes -->
-<div class="engagement-btn share-btn" onclick="showSharePopup({{ campaign.id }})">
-    <i class="fas fa-share-alt"></i>
-    
-</div>
-        
-{% if user.profile in campaign.user_profiles.all %}
-<a href="{% url 'join_leave_campaign' campaign.id %}" 
-   class="engagement-btn join-btn leave" 
-   style="background: rgba(237, 73, 86, 0.08); 
-          color: #ed4956; 
-          border: 1px solid rgba(237, 73, 86, 0.2);
-          padding: 4px 10px;
-          border-radius: 12px; 
-          font-size: 12px;
-          transition: all 0.2s ease;">
-    <i class="fas fa-user-minus" style="font-size: 13px;"></i>
-    <span>Leave</span>
-</a>
-{% else %}
-<a href="{% url 'join_leave_campaign' campaign.id %}" 
-   class="engagement-btn join-btn" 
-   style="background: rgba(0, 149, 246, 0.08); 
-          color: #0095f6; 
-          border: 1px solid rgba(0, 149, 246, 0.2);
-          padding: 4px 10px;
-          border-radius: 12px; 
-          font-size: 12px;
-          transition: all 0.2s ease;">
-    <i class="fas fa-user-plus" style="font-size: 13px;"></i>
-    <span>Join</span>
-</a>
-{% endif %}
-    </div>
 
+<!-- After campaign-status, before simple-actions -->
 {% if user.profile in campaign.user_profiles.all %}
 <div class="campaign-participation-links">
     <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="participation-link">
@@ -467,55 +3724,194 @@
         <i class="fas fa-hands-helping"></i> Participate Now
     </a>
 </div>
-<div style="padding: 0 12px 12px; text-align: center;">
-    <p style="color: #4CAF50; font-size: 13px; margin: 8px 0 0;">
-        <i class="fas fa-check-circle"></i> You've joined this campaign
-    </p>
-</div>
 {% endif %}
-  <!-- Campaign info sections -->
-    <div class="campaign-info">
-        <div class="info-section">
-            <h4><i class="fas fa-bullseye" style="color: #4CAF50;"></i> Our Objective</h4>
-            <p>{{ campaign.get_objective_and_activities.Objectives }}</p>
-        </div>
-        
-        <div class="info-section">
-            <h4><i class="fas fa-info-circle" style="color: #2196F3;"></i> About This Campaign</h4>
-            <ul>
-                {% for point in campaign.content.splitlines %}
-                    <li>{{ point }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        
-        <div class="info-section">
-            <h4><i class="fas fa-map-marker-alt" style="color: #FF9800;"></i> Location</h4>
-            <p>{{ campaign.user.location }}</p>
-        </div>
-        
-        <div class="info-section">
-            <h4><i class="fas fa-clock" style="color: #9C27B0;"></i> Time Left</h4>
-            <p>
-                {% if campaign.days_left != None %}
-                    {{ campaign.days_left }} 
-                    {% if campaign.days_left == 1 %}
-                        {% if campaign.duration_unit == "days" %}day{% else %}minute{% endif %}
-                    {% else %}
-                        {% if campaign.duration_unit == "days" %}days{% else %}minutes{% endif %}
-                    {% endif %} left
-                {% else %}
-                    Ongoing campaign
-                {% endif %}
-            </p>
-        </div>
-        <div style="text-align: center; margin: 20px 0;">
-
+        <!-- Simple Action Buttons -->
+        <div class="simple-actions">
+<div class="action-group">
+    <button class="simple-action-btn love-btn" onclick="toggleLove({{ campaign.id }})">
+        <i id="love-icon-{{ campaign.id }}" class="fas fa-heart"></i> 
+        <span id="love-count-{{ campaign.id }}">{{ campaign.love_count|format_count }}</span>
+        <span class="action-label">Like</span>
+    </button>
+    
+    <button class="simple-action-btn" onclick="showCommentPopup({{ campaign.id }})">
+        <i class="far fa-comment"></i> 
+        <span id="comment-count-{{ campaign.id }}">{{ campaign.comments.count|default:0 }}</span>
+        <span class="action-label">Comment</span>
+    </button>
+    
+    <button class="simple-action-btn" onclick="showSharePopup({{ campaign.id }})">
+        <i class="fas fa-share-alt"></i> 
+        <span class="action-label">Share</span>
+    </button>
 </div>
+        {% if user.profile in campaign.user_profiles.all %}
+<a href="{% url 'join_leave_campaign' campaign.id %}" 
+   class="simple-join-btn leave-btn"
+   style="background: rgba(237, 73, 86, 0.08);
+          color: #ed4956;
+          border: 1px solid rgba(237, 73, 86, 0.2);
+          padding: 4px 10px;
+          border-radius: 12px;
+          font-size: 12px;
+          transition: all 0.2s ease;
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          text-decoration: none;">
+    <i class="fas fa-user-minus" style="font-size: 13px;"></i>
+    <span>Leave</span>
+</a>
+{% else %}
+<a href="{% url 'join_leave_campaign' campaign.id %}" 
+   class="simple-join-btn"
+   style="background: rgba(0, 149, 246, 0.08);
+          color: #0095f6;
+          border: 1px solid rgba(0, 149, 246, 0.2);
+          padding: 4px 10px;
+          border-radius: 12px;
+          font-size: 12px;
+          transition: all 0.2s ease;
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          text-decoration: none;">
+    <i class="fas fa-user-plus" style="font-size: 13px;"></i>
+    <span>Join</span>
+</a>
+{% endif %}
+        </div>
+        
+        <!-- Hidden content that was in your original HTML -->
+        <div class="hidden-content" style="display:none;">
+            <!-- All your original content that we're keeping but hiding -->
+            <div class="campaign-content" data-campaign-id="{{ campaign.id }}">
+                <ul>
+                    {% for point in campaign.content.splitlines %}
+                        <li>{{ point }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            
+            <div class="funding-progress-card">
+                <!-- Your original funding progress card -->
+            </div>
+            
+            <div class="activity-links">
+                {% if user.profile in campaign.user_profiles.all %}
+                <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="activity-link">
+                    <i class='fas'>&#xf6e3;</i> Activities
+                </a>
+                <a href="{% url 'support' campaign_id=campaign.id %}" class="support-link">
+                    <i class="material-icons">&#xe925;</i> Participate
+                </a>
+                {% endif %}
+            </div>
+            
+            <!-- Audio player -->
+            
+<!-- Audio player -->
+{% if campaign.audio %}
+    <audio class="campaign-audio" loop preload="auto" muted autoplay>
+        <source src="{{ campaign.audio.url }}" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+{% else %}
+    <div class="audio-player">
+        {% if campaign.category == 'Poverty and Hunger' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/peace.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Clean Water and Sanitation' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/art.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Disaster Relief' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/Humanitarian Aid.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Healthcare and Medicine' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/health.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Mental Health' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/environment.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Human Rights and Equality' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/Equality1.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Peace and Justice' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/Policy.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Education for All' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/education1.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Economic Empowerment' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/economic.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Climate Action' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/Sustainable.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Save Our Planet' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/animal.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Tech for Humanity' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/digital.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% elif campaign.category == 'Community Development' %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/community.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% else %}
+            <audio class="campaign-audio" loop preload="auto" muted autoplay>
+                <source src="{% static 'main/audio/default.mp3' %}" type="audio/mpeg">
+            </audio>
+        {% endif %}
+    </div>
+{% endif %}
+
+
+       
+        </div>
+    </div>
+    
+</div>
+
+
+
+
+<!-- Share Popup Container -->
+<div id="sharePopup" class="share-popup">
+    <div class="share-popup-content">
+        <span class="close-share" onclick="hideSharePopup()">×</span>
+        <h3>Share This Campaign</h3>
+        <div class="share-buttons">
+            <a href="#" class="share-facebook" onclick="shareOnFacebook()"><i class="fab fa-facebook-f"></i> Facebook</a>
+            <a href="#" class="share-twitter" onclick="shareOnTwitter()"><i class="fab fa-twitter"></i> Twitter</a>
+            <a href="#" class="share-linkedin" onclick="shareOnLinkedIn()"><i class="fab fa-linkedin-in"></i> LinkedIn</a>
+            <a href="#" class="share-whatsapp" onclick="shareOnWhatsApp()"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+            <a href="#" class="share-reddit" onclick="shareOnReddit()"><i class="fab fa-reddit-alien"></i> Reddit</a>
+            <a href="#" class="share-telegram" onclick="shareOnTelegram()"><i class="fab fa-telegram-plane"></i> Telegram</a>
+            <a href="#" class="share-pinterest" onclick="shareOnPinterest()"><i class="fab fa-pinterest-p"></i> Pinterest</a>
+            <a href="#" class="share-email" onclick="shareViaEmail()"><i class="fas fa-envelope"></i> Email</a>
+        </div>
+        <div class="copy-link-container">
+            <span class="copy-link-title">Or copy the link directly</span>
+            <div class="copy-link">
+                <input type="text" id="campaignUrl" readonly>
+                <button onclick="copyCampaignUrl()"><i class="fas fa-copy"></i> Copy</button>
+            </div>
+        </div>
     </div>
 </div>
-
-             
 <!-- Comment Popup Container -->
 <div id="commentPopup" class="comment-popup-container" style="display: none;">
     <div class="comment-popup-content">
@@ -523,1054 +3919,53 @@
         <h3>Comments</h3>
         
         <!-- Comment Form -->
-        <div class="comment-form-container">
-            <div class="current-user-preview">
-                <img src="{{ user.profile.image.url }}" alt="Your profile picture" class="current-user-img">
-                <span>Posting as {{ user.username }}</span>
-            </div>
-            <form id="commentForm" method="post">
-                {% csrf_token %}
-                <input type="hidden" id="campaignIdInput" name="campaign_id">
-                <textarea name="text" class="comment-textarea" placeholder="Write your comment here..."></textarea>
-                <button type="submit" class="submit-comment-btn">Post Comment</button>
-            </form>
-        </div>
+      <div class="comment-form-container">
+    <div class="current-user-preview">
+        <img src="{{ user.profile.image.url }}" alt="Your profile picture" class="current-user-img">
+        <span>Posting as {{ user.username }}</span>
+    </div>
+    <form id="commentForm" method="post">
+        {% csrf_token %}
+        <input type="hidden" id="campaignIdInput" name="campaign_id">
+        <textarea name="text" class="comment-textarea" placeholder="Write your comment here..."></textarea>
+        <button type="submit" class="submit-comment-btn">Post Comment</button>
+    </form>
+</div>
+
         
         <!-- Comment List -->
         <div class="comment-list-container" id="commentList">
+            <!-- Comments will be loaded here dynamically -->
             <div class="loading-comments">Loading comments...</div>
         </div>
     </div>
 </div>
 
-  <!-- Audio player section - Added to match main campaigns -->
-        {% if campaign.audio %}
-            <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                <source src="{{ campaign.audio.url }}" type="audio/mpeg">
-                Your browser does not support the audio element.
-            </audio>
-        {% else %}
-            <div class="audio-player">
-                {% if campaign.category == 'Poverty and Hunger' %}
-                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                        <source src="{% static 'main/audio/peace.mp3' %}" type="audio/mpeg">
-                    </audio>
-                {% elif campaign.category == 'Clean Water and Sanitation' %}
-                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                        <source src="{% static 'main/audio/art.mp3' %}" type="audio/mpeg">
-                    </audio>
-                {% elif campaign.category == 'Disaster Relief' %}
-                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                        <source src="{% static 'main/audio/Humanitarian Aid.mp3' %}" type="audio/mpeg">
-                    </audio>
-                {% elif campaign.category == 'Healthcare and Medicine' %}
-                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                        <source src="{% static 'main/audio/health.mp3' %}" type="audio/mpeg">
-                    </audio>
-                {% elif campaign.category == 'Mental Health' %}
-                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                        <source src="{% static 'main/audio/environment.mp3' %}" type="audio/mpeg">
-                    </audio>
-                {% elif campaign.category == 'Human Rights and Equality' %}
-                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                        <source src="{% static 'main/audio/Equality1.mp3' %}" type="audio/mpeg">
-                    </audio>
-                {% elif campaign.category == 'Peace and Justice' %}
-                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                        <source src="{% static 'main/audio/Policy.mp3' %}" type="audio/mpeg">
-                    </audio>
-                {% elif campaign.category == 'Education for All' %}
-                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                        <source src="{% static 'main/audio/education1.mp3' %}" type="audio/mpeg">
-                    </audio>
-                {% elif campaign.category == 'Economic Empowerment' %}
-                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                        <source src="{% static 'main/audio/economic.mp3' %}" type="audio/mpeg">
-                    </audio>
-                {% elif campaign.category == 'Climate Action' %}
-                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                        <source src="{% static 'main/audio/Sustainable.mp3' %}" type="audio/mpeg">
-                    </audio>
-                {% elif campaign.category == 'Save Our Planet' %}
-                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                        <source src="{% static 'main/audio/animal.mp3' %}" type="audio/mpeg">
-                    </audio>
-                {% elif campaign.category == 'Tech for Humanity' %}
-                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                        <source src="{% static 'main/audio/digital.mp3' %}" type="audio/mpeg">
-                    </audio>
-                {% elif campaign.category == 'Community Development' %}
-                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                        <source src="{% static 'main/audio/community.mp3' %}" type="audio/mpeg">
-                    </audio>
-                {% else %}
-                    <audio class="campaign-audio" loop preload="auto" muted autoplay>
-                        <source src="{% static 'main/audio/default.mp3' %}" type="audio/mpeg">
-                    </audio>
-                {% endif %}
-            </div>
-        {% endif %}
-<!-- Share Popup - Accessibility Improved -->
-<div id="sharePopup" class="share-popup" style="display: none;">
-    <div class="share-popup-content">
-        <div class="share-header">
-            <h4><i class="fas fa-rocket"></i> Amplify This Cause!</h4>
-            <p>Share with your network to multiply your impact</p>
-        </div>
-        
-        <div class="share-platforms">
-            <!-- Social Platforms -->
-            <button class="platform-btn fb" onclick="shareOnSocial('facebook')">
-                <i class="fab fa-facebook-f"></i>
-                <span>Facebook</span>
-                <small>Reach friends who care</small>
-            </button>
-            
-            <button class="platform-btn twitter" onclick="shareOnSocial('twitter')">
-                <i class="fab fa-twitter"></i>
-                <span>Twitter</span>
-                <small>Start a conversation</small>
-            </button>
-            
-            <button class="platform-btn linkedin" onclick="shareOnSocial('linkedin')">
-                <i class="fab fa-linkedin-in"></i>
-                <span>LinkedIn</span>
-                <small>Engage professionals</small>
-            </button>
-            
-            <button class="platform-btn whatsapp" onclick="shareOnSocial('whatsapp')">
-                <i class="fab fa-whatsapp"></i>
-                <span>WhatsApp</span>
-                <small>Message groups directly</small>
-            </button>
-            
-            <button class="platform-btn instagram" onclick="shareOnSocial('instagram')">
-                <i class="fab fa-instagram"></i>
-                <span>Instagram</span>
-                <small>Inspire your followers</small>
-            </button>
-            
-            <button class="platform-btn reddit" onclick="shareOnSocial('reddit')">
-                <i class="fab fa-reddit-alien"></i>
-                <span>Reddit</span>
-                <small>Reach niche communities</small>
-            </button>
-            
-            <button class="platform-btn telegram" onclick="shareOnSocial('telegram')">
-                <i class="fab fa-telegram-plane"></i>
-                <span>Telegram</span>
-                <small>Share with channels</small>
-            </button>
-            
-            <button class="platform-btn pinterest" onclick="shareOnSocial('pinterest')">
-                <i class="fab fa-pinterest-p"></i>
-                <span>Pinterest</span>
-                <small>Create awareness pins</small>
-            </button>
-  
-            
-            <button class="platform-btn sms" onclick="shareViaSMS()">
-                <i class="fas fa-sms"></i>
-                <span>Text Message</span>
-                <small>Instant personal shares</small>
-            </button>
-            
-            <button class="platform-btn link" onclick="copyShareLink()">
-                <i class="fas fa-link"></i>
-                <span>Copy Link</span>
-                <small>Paste anywhere</small>
-            </button>
-            
-            <button class="platform-btn embed" onclick="showEmbedCode()">
-                <i class="fas fa-code"></i>
-                <span>Embed</span>
-                <small>For websites/blogs</small>
-            </button>
-        </div>
-        
-        <div class="share-motivation">
-            <div class="motivation-card">
-                <i class="fas fa-users"></i>
-                <p>Every share brings us <strong>3x closer</strong> to our goal!</p>
-            </div>
-        </div>
-        
-        <button class="close-popup" onclick="hideSharePopup()">
-            <i class="fas fa-times"></i> Close
-        </button>
-    </div>
-</div>
 
-
-<style>
-    /* Comment Popup Styles */
-    .comment-popup-container {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.7);
-        z-index: 1000;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    
-    .comment-popup-content {
-        background-color: white;
-        border-radius: 10px;
-        width: 90%;
-        max-width: 600px;
-        max-height: 80vh;
-        padding: 20px;
-        overflow-y: auto;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-    }
-    
-    .close-comment-popup {
-        float: right;
-        font-size: 24px;
-        cursor: pointer;
-        color: #888;
-    }
-    
-    .close-comment-popup:hover {
-        color: #000;
-    }
-    
-    .comment-form-container {
-        margin-bottom: 20px;
-        padding-bottom: 20px;
-        border-bottom: 1px solid #eee;
-    }
-    
-    .comment-textarea {
-        width: 100%;
-        min-height: 100px;
-        padding: 10px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        resize: vertical;
-        margin-bottom: 10px;
-    }
-    
-    .submit-comment-btn {
-        background-color: #4CAF50;
-        color: white;
-        border: none;
-        padding: 10px 15px;
-        border-radius: 5px;
-        cursor: pointer;
-    }
-    
-    .submit-comment-btn:hover {
-        background-color: #45a049;
-    }
-    
-    .comment-list-container {
-        max-height: 300px;
-        overflow-y: auto;
-    }
-    
-    .comment-item {
-        padding: 10px 0;
-        border-bottom: 1px solid #f0f0f0;
-    }
-    
-    .comment-user {
-        font-weight: bold;
-        margin-right: 5px;
-    }
-    
-    .comment-timestamp {
-        font-size: 12px;
-        color: #888;
-    }
-    
-    .comment-text {
-        margin-top: 5px;
-        line-height: 1.4;
-    }
-    
-    .loading-comments {
-        text-align: center;
-        padding: 20px;
-        color: #888;
-    }
-
-    /* Add these styles to your existing CSS */
-.comment-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 8px;
-}
-
-.comment-user-link {
-    margin-right: 10px;
-    display: flex;
-    align-items: center;
-}
-
-.comment-user-img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 2px solid #f0f0f0;
-    transition: transform 0.3s ease;
-}
-
-.comment-user-img:hover {
-    transform: scale(1.1);
-}
-
-.comment-user-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.comment-user {
-    font-weight: bold;
-    color: #333;
-    text-decoration: none;
-    margin-bottom: 2px;
-}
-
-.comment-user:hover {
-    color: #4CAF50;
-    text-decoration: underline;
-}
-
-.comment-timestamp {
-    font-size: 12px;
-    color: #888;
-}
-
-.comment-text {
-    margin-left: 50px; /* Align with user info */
-    padding: 8px 12px;
-    background-color: #f9f9f9;
-    border-radius: 12px;
-    line-height: 1.4;
-    position: relative;
-}
-
-.comment-text:before {
-    content: '';
-    position: absolute;
-    left: -8px;
-    top: 10px;
-    width: 0;
-    height: 0;
-    border-top: 8px solid transparent;
-    border-bottom: 8px solid transparent;
-    border-right: 8px solid #f9f9f9;
-}
-
-    .current-user-preview {
-        display: flex;
-        align-items: center;
-        margin-bottom: 10px;
-        padding: 5px;
-        background-color: #f5f5f5;
-        border-radius: 20px;
-    }
-
-    .current-user-img {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        object-fit: cover;
-        margin-right: 10px;
-        border: 1px solid #ddd;
-    }
-
-
-/* Comment Actions */
-.comment-actions {
-    display: flex;
-    align-items: center;
-    margin-top: 10px;
-    padding-left: 50px;
-}
-
-.comment-actions button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    margin-right: 15px;
-    font-size: 14px;
-    color: #666;
-    display: flex;
-    align-items: center;
-    padding: 5px 10px;
-    border-radius: 15px;
-    transition: all 0.2s ease;
-}
-
-.comment-actions button:hover {
-    background-color: #f0f0f0;
-    color: #333;
-}
-
-.comment-actions button i {
-    margin-right: 5px;
-}
-
-.comment-actions .like-comment-btn.active {
-    color: #4CAF50;
-}
-
-.comment-actions .dislike-comment-btn.active {
-    color: #f44336;
-}
-
-/* Reply Form */
-.reply-form-container {
-    margin-top: 15px;
-    padding: 15px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    border-left: 3px solid #ddd;
-}
-
-.reply-textarea {
-    width: 100%;
-    min-height: 80px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    resize: vertical;
-    margin-bottom: 10px;
-}
-
-.submit-reply-btn {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-right: 10px;
-}
-
-.submit-reply-btn:hover {
-    background-color: #45a049;
-}
-
-.cancel-reply-btn {
-    background-color: #f44336;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.cancel-reply-btn:hover {
-    background-color: #d32f2f;
-}
-
-/* Replies Container */
-.replies-container {
-    margin-top: 15px;
-    padding-left: 30px;
-    border-left: 2px solid #eee;
-}
-
-.replies-container .comment-item {
-    padding: 15px 0;
-}
-
-.replies-container .comment-text {
-    margin-left: 40px;
-}
-
-.replies-container .comment-actions {
-    padding-left: 40px;
-}
-
-/* Loading states */
-.loading-replies, .no-replies, .error-loading-replies {
-    text-align: center;
-    padding: 15px;
-    color: #888;
-    font-size: 14px;
-}
-
-.error-loading-replies .retry-btn {
-    background-color: #2196F3;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 3px;
-    margin-top: 5px;
-    cursor: pointer;
-}
-
-.error-loading-replies .retry-btn:hover {
-    background-color: #0b7dda;
-}
-/* ===== Dark Mode Styles for Comment Popup ===== */
-.dark-mode .comment-popup-container {
-    background-color: rgba(0, 0, 0, 0.85);
-}
-
-.dark-mode .comment-popup-content {
-    background-color: #1e1e1e;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-}
-
-.dark-mode .close-comment-popup {
-    color: #888;
-}
-
-.dark-mode .close-comment-popup:hover {
-    color: #e0e0e0;
-}
-
-.dark-mode .comment-form-container {
-    border-bottom-color: #333;
-}
-
-.dark-mode .comment-textarea {
-    background-color: #2d2d2d;
-    border-color: #444;
-    color: #e0e0e0;
-}
-
-.dark-mode .comment-textarea::placeholder {
-    color: #888;
-}
-
-.dark-mode .submit-comment-btn {
-    background-color: #388e3c;
-}
-
-.dark-mode .submit-comment-btn:hover {
-    background-color: #2e7d32;
-}
-
-.dark-mode .comment-item {
-    border-bottom-color: #333;
-}
-
-.dark-mode .comment-user {
-    color: #e0e0e0;
-}
-
-.dark-mode .comment-user:hover {
-    color: #81c784;
-}
-
-.dark-mode .comment-timestamp {
-    color: #888;
-}
-
-.dark-mode .comment-text {
-    background-color: #2d2d2d;
-    color: #e0e0e0;
-}
-
-.dark-mode .comment-text:before {
-    border-right-color: #2d2d2d;
-}
-
-.dark-mode .current-user-preview {
-    background-color: #2a2a2a;
-}
-
-.dark-mode .comment-user-img {
-    border-color: #444;
-}
-
-.dark-mode .comment-actions button {
-    color: #888;
-}
-
-.dark-mode .comment-actions button:hover {
-    background-color: #333;
-    color: #e0e0e0;
-}
-
-.dark-mode .comment-actions .like-comment-btn.active {
-    color: #81c784;
-}
-
-.dark-mode .comment-actions .dislike-comment-btn.active {
-    color: #e57373;
-}
-
-.dark-mode .reply-form-container {
-    background-color: #2a2a2a;
-    border-left-color: #444;
-}
-
-.dark-mode .reply-textarea {
-    background-color: #2d2d2d;
-    border-color: #444;
-    color: #e0e0e0;
-}
-
-.dark-mode .submit-reply-btn {
-    background-color: #388e3c;
-}
-
-.dark-mode .submit-reply-btn:hover {
-    background-color: #2e7d32;
-}
-
-.dark-mode .cancel-reply-btn {
-    background-color: #d32f2f;
-}
-
-.dark-mode .cancel-reply-btn:hover {
-    background-color: #b71c1c;
-}
-
-.dark-mode .replies-container {
-    border-left-color: #444;
-}
-
-.dark-mode .loading-replies,
-.dark-mode .no-replies,
-.dark-mode .error-loading-replies {
-    color: #888;
-}
-
-.dark-mode .error-loading-replies .retry-btn {
-    background-color: #1976d2;
-}
-
-.dark-mode .error-loading-replies .retry-btn:hover {
-    background-color: #1565c0;
-}
-
-/* Additional dark mode improvements */
-.dark-mode .comment-popup-content::-webkit-scrollbar {
-    width: 8px;
-}
-
-.dark-mode .comment-popup-content::-webkit-scrollbar-track {
-    background: #2d2d2d;
-}
-
-.dark-mode .comment-popup-content::-webkit-scrollbar-thumb {
-    background: #555;
-    border-radius: 4px;
-}
-
-.dark-mode .comment-popup-content::-webkit-scrollbar-thumb:hover {
-    background: #666;
-}
-</style>
-<style>
-/* Share Popup - Accessibility Focused */
-.share-popup {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.8);
-    backdrop-filter: blur(5px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    padding: 20px;
-}
-
-.share-popup-content {
-    background: white;
-    border-radius: 16px;
-    width: 100%;
-    max-width: 500px;
-    max-height: 80vh;
-    overflow-y: auto;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    animation: popIn 0.3s ease-out;
-}
-
-.dark-mode .share-popup-content {
-    background: #1e1e1e;
-    border: 1px solid #333;
-}
-
-.share-header {
-    padding: 20px 20px 10px;
-    text-align: center;
-    border-bottom: 1px solid #eee;
-}
-
-.dark-mode .share-header {
-    border-color: #333;
-}
-
-.share-header h4 {
-    margin: 0 0 5px;
-    font-size: 18px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-}
-
-.share-header h4 i {
-    color: #4CAF50;
-}
-
-.share-header p {
-    margin: 0;
-    color: #666;
-    font-size: 14px;
-}
-
-.dark-mode .share-header p {
-    color: #aaa;
-}
-
-.share-platforms {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    padding: 15px;
-}
-
-.platform-btn {
-    border: none;
-    background: #f8f9fa;
-    border-radius: 10px;
-    padding: 15px 8px;
-    cursor: pointer;
-    transition: all 0.2s;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-}
-
-.dark-mode .platform-btn {
-    background: #2a2a2a;
-}
-
-.platform-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
-}
-
-.platform-btn:hover i {
-    transform: scale(1.1);
-}
-
-.platform-btn i {
-    display: block;
-    font-size: 28px;
-    margin-bottom: 8px;
-    color: #777; /* Default silver color */
-    transition: all 0.2s;
-}
-
-.platform-btn span {
-    display: block;
-    font-weight: 600;
-    font-size: 14px;
-    color: #333;
-}
-
-.dark-mode .platform-btn span {
-    color: #eee;
-}
-
-.platform-btn small {
-    display: block;
-    font-size: 12px;
-    color: #666;
-    margin-top: 3px;
-}
-
-.dark-mode .platform-btn small {
-    color: #999;
-}
-
-/* Platform-specific styling with silver icons */
-.platform-btn.fb i { color: #777; background: linear-gradient(to right, #1877F2, #1877F2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.platform-btn.twitter i { color: #777; background: linear-gradient(to right, #1DA1F2, #1DA1F2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.platform-btn.linkedin i { color: #777; background: linear-gradient(to right, #0A66C2, #0A66C2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.platform-btn.whatsapp i { color: #777; background: linear-gradient(to right, #25D366, #25D366); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.platform-btn.instagram i { color: #777; background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.platform-btn.reddit i { color: #777; background: linear-gradient(to right, #FF4500, #FF4500); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.platform-btn.telegram i { color: #777; background: linear-gradient(to right, #0088CC, #0088CC); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.platform-btn.pinterest i { color: #777; background: linear-gradient(to right, #E60023, #E60023); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.platform-btn.email i { color: #777; background: linear-gradient(to right, #EA4335, #EA4335); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.platform-btn.sms i { color: #777; background: linear-gradient(to right, #34B7F1, #34B7F1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.platform-btn.link i { color: #777; background: linear-gradient(to right, #9C27B0, #9C27B0); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.platform-btn.embed i { color: #777; background: linear-gradient(to right, #607D8B, #607D8B); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-
-/* Hover states - show full color */
-.platform-btn:hover i {
-    -webkit-text-fill-color: initial;
-    color: inherit;
-}
-
-.share-motivation {
-    padding: 0 15px 15px;
-}
-
-.motivation-card {
-    background: #f0f7ff;
-    border-radius: 10px;
-    padding: 12px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.dark-mode .motivation-card {
-    background: #1a2a3a;
-}
-
-.motivation-card i {
-    font-size: 20px;
-    color: #2196F3;
-}
-
-.motivation-card p {
-    margin: 0;
-    font-size: 13px;
-}
-
-.close-popup {
-    width: 100%;
-    padding: 12px;
-    background: #f0f0f0;
-    color: #333;
-    border: none;
-    border-radius: 0 0 16px 16px;
-    font-weight: 500;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    transition: all 0.2s;
-}
-
-.dark-mode .close-popup {
-    background: #333;
-    color: #eee;
-}
-
-.close-popup:hover {
-    background: #e0e0e0;
-}
-
-.dark-mode .close-popup:hover {
-    background: #444;
-}
-
-@keyframes popIn {
-    0% { transform: scale(0.95); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-}
-</style>
-<style>
-/* Base styles (light mode) */
-.share-btn {
-    opacity: 1 !important;       /* Force visible */
-    visibility: visible !important; /* Force visible */
-    color: #262626;             /* Dark gray text */
-}
-
-.share-btn i {
-    color: #262626;             /* Icon color */
-}
-
-/* Dark mode overrides */
-.dark-mode .share-btn {
-    color: #e0e0e0;             /* Light gray text */
-}
-
-.dark-mode .share-btn i {
-    color: #bb86fc;             /* Purple accent for dark mode */
-}
-
-/* Hover states */
-.share-btn:hover {
-    background: #f5f5f5;        /* Light gray hover */
-}
-
-.dark-mode .share-btn:hover {
-    background: #333;           /* Dark gray hover */
-
-}
-</style>
 <script>
-// Enhanced sharing functions with persuasive messaging
-function shareOnSocial(platform) {
-    const shareUrl = window.location.href;
-    const title = "Help make a difference: {{ campaign.title }}";
-    const urgentText = "This cause needs our support now more than ever!";
-    const personalAppeal = "I just contributed and thought you'd want to join me in creating real change.";
-    const impactStatement = "Every share brings us closer to our goal - will you help amplify this?";
-    
-    let url;
-    switch(platform) {
-        case 'facebook':
-            url = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(`${personalAppeal} ${urgentText} ${impactStatement}`)}`;
-            break;
-        case 'twitter':
-            url = `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(`🚀 ${title}\n\n${personalAppeal}\n\n${impactStatement}\n\n#MakeADifference`)}`;
-            break;
-        case 'linkedin':
-            url = `https://www.linkedin.com/shareArticle?mini=true&url=${encodeURIComponent(shareUrl)}&title=${encodeURIComponent(title)}&summary=${encodeURIComponent(`${personalAppeal}\n\n${urgentText}\n\n${impactStatement}`)}`;
-            break;
-        case 'whatsapp':
-            url = `https://wa.me/?text=${encodeURIComponent(`*${title}*\n\n${personalAppeal}\n\n${urgentText}\n\n${shareUrl}\n\n${impactStatement}`)}`;
-            break;
-        case 'instagram':
-    // For Instagram, we'll provide both story and post options
-          const instagramMessage = `🌟 ${title}\n\n${personalAppeal}\n\n${urgentText}\n\n${impactStatement}\n\n${shareUrl}`;
-    
-    // Copy to clipboard for easy pasting into Instagram
-    navigator.clipboard.writeText(instagramMessage).then(() => {
-        alert("✨ Instagram Sharing Tips:\n\n" +
-              "For Stories: Tap 'Add Link' and paste this URL\n" +
-              "For Posts: Paste this text in your caption\n\n" +
-              "Content copied to your clipboard!");
-    }).catch(() => {
-        // Fallback if clipboard fails
-        prompt("Copy this text for Instagram:", instagramMessage);
+  function togglaMenu(clickedElement) {
+    // Close other open menus
+    document.querySelectorAll('.menu-dropdown.active').forEach(menu => {
+      if (!clickedElement.contains(menu)) {
+        menu.classList.remove('active');
+      }
     });
-    return;
-        case 'reddit':
-            url = `https://www.reddit.com/submit?url=${encodeURIComponent(shareUrl)}&title=${encodeURIComponent(`${title} - ${urgentText}`)}`;
-            break;
-        case 'telegram':
-            url = `https://t.me/share/url?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(`🌟 ${title}\n\n${personalAppeal}\n\n${urgentText}`)}`;
-            break;
-        case 'pinterest':
-            url = `https://pinterest.com/pin/create/button/?url=${encodeURIComponent(shareUrl)}&description=${encodeURIComponent(`${title} - ${personalAppeal}`)}`;
-            break;
+
+    // Toggle the clicked one
+    const dropdown = clickedElement.querySelector('.menu-dropdown');
+    dropdown.classList.toggle('active');
+  }
+
+  // Close the menu if clicked outside
+  document.addEventListener('click', function(event) {
+    const isClickInside = event.target.closest('.campaign-menu');
+    if (!isClickInside) {
+      document.querySelectorAll('.menu-dropdown.active').forEach(menu => {
+        menu.classList.remove('active');
+      });
     }
-    
-    window.open(url, '_blank', 'width=600,height=400');
-}
-
-
-function shareViaSMS() {
-    const shareUrl = window.location.href;
-    const personalAppeal = "I just contributed and thought you'd want to join me in creating real change.";
-    const impactStatement = "Every share brings us closer to our goal - will you help amplify this?";
-    
-    const text = `🌟 Quick favor: Can you help share this important cause?\n\n${shareUrl}\n\n${personalAppeal}\n\n${impactStatement}`;
-    window.location.href = `sms:?&body=${encodeURIComponent(text)}`;
-}
-
-function showEmbedCode() {
-    const embedCode = `<iframe src="${window.location.href}/embed" width="300" height="400" frameborder="0" style="border: 2px solid #4CAF50;"></iframe>`;
-    prompt("📌 Spread the word on your website! Copy this embed code:", embedCode);
-}
-
-// Enhanced copy function with more engaging confirmation
-function copyShareLink() {
-    const shareUrl = window.location.href;
-    navigator.clipboard.writeText(shareUrl).then(() => {
-        alert('✅ Copied! Now paste this anywhere to spread the word.\n\nEvery share counts - thank you for amplifying this cause!');
-    });
-}
-
-// Share popup visibility functions
-function showSharePopup(campaignId) {
-    document.getElementById('sharePopup').style.display = 'flex';
-}
-
-function hideSharePopup() {
-    document.getElementById('sharePopup').style.display = 'none';
-}
+  });
 </script>
 
 
-
-
-<script type="text/javascript">
-function toggleLove(campaignId) {
-    var loveIcon = document.getElementById('love-icon-' + campaignId);
-    var loveCount = document.getElementById('love-count-' + campaignId);
-    var loveCountMobile = document.getElementById('love-count-mobile-' + campaignId);
-    var loveText = "";
-
-    // Play sound when love is toggled
-    var audio = new Audio('{% static "main/files/sound.mp3" %}');
-    audio.play();
-
-    // Send AJAX request to add or remove love
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', '{% url "toggle_love" 0 %}'.replace('0', campaignId), true);
-    xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
-    xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-
-    xhr.onload = function () {
-        if (xhr.status === 200) {
-            // Update love count only if there's a response from the server
-            var response = JSON.parse(xhr.responseText);
-            var countText = response.love_count + " " + loveText;
-            loveCount.textContent = countText;
-            if (loveCountMobile) {
-                loveCountMobile.textContent = countText;
-            }
-
-            // Toggle the loved class based on response
-            if (response.love_count > 0) {
-                loveIcon.classList.add('loved');
-                createHearts(loveIcon); // Create heart explosion effect
-            } else {
-                loveIcon.classList.remove('loved');
-            }
-        }
-    };
-    xhr.send();
-}
-
-function createHearts(element) {
-    // Get position of the clicked element
-    const rect = element.getBoundingClientRect();
-    const x = rect.left + rect.width / 2;
-    const y = rect.top + rect.height / 2;
-    
-    // Create 15 hearts (you can adjust this number)
-    for (let i = 0; i < 15; i++) {
-        const heart = document.createElement('div');
-        heart.classList.add('heart');
-        
-        // Random size between 10px and 25px
-        const size = Math.random() * 15 + 10;
-        heart.style.width = `${size}px`;
-        heart.style.height = `${size}px`;
-        
-        // Random initial position near the click
-        heart.style.left = `${x + (Math.random() - 0.5) * 20}px`;
-        heart.style.top = `${y + (Math.random() - 0.5) * 20}px`;
-        
-        // Random animation properties
-        const duration = Math.random() * 3 + 2;
-        const randomX = (Math.random() - 0.5) * 2;
-        const randomY = Math.random() * 1.5 + 0.5;
-        heart.style.setProperty('--random-x', randomX);
-        heart.style.setProperty('--random-y', randomY);
-        heart.style.animation = `float ${duration}s ease-in forwards`;
-        
-        // Random rotation
-        heart.style.transform = `rotate(${Math.random() * 360}deg)`;
-        
-        document.body.appendChild(heart);
-        
-        // Remove heart after animation completes
-        setTimeout(() => {
-            heart.remove();
-        }, duration * 1000);
-    }
-}
-</script>
- <script src="{% static 'main/js/test.js' %}"></script>
 {% endblock %}

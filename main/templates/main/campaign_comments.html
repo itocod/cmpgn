@@ -372,47 +372,7 @@ body.dark-mode .cc-comment-form button:hover {
 }
 
     </style>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/emojionearea/dist/emojionearea.min.js"></script>
-   <script>
-    $(document).ready(function() {
-        $('#commentText').emojioneArea({
-            pickerPosition: "bottom",
-            tones: false
-        });
-
-        $('#commentForm').submit(function(e) {
-            e.preventDefault();
-
-            // Show spinner and disable submit button
-            $('#spinner').show();
-            $('#submitButton').prop('disabled', true);
-
-            $.ajax({
-                type: 'POST',
-                url: '{% url "campaign_comments" campaign_id=campaign.id %}',
-                data: $('#commentForm').serialize(),
-                success: function(response) {
-                    if (response.success) {
-                        $('#message').text('Comment sent successfully!');
-                        $('#commentsList').load(location.href + ' #commentsList>*');
-                        $('#commentText').val(''); // Clear textarea
-                    } else {
-                        $('#message').text('Error: ' + response.errors.text[0]);
-                    }
-                },
-                error: function(xhr, errmsg, err) {
-                    $('#message').text('Error: ' + xhr.status + ': ' + xhr.responseText);
-                },
-                complete: function() {
-                    // Hide spinner and enable submit button after request completes
-                    $('#spinner').hide();
-                    $('#submitButton').prop('disabled', false);
-                }
-            });
-        });
-    });
-</script>
+  
 </head>
 <body class="cc-body">
     <div class="cc-header">
@@ -455,7 +415,47 @@ body.dark-mode .cc-comment-form button:hover {
     </button>
 </form>
 
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/emojionearea/dist/emojionearea.min.js"></script>
+   <script>
+    $(document).ready(function() {
+        $('#commentText').emojioneArea({
+            pickerPosition: "bottom",
+            tones: false
+        });
 
+        $('#commentForm').submit(function(e) {
+            e.preventDefault();
+
+            // Show spinner and disable submit button
+            $('#spinner').show();
+            $('#submitButton').prop('disabled', true);
+
+            $.ajax({
+                type: 'POST',
+                url: '{% url "campaign_comments" campaign_id=campaign.id %}',
+                data: $('#commentForm').serialize(),
+                success: function(response) {
+                    if (response.success) {
+                        $('#message').text('Comment sent successfully!');
+                        $('#commentsList').load(location.href + ' #commentsList>*');
+                        $('#commentText').val(''); // Clear textarea
+                    } else {
+                        $('#message').text('Error: ' + response.errors.text[0]);
+                    }
+                },
+                error: function(xhr, errmsg, err) {
+                    $('#message').text('Error: ' + xhr.status + ': ' + xhr.responseText);
+                },
+                complete: function() {
+                    // Hide spinner and enable submit button after request completes
+                    $('#spinner').hide();
+                    $('#submitButton').prop('disabled', false);
+                }
+            });
+        });
+    });
+</script>
 
 <script type="text/javascript">
 function switchColor() {

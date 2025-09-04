@@ -159,9 +159,69 @@ body.dark-mode .affiliate-link i {
 }
 
     </style>
+
+      <style type="text/css">
+    .explore-card {
+        padding: 10px 15px;
+        margin-bottom: 12px;
+        background: #f5f9ff;
+        border-left: 3px solid #4CAF50;
+    }
+    
+    .explore-card h3 {
+        margin: 0;
+        font-size: 16px;
+        color: #333;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-weight: 600;
+    }
+    
+    .explore-card p {
+        margin: 2px 0 0;
+        font-size: 12px;
+        color: #666;
+    }
+    
+    /* Dark mode - Balanced Black */
+    .dark-mode .explore-card {
+        background: #1a1a1a;  /* Slightly lighter than pure black */
+        border-left-color: #4CAF50;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+    }
+    
+    .dark-mode .explore-card h3 { 
+        color: #f0f0f0;  /* Soft white */
+    }
+    
+    .dark-mode .explore-card p { 
+        color: #cccccc;  /* Light gray for better readability */
+    }
+    
+    /* Desktop */
+    @media (min-width: 768px) {
+        .explore-card {
+            border-radius: 6px;
+            border-left: none;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+        
+        .dark-mode .explore-card {
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+    }
+</style>
 </head>
 
 <body class="chat-list-body">
+
+<div class="explore-card">
+    <h3><i class="fas fa-comments"></i> Chat Room List</h3>
+    <p>Explore existing rooms and connect with participants.</p>
+</div>
+
+
     <div class="header-container">
         
         <a href="{% url 'create_chat' %}" class="new-chat-button">Create a New Chat Table</a>
@@ -176,7 +236,8 @@ body.dark-mode .affiliate-link i {
                     {% if chat.has_unread_messages %}
                         <span class="red-spot"></span>
                     {% endif %}
-                    <a href="{% url 'chat_detail' chat.id %}">
+                    <a href="{% url 'chat_detail' chat_id=chat.id %}">
+                    
                         Chat - {{ chat.title }} (Manager: {{ chat.manager.username }}
                         {% if chat.manager.profile.profile_verified %}
                             <span class="verified-status"><span>verified</span><i class="material-icons" style="font-size:12px;color:green">verified_user</i></span>

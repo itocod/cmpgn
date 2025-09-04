@@ -41,3 +41,37 @@ def fulfilled_count(pledges):
 @register.filter
 def pending_count(pledges):
     return pledges.filter(is_fulfilled=False).count()
+
+from django import template
+from django.db.models import Sum
+
+register = template.Library()
+
+@register.filter
+def subtract(value, arg):
+    return value - arg
+
+@register.filter
+def sum_pledges(pledges):
+    return pledges.aggregate(total=Sum('amount'))['total'] or 0
+
+
+from django import template
+
+register = template.Library()
+
+@register.filter(name='format_count')
+def format_count(value):
+    """
+    Format numbers for display (e.g., 1000 becomes 1K)
+    """
+    try:
+        value = int(value)
+        if value >= 1000000:
+            return f'{value/1000000:.1f}M'
+        elif value >= 1000:
+            return f'{value/1000:.1f}K'
+        else:
+            return str(value)
+    except (ValueError, TypeError):
+        return value

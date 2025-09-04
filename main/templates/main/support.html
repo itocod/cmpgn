@@ -299,34 +299,29 @@
                 </tr>
             </thead>
             <tbody>
-                {% if support_campaign.donate_monetary_visible or support_campaign.attend_event_visible or support_campaign.brainstorm_idea_visible or support_campaign.campaign_product_visible %}
-                {% if support_campaign.donate_monetary_visible %}
-    <tr>
-        <td>
-            <a href="{% url 'create_pledge' campaign_id=campaign.id %}" >
-                  <i class="fas fa-hand-holding-usd pledge-icon"></i>
-               make a pledge
-            </a>
-        </td>
-        <td>Visible</td>
-    </tr>
-{% endif %}
-                    {% if support_campaign.attend_event_visible %}
+                {% if support_campaign.donate_monetary_visible or support_campaign.pledge_visible or support_campaign.campaign_product_visible %}
+                    
+                    <!-- Donation Option -->
+                    {% if support_campaign.donate_monetary_visible %}
                         <tr>
                             <td>
-                                <a href="#">🎟️ Attend Event</a>
+                                <a href="{% url 'create_donation' campaign_id=campaign.id %}">💖 Donate</a>
                             </td>
                             <td>Visible</td>
                         </tr>
                     {% endif %}
-                    {% if support_campaign.brainstorm_idea_visible %}
+
+                    <!-- Pledge Option -->
+                    {% if support_campaign.pledge_visible %}
                         <tr>
                             <td>
-                                <a href="{% url 'brainstorm_idea' campaign_id=campaign.id %}">💡 Brainstorm Idea</a>
+                                <a href="{% url 'create_pledge' campaign_id=campaign.id %}">🤝 Pledge</a>
                             </td>
                             <td>Visible</td>
                         </tr>
                     {% endif %}
+
+                    <!-- Campaign Products Option -->
                     {% if support_campaign.campaign_product_visible %}
                         <tr>
                             <td>
@@ -335,10 +330,11 @@
                             <td>Visible</td>
                         </tr>
                     {% endif %}
+
                 {% else %}
                     <tr>
                         <td colspan="2" style="text-align: center; font-style: italic; color: #999;">
-                            No participation yet.
+                            No participation options available.
                         </td>
                     </tr>
                 {% endif %}
@@ -353,5 +349,6 @@
         {% endif %}
     </div>
 </body>
+
 </html>
 {% endblock %}

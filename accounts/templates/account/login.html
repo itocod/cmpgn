@@ -2189,235 +2189,34 @@ body.dark-mode .affiliate-link i {
 
 </style>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const resetButton = document.getElementById('reset-field');
-        const queryField = document.getElementById('query-field');
 
-        resetButton.addEventListener('click', function() {
-            queryField.value = ''; // Clear the input field
-            queryField.focus(); // Optionally, refocus the input field
-        });
-    });
-</script>
-<script type="text/javascript">
-  function handleCreateClick() {
-    console.log("Create button clicked!");
-    // Add your custom logic here, if needed
+<style>
+.subscribe-link {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: bold;
 }
 
-</script>
-
-
-
-
-
-<script type="text/javascript">
-function switchColor() {
-    const body = document.body;
-    const isDarkMode = body.classList.toggle('dark-mode'); // Toggle dark mode class
-    var reactDivs = document.querySelectorAll('.react');
-
-    // Update background and text colors for all elements
-    const elementsToUpdate = document.querySelectorAll(
-        'header, footer, section, .left-aside, .right-aside, .upper-post, .campaign-content, .react, .search-container input, .search-container .btn-reset'
-    );
-
-    elementsToUpdate.forEach(element => {
-        element.classList.toggle('dark-mode', isDarkMode);
-    });
-
-    // Update text colors for specific elements
-    const textElements = document.querySelectorAll(
-        'h1, h2, h3, h4, p, li, .campaign-nav, .campaign-nav a, .btn, .reaction, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link, .love-count, #view-count, .comment-count'
-    );
-
-    textElements.forEach(element => {
-        element.style.color = isDarkMode ? '#ffffff' : '#000000';
-    });
-
-    // Update buttons
-    const buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)');
-    buttons.forEach(button => {
-        button.style.backgroundColor = isDarkMode ? '#262626' : '';
-        button.style.color = isDarkMode ? '#ffffff' : '#000000';
-    });
-
-    // Update `.react` divs
-    if (reactDivs.length > 0) {
-        reactDivs.forEach(function(reactDiv) {
-            reactDiv.style.backgroundColor = isDarkMode ? "#262626" : "";
-            reactDiv.style.color = isDarkMode ? "white" : "black";
-
-            if (isDarkMode) {
-                reactDiv.classList.add('react-hover');
-            } else {
-                reactDiv.classList.remove('react-hover');
-                reactDiv.style.backgroundColor = "";
-            }
-        });
-    }
-
-    // Update input field and reset button
-    const inputField = document.querySelector('.search-container input[type="text"]');
-    const inputResetButton = document.querySelector('.search-container .btn-reset');
-
-    if (inputField) {
-        inputField.style.backgroundColor = isDarkMode ? '#333333' : '#ffffff';
-        inputField.style.color = isDarkMode ? '#ffffff' : '#000000';
-    }
-
-    if (inputResetButton) {
-        inputResetButton.style.color = '#b0b0b0';
-    }
+.subscribe-link:hover {
+    text-decoration: underline;
 }
 
-</script>
-
-
-
-
-
-
-
-
-<script>
-
-
-function toggleCommentForm() {
-    var popup = document.getElementById("commentFormPopup");
-    popup.style.display = "block";
+.subscribe-link {
+    color: #4CAF50;
+    text-decoration: none;
+    font-weight: bold;
 }
 
-function closeCommentForm() {
-    var popup = document.getElementById("commentFormPopup");
-    popup.style.display = "none";
+.subscribe-link:hover {
+    text-decoration: underline;
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    var campaignElement = document.querySelector('.campaign-details');
-    var campaignId = {{ campaign.id }};
-    var startTime;
 
-    function recordCampaignView() {
-        var endTime = Math.floor(Date.now() / 1000); // Get current time in seconds
-        var timeSpent = endTime - startTime;
-        
-        fetch(`/record_campaign_view/${campaignId}/`, {
-            method: 'POST',
-            credentials: 'same-origin',
-            headers: {
-                'X-CSRFToken': '{{ csrf_token }}',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ time_spent: timeSpent })
-        })
-        .then(response => {
-            if (response.ok) {
-                console.log('View recorded successfully');
-            } else {
-                console.error('Failed to record view');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    }
 
-    function handleVisibilityChange() {
-        if (document.visibilityState === 'visible') {
-            startTime = Math.floor(Date.now() / 1000); // Get current time in seconds
-        } else {
-            recordCampaignView();
-        }
-    }
+</style>
 
-    function isInViewport(element) {
-        var rect = element.getBoundingClientRect();
-        return (
-            rect.top >= 0 &&
-            rect.left >= 0 &&
-            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-        );
-    }
 
-    function handleScroll() {
-        if (isInViewport(campaignElement)) {
-            startTime = Math.floor(Date.now() / 1000); // Get current time in seconds
-        } else {
-            recordCampaignView();
-        }
-    }
 
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    document.addEventListener('scroll', handleScroll);
-});
-
-document.addEventListener('DOMContentLoaded', function() {
-    var mediaQuery = window.matchMedia('(max-width: 768px)');
-    var leftAside = document.querySelector('.left-aside');
-    var rightAside = document.querySelector('.right-aside');
-
-    function handleMediaQueryChange(e) {
-        if (e.matches) {
-            leftAside.style.display = 'none';
-            rightAside.style.display = 'none';
-        } else {
-            leftAside.style.display = 'block';
-            rightAside.style.display = 'block';
-        }
-    }
-
-    mediaQuery.addListener(handleMediaQueryChange);
-    handleMediaQueryChange(mediaQuery);
-});
-
-document.addEventListener("DOMContentLoaded", function() {
-    const navbarToggle = document.getElementById("navbarToggle");
-    const navbar = document.getElementById("navbar");
-    const popupClose = document.getElementById("popupClose");
-
-    // Toggle navbar visibility
-    navbarToggle.addEventListener("click", function() {
-        if (navbar.style.display === "block") {
-            navbar.style.display = "none";
-        } else {
-            navbar.style.display = "block";
-        }
-    });
-
-    // Close popup when clicking the close button
-    popupClose.addEventListener("click", function() {
-        navbar.style.display = "none";
-    });
-
-    // Adjust navbar display on window resize
-    window.addEventListener("resize", function() {
-        if (window.innerWidth > 768) {
-            navbar.style.display = "none";
-        } else if (navbar.style.display === "block") {
-            navbar.style.display = "block";
-        } else {
-            navbar.style.display = "none";
-        }
-    });
-
-    // Ensure the navbar is initially hidden on page load for larger screens
-    if (window.innerWidth > 768) {
-        navbar.style.display = "none";
-    } else {
-        navbar.style.display = "none"; // or "block" based on your initial requirement
-    }
-});
-</script>
-
-<script>
-    function goBack() {
-        window.history.back(); // Navigates to the previous page
-    }
-</script>
 </head>
 
 
@@ -2836,30 +2635,240 @@ document.addEventListener("DOMContentLoaded", function() {
     </div>
 </footer>
 
-<style>
-.subscribe-link {
-    color: #4CAF50;
-    text-decoration: none;
-    font-weight: bold;
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const resetButton = document.getElementById('reset-field');
+        const queryField = document.getElementById('query-field');
+
+        resetButton.addEventListener('click', function() {
+            queryField.value = ''; // Clear the input field
+            queryField.focus(); // Optionally, refocus the input field
+        });
+    });
+</script>
+<script type="text/javascript">
+  function handleCreateClick() {
+    console.log("Create button clicked!");
+    // Add your custom logic here, if needed
 }
 
-.subscribe-link:hover {
-    text-decoration: underline;
+</script>
+
+
+
+
+
+<script type="text/javascript">
+function switchColor() {
+    const body = document.body;
+    const isDarkMode = body.classList.toggle('dark-mode'); // Toggle dark mode class
+    var reactDivs = document.querySelectorAll('.react');
+
+    // Update background and text colors for all elements
+    const elementsToUpdate = document.querySelectorAll(
+        'header, footer, section, .left-aside, .right-aside, .upper-post, .campaign-content, .react, .search-container input, .search-container .btn-reset'
+    );
+
+    elementsToUpdate.forEach(element => {
+        element.classList.toggle('dark-mode', isDarkMode);
+    });
+
+    // Update text colors for specific elements
+    const textElements = document.querySelectorAll(
+        'h1, h2, h3, h4, p, li, .campaign-nav, .campaign-nav a, .btn, .reaction, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link, .love-count, #view-count, .comment-count'
+    );
+
+    textElements.forEach(element => {
+        element.style.color = isDarkMode ? '#ffffff' : '#000000';
+    });
+
+    // Update buttons
+    const buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)');
+    buttons.forEach(button => {
+        button.style.backgroundColor = isDarkMode ? '#262626' : '';
+        button.style.color = isDarkMode ? '#ffffff' : '#000000';
+    });
+
+    // Update `.react` divs
+    if (reactDivs.length > 0) {
+        reactDivs.forEach(function(reactDiv) {
+            reactDiv.style.backgroundColor = isDarkMode ? "#262626" : "";
+            reactDiv.style.color = isDarkMode ? "white" : "black";
+
+            if (isDarkMode) {
+                reactDiv.classList.add('react-hover');
+            } else {
+                reactDiv.classList.remove('react-hover');
+                reactDiv.style.backgroundColor = "";
+            }
+        });
+    }
+
+    // Update input field and reset button
+    const inputField = document.querySelector('.search-container input[type="text"]');
+    const inputResetButton = document.querySelector('.search-container .btn-reset');
+
+    if (inputField) {
+        inputField.style.backgroundColor = isDarkMode ? '#333333' : '#ffffff';
+        inputField.style.color = isDarkMode ? '#ffffff' : '#000000';
+    }
+
+    if (inputResetButton) {
+        inputResetButton.style.color = '#b0b0b0';
+    }
 }
 
-.subscribe-link {
-    color: #4CAF50;
-    text-decoration: none;
-    font-weight: bold;
+</script>
+
+
+
+
+
+
+
+
+<script>
+
+
+function toggleCommentForm() {
+    var popup = document.getElementById("commentFormPopup");
+    popup.style.display = "block";
 }
 
-.subscribe-link:hover {
-    text-decoration: underline;
+function closeCommentForm() {
+    var popup = document.getElementById("commentFormPopup");
+    popup.style.display = "none";
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+    var campaignElement = document.querySelector('.campaign-details');
+    var campaignId = {{ campaign.id }};
+    var startTime;
+
+    function recordCampaignView() {
+        var endTime = Math.floor(Date.now() / 1000); // Get current time in seconds
+        var timeSpent = endTime - startTime;
+        
+        fetch(`/record_campaign_view/${campaignId}/`, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ time_spent: timeSpent })
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log('View recorded successfully');
+            } else {
+                console.error('Failed to record view');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+
+    function handleVisibilityChange() {
+        if (document.visibilityState === 'visible') {
+            startTime = Math.floor(Date.now() / 1000); // Get current time in seconds
+        } else {
+            recordCampaignView();
+        }
+    }
+
+    function isInViewport(element) {
+        var rect = element.getBoundingClientRect();
+        return (
+            rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+        );
+    }
+
+    function handleScroll() {
+        if (isInViewport(campaignElement)) {
+            startTime = Math.floor(Date.now() / 1000); // Get current time in seconds
+        } else {
+            recordCampaignView();
+        }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    document.addEventListener('scroll', handleScroll);
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    var mediaQuery = window.matchMedia('(max-width: 768px)');
+    var leftAside = document.querySelector('.left-aside');
+    var rightAside = document.querySelector('.right-aside');
+
+    function handleMediaQueryChange(e) {
+        if (e.matches) {
+            leftAside.style.display = 'none';
+            rightAside.style.display = 'none';
+        } else {
+            leftAside.style.display = 'block';
+            rightAside.style.display = 'block';
+        }
+    }
+
+    mediaQuery.addListener(handleMediaQueryChange);
+    handleMediaQueryChange(mediaQuery);
+});
+
+document.addEventListener("DOMContentLoaded", function() {
+    const navbarToggle = document.getElementById("navbarToggle");
+    const navbar = document.getElementById("navbar");
+    const popupClose = document.getElementById("popupClose");
+
+    // Toggle navbar visibility
+    navbarToggle.addEventListener("click", function() {
+        if (navbar.style.display === "block") {
+            navbar.style.display = "none";
+        } else {
+            navbar.style.display = "block";
+        }
+    });
+
+    // Close popup when clicking the close button
+    popupClose.addEventListener("click", function() {
+        navbar.style.display = "none";
+    });
+
+    // Adjust navbar display on window resize
+    window.addEventListener("resize", function() {
+        if (window.innerWidth > 768) {
+            navbar.style.display = "none";
+        } else if (navbar.style.display === "block") {
+            navbar.style.display = "block";
+        } else {
+            navbar.style.display = "none";
+        }
+    });
+
+    // Ensure the navbar is initially hidden on page load for larger screens
+    if (window.innerWidth > 768) {
+        navbar.style.display = "none";
+    } else {
+        navbar.style.display = "none"; // or "block" based on your initial requirement
+    }
+});
+</script>
+
+<script>
+    function goBack() {
+        window.history.back(); // Navigates to the previous page
+    }
+</script>
 
 
-</style>
 
 <script type="text/javascript">
   

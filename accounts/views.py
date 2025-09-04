@@ -29,18 +29,18 @@ from decimal import Decimal
 from dotenv import load_dotenv
 
 from main.models import (
-    Profile, Campaign, Comment, Follow, Activity, SupportCampaign, Brainstorming,
+    Profile, Campaign, Comment, Follow, Activity, SupportCampaign,
     User, Love, CampaignView, Chat, Notification, Message,
     AffiliateLink, AffiliateLibrary, AffiliateNewsSource, NativeAd,
     Report, NotInterested, QuranVerse, Surah, Adhkar, Hadith,
-    PlatformFund, Donation, CampaignProduct, ActivityComment, ActivityLove
+    PlatformFund,CampaignProduct, ActivityComment, ActivityLove
 )
 
 from main.forms import (
     UserForm, ProfileForm, CampaignForm, CommentForm, ActivityForm, ActivityFormSet,
     SupportForm, ChatForm, MessageForm, CampaignSearchForm, ProfileSearchForm,
-    BrainstormingForm, CampaignProductForm, ReportForm, NotInterestedForm,
-    SubscriptionForm, DonationForm, UpdateVisibilityForm, ActivityCommentForm,
+     CampaignProductForm, ReportForm, NotInterestedForm,
+    SubscriptionForm, UpdateVisibilityForm, ActivityCommentForm,
     UserVerificationForm
 )
 
@@ -93,17 +93,16 @@ def index(request):
 
     # Top Contributors logic
     engaged_users = set()
-    donation_pairs = Donation.objects.values_list('donor__id', 'campaign_id')
+ 
     love_pairs = Love.objects.values_list('user_id', 'campaign_id')
     comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
     view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
-    brainstorm_pairs = Brainstorming.objects.values_list('supporter_id', 'campaign_id')
     activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
     activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
 
     # Combine all engagement pairs
-    all_pairs = chain(donation_pairs, love_pairs, comment_pairs, view_pairs,
-                     brainstorm_pairs, activity_love_pairs, activity_comment_pairs)
+    all_pairs = chain(love_pairs, comment_pairs, view_pairs,
+                      activity_love_pairs, activity_comment_pairs)
 
     # Count number of unique campaigns each user engaged with
     user_campaign_map = defaultdict(set)

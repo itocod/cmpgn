@@ -16,7 +16,6 @@ from PIL import Image, ExifTags
 from io import BytesIO
 from django.core.files.base import ContentFile
 
-import stripe
 
 
 User = get_user_model()
@@ -195,21 +194,6 @@ def default_content():
          
 
 
-class Brainstorming(models.Model):
-    idea = models.TextField() 
-    attachment = models.FileField(upload_to='brainstorming_attachments/', blank=True, null=True)
-    supporter = models.ForeignKey(User, on_delete=models.CASCADE)
-    campaign = models.ForeignKey('Campaign', on_delete=models.CASCADE)
-
-    def save(self, *args, **kwargs):
-        is_new = self.pk is None
-        super().save(*args, **kwargs)
-        if is_new:
-            supporter_username = self.supporter.username
-            campaign_title = self.campaign.title
-            message = f"{supporter_username} has added a new brainstorming idea to your campaign '{campaign_title}'. <a href='{reverse('view_campaign', kwargs={'campaign_id': self.campaign.pk})}'>View Campaign</a>"
-            Notification.objects.create(user=self.campaign.user.user, message=message, campaign=self.campaign)
-
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
@@ -230,37 +214,40 @@ class Campaign(models.Model):
     audio = models.FileField(upload_to='campaign_audio', null=True, blank=True)
     is_active = models.BooleanField(default=True)  # Stops donations when target is met
    
-
     CATEGORY_CHOICES = (
-    # Survival Essentials
-    ('Poverty and Hunger', 'Poverty and Hunger'),  
-    ('Clean Water and Sanitation', 'Clean Water and Sanitation'),  
-    ('Disaster Relief', 'Disaster Relief'),  # Earthquakes, floods, wars
+
+        # Basic Needs
+        ('Poverty and Hunger', 'Poverty and Hunger'),
+        ('Clean Water and Sanitation', 'Clean Water and Sanitation'),
+        ('Disaster Relief', 'Disaster Relief'),
     
-    # Health
-    ('Healthcare and Medicine', 'Healthcare and Medicine'),  # Diseases, hospitals, emergencies
-    ('Mental Health', 'Mental Health'),  
+         # Health
+        ('Healthcare and Medicine', 'Healthcare and Medicine'),
+        ('Mental Health', 'Mental Health'),
     
-    # Equity and Justice
-    ('Human Rights and Equality', 'Human Rights and Equality'),  # Gender, race, LGBTQ+, refugees
-    ('Peace and Justice', 'Peace and Justice'),  # Conflict zones, legal aid
+        # Social Justice
+        ('Human Rights and Equality', 'Human Rights and Equality'),
+        ('Peace and Justice', 'Peace and Justice'),
     
-    # Future Foundations
-    ('Education for All', 'Education for All'),  # Schools, scholarships, literacy
-    ('Economic Empowerment', 'Economic Empowerment'),  # Jobs, entrepreneurship
+         # Education/Economy
+        ('Education for All', 'Education for All'),
+        ('Economic Empowerment', 'Economic Empowerment'),
     
-    # Planet Sustainability
-    ('Climate Action', 'Climate Action'),  # Extreme weather, pollution
-    ('Save Our Planet', 'Save Our Planet'),  # Forests, oceans, wildlife
+         # Environment
+        ('Climate Action', 'Climate Action'),
+        ('Wildlife and Conservation', 'Wildlife and Conservation'),
     
-    # Technology for Good
-    ('Tech for Humanity', 'Tech for Humanity'),  # Digital access, innovation
+        # Technology
+       ('Tech for Humanity', 'Tech for Humanity'),
     
-    # Other
-    ('Community Development', 'Community Development'),  # Local projects
-    ('Other', 'Other'),
-)
-    category = models.CharField(max_length=30, choices=CATEGORY_CHOICES, default='Environmental Conservation')
+       # Community
+       ('Community Development', 'Community Development'),
+       ('Arts and Culture', 'Arts and Culture'),
+    
+       # Other
+       ('Other', 'Other'),
+    )
+    category = models.CharField(max_length=30, choices=CATEGORY_CHOICES, default='Education for All')
 
     VISIBILITY_CHOICES = (
         ('public', 'Public'),
@@ -275,7 +262,24 @@ class Campaign(models.Model):
     )
     duration = models.PositiveIntegerField(null=True, blank=True, help_text="Enter duration.")
     duration_unit = models.CharField(max_length=10, choices=DURATION_UNITS, default='days')
+    funding_goal = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    
+    @property
+    def total_pledges(self):
+        return self.pledge_set.aggregate(total=models.Sum('amount'))['total'] or 0
+    @property
+    def total_donations(self):
+        return self.donations.aggregate(total=models.Sum('amount'))['total'] or 0
 
+    @property
+    def donation_percentage(self):
+        if self.funding_goal == 0:
+            return 0
+        return round((self.total_donations / self.funding_goal) * 100, 2)
+
+    @property
+    def donation_remaining(self):
+        return max(self.funding_goal - self.total_donations, 0)    
    
     @property
     def is_outdated(self):
@@ -304,8 +308,6 @@ class Campaign(models.Model):
             remaining = end_time - timezone.now()
             return max(remaining.days, 0)
 
-    def progress_percentage(self):
-        return (self.amount_raised / self.target_amount) * 100 if self.target_amount > 0 else 0
 
 
     def __str__(self):
@@ -390,206 +392,208 @@ class Campaign(models.Model):
                 timestamp=timezone.now()
             )
 
-    def can_accept_payments(self):
-        return (
-            self.is_active and 
-            self.user.stripe_account_id and
-            self.user.has_completed_stripe_onboarding()
-        )
-    
-    def percentage_funded(self):
-        if self.target_amount == 0:
-            return 0
-        return min(100, (self.amount_raised / self.target_amount) * 100)
+   
+    def get_goals_and_activities(self):
+        goals_activities = {
+        'Poverty and Hunger': {
+            'Goals': [
+                'Reduce poverty and hunger by providing immediate and long-term support.',
+                'Empower communities with resources for food security and income generation.'
+            ],
+            'Activities': [
+                'Distribute food packages or meals to low-income families.',
+                'Fund community farming or cooperative initiatives.',
+                'Launch skills training or small-business grants for unemployed individuals.',
+                'Support food banks or hunger relief programs.',
+                'Organize donation drives for clothes and daily essentials.'
+            ]
+        },
+        'Clean Water and Sanitation': {
+            'Goals': [
+                'Ensure access to clean drinking water and improved sanitation.',
+                'Raise awareness about hygiene and waterborne diseases.'
+            ],
+            'Activities': [
+                'Build or repair wells, boreholes, or water systems.',
+                'Distribute water filters or hygiene kits to communities.',
+                'Conduct sanitation awareness campaigns.',
+                'Partner with engineers to develop sustainable water solutions.',
+                'Install toilets and handwashing facilities in underserved areas.'
+            ]
+        },
+        'Disaster Relief': {
+            'Goals': [
+                'Provide emergency aid to victims of natural or human-made disasters.',
+                'Support recovery and rebuilding efforts.'
+            ],
+            'Activities': [
+                'Distribute emergency supplies like food, blankets, and medicine.',
+                'Raise funds for rebuilding homes and schools.',
+                'Mobilize volunteers for rescue and relief operations.',
+                'Partner with emergency response organizations.',
+                'Provide temporary shelter and medical services.'
+            ]
+        },
+        'Healthcare and Medicine': {
+            'Goals': [
+                'Improve access to medical care and essential medicines.',
+                'Support health infrastructure in low-resource settings.'
+            ],
+            'Activities': [
+                'Fund surgeries or treatments for patients in need.',
+                'Provide medical equipment or ambulances to rural clinics.',
+                'Organize blood donation or vaccination drives.',
+                'Train health workers in local communities.',
+                'Create mobile health clinics or telemedicine services.'
+            ]
+        },
+        'Mental Health': {
+            'Goals': [
+                'Raise awareness about mental health challenges.',
+                'Provide accessible support and counseling services.'
+            ],
+            'Activities': [
+                'Launch online or in-person mental health counseling programs.',
+                'Train community members as mental health first responders.',
+                'Fund hotlines or mental health apps.',
+                'Host awareness events to fight stigma.',
+                'Create support groups for anxiety, depression, or trauma recovery.'
+            ]
+        },
+        'Human Rights and Equality': {
+            'Goals': [
+                'Promote and protect fundamental human rights.',
+                'Fight discrimination and injustice in all forms.'
+            ],
+            'Activities': [
+                'Advocate for refugee rights or gender equality.',
+                'Organize legal aid or education workshops.',
+                'Support organizations working on human rights issues.',
+                'Launch campaigns to expose injustice or systemic discrimination.',
+                'Provide safe havens or shelters for vulnerable groups.'
+            ]
+        },
+        'Peace and Justice': {
+            'Goals': [
+                'Support justice systems and conflict resolution.',
+                'Promote peacebuilding and reconciliation in conflict zones.'
+            ],
+            'Activities': [
+                'Train youth in conflict resolution and mediation.',
+                'Support rehabilitation programs for former offenders or soldiers.',
+                'Organize peace dialogues between divided communities.',
+                'Fund legal defense for marginalized populations.',
+                'Document and report human rights abuses.'
+            ]
+        },
+        'Education for All': {
+            'Goals': [
+                'Ensure equitable access to quality education.',
+                'Reduce school dropout rates and promote literacy.'
+            ],
+            'Activities': [
+                'Build classrooms or learning centers.',
+                'Fund school supplies, tuition, or scholarships.',
+                'Train teachers and provide educational resources.',
+                'Host community literacy campaigns.',
+                'Create inclusive education programs for girls and disabled students.'
+            ]
+        },
+        'Economic Empowerment': {
+            'Goals': [
+                'Promote entrepreneurship and job creation.',
+                'Support marginalized groups through income-generating activities.'
+            ],
+            'Activities': [
+                'Provide startup capital to small businesses.',
+                'Offer vocational training and mentorship programs.',
+                'Launch financial literacy and savings programs.',
+                'Support women-led enterprises.',
+                'Connect job seekers to employment opportunities.'
+            ]
+        },
+        'Climate Action': {
+            'Goals': [
+                'Combat climate change and its effects.',
+                'Promote community-based solutions to environmental challenges.'
+            ],
+            'Activities': [
+                'Raise awareness about carbon emissions and climate change.',
+                'Organize reforestation or carbon offset programs.',
+                'Support renewable energy projects.',
+                'Develop sustainable agriculture initiatives.',
+                'Advocate for green policies and eco-justice.'
+            ]
+        },
+        'Wildlife and Conservation': {
+            'Goals': [
+                'Protect biodiversity, forests, oceans, and wildlife.',
+                'Promote sustainable and ethical environmental practices.'
+            ],
+            'Activities': [
+                'Fund rescue and rehabilitation of endangered species.',
+                'Organize beach cleanups and marine conservation efforts.',
+                'Create campaigns to stop deforestation.',
+                'Partner with conservation groups on wildlife protection.',
+                'Educate communities on eco-friendly lifestyles.'
+            ]
+        },
+        'Tech for Humanity': {
+            'Goals': [
+                'Leverage technology to solve social and environmental problems.',
+                'Bridge the digital divide.'
+            ],
+            'Activities': [
+                'Donate laptops or tablets to students in need.',
+                'Develop tech tools for health, education, or disaster response.',
+                'Offer coding and digital literacy workshops.',
+                'Support innovation hubs or tech incubators for social good.',
+                'Create platforms or apps that connect underserved communities.'
+            ]
+        },
+        'Community Development': {
+            'Goals': [
+                'Enhance the quality of life in local communities.',
+                'Build strong and resilient local systems.'
+            ],
+            'Activities': [
+                'Renovate community centers or build shared spaces.',
+                'Support local artists or cultural initiatives.',
+                'Create neighborhood safety and youth empowerment programs.',
+                'Fund micro-infrastructure like street lights or boreholes.',
+                'Organize community festivals and forums.'
+            ]
+        },
+        'Arts and Culture': {
+            'Goals': [
+                'Encourage creativity and artistic expression.'
+                'Preserve and promote cultural heritage.',
+                
+            ],
+            'Activities': [
+                'Fund art exhibitions and cultural festivals.',
+                'Support local artisans and craftspeople.',
+                'Provide arts education for youth.',
+                'Document and archive cultural traditions.',
+                'Promote cultural exchange programs.'
+            ]
+        },
+        'Other': {
+            'Goals': [
+                'Support causes that don’t fit into predefined categories.',
+                'Provide flexibility for unique community needs.'
+            ],
+            'Activities': [
+                'Launch one-time campaigns for urgent needs.',
+                'Fundraise for emerging or unexpected challenges.',
+                'Engage in storytelling to raise awareness.',
+                'Partner with local influencers or activists.',
+                'Customize support efforts to individual or group-specific cases.'
+            ]
+        },
+    }
 
-
-    def get_objective_and_activities(self):
-        objectives_activities = {
-            'Poverty and Hunger': {
-                'Objectives': [
-                    'Reduce poverty and hunger by providing immediate and long-term support.',
-                    'Empower communities with resources for food security and income generation.'
-                ],
-                'Activities': [
-                    'Distribute food packages or meals to low-income families.',
-                    'Fund community farming or cooperative initiatives.',
-                    'Launch skills training or small-business grants for unemployed individuals.',
-                    'Support food banks or hunger relief programs.',
-                    'Organize donation drives for clothes and daily essentials.'
-                ]
-            },
-            'Clean Water and Sanitation': {
-                'Objectives': [
-                    'Ensure access to clean drinking water and improved sanitation.',
-                    'Raise awareness about hygiene and waterborne diseases.'
-                ],
-                'Activities': [
-                    'Build or repair wells, boreholes, or water systems.',
-                    'Distribute water filters or hygiene kits to communities.',
-                    'Conduct sanitation awareness campaigns.',
-                    'Partner with engineers to develop sustainable water solutions.',
-                    'Install toilets and handwashing facilities in underserved areas.'
-                ]
-            },
-            'Disaster Relief': {
-                'Objectives': [
-                    'Provide emergency aid to victims of natural or human-made disasters.',
-                    'Support recovery and rebuilding efforts.'
-                ],
-                'Activities': [
-                    'Distribute emergency supplies like food, blankets, and medicine.',
-                    'Raise funds for rebuilding homes and schools.',
-                    'Mobilize volunteers for rescue and relief operations.',
-                    'Partner with emergency response organizations.',
-                    'Provide temporary shelter and medical services.'
-                ]
-            },
-            'Healthcare and Medicine': {
-                'Objectives': [
-                    'Improve access to medical care and essential medicines.',
-                    'Support health infrastructure in low-resource settings.'
-                ],
-                'Activities': [
-                    'Fund surgeries or treatments for patients in need.',
-                    'Provide medical equipment or ambulances to rural clinics.',
-                    'Organize blood donation or vaccination drives.',
-                    'Train health workers in local communities.',
-                    'Create mobile health clinics or telemedicine services.'
-                ]
-            },
-            'Mental Health': {
-                'Objectives': [
-                    'Raise awareness about mental health challenges.',
-                    'Provide accessible support and counseling services.'
-                ],
-                'Activities': [
-                    'Launch online or in-person mental health counseling programs.',
-                    'Train community members as mental health first responders.',
-                    'Fund hotlines or mental health apps.',
-                    'Host awareness events to fight stigma.',
-                    'Create support groups for anxiety, depression, or trauma recovery.'
-                ]
-            },
-            'Human Rights and Equality': {
-                'Objectives': [
-                    'Promote and protect fundamental human rights.',
-                    'Fight discrimination and injustice in all forms.'
-                ],
-                'Activities': [
-                    'Advocate for refugee rights or gender equality.',
-                    'Organize legal aid or education workshops.',
-                    'Support organizations working on human rights issues.',
-                    'Launch campaigns to expose injustice or systemic discrimination.',
-                    'Provide safe havens or shelters for vulnerable groups.'
-                ]
-            },
-            'Peace and Justice': {
-                'Objectives': [
-                    'Support justice systems and conflict resolution.',
-                    'Promote peacebuilding and reconciliation in conflict zones.'
-                ],
-                'Activities': [
-                    'Train youth in conflict resolution and mediation.',
-                    'Support rehabilitation programs for former offenders or soldiers.',
-                    'Organize peace dialogues between divided communities.',
-                    'Fund legal defense for marginalized populations.',
-                    'Document and report human rights abuses.'
-                ]
-            },
-            'Education for All': {
-                'Objectives': [
-                    'Ensure equitable access to quality education.',
-                    'Reduce school dropout rates and promote literacy.'
-                ],
-                'Activities': [
-                    'Build classrooms or learning centers.',
-                    'Fund school supplies, tuition, or scholarships.',
-                    'Train teachers and provide educational resources.',
-                    'Host community literacy campaigns.',
-                    'Create inclusive education programs for girls and disabled students.'
-                ]
-            },
-            'Economic Empowerment': {
-                'Objectives': [
-                    'Promote entrepreneurship and job creation.',
-                    'Support marginalized groups through income-generating activities.'
-                ],
-                'Activities': [
-                    'Provide startup capital to small businesses.',
-                    'Offer vocational training and mentorship programs.',
-                    'Launch financial literacy and savings programs.',
-                    'Support women-led enterprises.',
-                    'Connect job seekers to employment opportunities.'
-                ]
-            },
-            'Climate Action': {
-                'Objectives': [
-                    'Combat climate change and its effects.',
-                    'Promote community-based solutions to environmental challenges.'
-                ],
-                'Activities': [
-                    'Raise awareness about carbon emissions and climate change.',
-                    'Organize reforestation or carbon offset programs.',
-                    'Support renewable energy projects.',
-                    'Develop sustainable agriculture initiatives.',
-                    'Advocate for green policies and eco-justice.'
-                ]
-            },
-            'Save Our Planet': {
-                'Objectives': [
-                    'Protect biodiversity, forests, oceans, and wildlife.',
-                    'Promote sustainable and ethical environmental practices.'
-                ],
-                'Activities': [
-                    'Fund rescue and rehabilitation of endangered species.',
-                    'Organize beach cleanups and marine conservation efforts.',
-                    'Create campaigns to stop deforestation.',
-                    'Partner with conservation groups on wildlife protection.',
-                    'Educate communities on eco-friendly lifestyles.'
-                ]
-            },
-            'Tech for Humanity': {
-                'Objectives': [
-                    'Leverage technology to solve social and environmental problems.',
-                    'Bridge the digital divide.'
-                ],
-                'Activities': [
-                    'Donate laptops or tablets to students in need.',
-                    'Develop tech tools for health, education, or disaster response.',
-                    'Offer coding and digital literacy workshops.',
-                    'Support innovation hubs or tech incubators for social good.',
-                    'Create platforms or apps that connect underserved communities.'
-                ]
-            },
-            'Community Development': {
-                'Objectives': [
-                    'Enhance the quality of life in local communities.',
-                    'Build strong and resilient local systems.'
-                ],
-                'Activities': [
-                    'Renovate community centers or build shared spaces.',
-                    'Support local artists or cultural initiatives.',
-                    'Create neighborhood safety and youth empowerment programs.',
-                    'Fund micro-infrastructure like street lights or boreholes.',
-                    'Organize community festivals and forums.'
-                ]
-            },
-            'Other': {
-                'Objectives': [
-                    'Support causes that don’t fit into predefined categories.',
-                    'Provide flexibility for unique community needs.'
-                ],
-                'Activities': [
-                    'Launch one-time campaigns for urgent needs.',
-                    'Fundraise for emerging or unexpected challenges.',
-                    'Engage in storytelling to raise awareness.',
-                    'Partner with local influencers or activists.',
-                    'Customize support efforts to individual or group-specific cases.'
-                ]
-            },
-        }
-        return objectives_activities.get(self.category, {})
-
+        return goals_activities.get(self.category, {})
 
 
 
@@ -626,28 +630,79 @@ class NotInterested(models.Model):
 
 
 
-
-
-
 class SupportCampaign(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     campaign = models.ForeignKey('Campaign', on_delete=models.CASCADE)
     
     CATEGORY_CHOICES = (
-        (' Donate_monetary,', ' Donate_monetary,'),
-        ('Brainstorming', 'Brainstorming'),
-        ('CampaignProduct','CampaignProduct')
-     
+        ('donation', 'Monetary Donation'),
+        ('pledge','Pledge'),
+        ('campaign_product','Campaign Product'),
     )
-    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='Monetary Donation')
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='donation')
     
-    # Visibility fields for support actions
+    # Visibility flags for template toggles
     donate_monetary_visible = models.BooleanField(default=False)
-    brainstorm_idea_visible = models.BooleanField(default=False)
-      # Visibility for campaign products
+    pledge_visible = models.BooleanField(default=False)
     campaign_product_visible = models.BooleanField(default=False)
-   
+
+    def total_donations(self):
+        return self.campaign.donations.aggregate(total=models.Sum('amount'))['total'] or 0
+
+    def total_pledges(self):
+        return self.campaign.pledges.aggregate(total=models.Sum('amount'))['total'] or 0
+
+    def donation_percentage(self):
+        if self.campaign.funding_goal == 0:
+            return 0
+        return round((self.total_donations() / self.campaign.funding_goal) * 100, 2)
+
+    def donation_remaining(self):
+        return max(self.campaign.funding_goal - self.total_donations(), 0)
+
+    def __str__(self):
+        return f"{self.user.username} supports {self.campaign.title}"
+
+
+from django.db import models
+from django.contrib.auth import get_user_model
+from django.utils import timezone
+
+User = get_user_model()
+
+DONATION_DESTINATION_CHOICES = (
+    ('campaign', 'Campaign Owner'),
+    ('site', 'Site Tip'),
+)
+
+class Donation(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    campaign = models.ForeignKey('Campaign', on_delete=models.CASCADE, related_name='donations')
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    destination = models.CharField(max_length=10, choices=DONATION_DESTINATION_CHOICES, default='campaign')
+    timestamp = models.DateTimeField(auto_now_add=True)
+    fulfilled = models.BooleanField(default=True)  # Donations are instant/tips
+
+    def __str__(self):
+        dest = "site" if self.destination == 'site' else "campaign"
+        return f"{self.user.username} donated ${self.amount} to {dest} ({self.campaign.title})"
+
+
+
+
  
+class Pledge(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='pledges')
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    contact = models.CharField(max_length=100, blank=True)
+    is_fulfilled = models.BooleanField(default=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} pledged ${self.amount} to {self.campaign.title}"
+
+
 
 
 
@@ -671,70 +726,12 @@ class CampaignProduct(models.Model):
 
 
 
-# models.py
-class Pledge(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)  # USD/EUR/etc.
-    contact = models.CharField(max_length=100, blank=True)  # Email/phone
-    is_fulfilled = models.BooleanField(default=False)
-    timestamp = models.DateTimeField(auto_now_add=True)
-    
-    def toggle_fulfilled(self):
-        self.is_fulfilled = not self.is_fulfilled
-        self.save()
-        return self.is_fulfilled
 
 
 
 
-# models.py
-from django.db import models
-from django.core.validators import EmailValidator
-from django.conf import settings
 
-class CampaignFund(models.Model):
-    campaign = models.OneToOneField('Campaign', on_delete=models.CASCADE)
-    target_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    amount_raised = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
-    paypal_email = models.EmailField(
-        validators=[EmailValidator(message="Enter a valid PayPal email.")],
-        help_text="Campaign owner's PayPal email for receiving funds."
-    )
-    email_verified = models.BooleanField(default=False)
-    
 
-    def progress_percentage(self):
-        if self.target_amount > 0:
-            return (self.amount_raised / self.target_amount) * 100
-        return 0
-
-class Donation(models.Model):
-    campaign = models.ForeignKey('Campaign', on_delete=models.CASCADE)
-    donor = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    donor_name = models.CharField(max_length=255, default="Anonymous")
-    transaction_id = models.CharField(max_length=255, unique=True, null=True)
-    created_at = models.DateTimeField(default=timezone.now)
-
-class PayoutRecord(models.Model):
-    PAYOUT_STATUS = (
-        ('pending', 'Pending'),
-        ('completed', 'Completed'),
-        ('failed', 'Failed'),
-    )
-    
-    campaign = models.ForeignKey('Campaign', on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    recipient_email = models.EmailField()
-    payout_id = models.CharField(max_length=255, null=True, blank=True)
-    status = models.CharField(max_length=20, choices=PAYOUT_STATUS, default='pending')
-    created_at = models.DateTimeField(auto_now_add=True)
-    completed_at = models.DateTimeField(null=True, blank=True)
-    notes = models.TextField(blank=True)
-
-    def __str__(self):
-        return f"Payout of ${self.amount} to {self.recipient_email} ({self.status})"
 
 
 
@@ -924,25 +921,24 @@ def notify_user_added(sender, instance, action, model, pk_set, **kwargs):
 
 import re
 from django.utils.html import escape
-
-
+# models.py
 class Message(models.Model):
     chat = models.ForeignKey(Chat, related_name='messages', on_delete=models.CASCADE)
     sender = models.ForeignKey(User, related_name='sent_messages', on_delete=models.CASCADE)
     content = models.TextField(default='say something..')
     timestamp = models.DateTimeField(auto_now_add=True)
+    # Add these fields for file attachments
+    file = models.FileField(upload_to='chat_files/', null=True, blank=True)
+    file_name = models.CharField(max_length=255, blank=True)
+    file_type = models.CharField(max_length=50, blank=True)  # image, document, etc.
 
     def save(self, *args, **kwargs):
         if self.pk is None:  # If this is a new message
-            # Convert plain text links to clickable links
-            self.content = re.sub(
-                r'(https?://\S+)', 
-                r'<a href="\1" target="_blank" rel="noopener noreferrer">\1</a>', 
-                self.content
-            )
-
             # Create the notification message
-            message = f"You have a new message from {self.sender.username} in the chat '{self.chat.title}'. <a href='{reverse('chat_detail', kwargs={'chat_id': self.chat.pk})}'>View Chat</a>"
+            if self.file:
+                message = f"{self.sender.username} shared a file in the chat '{self.chat.title}'. <a href='{reverse('chat_detail', kwargs={'chat_id': self.chat.pk})}'>View Chat</a>"
+            else:
+                message = f"You have a new message from {self.sender.username} in the chat '{self.chat.title}'. <a href='{reverse('chat_detail', kwargs={'chat_id': self.chat.pk})}'>View Chat</a>"
             
             # Notify all participants except the sender
             for participant in self.chat.participants.exclude(id=self.sender.id):
@@ -950,19 +946,18 @@ class Message(models.Model):
 
         super().save(*args, **kwargs)
 
+    @property
+    def file_category(self):
+        if not self.file_type:
+            return ''
+            if self.file_type.startswith('image'):
+                return 'image'
+            elif self.file_type.startswith('video'):
+                return 'video'
+            else:
+                return 'document'
 
 
-
-
-class AffiliateLink(models.Model):
-    title = models.CharField(max_length=200)
-    link = models.URLField()
-    description = models.TextField(blank=True, null=True)
-    image = models.ImageField(upload_to='affiliate_images/', null=True, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)  # Automatically set when an instance is created
-
-    def __str__(self):
-        return self.title
 
 
 
@@ -980,56 +975,19 @@ class Notification(models.Model):
     def __str__(self):
         return self.message
 
-class Surah(models.Model):
-    name = models.CharField(max_length=255)
-    surah_number = models.IntegerField(unique=True)
-    chapter = models.IntegerField(default=1)
-    english_name = models.CharField(max_length=255, default='unknown')
-    place_of_revelation = models.CharField(max_length=255, default='unknown')
+
+
+
+class AffiliateLink(models.Model):
+    title = models.CharField(max_length=200)
+    link = models.URLField()
+    description = models.TextField(blank=True, null=True)
+    image = models.ImageField(upload_to='affiliate_images/', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)  # Automatically set when an instance is created
 
     def __str__(self):
-        return self.name
+        return self.title
 
-class QuranVerse(models.Model):
-    surah = models.ForeignKey(Surah, on_delete=models.CASCADE)
-    verse_number = models.IntegerField()
-    verse_text = models.TextField()
-    translation = models.TextField()
-    description = models.TextField(blank=True, null=True)  # New description field
-
-    class Meta:
-        unique_together = ('surah', 'verse_number')
-
-    def __str__(self):
-        return f"{self.surah.name} {self.verse_number}"
-
-
-class Adhkar(models.Model):
-    TYPE_CHOICES = [
-        ('morning', 'Morning'),
-        ('evening', 'Evening'),
-        ('night', 'Night'),
-        ('after_prayer', 'After Prayer'),
-        ('anywhere', 'Anywhere'),
-    ]
-
-    type = models.CharField(max_length=20, choices=TYPE_CHOICES)
-    text = models.TextField()
-    translation = models.TextField()
-    reference = models.CharField(max_length=255, blank=True, null=True)
-
-    def __str__(self):
-        return f"{self.get_type_display()} Adhkar"
-
-
-class Hadith(models.Model):
-    narrator = models.CharField(max_length=255)
-    text = models.TextField()
-    reference = models.CharField(max_length=255)
-    authenticity = models.CharField(max_length=100)
-
-    def __str__(self):
-        return f"Hadith {self.id}: {self.reference}"
 
 
 
@@ -1193,3 +1151,59 @@ class FAQ(models.Model):
 
     def __str__(self):
         return self.question
+
+
+
+
+
+class Surah(models.Model):
+    name = models.CharField(max_length=255)
+    surah_number = models.IntegerField(unique=True)
+    chapter = models.IntegerField(default=1)
+    english_name = models.CharField(max_length=255, default='unknown')
+    place_of_revelation = models.CharField(max_length=255, default='unknown')
+
+    def __str__(self):
+        return self.name
+
+class QuranVerse(models.Model):
+    surah = models.ForeignKey(Surah, on_delete=models.CASCADE)
+    verse_number = models.IntegerField()
+    verse_text = models.TextField()
+    translation = models.TextField()
+    description = models.TextField(blank=True, null=True)  # New description field
+
+    class Meta:
+        unique_together = ('surah', 'verse_number')
+
+    def __str__(self):
+        return f"{self.surah.name} {self.verse_number}"
+
+
+class Adhkar(models.Model):
+    TYPE_CHOICES = [
+        ('morning', 'Morning'),
+        ('evening', 'Evening'),
+        ('night', 'Night'),
+        ('after_prayer', 'After Prayer'),
+        ('anywhere', 'Anywhere'),
+    ]
+
+    type = models.CharField(max_length=20, choices=TYPE_CHOICES)
+    text = models.TextField()
+    translation = models.TextField()
+    reference = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return f"{self.get_type_display()} Adhkar"
+
+
+class Hadith(models.Model):
+    narrator = models.CharField(max_length=255)
+    text = models.TextField()
+    reference = models.CharField(max_length=255)
+    authenticity = models.CharField(max_length=100)
+
+    def __str__(self):
+        return f"Hadith {self.id}: {self.reference}"
+
