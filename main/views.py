@@ -1564,124 +1564,6 @@ def upload_image(request):
 
 
 
-@login_required
-def product_manage(request, campaign_id=None, product_id=None):
-    # Initialize variables
-    campaign = None
-    product = None
-
-    # Get following user IDs using the improved pattern
-    current_user_following = request.user.following.all()
-    following_user_ids = [follow.followed_id for follow in current_user_following]
-    user_profile = get_object_or_404(Profile, user=request.user)
-
-    # Fetch campaign and product if IDs are provided
-    if campaign_id:
-        campaign = get_object_or_404(Campaign, pk=campaign_id)
-    if product_id:
-        product = get_object_or_404(CampaignProduct, pk=product_id)
-
-    # Handle form submission
-    if request.method == 'POST':
-        form = CampaignProductForm(request.POST, request.FILES, instance=product)
-        if form.is_valid():
-            product = form.save(commit=False)
-            product.campaign = campaign
-            product.save()
-            if campaign:
-                return redirect('product_manage', campaign_id=campaign.id)
-            else:
-                return redirect('product_manage')
-    else:
-        form = CampaignProductForm(instance=product)
-    
-    # Fetch all products for the campaign
-    products = CampaignProduct.objects.filter(campaign=campaign).order_by('-date_added') if campaign else None
-    product_count = products.count() if products else 0
-
-    # 🔥 Trending campaigns (Only those with at least 1 love)
-    trending_campaigns = Campaign.objects.filter(visibility='public') \
-        .annotate(love_count_annotated=Count('loves')) \
-        .filter(love_count_annotated__gte=1) \
-        .order_by('-love_count_annotated')[:10]
-
-    # Top Contributors logic
-    engaged_users = set()
-
-    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
-    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
-    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
-    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
-    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
-
-    # Combine all engagement pairs
-    all_pairs = chain(love_pairs, comment_pairs, view_pairs,
-                      activity_love_pairs, activity_comment_pairs)
-
-    # Count number of unique campaigns each user engaged with
-    user_campaign_map = defaultdict(set)
-    for user_id, campaign_id in all_pairs:
-        user_campaign_map[user_id].add(campaign_id)
-
-    # Build a list of contributors with their campaign engagement count
-    contributor_data = []
-    for user_id, campaign_set in user_campaign_map.items():
-        try:
-            profile = Profile.objects.get(user__id=user_id)
-            contributor_data.append({
-                'user': profile.user,
-                'image': profile.image,
-                'campaign_count': len(campaign_set),
-            })
-        except Profile.DoesNotExist:
-            continue
-
-    # Sort contributors by campaign_count descending
-    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
-
-    # User notifications and follows
-    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
-    new_campaigns_from_follows = Campaign.objects.filter(
-        user__user__id__in=following_user_ids,
-        visibility='public', 
-        timestamp__gt=user_profile.last_campaign_check
-    )
-    user_profile.last_campaign_check = timezone.now()
-    user_profile.save()
-
-    # Suggested users with improved logic
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
-    suggested_users = []
-    
-    for profile in all_profiles:
-        similarity_score = calculate_similarity(user_profile, profile)
-        if similarity_score >= 0.5:
-            followers_count = Follow.objects.filter(followed=profile.user).count()
-            suggested_users.append({
-                'user': profile.user,
-                'followers_count': followers_count
-            })
-    suggested_users = suggested_users[:2]
-
-    ads = NativeAd.objects.all()
-
-    context = {
-        'ads': ads,
-        'form': form,
-        'product': product,
-        'campaign': campaign,
-        'products': products,
-        'product_count': product_count,
-        'unread_notifications': unread_notifications,
-        'user_profile': user_profile,
-        'new_campaigns_from_follows': new_campaigns_from_follows,
-        'suggested_users': suggested_users,
-        'trending_campaigns': trending_campaigns,
-        'top_contributors': top_contributors,
-    }
-    
-    return render(request, 'main/product_manage.html', context)
-
 
 def love_activity(request, activity_id):
     if request.method == 'POST' and request.user.is_authenticated:
@@ -4901,7 +4783,7 @@ def recreate_campaign(request, campaign_id):
         form = CampaignForm(request.POST, request.FILES, instance=existing_campaign)
         if form.is_valid():
             form.save()
-            return redirect('success_page')  # Update with your success URL
+            return redirect('view_campaign', campaign_id=existing_campaign.id)  # Update with your success URL
     else:
         form = CampaignForm(instance=existing_campaign)
 
@@ -6091,30 +5973,46 @@ def create_pledge(request, campaign_id):
 
 
 
-
-
-    from django.contrib.auth.decorators import login_required
+from collections import defaultdict
+from itertools import chain
+from django.contrib.auth.decorators import login_required
+from django.db.models import Count
 from django.shortcuts import render, get_object_or_404
-from .models import Campaign, Pledge
+from django.utils import timezone
+
+from .models import Campaign, Pledge, Profile, NativeAd, Follow, Love, Comment, CampaignView, ActivityLove, ActivityComment
+
 
 @login_required
 def campaign_pledgers_view(request, campaign_id):
     campaign = get_object_or_404(Campaign, id=campaign_id)
     pledges = Pledge.objects.filter(campaign=campaign).order_by('-timestamp')
 
-    # User data and following
+    # Counts
+    fulfilled_count = pledges.filter(is_fulfilled=True).count()
+    pending_count = pledges.filter(is_fulfilled=False).count()
+    total_count = pledges.count()
+
+    # Clean contacts for WhatsApp links
+    for pledge in pledges:
+        if pledge.contact:
+            pledge.cleaned_contact = ''.join(filter(str.isdigit, pledge.contact))
+        else:
+            pledge.cleaned_contact = ''
+
+    # User profile + following
     user_profile = get_object_or_404(Profile, user=request.user)
     following_users = request.user.following.values_list('followed', flat=True)
     user_profile.last_campaign_check = timezone.now()
     user_profile.save()
-    
+
     ads = NativeAd.objects.all()
 
     # Suggested users
     current_user_following = user_profile.following.all()
     all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
     suggested_users = []
-    
+
     for profile in all_profiles:
         similarity_score = calculate_similarity(user_profile, profile)
         if similarity_score >= 0.5:
@@ -6125,30 +6023,25 @@ def campaign_pledgers_view(request, campaign_id):
             })
     suggested_users = suggested_users[:2]
 
-    # Trending campaigns (Only those with at least 1 love)
+    # Trending campaigns (with at least 1 love)
     trending_campaigns = Campaign.objects.filter(visibility='public') \
         .annotate(love_count_annotated=Count('loves')) \
         .filter(love_count_annotated__gte=1) \
         .order_by('-love_count_annotated')[:10]
 
-    # Top Contributors logic
-   
+    # Top contributors
     love_pairs = Love.objects.values_list('user_id', 'campaign_id')
     comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
     view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
     activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
     activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
 
-    # Combine all engagement pairs
-    all_pairs = chain( love_pairs, comment_pairs, view_pairs,
-                      activity_love_pairs, activity_comment_pairs)
+    all_pairs = chain(love_pairs, comment_pairs, view_pairs, activity_love_pairs, activity_comment_pairs)
 
-    # Count number of unique campaigns each user engaged with
     user_campaign_map = defaultdict(set)
     for user_id, campaign_id in all_pairs:
         user_campaign_map[user_id].add(campaign_id)
 
-    # Build a list of contributors with their campaign engagement count
     contributor_data = []
     for user_id, campaign_set in user_campaign_map.items():
         try:
@@ -6161,7 +6054,6 @@ def campaign_pledgers_view(request, campaign_id):
         except Profile.DoesNotExist:
             continue
 
-    # Sort contributors by campaign_count descending
     top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
 
     return render(request, 'main/pledges.html', {
@@ -6172,7 +6064,16 @@ def campaign_pledgers_view(request, campaign_id):
         'suggested_users': suggested_users,
         'trending_campaigns': trending_campaigns,
         'top_contributors': top_contributors,
+        'fulfilled_count': fulfilled_count,
+        'pending_count': pending_count,
+        'total_count': total_count,
     })
+
+
+
+
+
+
 
 # views.py
 from django.contrib.auth.decorators import login_required
@@ -6297,6 +6198,385 @@ def create_donation(request, campaign_id):
 
     return render(request, 'main/donation_form.html', context)
 
+
+
+
+@login_required
+def product_manage(request, campaign_id=None, product_id=None):
+    # Initialize variables
+    campaign = None
+    product = None
+
+    # Get following user IDs using the improved pattern
+    current_user_following = request.user.following.all()
+    following_user_ids = [follow.followed_id for follow in current_user_following]
+    user_profile = get_object_or_404(Profile, user=request.user)
+
+    # Fetch campaign and product if IDs are provided
+    if campaign_id:
+        campaign = get_object_or_404(Campaign, pk=campaign_id)
+    if product_id:
+        product = get_object_or_404(CampaignProduct, pk=product_id)
+
+    # Handle form submission
+    if request.method == 'POST':
+        form = CampaignProductForm(request.POST, request.FILES, instance=product)
+        if form.is_valid():
+            product = form.save(commit=False)
+            product.campaign = campaign
+            
+            # If stock quantity is 0, set is_active to False
+            if product.stock_quantity == 0:
+                product.is_active = False
+                
+            product.save()
+            
+            if campaign:
+                return redirect('product_manage', campaign_id=campaign.id)
+            else:
+                return redirect('product_manage')
+    else:
+        form = CampaignProductForm(instance=product)
+    
+    # Fetch all products for the campaign
+    products = CampaignProduct.objects.filter(campaign=campaign).order_by('-date_added') if campaign else None
+    product_count = products.count() if products else 0
+
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    engaged_users = set()
+
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(love_pairs, comment_pairs, view_pairs,
+                      activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    # User notifications and follows
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__id__in=following_user_ids,
+        visibility='public', 
+        timestamp__gt=user_profile.last_campaign_check
+    )
+    user_profile.last_campaign_check = timezone.now()
+    user_profile.save()
+
+    # Suggested users with improved logic
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
+    suggested_users = []
+    
+    for profile in all_profiles:
+        similarity_score = calculate_similarity(user_profile, profile)
+        if similarity_score >= 0.5:
+            followers_count = Follow.objects.filter(followed=profile.user).count()
+            suggested_users.append({
+                'user': profile.user,
+                'followers_count': followers_count
+            })
+    suggested_users = suggested_users[:2]
+
+    ads = NativeAd.objects.all()
+
+    context = {
+        'ads': ads,
+        'form': form,
+        'product': product,
+        'campaign': campaign,
+        'products': products,
+        'product_count': product_count,
+        'unread_notifications': unread_notifications,
+        'user_profile': user_profile,
+        'new_campaigns_from_follows': new_campaigns_from_follows,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
+        'top_contributors': top_contributors,
+    }
+    
+    return render(request, 'main/product_manage.html', context)
+
+
+
+@login_required
+def toggle_product_status(request, product_id):
+    product = get_object_or_404(CampaignProduct, id=product_id)
+    
+    # Check if the user owns the campaign
+    if product.campaign.user.user != request.user:
+        return JsonResponse({'success': False, 'error': 'Permission denied'})
+    
+    if request.method == 'POST':
+        # Toggle the is_active status
+        product.is_active = not product.is_active
+        product.save()
+        
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': True,
+                'is_active': product.is_active,
+                'message': f'Product {"activated" if product.is_active else "deactivated"} successfully'
+            })
+    
+    return redirect('product_manage', campaign_id=product.campaign.id)
+
+@login_required
+def mark_out_of_stock(request, product_id):
+    product = get_object_or_404(CampaignProduct, id=product_id)
+    
+    # Check if the user owns the campaign
+    if product.campaign.user.user != request.user:
+        return JsonResponse({'success': False, 'error': 'Permission denied'})
+    
+    if request.method == 'POST':
+        # Set stock to 0 and deactivate
+        product.stock_quantity = 0
+        product.is_active = False
+        product.save()
+        
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({
+                'success': True,
+                'message': 'Product marked as out of stock and removed from market'
+            })
+    
+    return redirect('product_manage', campaign_id=product.campaign.id)
+
+
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import JsonResponse
+from .models import Cart, CartItem, CampaignProduct
+
+
+@login_required
+def view_cart(request):
+    # Get or create cart for the current user
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    cart_items = cart.items.select_related('product').all()
+    
+    # Get following user IDs using the improved pattern
+    current_user_following = request.user.following.all()
+    following_user_ids = [follow.followed_id for follow in current_user_following]
+    user_profile = get_object_or_404(Profile, user=request.user)
+
+    # 🔥 Trending campaigns (Only those with at least 1 love)
+    trending_campaigns = Campaign.objects.filter(visibility='public') \
+        .annotate(love_count_annotated=Count('loves')) \
+        .filter(love_count_annotated__gte=1) \
+        .order_by('-love_count_annotated')[:10]
+
+    # Top Contributors logic
+    engaged_users = set()
+
+    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
+    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
+    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
+    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
+    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
+
+    # Combine all engagement pairs
+    all_pairs = chain(love_pairs, comment_pairs, view_pairs,
+                      activity_love_pairs, activity_comment_pairs)
+
+    # Count number of unique campaigns each user engaged with
+    user_campaign_map = defaultdict(set)
+    for user_id, campaign_id in all_pairs:
+        user_campaign_map[user_id].add(campaign_id)
+
+    # Build a list of contributors with their campaign engagement count
+    contributor_data = []
+    for user_id, campaign_set in user_campaign_map.items():
+        try:
+            profile = Profile.objects.get(user__id=user_id)
+            contributor_data.append({
+                'user': profile.user,
+                'image': profile.image,
+                'campaign_count': len(campaign_set),
+            })
+        except Profile.DoesNotExist:
+            continue
+
+    # Sort contributors by campaign_count descending
+    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
+
+    # User notifications and follows
+    unread_notifications = Notification.objects.filter(user=request.user, viewed=False)
+    new_campaigns_from_follows = Campaign.objects.filter(
+        user__user__id__in=following_user_ids,
+        visibility='public', 
+        timestamp__gt=user_profile.last_campaign_check
+    )
+    user_profile.last_campaign_check = timezone.now()
+    user_profile.save()
+
+    # Suggested users with improved logic
+    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__id__in=following_user_ids)
+    suggested_users = []
+    
+    for profile in all_profiles:
+        similarity_score = calculate_similarity(user_profile, profile)
+        if similarity_score >= 0.5:
+            followers_count = Follow.objects.filter(followed=profile.user).count()
+            suggested_users.append({
+                'user': profile.user,
+                'followers_count': followers_count
+            })
+    suggested_users = suggested_users[:2]
+
+    ads = NativeAd.objects.all()
+
+    context = {
+        'ads': ads,
+        'cart': cart,
+        'cart_items': cart_items,
+        'unread_notifications': unread_notifications,
+        'user_profile': user_profile,
+        'new_campaigns_from_follows': new_campaigns_from_follows,
+        'suggested_users': suggested_users,
+        'trending_campaigns': trending_campaigns,
+        'top_contributors': top_contributors,
+        'page_title': 'Your Shopping Cart',
+    }
+    
+    return render(request, 'main/cart.html', context)
+
+
+
+@login_required
+def add_to_cart(request, product_id):
+    product = get_object_or_404(CampaignProduct, id=product_id, is_active=True)
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    
+    # Check if product is already in cart
+    cart_item, created = CartItem.objects.get_or_create(
+        cart=cart, 
+        product=product,
+        defaults={'quantity': 1}
+    )
+    
+    if not created:
+        # Increment quantity if product already in cart
+        if cart_item.quantity < product.stock_quantity:
+            cart_item.quantity += 1
+            cart_item.save()
+    
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return JsonResponse({
+            'success': True,
+            'message': f'Added {product.name} to cart',
+            'total_items': cart.total_items,
+            'total_price': str(cart.total_price)
+        })
+    
+    return redirect('view_cart')
+
+@login_required
+def update_cart_item(request, item_id):
+    cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
+    
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        
+        if action == 'increase':
+            if cart_item.quantity < cart_item.product.stock_quantity:
+                cart_item.quantity += 1
+                cart_item.save()
+        elif action == 'decrease':
+            if cart_item.quantity > 1:
+                cart_item.quantity -= 1
+                cart_item.save()
+        elif action == 'remove':
+            cart_item.delete()
+        elif action == 'set_quantity':
+            quantity = int(request.POST.get('quantity', 1))
+            if 1 <= quantity <= cart_item.product.stock_quantity:
+                cart_item.quantity = quantity
+                cart_item.save()
+    
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        cart = Cart.objects.get(user=request.user)
+        return JsonResponse({
+            'success': True,
+            'item_total': str(cart_item.total_price),
+            'cart_total': str(cart.total_price),
+            'total_items': cart.total_items,
+            'item_quantity': cart_item.quantity
+        })
+    
+    return redirect('view_cart')
+
+@login_required
+def remove_from_cart(request, item_id):
+    cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
+    cart_item.delete()
+    
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        cart = Cart.objects.get(user=request.user)
+        return JsonResponse({
+            'success': True,
+            'cart_total': str(cart.total_price),
+            'total_items': cart.total_items
+        })
+    
+    return redirect('view_cart')
+
+
+
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
+from .models import Pledge, Campaign
+
+def pledge_payment_view(request, pledge_id):
+    pledge = get_object_or_404(Pledge, id=pledge_id)
+    campaign = pledge.campaign
+
+    if pledge.is_fulfilled:
+        messages.info(request, "This pledge has already been fulfilled.")
+        return redirect('view_campaign', campaign_id=campaign.id)
+
+    if request.method == 'POST':
+        # Mark pledge as fulfilled (replace with real payment integration if needed)
+        pledge.is_fulfilled = True
+        pledge.save()
+        messages.success(request, f"Thank you! Your pledge of ${pledge.amount} to '{campaign.title}' is now completed.")
+        return redirect('view_campaign', campaign_id=campaign.id)
+
+    return render(request, 'main/pledge_payment.html', {
+        'pledge': pledge,
+        'campaign': campaign
+    })
 
 
 

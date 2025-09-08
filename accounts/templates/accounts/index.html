@@ -1,5 +1,3 @@
-
-
 {% load custom_filters %}
 
 {% load static %}
@@ -125,7 +123,6 @@ section {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
 }
-
 
 
 @media (min-width: 769px) {
@@ -346,14 +343,6 @@ section {
         display: none !important;
     }
 }
-
-    nav {
-      margin-top: 20px;
-      border: 1px solid #808080;
-      border-radius: 5px;
-      overflow: hidden;
-    }
-
     nav a {
       text-decoration: none;
       font-weight: bold;
@@ -456,8 +445,7 @@ border: 1px solid silver;
             cursor: pointer;
             border-radius: 5px;
         }
-    
-
+       
 
   .file-container {
     position: relative;
@@ -847,124 +835,223 @@ border: 1px solid silver;
     
 }
 
+        .carousel {
+            position: relative;
+            overflow: hidden;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto;
+            border-radius: 18px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            background: #fff;
+        }
 
-.carousel {
-    position: relative;
-    overflow: hidden;
-    width: 250px;
-    height: 400px;
-    margin: 0 auto;
-}
+        .slides {
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.16, 0.85, 0.45, 1);
+            height: 100%;
+        }
 
-.slides {
-    display: flex;
-    transition: transform 0.5s ease-in-out;
-}
+        .slide {
+            min-width: 100%;
+            flex: 1;
+            text-align: center;
+            overflow: hidden;
+            padding: 10px;
+            box-sizing: border-box;
+        }
 
-.slide {
-    min-width: 100%;
-    flex: 1;
-    text-align: center;
-    overflow: hidden;
-}
+        .ad {
+            padding: 20px;
+            border: none;
+            border-radius: 14px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.09);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s ease;
+            height: 100%;
+            overflow-y: auto;
+            background: #fff;
+            position: relative;
+        }
 
-/* Your other CSS styles for the .ad, .ad:hover, and image behavior */
+        .ad:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
 
+        .ad h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2d3748;
+            margin: 15px 0 12px;
+            text-align: center;
+            line-height: 1.3;
+        }
 
-.ad {
-    
-    padding: 15px; /* Adjusted padding */
-    border: 1px solid #e0e0e0;
-    border-radius: 8px; /* Adjusted border-radius */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column; /* Ensure content stacks vertically */
-    align-items: center; /* Center align content */
-    transition: transform 0.3s ease; /* Smooth scaling on hover */
-    height: 100%; /* Make the ad take the full height of the slide */
-    overflow-y: auto; /* Enable vertical scrolling */
-}
+        .ad .content {
+            margin-bottom: 18px;
+            color: #4a5568;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            text-align: center;
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
 
-.ad:hover {
-    transform: scale(1.02); /* Slightly enlarge on hover */
-    box-shadow: 0 6px 12px rgba(0,0,0,0.2); /* Enhanced shadow on hover */
-}
+        .ad img {
+            width: calc(100% + 40px);
+            height: 170px;
+            object-fit: cover;
+            margin: -20px -20px 15px -20px;
+            border-radius: 14px 14px 0 0;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+            position: relative;
+            transition: transform 0.4s ease;
+        }
 
-.ad h2 {
-    font-size: 1.5rem; /* Smaller font size */
-    font-weight: 600;
-    color: #333;
-    margin: 10px 0 8px; /* Adjusted margin */
-    text-align: center;
-}
+        .ad img:hover {
+            transform: scale(1.06);
+        }
 
-.ad .content {
-    margin-bottom: 12px; /* Adjusted margin */
-    color: #666;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 3; /* Limit to 3 lines */
-    -webkit-box-orient: vertical;
-    text-align: center;
-    line-height: 1.4;
-}
+        .ad .sponsored-by {
+            font-size: 0.9rem;
+            color: #718096;
+            margin-bottom: 15px;
+            text-align: center;
+            font-style: italic;
+        }
 
-.ad img {
-    width: calc(100% + 30px); /* Extend width by padding on both sides */
-    height: auto;
-    margin: -15px -15px 10px -15px; /* Compensate for the padding and add bottom margin */
-    border-radius: 8px 8px 0 0; /* Rounded corners only on top */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Added subtle shadow */
-    position: relative; /* Required for the CTA text */
-    transition: transform 0.3s ease; /* Smooth scaling on hover */
-}
+        .ad .sponsored-by strong {
+            color: #4a5568;
+            font-weight: 600;
+        }
 
-.ad img:hover {
-    transform: scale(1.05); /* Slight scale on hover */
-}
+        .ad a {
+            display: block;
+            width: 100%;
+            text-decoration: none;
+            color: inherit;
+            position: relative;
+        }
 
-.ad .sponsored-by {
-    font-size: 1.2rem; /* Smaller font size */
-    color: #888;
-    margin-bottom: 8px;
-    text-align: center;
-}
-
-.ad .sponsored-by strong {
-    color: #444; /* Optional: Add a different color for the bold text */
-    font-weight: bold;
-}
-
-
-.ad a {
-    display: block;
-    width: 100%;
-    text-decoration: none;
-    color: inherit;
-    position: relative; /* Required for the CTA text */
-}
-
-.ad a::after {
-    content: "Visit"; /* CTA text */
+ .ad a::after {
+    content: "Visit \f061";
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
     position: absolute;
-    top: 50%; /* Center vertically */
-    left: 50%; /* Center horizontally */
-    transform: translate(-50%, -50%); /* Center text */
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-    color: white; /* Text color */
-    padding: 5px 10px; /* Padding */
-    border-radius: 5px; /* Rounded corners */
-    opacity: 0; /* Initially hidden */
-    transition: opacity 0.3s ease; /* Smooth transition */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.75);
+    color: white;
+    padding: 12px 26px; /* slightly bigger for balance */
+    border-radius: 30px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    font-size: 1.2rem;   /* increased */
+    font-weight: 600;    /* stronger */
 }
 
-.ad a:hover::after {
-    opacity: 1; /* Show on hover */
+        .ad a:hover::after {
+            opacity: 1;
+        }
+
+        /* Custom scrollbar for the ad content */
+        .ad::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .ad::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+
+        .ad::-webkit-scrollbar-thumb {
+            background: #cbd5e0;
+            border-radius: 10px;
+        }
+
+        .ad::-webkit-scrollbar-thumb:hover {
+            background: #a0aec0;
+        }
+
+        .boosted-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: linear-gradient(135deg, #000000, #434343); /* black gradient */
+    color: #ffffff; /* white text */
+    font-size: 0.8rem;
+    font-weight: bold;
+    padding: 5px 12px;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.25);
+    z-index: 2;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
+.hidden-carousel {
+    display: none; /* hidden by default */
+}
 
-
+        
+        /* Navigation arrows */
+        .carousel-nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .carousel-nav button {
+            background: #fff;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            color: #4a5568;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .carousel-nav button:hover {
+            background: #4a5568;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        /* Indicators */
+        .indicators {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+        
+        .indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #cbd5e0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .indicator.active {
+            background: #4a5568;
+            transform: scale(1.2);
+        }
   .left-aside, .right-aside {
     flex: 1;
     background-color: #fff;
@@ -1014,7 +1101,7 @@ border: 1px solid silver;
 /* Light mode (default) styles remain the same */
 .sidebar-box {
     border-left: 2px solid #c0c0c0;
-    height: 1500px;
+    height: 1000px;
     overflow-y: auto;
     overflow-x: hidden;
     border-radius: 5px;
@@ -1058,130 +1145,6 @@ border: 1px solid silver;
     }
 }
 
-
-
-
-
-.navbar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
-    border-top: 1px solid rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    padding: 8px 0;
-}
-
-.bottom-nav {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 0;
-    margin: 0;
-    list-style: none;
-}
-
-.bottom-nav li {
-    flex: 1;
-    text-align: center;
-}
-
-.bottom-nav a {
-    color: #333;
-    font-size: 12px;
-    text-decoration: none;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 5px 0;
-    position: relative;
-}
-
-.bottom-nav i {
-    font-size: 20px;
-    margin-bottom: 3px;
-}
-
-.create-btn-container {
-    position: relative;
-    margin: 0 10px;
-}
-
-.create-btn {
-    background-color: transparent;
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #333;
-    font-size: 20px;
-}
-
-.alert-badge {
-    position: absolute;
-    top: -5px;
-    right: 5px;
-    background-color: #ff4757;
-    color: white;
-    border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    font-size: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.dropdown-menu {
-    position: fixed;
-    bottom: 60px;
-    right: 10px;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    width: 200px;
-    display: none;
-    z-index: 1001;
-}
-
-.dropdown-menu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.dropdown-menu li a {
-    display: flex;
-    align-items: center;
-    padding: 12px 15px;
-    color: #333;
-    text-decoration: none;
-}
-
-.dropdown-menu li i {
-    margin-right: 10px;
-    width: 20px;
-    text-align: center;
-}
-
-.dropdown-menu li:hover {
-    background-color: #f5f5f5;
-}
-
-.dropdown-menu.show {
-    display: block;
-}
-
-/* Active state */
-.bottom-nav a.active,
-.bottom-nav a.active i {
-    color: #3897f0;
-}
 
 /* Styles for the "Activities" label (left-centered) */
 .activity-label {
@@ -1373,6 +1336,16 @@ body.dark-theme .explore-link i {
     }
 }
 
+.search-container input[type="text"] {
+    background-color: white;
+    color: black;
+    border: 1px solid #ccc;
+}
+
+.search-container {
+    color: black;
+}
+
 
 /* Hide the button on mobile screens */
 @media (max-width: 768px) {
@@ -1418,10 +1391,6 @@ body.dark-mode .search-container input[type="text"] {
     border: 1px solid #444444; /* Dark border */
 }
 
-body.dark-mode .search-container .btn-reset {
-    color: #b0b0b0; /* Light icon color */
-}
-
 
 body.dark-mode .explore-link i {
     color: #ffffff; /* Light icon color */
@@ -1432,1122 +1401,10 @@ body.dark-mode #view-count,
 body.dark-mode .comment-count {
     color: #ffffff; /* Light text for counts */
 }
+
+
   </style>
 
-
-
-
-
-<style>
-/* Simple, accessible styling */
-.simple-campaigns-container {
-    max-width: 600px;
-    margin: 0 auto;
-    font-family: Arial, sans-serif;
-}
-
-.simple-campaign-card {
-    background: white;
-    border: 1px solid #e0e0e0;
-    border-radius: 10px;
-    margin-bottom: 20px;
-    overflow: hidden;
-}
-
-.creator-info {
-    display: flex;
-    align-items: center;
-    padding: 12px;
-    position: relative;
-}
-
-.creator-pic img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 10px;
-}
-
-.creator-details {
-    flex-grow: 1;
-}
-
-.creator-name {
-    font-weight: bold;
-    font-size: 15px;
-    color: #333;
-}
-
-.verified-badge {
-    color: #1DA1F2;
-    font-size: 14px;
-}
-
-.changemaker-badge {
-    background: #FF5252;
-    color: white;
-    padding: 2px 6px;
-    border-radius: 10px;
-    font-size: 11px;
-    margin-left: 5px;
-}
-
-.campaign-time {
-    font-size: 12px;
-    color: #777;
-}
-
-.campaign-menu {
-    color: #666;
-    cursor: pointer;
-    padding: 5px;
-}
-
-.menu-dropdown {
-    display: none;
-    position: absolute;
-    right: 10px;
-    top: 40px;
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    z-index: 10;
-}
-
-.menu-dropdown a {
-    display: block;
-    padding: 8px 15px;
-    color: #333;
-    text-decoration: none;
-    font-size: 14px;
-}
-
-.menu-dropdown a:hover {
-    background: #f5f5f5;
-}
-
-
-
-.campaign-image-section {
-    position: relative;
-}
-
-.main-campaign-image {
-    width: 100%;
-    max-height: 500px;
-    object-fit: cover;
-    display: block;
-}
-
-.no-image-placeholder {
-    height: 200px;
-    background: #f5f5f5;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: #999;
-}
-
-.no-image-placeholder i {
-    font-size: 40px;
-    margin-bottom: 10px;
-}
-
-.image-overlay-top, .image-overlay-bottom {
-    position: absolute;
-    left: 0;
-    right: 0;
-    padding: 10px;
-    color: white;
-}
-
-.image-overlay-top {
-    top: 0;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 100%);
-}
-
-.image-overlay-bottom {
-    bottom: 0;
-    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
-}
-
-.campaign-category {
-    font-weight: bold;
-    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
-}
-
-.progress-container {
-    margin-bottom: 10px;
-}
-
-.progress-text {
-    display: flex;
-    justify-content: space-between;
-    font-size: 13px;
-    margin-bottom: 5px;
-}
-
-.progress-bar {
-    height: 5px;
-    background: rgba(255,255,255,0.3);
-    border-radius: 3px;
-}
-
-.progress-fill {
-    height: 100%;
-    background: #4CAF50;
-    border-radius: 3px;
-}
-
-.campaign-time-left {
-    font-size: 13px;
-    display: flex;
-    align-items: center;
-}
-
-.campaign-time-left i {
-    margin-right: 5px;
-}
-
-.join-prompt {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background: rgba(0,0,0,0.7);
-    color: white;
-    padding: 10px 15px;
-    border-radius: 20px;
-    font-size: 14px;
-}
-
-.join-prompt i {
-    margin-right: 5px;
-}
-
-.donate-button-overlay {
-    position: absolute;
-    bottom: 60px;
-    left: 10px;
-}
-
-.simple-donate-btn {
-    background: #FF5722;
-    color: white;
-    padding: 8px;
-    border-radius: 20px;
-    text-decoration: none;
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    transition: all 0.3s ease;
-    width: 40px; /* Fixed width for icon-only state */
-    overflow: hidden;
-}
-
-.simple-donate-btn {
-    min-width: 40px;
-    width: 40px;
-}
-
-.donate-text {
-    margin-left: 8px;
-    white-space: nowrap;
-    opacity: 0;
-    width: 0;
-    transition: all 0.3s ease;
-}
-
-.simple-donate-btn:hover {
-    width: auto; /* Allow full width on hover */
-    padding: 8px 15px;
-}
-
-.simple-donate-btn:hover .donate-text {
-    opacity: 1;
-    width: auto;
-    margin-left: 8px;
-}
-
-/* For accessibility - ensure text is readable when focused */
-.simple-donate-btn:focus {
-    width: auto;
-    padding: 8px 15px;
-}
-
-.simple-donate-btn:focus .donate-text {
-    opacity: 1;
-    width: auto;
-    margin-left: 8px;
-}
-
-.campaign-basic-info {
-    padding: 12px;
-}
-
-.simple-campaign-title {
-    margin: 0 0 8px 0;
-    font-size: 18px;
-    color: #333;
-}
-
-.simple-campaign-objective {
-    font-size: 14px;
-    color: #555;
-    line-height: 1.4;
-}
-
-.campaign-status {
-    display: flex;
-    padding: 0 12px 12px;
-    align-items: center;
-}
-
-.status-badge {
-    padding: 4px 10px;
-    border-radius: 15px;
-    font-size: 13px;
-    margin-right: 10px;
-    display: flex;
-    align-items: center;
-}
-
-.status-badge i {
-    margin-right: 5px;
-}
-
-.status-badge.active {
-    background: #E8F5E9;
-    color: #2E7D32;
-}
-
-.status-badge.outdated {
-    background: #FFEBEE;
-    color: #C62828;
-}
-
-.runtime-info {
-    font-size: 13px;
-    color: #666;
-}
-
-.runtime-info i {
-    margin-right: 5px;
-}
-
-.simple-actions {
-    display: flex;
-    justify-content: space-between;
-    padding: 0 12px 12px;
-    border-top: 1px solid #eee;
-    padding-top: 12px;
-}
-
-.action-group {
-    display: flex;
-}
-
-
-
-.simple-action-btn {
-    background: none;
-    border: none;
-    color: #555;
-    font-size: 14px;
-    padding: 5px 10px;
-    margin-right: 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-}
-
-.simple-action-btn i {
-    margin-right: 5px;
-    font-size: 16px;
-}
-
-.simple-action-btn.love-btn {
-    color: #E91E63;
-}
-
-
-/* Add hover effects to action buttons */
-.simple-action-btn:hover {
-    color: #c0c0c0; /* Silver white color */
-    background-color: rgba(192, 192, 192, 0.1); /* Optional: slight background on hover */
-    transition: color 0.2s ease; /* Smooth transition */
-}
-
-/* Specific hover for love button - keeps red color but changes to silver on hover */
-.simple-action-btn.love-btn:hover {
-    color: #c0c0c0; /* Override the red color on hover */
-}
-
-/* Hover effect for join/leave buttons */
-.simple-join-btn:hover {
-    color: #c0c0c0;
-    transition: color 0.2s ease;
-}
-
-.simple-join-btn {
-    padding: 5px 15px;
-    border-radius: 15px;
-    font-size: 14px;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-}
-
-.simple-join-btn i {
-    margin-right: 5px;
-}
-
-.simple-join-btn {
-    background: #2196F3;
-    color: white;
-}
-
-.simple-join-btn.leave-btn {
-    background: #F44336;
-}
-
-
-@media (max-width: 480px) {
-    .simple-campaign-card {
-        border-radius: 0;
-        border-left: none;
-        border-right: none;
-    }
-
-    .simple-action-btn .label {
-        display: none;
-    }
-}
-
-
-
-
-.campaign-participation-links {
-    display: flex;
-    padding: 0 12px 12px;
-    gap: 10px;
-}
-
-.participation-link {
-    flex: 1;
-    background: #f5f5f5;
-    padding: 10px;
-    border-radius: 8px;
-    text-align: center;
-    text-decoration: none;
-    color: #333;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.participation-link i {
-    margin-right: 8px;
-    color: #2196F3;
-}
-
-.participation-link:hover {
-    background: #e0e0e0;
-}
-
-.campaign-caption {
-    font-size: 15px;
-    line-height: 1.4;
-    padding: 8px 12px;
-    color: #333;
-}
-
-.campaign-caption strong {
-    color: #000;
-    display: block;
-    margin-bottom: 3px;
-}
-
-.campaign-content-points {
-    padding: 0 12px 12px;
-    font-size: 15px;
-    line-height: 1.4;
-    color: #333;
-}
-
-.campaign-content-points ul {
-    padding-left: 20px;
-    margin: 0;
-    list-style-type: none;
-}
-
-.campaign-content-points li {
-    position: relative;
-    padding-left: 15px;
-    margin-bottom: 8px;
-}
-
-.campaign-content-points li:before {
-    content: "•";
-    position: absolute;
-    left: 0;
-    color: #666;
-}
-
-.see-more-container {
-    text-align: center;
-    margin-top: 8px;
-}
-
-.see-more-btn, .see-less-btn {
-    background: none;
-    border: none;
-    color: #3897f0;
-    font-size: 14px;
-    cursor: pointer;
-    padding: 5px 10px;
-    display: inline-flex;
-    align-items: center;
-    border-radius: 4px;
-    transition: all 0.2s ease;
-}
-
-.see-more-btn:hover, .see-less-btn:hover {
-    background: rgba(245, 245, 245, 0.7); /* Silver-white */
-    color: #1877f2; /* Slightly darker blue on hover */
-    text-decoration: none;
-}
-
-.see-more-btn i, .see-less-btn i {
-    margin-left: 5px;
-    font-size: 12px;
-    transition: transform 0.2s ease;
-}
-
-.see-more-btn:hover i {
-    transform: translateY(1px);
-}
-
-.see-less-btn:hover i {
-    transform: translateY(-1px);
-}
-
-.full-content {
-    margin-top: 10px;
-    animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-
-
-
-/* ===== Dark Mode Styles ===== */
-.dark-mode .simple-campaigns-container {
-    background-color: #121212;
-}
-
-.dark-mode .simple-campaign-card {
-    background: #1e1e1e;
-    border-color: #333;
-}
-
-.dark-mode .creator-name,
-.dark-mode .simple-campaign-title,
-.dark-mode .campaign-caption strong {
-    color: #f0f0f0;
-}
-
-.dark-mode .campaign-time,
-.dark-mode .simple-campaign-objective,
-.dark-mode .campaign-caption,
-.dark-mode .campaign-content-points,
-.dark-mode .runtime-info {
-    color: #b0b0b0;
-}
-
-.dark-mode .campaign-menu {
-    color: #b0b0b0;
-}
-
-.dark-mode .menu-dropdown {
-    background: #2d2d2d;
-    border-color: #444;
-}
-
-.dark-mode .menu-dropdown a {
-    color: #e0e0e0;
-}
-
-.dark-mode .menu-dropdown a:hover {
-    background: #383838;
-}
-
-.dark-mode .no-image-placeholder {
-    background: #2a2a2a;
-    color: #666;
-}
-
-.dark-mode .status-badge.active {
-    background: #1b5e20;
-    color: #a5d6a7;
-}
-
-.dark-mode .status-badge.outdated {
-    background: #b71c1c;
-    color: #ffcdd2;
-}
-
-.dark-mode .simple-actions {
-    border-top-color: #333;
-}
-
-.dark-mode .simple-action-btn {
-    color: #b0b0b0;
-}
-
-.dark-mode .simple-action-btn:hover {
-    color: #e0e0e0;
-    background-color: rgba(255, 255, 255, 0.05);
-}
-
-.dark-mode .simple-action-btn.love-btn {
-    color: #ff2d55;
-}
-
-.dark-mode .simple-action-btn.love-btn:hover {
-    color: #ff6b8b;
-}
-
-.dark-mode .participation-link {
-    background: #2a2a2a;
-    color: #e0e0e0;
-}
-
-.dark-mode .participation-link:hover {
-    background: #383838;
-}
-
-.dark-mode .participation-link i {
-    color: #64b5f6;
-}
-
-.dark-mode .see-more-btn,
-.dark-mode .see-less-btn {
-    color: #64b5f6;
-}
-
-.dark-mode .see-more-btn:hover,
-.dark-mode .see-less-btn:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: #90caf9;
-}
-
-/* Overlay elements in dark mode */
-.dark-mode .join-prompt,
-.dark-mode .campaign-views-overlay {
-    background: rgba(0, 0, 0, 0.8);
-}
-
-.dark-mode .campaign-views-overlay:hover {
-    background: rgba(0, 0, 0, 0.9);
-}
-
-/* Progress bar adjustments */
-.dark-mode .progress-bar {
-    background: rgba(255, 255, 255, 0.1);
-}
-
-/* Donate button in dark mode */
-.dark-mode .simple-donate-btn {
-    background: #ff7043;
-}
-
-/* Join/Leave buttons in dark mode */
-.dark-mode .simple-join-btn {
-    background: #1976d2;
-}
-
-.dark-mode .simple-join-btn.leave-btn {
-    background: #d32f2f;
-}
-
-/* List bullets in dark mode */
-.dark-mode .campaign-content-points li:before {
-    color: #666;
-}
-
-/* Mobile adjustments for dark mode */
-@media (max-width: 480px) {
-    .dark-mode .simple-campaign-card {
-        border-color: #333;
-    }
-}
-
-
-
-
-/* Views Counter with Tooltip */
-.campaign-views-overlay {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: rgba(0, 0, 0, 0.6);
-    color: white;
-    padding: 4px 8px;
-    border-radius: 12px;
-    font-size: 13px;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    backdrop-filter: blur(2px);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    z-index: 2;
-}
-
-.campaign-views-overlay:hover {
-    background: rgba(0, 0, 0, 0.8);
-}
-
-.campaign-views-overlay i {
-    font-size: 12px;
-}
-
-.views-tooltip {
-    position: absolute;
-    bottom: 100%;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0,0,0,0.8);
-    color: white;
-    padding: 6px 10px;
-    border-radius: 4px;
-    font-size: 12px;
-    white-space: nowrap;
-    opacity: 0;
-    visibility: hidden;
-    transition: all 0.2s ease;
-    margin-bottom: 8px;
-    pointer-events: none;
-}
-
-.views-tooltip:after {
-    content: "";
-    position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-width: 5px;
-    border-style: solid;
-    border-color: rgba(0,0,0,0.8) transparent transparent transparent;
-}
-
-.campaign-views-overlay:hover .views-tooltip {
-    opacity: 1;
-    visibility: visible;
-    transform: translateX(-50%) translateY(0);
-}
-
-/* Blinking Animation */
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0; }
-}
-
-.blink-5s {
-    animation: blink 5s infinite;
-    /* Optional: Add these for smoother transitions */
-    transition: opacity 0.5s ease;
-    animation-timing-function: ease-in-out;
-}
-
-/* If you want it to fade instead of blink sharply */
-@keyframes gentleBlink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.3; }
-}
-
-/* Alternative: Fade in/out every 5s */
-@keyframes fadePulse {
-    0%, 100% { 
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-    }
-    50% {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.95);
-    }
-}
-
-/* Apply the animation */
-.join-prompt {
-    /* Your existing styles */
-    animation: fadePulse 5s infinite;
-}
-.heart {
-    position: fixed;
-    pointer-events: none;
-    background-color: #ff2d55;
-    display: inline-block;
-    transform: rotate(-45deg);
-    z-index: 1000;
-}
-
-.heart:before, .heart:after {
-    content: "";
-    background-color: #ff2d55;
-    border-radius: 50%;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-}
-
-.heart:before {
-    top: -50%;
-    left: 0;
-}
-
-.heart:after {
-    top: 0;
-    left: 50%;
-}
-
-@keyframes float {
-    0% {
-        transform: translate(0, 0) rotate(-45deg);
-        opacity: 1;
-    }
-    100% {
-        transform: translate(
-            calc(var(--random-x) * 100px), 
-            calc(var(--random-y) * -150px)
-        ) rotate(-45deg);
-        opacity: 0;
-    }
-}
-
-/* Love button styles */
-.loved {
-    color: #ff2d55 !important;
-}
-
-/* Mobile-specific styles */
-@media (max-width: 768px) {
-    .love-btn {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-    }
-    
-    .love-count-mobile {
-        display: inline-block;
-        font-size: 14px;
-    }
-    
-    /* Hide desktop count on mobile if needed */
-    .love-count-desktop {
-        display: none;
-    }
-}
-
-/* Desktop styles */
-@media (min-width: 769px) {
-    .love-count-mobile {
-        display: none;
-    }
-    
-    .love-count-desktop {
-        display: inline-block;
-    }
-}
-
-
-/* Light mode (default) */
-.filter-form {
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding-left: 20px;
-}
-
-.filter-label {
-    font-size: 14px;
-    color: #333;
-    font-weight: 500;
-}
-
-.filter-select {
-    padding: 8px 12px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    background-color: #f9f9f9;
-    font-size: 14px;
-    color: #555;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.filter-select:hover {
-    border-color: #bbb;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-}
-
-.filter-select:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
-}
-
-/* Dark mode */
-.dark-mode .filter-form {
-    background-color: transparent; /* Ensure form background doesn't conflict */
-}
-
-.dark-mode .filter-label {
-    color: #f0f0f0; /* Light text for dark mode */
-}
-
-.dark-mode .filter-select {
-    background-color: #333; /* Dark background for select */
-    border-color: #555; /* Darker border */
-    color: #f0f0f0; /* Light text */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Darker shadow */
-}
-
-.dark-mode .filter-select:hover {
-    border-color: #777; /* Lighter border on hover */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); /* Stronger shadow on hover */
-}
-
-.dark-mode .filter-select:focus {
-    border-color: #007bff; /* Keep focus color consistent */
-    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Brighter focus shadow */
-}
-
-/* Mobile version */
-@media (max-width: 768px) {
-    .filter-form {
-        flex-direction: column; /* Stack elements vertically */
-        align-items: flex-start; /* Align items to the start */
-        padding-left: 10px; /* Reduce padding */
-        gap: 8px; /* Reduce gap between elements */
-    }
-
-    .filter-label {
-        font-size
-
-
-</style>
-<style>
-    /* Dark mode styles */
-    .dark-mode .profile-widget .username-text {
-        color: #e0e0e0 !important;
-    }
-    
-    .dark-mode .profile-widget .last-visit {
-        color: #b0b0b0 !important;
-    }
-    
-    .dark-mode .profile-widget .last-visit span[style="font-weight: 600;"] {
-        color: #d0d0d0 !important;
-    }
-    
-    /* Keep the green accent colors the same in both modes */
-    .dark-mode .profile-widget span[style="color: #4CAF50;"],
-    .dark-mode .profile-widget .profile-image {
-        border-color: #4CAF50 !important;
-    }
-    
-    /* Adjust badge shadow for dark mode */
-    .dark-mode .vip-badge {
-        box-shadow: 0 2px 3px rgba(0,0,0,0.4) !important;
-    }
-</style>
-<style>
-    .dark-mode .dark-mode-compatible {
-        background-color: #1E1E1E;
-        padding: 8px 12px;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-    }
-    
-    .dark-mode .dark-mode-compatible:hover {
-        background-color: #252525;
-    }
-</style>
-
-<style type="text/css">
-  .action-group {
-    display: flex;
-    gap: 8px;
-    position: relative;
-}
-
-.simple-action-btn {
-    position: relative; /* Essential for absolute positioning of label */
-    background: none;
-    border: none;
-    color: #555;
-    font-size: 14px;
-    padding: 5px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    transition: all 0.3s ease;
-}
-
-.simple-action-btn i {
-    margin-right: 5px;
-    font-size: 16px;
-}
-
-.simple-action-btn.love-btn {
-    color: #E91E63;
-}
-
-/* Label styling - positioned ABOVE the icon */
-.action-label {
-    position: absolute;
-    left: 50%;
-    top: -25px; /* Position above the button */
-    transform: translateX(-50%);
-    white-space: nowrap;
-    font-size: 12px;
-    background: #c0c0c0; /* Silver background */
-    color: #000 !important; /* Black text with important to override dark mode */
-    padding: 3px 10px;
-    border-radius: 15px;
-    opacity: 0;
-    transition: all 0.3s ease;
-    pointer-events: none;
-    z-index: 100;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-    border: 1px solid #808080;
-}
-
-/* Tooltip arrow */
-.action-label::after {
-    content: "";
-    position: absolute;
-    bottom: -5px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 5px 5px 0;
-    border-style: solid;
-    border-color: #c0c0c0 transparent transparent;
-}
-
-/* Show label on hover */
-.simple-action-btn:hover .action-label {
-    opacity: 1;
-    top: -30px; /* Final raised position */
-}
-
-/* Show label on touch for mobile devices */
-.simple-action-btn:active .action-label,
-.simple-action-btn:focus .action-label {
-    opacity: 1;
-    top: -30px;
-}
-
-/* Mobile responsive adjustments */
-@media (max-width: 480px) {
-    .simple-action-btn {
-        padding: 5px 10px;
-    }
-    
-    .action-label {
-        font-size: 10px;
-        padding: 2px 8px;
-        top: -22px;
-    }
-    
-    .simple-action-btn:hover .action-label,
-    .simple-action-btn:active .action-label {
-        top: -25px;
-    }
-}
-
-/* ===== Dark Mode Styles ===== */
-.dark-mode .action-label {
-    background: #c0c0c0 !important; /* Force silver background */
-    color: #000 !important; /* Force black text */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-.dark-mode .action-label::after {
-    border-color: #c0c0c0 transparent transparent !important;
-}
-
-/* Adjust hover states in dark mode */
-.dark-mode .simple-action-btn:hover .action-label,
-.dark-mode .simple-action-btn:active .action-label,
-.dark-mode .simple-action-btn:focus .action-label {
-    background: #d0d0d0 !important; /* Slightly lighter silver */
-    color: #000 !important; /* Maintain black text */
-}
-
-/* Love button tooltip special case */
-.dark-mode .simple-action-btn.love-btn:hover .action-label,
-.dark-mode .simple-action-btn.love-btn:active .action-label,
-.dark-mode .simple-action-btn.love-btn:focus .action-label {
-    background: #d0d0d0 !important;
-    color: #000 !important;
-}
-
-/* Mobile adjustments for dark mode */
-@media (max-width: 480px) {
-    .dark-mode .action-label {
-        background: #c0c0c0 !important;
-        color: #000 !important;
-    }
-}
-
-/* Additional button styles */
-.simple-action-btn:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-}
-
-.dark-mode .simple-action-btn {
-    color: #aaa;
-}
-
-.dark-mode .simple-action-btn:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-}
-
-.simple-action-btn.love-btn:hover {
-    background-color: rgba(233, 30, 99, 0.1);
-}
-
-.dark-mode .simple-action-btn.love-btn:hover {
-    background-color: rgba(233, 30, 99, 0.2);
-}
-
-
-/* Hide mobile version by default, show web version */
-.mobile-version { display: none; }
-.web-version { display: block; }
-
-/* On screens smaller than 768px (mobile) */
-@media (max-width: 768px) {
-    .mobile-version { display: block; }
-    .web-version { display: none; }
-}
-
-</style>
 
 
     <style type="text/css">
@@ -2825,6 +1682,1308 @@ body.dark-mode .comment-count {
     </style>
 
 
+<style type="text/css">
+  .follow-btn {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid #1DA1F2;
+    background: white;
+    color: #1DA1F2;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    margin-left: 10px;
+    min-width: 80px;
+    text-align: center;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.follow-btn:hover {
+    background: rgba(29, 161, 242, 0.1);
+}
+
+.follow-btn.following {
+    background: #1DA1F2;
+    color: white;
+}
+
+.follow-btn.following:hover {
+    background: #e0245e;
+}
+
+/* Simple text swap - no fancy transitions */
+.follow-btn .btn-text {
+    display: block;
+}
+
+.follow-btn .unfollow-text {
+    display: none;
+}
+
+.follow-btn.following:hover .btn-text {
+    display: none;
+}
+
+.follow-btn.following:hover .unfollow-text {
+    display: block;
+}
+
+.follow-btn.loading {
+    opacity: 0.7;
+    pointer-events: none;
+    padding-left: 30px;
+}
+
+.follow-btn.loading:before {
+    content: "";
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    width: 16px;
+    height: 16px;
+    margin-top: -8px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.followers-count {
+    font-size: 12px;
+    color: #666;
+    margin-left: 15px;
+    display: inline-block;
+}
+</style>
+
+<style>
+/* Simple, accessible styling */
+.simple-campaigns-container {
+    max-width: 600px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+}
+
+.simple-campaign-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.creator-info {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    position: relative;
+}
+
+.creator-pic img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+
+.creator-details {
+    flex-grow: 1;
+}
+
+.creator-name {
+    font-weight: bold;
+    font-size: 15px;
+    color: #333;
+}
+
+.verified-badge {
+    color: #1DA1F2;
+    font-size: 14px;
+}
+
+.changemaker-badge {
+    background: #FF5252;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 11px;
+    margin-left: 5px;
+}
+
+.campaign-time {
+    font-size: 12px;
+    color: #777;
+}
+
+.campaign-menu {
+    color: #666;
+    cursor: pointer;
+    padding: 5px;
+}
+
+.menu-dropdown {
+    display: none;
+    position: absolute;
+    right: 10px;
+    top: 40px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    z-index: 10;
+}
+
+.menu-dropdown a {
+    display: block;
+    padding: 8px 15px;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.menu-dropdown a:hover {
+    background: #f5f5f5;
+}
+
+.campaign-image-section {
+    position: relative;
+}
+
+.main-campaign-image {
+    width: 100%;
+    max-height: 500px;
+    object-fit: cover;
+    display: block;
+}
+
+.no-image-placeholder {
+    height: 200px;
+    background: #f5f5f5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #999;
+}
+
+.no-image-placeholder i {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.image-overlay-top, .image-overlay-bottom {
+    position: absolute;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    color: white;
+}
+
+.image-overlay-top {
+    top: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 100%);
+}
+
+.image-overlay-bottom {
+    bottom: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
+}
+
+.campaign-category {
+    font-weight: bold;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+.progress-container {
+    margin-bottom: 10px;
+}
+
+.progress-text {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 5px;
+}
+
+.progress-bar {
+    height: 5px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 3px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: #4CAF50;
+    border-radius: 3px;
+}
+
+.campaign-time-left {
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+}
+
+.campaign-time-left i {
+    margin-right: 5px;
+}
+
+.join-prompt {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0,0,0,0.7);
+    color: white;
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+}
+
+.join-prompt i {
+    margin-right: 5px;
+}
+.donate-button-overlay {
+    position: absolute;
+    bottom: 60px;
+    left: 10px;
+}
+
+.simple-donate-btn {
+    background: #FF5722;
+    color: white;
+    padding: 8px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    width: 40px; /* Fixed width for icon-only state */
+    overflow: hidden;
+    border: 1px solid transparent; /* Add for smooth hover transition */
+}
+
+.simple-donate-btn {
+    min-width: 40px;
+    width: 40px;
+}
+
+.donate-text {
+    margin-left: 8px;
+    white-space: nowrap;
+    opacity: 0;
+    width: 0;
+    transition: all 0.3s ease;
+}
+
+.simple-donate-btn:hover {
+    width: auto; /* Allow full width on hover */
+    padding: 8px 15px;
+    background: white; /* White background on hover */
+    color: #FF5722; /* Orange text on hover */
+    border-color: #FF5722; /* Orange border on hover */
+}
+
+.simple-donate-btn:hover .donate-text {
+    opacity: 1;
+    width: auto;
+    margin-left: 8px;
+}
+
+/* For accessibility - ensure text is readable when focused */
+.simple-donate-btn:focus {
+    width: auto;
+    padding: 8px 15px;
+    background: white;
+    color: #FF5722;
+    border-color: #FF5722;
+}
+
+.campaign-basic-info {
+    padding: 12px;
+}
+
+.simple-campaign-title {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.simple-campaign-objective {
+    font-size: 14px;
+    color: #555;
+    line-height: 1.4;
+}
+
+.campaign-status {
+    display: flex;
+    padding: 0 12px 12px;
+    align-items: center;
+}
+
+.status-badge {
+    padding: 4px 10px;
+    border-radius: 15px;
+    font-size: 13px;
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.status-badge i {
+    margin-right: 5px;
+}
+
+.status-badge.active {
+    background: #E8F5E9;
+    color: #2E7D32;
+}
+
+.status-badge.outdated {
+    background: #FFEBEE;
+    color: #C62828;
+}
+
+.runtime-info {
+    font-size: 13px;
+    color: #666;
+}
+
+.runtime-info i {
+    margin-right: 5px;
+}
+
+.simple-actions {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 12px 12px;
+    border-top: 1px solid #eee;
+    padding-top: 12px;
+}
+
+.action-group {
+    display: flex;
+}
+
+.simple-action-btn {
+    background: none;
+    border: none;
+    color: #555;
+    font-size: 14px;
+    padding: 5px 10px;
+    margin-right: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+}
+
+.simple-action-btn i {
+    margin-right: 5px;
+    font-size: 16px;
+}
+
+.simple-action-btn.love-btn {
+    color: #E91E63;
+}
+
+/* Add hover effects to action buttons */
+.simple-action-btn:hover {
+    color: #c0c0c0; /* Silver white color */
+    background-color: rgba(192, 192, 192, 0.1); /* Optional: slight background on hover */
+    transition: color 0.2s ease; /* Smooth transition */
+}
+
+/* Specific hover for love button - keeps red color but changes to silver on hover */
+.simple-action-btn.love-btn:hover {
+    color: #c0c0c0; /* Override the red color on hover */
+}
+
+.simple-join-btn {
+    /* Base styles are now inline */
+}
+
+.simple-join-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.leave-btn:hover {
+    background: rgba(237, 73, 86, 0.15) !important;
+    border-color: rgba(237, 73, 86, 0.4) !important;
+}
+
+.simple-join-btn:not(.leave-btn):hover {
+    background: rgba(0, 149, 246, 0.15) !important;
+    border-color: rgba(0, 149, 246, 0.4) !important;
+}
+
+.simple-join-btn:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* Follow button in creator info section */
+.creator-follow {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+
+.creator-follow .follow-btn {
+    margin-left: 10px;
+}
+
+@media (max-width: 480px) {
+    .simple-campaign-card {
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
+
+    .simple-action-btn .label {
+        display: none;
+    }
+    
+    .creator-follow {
+        flex-direction: column;
+        align-items: flex-end;
+    }
+    
+    .creator-follow .followers-count {
+        margin-left: 0;
+        margin-top: 4px;
+    }
+}
+
+.campaign-participation-links {
+    display: flex;
+    padding: 0 12px 12px;
+    gap: 10px;
+}
+
+.participation-link {
+    flex: 1;
+    background: #f5f5f5;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.participation-link i {
+    margin-right: 8px;
+    color: #2196F3;
+}
+
+.participation-link:hover {
+    background: #e0e0e0;
+}
+
+.campaign-caption {
+    font-size: 15px;
+    line-height: 1.4;
+    padding: 8px 12px;
+    color: #333;
+}
+
+.campaign-caption strong {
+    color: #000;
+    display: block;
+    margin-bottom: 3px;
+}
+
+.campaign-content-points {
+    padding: 0 12px 12px;
+    font-size: 15px;
+    line-height: 1.4;
+    color: #333;
+}
+
+.campaign-content-points ul {
+    padding-left: 20px;
+    margin: 0;
+    list-style-type: none;
+}
+
+.campaign-content-points li {
+    position: relative;
+    padding-left: 15px;
+    margin-bottom: 8px;
+}
+
+.campaign-content-points li:before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #666;
+}
+
+.see-more-container {
+    text-align: center;
+    margin-top: 8px;
+}
+
+.see-more-btn, .see-less-btn {
+    background: none;
+    border: none;
+    color: #3897f0;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 5px 10px;
+    display: inline-flex;
+    align-items: center;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.see-more-btn:hover, .see-less-btn:hover {
+    background: rgba(245, 245, 245, 0.7); /* Silver-white */
+    color: #1877f2; /* Slightly darker blue on hover */
+    text-decoration: none;
+}
+
+.see-more-btn i, .see-less-btn i {
+    margin-left: 5px;
+    font-size: 12px;
+    transition: transform 0.2s ease;
+}
+
+.see-more-btn:hover i {
+    transform: translateY(1px);
+}
+
+.see-less-btn:hover i {
+    transform: translateY(-1px);
+}
+
+.full-content {
+    margin-top: 10px;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* ===== Dark Mode Styles ===== */
+.dark-mode .simple-campaigns-container {
+    background-color: #121212;
+}
+
+.dark-mode .simple-campaign-card {
+    background: #1e1e1e;
+    border-color: #333;
+}
+
+.dark-mode .creator-name,
+.dark-mode .simple-campaign-title,
+.dark-mode .campaign-caption strong {
+    color: #f0f0f0;
+}
+
+.dark-mode .campaign-time,
+.dark-mode .simple-campaign-objective,
+.dark-mode .campaign-caption,
+.dark-mode .campaign-content-points,
+.dark-mode .runtime-info {
+    color: #b0b0b0;
+}
+
+.dark-mode .campaign-menu {
+    color: #b0b0b0;
+}
+
+.dark-mode .menu-dropdown {
+    background: #2d2d2d;
+    border-color: #444;
+}
+
+.dark-mode .menu-dropdown a {
+    color: #e0e0e0;
+}
+
+.dark-mode .menu-dropdown a:hover {
+    background: #383838;
+}
+
+.dark-mode .no-image-placeholder {
+    background: #2a2a2a;
+    color: #666;
+}
+
+.dark-mode .status-badge.active {
+    background: #1b5e20;
+    color: #a5d6a7;
+}
+
+.dark-mode .status-badge.outdated {
+    background: #b71c1c;
+    color: #ffcdd2;
+}
+
+.dark-mode .simple-actions {
+    border-top-color: #333;
+}
+
+.dark-mode .simple-action-btn {
+    color: #b0b0b0;
+}
+
+.dark-mode .simple-action-btn:hover {
+    color: #e0e0e0;
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.dark-mode .simple-action-btn.love-btn {
+    color: #ff2d55;
+}
+
+.dark-mode .simple-action-btn.love-btn:hover {
+    color: #ff6b8b;
+}
+
+.dark-mode .participation-link {
+    background: #2a2a2a;
+    color: #e0e0e0;
+}
+
+.dark-mode .participation-link:hover {
+    background: #383838;
+}
+
+.dark-mode .participation-link i {
+    color: #64b5f6;
+}
+
+.dark-mode .see-more-btn,
+.dark-mode .see-less-btn {
+    color: #64b5f6;
+}
+
+.dark-mode .see-more-btn:hover,
+.dark-mode .see-less-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #90caf9;
+}
+
+/* Dark mode follow button styles */
+.dark-mode .follow-btn {
+    background: #1e1e1e;
+    color: #1DA1F2;
+    border-color: #1DA1F2;
+}
+
+.dark-mode .follow-btn:hover {
+    background: rgba(29, 161, 242, 0.2);
+}
+
+.dark-mode .follow-btn.following {
+    background: #1DA1F2;
+    color: white;
+}
+
+.dark-mode .follow-btn.following:hover {
+    background: #e0245e;
+}
+
+.dark-mode .followers-count {
+    color: #b0b0b0;
+}
+
+/* Overlay elements in dark mode */
+.dark-mode .join-prompt,
+.dark-mode .campaign-views-overlay {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.dark-mode .campaign-views-overlay:hover {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+/* Progress bar adjustments */
+.dark-mode .progress-bar {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Donate button in dark mode */
+.dark-mode .simple-donate-btn {
+    background: #ff7043;
+}
+
+/* Join/Leave buttons in dark mode */
+.dark-mode .simple-join-btn {
+    background: #1976d2;
+}
+
+.dark-mode .simple-join-btn.leave-btn {
+    background: #d32f2f;
+}
+
+/* List bullets in dark mode */
+.dark-mode .campaign-content-points li:before {
+    color: #666;
+}
+
+/* Mobile adjustments for dark mode */
+@media (max-width: 480px) {
+    .dark-mode .simple-campaign-card {
+        border-color: #333;
+    }
+}
+
+/* Views Counter with Tooltip */
+.campaign-views-overlay {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    backdrop-filter: blur(2px);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    z-index: 2;
+}
+
+.campaign-views-overlay:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.campaign-views-overlay i {
+    font-size: 12px;
+}
+
+.views-tooltip {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    margin-bottom: 8px;
+    pointer-events: none;
+}
+
+.views-tooltip:after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgba(0,0,0,0.8) transparent transparent transparent;
+}
+
+.campaign-views-overlay:hover .views-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* Blinking Animation */
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.blink-5s {
+    animation: blink 5s infinite;
+    /* Optional: Add these for smoother transitions */
+    transition: opacity 0.5s ease;
+    animation-timing-function: ease-in-out;
+}
+
+/* If you want it to fade instead of blink sharply */
+@keyframes gentleBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+}
+
+/* Alternative: Fade in/out every 5s */
+@keyframes fadePulse {
+    0%, 100% { 
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.95);
+    }
+}
+
+/* Apply the animation */
+.join-prompt {
+    /* Your existing styles */
+    animation: fadePulse 5s infinite;
+}
+.heart {
+    position: fixed;
+    pointer-events: none;
+    background-color: #ff2d55;
+    display: inline-block;
+    transform: rotate(-45deg);
+    z-index: 1000;
+}
+
+.heart:before, .heart:after {
+    content: "";
+    background-color: #ff2d55;
+    border-radius: 50%;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.heart:before {
+    top: -50%;
+    left: 0;
+}
+
+.heart:after {
+    top: 0;
+    left: 50%;
+}
+
+@keyframes float {
+    0% {
+        transform: translate(0, 0) rotate(-45deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(
+            calc(var(--random-x) * 100px), 
+            calc(var(--random-y) * -150px)
+        ) rotate(-45deg);
+        opacity: 0;
+    }
+}
+
+/* Love button styles */
+.loved {
+    color: #ff2d55 !important;
+}
+
+/* Mobile-specific styles */
+@media (max-width: 768px) {
+    .love-btn {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    
+    .love-count-mobile {
+        display: inline-block;
+        font-size: 14px;
+    }
+    
+    /* Hide desktop count on mobile if needed */
+    .love-count-desktop {
+        display: none;
+    }
+}
+
+/* Desktop styles */
+@media (min-width: 769px) {
+    .love-count-mobile {
+        display: none;
+    }
+    
+    .love-count-desktop {
+        display: inline-block;
+    }
+}
+
+/* Light mode (default) */
+.filter-form {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 20px;
+}
+
+.filter-label {
+    font-size: 14px;
+    color: #333;
+    font-weight: 500;
+}
+
+.filter-select {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    font-size: 14px;
+    color: #555;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.filter-select:hover {
+    border-color: #bbb;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.filter-select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+/* Dark mode */
+.dark-mode .filter-form {
+    background-color: transparent; /* Ensure form background doesn't conflict */
+}
+
+.dark-mode .filter-label {
+    color: #f0f0f0; /* Light text for dark mode */
+}
+
+.dark-mode .filter-select {
+    background-color: #333; /* Dark background for select */
+    border-color: #555; /* Darker border */
+    color: #f0f0f0; /* Light text */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Darker shadow */
+}
+
+.dark-mode .filter-select:hover {
+    border-color: #777; /* Lighter border on hover */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5); /* Stronger shadow on hover */
+}
+
+.dark-mode .filter-select:focus {
+    border-color: #007bff; /* Keep focus color consistent */
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5); /* Brighter focus shadow */
+}
+
+/* Mobile version */
+@media (max-width: 768px) {
+    .filter-form {
+        flex-direction: column; /* Stack elements vertically */
+        align-items: flex-start; /* Align items to the start */
+        padding-left: 10px; /* Reduce padding */
+        gap: 8px; /* Reduce gap between elements */
+    }
+
+    .filter-label {
+        font-size: 13px;
+    }
+}
+</style>
+<style>
+    /* Dark mode styles */
+    .dark-mode .profile-widget .username-text {
+        color: #e0e0e0 !important;
+    }
+    
+    .dark-mode .profile-widget .last-visit {
+        color: #b0b0b0 !important;
+    }
+    
+    .dark-mode .profile-widget .last-visit span[style="font-weight: 600;"] {
+        color: #d0d0d0 !important;
+    }
+    
+    /* Keep the green accent colors the same in both modes */
+    .dark-mode .profile-widget span[style="color: #4CAF50;"],
+    .dark-mode .profile-widget .profile-image {
+        border-color: #4CAF50 !important;
+    }
+    
+    /* Adjust badge shadow for dark mode */
+    .dark-mode .vip-badge {
+        box-shadow: 0 2px 3px rgba(0,0,0,0.4) !important;
+    }
+</style>
+<style>
+    .dark-mode .dark-mode-compatible {
+        background-color: #1E1E1E;
+        padding: 8px 12px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    
+    .dark-mode .dark-mode-compatible:hover {
+        background-color: #252525;
+    }
+</style>
+
+<style type="text/css">
+  .action-group {
+    display: flex;
+    gap: 8px;
+    position: relative;
+}
+
+.simple-action-btn {
+    position: relative; /* Essential for absolute positioning of label */
+    background: none;
+    border: none;
+    color: #555;
+    font-size: 14px;
+    padding: 5px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.simple-action-btn i {
+    margin-right: 5px;
+    font-size: 16px;
+}
+
+.simple-action-btn.love-btn {
+    color: #E91E63;
+}
+
+/* Label styling - positioned ABOVE the icon */
+.action-label {
+    position: absolute;
+    left: 50%;
+    top: -25px; /* Position above the button */
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 12px;
+    background: #c0c0c0; /* Silver background */
+    color: #000 !important; /* Black text with important to override dark mode */
+    padding: 3px 10px;
+    border-radius: 15px;
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+    z-index: 100;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    border: 1px solid #808080;
+}
+
+/* Tooltip arrow */
+.action-label::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px 5px 0;
+    border-style: solid;
+    border-color: #c0c0c0 transparent transparent;
+}
+
+/* Show label on hover */
+.simple-action-btn:hover .action-label {
+    opacity: 1;
+    top: -30px; /* Final raised position */
+}
+
+/* Show label on touch for mobile devices */
+.simple-action-btn:active .action-label,
+.simple-action-btn:focus .action-label {
+    opacity: 1;
+    top: -30px;
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 480px) {
+    .simple-action-btn {
+        padding: 5px 10px;
+    }
+    
+    .action-label {
+        font-size: 10px;
+        padding: 2px 8px;
+        top: -22px;
+    }
+    
+    .simple-action-btn:hover .action-label,
+    .simple-action-btn:active .action-label {
+        top: -25px;
+    }
+}
+
+/* ===== Dark Mode Styles ===== */
+.dark-mode .action-label {
+    background: #c0c0c0 !important; /* Force silver background */
+    color: #000 !important; /* Force black text */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .action-label::after {
+    border-color: #c0c0c0 transparent transparent !important;
+}
+
+/* Adjust hover states in dark mode */
+.dark-mode .simple-action-btn:hover .action-label,
+.dark-mode .simple-action-btn:active .action-label,
+.dark-mode .simple-action-btn:focus .action-label {
+    background: #d0d0d0 !important; /* Slightly lighter silver */
+    color: #000 !important; /* Maintain black text */
+}
+
+/* Love button tooltip special case */
+.dark-mode .simple-action-btn.love-btn:hover .action-label,
+.dark-mode .simple-action-btn.love-btn:active .action-label,
+.dark-mode .simple-action-btn.love-btn:focus .action-label {
+    background: #d0d0d0 !important;
+    color: #000 !important;
+}
+
+/* Mobile adjustments for dark mode */
+@media (max-width: 480px) {
+    .dark-mode .action-label {
+        background: #c0c0c0 !important;
+        color: #000 !important;
+    }
+}
+
+/* Additional button styles */
+.simple-action-btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+}
+
+.dark-mode .simple-action-btn {
+    color: #aaa;
+}
+
+.dark-mode .simple-action-btn:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.simple-action-btn.love-btn:hover {
+    background-color: rgba(233, 30, 99, 0.1);
+}
+
+.dark-mode .simple-action-btn.love-btn:hover {
+    background-color: rgba(233, 30, 99, 0.2);
+}
+
+
+/* Hide mobile version by default, show web version */
+.mobile-version { display: none; }
+.web-version { display: block; }
+
+/* On screens smaller than 768px (mobile) */
+@media (max-width: 768px) {
+    .mobile-version { display: block; }
+    .web-version { display: none; }
+}
+
+</style>
+
+
+
+
+
+<style>
+.dashboard-snaps {
+  margin-top: 24px;
+  background: #fff;
+  border-radius: 12px;
+  padding-left: 8px;
+  padding-top: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+.snaps-header {
+  margin-bottom: 12px;
+}
+
+.snaps-title {
+  font-size: 18px;
+  color: #333;
+  font-weight: 600;
+}
+
+.snaps-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.snap-link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 12px;
+  background: #f0f2f5;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.snap-icon {
+  font-size: 20px;
+  margin-bottom: 8px;
+  color: #1877f2;
+}
+
+.snap-label {
+  display: block;
+  font-size: 13px;
+  color: #000;
+  font-weight: 500;
+}
+
+/* === Dark Mode === */
+.dark-mode .dashboard-snaps {
+  background: #1e1e1e;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.dark-mode .snap-link {
+  background: #2d2d2d;
+  transition: background-color 0.2s ease;
+}
+
+.dark-mode .snap-link:hover {
+  background: #383838;
+}
+
+.dark-mode .snap-icon {
+  color: #64b5f6;
+}
+
+.dark-mode .snap-label {
+  color: #e0e0e0;
+}
+
+/* Smooth transitions */
+.dashboard-snaps,
+.snap-link,
+.snap-icon,
+.snap-label {
+  transition: all 0.3s ease;
+}
+
+</style>
+
 
 
 <style>
@@ -2882,397 +3041,103 @@ body.dark-mode .comment-count {
   .fa-search, .fa-times {
     font-size: 14px;
   }
+
+  
 </style>
 
 
 
-<style>
-    .affiliate-products-section {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    }
-    
-    .product-card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        border-radius: 12px;
-    }
-    
-    .product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
-    }
-    
-    .product-image {
-        height: 180px;
-        object-fit: cover;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    }
-    
-    .product-badge {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        padding: 5px 10px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 600;
-        z-index: 2;
-    }
-    
-    .ribbon {
-        width: 150px;
-        height: 150px;
-        overflow: hidden;
-        position: absolute;
-        z-index: 1;
-    }
-    
-    .ribbon span {
-        position: absolute;
-        display: block;
-        width: 225px;
-        padding: 8px 0;
-        background-color: #4e66f8;
-        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-        color: #fff;
-        font-size: 12px;
-        font-weight: 600;
-        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-        text-transform: uppercase;
-        text-align: center;
-        right: -25px;
-        top: 30px;
-        transform: rotate(45deg);
-    }
-    
-    .ribbon-top-right {
-        top: -10px;
-        right: -10px;
-    }
-    
-    .product-features {
-        background-color: #f9fafc;
-        padding: 12px;
-        border-radius: 8px;
-    }
-    
-    .feature-item {
-        padding: 6px 0;
-        font-size: 14px;
-    }
-    
-    .rating {
-        white-space: nowrap;
-    }
-    
-    .bg-primary-soft {
-        background-color: rgba(78, 102, 248, 0.1);
-    }
-    
-    .bg-success-soft {
-        background-color: rgba(40, 167, 69, 0.1);
-    }
-    
-    .btn-link-arrow {
-        color: #4e66f8;
-        text-decoration: none;
-        font-weight: 500;
-        transition: all 0.3s ease;
-    }
-    
-    .btn-link-arrow:hover {
-        color: #3a56e8;
-        transform: translateX(3px);
-    }
 
-      /* Custom Button Classes */
-    .affiliate-btn {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 500;
-        text-align: center;
-        white-space: nowrap;
-        vertical-align: middle;
-        user-select: none;
-        border: 1px solid transparent;
-        padding: 0.5rem 1.25rem;
-        font-size: 0.875rem;
-        line-height: 1.5;
-        border-radius: 50px;
-        transition: all 0.3s ease;
-        text-decoration: none !important;
-    }
-    
-    .affiliate-btn-primary {
-        color: #fff;
-        background-color: #4e66f8;
-        border-color: #4e66f8;
-        box-shadow: 0 4px 6px rgba(78, 102, 248, 0.1);
-    }
-    
-    .affiliate-btn-primary:hover {
-        background-color: #3a56e8;
-        border-color: #3a56e8;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 12px rgba(78, 102, 248, 0.15);
-    }
-    
-    .affiliate-btn-outline {
-        color: #4e66f8;
-        background-color: transparent;
-        border-color: #4e66f8;
-    }
-    
-    .affiliate-btn-outline:hover {
-        color: #fff;
-        background-color: #4e66f8;
-    }
 
-      /* Add these new styles to your existing CSS */
-    .section-badge {
-        font-size: 0.85rem;
-        font-weight: 600;
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-        transition: all 0.3s ease;
-    }
-    
-    .section-badge:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(78, 102, 248, 0.1);
-    }
-    
-    .section-title {
-        color: #2a3042;
-        padding-bottom: 10px;
-    }
-    
-    .title-decoration {
-        width: 60px;
-        height: 3px;
-        background: linear-gradient(90deg, #4e66f8 0%, #3a56e8 100%);
-        border-radius: 3px;
-    }
-    
-    .section-subtitle {
-        position: relative;
-        padding-top: 15px;
-        max-width: 700px;
-    }
-    
-    .section-subtitle::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 100px;
-        height: 1px;
-        background: linear-gradient(90deg, rgba(78, 102, 248, 0) 0%, rgba(78, 102, 248, 0.4) 50%, rgba(78, 102, 248, 0) 100%);
-    }
-    
-    /* If you want to add a subtle animation */
-    @keyframes fadeInUp {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    .affiliate-products-section {
-        animation: fadeInUp 0.6s ease-out;
-    }
 
-    .affiliate-btn-outline {
-    color: #4e66f8;
-    background-color: transparent;
-    border: 2px solid #4e66f8;
-    padding: 0.625rem 1.5rem;
+<style type="text/css">
+/* Light mode styles */
+.follow-text {
+    color: #1DA1F2;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    margin-left: 10px;
+    text-align: center;
+    display: inline-block;
+}
+
+.follow-text:hover {
+    text-decoration: underline;
+    opacity: 0.8;
+}
+
+.follow-text.following {
+    color: #1DA1F2;
+}
+
+.follow-text.following:hover {
+    color: #e0245e;
+}
+
+/* Dark mode styles */
+.dark-mode .follow-text {
+    color: #64b5f6;
+}
+
+.dark-mode .follow-text:hover {
+    color: #90caf9;
+    opacity: 1;
+}
+
+.dark-mode .follow-text.following {
+    color: #64b5f6;
+}
+
+.dark-mode .follow-text.following:hover {
+    color: #ef9a9a;
+}
+
+/* Common styles */
+.follow-text.loading {
+    opacity: 0.7;
+    pointer-events: none;
     position: relative;
-    overflow: hidden;
-    transition: all 0.4s ease;
+    padding-left: 20px;
 }
 
-.affiliate-btn-outline:hover {
-    color: #fff;
-    background-color: #4e66f8;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(78, 102, 248, 0.2);
-}
-
-/* Optional hover effect - subtle background wave */
-.affiliate-btn-outline::before {
-    content: '';
+.follow-text.loading:before {
+    content: "";
     position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition: 0.5s;
+    left: 0;
+    top: 50%;
+    width: 12px;
+    height: 12px;
+    margin-top: -6px;
+    border: 2px solid rgba(29, 161, 242, 0.3);
+    border-top-color: #1DA1F2;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
 }
 
-.affiliate-btn-outline:hover::before {
-    left: 100%;
+.dark-mode .follow-text.loading:before {
+    border: 2px solid rgba(100, 181, 246, 0.3);
+    border-top-color: #64b5f6;
 }
 
-/* If you want the arrow to animate on hover */
-.affiliate-btn-outline i {
-    transition: transform 0.3s ease;
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 
-.affiliate-btn-outline:hover i {
-    transform: translateX(3px);
+.followers-count {
+    font-size: 12px;
+    color: #666;
+    margin-left: 15px;
+    display: inline-block;
 }
-.affiliate-btn-primary {
-   min-height: 48px;      /* Safe touch target */
-   padding: 12px 24px;    /* Generous padding */
-   font-size: 1rem;       /* Readable text */
-}
-.affiliate-btn-outline {
-   min-height: 44px;      /* Still safe, but less prominent */
-   padding: 10px 20px;    /* Slightly smaller */
-   font-size: 0.95rem;    /* Slightly smaller text */
-}
-    /* ===== Light Mode (Existing Styles) ===== */
-    .affiliate-products-section {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        background-color: #f8f9fa;
-    }
-    
-    .product-card {
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        border-radius: 12px;
-        background-color: #ffffff;
-    }
-    
-    .product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08) !important;
-    }
-    
-    .product-image {
-        height: 180px;
-        object-fit: cover;
-        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-    }
-    
- 
-    
-    .ribbon span {
-        background-color: #4e66f8;
-        color: #fff;
-    }
-    
-    .product-features {
-        background-color: #f9fafc;
-        color: #495057;
-    }
-    
-    .section-title {
-        color: #2a3042;
-    }
-    
-    .section-subtitle {
-        color: #6c757d;
-    }
-    
-    /* ===== Dark Mode Overrides ===== */
-    .dark-mode .affiliate-products-section {
-        background-color: #1a1a1a;
-    }
-    
-    .dark-mode .product-card {
-        background-color: #2d2d2d;
-        border-color: #383838;
-    }
-    
-    .dark-mode .product-card:hover {
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3) !important;
-    }
-    
-    .dark-mode .product-image {
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        filter: brightness(0.9);
-    }
-    
-    .dark-mode .product-badge {
-        background-color: #383838;
-    }
-    
-    .dark-mode .ribbon span {
-        background-color: #3a56e8;
-    }
-    
-    .dark-mode .product-features {
-        background-color: #383838;
-        color: #e9ecef;
-    }
-    
-    .dark-mode .feature-item {
-        color: #dee2e6;
-    }
-    
-    .dark-mode .section-title {
-        color: #f8f9fa;
-    }
-    
-    .dark-mode .section-subtitle {
-        color: #adb5bd;
-    }
-    
-    .dark-mode .section-subtitle::before {
-        background: linear-gradient(90deg, rgba(78, 102, 248, 0) 0%, rgba(78, 102, 248, 0.2) 50%, rgba(78, 102, 248, 0) 100%);
-    }
-    
-    .dark-mode .section-badge {
-        background-color: rgba(78, 102, 248, 0.2);
-        color: #64b5f6;
-    }
-    
-    .dark-mode .card-footer {
-        background-color: #2d2d2d !important;
-        border-top: 1px solid #383838 !important;
-    }
-    
-    .dark-mode .text-muted {
-        color: #868e96 !important;
-    }
-    
-    .dark-mode .text-primary {
-        color: #64b5f6 !important;
-    }
-    
-    /* Dark mode buttons */
-    .dark-mode .affiliate-btn-primary {
-        background-color: #3a56e8;
-        border-color: #3a56e8;
-    }
-    
-    .dark-mode .affiliate-btn-primary:hover {
-        background-color: #4e66f8;
-        border-color: #4e66f8;
-    }
-    
-    .dark-mode .affiliate-btn-outline {
-        color: #64b5f6;
-        border-color: #64b5f6;
-    }
-    
-    .dark-mode .affiliate-btn-outline:hover {
-        color: #fff;
-        background-color: #64b5f6;
-    }
-.affiliate-btn-primary:focus, 
-.affiliate-btn-outline:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(78, 102, 248, 0.3);
+
+.dark-mode .followers-count {
+    color: #aaa;
 }
 </style>
+
 
 <style>
     .affiliate-essentials {
@@ -3463,8 +3328,310 @@ body.dark-mode .comment-count {
 </style>
 
 
-
-
+     <style>
+      
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        h1 {
+            margin-bottom: 30px;
+            font-weight: 600;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .campaign-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            margin-bottom: 30px;
+        }
+        
+        .campaign-image {
+            height: 300px;
+            position: relative;
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        
+       .image-overlay-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
+            color: white;
+        }
+        
+        /* Fixed Action icons styles */
+        .campaign-action-icons {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .action-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            background-color: transparent;
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            position: relative;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+        }
+        
+        .action-icon:hover {
+            transform: translateY(-8px) scale(1.05);
+            border: 2px solid rgba(255, 255, 255, 1);
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.25),
+                        0 0 30px rgba(255, 215, 100, 0.5);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .action-icon i {
+            font-size: 32px;
+            transition: all 0.3s ease;
+        }
+        
+        .action-icon:hover i {
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+        }
+        
+        /* Custom tooltip styling - fixed position */
+        .action-icon .tooltip {
+            content: attr(data-title);
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 100;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .action-icon:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+            bottom: -35px;
+        }
+        
+        /* Icon specific hover effects */
+        .action-icon:nth-child(1):hover {
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.25),
+                        0 0 30px rgba(255, 100, 100, 0.5);
+        }
+        
+        .action-icon:nth-child(2):hover {
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.25),
+                        0 0 30px rgba(100, 200, 255, 0.5);
+        }
+        
+        .action-icon:nth-child(3):hover {
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.25),
+                        0 0 30px rgba(100, 255, 150, 0.5);
+        }
+        
+        /* Progress bar styles */
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4ECDC4, #42b883);
+            border-radius: 5px;
+            width: 65%;
+            position: relative;
+        }
+        
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
+            background-size: 10px 10px;
+            animation: move 1s linear infinite;
+            border-radius: 5px;
+        }
+        
+        @keyframes move {
+            0% { background-position: 0 0; }
+            100% { background-position: 10px 0; }
+        }
+        
+        .campaign-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .campaign-time-left {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        .campaign-time-left i {
+            margin-right: 8px;
+            color: #FFD700;
+        }
+        
+        /* Mobile-specific styles */
+        .mobile-goal-display {
+            display: none;
+        }
+        
+        /* Campaign content below image */
+        .campaign-content {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .campaign-title {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+        
+        .campaign-description {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .campaign-creator {
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .creator-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+            background: #4ECDC4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .campaigns-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .campaign-action-icons {
+                gap: 25px;
+            }
+            
+            .action-icon {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .action-icon i {
+                font-size: 28px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .campaign-image {
+                height: 250px;
+            }
+            
+            .campaign-action-icons {
+                gap: 15px;
+            }
+            
+            .action-icon {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .action-icon i {
+                font-size: 24px;
+            }
+            
+            .image-overlay-bottom {
+                padding: 15px;
+            }
+            
+            /* Hide detailed progress info on mobile */
+            .progress-info, .campaign-stats {
+                display: none;
+            }
+            
+            /* Show simplified goal display on mobile */
+            .mobile-goal-display {
+                display: block;
+                margin-top: 15px;
+                font-size: 16px;
+                font-weight: 600;
+                color: #4ECDC4;
+                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            }
+            
+            /* Adjust progress bar for mobile */
+            .progress-container {
+                margin-bottom: 0;
+                height: 8px;
+            }
+            
+            /* Simplify the time display */
+            .campaign-time-left {
+                font-size: 13px;
+                margin-top: 8px;
+            }
+        }
+        
+   
+    </style>
 
 <style>
 .top-contributors {
@@ -3600,672 +3767,13 @@ body.dark-mode .comment-count {
 .view-all-contributors a {
   transition: all 0.3s ease;
 }
-</style>
 
 
-
-<style>
-.right-aside {
-  width: 340px;
-  padding: 16px;
-  background: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.08);
-  position: sticky;
-  top: 20px;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-}
-
-.section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.section-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #050505;
-  margin: 0;
-}
-
-.see-all {
-  font-size: 14px;
-  color: #1877f2;
-  text-decoration: none;
-  font-weight: 500;
-}
-
-.see-all:hover {
-  text-decoration: underline;
-}
-
-
-.user-card {
-  display: flex;
-  padding: 12px;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  margin-bottom: 8px;
-  background: linear-gradient(135deg, rgba(240, 242, 245, 0.4) 0%, rgba(255, 255, 255, 0.8) 100%);
-  backdrop-filter: blur(2px);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.user-card:hover {
-  background: linear-gradient(135deg, rgba(224, 227, 233, 0.6) 0%, rgba(240, 242, 245, 0.9) 100%);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  transform: translateY(-1px);
-}
-
-/* Dark mode adjustments */
-.dark-mode .user-card {
-  background: linear-gradient(135deg, rgba(45, 45, 45, 0.4) 0%, rgba(30, 30, 30, 0.8) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.dark-mode .user-card:hover {
-  background: linear-gradient(135deg, rgba(60, 60, 60, 0.6) 0%, rgba(45, 45, 45, 0.9) 100%);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-/* Add this to your existing transitions */
-.user-card {
-  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-}
-
-.user-avatar {
-  position: relative;
-  margin-right: 12px;
-}
-
-.avatar-img {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #ffffff;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.online-status {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 12px;
-  height: 12px;
-  background-color: #31a24c;
-  border-radius: 50%;
-  border: 2px solid #ffffff;
-}
-
-.user-info {
-  flex: 1;
-}
-
-.user-name {
-  font-size: 15px;
-  font-weight: 600;
-  margin: 0 0 2px 0;
-  color: #050505;
-}
-
-.user-bio {
-  font-size: 13px;
-  color: #65676b;
-  margin: 0 0 4px 0;
-  line-height: 1.3;
-}
-
-.user-meta {
-  display: flex;
-  align-items: center;
-  font-size: 12px;
-  color: #65676b;
-  margin-bottom: 8px;
-}
-
-.followers {
-  margin-right: 6px;
-}
-
-.verified-badge {
-  color: #1877f2;
-  font-size: 14px;
-}
-.visit-btn {
-    display: inline-block;
-    padding: 6px 12px;
-    background-color: #f0f2f5;
-    color: #050505;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: background-color 0.2s;
-    margin-left: 4px; /* Added left margin for better spacing */
-}
-
-.visit-btn:hover {
-    background-color: #e4e6eb;
-    text-decoration: none;
-}
-
-.user-actions {
-    display: flex;
-    align-items: center;
-    gap: 8px; /* Added gap property for consistent spacing */
-}
-
-/* Dark mode styles */
-.dark-mode .follow-text {
-    color: #64b5f6;
-    background-color: rgba(100, 181, 246, 0.1);
-}
-
-.dark-mode .follow-text:hover {
-    background-color: rgba(100, 181, 246, 0.2);
-}
-
-.dark-mode .follow-text.following {
-    color: #64b5f6;
-    background-color: rgba(100, 181, 246, 0.1);
-}
-
-.dark-mode .visit-btn {
-    background-color: #2d2d2d;
-    color: #e4e6eb;
-}
-
-.dark-mode .visit-btn:hover {
-    background-color: #3d3d3d;
-}
-
-/* Dark mode styles */
-.dark-mode .suggested-follow-btn {
-    color: #64b5f6;
-    background-color: rgba(100, 181, 246, 0.1);
-}
-
-.dark-mode .suggested-follow-btn:hover {
-    background-color: rgba(100, 181, 246, 0.2);
-}
-
-.dark-mode .suggested-follow-btn.suggested-following {
-    color: #64b5f6;
-    background-color: rgba(100, 181, 246, 0.1);
-}
-
-.dark-mode .suggested-visit-btn {
-    background-color: #2d2d2d;
-    color: #e4e6eb;
-}
-
-.dark-mode .suggested-visit-btn:hover {
-    background-color: #3d3d3d;
-}
-
-/* ===== Dark Mode Styles ===== */
-.dark-mode .section-title {
-  color: #e0e0e0;
-}
-
-.dark-mode .see-all {
-  color: #64b5f6;
-}
-
-.dark-mode .see-all:hover {
-  color: #90caf9;
-}
-
-.dark-mode .user-card {
-  background-color: transparent;
-}
-
-.dark-mode .user-card:hover {
-  background-color: #2d2d2d;
-}
-
-.dark-mode .avatar-img {
-  border-color: #333;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-}
-
-.dark-mode .online-status {
-  border-color: #1e1e1e;
-}
-
-.dark-mode .user-name {
-  color: #f0f0f0;
-}
-
-.dark-mode .user-bio,
-.dark-mode .user-meta {
-  color: #b0b0b0;
-}
-
-.dark-mode .follow-btn {
-  background-color: rgba(100, 181, 246, 0.1);
-  color: #64b5f6;
-}
-
-.dark-mode .follow-btn:hover {
-  background-color: rgba(100, 181, 246, 0.2);
-}
-
-.dark-mode .verified-badge {
-  color: #64b5f6;
-}
-
-/* Optional: Add smooth transitions */
-.section-title,
-.see-all,
-.user-card,
-.user-name,
-.user-bio,
-.user-meta,
-.follow-btn {
-  transition: all 0.3s ease;
-}
-</style>
-
-
-<style type="text/css">
-/* Light mode styles */
-.follow-text {
-    color: #1DA1F2;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 600;
-    transition: all 0.2s ease;
-    margin-left: 10px;
-    text-align: center;
-    display: inline-block;
-}
-
-.follow-text:hover {
-    text-decoration: underline;
-    opacity: 0.8;
-}
-
-.follow-text.following {
-    color: #1DA1F2;
-}
-
-.follow-text.following:hover {
-    color: #e0245e;
-}
-
-/* Dark mode styles */
-.dark-mode .follow-text {
-    color: #64b5f6;
-}
-
-.dark-mode .follow-text:hover {
-    color: #90caf9;
-    opacity: 1;
-}
-
-.dark-mode .follow-text.following {
-    color: #64b5f6;
-}
-
-.dark-mode .follow-text.following:hover {
-    color: #ef9a9a;
-}
-
-/* Common styles */
-.follow-text.loading {
-    opacity: 0.7;
-    pointer-events: none;
-    position: relative;
-    padding-left: 20px;
-}
-
-.follow-text.loading:before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 50%;
-    width: 12px;
-    height: 12px;
-    margin-top: -6px;
-    border: 2px solid rgba(29, 161, 242, 0.3);
-    border-top-color: #1DA1F2;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-}
-
-.dark-mode .follow-text.loading:before {
-    border: 2px solid rgba(100, 181, 246, 0.3);
-    border-top-color: #64b5f6;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-
-.followers-count {
-    font-size: 12px;
-    color: #666;
-    margin-left: 15px;
-    display: inline-block;
-}
-
-.dark-mode .followers-count {
-    color: #aaa;
-}
-</style>
-<style>
-.trending-now {
-  margin-top: 24px;
-}
-
-.trending-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.trending-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #050505;
-  margin: 0;
-  display: flex;
-  align-items: center;
-}
-
-.trending-title i {
-  margin-right: 8px;
-  color: #1877f2;
-}
-
-.refresh-btn {
-  background: none;
-  border: none;
-  color: #65676b;
-  font-size: 14px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  padding: 4px 8px;
-  border-radius: 4px;
-  transition: all 0.2s;
-}
-
-.refresh-btn:hover {
-  background-color: #f0f2f5;
-  color: #1877f2;
-}
-
-.refresh-btn i {
-  margin-right: 4px;
-}
-
-.trending-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.trending-item {
-  display: flex;
-  padding: 12px;
-  border-radius: 8px;
-  transition: background-color 0.2s;
-  margin-bottom: 8px;
-  position: relative;
-}
-
-.trending-item:hover {
-  background-color: #f0f2f5;
-}
-
-.trending-rank {
-  font-size: 14px;
-  font-weight: 600;
-  color: #65676b;
-  min-width: 24px;
-  text-align: center;
-  align-self: center;
-}
-
-.trending-hot {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  font-size: 10px;
-  background-color: #ff4d4f;
-  color: white;
-  padding: 2px 6px;
-  border-radius: 10px;
-  font-weight: 500;
-}
-
-.trending-content {
-  flex: 1;
-  margin-left: 12px;
-}
-
-.trending-topic {
-  font-size: 15px;
-  font-weight: 600;
-  margin: 0 0 4px 0;
-  color: #050505;
-  display: flex;
-  align-items: center;
-}
-
-.trending-topic i {
-  margin-left: 6px;
-  color: #1877f2;
-  font-size: 14px;
-}
-
-.trending-meta {
-  display: flex;
-  font-size: 12px;
-  color: #65676b;
-}
-
-.trending-posts {
-  margin-right: 12px;
-  display: flex;
-  align-items: center;
-}
-
-.trending-posts i {
-  margin-right: 4px;
-  font-size: 10px;
-}
-
-.trending-category {
-  background-color: #e7f3ff;
-  color: #1877f2;
-  padding: 2px 8px;
-  border-radius: 4px;
-  font-size: 11px;
-  font-weight: 500;
-  align-self: center;
-}
-
-.view-more {
-  text-align: center;
-  margin-top: 12px;
-}
-
-.view-more a {
-  color: #1877f2;
-  font-size: 14px;
-  font-weight: 500;
-  text-decoration: none;
-}
-
-.view-more a:hover {
-  text-decoration: underline;
-}
-
-/* Animation for hot items */
-@keyframes pulse {
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-}
-
-.trending-hot {
-  animation: pulse 2s infinite;
-}
-
-/* Rank colors */
-.trending-rank-1 {
-  color: #ff4d4f;
-  font-weight: 700;
-}
-
-.trending-rank-2 {
-  color: #fa8c16;
-  font-weight: 700;
-}
-
-.trending-rank-3 {
-  color: #fadb14;
-  font-weight: 700;
-}
-
-
-
-/* ===== Dark Mode Styles for Trending Now ===== */
-.dark-mode .trending-title {
-  color: #e0e0e0;
-}
-
-.dark-mode .trending-title i {
-  color: #64b5f6;
-}
-
-.dark-mode .refresh-btn {
-  color: #b0b0b0;
-}
-
-.dark-mode .refresh-btn:hover {
-  background-color: #2d2d2d;
-  color: #64b5f6;
-}
-
-.dark-mode .trending-item:hover {
-  background-color: #2d2d2d;
-}
-
-.dark-mode .trending-rank {
-  color: #b0b0b0;
-}
-
-.dark-mode .trending-topic {
-  color: #f0f0f0;
-}
-
-.dark-mode .trending-topic i {
-  color: #64b5f6;
-}
-
-.dark-mode .trending-meta {
-  color: #b0b0b0;
-}
-
-.dark-mode .trending-category {
-  background-color: rgba(100, 181, 246, 0.1);
-  color: #64b5f6;
-}
-
-.dark-mode .view-more a {
-  color: #64b5f6;
-}
-
-.dark-mode .view-more a:hover {
-  color: #90caf9;
-}
-
-/* Rank colors in dark mode */
-.dark-mode .trending-rank-1 {
-  color: #ff6b6b;
-}
-
-.dark-mode .trending-rank-2 {
-  color: #ffa940;
-}
-
-.dark-mode .trending-rank-3 {
-  color: #ffec3d;
-}
-
-/* Hot badge in dark mode */
-.dark-mode .trending-hot {
-  background-color: #ff6b6b;
-  box-shadow: 0 0 0 2px #1e1e1e;
-}
-
-/* Animation remains the same in dark mode */
-.dark-mode .trending-hot {
-  animation: pulse 2s infinite;
-}
-
-/* Optional transitions */
-.trending-item,
-.trending-topic,
-.trending-rank,
-.refresh-btn,
-.trending-category {
-  transition: all 0.3s ease;
-}
-</style>
-
-
-
-
-
-<style>
-
-
-
-
-
-.skeleton-loading {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background: #f0f0f0;
-    animation: pulse 1.5s infinite ease-in-out;
-}
-
-.skeleton-box {
-    width: 100%;
-    height: 20px;
-    margin: 10px 0;
-    background-color: #e0e0e0;
-    border-radius: 4px;
-}
-
-@keyframes pulse {
-    0% {
-        background-color: #e0e0e0;
-    }
-    50% {
-        background-color: #f7f7f7;
-    }
-    100% {
-        background-color: #e0e0e0;
-    }
-}
-
-  
 </style>
 
 <style type="text/css">
+
+
     .explore-card {
         padding: 10px 15px;
         margin-bottom: 12px;
@@ -4317,231 +3825,7 @@ body.dark-mode .comment-count {
         }
     }
 </style>
-<style>
 
-
-.dashboard-snaps {
-  margin-top: 24px;
-  background: #fff;
-  border-radius: 12px;
-  padding-left: 8px;
-  padding-top: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-}
-.snaps-header {
-  margin-bottom: 12px;
-}
-
-.snaps-title {
-  font-size: 18px;
-  color: #333;
-  font-weight: 600;
-}
-
-.snaps-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
-}
-
-.snap-link {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 16px 12px;
-  background: #f0f2f5;
-  border-radius: 8px;
-  text-decoration: none;
-}
-
-.snap-icon {
-  font-size: 20px;
-  margin-bottom: 8px;
-  color: #1877f2;
-}
-
-.snap-label {
-  display: block;
-  font-size: 13px;
-  color: #000;
-  font-weight: 500;
-}
-
-/* === Dark Mode === */
-.dark-mode .dashboard-snaps {
-  background: #1e1e1e;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-.dark-mode .snap-link {
-  background: #2d2d2d;
-  transition: background-color 0.2s ease;
-}
-
-.dark-mode .snap-link:hover {
-  background: #383838;
-}
-
-.dark-mode .snap-icon {
-  color: #64b5f6;
-}
-
-.dark-mode .snap-label {
-  color: #e0e0e0;
-}
-
-/* Smooth transitions */
-.dashboard-snaps,
-.snap-link,
-.snap-icon,
-.snap-label {
-  transition: all 0.3s ease;
-}
-@media (max-width: 767px) {
-    .desktop-only {
-        display: none !important;
-    }
-}
-
-</style>
-
-
-<style>
-.top-contributors {
-  margin-top: 24px;
-  background: #fff;
-  border-radius: 12px;
-  padding: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-
-.contributors-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.contributors-title {
-  font-size: 18px;
-  font-weight: 600;
-  color: #050505;
-  margin: 0;
-}
-
-.contributor-item {
-  display: flex;
-  align-items: center;
-  padding: 8px 0;
-}
-
-.contributor-avatar {
-  position: relative;
-  margin-right: 12px;
-}
-
-.contributor-img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid #fff;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-.contributor-badge {
-  position: absolute;
-  bottom: -2px;
-  right: -2px;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: #ffd700;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 10px;
-  color: #000;
-  font-weight: bold;
-}
-
-.contributor-info {
-  flex: 1;
-}
-
-.contributor-name {
-  font-size: 14px;
-  font-weight: 600;
-  margin: 0 0 2px 0;
-}
-
-.contributor-stats {
-  font-size: 12px;
-  color: #65676b;
-}
-
-.view-all-contributors {
-  text-align: center;
-  margin-top: 12px;
-}
-
-.view-all-contributors a {
-  color: #1877f2;
-  font-size: 14px;
-  font-weight: 500;
-  text-decoration: none;
-}
-
-/* ===== Dark Mode Styles for Top Contributors ===== */
-.dark-mode .top-contributors {
-  background: #1e1e1e;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
-
-.dark-mode .contributors-title {
-  color: #e0e0e0;
-}
-
-.dark-mode .contributor-img {
-  border-color: #333;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-}
-
-.dark-mode .contributor-name {
-  color: #f0f0f0;
-}
-
-.dark-mode .contributor-stats {
-  color: #b0b0b0;
-}
-
-.dark-mode .view-all-contributors a {
-  color: #64b5f6;
-}
-
-/* Contributor badges in dark mode */
-.dark-mode .contributor-badge {
-  color: #000; /* Keep text black for contrast */
-  box-shadow: 0 0 0 2px #1e1e1e; /* Creates outline effect */
-}
-
-/* Hover effects for dark mode */
-.dark-mode .view-all-contributors a:hover {
-  color: #90caf9;
-  text-decoration: underline;
-}
-
-/* Optional: Add smooth transitions */
-.top-contributors,
-.contributors-title,
-.contributor-img,
-.contributor-name,
-.contributor-stats,
-.view-all-contributors a {
-  transition: all 0.3s ease;
-}
-</style>
 
 <style>
     /* Comment Popup Styles */
@@ -5049,12 +4333,33 @@ body.dark-mode .comment-count {
   display: flex;
   padding: 12px;
   border-radius: 8px;
-  transition: background-color 0.2s;
+  transition: all 0.3s ease;
   margin-bottom: 8px;
+  background: linear-gradient(135deg, rgba(240, 242, 245, 0.4) 0%, rgba(255, 255, 255, 0.8) 100%);
+  backdrop-filter: blur(2px);
+  border: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .user-card:hover {
-  background-color: #f0f2f5;
+  background: linear-gradient(135deg, rgba(224, 227, 233, 0.6) 0%, rgba(240, 242, 245, 0.9) 100%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transform: translateY(-1px);
+}
+
+/* Dark mode adjustments */
+.dark-mode .user-card {
+  background: linear-gradient(135deg, rgba(45, 45, 45, 0.4) 0%, rgba(30, 30, 30, 0.8) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.dark-mode .user-card:hover {
+  background: linear-gradient(135deg, rgba(60, 60, 60, 0.6) 0%, rgba(45, 45, 45, 0.9) 100%);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Add this to your existing transitions */
+.user-card {
+  transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
 }
 
 .user-avatar {
@@ -5117,30 +4422,77 @@ body.dark-mode .comment-count {
   font-size: 14px;
 }
 
-.follow-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #e7f3ff;
-  color: #1877f2;
-  border: none;
-  border-radius: 6px;
-  padding: 6px 12px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  width: 100%;
+.visit-btn {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #f0f2f5;
+    color: #050505;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.2s;
+    margin-left: 4px; /* Added left margin for better spacing */
 }
 
-.follow-btn:hover {
-  background-color: #dbe7f2;
+.visit-btn:hover {
+    background-color: #e4e6eb;
+    text-decoration: none;
 }
 
-.btn-text {
-  margin-right: 4px;
+.user-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Added gap property for consistent spacing */
 }
 
+/* Dark mode styles */
+.dark-mode .follow-text {
+    color: #64b5f6;
+    background-color: rgba(100, 181, 246, 0.1);
+}
+
+.dark-mode .follow-text:hover {
+    background-color: rgba(100, 181, 246, 0.2);
+}
+
+.dark-mode .follow-text.following {
+    color: #64b5f6;
+    background-color: rgba(100, 181, 246, 0.1);
+}
+
+.dark-mode .visit-btn {
+    background-color: #2d2d2d;
+    color: #e4e6eb;
+}
+
+.dark-mode .visit-btn:hover {
+    background-color: #3d3d3d;
+}
+
+/* Dark mode styles */
+.dark-mode .suggested-follow-btn {
+    color: #64b5f6;
+    background-color: rgba(100, 181, 246, 0.1);
+}
+
+.dark-mode .suggested-follow-btn:hover {
+    background-color: rgba(100, 181, 246, 0.2);
+}
+
+.dark-mode .suggested-follow-btn.suggested-following {
+    color: #64b5f6;
+    background-color: rgba(100, 181, 246, 0.1);
+}
+
+.dark-mode .suggested-visit-btn {
+    background-color: #2d2d2d;
+    color: #e4e6eb;
+}
+
+.dark-mode .suggested-visit-btn:hover {
+    background-color: #3d3d3d;
+}
 /* ===== Dark Mode Styles ===== */
 .dark-mode .section-title {
   color: #e0e0e0;
@@ -5748,7 +5100,55 @@ body.dark-mode .comment-count {
 
 </style>
 
+
+
+
+
+
+
 <style>
+
+
+
+    .create-btn {
+        background-color: #0095f6;
+        color: white;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto;
+        transform: translateY(-10px);
+        box-shadow: 0 2px 8px rgba(0, 149, 246, 0.3);
+    }
+    
+    .create-btn svg {
+        margin-bottom: 0;
+    }
+    
+    .alert-badge {
+        position: absolute;
+        top: 2px;
+        right: 8px;
+        background-color: #ff3040;
+        color: white;
+        border-radius: 50%;
+        font-size: 10px;
+        min-width: 16px;
+        height: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 4px;
+    }
+    
+    .chat-alert {
+        position: static;
+        margin-left: 8px;
+    }
+    
  
     .delete-link {
         color: #e74c3c !important;
@@ -6055,10 +5455,8 @@ body.dark-mode .comment-count {
                         transform 0.3s ease;
         }
 
+
 </style>
-
-
-
 
 </head>
 
@@ -6092,7 +5490,7 @@ body.dark-mode .comment-count {
         display: inline-block;
         border-radius: 3px;
         backdrop-filter: brightness(1.2);
-    "><img src="{% static 'main/files/lg.png' %}" alt="Rallynex Logo" style="height: 50px; width: 50px;">RALLYNEX</div>
+    "><img src="{% static 'main/files/z.png' %}" alt="Rallynex Logo" style="height: 50px; width: 50px;">RALLYNEX</div>
 
     <!-- Mobile Search Icon on the right -->
     <div class="rallynex-mobile-search-icon">
@@ -6272,7 +5670,7 @@ body.dark-mode .comment-count {
     backdrop-filter: brightness(1.2);
     margin: 0;
     z-index: 1000;
-"><img src="{% static 'main/files/lg.png' %}" alt="Rallynex Logo" style="height: 50px; width: 50px;">RALLYNEX</h3>
+"><img src="{% static 'main/files/z.png' %}" alt="Rallynex Logo" style="height: 50px; width: 50px;">RALLYNEX</h3>
   
 
     <!-- Updated the <nav> tag to <nav class="campaign-nav"> -->
@@ -6409,13 +5807,16 @@ body.dark-mode .comment-count {
 
 
 
-
 <section>
-<br>
+
+
+    </br>
+
  <div class="explore-card">
-    <h3><i class="fas fa-compass"></i> Explore</h3>
+    <h3><i class="fas fa-compass"></i>Explore</h3>
     <p>Explore campaigns to be part of.</p>
 </div>
+
 
 <form method="GET" action="{% url 'home' %}" class="filter-form">
     <label for="category" class="filter-label">Filter by Category:</label>
@@ -6430,94 +5831,141 @@ body.dark-mode .comment-count {
 
 </form>
 
-
+<!-- Beautiful upload button -->
 
     
 </div><br>
+
 <div class="sidebar-box ">
+
    {% if public_campaigns %}
 <div class="simple-campaigns-container">
+    
     {% for campaign in public_campaigns %}
     <div class="simple-campaign-card">
         <!-- Top Section - Creator Info -->
         <div class="creator-info">
-          
+            <a href="{% url 'profile_view' username=campaign.user.user.username %}" class="creator-pic">
+                <img src="{{ campaign.user.image.url }}" alt="{{ campaign.user.user.username }}">
+            </a>
             <div class="creator-details">
-                <div class="creator-name">
-                    {{ campaign.user.user.username }}
+             <div class="creator-container" style="display: flex; justify-content: space-between; align-items: center;">
+    <div>
+
+<div class="creator-info">
+    <span class="creator-name">
+       {{ campaign.user.user.username }}
                     {% if campaign.user.profile_verified %}
-                    <span class="verified-badge"><i class="material-icons">verified_user</i></span>
+                    <span class="verified-badge"><i class="material-icons">verified_user</i></span> 
                     {% endif %}
                     {% if campaign.is_changemaker %}
-                    <span class="changemaker-badge"><i class="far fa-star"></i> Changemaker</span>
+                    <span class="changemaker-badge"><i class="far fa-star"></i>Changemaker</span>
                     {% endif %}
-                </div>
-                <div class="campaign-time">
-                    {{ campaign.timestamp|timesince }} ago • {{ campaign.user.location }}
-                </div>
+    </span>
+{% if request.user != campaign.user.user %}
+<span id="follow-btn-{{ campaign.user.user.id }}" 
+      class="follow-text {% if request.user in campaign.user.user.followers.all %}following{% endif %}" 
+      data-user-id="{{ campaign.user.user.id }}"
+      data-is-following="{% if request.user in campaign.user.user.followers.all %}true{% else %}false{% endif %}">
+    {% if request.user in campaign.user.user.followers.all %}
+        • Following
+    {% else %}
+        • Follow
+    {% endif %}
+</span>
+{% endif %}
+
+</div>
+
+
+
+
+        <div class="campaign-time">
+            {{ campaign.timestamp|timesince }} ago • {{ campaign.user.location }}
+        </div>
+    </div>
+
+</div>
             </div>
+
 
 <div class="campaign-menu" onclick="togglaMenu(this)" style="position: relative;">
   <i class="fas fa-ellipsis-v"></i>
   <div class="menu-dropdown">
+
+    <!-- ===== Public Items ===== -->
     <a href="{% url 'view_campaign' campaign_id=campaign.pk %}">
       <i class="fas fa-eye"></i> View Details
     </a>
+
     <a href="{% url 'campaign_joiners' campaign.id %}" class="comment-count" aria-label="View joiners of this campaign">
       <i class="fas fa-user-plus"></i> Joiners ({{ campaign.user_profiles.count|format_count }})
     </a>
-  
-    {% if user == campaign.user.user %}
-      <a href="{% url 'recreate_campaign' campaign.id %}">
-        <i class="fas fa-edit"></i> Edit
-      </a>
-    {% endif %}
 
-
-          <a href="{% url 'update_visibilit' campaign.pk %}" style="
-   
-">
-    <i class="fas fa-lock" ></i> Visibility
-</a>
-
- <a href="{% url 'campaign_engagement' campaign.id %}">
-        <i class="fas fa-chart-bar"></i> Engagement
+    <a href="{% url 'top_participants' campaign_id=campaign.pk %}" class="top-supporters-link">
+      <i class="fas fa-trophy"></i> Top Participants
     </a>
 
+   
 
-  <a href="{% url 'report_campaign' campaign.id %}">
+    <a href="{% url 'report_campaign' campaign.id %}">
       <i class="fas fa-flag"></i> Report
     </a>
 
-     <a href="{% url 'campaign-delete' campaign.pk %}" class="delete-link">
-        <i class="fas fa-trash"></i> Delete
-    </a>
-    
     <div class="not-interested-container">
-        <form action="{% url 'mark_not_interested' campaign_id=campaign.pk %}" method="post" class="not-interested-form">
-            {% csrf_token %}
-            <div class="form-row">
-                <label for="not-interested" class="form-label">
-                    <i class="fas fa-times-circle"></i> Not Interested
-                </label>
-                <div class="form-controls">
-                    <input type="checkbox" id="not-interested" name="not_interested" class="form-checkbox">
-                </div>
-            </div>
-            <button type="submit" class="form-submit-button">
-                Submit
-            </button>
-        </form>
+      <form action="{% url 'mark_not_interested' campaign_id=campaign.pk %}" method="post" class="not-interested-form">
+        {% csrf_token %}
+        <div class="form-row">
+          <label for="not-interested" class="form-label">
+            <i class="fas fa-times-circle"></i> Not Interested
+          </label>
+          <div class="form-controls">
+            <input type="checkbox" id="not-interested" name="not_interested" class="form-checkbox">
+          </div>
+        </div>
+        <button type="submit" class="form-submit-button">Submit</button>
+      </form>
     </div>
+
+    <!-- ===== Owner-Only Items ===== -->
+    {% if user == campaign.user.user %}
+      <a href="{% url 'recreate_campaign' campaign.id %}">
+        <i class="fas fa-edit"></i> Edit / Recreate
+      </a>
+
+      <a href="{% url 'campaign_pledgers' campaign.id %}">
+        <i class="fas fa-donate"></i> Pledgers
+      </a>
+
+      <a href="{% url 'update_visibility' campaign_id=campaign.id %}" class="update-visibility-link">
+        <i class="fas fa-mouse-pointer"></i> CTA Buttons
+      </a>
+       <a href="{% url 'campaign_engagement' campaign.id %}">
+      <i class="fas fa-chart-bar"></i> Engagement
+    </a>
+
+      <a href="{% url 'campaign-delete' campaign.pk %}" class="delete-link">
+        <i class="fas fa-trash"></i> Delete
+      </a>
+    {% endif %}
+
+    <!-- Optional: Visibility toggle could also be owner-only -->
+    {% if user == campaign.user.user %}
+      <a href="{% url 'update_visibilit' campaign.pk %}">
+        <i class="fas fa-lock"></i> Visibility
+      </a>
+    {% endif %}
+
   </div>
 </div>
+
         </div>
 
         <!-- Campaign Image - Dominant Space -->
         <div class="campaign-image-section">
             {% if campaign.poster %}
             <div class="campaign-image-container">
-                    {% if user.is_authenticated and user.profile in campaign.user_profiles.all %}
+       {% if user.is_authenticated and user.profile in campaign.user_profiles.all %}
     <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="campaign-poster-link">
 {% endif %}
         <img src="{{ campaign.poster.url }}" 
@@ -6534,31 +5982,78 @@ body.dark-mode .comment-count {
 </div>   
                 <!-- Image Overlay Info -->
                 <div class="image-overlay-top">
-                    <span class="campaign-category">{{ campaign.category }} Campaign</span>
+                    <span class="campaign-category">{{ campaign.category }}</span>
                 </div>
-                
-          
 <div class="image-overlay-bottom">
-    <div class="progress-container">
-       
+    <!-- Action icons with data-title instead of title -->
+    <div class="campaign-action-icons">
+
+        <!-- Donate icon - only show if donation is enabled -->
+        {% if campaign.supportcampaign_set.first.donate_monetary_visible %}
+            <a href="{% url 'create_donation' campaign_id=campaign.id %}" class="action-icon" data-title="Donate">
+                <i class="fas fa-hand-holding-heart"></i>
+                <span class="tooltip">Donate</span>
+            </a>
+        {% endif %}
+   
+
+        <!-- Pledge icon - only show if pledge is enabled -->
+        {% if campaign.supportcampaign_set.first.pledge_visible %}
+            <a href="{% url 'create_pledge' campaign_id=campaign.id %}" class="action-icon" data-title="Pledge">
+                <i class="fas fa-handshake"></i>
+                <span class="tooltip">Pledge</span>
+            </a>
+        {% endif %}
+
+        <!-- Purchase Products icon - only show if campaign product is enabled -->
+        {% if campaign.supportcampaign_set.first.campaign_product_visible %}
+            <a href="{% url 'product_manage' campaign_id=campaign.id %}" class="action-icon" data-title="Purchase Products">
+                <i class="fas fa-shopping-bag"></i>
+                <span class="tooltip">Purchase Products</span>
+            </a>
+        {% endif %}
+
     </div>
-    
+    {% if campaign.supportcampaign_set.first.donate_monetary_visible %}
+
+    <div class="progress-info">
+        <span>Raised: ${{ campaign.total_donations }}</span>
+        <span>Goal: ${{ campaign.funding_goal }}</span>
+    </div>
+
+    <div class="progress-container">
+        <div class="progress-fill" style="width: {{ campaign.donation_percentage }}%;"></div>
+    </div>
+
+    <div class="campaign-stats">
+        <span>{{ campaign.donation_percentage }}% funded</span>
+        <span>${{ campaign.donation_remaining }} to go</span>
+    </div>
+
+    <div class="mobile-goal-display">
+        {{ campaign.donation_percentage }}% funded • ${{ campaign.donation_remaining }} to go
+    </div>
+
+ {% endif %}
+
     <div class="campaign-time-left">
         <i class="fas fa-clock"></i>
-        {% if campaign.days_left != None %}
-            {{ campaign.days_left }} {% if campaign.days_left == 1 %}day{% else %}days{% endif %} left
-        {% else %}
-            Ongoing
-        {% endif %}
+        <span>
+            {% if campaign.days_left != None %}
+                {{ campaign.days_left }} {% if campaign.days_left == 1 %}day{% else %}days{% endif %} left
+            {% else %}
+                Ongoing
+            {% endif %}
+        </span>
     </div>
 </div>
-                
+
                 {% if not user.profile in campaign.user_profiles.all %}
           <div class="join-prompt blink-5s">
     <i class="fas fa-lock"></i> Join to see activities
 </div>
                 {% endif %}
-
+  
 
             </div>
             {% else %}
@@ -6606,7 +6101,7 @@ body.dark-mode .comment-count {
         </button>
     </div>
 </div>
-     Goals: {{ campaign.get_goals_and_activities.Goals.0|default:"No goal specified"|truncatechars:80 }}
+  Goals: {{ campaign.get_goals_and_activities.Goals.0|default:"No goal specified"|truncatechars:80 }}
 </div>
 
         <!-- Campaign Status - Visual Indicators -->
@@ -6662,15 +6157,41 @@ body.dark-mode .comment-count {
         <span class="action-label">Share</span>
     </button>
 </div>
-            {% if user.profile in campaign.user_profiles.all %}
-            <a href="{% url 'join_leave_campaign' campaign.id %}" class="simple-join-btn leave-btn">
-                <i class="fas fa-user-minus"></i> Leave
-            </a>
-            {% else %}
-            <a href="{% url 'join_leave_campaign' campaign.id %}" class="simple-join-btn">
-                <i class="fas fa-user-plus"></i> Join
-            </a>
-            {% endif %}
+        {% if user.profile in campaign.user_profiles.all %}
+<a href="{% url 'join_leave_campaign' campaign.id %}" 
+   class="simple-join-btn leave-btn"
+   style="background: rgba(237, 73, 86, 0.08);
+          color: #ed4956;
+          border: 1px solid rgba(237, 73, 86, 0.2);
+          padding: 4px 10px;
+          border-radius: 12px;
+          font-size: 12px;
+          transition: all 0.2s ease;
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          text-decoration: none;">
+    <i class="fas fa-user-minus" style="font-size: 13px;"></i>
+    <span>Leave</span>
+</a>
+{% else %}
+<a href="{% url 'join_leave_campaign' campaign.id %}" 
+   class="simple-join-btn"
+   style="background: rgba(0, 149, 246, 0.08);
+          color: #0095f6;
+          border: 1px solid rgba(0, 149, 246, 0.2);
+          padding: 4px 10px;
+          border-radius: 12px;
+          font-size: 12px;
+          transition: all 0.2s ease;
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          text-decoration: none;">
+    <i class="fas fa-user-plus" style="font-size: 13px;"></i>
+    <span>Join</span>
+</a>
+{% endif %}
         </div>
         
         <!-- Hidden content that was in your original HTML -->
@@ -6776,20 +6297,17 @@ body.dark-mode .comment-count {
     {% endfor %}
 </div>
 
+
 <!-- Replace the current "else" block with this updated version -->
 {% else %}
+
 <!-- Default campaign display for when there are no public campaigns -->
 {% if not public_campaigns %}
 <div class="simple-campaigns-container">
-       <!-- Mobile-optimized title section with left padding -->
-
     {% for campaign in campaigns %}
-  <div class="simple-campaign-card">
+    <div class="simple-campaign-card">
         <!-- Top Section - Creator Info -->
         <div class="creator-info">
-            <a href="{% url 'profile_view' username=campaign.user.user.username %}" class="creator-pic">
-                <img src="{{ campaign.user.image.url }}" alt="{{ campaign.user.user.username }}">
-            </a>
             <div class="creator-details">
                 <div class="creator-name">
                     {{ campaign.user.user.username }}
@@ -6804,64 +6322,83 @@ body.dark-mode .comment-count {
                     {{ campaign.timestamp|timesince }} ago • {{ campaign.user.location }}
                 </div>
             </div>
+<div class="campaign-menu" onclick="togglaMenu(this)" style="position: relative;">
+  <i class="fas fa-ellipsis-v"></i>
+  <div class="menu-dropdown">
 
-            <div class="campaign-menu" onclick="togglaMenu(this)" style="position: relative;">
-                <i class="fas fa-ellipsis-v"></i>
-                <div class="menu-dropdown">
-                    <a href="{% url 'view_campaign' campaign_id=campaign.pk %}">
-                        <i class="fas fa-eye"></i> View Details
-                    </a>
-                    <a href="{% url 'campaign_joiners' campaign.id %}" class="comment-count" aria-label="View joiners of this campaign">
-                        <i class="fas fa-user-plus"></i> Joiners ({{ campaign.user_profiles.count|format_count }})
-                    </a>
-                
-                    {% if user == campaign.user.user %}
-                        <a href="{% url 'recreate_campaign' campaign.id %}">
-                            <i class="fas fa-edit"></i> Edit
-                        </a>
-                    {% endif %}
+    <!-- ===== Public Items ===== -->
+    <a href="{% url 'view_campaign' campaign_id=campaign.pk %}">
+      <i class="fas fa-eye"></i> View Details
+    </a>
 
-                    <a href="{% url 'update_visibilit' campaign.pk %}" style="">
-                        <i class="fas fa-lock"></i> Visibility
-                    </a>
+    <a href="{% url 'campaign_joiners' campaign.id %}" class="comment-count" aria-label="View joiners of this campaign">
+      <i class="fas fa-user-plus"></i> Joiners ({{ campaign.user_profiles.count|format_count }})
+    </a>
 
-                    <a href="{% url 'campaign_engagement' campaign.id %}">
-                        <i class="fas fa-chart-bar"></i> Engagement
-                    </a>
+    <a href="{% url 'top_participants' campaign_id=campaign.pk %}" class="top-supporters-link">
+      <i class="fas fa-trophy"></i> Top Participants
+    </a>
 
-                    <a href="{% url 'report_campaign' campaign.id %}">
-                        <i class="fas fa-flag"></i> Report
-                    </a>
+   
 
-                    <a href="{% url 'campaign-delete' campaign.pk %}" class="delete-link">
-                        <i class="fas fa-trash"></i> Delete
-                    </a>
-                    
-                    <div class="not-interested-container">
-                        <form action="{% url 'mark_not_interested' campaign_id=campaign.pk %}" method="post" class="not-interested-form">
-                            {% csrf_token %}
-                            <div class="form-row">
-                                <label for="not-interested" class="form-label">
-                                    <i class="fas fa-times-circle"></i> Not Interested
-                                </label>
-                                <div class="form-controls">
-                                    <input type="checkbox" id="not-interested" name="not_interested" class="form-checkbox">
-                                </div>
-                            </div>
-                            <button type="submit" class="form-submit-button">
-                                Submit
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
+    <a href="{% url 'report_campaign' campaign.id %}">
+      <i class="fas fa-flag"></i> Report
+    </a>
+
+    <div class="not-interested-container">
+      <form action="{% url 'mark_not_interested' campaign_id=campaign.pk %}" method="post" class="not-interested-form">
+        {% csrf_token %}
+        <div class="form-row">
+          <label for="not-interested" class="form-label">
+            <i class="fas fa-times-circle"></i> Not Interested
+          </label>
+          <div class="form-controls">
+            <input type="checkbox" id="not-interested" name="not_interested" class="form-checkbox">
+          </div>
         </div>
+        <button type="submit" class="form-submit-button">Submit</button>
+      </form>
+    </div>
+
+    <!-- ===== Owner-Only Items ===== -->
+    {% if user == campaign.user.user %}
+      <a href="{% url 'recreate_campaign' campaign.id %}">
+        <i class="fas fa-edit"></i> Edit / Recreate
+      </a>
+
+      <a href="{% url 'campaign_pledgers' campaign.id %}">
+        <i class="fas fa-donate"></i> Pledgers
+      </a>
+
+      <a href="{% url 'update_visibility' campaign_id=campaign.id %}" class="update-visibility-link">
+        <i class="fas fa-mouse-pointer"></i> CTA Buttons
+      </a>
+       <a href="{% url 'campaign_engagement' campaign.id %}">
+      <i class="fas fa-chart-bar"></i> Engagement
+    </a>
+
+      <a href="{% url 'campaign-delete' campaign.pk %}" class="delete-link">
+        <i class="fas fa-trash"></i> Delete
+      </a>
+    {% endif %}
+
+    <!-- Optional: Visibility toggle could also be owner-only -->
+    {% if user == campaign.user.user %}
+      <a href="{% url 'update_visibilit' campaign.pk %}">
+        <i class="fas fa-lock"></i> Visibility
+      </a>
+    {% endif %}
+
+  </div>
+</div>
+</div>
+
 
         <!-- Campaign Image - Dominant Space -->
         <div class="campaign-image-section">
             {% if campaign.poster %}
             <div class="campaign-image-container">
-                    {% if user.is_authenticated and user.profile in campaign.user_profiles.all %}
+      {% if user.is_authenticated and user.profile in campaign.user_profiles.all %}
     <a href="{% url 'activity_list' campaign_id=campaign.id %}" class="campaign-poster-link">
 {% endif %}
         <img src="{{ campaign.poster.url }}" 
@@ -6879,31 +6416,79 @@ body.dark-mode .comment-count {
                 
                 <!-- Image Overlay Info -->
                 <div class="image-overlay-top">
-                    <span class="campaign-category">{{ campaign.category }} Campaign</span>
+                    <span class="campaign-category">{{ campaign.category }} </span>
                 </div>
-                
-                <div class="image-overlay-bottom">
-                    <div class="progress-container">
-                       
-                    </div>
-                    
-                    <div class="campaign-time-left">
-                        <i class="fas fa-clock"></i>
-                        {% if campaign.days_left != None %}
-                            {{ campaign.days_left }} {% if campaign.days_left == 1 %}day{% else %}days{% endif %} left
-                        {% else %}
-                            Ongoing
-                        {% endif %}
-                    </div>
-                </div>
-                
+             <div class="image-overlay-bottom">
+    <!-- Action icons with data-title instead of title -->
+    <div class="campaign-action-icons">
+
+        <!-- Donate icon - only show if donation is enabled -->
+        {% if campaign.supportcampaign_set.first.donate_monetary_visible %}
+            <a href="{% url 'create_donation' campaign_id=campaign.id %}" class="action-icon" data-title="Donate">
+                <i class="fas fa-hand-holding-heart"></i>
+                <span class="tooltip">Donate</span>
+            </a>
+        {% endif %}
+
+        <!-- Pledge icon - only show if pledge is enabled -->
+        {% if campaign.supportcampaign_set.first.pledge_visible %}
+            <a href="{% url 'create_pledge' campaign_id=campaign.id %}" class="action-icon" data-title="Pledge">
+                <i class="fas fa-handshake"></i>
+                <span class="tooltip">Pledge</span>
+            </a>
+        {% endif %}
+
+        <!-- Purchase Products icon - only show if campaign product is enabled -->
+        {% if campaign.supportcampaign_set.first.campaign_product_visible %}
+            <a href="{% url 'product_manage' campaign_id=campaign.id %}" class="action-icon" data-title="Purchase Products">
+                <i class="fas fa-shopping-bag"></i>
+                <span class="tooltip">Purchase Products</span>
+            </a>
+        {% endif %}
+
+    </div>
+
+    {% if campaign.supportcampaign_set.first.donate_monetary_visible %}
+        <!-- Progress bar section -->
+        <div class="progress-info">
+            <span>Raised: ${{ campaign.total_donations }}</span>
+            <span>Goal: ${{ campaign.funding_goal }}</span>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-fill" style="width: {{ campaign.donation_percentage }}%;"></div>
+        </div>
+
+        <div class="campaign-stats">
+            <span>{{ campaign.donation_percentage }}% funded</span>
+            <span>${{ campaign.donation_remaining }} to go</span>
+        </div>
+
+        <!-- Mobile-specific simplified display -->
+        <div class="mobile-goal-display">
+            {{ campaign.donation_percentage }}% funded • ${{ campaign.donation_remaining }} to go
+        </div>
+    {% endif %}
+
+    <div class="campaign-time-left">
+        <i class="fas fa-clock"></i>
+        <span>
+            {% if campaign.days_left != None %}
+                {{ campaign.days_left }} {% if campaign.days_left == 1 %}day{% else %}days{% endif %} left
+            {% else %}
+                Ongoing
+            {% endif %}
+        </span>
+    </div>
+</div>
+
+               
                 {% if not user.profile in campaign.user_profiles.all %}
                 <div class="join-prompt blink-5s">
                     <i class="fas fa-lock"></i> Join to see activities
                 </div>
                 {% endif %}
-                
-              
+               
             </div>
             {% else %}
             <div class="no-image-placeholder">
@@ -6948,8 +6533,7 @@ body.dark-mode .comment-count {
                     </button>
                 </div>
             </div>
-        Goals: {{ campaign.get_goals_and_activities.Goals.0|default:"No goal specified"|truncatechars:80 }}
-        </div>
+             Goals: {{ campaign.get_goals_and_activities.Goals.0|default:"No goal specified"|truncatechars:80 }}        </div>
 
         <!-- Campaign Status - Visual Indicators -->
         <div class="campaign-status">
@@ -7005,18 +6589,43 @@ body.dark-mode .comment-count {
                     <span class="action-label">Share</span>
                 </button>
             </div>
-            
-            {% if user.profile in campaign.user_profiles.all %}
-            <a href="{% url 'join_leave_campaign' campaign.id %}" class="simple-join-btn leave-btn">
-                <i class="fas fa-user-minus"></i> Leave
-            </a>
-            {% else %}
-            <a href="{% url 'join_leave_campaign' campaign.id %}" class="simple-join-btn">
-                <i class="fas fa-user-plus"></i> Join
-            </a>
-            {% endif %}
+         {% if user.profile in campaign.user_profiles.all %}
+<a href="{% url 'join_leave_campaign' campaign.id %}" 
+   class="simple-join-btn leave-btn"
+   style="background: rgba(237, 73, 86, 0.08);
+          color: #ed4956;
+          border: 1px solid rgba(237, 73, 86, 0.2);
+          padding: 4px 10px;
+          border-radius: 12px;
+          font-size: 12px;
+          transition: all 0.2s ease;
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          text-decoration: none;">
+    <i class="fas fa-user-minus" style="font-size: 13px;"></i>
+    <span>Leave</span>
+</a>
+{% else %}
+<a href="{% url 'join_leave_campaign' campaign.id %}" 
+   class="simple-join-btn"
+   style="background: rgba(0, 149, 246, 0.08);
+          color: #0095f6;
+          border: 1px solid rgba(0, 149, 246, 0.2);
+          padding: 4px 10px;
+          border-radius: 12px;
+          font-size: 12px;
+          transition: all 0.2s ease;
+          display: inline-flex;
+          align-items: center;
+          gap: 5px;
+          text-decoration: none;">
+    <i class="fas fa-user-plus" style="font-size: 13px;"></i>
+    <span>Join</span>
+</a>
+{% endif %}
         </div>
-
+        
         <!-- Audio player section - Added to match main campaigns -->
         {% if campaign.audio %}
             <audio class="campaign-audio" loop preload="auto" muted autoplay>
@@ -7116,7 +6725,6 @@ body.dark-mode .comment-count {
         </div>
     </div>
 </div>
-
 <!-- Comment Popup Container -->
 <div id="commentPopup" class="comment-popup-container" style="display: none;">
     <div class="comment-popup-content">
@@ -7147,10 +6755,8 @@ body.dark-mode .comment-count {
 </div>
 
 
-
-
-
 </section>
+
 
 
 
@@ -7349,115 +6955,175 @@ body.dark-mode .comment-count {
 
 
 
+    <script>
+        // Prevent default title tooltip from showing
+        document.addEventListener('DOMContentLoaded', function() {
+            const icons = document.querySelectorAll('.action-icon');
+            
+            icons.forEach(icon => {
+                // Remove title attribute to prevent default tooltip
+                icon.removeAttribute('title');
+                
+                // Add hover effect with slight 3D tilt
+                icon.addEventListener('mousemove', function(e) {
+                    const x = e.offsetX;
+                    const y = e.offsetY;
+                    
+                    const rotateY = -1/5 * x + 20;
+                    const rotateX = 1/5 * y - 20;
+                    
+                    this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px) scale(1.05)`;
+                });
+                
+                icon.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(-8px) scale(1.05)';
+                });
+            });
+        });
+    </script>
+
+
+
+
 <script>
-// Store follow state in localStorage
-function updateFollowState(userId, isFollowing) {
-    const storageKey = `followState_${userId}`;
-    localStorage.setItem(storageKey, isFollowing ? 'true' : 'false');
-}
-
-// Retrieve follow state from localStorage
-function getFollowState(userId) {
-    const storageKey = `followState_${userId}`;
-    return localStorage.getItem(storageKey) === 'true';
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize text elements with correct state
-    document.querySelectorAll('.follow-text').forEach(element => {
-        const userId = element.getAttribute('data-user-id');
-        const storedState = getFollowState(userId);
-        const currentState = element.getAttribute('data-is-following') === 'true';
+    function toggleMenu(event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation(); // Important to prevent immediate close
+        }
         
-        // Use stored state if available, otherwise use server state
-        const finalState = storedState !== null ? storedState : currentState;
+        const menu = document.getElementById('navbarDropdownMenu');
+        const overlay = document.getElementById('menuOverlay');
         
-        if (finalState) {
-            element.classList.add('following');
-            element.textContent = '• Following';
-            element.setAttribute('data-is-following', 'true');
-        } else {
-            element.classList.remove('following');
-            element.textContent = '• Follow';
-            element.setAttribute('data-is-following', 'false');
+        menu.classList.toggle('active');
+        overlay.classList.toggle('active');
+    }
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', function(event) {
+        const menu = document.getElementById('navbarDropdownMenu');
+        const overlay = document.getElementById('menuOverlay');
+        const toggleBtn = document.querySelector('[onclick*="toggleMenu"]'); // Your menu button
+        
+        // Check if click is outside of menu AND outside of toggle button
+        if (!menu.contains(event.target) && 
+            (!toggleBtn || !toggleBtn.contains(event.target))) {
+            menu.classList.remove('active');
+            overlay.classList.remove('active');
+        }
+    });
+</script>
+
+
+<script>
+function togglaMenu(clickedElement) {
+    // Close other open menus
+    document.querySelectorAll('.menu-dropdown.active').forEach(menu => {
+        if (!clickedElement.contains(menu)) {
+            menu.classList.remove('active');
         }
     });
 
-    // Handle follow text clicks
-    document.querySelectorAll('.follow-text').forEach(element => {
-        element.addEventListener('click', async function() {
-            const userId = this.getAttribute('data-user-id');
-            const isFollowing = this.getAttribute('data-is-following') === 'true';
-            const action = isFollowing ? 'unfollow' : 'follow';
-            
-            try {
-                const response = await fetch('/toggle_follow/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRFToken': '{{ csrf_token }}'
-                    },
-                    body: JSON.stringify({
-                        'user_id': userId,
-                        'action': action
-                    })
-                });
+    // Toggle the clicked one
+    const dropdown = clickedElement.querySelector('.menu-dropdown');
+    dropdown.classList.toggle('active');
+}
 
-                const data = await response.json();
-                
-                if (data.status === 'success') {
-                    // Update text state
-                    const newState = data.action === 'followed';
-                    this.classList.toggle('following', newState);
-                    this.textContent = newState ? '• Following' : '• Follow';
-                    this.setAttribute('data-is-following', newState.toString());
-                    
-                    // Update followers count
-                    const followersCount = document.getElementById(`followers-count-${userId}`);
-                    if (followersCount) {
-                        followersCount.textContent = `(${data.followers_count} followers)`;
-                    }
-                    
-                    // Persist state in localStorage
-                    updateFollowState(userId, newState);
-                } else {
-                    console.error('Error:', data.message);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('An error occurred. Please try again.');
-            }
+// Close the menu if clicked outside
+document.addEventListener('click', function(event) {
+    // Don't close if clicking on form elements within the menu
+    const isFormElement = event.target.closest('.not-interested-form') || 
+                         event.target.matches('input, select, textarea, label');
+    
+    const isClickInside = event.target.closest('.campaign-menu');
+    
+    if (!isClickInside && !isFormElement) {
+        document.querySelectorAll('.menu-dropdown.active').forEach(menu => {
+            menu.classList.remove('active');
         });
+    }
+});
+
+// Prevent checkbox clicks from bubbling up and closing the menu
+document.addEventListener('click', function(event) {
+    if (event.target.matches('.form-checkbox, .form-label, .form-submit-button')) {
+        event.stopPropagation();
+    }
+}, true);
+</script>
+
+
+
+
+
+
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', function() {
+  const searchInput = document.getElementById('mobile-search-input');
+  const clearButton = document.querySelector('.clear-search');
+  
+  if (searchInput && clearButton) {
+    // Show/hide clear button based on input
+    searchInput.addEventListener('input', function() {
+      clearButton.style.display = this.value.length > 0 ? 'flex' : 'none';
     });
+    
+    // Clear input when X is clicked
+    clearButton.addEventListener('click', function() {
+      searchInput.value = '';
+      clearButton.style.display = 'none';
+      searchInput.focus();
+    });
+    
+    // Handle when popup is opened (in case there's existing text)
+    const mobileSearchIcon = document.querySelector('.mobile-search-icon');
+    if (mobileSearchIcon) {
+      mobileSearchIcon.addEventListener('click', function() {
+        setTimeout(() => {
+          clearButton.style.display = searchInput.value.length > 0 ? 'flex' : 'none';
+        }, 100);
+      });
+    }
+  }
 });
 </script>
 
 
 
 <script>
-  // Mobile search toggle
-  document.addEventListener('DOMContentLoaded', function() {
-    const mobileSearchIcon = document.querySelector('.mobile-search-icon');
-    const mobileSearchPopup = document.querySelector('.mobile-search-popup');
-    const closeMobileSearch = document.querySelector('.close-mobile-search');
-
-    if (mobileSearchIcon && mobileSearchPopup) {
-      mobileSearchIcon.addEventListener('click', function() {
-        mobileSearchPopup.classList.add('active');
-        mobileSearchPopup.querySelector('input').focus();
-      });
-
-      closeMobileSearch.addEventListener('click', function() {
-        mobileSearchPopup.classList.remove('active');
-      });
-    }
-  });
+    document.addEventListener('DOMContentLoaded', function() {
+        // Toggle search popup
+        const mobileSearchIcon = document.querySelector('.rallynex-mobile-search-icon');
+        const mobileSearchPopup = document.querySelector('.rallynex-mobile-search-popup');
+        const closeMobileSearch = document.querySelector('.rallynex-close-mobile-search');
+        const searchInput = document.getElementById('mobile-search-input');
+        const clearButton = document.querySelector('.rallynex-clear-search');
+        
+        if (mobileSearchIcon && mobileSearchPopup) {
+            mobileSearchIcon.addEventListener('click', function() {
+                mobileSearchPopup.classList.add('active');
+                if (searchInput) searchInput.focus();
+            });
+            
+            closeMobileSearch.addEventListener('click', function() {
+                mobileSearchPopup.classList.remove('active');
+            });
+        }
+        
+        // Clear search functionality
+        if (searchInput && clearButton) {
+            searchInput.addEventListener('input', function() {
+                clearButton.style.display = this.value.length > 0 ? 'flex' : 'none';
+            });
+            
+            clearButton.addEventListener('click', function() {
+                searchInput.value = '';
+                clearButton.style.display = 'none';
+                searchInput.focus();
+            });
+        }
+    });
 </script>
-
-
-
-
-
 
 <script>
     function handleCreateClick(e) {
@@ -7505,14 +7171,22 @@ function showSharePopup(campaignId) {
 </script>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const resetButton = document.getElementById('reset-field');
         const queryField = document.getElementById('query-field');
-
-        resetButton.addEventListener('click', function() {
-            queryField.value = ''; // Clear the input field
-            queryField.focus(); // Optionally, refocus the input field
+        const resetBtn = document.getElementById('reset-field');
+        
+        // Show/hide reset button based on input
+        queryField.addEventListener('input', function() {
+            resetBtn.style.display = this.value ? 'block' : 'none';
+        });
+        
+        // Reset field
+        resetBtn.addEventListener('click', function() {
+            queryField.value = '';
+            this.style.display = 'none';
+            queryField.focus();
         });
     });
 </script>
@@ -7698,76 +7372,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-
-<script type="text/javascript">
-  document.addEventListener('DOMContentLoaded', function() {
-  const searchInput = document.getElementById('mobile-search-input');
-  const clearButton = document.querySelector('.clear-search');
-  
-  if (searchInput && clearButton) {
-    // Show/hide clear button based on input
-    searchInput.addEventListener('input', function() {
-      clearButton.style.display = this.value.length > 0 ? 'flex' : 'none';
-    });
-    
-    // Clear input when X is clicked
-    clearButton.addEventListener('click', function() {
-      searchInput.value = '';
-      clearButton.style.display = 'none';
-      searchInput.focus();
-    });
-    
-    // Handle when popup is opened (in case there's existing text)
-    const mobileSearchIcon = document.querySelector('.mobile-search-icon');
-    if (mobileSearchIcon) {
-      mobileSearchIcon.addEventListener('click', function() {
-        setTimeout(() => {
-          clearButton.style.display = searchInput.value.length > 0 ? 'flex' : 'none';
-        }, 100);
-      });
-    }
-  }
-});
-</script>
-
-
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Toggle search popup
-        const mobileSearchIcon = document.querySelector('.rallynex-mobile-search-icon');
-        const mobileSearchPopup = document.querySelector('.rallynex-mobile-search-popup');
-        const closeMobileSearch = document.querySelector('.rallynex-close-mobile-search');
-        const searchInput = document.getElementById('mobile-search-input');
-        const clearButton = document.querySelector('.rallynex-clear-search');
-        
-        if (mobileSearchIcon && mobileSearchPopup) {
-            mobileSearchIcon.addEventListener('click', function() {
-                mobileSearchPopup.classList.add('active');
-                if (searchInput) searchInput.focus();
-            });
-            
-            closeMobileSearch.addEventListener('click', function() {
-                mobileSearchPopup.classList.remove('active');
-            });
-        }
-        
-        // Clear search functionality
-        if (searchInput && clearButton) {
-            searchInput.addEventListener('input', function() {
-                clearButton.style.display = this.value.length > 0 ? 'flex' : 'none';
-            });
-            
-            clearButton.addEventListener('click', function() {
-                searchInput.value = '';
-                clearButton.style.display = 'none';
-                searchInput.focus();
-            });
-        }
-    });
-</script>
-
-
 <script>
 function toggleFullContent(button) {
     const fullContent = button.closest('.see-more-container').nextElementSibling;
@@ -7781,6 +7385,90 @@ function toggleFullContent(button) {
 }
 </script>
 
+
+
+<script>
+// Store follow state in localStorage
+function updateFollowState(userId, isFollowing) {
+    const storageKey = `followState_${userId}`;
+    localStorage.setItem(storageKey, isFollowing ? 'true' : 'false');
+}
+
+// Retrieve follow state from localStorage
+function getFollowState(userId) {
+    const storageKey = `followState_${userId}`;
+    return localStorage.getItem(storageKey) === 'true';
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize text elements with correct state
+    document.querySelectorAll('.follow-text').forEach(element => {
+        const userId = element.getAttribute('data-user-id');
+        const storedState = getFollowState(userId);
+        const currentState = element.getAttribute('data-is-following') === 'true';
+        
+        // Use stored state if available, otherwise use server state
+        const finalState = storedState !== null ? storedState : currentState;
+        
+        if (finalState) {
+            element.classList.add('following');
+            element.textContent = '• Following';
+            element.setAttribute('data-is-following', 'true');
+        } else {
+            element.classList.remove('following');
+            element.textContent = '• Follow';
+            element.setAttribute('data-is-following', 'false');
+        }
+    });
+
+    // Handle follow text clicks
+    document.querySelectorAll('.follow-text').forEach(element => {
+        element.addEventListener('click', async function() {
+            const userId = this.getAttribute('data-user-id');
+            const isFollowing = this.getAttribute('data-is-following') === 'true';
+            const action = isFollowing ? 'unfollow' : 'follow';
+            
+            try {
+                const response = await fetch('/toggle_follow/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({
+                        'user_id': userId,
+                        'action': action
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    // Update text state
+                    const newState = data.action === 'followed';
+                    this.classList.toggle('following', newState);
+                    this.textContent = newState ? '• Following' : '• Follow';
+                    this.setAttribute('data-is-following', newState.toString());
+                    
+                    // Update followers count
+                    const followersCount = document.getElementById(`followers-count-${userId}`);
+                    if (followersCount) {
+                        followersCount.textContent = `(${data.followers_count} followers)`;
+                    }
+                    
+                    // Persist state in localStorage
+                    updateFollowState(userId, newState);
+                } else {
+                    console.error('Error:', data.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            }
+        });
+    });
+});
+</script>
 
 
 
@@ -7807,407 +7495,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 
-<script type="text/javascript">
-    // Function to show comment popup
-function showCommentPopup(campaignId) {
-    const popup = document.getElementById('commentPopup');
-    const campaignIdInput = document.getElementById('campaignIdInput');
-    
-    // Set the campaign ID in the form
-    campaignIdInput.value = campaignId;
-    
-    // Show the popup
-    popup.style.display = 'flex';
-    
-    // Load comments for this campaign
-    loadComments(campaignId);
-}
 
-// Function to load comments
-function loadComments(campaignId) {
-    const commentList = document.getElementById('commentList');
-    commentList.innerHTML = '<div class="loading-comments">Loading comments...</div>';
-    
-    fetch(`/get_comments/?campaign_id=${campaignId}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.comments && data.comments.length > 0) {
-                let commentsHtml = '';
-                
-                data.comments.forEach(comment => {
-                    commentsHtml += createCommentHtml(comment);
-                });
-                
-                commentList.innerHTML = commentsHtml;
-                
-                // Add event listeners for like/dislike buttons
-                document.querySelectorAll('.like-comment-btn').forEach(btn => {
-                    btn.addEventListener('click', handleLikeDislike);
-                });
-                
-                document.querySelectorAll('.dislike-comment-btn').forEach(btn => {
-                    btn.addEventListener('click', handleLikeDislike);
-                });
-                
-                // Add event listeners for reply buttons
-                document.querySelectorAll('.reply-comment-btn').forEach(btn => {
-                    btn.addEventListener('click', showReplyForm);
-                });
-                
-                // Add event listeners for view replies buttons
-                document.querySelectorAll('.view-replies-btn').forEach(btn => {
-                    btn.addEventListener('click', toggleReplies);
-                });
-            } else {
-                commentList.innerHTML = `
-                    <div class="no-comments">
-                        <i class="far fa-comment-dots"></i>
-                        <p>No comments yet. Be the first to comment!</p>
-                    </div>
-                `;
-            }
-        })
-        .catch(error => {
-            console.error('Error loading comments:', error);
-            commentList.innerHTML = `
-                <div class="error-loading-comments">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <p>Error loading comments. Please try again.</p>
-                    <button onclick="loadComments(${campaignId})" class="retry-btn">
-                        <i class="fas fa-sync-alt"></i> Retry
-                    </button>
-                </div>
-            `;
-        });
-}
-
-// Function to create HTML for a comment
-function createCommentHtml(comment) {
-    const timestamp = new Date(comment.timestamp);
-    const formattedDate = timestamp.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit'
-    });
-    
-    // Determine like/dislike button states
-    const likeBtnClass = comment.user_like_status === 'liked' ? 'active' : '';
-    const dislikeBtnClass = comment.user_like_status === 'disliked' ? 'active' : '';
-    
-    return `
-        <div class="comment-item" data-comment-id="${comment.id}">
-            <div class="comment-header">
-                <a href="/user-profile/@${comment.user_username}/" class="comment-user-link">
-                    <img src="${comment.user_profile_image || '/static/images/default_profile.png'}" 
-                         alt="${comment.user_username}'s profile picture" 
-                         class="comment-user-img"
-                         onerror="this.onerror=null;this.src='/static/images/default_profile.png'">
-                </a>
-                <div class="comment-user-info">
-                    <a href="/user-profile/@${comment.user_username}/" class="comment-user">${comment.user_username}</a>
-                    <span class="comment-timestamp" title="${timestamp.toISOString()}">${formattedDate}</span>
-                </div>
-            </div>
-            <div class="comment-text">${comment.text}</div>
-            
-            <div class="comment-actions">
-                <button class="like-comment-btn ${likeBtnClass}" data-comment-id="${comment.id}">
-                    <i class="fas fa-thumbs-up"></i> <span class="like-count">${comment.like_count}</span>
-                </button>
-                <button class="dislike-comment-btn ${dislikeBtnClass}" data-comment-id="${comment.id}">
-                    <i class="fas fa-thumbs-down"></i> <span class="dislike-count">${comment.dislike_count}</span>
-                </button>
-                <button class="reply-comment-btn" data-comment-id="${comment.id}">
-                    <i class="fas fa-reply"></i> Reply
-                </button>
-                
-                ${comment.reply_count > 0 ? `
-                    <button class="view-replies-btn" data-comment-id="${comment.id}">
-                        <i class="fas fa-comments"></i> ${comment.reply_count} ${comment.reply_count === 1 ? 'reply' : 'replies'}
-                    </button>
-                ` : ''}
-            </div>
-            
-            <div class="reply-form-container" id="reply-form-${comment.id}" style="display: none;">
-                <div class="current-user-preview">
-                    <img src="${document.querySelector('.current-user-img').src}" alt="Your profile picture" class="current-user-img">
-                    <span>Replying to ${comment.user_username}</span>
-                </div>
-<form class="reply-form" data-comment-id="${comment.id}">
-    <input type="hidden" name="campaign_id" value="${document.getElementById('campaignIdInput').value}">
-    <input type="hidden" name="parent_comment_id" value="${comment.id}">
-    <input type="hidden" name="csrfmiddlewaretoken" value="${document.querySelector('[name=csrfmiddlewaretoken]').value}">
-    <textarea name="text" class="reply-textarea" placeholder="Write your reply here..."></textarea>
-    <button type="submit" class="submit-reply-btn">Post Reply</button>
-    <button type="button" class="cancel-reply-btn">Cancel</button>
-</form>
-
-            </div>
-            
-            <div class="replies-container" id="replies-${comment.id}" style="display: none;"></div>
-        </div>
-    `;
-}
-function handleLikeDislike(e) {
-    e.preventDefault();
-    const btn = e.currentTarget;
-    const commentId = btn.dataset.commentId;
-    const isLikeBtn = btn.classList.contains('like-comment-btn');
-    const action = btn.classList.contains('active') ? 'remove' : (isLikeBtn ? 'like' : 'dislike');
-    
-    const formData = new FormData();
-    formData.append('comment_id', commentId);
-    formData.append('action', action);
-    formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
-    
-    fetch('/like_dislike_comment/', {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest',  // Add this header
-        },
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.success) {
-            const commentItem = btn.closest('.comment-item');
-            const likeBtn = commentItem.querySelector('.like-comment-btn');
-            const dislikeBtn = commentItem.querySelector('.dislike-comment-btn');
-            const likeCount = commentItem.querySelector('.like-count');
-            const dislikeCount = commentItem.querySelector('.dislike-count');
-            
-            // Update counts from server response
-            if (data.like_count !== undefined) {
-                likeCount.textContent = data.like_count;
-            }
-            if (data.dislike_count !== undefined) {
-                dislikeCount.textContent = data.dislike_count;
-            }
-            
-            // Update button states
-            if (action === 'remove') {
-                if (btn === likeBtn) {
-                    likeBtn.classList.remove('active');
-                } else {
-                    dislikeBtn.classList.remove('active');
-                }
-            } else if (action === 'like') {
-                likeBtn.classList.add('active');
-                dislikeBtn.classList.remove('active');
-            } else { // dislike
-                dislikeBtn.classList.add('active');
-                likeBtn.classList.remove('active');
-            }
-        } else {
-            console.error('Error:', data.error);
-            alert('Error processing your action. Please try again.');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Network error. Please check your connection and try again.');
-    });
-}
-// Function to show reply form
-function showReplyForm(e) {
-    const commentId = e.currentTarget.dataset.commentId;
-    const replyForm = document.getElementById(`reply-form-${commentId}`);
-    
-    if (!replyForm) return; // Safety check
-
-    // Hide all other reply forms first
-    document.querySelectorAll('.reply-form-container').forEach(form => {
-        if (form.id !== `reply-form-${commentId}`) {
-            form.style.display = 'none';
-        }
-    });
-
-    // Toggle this reply form
-    replyForm.style.display = replyForm.style.display === 'none' || replyForm.style.display === '' ? 'block' : 'none';
-
-    // Add event listener for the form submission
-    const form = replyForm.querySelector('.reply-form');
-    if (form) {
-        form.onsubmit = function(e) {
-            e.preventDefault();
-            submitReplyForm(this);
-        };
-    }
-
-    // Add event listener for cancel button
-    const cancelBtn = replyForm.querySelector('.cancel-reply-btn');
-    if (cancelBtn) {
-        cancelBtn.onclick = function() {
-            replyForm.style.display = 'none';
-        };
-    }
-}
-
-
-// Function to toggle replies visibility
-function toggleReplies(e) {
-    const commentId = e.currentTarget.dataset.commentId;
-    const repliesContainer = document.getElementById(`replies-${commentId}`);
-    
-    if (repliesContainer.style.display === 'none') {
-        // Load replies if not already loaded
-        if (repliesContainer.innerHTML === '') {
-            loadReplies(commentId);
-        }
-        repliesContainer.style.display = 'block';
-        e.currentTarget.innerHTML = `<i class="fas fa-comments"></i> Hide replies`;
-    } else {
-        repliesContainer.style.display = 'none';
-        const replyCount = parseInt(e.currentTarget.textContent.match(/\d+/)[0]);
-        e.currentTarget.innerHTML = `<i class="fas fa-comments"></i> ${replyCount} ${replyCount === 1 ? 'reply' : 'replies'}`;
-    }
-}
-
-// Function to load replies for a comment
-function loadReplies(commentId) {
-    const repliesContainer = document.getElementById(`replies-${commentId}`);
-    repliesContainer.innerHTML = '<div class="loading-replies">Loading replies...</div>';
-    
-    fetch(`/get_replies/${commentId}/`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            if (data.replies && data.replies.length > 0) {
-                let repliesHtml = '';
-                
-                data.replies.forEach(reply => {
-                    repliesHtml += createCommentHtml(reply);
-                });
-                
-                repliesContainer.innerHTML = repliesHtml;
-                
-                // Add event listeners for like/dislike buttons in replies
-                repliesContainer.querySelectorAll('.like-comment-btn').forEach(btn => {
-                    btn.addEventListener('click', handleLikeDislike);
-                });
-                
-                repliesContainer.querySelectorAll('.dislike-comment-btn').forEach(btn => {
-                    btn.addEventListener('click', handleLikeDislike);
-                });
-            } else {
-                repliesContainer.innerHTML = `
-                    <div class="no-replies">
-                        <p>No replies yet.</p>
-                    </div>
-                `;
-            }
-        })
-        .catch(error => {
-            console.error('Error loading replies:', error);
-            repliesContainer.innerHTML = `
-                <div class="error-loading-replies">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <p>Error loading replies. Please try again.</p>
-                    <button onclick="loadReplies(${commentId})" class="retry-btn">
-                        <i class="fas fa-sync-alt"></i> Retry
-                    </button>
-                </div>
-            `;
-        });
-}
-
-// Handle main comment form submission
-document.getElementById('commentForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    const formData = new FormData(this);
-    const campaignId = formData.get('campaign_id');
-    
-    fetch('/post_comment/', {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
-        },
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Clear the textarea
-            this.querySelector('textarea').value = '';
-            // Reload comments
-            loadComments(campaignId);
-        } else {
-            alert('Error posting comment: ' + (data.error || 'Unknown error'));
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error posting comment. Please try again.');
-    });
-});
-
-// Close popup when clicking outside
-document.getElementById('commentPopup').addEventListener('click', function(e) {
-    if (e.target === this) {
-        this.style.display = 'none';
-    }
-});
-
-// Close popup with close button
-document.querySelector('.close-comment-popup').addEventListener('click', function() {
-    document.getElementById('commentPopup').style.display = 'none';
-});
-</script>
-
-<script>
-function submitReplyForm(form) {
-    const formData = new FormData(form);
-    const commentId = form.dataset.commentId;
-    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
-
-    fetch('/post_comment/', {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'X-CSRFToken': csrfToken,
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (data.success) {
-            // Refresh the comments to include the new reply
-            const campaignId = document.getElementById('campaignIdInput').value;
-            loadComments(campaignId);
-        } else {
-            alert('Failed to post reply. Please try again.');
-            console.error('Reply post error:', data.error || data);
-        }
-    })
-    .catch(error => {
-        console.error('Error submitting reply:', error);
-        alert('Network error. Please check your connection and try again.');
-    });
-}
-
-</script>
 
 <script type="text/javascript">
     
@@ -8365,87 +7653,6 @@ window.onclick = function(event) {
     }
 }
 </script>
-
-
-
-<script>
-    function toggleMenu(event) {
-        if (event) {
-            event.preventDefault();
-            event.stopPropagation(); // Important to prevent immediate close
-        }
-        
-        const menu = document.getElementById('navbarDropdownMenu');
-        const overlay = document.getElementById('menuOverlay');
-        
-        menu.classList.toggle('active');
-        overlay.classList.toggle('active');
-    }
-    
-    // Close menu when clicking outside
-    document.addEventListener('click', function(event) {
-        const menu = document.getElementById('navbarDropdownMenu');
-        const overlay = document.getElementById('menuOverlay');
-        const toggleBtn = document.querySelector('[onclick*="toggleMenu"]'); // Your menu button
-        
-        // Check if click is outside of menu AND outside of toggle button
-        if (!menu.contains(event.target) && 
-            (!toggleBtn || !toggleBtn.contains(event.target))) {
-            menu.classList.remove('active');
-            overlay.classList.remove('active');
-        }
-    });
-</script>
-<script>
-  function togglaMenu(clickedElement) {
-    // Close other open menus
-    document.querySelectorAll('.menu-dropdown.active').forEach(menu => {
-      if (!clickedElement.contains(menu)) {
-        menu.classList.remove('active');
-      }
-    });
-
-    // Toggle the clicked one
-    const dropdown = clickedElement.querySelector('.menu-dropdown');
-    dropdown.classList.toggle('active');
-  }
-
-  // Close the menu if clicked outside
-  document.addEventListener('click', function(event) {
-    const isClickInside = event.target.closest('.campaign-menu');
-    if (!isClickInside) {
-      document.querySelectorAll('.menu-dropdown.active').forEach(menu => {
-        menu.classList.remove('active');
-      });
-    }
-  });
-</script>
-
-
-
-<script>
-function refreshTrending() {
-  // Add AJAX call to refresh trending content
-  console.log("Refreshing trending content...");
-  // In a real implementation, you would fetch new trending data here
-}
-
-// Add this to your existing script section
-document.addEventListener('DOMContentLoaded', function() {
-  // Highlight the first three items more prominently
-  const trendingItems = document.querySelectorAll('.trending-item');
-  trendingItems.forEach((item, index) => {
-    if (index < 3) {
-      item.style.borderLeft = `3px solid ${
-        index === 0 ? '#ff4d4f' : 
-        index === 1 ? '#fa8c16' : '#fadb14'
-      }`;
-    }
-  });
-});
-</script>
-
-
 
 
 
@@ -8668,37 +7875,49 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 </script>
 
-
-<script>
-let currentIndex = 0; // Track the current slide index
-const slides = document.querySelector('.slides');
-const totalSlides = slides.children.length; // Get total number of slides
-const slideWidth = 250; // Width of each slide (same as .carousel width)
-let interval;
-
-function startCarousel() {
-    interval = setInterval(() => {
-        currentIndex = (currentIndex + 1) % totalSlides; // Move to the next slide
-        updateSlidePosition(); // Update the position of the slides
-    }, 3000); // Change slide every 3 seconds
-}
-
-function pauseCarousel() {
-    clearInterval(interval); // Stop the automatic sliding
-}
-
-function resumeCarousel() {
-    startCarousel(); // Resume the automatic sliding
-}
-
-function updateSlidePosition() {
-    slides.style.transform = `translateX(-${currentIndex * slideWidth}px)`; // Slide to the current index
-    slides.style.transition = 'transform 0.5s ease-in-out'; // Add transition for smooth effect
-}
-
-startCarousel(); // Start the carousel on page load
-</script>
-
+  <script>
+        let currentSlide = 0;
+        const slides = document.querySelector('.slides');
+        const slideCount = document.querySelectorAll('.slide').length;
+        const indicators = document.querySelectorAll('.indicator');
+        
+        function pauseCarousel() {
+            clearInterval(carouselInterval);
+        }
+        
+        function resumeCarousel() {
+            carouselInterval = setInterval(nextSlide, 4000);
+        }
+        
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % slideCount;
+            updateCarousel();
+        }
+        
+        function moveSlide(direction) {
+            currentSlide = (currentSlide + direction + slideCount) % slideCount;
+            updateCarousel();
+        }
+        
+        function updateCarousel() {
+            slides.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            // Update indicators
+            indicators.forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === currentSlide);
+            });
+        }
+        
+        let carouselInterval = setInterval(nextSlide, 4000);
+        
+        // Click on indicator to navigate to specific slide
+        indicators.forEach((indicator, index) => {
+            indicator.addEventListener('click', () => {
+                currentSlide = index;
+                updateCarousel();
+            });
+        });
+    </script>
 
 <script type="text/javascript">
 
@@ -8995,28 +8214,10 @@ function createHearts(element) {
 }
 </script>
 
-<script>
-        // Example of showing skeleton loading when data is being fetched
-        document.addEventListener('DOMContentLoaded', function() {
-            // Show skeletons while content is loading
-            document.getElementById('header-skeleton').style.display = 'block';
-            document.getElementById('main-skeleton').style.display = 'block';
-            document.getElementById('left-sidebar-skeleton').style.display = 'block';
-            document.getElementById('content-skeleton').style.display = 'block';
-            document.getElementById('right-sidebar-skeleton').style.display = 'block';
 
-            // Simulate loading delay (You can replace this with real AJAX loading logic)
-            setTimeout(function() {
-                document.getElementById('header-skeleton').style.display = 'none';
-                document.getElementById('main-skeleton').style.display = 'none';
-                document.getElementById('left-sidebar-skeleton').style.display = 'none';
-                document.getElementById('content-skeleton').style.display = 'none';
-                document.getElementById('right-sidebar-skeleton').style.display = 'none';
-            }, 3000); // Hide skeleton after 3 seconds (replace with actual loading logic)
-        });
-</script>
-
-
+ <script src="{% static 'main/js/comments.js' %}"></script>
 
 </body>
 </html>
+
+

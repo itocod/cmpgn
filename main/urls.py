@@ -12,7 +12,8 @@ from .views import get_comments, post_comment
 urlpatterns = [
     path('get_comments/', get_comments, name='get_comments'),
     path('post_comment/', post_comment, name='post_comment'),
-  
+  path('product/<int:product_id>/toggle-status/', views.toggle_product_status, name='toggle_product_status'),
+path('product/<int:product_id>/mark-out-of-stock/', views.mark_out_of_stock, name='mark_out_of_stock'),
    path('campaign/<int:campaign_id>/engagement/', views.campaign_engagement_data, name='campaign_engagement'),
     path('landing/', views.explore_campaigns, name='explore_campaigns'),
     path('verify/', views.verify_profile, name='verify_profile'),
@@ -137,6 +138,12 @@ path('get_replies/<int:comment_id>/', views.get_replies, name='get_replies'),
     path('campaign/<int:campaign_id>/pledgers/', views.campaign_pledgers_view, name='campaign_pledgers'),
 # urls.py
 path('pledge/<int:pledge_id>/toggle-fulfillment/', views.toggle_pledge_fulfillment, name='toggle_pledge_fulfillment'),
+
+    path('cart/', views.view_cart, name='view_cart'),
+    path('cart/add/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
+    path('cart/update/<int:item_id>/', views.update_cart_item, name='update_cart_item'),
+    path('cart/remove/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
+      path('pledge-payment/<int:pledge_id>/', views.pledge_payment_view, name='pledge_payment'),
 ]
 
 

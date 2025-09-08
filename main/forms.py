@@ -44,21 +44,24 @@ class ReportForm(forms.ModelForm):
         return description
 
 
-# CampaignProductForm
+
+
+
+from django import forms
+from .models import CampaignProduct
+
+
+from django import forms
+from .models import CampaignProduct
+
 class CampaignProductForm(forms.ModelForm):
     class Meta:
         model = CampaignProduct
-        fields = ['name', 'description', 'url', 'image', 'category', 'price', 'stock_quantity', 'is_active']
+        fields = ['name', 'description', 'image', 'price', 'stock_quantity', 'stock_status', 'is_active']
 
-    def clean_name(self):
-        name = self.cleaned_data.get('name')
-        validate_no_long_words(name)  # Validate the name field
-        return name
 
-    def clean_description(self):
-        description = self.cleaned_data.get('description')
-        validate_no_long_words(description)  # Validate the description field
-        return description
+
+
 
 
 # ActivityCommentForm
@@ -265,8 +268,6 @@ def validate_no_long_words(value):
         if len(word) > 20:  # Check if any word exceeds 20 characters
             raise ValidationError(f"Word '{word}' exceeds the allowed length of 20 characters.")
 
-
-
 from django.core.exceptions import ValidationError
 from PIL import Image
 import os
@@ -274,7 +275,11 @@ import os
 class CampaignForm(forms.ModelForm):
     class Meta:
         model = Campaign
-        fields = ['title', 'category', 'poster', 'audio', 'visibility', 'content','duration', 'duration_unit']
+        fields = [
+            'title', 'category', 'poster', 'audio',
+            'visibility', 'content', 'duration',
+            'duration_unit', 'funding_goal'
+        ]
         labels = {
             'title': 'Title:',
             'content': 'Content:',
@@ -284,10 +289,8 @@ class CampaignForm(forms.ModelForm):
             'category': 'Category:',
             'duration': 'Duration:',
             'duration_unit': 'Duration Unit:',
-            
-           
+            'funding_goal': 'Funding Goal (optional):',
         }
-
 
     def clean_poster(self):
         poster = self.cleaned_data.get('poster')
@@ -305,7 +308,6 @@ class CampaignForm(forms.ModelForm):
 
         return poster
 
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['content'].widget.attrs['readonly'] = False  # Allow editing
@@ -319,11 +321,6 @@ class CampaignForm(forms.ModelForm):
         content = self.cleaned_data.get('content')
         validate_no_long_words(content)  # Validate the content field
         return content
-
-
-
-
-
 
 
 

@@ -45,7 +45,13 @@ INSTALLED_APPS = [
   'django.contrib.humanize',
    'django_summernote',  # Remove this if you don’t need it
     'django_quill',
-    
+      'django_crontab',
+      'background_task',
+]
+
+
+CRONJOBS = [
+    ('0 */24 * * *', 'campaigns.cron.send_pledge_reminders'),
 ]
 
 MIDDLEWARE = [

@@ -5488,7 +5488,7 @@ body.dark-mode .comment-count {
         display: inline-block;
         border-radius: 3px;
         backdrop-filter: brightness(1.2);
-    "><img src="{% static 'main/files/lg.png' %}" alt="Rallynex Logo" style="height: 50px; width: 50px;">RALLYNEX</div>
+    "><img src="{% static 'main/files/z.png' %}" alt="Rallynex Logo" style="height: 50px; width: 50px;">RALLYNEX</div>
 
     <!-- Mobile Search Icon on the right -->
     <div class="rallynex-mobile-search-icon">
@@ -5667,7 +5667,7 @@ body.dark-mode .comment-count {
     backdrop-filter: brightness(1.2);
     margin: 0;
     z-index: 1000;
-"><img src="{% static 'main/files/lg.png' %}" alt="Rallynex Logo" style="height: 50px; width: 50px;">RALLYNEX</h3>
+"><img src="{% static 'main/files/z.png' %}" alt="Rallynex Logo" style="height: 50px; width: 50px;">RALLYNEX</h3>
 
     <!-- Updated the <nav> tag to <nav class="campaign-nav"> -->
 <nav class="campaign-nav">
@@ -5728,7 +5728,11 @@ body.dark-mode .comment-count {
                 <i class="fas fa-user-circle"></i> My Profile
             </a>
         </li>
+      
 
+
+    
+     
         <!-- Logout link -->
         <li>
             <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
@@ -5880,68 +5884,77 @@ body.dark-mode .comment-count {
 </div>
             </div>
 
+
 <div class="campaign-menu" onclick="togglaMenu(this)" style="position: relative;">
   <i class="fas fa-ellipsis-v"></i>
   <div class="menu-dropdown">
+
+    <!-- ===== Public Items ===== -->
     <a href="{% url 'view_campaign' campaign_id=campaign.pk %}">
       <i class="fas fa-eye"></i> View Details
     </a>
+
     <a href="{% url 'campaign_joiners' campaign.id %}" class="comment-count" aria-label="View joiners of this campaign">
       <i class="fas fa-user-plus"></i> Joiners ({{ campaign.user_profiles.count|format_count }})
     </a>
-  
-    {% if user == campaign.user.user %}
-      <a href="{% url 'recreate_campaign' campaign.id %}">
-        <i class="fas fa-edit"></i> Edit
-      </a>
-    {% endif %}
 
-{% if user == campaign.user.user %}
-    <a href="{% url 'campaign_pledgers' campaign.id %}">
-        <i class="fas fa-donate"></i> Pledgers
+    <a href="{% url 'top_participants' campaign_id=campaign.pk %}" class="top-supporters-link">
+      <i class="fas fa-trophy"></i> Top Participants
     </a>
-{% endif %}
 
-     <a href="{% url 'top_participants' campaign_id=campaign.pk %}" class="top-supporters-link">
-    <i class="fas fa-trophy"></i> Top Participants
-</a>
-          <a href="{% url 'update_visibilit' campaign.pk %}" style="
    
-">
-    <i class="fas fa-lock" ></i> Visibility
-</a>
 
- <a href="{% url 'campaign_engagement' campaign.id %}">
-        <i class="fas fa-chart-bar"></i> Engagement
-    </a>
-
-
-  <a href="{% url 'report_campaign' campaign.id %}">
+    <a href="{% url 'report_campaign' campaign.id %}">
       <i class="fas fa-flag"></i> Report
     </a>
 
-     <a href="{% url 'campaign-delete' campaign.pk %}" class="delete-link">
-        <i class="fas fa-trash"></i> Delete
-    </a>
-    
     <div class="not-interested-container">
-        <form action="{% url 'mark_not_interested' campaign_id=campaign.pk %}" method="post" class="not-interested-form">
-            {% csrf_token %}
-            <div class="form-row">
-                <label for="not-interested" class="form-label">
-                    <i class="fas fa-times-circle"></i> Not Interested
-                </label>
-                <div class="form-controls">
-                    <input type="checkbox" id="not-interested" name="not_interested" class="form-checkbox">
-                </div>
-            </div>
-            <button type="submit" class="form-submit-button">
-                Submit
-            </button>
-        </form>
+      <form action="{% url 'mark_not_interested' campaign_id=campaign.pk %}" method="post" class="not-interested-form">
+        {% csrf_token %}
+        <div class="form-row">
+          <label for="not-interested" class="form-label">
+            <i class="fas fa-times-circle"></i> Not Interested
+          </label>
+          <div class="form-controls">
+            <input type="checkbox" id="not-interested" name="not_interested" class="form-checkbox">
+          </div>
+        </div>
+        <button type="submit" class="form-submit-button">Submit</button>
+      </form>
     </div>
+
+    <!-- ===== Owner-Only Items ===== -->
+    {% if user == campaign.user.user %}
+      <a href="{% url 'recreate_campaign' campaign.id %}">
+        <i class="fas fa-edit"></i> Edit / Recreate
+      </a>
+
+      <a href="{% url 'campaign_pledgers' campaign.id %}">
+        <i class="fas fa-donate"></i> Pledgers
+      </a>
+
+      <a href="{% url 'update_visibility' campaign_id=campaign.id %}" class="update-visibility-link">
+        <i class="fas fa-mouse-pointer"></i> CTA Buttons
+      </a>
+       <a href="{% url 'campaign_engagement' campaign.id %}">
+      <i class="fas fa-chart-bar"></i> Engagement
+    </a>
+
+      <a href="{% url 'campaign-delete' campaign.pk %}" class="delete-link">
+        <i class="fas fa-trash"></i> Delete
+      </a>
+    {% endif %}
+
+    <!-- Optional: Visibility toggle could also be owner-only -->
+    {% if user == campaign.user.user %}
+      <a href="{% url 'update_visibilit' campaign.pk %}">
+        <i class="fas fa-lock"></i> Visibility
+      </a>
+    {% endif %}
+
   </div>
 </div>
+
         </div>
 
         <!-- Campaign Image - Dominant Space -->
@@ -5978,6 +5991,7 @@ body.dark-mode .comment-count {
                 <span class="tooltip">Donate</span>
             </a>
         {% endif %}
+   
 
         <!-- Pledge icon - only show if pledge is enabled -->
         {% if campaign.supportcampaign_set.first.pledge_visible %}
@@ -5996,28 +6010,27 @@ body.dark-mode .comment-count {
         {% endif %}
 
     </div>
-
     {% if campaign.supportcampaign_set.first.donate_monetary_visible %}
-        <!-- Progress bar section -->
-        <div class="progress-info">
-            <span>Raised: ${{ campaign.total_donations }}</span>
-            <span>Goal: ${{ campaign.funding_goal }}</span>
-        </div>
 
-        <div class="progress-container">
-            <div class="progress-fill" style="width: {{ campaign.donation_percentage }}%;"></div>
-        </div>
+    <div class="progress-info">
+        <span>Raised: ${{ campaign.total_donations }}</span>
+        <span>Goal: ${{ campaign.funding_goal }}</span>
+    </div>
 
-        <div class="campaign-stats">
-            <span>{{ campaign.donation_percentage }}% funded</span>
-            <span>${{ campaign.donation_remaining }} to go</span>
-        </div>
+    <div class="progress-container">
+        <div class="progress-fill" style="width: {{ campaign.donation_percentage }}%;"></div>
+    </div>
 
-        <!-- Mobile-specific simplified display -->
-        <div class="mobile-goal-display">
-            {{ campaign.donation_percentage }}% funded • ${{ campaign.donation_remaining }} to go
-        </div>
-    {% endif %}
+    <div class="campaign-stats">
+        <span>{{ campaign.donation_percentage }}% funded</span>
+        <span>${{ campaign.donation_remaining }} to go</span>
+    </div>
+
+    <div class="mobile-goal-display">
+        {{ campaign.donation_percentage }}% funded • ${{ campaign.donation_remaining }} to go
+    </div>
+
+ {% endif %}
 
     <div class="campaign-time-left">
         <i class="fas fa-clock"></i>
@@ -6306,62 +6319,74 @@ body.dark-mode .comment-count {
                 </div>
             </div>
 <div class="campaign-menu" onclick="togglaMenu(this)" style="position: relative;">
-    <i class="fas fa-ellipsis-v"></i>
-    <div class="menu-dropdown">
-        <a href="{% url 'view_campaign' campaign_id=campaign.pk %}">
-            <i class="fas fa-eye"></i> View Details
-        </a>
-        <a href="{% url 'campaign_joiners' campaign.id %}" class="comment-count" aria-label="View joiners of this campaign">
-            <i class="fas fa-user-plus"></i> Joiners ({{ campaign.user_profiles.count|format_count }})
-        </a>
+  <i class="fas fa-ellipsis-v"></i>
+  <div class="menu-dropdown">
 
-        {% if user == campaign.user.user %}
-            <a href="{% url 'recreate_campaign' campaign.id %}">
-                <i class="fas fa-edit"></i> Edit
-            </a>
+    <!-- ===== Public Items ===== -->
+    <a href="{% url 'view_campaign' campaign_id=campaign.pk %}">
+      <i class="fas fa-eye"></i> View Details
+    </a>
 
-          
-        {% endif %}
+    <a href="{% url 'campaign_joiners' campaign.id %}" class="comment-count" aria-label="View joiners of this campaign">
+      <i class="fas fa-user-plus"></i> Joiners ({{ campaign.user_profiles.count|format_count }})
+    </a>
 
-  <a href="{% url 'campaign_pledgers' campaign.id %}">
-                <i class="fas fa-donate"></i> Pledgers
-            </a>
-                 <a href="{% url 'top_participants' campaign_id=campaign.pk %}" class="top-supporters-link">
-    <i class="fas fa-trophy"></i> Top Participants
-</a>
-        <a href="{% url 'update_visibilit' campaign.pk %}">
-            <i class="fas fa-lock"></i> Visibility
-        </a>
+    <a href="{% url 'top_participants' campaign_id=campaign.pk %}" class="top-supporters-link">
+      <i class="fas fa-trophy"></i> Top Participants
+    </a>
 
-        <a href="{% url 'campaign_engagement' campaign.id %}">
-            <i class="fas fa-chart-bar"></i> Engagement
-        </a>
+   
 
-        <a href="{% url 'report_campaign' campaign.id %}">
-            <i class="fas fa-flag"></i> Report
-        </a>
+    <a href="{% url 'report_campaign' campaign.id %}">
+      <i class="fas fa-flag"></i> Report
+    </a>
 
-        <a href="{% url 'campaign-delete' campaign.pk %}" class="delete-link">
-            <i class="fas fa-trash"></i> Delete
-        </a>
-
-        <div class="not-interested-container">
-            <form action="{% url 'mark_not_interested' campaign_id=campaign.pk %}" method="post" class="not-interested-form">
-                {% csrf_token %}
-                <div class="form-row">
-                    <label for="not-interested" class="form-label">
-                        <i class="fas fa-times-circle"></i> Not Interested
-                    </label>
-                    <div class="form-controls">
-                        <input type="checkbox" id="not-interested" name="not_interested" class="form-checkbox">
-                    </div>
-                </div>
-                <button type="submit" class="form-submit-button">
-                    Submit
-                </button>
-            </form>
+    <div class="not-interested-container">
+      <form action="{% url 'mark_not_interested' campaign_id=campaign.pk %}" method="post" class="not-interested-form">
+        {% csrf_token %}
+        <div class="form-row">
+          <label for="not-interested" class="form-label">
+            <i class="fas fa-times-circle"></i> Not Interested
+          </label>
+          <div class="form-controls">
+            <input type="checkbox" id="not-interested" name="not_interested" class="form-checkbox">
+          </div>
         </div>
+        <button type="submit" class="form-submit-button">Submit</button>
+      </form>
     </div>
+
+    <!-- ===== Owner-Only Items ===== -->
+    {% if user == campaign.user.user %}
+      <a href="{% url 'recreate_campaign' campaign.id %}">
+        <i class="fas fa-edit"></i> Edit / Recreate
+      </a>
+
+      <a href="{% url 'campaign_pledgers' campaign.id %}">
+        <i class="fas fa-donate"></i> Pledgers
+      </a>
+
+      <a href="{% url 'update_visibility' campaign_id=campaign.id %}" class="update-visibility-link">
+        <i class="fas fa-mouse-pointer"></i> CTA Buttons
+      </a>
+       <a href="{% url 'campaign_engagement' campaign.id %}">
+      <i class="fas fa-chart-bar"></i> Engagement
+    </a>
+
+      <a href="{% url 'campaign-delete' campaign.pk %}" class="delete-link">
+        <i class="fas fa-trash"></i> Delete
+      </a>
+    {% endif %}
+
+    <!-- Optional: Visibility toggle could also be owner-only -->
+    {% if user == campaign.user.user %}
+      <a href="{% url 'update_visibilit' campaign.pk %}">
+        <i class="fas fa-lock"></i> Visibility
+      </a>
+    {% endif %}
+
+  </div>
+</div>
 </div>
 
 
@@ -6387,7 +6412,7 @@ body.dark-mode .comment-count {
                 
                 <!-- Image Overlay Info -->
                 <div class="image-overlay-top">
-                    <span class="campaign-category">{{ campaign.category }} Campaign</span>
+                    <span class="campaign-category">{{ campaign.category }} </span>
                 </div>
              <div class="image-overlay-bottom">
     <!-- Action icons with data-title instead of title -->
@@ -7002,28 +7027,40 @@ body.dark-mode .comment-count {
 
 
 <script>
-  function togglaMenu(clickedElement) {
+function togglaMenu(clickedElement) {
     // Close other open menus
     document.querySelectorAll('.menu-dropdown.active').forEach(menu => {
-      if (!clickedElement.contains(menu)) {
-        menu.classList.remove('active');
-      }
+        if (!clickedElement.contains(menu)) {
+            menu.classList.remove('active');
+        }
     });
 
     // Toggle the clicked one
     const dropdown = clickedElement.querySelector('.menu-dropdown');
     dropdown.classList.toggle('active');
-  }
+}
 
-  // Close the menu if clicked outside
-  document.addEventListener('click', function(event) {
+// Close the menu if clicked outside
+document.addEventListener('click', function(event) {
+    // Don't close if clicking on form elements within the menu
+    const isFormElement = event.target.closest('.not-interested-form') || 
+                         event.target.matches('input, select, textarea, label');
+    
     const isClickInside = event.target.closest('.campaign-menu');
-    if (!isClickInside) {
-      document.querySelectorAll('.menu-dropdown.active').forEach(menu => {
-        menu.classList.remove('active');
-      });
+    
+    if (!isClickInside && !isFormElement) {
+        document.querySelectorAll('.menu-dropdown.active').forEach(menu => {
+            menu.classList.remove('active');
+        });
     }
-  });
+});
+
+// Prevent checkbox clicks from bubbling up and closing the menu
+document.addEventListener('click', function(event) {
+    if (event.target.matches('.form-checkbox, .form-label, .form-submit-button')) {
+        event.stopPropagation();
+    }
+}, true);
 </script>
 
 

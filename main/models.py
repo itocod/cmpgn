@@ -263,7 +263,7 @@ class Campaign(models.Model):
     duration = models.PositiveIntegerField(null=True, blank=True, help_text="Enter duration.")
     duration_unit = models.CharField(max_length=10, choices=DURATION_UNITS, default='days')
     funding_goal = models.DecimalField(max_digits=10, decimal_places=2, default=0)
-    
+
     @property
     def total_pledges(self):
         return self.pledge_set.aggregate(total=models.Sum('amount'))['total'] or 0
@@ -695,33 +695,103 @@ class Pledge(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='pledges')
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    contact = models.CharField(max_length=100, blank=True)
+    contact = models.EmailField(blank=True, null=True)
+
     is_fulfilled = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f"{self.user.username} pledged ${self.amount} to {self.campaign.title}"
 
+    def toggle_fulfilled(self):
+        """Toggle the fulfillment status of the pledge"""
+        self.is_fulfilled = not self.is_fulfilled
+        self.save()
+        return self.is_fulfilled
 
 
-
+from django.utils import timezone
+from django.db import models
 
 class CampaignProduct(models.Model):
+    STOCK_STATUS_CHOICES = [
+        ('in_stock', 'In Stock'),
+        ('low_stock', 'Low Stock'),
+        ('out_of_stock', 'Out of Stock'),
+        ('preorder', 'Preorder'),
+        ('discontinued', 'Discontinued'),
+    ]
+
     campaign = models.ForeignKey('Campaign', on_delete=models.CASCADE, related_name='products')
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
-    url = models.URLField(max_length=200)
     image = models.ImageField(upload_to='campaign_product_images/', blank=True, null=True)
-    category = models.CharField(max_length=100, default='default_category')
     price = models.DecimalField(max_digits=10, decimal_places=2)
     stock_quantity = models.PositiveIntegerField(default=0)
     is_active = models.BooleanField(default=True)
-    date_added = models.DateTimeField(default=timezone.now)  # Use timezone.now() as default
+    stock_status = models.CharField(
+        max_length=20,
+        choices=STOCK_STATUS_CHOICES,
+        default='in_stock'
+    )
+    date_added = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return self.name
 
+    def get_stock_display(self):
+        """Helper: decide stock display based on manual status"""
+        if self.stock_status == 'out_of_stock':
+            return "Out of Stock"
+        elif self.stock_status == 'low_stock':
+            return f"Only {self.stock_quantity} left"
+        elif self.stock_status == 'preorder':
+            return "Available for Preorder"
+        elif self.stock_status == 'discontinued':
+            return "Discontinued"
+        else:  # in_stock
+            return f"{self.stock_quantity} in stock"
 
+
+
+
+
+
+
+
+
+from django.db import models
+from django.contrib.auth.models import User
+from decimal import Decimal
+
+class Cart(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='cart')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Cart ({self.user.username})"
+    
+    @property
+    def total_price(self):
+        return sum(item.total_price for item in self.items.all())
+    
+    @property
+    def total_items(self):
+        return sum(item.quantity for item in self.items.all())
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='items')
+    product = models.ForeignKey(CampaignProduct, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1)
+    added_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.quantity} x {self.product.name}"
+    
+    @property
+    def total_price(self):
+        return self.product.price * self.quantity
 
 
 

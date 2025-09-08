@@ -371,3 +371,12 @@ admin.site.register(FAQ, FAQAdmin)
 
 
 
+from .models import Pledge
+
+@admin.register(Pledge)
+class PledgeAdmin(admin.ModelAdmin):
+    list_display = ('user', 'campaign', 'amount', 'contact', 'is_fulfilled', 'timestamp')
+    list_filter = ('is_fulfilled', 'campaign', 'timestamp')
+    search_fields = ('user__username', 'contact', 'campaign__title')
+    ordering = ('-timestamp',)
+    readonly_fields = ('timestamp',)

@@ -2324,7 +2324,7 @@ body.dark-mode .affiliate-link i {
     backdrop-filter: brightness(1.2);
     margin: 0;
     z-index: 1000;
-"><img src="{% static 'main/files/lg.png' %}" alt="Rallynex Logo" style="height: 50px; width: 50px;">RALLYNEX</h3>
+"><img src="{% static 'main/files/z.png' %}" alt="Rallynex Logo" style="height: 50px; width: 50px;">RALLYNEX</h3>
   
 
     <!-- Updated the <nav> tag to <nav class="campaign-nav"> -->
@@ -2711,74 +2711,78 @@ body.dark-mode .affiliate-link i {
 
 
 
-
-
 <script type="text/javascript">
+// Helper functions for cookies
+function setCookie(name, value, days) {
+    const expires = new Date(Date.now() + days*24*60*60*1000).toUTCString();
+    document.cookie = `${name}=${value}; expires=${expires}; path=/`;
+}
+
+function getCookie(name) {
+    const cookies = document.cookie.split(';').map(c => c.trim());
+    for (let c of cookies) {
+        if (c.startsWith(name + '=')) return c.split('=')[1];
+    }
+    return null;
+}
+
+// Function to toggle dark mode
 function switchColor() {
     const body = document.body;
     const isDarkMode = body.classList.toggle('dark-mode'); // Toggle dark mode class
-    var reactDivs = document.querySelectorAll('.react');
 
-    // Update background and text colors for all elements
+    // Save preference to cookie for 1 year
+    setCookie('dark_mode', isDarkMode, 365);
+
+    // Funding progress card
+    document.querySelector('.funding-progress-card')?.classList.toggle('dark-mode', isDarkMode);
+
+    // Elements to update background and text colors
     const elementsToUpdate = document.querySelectorAll(
         'header, footer, section, .left-aside, .right-aside, .upper-post, .campaign-content, .react, .search-container input, .search-container .btn-reset'
     );
+    elementsToUpdate.forEach(el => el.classList.toggle('dark-mode', isDarkMode));
 
-    elementsToUpdate.forEach(element => {
-        element.classList.toggle('dark-mode', isDarkMode);
-    });
-
-    // Update text colors for specific elements
+    // Text color updates
     const textElements = document.querySelectorAll(
         'h1, h2, h3, h4, p, li, .campaign-nav, .campaign-nav a, .btn, .reaction, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link, .love-count, #view-count, .comment-count'
     );
+    textElements.forEach(el => el.style.color = isDarkMode ? '#ffffff' : '#000000');
 
-    textElements.forEach(element => {
-        element.style.color = isDarkMode ? '#ffffff' : '#000000';
-    });
-
-    // Update buttons
+    // Buttons
     const buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)');
-    buttons.forEach(button => {
-        button.style.backgroundColor = isDarkMode ? '#262626' : '';
-        button.style.color = isDarkMode ? '#ffffff' : '#000000';
+    buttons.forEach(btn => {
+        btn.style.backgroundColor = isDarkMode ? '#262626' : '';
+        btn.style.color = isDarkMode ? '#ffffff' : '#000000';
     });
 
-    // Update `.react` divs
-    if (reactDivs.length > 0) {
-        reactDivs.forEach(function(reactDiv) {
-            reactDiv.style.backgroundColor = isDarkMode ? "#262626" : "";
-            reactDiv.style.color = isDarkMode ? "white" : "black";
+    // `.react` divs
+    const reactDivs = document.querySelectorAll('.react');
+    reactDivs.forEach(div => {
+        div.style.backgroundColor = isDarkMode ? "#262626" : "";
+        div.style.color = isDarkMode ? "white" : "black";
+        if (isDarkMode) div.classList.add('react-hover');
+        else div.classList.remove('react-hover');
+    });
 
-            if (isDarkMode) {
-                reactDiv.classList.add('react-hover');
-            } else {
-                reactDiv.classList.remove('react-hover');
-                reactDiv.style.backgroundColor = "";
-            }
-        });
-    }
-
-    // Update input field and reset button
+    // Input field and reset button
     const inputField = document.querySelector('.search-container input[type="text"]');
-    const inputResetButton = document.querySelector('.search-container .btn-reset');
-
     if (inputField) {
         inputField.style.backgroundColor = isDarkMode ? '#333333' : '#ffffff';
         inputField.style.color = isDarkMode ? '#ffffff' : '#000000';
     }
-
-    if (inputResetButton) {
-        inputResetButton.style.color = '#b0b0b0';
-    }
+    const inputResetButton = document.querySelector('.search-container .btn-reset');
+    if (inputResetButton) inputResetButton.style.color = '#b0b0b0';
 }
 
+// Apply dark mode on page load based on cookie
+window.addEventListener('DOMContentLoaded', () => {
+    const darkModeCookie = getCookie('dark_mode');
+    if (darkModeCookie === 'true') {
+        switchColor();
+    }
+});
 </script>
-
-
-
-
-
 
 
 

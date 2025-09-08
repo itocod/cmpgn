@@ -6,23 +6,16 @@ class Command(BaseCommand):
     help = 'Find users who qualify for changemaker status and assign awards.'
 
     def handle(self, *args, **kwargs):
-        # Find all users who have campaigns
         users = Profile.objects.all()
-        
+
         for user in users:
-            # Get all campaigns of the user
             user_campaigns = Campaign.objects.filter(user=user)
+            changemaker_campaigns = [c for c in user_campaigns if c.is_changemaker]
 
-            changemaker_campaigns = []  # Will store campaigns that qualify for changemaker
-
-            for campaign in user_campaigns:
-                if campaign.is_changemaker:
-                    changemaker_campaigns.append(campaign)
-
-            # Check if the user qualifies for an award
             if changemaker_campaigns:
                 campaign_count = len(changemaker_campaigns)
                 
+                # Determine award type
                 if campaign_count >= 3:
                     award_type = ChangemakerAward.GOLD
                 elif campaign_count == 2:
@@ -30,12 +23,13 @@ class Command(BaseCommand):
                 else:
                     award_type = ChangemakerAward.BRONZE
 
-                # Print the user and their campaigns for verification
+                # Print user, campaigns, and award type BEFORE awarding
                 self.stdout.write(self.style.SUCCESS(
-                    f'User: {user} - Campaigns: {[campaign.title for campaign in changemaker_campaigns]}'
+                    f'User: {user} - Campaigns: {[c.title for c in changemaker_campaigns]} - '
+                    f'Award Type: {award_type}'
                 ))
 
-                # Award the user if not already awarded for the latest campaign
+                # Award the latest campaign if not already awarded
                 latest_campaign = changemaker_campaigns[-1]
                 if not ChangemakerAward.objects.filter(user=user, campaign=latest_campaign).exists():
                     ChangemakerAward.objects.create(
@@ -44,12 +38,8 @@ class Command(BaseCommand):
                         award=award_type,
                         timestamp=timezone.now()
                     )
-
                     self.stdout.write(self.style.SUCCESS(
                         f'Awarded {award_type} to {user} for campaign: {latest_campaign.title}'
                     ))
-            else:
-                self.stdout.write(self.style.WARNING(f'User: {user} does not qualify for changemaker status.'))
-
 
 #python manage.py award_changemakers

@@ -6,802 +6,980 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Create Campaign</title>
-
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emojionearea/dist/emojionearea.min.css">
-<script src="https://cdn.jsdelivr.net/npm/emojionearea/dist/emojionearea.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/emojionearea@3.4.2/dist/emojionearea.min.css">
-<script src="https://cdn.jsdelivr.net/npm/emojionearea@3.4.2/dist/emojionearea.min.js"></script>
-
-<!-- Include Quill CSS and JS -->
-<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
-<style type="text/css">
-/* General styles for the form */
-.edit-profile-form {
-    max-width: 800px; /* Slightly wider for better readability */
-    margin: 20px auto;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.1);
-    background: #FFFFFF;
-}
-
-h1 {
-    text-align: center;
-    color: #37474F;
-    font-size: 2em; /* Larger font size for emphasis */
-    margin-bottom: 20px;
-    font-weight: 600;
-}
-
-.form-section {
-    margin-bottom: 20px;
-}
-
-.form-label {
-    font-weight: bold;
-    color: #546E7A;
-    font-size: 1.1em;
-    display: block;
-    margin-bottom: 8px;
-}
-
-.form-input,
-.form-textarea,
-.form-select {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid #90A4AE;
-    border-radius: 10px;
-    box-sizing: border-box;
-    margin-top: 5px;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-    background-color: #F1F1F1;
-    font-size: 1em;
-}
-
-.form-input:focus,
-.form-textarea:focus,
-.form-select:focus {
-    outline: none;
-    border-color: #2196F3;
-    box-shadow: 0 0 8px rgba(33, 150, 243, 0.5);
-}
-
-.form-textarea {
-    resize: vertical; /* Allow vertical resizing */
-    height: 150px; /* Slightly taller for better usability */
-    overflow-y: auto; /* Always show scrollbar for consistency */
-}
-
-.form-select {
-    appearance: none;
-    background-image: url('data:image/svg+xml;utf8,<svg fill="%2390A4AE" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
-    background-position: right 10px top 50%;
-    background-repeat: no-repeat;
-    background-size: 12px;
-}
-
-.submit-button {
-    display: block;
-    width: 100%;
-    padding: 14px;
-    background-color: #2196F3;
-    color: #fff;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    margin-top: 20px;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-    font-size: 1.1em;
-    font-weight: bold;
-}
-
-.submit-button:hover {
-    background-color: #1976D2;
-    transform: translateY(-2px);
-}
-
-.form-helper-text {
-    color: #757575;
-    font-size: 0.9em;
-    margin-top: 5px;
-    display: block;
-}
-
-.action-button {
-    display: inline-block;
-    padding: 10px 20px;
-    margin: 10px 5px;
-    border-radius: 25px;
-    text-align: center;
-    font-size: 14px;
-    background-color: #F1F1F1;
-    transition: background-color 0.3s ease;
-}
-
-.action-button:hover {
-    background-color: #E0E0E0;
-}
-
-.action-button a {
-    color: #37474F;
-    text-decoration: none;
-    font-size: inherit;
-}
-
-.action-button i {
-    margin-right: 8px;
-}
-
-.image-preview-container {
-    margin-top: 15px;
-    text-align: center;
-}
-
-.image-preview-container img {
-    max-width: 100%;
-    max-height: 250px;
-    border: 2px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-#emoji-picker-button {
-    margin-top: 10px;
-    padding: 10px 15px;
-    background-color: #2196F3;
-    color: #fff;
-    border: none;
-    border-radius: 25px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-    font-size: 0.9em;
-}
-
-#emoji-picker-button:hover {
-    background-color: #1976D2;
-}
-
-/* Media queries for mobile responsiveness */
-@media (max-width: 768px) {
-    .edit-profile-form {
-        padding: 20px;
-    }
-
-    h1 {
-        font-size: 1.8em;
-    }
-
-    .form-label {
-        font-size: 1em;
-    }
-
-    .form-input,
-    .form-textarea,
-    .form-select {
-        font-size: 0.9em;
-        padding: 10px;
-    }
-
-    .submit-button {
-        padding: 12px;
-        font-size: 1em;
-    }
-
-    .form-helper-text {
-        font-size: 0.8em;
-    }
-}
-
-@media (max-width: 480px) {
-    h1 {
-        font-size: 1.5em;
-    }
-
-    .form-label {
-        font-size: 0.9em;
-    }
-
-    .submit-button {
-        font-size: 0.9em;
-    }
-}
-
-
-/* Add this to your existing CSS */
-.form-textarea {
-    white-space: pre-wrap; /* Preserve whitespace and wrap text */
-    word-wrap: break-word; /* Break long words if necessary */
-    word-break: break-word; /* Ensure words break to fit within the container */
-}
-
-/* Dark Mode Styles */
-body.dark-mode {
-    background-color: #121212; /* Dark background */
-    color: #e0e0e0; /* Light text for better readability */
-    font-family: 'Arial', sans-serif;
-}
-
-/* Create Campaign Form */
-body.dark-mode #campaignForm {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #1e1e1e; /* Slightly lighter dark background */
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-}
-
-body.dark-mode h1 {
-    color: #ffffff; /* Bright white for headings */
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-body.dark-mode .form-section {
-    margin-bottom: 20px;
-}
-
-body.dark-mode .form-label {
-    display: block;
-    font-weight: bold;
-    margin-bottom: 8px;
-    color: #ffffff; /* Bright white for labels */
-}
-
-body.dark-mode .form-input,
-body.dark-mode .form-select,
-body.dark-mode .form-textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #444444; /* Dark border */
-    border-radius: 5px;
-    background-color: #333333; /* Dark background for inputs */
-    color: #e0e0e0; /* Light text */
-    font-size: 14px;
-}
-
-body.dark-mode .form-input:focus,
-body.dark-mode .form-select:focus,
-body.dark-mode .form-textarea:focus {
-    border-color: #3498db; /* Accent color for focus */
-    outline: none;
-}
-
-body.dark-mode .form-helper-text {
-    display: block;
-    font-size: 12px;
-    color: #b0b0b0; /* Light gray for helper text */
-    margin-top: 5px;
-}
-
-body.dark-mode .form-errors {
-    color: #ff6b6b; /* Light red for errors */
-    background-color: #2d1e1e; /* Darker red background */
-    border: 1px solid #ff6b6b;
-    padding: 10px;
-    border-radius: 5px;
-    margin-bottom: 20px;
-}
-
-body.dark-mode .form-errors ul {
-    list-style: none;
-    padding-left: 0;
-}
-
-body.dark-mode .form-errors li {
-    margin-bottom: 5px;
-}
-
-body.dark-mode .action-button {
-    display: inline-block;
-    margin-top: 10px;
-    padding: 8px 12px;
-    background-color: #3498db; /* Accent color for buttons */
-    color: #ffffff;
-    border-radius: 5px;
-    text-decoration: none;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
-}
-
-body.dark-mode .action-button:hover {
-    background-color: #2980b9; /* Darker accent color on hover */
-}
-
-body.dark-mode .image-preview-container,
-body.dark-mode .audio-preview-container {
-    margin-top: 10px;
-    padding: 10px;
-    background-color: #262626; /* Dark background for preview containers */
-    border-radius: 5px;
-}
-
-body.dark-mode .submit-button {
-    display: block;
-    width: 100%;
-    padding: 12px;
-    background-color: #3498db; /* Accent color for submit button */
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-body.dark-mode .submit-button:hover {
-    background-color: #2980b9; /* Darker accent color on hover */
-}
-
-/* Edit Profile Form */
-body.dark-mode .edit-profile-form {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #1e1e1e; /* Slightly lighter dark background */
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-}
-
-body.dark-mode .edit-profile-form h1 {
-    color: #ffffff; /* Bright white for headings */
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-body.dark-mode .affiliate-link {
-    display: inline-block;
-    margin-bottom: 20px;
-    padding: 10px 15px;
-    background-color: #3498db; /* Accent color for buttons */
-    color: #ffffff;
-    border-radius: 5px;
-    text-decoration: none;
-    font-size: 14px;
-    transition: background-color 0.3s ease;
-}
-
-body.dark-mode .affiliate-link:hover {
-    background-color: #2980b9; /* Darker accent color on hover */
-}
-
-body.dark-mode .affiliate-link i {
-    margin-right: 8px; /* Space between icon and text */
-}
-</style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #1877f2;
+            --primary-dark: #166fe5;
+            --primary-light: #e7f3ff;
+            --secondary: #f0f2f5;
+            --text-primary: #1c1e21;
+            --text-secondary: #65676b;
+            --border: #dddfe2;
+            --card-bg: #ffffff;
+            --success: #42b72a;
+            --error: #f02849;
+            --warning: #f7b928;
+            --canva-pink: #ff4b4b;
+            --canva-orange: #ff9c4b;
+            --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            --transition: all 0.2s ease;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+            background-color: var(--secondary);
+            color: var(--text-primary);
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .create-wrapper {
+            flex: 1;
+            padding: 20px 12px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .create-container {
+            max-width: 480px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .create-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            margin-bottom: 24px;
+            transition: var(--transition);
+        }
+        
+        .create-card:hover {
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+        }
+        
+        .card-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            background-color: #fafbfc;
+        }
+        
+        .card-header h1 {
+            margin: 0;
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+        
+        .card-header h1 i {
+            margin-right: 12px;
+            color: var(--primary);
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        
+        .close-btn:hover {
+            background-color: var(--secondary);
+            color: var(--text-primary);
+        }
+        
+        .card-body {
+            padding: 24px;
+        }
+        
+        .form-section {
+            margin-bottom: 24px;
+            position: relative;
+        }
+        
+        .section-label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            background-color: var(--primary-light);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            color: var(--primary);
+        }
+        
+        .section-label-text {
+            font-weight: 600;
+            font-size: 18px;
+            color: var(--text-primary);
+        }
+        
+        .form-label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+        
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 15px;
+            background-color: var(--card-bg);
+            box-sizing: border-box;
+            transition: var(--transition);
+        }
+        
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.2);
+        }
+        
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+            line-height: 1.5;
+        }
+        
+        .form-helper {
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-top: 6px;
+            display: block;
+        }
+        
+        .file-upload {
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background-color: #fbfbfb;
+        }
+        
+        .file-upload:hover {
+            border-color: var(--primary);
+            background-color: rgba(24, 119, 242, 0.03);
+        }
+        
+        .file-upload i {
+            font-size: 28px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+        
+        .file-upload-text {
+            font-size: 15px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        .preview-container {
+            margin-top: 16px;
+            text-align: center;
+        }
+        
+        .preview-image {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .submit-button {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 14px 28px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 24px auto 0;
+            min-width: 180px;
+            box-shadow: 0 2px 6px rgba(24, 119, 242, 0.3);
+        }
+        
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(24, 119, 242, 0.4);
+        }
+        
+        .submit-button:active {
+            transform: translateY(0);
+        }
+        
+        .submit-button i {
+            margin-right: 8px;
+        }
+        
+        .error-container {
+            background-color: rgba(240, 40, 73, 0.08);
+            border-left: 4px solid var(--error);
+            border-radius: 6px;
+            padding: 16px;
+            margin-bottom: 24px;
+            color: var(--error);
+            font-size: 14px;
+        }
+        
+        .error-container ul {
+            margin: 10px 0 0;
+            padding-left: 20px;
+        }
+        
+        .error-container li {
+            margin-bottom: 4px;
+        }
+        
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        
+        @media (max-width: 768px) {
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+            
+            .create-wrapper {
+                padding: 12px 8px;
+            }
+            
+            .card-body {
+                padding: 16px;
+            }
+            
+            .card-header {
+                padding: 16px;
+            }
+            
+            .section-label {
+                margin-bottom: 12px;
+            }
+        }
+        
+        /* Animation for form elements */
+        .form-section {
+            animation: fadeIn 0.4s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Social media style tags */
+        .tag-pill {
+            display: inline-block;
+            background-color: var(--primary-light);
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-left: 8px;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background-color: var(--secondary);
+            border-radius: 3px;
+            margin-bottom: 24px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 3px;
+        }
+        
+        .progress-text {
+            position: absolute;
+            right: 0;
+            top: -24px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        
+        /* Canva Tool Styles */
+        .canva-tool {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: linear-gradient(to bottom, #ffffff, #f9f9f9);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .canva-tool::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, var(--canva-pink), var(--canva-orange));
+        }
+        
+        .canva-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        
+        .canva-logo {
+            width: 36px;
+            height: 36px;
+            margin-right: 12px;
+            background: linear-gradient(to right, var(--canva-pink), var(--canva-orange));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 2px 6px rgba(255, 75, 75, 0.3);
+        }
+        
+        .canva-title {
+            font-weight: 700;
+            font-size: 17px;
+            color: var(--text-primary);
+        }
+        
+        .canva-description {
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .canva-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(to right, var(--canva-pink), var(--canva-orange));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            box-shadow: 0 2px 6px rgba(255, 75, 75, 0.3);
+        }
+        
+        .canva-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 75, 75, 0.4);
+        }
+        
+        .canva-button:active {
+            transform: translateY(0);
+        }
+        
+        .canva-button i {
+            margin-right: 10px;
+        }
+        
+        /* Tool toggle */
+        .tool-toggle {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            padding: 12px 16px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .toggle-text {
+            font-size: 15px;
+            color: var(--text-primary);
+            margin-left: 12px;
+            font-weight: 500;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background: linear-gradient(to right, var(--canva-pink), var(--canva-orange));
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(20px);
+        }
+        
+        /* Status indicators */
+        .canva-status {
+            margin-top: 16px;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 14px;
+            display: none;
+        }
+        
+        .status-success {
+            background-color: rgba(66, 183, 42, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(66, 183, 42, 0.2);
+        }
+        
+        .status-error {
+            background-color: rgba(240, 40, 73, 0.1);
+            color: var(--error);
+            border: 1px solid rgba(240, 40, 73, 0.2);
+        }
+        
+        .status-loading {
+            background-color: rgba(24, 119, 242, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(24, 119, 242, 0.2);
+        }
+        
+        .status-loading .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(24, 119, 242, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 8px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .optional-badge {
+            display: inline-block;
+            background-color: #f0f2f5;
+            color: var(--text-secondary);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-left: 8px;
+        }
+    </style>
+</head>
 
 <body>
-
-<div class="edit-profile-form">
- 
-
-    <form method="post" enctype="multipart/form-data" id="campaignForm">
-        {% csrf_token %}
-        <h1>Create Campaign Form</h1>
-
-
-        <!-- Display Error Messages -->
-        {% if form.errors %}
-            <div class="form-errors" id="form-errors" style="color: red; background-color: #f8d7da; border: 1px solid #f5c6cb; padding: 10px; border-radius: 5px;">
-                <ul style="list-style: none; padding-left: 0;">
-                    {% for field in form %}
-                        {% if field.errors %}
-                            <li>
-                                <strong>{{ field.label }}:</strong>
-                                <span style="color: #721c24;">{{ field.errors|join:', ' }}</span>
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
+    <div class="create-wrapper">
+        <div class="create-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="formProgress"></div>
+                <div class="progress-text" id="progressText">0% complete</div>
             </div>
-        {% endif %}
-
-        <div class="form-section">
-            <label for="id_title" class="form-label">Title:</label>
-            <input type="text" id="id_title" name="title" class="form-input" required>
-            <span class="form-helper-text">Provide a concise title for your campaign.</span>
+            
+            <div class="create-card">
+                <div class="card-header">
+                    <h1><i class="fas fa-bullhorn"></i> Create Campaign</h1>
+                    <button class="close-btn">&times;</button>
+                </div>
+                
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data" id="campaignForm">
+                        {% csrf_token %}
+                        
+                        <!-- Display Error Messages -->
+                        {% if form.errors %}
+                            <div class="error-container">
+                                <strong>Please correct the following errors:</strong>
+                                <ul>
+                                    {% for field in form %}
+                                        {% for error in field.errors %}
+                                            <li>{{ field.label }}: {{ error }}</li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+                        
+                        <!-- Campaign Basics Section -->
+                        <div class="section-label">
+                            <div class="section-icon">
+                                <i class="fas fa-edit"></i>
+                            </div>
+                            <div class="section-label-text">Campaign Basics</div>
+                        </div>
+                        
+                        <!-- Title -->
+                        <div class="form-section">
+                            <label for="id_title" class="form-label">Campaign Title</label>
+                            <input type="text" id="id_title" name="title" class="form-input" placeholder="What's your campaign about?" required>
+                            <span class="form-helper">Choose a clear and engaging title that describes your campaign</span>
+                        </div>
+                        
+                        <!-- Content -->
+                        <div class="form-section">
+                            <label for="id_content" class="form-label">Description</label>
+                            <textarea id="id_content" name="content" class="form-textarea" placeholder="Tell people more about your campaign. What's the purpose? Who will benefit?" required></textarea>
+                            <span class="form-helper">Be specific about your goals and how people can help</span>
+                        </div>
+                        
+                        <!-- Design Section -->
+                        <div class="section-label">
+                            <div class="section-icon">
+                                <i class="fas fa-paint-brush"></i>
+                            </div>
+                            <div class="section-label-text">Design & Media</div>
+                        </div>
+                        
+                        <!-- Canva GIF Creation Tool -->
+                        <div class="form-section">
+                            <div class="tool-toggle">
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="canvaToggle">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                                <span class="toggle-text">Create a GIF poster with Canva</span>
+                            </div>
+                            
+                            <div class="canva-tool" id="canvaTool">
+                                <div class="canva-header">
+                                    <div class="canva-logo">C</div>
+                                    <div class="canva-title">Canva Design</div>
+                                </div>
+                                <p class="canva-description">Create an eye-catching GIF poster for your campaign with our integrated Canva tool. No design skills needed!</p>
+                                <button type="button" class="canva-button" id="openCanva">
+                                    <i class="fas fa-paint-brush"></i> Design with Canva
+                                </button>
+                                
+                                <!-- Status indicators -->
+                                <div class="canva-status status-loading" id="canvaLoading">
+                                    <span class="spinner"></span> Waiting for Canva design...
+                                </div>
+                                <div class="canva-status status-success" id="canvaSuccess">
+                                    <i class="fas fa-check-circle"></i> Poster created successfully!
+                                </div>
+                                <div class="canva-status status-error" id="canvaError">
+                                    <i class="fas fa-exclamation-circle"></i> Could not connect to Canva. Please try again.
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Poster Upload -->
+                        <div class="form-section">
+                            <label class="form-label">Campaign Image / Poster</label>
+                            <label for="id_poster" class="file-upload">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <div class="file-upload-text">Click to upload or drag and drop</div>
+                                <span class="form-helper">PNG, JPG, GIF or WEBP (max. 5MB)</span>
+                            </label>
+                            <input type="file" id="id_poster" name="poster" accept="image/png, image/jpeg, image/gif, image/webp" style="display: none;" onchange="previewImage(event)">
+                            <div id="posterPreview" class="preview-container"></div>
+                        </div>
+                        
+                        <!-- Audio Upload -->
+                        <div class="form-section">
+                            <label class="form-label">Campaign Sound <span class="optional-badge">Optional</span></label>
+                            <label for="id_audio" class="file-upload">
+                                <i class="fas fa-music"></i>
+                                <div class="file-upload-text">Add audio to your campaign</div>
+                                <span class="form-helper">MP3, WAV, or OGG format</span>
+                            </label>
+                            <input type="file" id="id_audio" name="audio" accept="audio/*" style="display: none;" onchange="previewAudio(event)">
+                            <div id="audioPreview" class="preview-container"></div>
+                        </div>
+                        
+                        <!-- Settings Section -->
+                        <div class="section-label">
+                            <div class="section-icon">
+                                <i class="fas fa-cog"></i>
+                            </div>
+                            <div class="section-label-text">Campaign Settings</div>
+                        </div>
+                        
+                        <!-- Category and Visibility -->
+                        <div class="two-column">
+                            <div class="form-section">
+                                <label for="id_category" class="form-label">Category</label>
+                                <select id="id_category" name="category" class="form-select">
+                                    {% for category in categories %}
+                                    <option value="{{ category.0 }}">{{ category.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            
+                            <div class="form-section">
+                                <label for="id_visibility" class="form-label">Visibility</label>
+                                <select id="id_visibility" name="visibility" class="form-select">
+                                    <option value="public">Public</option>
+                                    <option value="private">Private</option>
+                                </select>
+                                <span class="form-helper"><span class="tag-pill">Tip</span> Public campaigns can be discovered by everyone</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Duration -->
+                        <div class="two-column">
+                            <div class="form-section">
+                                <label for="id_duration" class="form-label">Duration</label>
+                                <input type="number" id="id_duration" name="duration" class="form-input" min="1" placeholder="e.g., 30" required>
+                            </div>
+                            
+                            <div class="form-section">
+                                <label for="id_duration_unit" class="form-label">Unit</label>
+                                <select id="id_duration_unit" name="duration_unit" class="form-select">
+                                    <option value="days">Days</option>
+                                    <option value="minutes">Minutes</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <!-- Funding Goal -->
+                        <div class="form-section">
+                            <label for="id_funding_goal" class="form-label">Funding Goal <span class="optional-badge">Optional</span></label>
+                            <input type="number" id="id_funding_goal" name="funding_goal" class="form-input" min="0" step="0.01" placeholder="0.00">
+                            <span class="form-helper">Set a fundraising target if needed</span>
+                        </div>
+                        
+                        <!-- Hidden field to store Canva poster data -->
+                        <input type="hidden" id="canva_poster_data" name="canva_poster_data">
+                        
+                        <!-- Submit Button -->
+                        <button type="submit" class="submit-button">
+                            <i class="fas fa-paper-plane"></i> Create
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
+    </div>
 
-        <div class="form-section">
-            <label for="id_category" class="form-label">Category:</label>
-            <select id="id_category" name="category" class="form-select">
-                {% for category in categories %}
-                <option value="{{ category.0 }}">{{ category.1 }}</option>
-                {% endfor %}
-            </select>
-            <span class="form-helper-text">Choose the category of your campaign.</span>
-        </div>
-
-
-<div class="form-section">
-    <label for="id_duration" class="form-label">Campaign Runtime:</label>
-    <input type="number" id="id_duration" name="duration" class="form-input" min="1" required>
-    <span class="form-helper-text">Specify how long your campaign should run.</span>
-</div>
-
-<div class="form-section">
-    <label for="id_duration_unit" class="form-label">Duration Unit:</label>
-    <select id="id_duration_unit" name="duration_unit" class="form-select">
-        <option value="days">Days</option>
-        <option value="minutes">Minutes</option>
-    </select>
-    <span class="form-helper-text">Choose whether duration is in minutes or days.</span>
-</div>
-
-
-        <div class="form-section">
-            <label for="id_poster" class="form-label">Poster:</label>
-            <input type="file" id="id_poster" name="poster" accept="image/png, image/jpeg, image/gif, image/webp" onchange="previewImage(event)">
-
-            <span class="form-helper-text">
-    Upload a campaign poster in one of the following image formats: <strong>JPEG (.jpg, .jpeg), PNG (.png), GIF (.gif), or WebP (.webp)</strong>.
-    Animated GIFs and modern WebP formats are supported. Maximum recommended size: 5MB.
-</span>
-
-           <a href="{% url 'edit_gif' %}" target="_blank" class="action-button">
-    <i class="fas fa-scissors"></i> Edit Photos/GIFs
-</a>
-            <div id="posterPreview" class="image-preview-container"></div>
-        </div>
-
-        <div class="form-section">
-            <label for="id_audio" class="form-label">Sound:</label>
-            <input type="file" id="id_audio" name="audio" class="form-input" accept="audio/*" onchange="previewAudio(event)">
-            <span class="form-helper-text">Upload a sound file (MP3, WAV, OGG).</span>
-            <small class="form-helper-text">By uploading, you confirm that you have rights to use this sound.</small>
-            <div id="audioPreview" class="audio-preview-container"></div>
-        </div>
-
-        <div class="form-section">
-            <label for="id_visibility" class="form-label">Visibility:</label>
-            <select id="id_visibility" name="visibility" class="form-select">
-                <option value="public">Public</option>
-                <option value="private">Private</option>
-            </select>
-            <span class="form-helper-text">Choose how to display your campaign.</span>
-        </div>
-
-        <div class="form-section">
-            <label for="id_content" class="form-label">Content:</label>
-            <textarea id="id_content" name="content" class="form-textarea" required></textarea>
-           <span class="form-helper-text">A Simple Description for your campaign.</span> 
-        </div>
-
-        <button type="submit" class="submit-button">Submit</button>
-    </form>
-</div>
-
-<script>
-    // Make the error message disappear after 5 seconds
-    setTimeout(function() {
-        var errorDiv = document.getElementById('form-errors');
-        if (errorDiv) {
-            errorDiv.style.display = 'none';  // Hide the error message
-        }
-    }, 5000);  // 5000 milliseconds = 5 seconds
-</script>
-
-<script>
-$(document).ready(function () {
-    // Initialize EmojioneArea with correct options
-    var emojioneArea = $('#id_content').emojioneArea({
-        pickerPosition: "bottom", // Position picker outside the textarea
-        inline: false, // Ensure picker appears in a separate popup
-        hidePickerOnBlur: false, // Keep picker open when clicking outside
-        tonesStyle: "bullet"
-    });
-
-    // Get the EmojioneArea instance
-    var emojioneAreaInstance = emojioneArea[0].emojioneArea;
-
-    // Add click event to the button to show the emoji picker
-    $('#emoji-picker-button').click(function () {
-        emojioneAreaInstance.showPicker(); // Show the emoji picker
-    });
-
-    // Ensure the picker appears above everything
-    setTimeout(function () {
-        $('.emojionearea-picker').css({
-            "z-index": "9999",   // High z-index to be on top
-            "position": "absolute",
-            "top": "50px", // Adjust this as needed
-            "left": "50%", // Center it if needed
-            "transform": "translateX(-50%)",
-            "box-shadow": "0px 5px 15px rgba(0, 0, 0, 0.3)"
-        });
-    }, 1000);
-});
-
-
-</script>
-
-
-
-
-    <script type="text/javascript">
-        // Function to submit the form
-function submitForm() {
-    document.getElementById('campaign_form').submit();
-}
-
-
-
-    </script>
-
-
-
-<script>
-function previewAudio(event) {
-    const fileInput = event.target;
-    const previewContainer = document.getElementById('audioPreview');
-    previewContainer.innerHTML = ''; // Clear previous preview
-
-    const file = fileInput.files[0];
-    if (file) {
-        // Ensure the file type is audio
-        if (file.type.startsWith('audio/')) {
-            const audio = document.createElement('audio');
-            audio.controls = true;
-
-            // Use a direct object URL to ensure playback compatibility
-            const objectURL = URL.createObjectURL(file);
-            audio.src = objectURL;
-
-            // Add audio player to the preview container
-            audio.style.marginTop = '10px';
-            previewContainer.appendChild(audio);
-
-            // Revoke the object URL after the audio file is loaded
-            audio.onloadeddata = () => {
-                URL.revokeObjectURL(objectURL);
-            };
-        } else {
-            alert('Please upload a valid audio file.');
-        }
-    }
-}
-</script>
-
-
-
-<script>
-function previewImage(event) {
-    const fileInput = event.target;
-    const previewContainer = document.getElementById('posterPreview');
-    previewContainer.innerHTML = ''; // Clear previous content
-
-    const file = fileInput.files[0];
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            img.alt = 'Selected Poster';
-            img.style.maxWidth = '100%';
-            img.style.height = 'auto';
-            img.style.marginTop = '10px';
-            previewContainer.appendChild(img);
-        };
-        reader.readAsDataURL(file);
-    }
-}
-</script>
-
-
-<script type="text/javascript">
-function switchColor() {
-    const body = document.body;
-    const isDarkMode = body.classList.toggle('dark-mode'); // Toggle dark mode class
-    var reactDivs = document.querySelectorAll('.react');
-
-    // Update background and text colors for all elements
-    const elementsToUpdate = document.querySelectorAll(
-        'header, footer, section, .left-aside, .right-aside, .upper-post, .campaign-content, .react, .search-container input, .search-container .btn-reset'
-    );
-
-    elementsToUpdate.forEach(element => {
-        element.classList.toggle('dark-mode', isDarkMode);
-    });
-
-    // Update text colors for specific elements
-    const textElements = document.querySelectorAll(
-        'h1, h2, h3, h4, p, li, .campaign-nav, .campaign-nav a, .btn, .reaction, .action-item, .action-item a, .carousel, .ad, .slide, .ad a, .explore-link, .love-count, #view-count, .comment-count'
-    );
-
-    textElements.forEach(element => {
-        element.style.color = isDarkMode ? '#ffffff' : '#000000';
-    });
-
-    // Update buttons
-    const buttons = document.querySelectorAll('button:not(.btn-search, .btn-reset)');
-    buttons.forEach(button => {
-        button.style.backgroundColor = isDarkMode ? '#262626' : '';
-        button.style.color = isDarkMode ? '#ffffff' : '#000000';
-    });
-
-    // Update `.react` divs
-    if (reactDivs.length > 0) {
-        reactDivs.forEach(function(reactDiv) {
-            reactDiv.style.backgroundColor = isDarkMode ? "#262626" : "";
-            reactDiv.style.color = isDarkMode ? "white" : "black";
-
-            if (isDarkMode) {
-                reactDiv.classList.add('react-hover');
-            } else {
-                reactDiv.classList.remove('react-hover');
-                reactDiv.style.backgroundColor = "";
-            }
-        });
-    }
-
-    // Update input field and reset button
-    const inputField = document.querySelector('.search-container input[type="text"]');
-    const inputResetButton = document.querySelector('.search-container .btn-reset');
-
-    if (inputField) {
-        inputField.style.backgroundColor = isDarkMode ? '#333333' : '#ffffff';
-        inputField.style.color = isDarkMode ? '#ffffff' : '#000000';
-    }
-
-    if (inputResetButton) {
-        inputResetButton.style.color = '#b0b0b0';
-    }
-}
-
-</script>
     <script>
-
-
-        // Function to handle file upload and playback
-        function uploadAudio() {
-            var input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'audio/*, video/*'; // Limit file selection to audio files
-
-            // Listen for file selection
-            input.onchange = function(e) {
-                var file = e.target.files[0];
-                var audio = document.getElementById('bgAudio');
-
-                // Pause the current audio playback
-                audio.pause();
-
-                // Store the selected audio file and its playback position in local storage
-                localStorage.setItem('bgAudioFile', URL.createObjectURL(file));
-                localStorage.setItem('bgAudioPosition', audio.currentTime);
-
-                // Set the audio source to the selected file
-                audio.src = localStorage.getItem('bgAudioFile');
-
-                // Resume audio playback
-                audio.play();
-            };
-
-            // Trigger the file input
-            input.click();
-        }
-
-        // Function to set background audio on page load
-        window.onload = function() {
-            var audio = document.getElementById('bgAudio');
-            var bgAudioFile = localStorage.getItem('bgAudioFile');
-            var audioPosition = parseFloat(localStorage.getItem('bgAudioPosition'));
-
-            // Check if there's a stored audio file
-            if (bgAudioFile) {
-                // Set the audio source to the stored file
-                audio.src = bgAudioFile;
-
-                // Set the playback position if available
-                if (!isNaN(audioPosition)) {
-                    audio.currentTime = audioPosition;
-                }
-
-                // Autoplay the audio
-                audio.play();
+        // Image preview function
+        function previewImage(event) {
+            const fileInput = event.target;
+            const previewContainer = document.getElementById('posterPreview');
+            previewContainer.innerHTML = '';
+            
+            const file = fileInput.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.createElement('img');
+                    img.src = e.target.result;
+                    img.alt = 'Poster preview';
+                    img.className = 'preview-image';
+                    previewContainer.appendChild(img);
+                };
+                reader.readAsDataURL(file);
             }
-        };
-
-        // Store current playback position before page refresh
-        window.addEventListener('beforeunload', function() {
-            var audio = document.getElementById('bgAudio');
-            localStorage.setItem('bgAudioPosition', audio.currentTime);
-        });
-
-  document.addEventListener('DOMContentLoaded', function() {
-    var mediaQuery = window.matchMedia('(max-width: 768px)');
-    var leftAside = document.querySelector('.left-aside');
-    var rightAside = document.querySelector('.right-aside');
-
-    function handleMediaQueryChange(e) {
-      if (e.matches) {
-        leftAside.style.display = 'none';
-        rightAside.style.display = 'none';
-      } else {
-        leftAside.style.display = 'block';
-        rightAside.style.display = 'block';
-      }
-    }
-
-    mediaQuery.addListener(handleMediaQueryChange);
-    handleMediaQueryChange(mediaQuery);
-  });
-
-
-
-
-    </script>
-
-
-
-    <script type="text/javascript">
+        }
         
-document.addEventListener("DOMContentLoaded", function() {
-    const navbarToggle = document.getElementById("navbarToggle");
-    const navbar = document.getElementById("navbar");
-    const popupClose = document.getElementById("popupClose");
-
-    // Toggle navbar visibility
-    navbarToggle.addEventListener("click", function() {
-        if (navbar.style.display === "block") {
-            navbar.style.display = "none";
-        } else {
-            navbar.style.display = "block";
+        // Audio preview function
+        function previewAudio(event) {
+            const fileInput = event.target;
+            const previewContainer = document.getElementById('audioPreview');
+            previewContainer.innerHTML = '';
+            
+            const file = fileInput.files[0];
+            if (file && file.type.startsWith('audio/')) {
+                const audio = document.createElement('audio');
+                audio.controls = true;
+                audio.style.width = '100%';
+                audio.style.marginTop = '10px';
+                
+                const objectURL = URL.createObjectURL(file);
+                audio.src = objectURL;
+                
+                previewContainer.appendChild(audio);
+                
+                audio.onloadeddata = function() {
+                    URL.revokeObjectURL(objectURL);
+                };
+            } else if (file) {
+                previewContainer.innerHTML = '<p class="form-helper" style="color:#f02849;">Please select a valid audio file</p>';
+            }
         }
-    });
-
-    // Close popup when clicking the close button
-    popupClose.addEventListener("click", function() {
-        navbar.style.display = "none";
-    });
-
-    // Adjust navbar display on window resize
-    window.addEventListener("resize", function() {
-        if (window.innerWidth > 768) {
-            navbar.style.display = "none";
-        } else if (navbar.style.display === "block") {
-            navbar.style.display = "block";
-        } else {
-            navbar.style.display = "none";
+        
+        // Form progress indicator
+        function updateProgress() {
+            const form = document.getElementById('campaignForm');
+            const inputs = form.querySelectorAll('input, textarea, select');
+            const progressFill = document.getElementById('formProgress');
+            const progressText = document.getElementById('progressText');
+            
+            let filledCount = 0;
+            inputs.forEach(input => {
+                if (input.type === 'hidden' && input.id === 'canva_poster_data' && input.value) {
+                    filledCount++;
+                } else if (input.value.trim() !== '' || (input.type === 'file' && input.files.length > 0)) {
+                    filledCount++;
+                }
+            });
+            
+            const progress = (filledCount / inputs.length) * 100;
+            progressFill.style.width = `${progress}%`;
+            progressText.textContent = `${Math.round(progress)}% complete`;
         }
-    });
-
-    // Ensure the navbar is initially hidden on page load for larger screens
-    if (window.innerWidth > 768) {
-        navbar.style.display = "none";
-    } else {
-        navbar.style.display = "none"; // or "block" based on your initial requirement
-    }
-});
+        
+        // Canva Tool Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const formElements = document.querySelectorAll('input, textarea, select');
+            formElements.forEach(element => {
+                element.addEventListener('input', updateProgress);
+                element.addEventListener('change', updateProgress);
+            });
+            
+            // Initialize progress
+            updateProgress();
+            
+            // Close button functionality
+            document.querySelector('.close-btn').addEventListener('click', function() {
+                if(confirm('Are you sure you want to cancel? Your progress will be lost.')) {
+                    window.history.back();
+                }
+            });
+            
+            // Canva tool toggle
+            const canvaToggle = document.getElementById('canvaToggle');
+            const canvaTool = document.getElementById('canvaTool');
+            
+            canvaToggle.addEventListener('change', function() {
+                canvaTool.style.display = this.checked ? 'block' : 'none';
+                updateProgress();
+            });
+            
+            // Initially hide the Canva tool
+            canvaTool.style.display = 'none';
+            
+            // Canva functionality
+            const openCanvaButton = document.getElementById('openCanva');
+            const canvaLoading = document.getElementById('canvaLoading');
+            const canvaSuccess = document.getElementById('canvaSuccess');
+            const canvaError = document.getElementById('canvaError');
+            const posterPreview = document.getElementById('posterPreview');
+            const canvaPosterData = document.getElementById('canva_poster_data');
+            
+            // Function to show status message
+            function showStatus(statusElement) {
+                // Hide all status messages first
+                canvaLoading.style.display = 'none';
+                canvaSuccess.style.display = 'none';
+                canvaError.style.display = 'none';
+                
+                // Show the requested status
+                statusElement.style.display = 'block';
+            }
+            
+            // Function to handle Canva poster data
+            function handleCanvaPosterData(data) {
+                // Store the data in the hidden field
+                canvaPosterData.value = JSON.stringify(data);
+                
+                // Show the poster preview
+                posterPreview.innerHTML = `
+                    <div style="text-align: center;">
+                        <img src="${data.previewUrl}" alt="Canva poster preview" class="preview-image">
+                        <p style="margin-top: 10px; font-size: 14px; color: var(--text-secondary);">
+                            Poster created with Canva
+                        </p>
+                    </div>
+                `;
+                
+                // Show success message
+                showStatus(canvaSuccess);
+                
+                // Update form progress
+                updateProgress();
+            }
+            
+            // Function to check for Canva response
+            function checkForCanvaResponse() {
+                // Check if we have a Canva response in localStorage
+                const canvaResponse = localStorage.getItem('canva_poster_response');
+                if (canvaResponse) {
+                    try {
+                        const data = JSON.parse(canvaResponse);
+                        handleCanvaPosterData(data);
+                        
+                        // Clear the stored response
+                        localStorage.removeItem('canva_poster_response');
+                    } catch (e) {
+                        console.error('Error parsing Canva response:', e);
+                        showStatus(canvaError);
+                    }
+                }
+            }
+            
+            // Check for Canva response on page load
+            checkForCanvaResponse();
+            
+            // Also check periodically in case the page was already loaded when Canva finished
+            const canvaCheckInterval = setInterval(checkForCanvaResponse, 1000);
+            
+            openCanvaButton.addEventListener('click', function() {
+                // Show loading status
+                showStatus(canvaLoading);
+                
+                // Generate a unique ID for this Canva session
+                const canvaSessionId = 'canva_' + Date.now();
+                
+                // Store the session ID to identify responses
+                localStorage.setItem('canva_session_id', canvaSessionId);
+                
+                // Open Canva in a new tab
+                const canvaUrl = "{% url 'poster_canva' %}?session_id=" + encodeURIComponent(canvaSessionId);
+                window.open(canvaUrl, '_blank');
+                
+                // Set up a listener for storage events (for cross-tab communication)
+                window.addEventListener('storage', function(e) {
+                    if (e.key === 'canva_poster_response') {
+                        checkForCanvaResponse();
+                    }
+                });
+            });
+            
+            // Set up a message listener for postMessage communication
+            window.addEventListener('message', function(event) {
+                // Verify the origin for security
+                if (event.origin !== window.location.origin) {
+                    return;
+                }
+                
+                // Check if this is a Canva response
+                if (event.data && event.data.type === 'canva_poster_data') {
+                    handleCanvaPosterData(event.data.payload);
+                }
+            });
+            
+            // Add drag and drop functionality for file uploads
+            const fileUploads = document.querySelectorAll('.file-upload');
+            fileUploads.forEach(upload => {
+                upload.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.style.borderColor = 'var(--primary)';
+                    this.style.backgroundColor = 'rgba(24, 119, 242, 0.05)';
+                });
+                
+                upload.addEventListener('dragleave', function(e) {
+                    e.preventDefault();
+                    this.style.borderColor = '';
+                    this.style.backgroundColor = '';
+                });
+                
+                upload.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.style.borderColor = '';
+                    this.style.backgroundColor = '';
+                    
+                    const files = e.dataTransfer.files;
+                    if (files.length) {
+                        const inputId = this.htmlFor;
+                        const input = document.getElementById(inputId);
+                        if (input) {
+                            input.files = files;
+                            const event = new Event('change', { bubbles: true });
+                            input.dispatchEvent(event);
+                        }
+                    }
+                });
+            });
+        });
+        
+        // Auto-hide error messages after 5 seconds
+        setTimeout(function() {
+            const errorDiv = document.querySelector('.error-container');
+            if (errorDiv) {
+                errorDiv.style.display = 'none';
+            }
+        }, 5000);
     </script>
-
-
 </body>
 </html>
-{% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+{% endblock content %}

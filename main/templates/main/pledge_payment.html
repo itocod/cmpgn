@@ -1,0 +1,16 @@
+
+
+{% block content %}
+<div class="container" style="max-width:600px; margin:50px auto; padding:20px; border:1px solid #ddd; border-radius:8px;">
+    <h2>Pledge Payment for {{ campaign.title }}</h2>
+    <p>Hi {{ pledge.user.username }}, you pledged <strong>${{ pledge.amount }}</strong> to <strong>{{ campaign.title }}</strong>.</p>
+    <p>Please complete your pledge by clicking the button below.</p>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" style="padding:10px 20px; background-color:#4CAF50; color:white; border:none; border-radius:5px; cursor:pointer;">
+            Complete Pledge Payment
+        </button>
+    </form>
+</div>
+{% endblock %}

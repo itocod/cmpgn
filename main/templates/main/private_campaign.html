@@ -1952,23 +1952,6 @@ body.dark-mode .comment-count {
     to { opacity: 1; }
 }
 
-
-
-    .dark-mode .campaign-members {
-        background: #2d2d2d;
-        border-color: #444;
-    }
-    .dark-mode .campaign-members h3 {
-        color: #f0f0f0;
-    }
-    .dark-mode .campaign-members a {
-        background: #383838;
-        border-color: #555;
-        color: #f0f0f0;
-    }
-    .dark-mode .campaign-members li:not(:has(a)) {
-        color: #b0b0b0;
-    }
 /* ===== Dark Mode Styles ===== */
 .dark-mode .simple-campaigns-container {
     background-color: #121212;
@@ -2556,42 +2539,6 @@ body.dark-mode .comment-count {
 }
 
 
-/* Hide mobile version by default, show web version */
-.mobile-version { display: none; }
-.web-version { display: block; }
-
-/* On screens smaller than 768px (mobile) */
-@media (max-width: 768px) {
-    .mobile-version { display: block; }
-    .web-version { display: none; }
-}
-
-/* WebKit browsers */
-.campaign-members div::-webkit-scrollbar {
-    width: 6px;
-}
-.campaign-members div::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 3px;
-}
-.campaign-members div::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 3px;
-}
-.campaign-members div::-webkit-scrollbar-thumb:hover {
-    background: #555;
-}
-
-/* Dark mode scrollbar */
-.dark-mode .campaign-members div::-webkit-scrollbar-track {
-    background: #333;
-}
-.dark-mode .campaign-members div::-webkit-scrollbar-thumb {
-    background: #666;
-}
-.dark-mode .campaign-members div::-webkit-scrollbar-thumb:hover {
-    background: #888;
-}
 
    .top-navigation-container {
         display: flex;
@@ -4983,6 +4930,363 @@ body.dark-mode .comment-count {
 </style>
 
 
+     <style>
+      
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        h1 {
+            margin-bottom: 30px;
+            font-weight: 600;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .campaign-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            margin-bottom: 30px;
+        }
+        
+        .campaign-image {
+            height: 300px;
+            position: relative;
+            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)), url('https://images.unsplash.com/photo-1532629345422-7515f3d16bb6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80');
+            background-size: cover;
+            background-position: center;
+        }
+        
+       .image-overlay-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
+            color: white;
+        }
+        
+        /* Fixed Action icons styles */
+        .campaign-action-icons {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .action-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            background-color: transparent;
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            position: relative;
+            border: 2px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+        }
+        
+        .action-icon:hover {
+            transform: translateY(-8px) scale(1.05);
+            border: 2px solid rgba(255, 255, 255, 1);
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.25),
+                        0 0 30px rgba(255, 215, 100, 0.5);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .action-icon i {
+            font-size: 32px;
+            transition: all 0.3s ease;
+        }
+        
+        .action-icon:hover i {
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+        }
+        
+        /* Custom tooltip styling - fixed position */
+        .action-icon .tooltip {
+            content: attr(data-title);
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            font-size: 14px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 100;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .action-icon:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+            bottom: -35px;
+        }
+        
+        /* Icon specific hover effects */
+        .action-icon:nth-child(1):hover {
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.25),
+                        0 0 30px rgba(255, 100, 100, 0.5);
+        }
+        
+        .action-icon:nth-child(2):hover {
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.25),
+                        0 0 30px rgba(100, 200, 255, 0.5);
+        }
+        
+        .action-icon:nth-child(3):hover {
+            box-shadow: 0 10px 25px rgba(255, 255, 255, 0.25),
+                        0 0 30px rgba(100, 255, 150, 0.5);
+        }
+        
+        /* Progress bar styles */
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4ECDC4, #42b883);
+            border-radius: 5px;
+            width: 65%;
+            position: relative;
+        }
+        
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background-image: linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
+            background-size: 10px 10px;
+            animation: move 1s linear infinite;
+            border-radius: 5px;
+        }
+        
+        @keyframes move {
+            0% { background-position: 0 0; }
+            100% { background-position: 10px 0; }
+        }
+        
+        .campaign-stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .campaign-time-left {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        
+        .campaign-time-left i {
+            margin-right: 8px;
+            color: #FFD700;
+        }
+        
+        /* Mobile-specific styles */
+        .mobile-goal-display {
+            display: none;
+        }
+        
+        /* Campaign content below image */
+        .campaign-content {
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+        }
+        
+        .campaign-title {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+        
+        .campaign-description {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .campaign-creator {
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .creator-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+            background: #4ECDC4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .campaigns-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .campaign-action-icons {
+                gap: 25px;
+            }
+            
+            .action-icon {
+                width: 70px;
+                height: 70px;
+            }
+            
+            .action-icon i {
+                font-size: 28px;
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .campaign-image {
+                height: 250px;
+            }
+            
+            .campaign-action-icons {
+                gap: 15px;
+            }
+            
+            .action-icon {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .action-icon i {
+                font-size: 24px;
+            }
+            
+            .image-overlay-bottom {
+                padding: 15px;
+            }
+            
+            /* Hide detailed progress info on mobile */
+            .progress-info, .campaign-stats {
+                display: none;
+            }
+            
+            /* Show simplified goal display on mobile */
+            .mobile-goal-display {
+                display: block;
+                margin-top: 15px;
+                font-size: 16px;
+                font-weight: 600;
+                color: #4ECDC4;
+                text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+            }
+            
+            /* Adjust progress bar for mobile */
+            .progress-container {
+                margin-bottom: 0;
+                height: 8px;
+            }
+            
+            /* Simplify the time display */
+            .campaign-time-left {
+                font-size: 13px;
+                margin-top: 8px;
+            }
+        }
+        
+   .campaign-members {
+    margin-top: 15px;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.campaign-members h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.campaign-members .follower-card {
+    display: flex;
+    align-items: center;
+    background: white;
+    padding: 4px 8px;
+    border-radius: 20px;
+    text-decoration: none;
+    color: #333;
+}
+
+.campaign-members .follower-card img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    margin-right: 6px;
+}
+
+.campaign-members p {
+    color: #666;
+    font-size: 14px;
+    margin: 0;
+}
+
+/* Dark mode */
+.dark-mode .campaign-members {
+    background: #1e1e1e;
+}
+
+.dark-mode .campaign-members h3 {
+    color: #ddd;
+}
+
+.dark-mode .campaign-members .follower-card {
+    background: #2a2a2a;
+    color: #eee;
+}
+
+.dark-mode .campaign-members p {
+    color: #aaa;
+}
+
+    </style>
 
 </head>
 
@@ -5159,7 +5463,7 @@ body.dark-mode .comment-count {
     backdrop-filter: brightness(1.2);
     margin: 0;
     z-index: 1000;
-"><img src="{% static 'main/files/lg.png' %}" alt="Rallynex Logo" style="height: 50px; width: 50px;">RALLYNEX</h3>
+"><img src="{% static 'main/files/z.png' %}" alt="Rallynex Logo" style="height: 50px; width: 50px;">RALLYNEX</h3>
 
     <!-- Updated the <nav> tag to <nav class="campaign-nav"> -->
 <nav class="campaign-nav">
@@ -5361,67 +5665,80 @@ body.dark-mode .comment-count {
                 </div>
             </div>
 
+
+
+
+
 <div class="campaign-menu" onclick="togglaMenu(this)" style="position: relative;">
   <i class="fas fa-ellipsis-v"></i>
   <div class="menu-dropdown">
+
+    <!-- ===== Public Items ===== -->
     <a href="{% url 'view_campaign' campaign_id=campaign.pk %}">
       <i class="fas fa-eye"></i> View Details
     </a>
+
     <a href="{% url 'campaign_joiners' campaign.id %}" class="comment-count" aria-label="View joiners of this campaign">
       <i class="fas fa-user-plus"></i> Joiners ({{ campaign.user_profiles.count|format_count }})
     </a>
-  
-    {% if user == campaign.user.user %}
-      <a href="{% url 'recreate_campaign' campaign.id %}">
-        <i class="fas fa-edit"></i> Edit
-      </a>
-    {% endif %}
-{% if user == campaign.user.user %}
-    <a href="{% url 'campaign_pledgers' campaign.id %}">
-        <i class="fas fa-donate"></i> Pledgers
-    </a>
-{% endif %}
-     <a href="{% url 'top_participants' campaign_id=campaign.pk %}" class="top-supporters-link">
-    <i class="fas fa-trophy"></i> Top Participants
-</a>
 
-          <a href="{% url 'update_visibilit' campaign.pk %}" style="
+    <a href="{% url 'top_participants' campaign_id=campaign.pk %}" class="top-supporters-link">
+      <i class="fas fa-trophy"></i> Top Participants
+    </a>
+
    
-">
-    <i class="fas fa-lock" ></i> Visibility
-</a>
 
- <a href="{% url 'campaign_engagement' campaign.id %}">
-        <i class="fas fa-chart-bar"></i> Engagement
-    </a>
-
-
-  <a href="{% url 'report_campaign' campaign.id %}">
+    <a href="{% url 'report_campaign' campaign.id %}">
       <i class="fas fa-flag"></i> Report
     </a>
 
-     <a href="{% url 'campaign-delete' campaign.pk %}" class="delete-link">
-        <i class="fas fa-trash"></i> Delete
-    </a>
-    
     <div class="not-interested-container">
-        <form action="{% url 'mark_not_interested' campaign_id=campaign.pk %}" method="post" class="not-interested-form">
-            {% csrf_token %}
-            <div class="form-row">
-                <label for="not-interested" class="form-label">
-                    <i class="fas fa-times-circle"></i> Not Interested
-                </label>
-                <div class="form-controls">
-                    <input type="checkbox" id="not-interested" name="not_interested" class="form-checkbox">
-                </div>
-            </div>
-            <button type="submit" class="form-submit-button">
-                Submit
-            </button>
-        </form>
+      <form action="{% url 'mark_not_interested' campaign_id=campaign.pk %}" method="post" class="not-interested-form">
+        {% csrf_token %}
+        <div class="form-row">
+          <label for="not-interested" class="form-label">
+            <i class="fas fa-times-circle"></i> Not Interested
+          </label>
+          <div class="form-controls">
+            <input type="checkbox" id="not-interested" name="not_interested" class="form-checkbox">
+          </div>
+        </div>
+        <button type="submit" class="form-submit-button">Submit</button>
+      </form>
     </div>
+
+    <!-- ===== Owner-Only Items ===== -->
+    {% if user == campaign.user.user %}
+      <a href="{% url 'recreate_campaign' campaign.id %}">
+        <i class="fas fa-edit"></i> Edit / Recreate
+      </a>
+
+      <a href="{% url 'campaign_pledgers' campaign.id %}">
+        <i class="fas fa-donate"></i> Pledgers
+      </a>
+
+      <a href="{% url 'update_visibility' campaign_id=campaign.id %}" class="update-visibility-link">
+        <i class="fas fa-mouse-pointer"></i> CTA Buttons
+      </a>
+       <a href="{% url 'campaign_engagement' campaign.id %}">
+      <i class="fas fa-chart-bar"></i> Engagement
+    </a>
+
+      <a href="{% url 'campaign-delete' campaign.pk %}" class="delete-link">
+        <i class="fas fa-trash"></i> Delete
+      </a>
+    {% endif %}
+
+    <!-- Optional: Visibility toggle could also be owner-only -->
+    {% if user == campaign.user.user %}
+      <a href="{% url 'update_visibilit' campaign.pk %}">
+        <i class="fas fa-lock"></i> Visibility
+      </a>
+    {% endif %}
+
   </div>
 </div>
+
         </div>
 
 
@@ -5449,18 +5766,67 @@ body.dark-mode .comment-count {
                 <div class="image-overlay-top">
                     <span class="campaign-category">{{ campaign.category }} Campaign</span>
                 </div>
-                
-          
-<div class="image-overlay-bottom">
+            <div class="image-overlay-bottom">
+    <!-- Action icons with data-title instead of title -->
+    <div class="campaign-action-icons">
+
+        <!-- Donate icon - only show if donation is enabled -->
+        {% if campaign.supportcampaign_set.first.donate_monetary_visible %}
+            <a href="{% url 'create_donation' campaign_id=campaign.id %}" class="action-icon" data-title="Donate">
+                <i class="fas fa-hand-holding-heart"></i>
+                <span class="tooltip">Donate</span>
+            </a>
+        {% endif %}
    
-    
+
+        <!-- Pledge icon - only show if pledge is enabled -->
+        {% if campaign.supportcampaign_set.first.pledge_visible %}
+            <a href="{% url 'create_pledge' campaign_id=campaign.id %}" class="action-icon" data-title="Pledge">
+                <i class="fas fa-handshake"></i>
+                <span class="tooltip">Pledge</span>
+            </a>
+        {% endif %}
+
+        <!-- Purchase Products icon - only show if campaign product is enabled -->
+        {% if campaign.supportcampaign_set.first.campaign_product_visible %}
+            <a href="{% url 'product_manage' campaign_id=campaign.id %}" class="action-icon" data-title="Purchase Products">
+                <i class="fas fa-shopping-bag"></i>
+                <span class="tooltip">Purchase Products</span>
+            </a>
+        {% endif %}
+
+    </div>
+    {% if campaign.supportcampaign_set.first.donate_monetary_visible %}
+
+    <div class="progress-info">
+        <span>Raised: ${{ campaign.total_donations }}</span>
+        <span>Goal: ${{ campaign.funding_goal }}</span>
+    </div>
+
+    <div class="progress-container">
+        <div class="progress-fill" style="width: {{ campaign.donation_percentage }}%;"></div>
+    </div>
+
+    <div class="campaign-stats">
+        <span>{{ campaign.donation_percentage }}% funded</span>
+        <span>${{ campaign.donation_remaining }} to go</span>
+    </div>
+
+    <div class="mobile-goal-display">
+        {{ campaign.donation_percentage }}% funded • ${{ campaign.donation_remaining }} to go
+    </div>
+
+ {% endif %}
+
     <div class="campaign-time-left">
         <i class="fas fa-clock"></i>
-        {% if campaign.days_left != None %}
-            {{ campaign.days_left }} {% if campaign.days_left == 1 %}day{% else %}days{% endif %} left
-        {% else %}
-            Ongoing
-        {% endif %}
+        <span>
+            {% if campaign.days_left != None %}
+                {{ campaign.days_left }} {% if campaign.days_left == 1 %}day{% else %}days{% endif %} left
+            {% else %}
+                Ongoing
+            {% endif %}
+        </span>
     </div>
 </div>
                 
@@ -5555,30 +5921,28 @@ body.dark-mode .comment-count {
 </div>
 {% endif %}
 
-<div class="campaign-members" style="margin-top: 15px; padding: 12px; background: #f8f9fa; border-radius: 8px;">
-    <h3 style="font-size: 16px; margin-bottom: 10px;">
+<div class="campaign-members">
+    <h3>
         <i class="fas fa-users" style="margin-right: 8px;"></i>
         Visible to: ({{ campaign.visible_to_followers.all.count }})
     </h3>
     {% if campaign.visible_to_followers.all %}
         <div style="display: flex; flex-wrap: wrap; gap: 8px; max-height: 150px; overflow-y: auto; padding-right: 5px;">
             {% for follower in campaign.visible_to_followers.all %}
-                <a href="{% url 'profile_view' follower.user.username %}" 
-                   style="display: flex; align-items: center; background: white; padding: 4px 8px; border-radius: 20px; text-decoration: none; color: #333;">
-                    <img src="{{ follower.image.url }}" 
-                         alt="{{ follower.user.username }}" 
-                         style="width: 24px; height: 24px; border-radius: 50%; margin-right: 6px;">
+                <a href="{% url 'profile_view' follower.user.username %}" class="follower-card">
+                    <img src="{{ follower.image.url }}" alt="{{ follower.user.username }}">
                     {{ follower.user.username }}
                 </a>
             {% endfor %}
         </div>
     {% else %}
-        <p style="color: #666; font-size: 14px; margin: 0;">
+        <p>
             <i class="fas fa-info-circle" style="margin-right: 6px;"></i>
             This campaign is not visible to any specific followers
         </p>
     {% endif %}
 </div>
+
         <!-- Simple Action Buttons -->
         <div class="simple-actions">
 <div class="action-group">
@@ -5989,31 +6353,47 @@ body.dark-mode .comment-count {
     });
 </script>
 
+
+
+
+
+
 <script>
-  function togglaMenu(clickedElement) {
+function togglaMenu(clickedElement) {
     // Close other open menus
     document.querySelectorAll('.menu-dropdown.active').forEach(menu => {
-      if (!clickedElement.contains(menu)) {
-        menu.classList.remove('active');
-      }
+        if (!clickedElement.contains(menu)) {
+            menu.classList.remove('active');
+        }
     });
 
     // Toggle the clicked one
     const dropdown = clickedElement.querySelector('.menu-dropdown');
     dropdown.classList.toggle('active');
-  }
+}
 
-  // Close the menu if clicked outside
-  document.addEventListener('click', function(event) {
+// Close the menu if clicked outside
+document.addEventListener('click', function(event) {
+    // Don't close if clicking on form elements within the menu
+    const isFormElement = event.target.closest('.not-interested-form') || 
+                         event.target.matches('input, select, textarea, label');
+    
     const isClickInside = event.target.closest('.campaign-menu');
-    if (!isClickInside) {
-      document.querySelectorAll('.menu-dropdown.active').forEach(menu => {
-        menu.classList.remove('active');
-      });
+    
+    if (!isClickInside && !isFormElement) {
+        document.querySelectorAll('.menu-dropdown.active').forEach(menu => {
+            menu.classList.remove('active');
+        });
     }
-  });
-</script>
+});
 
+// Prevent checkbox clicks from bubbling up and closing the menu
+document.addEventListener('click', function(event) {
+    if (event.target.matches('.form-checkbox, .form-label, .form-submit-button')) {
+        event.stopPropagation();
+    }
+}, true);
+</script>
 
 
 
@@ -7517,6 +7897,32 @@ function createHearts(element) {
 </script>
 
 
+    <script>
+        // Prevent default title tooltip from showing
+        document.addEventListener('DOMContentLoaded', function() {
+            const icons = document.querySelectorAll('.action-icon');
+            
+            icons.forEach(icon => {
+                // Remove title attribute to prevent default tooltip
+                icon.removeAttribute('title');
+                
+                // Add hover effect with slight 3D tilt
+                icon.addEventListener('mousemove', function(e) {
+                    const x = e.offsetX;
+                    const y = e.offsetY;
+                    
+                    const rotateY = -1/5 * x + 20;
+                    const rotateX = 1/5 * y - 20;
+                    
+                    this.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px) scale(1.05)`;
+                });
+                
+                icon.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(-8px) scale(1.05)';
+                });
+            });
+        });
+    </script>
 
 
 </body>

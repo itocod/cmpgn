@@ -6,9 +6,7 @@
     <div class="store-container">
         <!-- Campaign Header -->
         <div class="campaign-header">
-         
             <div class="campaign-info">
-               
                 <p class="product-count">{{ product_count }} products available</p>
             </div>
         </div>
@@ -19,15 +17,7 @@
             <aside class="filters-sidebar">
                 <div class="filter-section">
                     <h3>Filters</h3>
-                    <div class="filter-group">
-                        <label>Category</label>
-                        <select class="filter-select">
-                            <option>All Categories</option>
-                            {% for category in categories %}
-                            <option value="{{ category.id }}">{{ category.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
+                    
                     <div class="filter-group">
                         <label>Price Range</label>
                         <div class="price-range">
@@ -35,18 +25,45 @@
                             <span class="price-value">$0 - $500</span>
                         </div>
                     </div>
+
                     <div class="filter-group">
-                        <label>Status</label>
+                        <label>Stock Status</label>
                         <div class="checkbox-group">
                             <label class="checkbox-label">
                                 <input type="checkbox" checked id="inStockFilter"> In Stock
                             </label>
                             <label class="checkbox-label">
-                                <input type="checkbox" checked id="activeFilter"> Active
+                                <input type="checkbox" id="lowStockFilter"> Low Stock
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="outOfStockFilter"> Out of Stock
                             </label>
                         </div>
                     </div>
+
+                    <div class="filter-group">
+                        <label>Status</label>
+                        <div class="checkbox-group">
+                            <input type="checkbox" checked id="activeFilter"> Active
+                        </div>
+                    </div>
                     <button class="apply-filters">Apply Filters</button>
+                </div>
+                
+                <!-- Middleman Information -->
+                <div class="middleman-info-sidebar">
+                    <h4><i class="fas fa-hands-helping"></i> Our Service</h4>
+                    <p>We connect you with trusted suppliers. Shipping is handled directly by them.</p>
+                    <div class="trust-badges">
+                        <div class="trust-badge">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Secure Payments</span>
+                        </div>
+                        <div class="trust-badge">
+                            <i class="fas fa-medal"></i>
+                            <span>Verified Suppliers</span>
+                        </div>
+                    </div>
                 </div>
             </aside>
 
@@ -60,6 +77,8 @@
                             <option value="price_low">Price: Low to High</option>
                             <option value="price_high">Price: High to Low</option>
                             <option value="name">Name A-Z</option>
+                            <option value="stock_high">Stock: High to Low</option>
+                            <option value="stock_low">Stock: Low to High</option>
                         </select>
                     </div>
                     <div class="view-options">
@@ -70,7 +89,12 @@
 
                 <div class="product-grid" id="productGrid">
                     {% for product in products %}
-                    <div class="product-card" data-price="{{ product.price }}" data-stock="{{ product.stock_quantity }}" data-active="{{ product.is_active|yesno:'true,false' }}" data-date="{{ product.date_added|date:'Y-m-d H:i:s' }}">
+                    <div class="product-card" 
+                         data-price="{{ product.price }}" 
+                         data-stock="{{ product.stock_quantity }}" 
+                         data-active="{{ product.is_active|yesno:'true,false' }}" 
+                         data-date="{{ product.date_added|date:'Y-m-d H:i:s' }}">
+                         
                         <div class="product-image">
                             {% if product.image %}
                             <img src="{{ product.image.url }}" alt="{{ product.name }}" 
@@ -78,27 +102,63 @@
                             {% else %}
                             <div class="placeholder-image">No Image Available</div>
                             {% endif %}
+                            
+                            <!-- Stock Status Badges -->
                             <div class="product-badges">
-                                {% if not product.is_active %}<span class="badge inactive">Inactive</span>{% endif %}
-                                {% if product.stock_quantity == 0 %}<span class="badge out-of-stock">Out of Stock</span>{% endif %}
+                                {% if not product.is_active %}
+                                <span class="badge inactive">Inactive</span>
+                                {% elif product.stock_quantity == 0 %}
+                                <span class="badge out-of-stock">Out of Stock</span>
+                                {% elif product.stock_quantity <= 5 %}
+                                <span class="badge low-stock">Low Stock</span>
+                                {% else %}
+                                <span class="badge in-stock">In Stock</span>
+                                {% endif %}
                             </div>
+                            
                             <button class="quick-view-btn" data-product-id="{{ product.id }}">Quick View</button>
                         </div>
+
                         <div class="product-info">
-                            <div class="product-category">{{ product.category }}</div>
                             <h3 class="product-title">{{ product.name }}</h3>
                             <p class="product-description">{{ product.description|truncatewords:15 }}</p>
+                            
+                            <!-- Stock Information -->
+                            <div class="stock-display">
+                                {% if product.stock_quantity == 0 %}
+                                <div class="stock-status out-of-stock-status">
+                                    <i class="fas fa-times-circle"></i>
+                                    <span>Out of Stock</span>
+                                </div>
+                                {% elif product.stock_quantity <= 5 %}
+                                <div class="stock-status low-stock-status">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <span>Only {{ product.stock_quantity }} left</span>
+                                </div>
+                                {% else %}
+                                <div class="stock-status in-stock-status">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>{{ product.stock_quantity }} in stock</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                            
                             <div class="product-meta">
                                 <div class="product-price">${{ product.price }}</div>
-                                <div class="stock-info">{{ product.stock_quantity }} in stock</div>
                             </div>
+                            
+                            <!-- Middleman Note -->
+                            <div class="middleman-note">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Shipping by supplier</span>
+                            </div>
+                            
                             <div class="product-actions">
-                                <button class="add-to-cart-btn" {% if product.stock_quantity == 0 or not product.is_active %}disabled{% endif %}>
-                                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                                <button class="checkout-btn" 
+                                    {% if product.stock_quantity == 0 or not product.is_active %}disabled{% endif %}
+                                    onclick="proceedToCheckout({{ product.id }})">
+                                    <i class="fas fa-credit-card"></i> Proceed to Checkout
                                 </button>
-                                <a href="{{ product.url }}" class="shop-store-btn">
-                                    Visit Store
-                                </a>
                             </div>
                         </div>
                     </div>
@@ -155,20 +215,37 @@
             </div>
             <div class="modal-details">
                 <div class="modal-price" id="popupPrice">$0.00</div>
+                
+                <!-- Stock info in modal -->
+                <div class="modal-stock-info" id="popupStockInfo">
+                    <i class="fas fa-check-circle"></i>
+                    <span>In Stock</span>
+                </div>
+                
                 <p class="modal-description" id="popupDescription">Product description will appear here.</p>
+                
+                <!-- Middleman note in modal -->
+                <div class="modal-middleman-note">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Note: We are a middleman service. Shipping is handled by the supplier.</span>
+                </div>
+                
                 <div class="modal-actions">
                     <div class="quantity-selector">
                         <button class="qty-btn minus">-</button>
                         <input type="number" value="1" min="1" max="10" class="qty-input">
                         <button class="qty-btn plus">+</button>
                     </div>
-                    <button class="add-to-cart-modal">Add to Cart</button>
+                    <button class="checkout-btn" onclick="proceedToCheckout(selectedProductId)">
+                        Proceed to Checkout
+                    </button>
                 </div>
             </div>
         </div>
     </div>
 </div>
-      <style>
+
+<style>
 /* Base Styles */
 :root {
     --primary: #4a6cf7;
@@ -882,7 +959,7 @@ body.dark-mode {
         }
 
 .dark-mode .quick-view-btn {
-    background: rgba(30, 30, 30, 0.95);
+    background: rgba(30, 30, 30,0.95);
     color: var(--text-dark);
     box-shadow: 0 2px 5px rgba(0,0,0,0.3);
 }
@@ -1467,7 +1544,176 @@ body.dark-mode {
     0% { background-position: 200% 0; }
     100% { background-position: -200% 0; }
 }
-    </style>
+
+/* Enhanced Stock Status Styles */
+.stock-display {
+    margin: 10px 0;
+}
+
+.stock-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.in-stock-status {
+    background: #f0fff4;
+    color: #00a650;
+    border-left: 4px solid #00a650;
+}
+
+.low-stock-status {
+    background: #fffaf0;
+    color: #ff9500;
+    border-left: 4px solid #ff9500;
+}
+
+.out-of-stock-status {
+    background: #fff5f5;
+    color: #ff3b30;
+    border-left: 4px solid #ff3b30;
+}
+
+/* Enhanced Badge Styles */
+.badge.in-stock {
+    background: #00a650;
+    color: white;
+}
+
+.badge.low-stock {
+    background: #ff9500;
+    color: white;
+}
+
+/* Middleman Information Styles */
+.middleman-info-sidebar {
+    background: #f0f8ff;
+    border-radius: 8px;
+    padding: 15px;
+    margin-top: 20px;
+    border-left: 4px solid #0084FF;
+}
+
+.middleman-info-sidebar h4 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    color: #0084FF;
+}
+
+.middleman-info-sidebar p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.middleman-note {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #666;
+    margin: 8px 0;
+    padding: 6px;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+
+.middleman-note i {
+    color: #0084FF;
+}
+
+/* Modal Middleman Note */
+.modal-middleman-note {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px;
+    background: #f0f8ff;
+    border-radius: 6px;
+    margin: 15px 0;
+    font-size: 14px;
+    color: #0084FF;
+    border-left: 3px solid #0084FF;
+}
+
+.modal-stock-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 10px 0;
+    padding: 8px;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+/* Trust Badges in Sidebar */
+.trust-badges {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.trust-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #666;
+}
+
+.trust-badge i {
+    color: #0084FF;
+}
+
+/* Dark mode adjustments */
+.dark-mode .middleman-info-sidebar {
+    background: #1a2c3f;
+    border-left-color: #339dff;
+}
+
+.dark-mode .middleman-info-sidebar h4 {
+    color: #339dff;
+}
+
+.dark-mode .middleman-info-sidebar p {
+    color: #a0a0a0;
+}
+
+.dark-mode .middleman-note {
+    background: #2a2a2a;
+    color: #a0a0a0;
+}
+
+.dark-mode .modal-middleman-note {
+    background: #1a2c3f;
+    color: #339dff;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .middleman-info-sidebar {
+        margin-top: 15px;
+        padding: 12px;
+    }
+    
+    .stock-status {
+        font-size: 13px;
+        padding: 6px;
+    }
+    
+    .middleman-note {
+        font-size: 11px;
+    }
+}
+</style>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Image popup functionality
@@ -1607,9 +1853,11 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Filter functionality
+    // Enhanced filter functionality with stock filtering
     const applyFiltersBtn = document.querySelector('.apply-filters');
     const inStockFilter = document.getElementById('inStockFilter');
+    const lowStockFilter = document.getElementById('lowStockFilter');
+    const outOfStockFilter = document.getElementById('outOfStockFilter');
     const activeFilter = document.getElementById('activeFilter');
     const sortSelect = document.getElementById('sortSelect');
     
@@ -1628,6 +1876,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function filterProducts() {
         const maxPrice = priceRange ? parseInt(priceRange.value) : 1000;
         const showInStock = inStockFilter ? inStockFilter.checked : true;
+        const showLowStock = lowStockFilter ? lowStockFilter.checked : false;
+        const showOutOfStock = outOfStockFilter ? outOfStockFilter.checked : false;
         const showActive = activeFilter ? activeFilter.checked : true;
         const sortBy = sortSelect ? sortSelect.value : 'newest';
         
@@ -1637,7 +1887,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const price = parseFloat(card.dataset.price);
             const stock = parseInt(card.dataset.stock);
             const active = card.dataset.active === 'true';
-            const dateAdded = card.dataset.date;
             
             let shouldShow = true;
             
@@ -1646,8 +1895,15 @@ document.addEventListener('DOMContentLoaded', function() {
                 shouldShow = false;
             }
             
-            // Stock filter
-            if (showInStock && stock === 0) {
+            // Stock status filters
+            let stockStatus = '';
+            if (stock === 0) stockStatus = 'out';
+            else if (stock <= 5) stockStatus = 'low';
+            else stockStatus = 'in';
+            
+            if ((stockStatus === 'in' && !showInStock) ||
+                (stockStatus === 'low' && !showLowStock) ||
+                (stockStatus === 'out' && !showOutOfStock)) {
                 shouldShow = false;
             }
             
@@ -1660,7 +1916,69 @@ document.addEventListener('DOMContentLoaded', function() {
             card.style.display = shouldShow ? 'flex' : 'none';
         });
         
-        // Additional sorting logic would go here
+        // Sort products
+        sortProducts(sortBy);
+    }
+    
+    // Enhanced sorting function
+    function sortProducts(sortBy) {
+        const productGrid = document.getElementById('productGrid');
+        const productCards = Array.from(document.querySelectorAll('.product-card'));
+        
+        productCards.sort((a, b) => {
+            switch(sortBy) {
+                case 'price_low':
+                    return parseFloat(a.dataset.price) - parseFloat(b.dataset.price);
+                case 'price_high':
+                    return parseFloat(b.dataset.price) - parseFloat(a.dataset.price);
+                case 'name':
+                    return a.querySelector('.product-title').textContent.localeCompare(b.querySelector('.product-title').textContent);
+                case 'stock_high':
+                    return parseInt(b.dataset.stock) - parseInt(a.dataset.stock);
+                case 'stock_low':
+                    return parseInt(a.dataset.stock) - parseInt(b.dataset.stock);
+                case 'newest':
+                default:
+                    return new Date(b.dataset.date) - new Date(a.dataset.date);
+            }
+        });
+        
+        // Reappend sorted products
+        productCards.forEach(card => productGrid.appendChild(card));
+    }
+    
+    // Update modal with stock information
+    const modalStockInfo = document.getElementById('popupStockInfo');
+    
+    quickViewButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const productCard = this.closest('.product-card');
+            const stock = parseInt(productCard.dataset.stock);
+            
+            // Update stock info in modal
+            if (stock === 0) {
+                modalStockInfo.innerHTML = '<i class="fas fa-times-circle"></i><span>Out of Stock</span>';
+                modalStockInfo.className = 'modal-stock-info out-of-stock-status';
+            } else if (stock <= 5) {
+                modalStockInfo.innerHTML = `<i class="fas fa-exclamation-triangle"></i><span>Only ${stock} left</span>`;
+                modalStockInfo.className = 'modal-stock-info low-stock-status';
+            } else {
+                modalStockInfo.innerHTML = `<i class="fas fa-check-circle"></i><span>${stock} in stock</span>`;
+                modalStockInfo.className = 'modal-stock-info in-stock-status';
+            }
+        });
+    });
+    
+    // Initialize filters
+    if (inStockFilter && lowStockFilter && outOfStockFilter) {
+        // Set initial state
+        filterProducts();
+        
+        // Add event listeners
+        inStockFilter.addEventListener('change', filterProducts);
+        lowStockFilter.addEventListener('change', filterProducts);
+        outOfStockFilter.addEventListener('change', filterProducts);
+        activeFilter.addEventListener('change', filterProducts);
     }
     
     // Pagination functionality
@@ -1718,5 +2036,61 @@ document.addEventListener('DOMContentLoaded', function() {
         updatePagination();
     }
 });
+
+// Add to cart function with stock validation
+function addToCart(productId) {
+    // Find the product card to check stock
+    const productCard = document.querySelector(`.product-card[data-product-id="${productId}"]`);
+    const stock = productCard ? parseInt(productCard.dataset.stock) : 0;
+    const productName = productCard ? productCard.querySelector('.product-title').textContent : 'Product';
+    
+    if (stock === 0) {
+        alert(`Sorry, "${productName}" is out of stock.`);
+        return;
+    }
+    
+    fetch(`/cart/add/${productId}/`, {
+        method: 'POST',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRFToken': getCookie('csrftoken'),
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Show success message
+            alert(`Added "${productName}" to your cart!`);
+            
+            // Update cart counter if you have one
+            const cartCounter = document.querySelector('.cart-counter');
+            if (cartCounter) {
+                cartCounter.textContent = data.total_items;
+            }
+        } else {
+            alert(`Error: ${data.message}`);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while adding the product to your cart.');
+    });
+}
+
+// Helper function to get CSRF token
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 </script>
 {% endblock %}
