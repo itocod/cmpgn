@@ -24,7 +24,8 @@ class Command(BaseCommand):
             return
 
         for pledge in pledges_to_remind:
-            if "@" in pledge.contact:  # Only email
+            # Check if contact exists and is an email address
+            if pledge.contact and "@" in pledge.contact:  # Only email
                 subject = f"Reminder: Complete your pledge to {pledge.campaign.title}"
                 body = (
                     f"Hi {pledge.user.username},\n\n"
@@ -45,3 +46,5 @@ class Command(BaseCommand):
                     self.stdout.write(f"Reminder sent to {pledge.contact}")
                 except Exception as e:
                     self.stdout.write(f"Failed to send email to {pledge.contact}: {e}")
+            else:
+                self.stdout.write(f"Skipping pledge {pledge.id} - no valid email contact")

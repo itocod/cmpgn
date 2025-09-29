@@ -939,9 +939,85 @@ body.dark-mode .campaign-title {
 }
 </style>
 
+
+
+    <style type="text/css">
+        
+
+
+    .sub {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* slightly bigger */
+    margin-bottom: 14px; 
+    padding: 14px; /* increased */
+    border-radius: 10px; 
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    transition: transform 0.2s ease;
+}
+
+.sub:hover {
+    transform: translateY(-2px); 
+}
+
+.sub i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;   /* increased */
+    height: 38px;  /* increased */
+    font-size: 16px; /* slightly bigger */
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    color: #4b5563;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 1px solid #f9fafb;
+}
+
+.sub h2 {
+    margin: 0;
+    font-size: 18px;  /* slightly larger */
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.sub p {
+    margin: 5px 0 0;
+    font-size: 13px;  /* increased */
+    color: #6b7280;
+    line-height: 1.45;
+}
+
+        /* Dark mode for sub elements */
+        body.dark-mode .sub {
+            background: #1e1e1e;
+            border: 1px solid #333;
+        }
+        
+        body.dark-mode .sub i {
+            background: linear-gradient(135deg, #2d2d2d 0%, #252525 100%);
+            color: #b0b0b0;
+            border: 1px solid #333;
+        }
+        
+        body.dark-mode .sub h2 {
+            color: #f0f0f0;
+        }
+        
+        body.dark-mode .sub p {
+            color: #a0a0a0;
+        }
+</style>
   
-  
-<h2 style="font-size: 19px; padding-left: 20px;">User_profile</h2>
+  <div class="sub">
+   <i class="fas fa-user-circle"></i>
+   <div>
+       <h2>User Profile</h2>
+       <p>View your profile, update personal info, and track your campaign activities.</p>
+   </div>
+</div>
+
 
 <div class="container">
 <div class="rectangle-container">
@@ -1014,26 +1090,58 @@ body.dark-mode .campaign-title {
 
 
 
-  
-
-    
 <div class="details">
     <hr>
     <h3 style="font-size:19px;">User Details:</h3>
 
     <p><strong>Email:</strong> {{ user_profile.user.email }} ✉️</p>
     {% if user_profile.date_of_birth %}
-        <p><strong>Age:</strong>{{ user_profile.age }} 🎂</p>
+        <p><strong>Age:</strong> {{ user_profile.age }} 🎂</p>
     {% endif %}
-    <p><strong>Contact:</strong>{{ user_profile.contact }} 📞</p>
+    <p><strong>Contact:</strong> {{ user_profile.contact }} 📞</p>
     <p><strong>Gender:</strong> {{ user_profile.gender }} ♂️♀️</p>
     <p><strong>Location:</strong> {{ user_profile.location }} 🌍</p>
     <p><strong>Date of Birth:</strong> {{ user_profile.date_of_birth }} 🎉</p>
-    <p><strong>Highest level of education:</strong>{{ user_profile.highest_level_of_education }} 🎓</p>
-    {% if user_profileri.profile_verified %}
-        <p><strong>Status:</strong>   <span>verified</span><i class="material-icons" style="font-size:20px;color:green">verified_user</i></p>
+    <p><strong>Highest level of education:</strong> {{ user_profile.highest_level_of_education }} 🎓</p>
+
+    <!-- ✅ Payment Information Section -->
+    <hr>
+    <h3 style="font-size:19px;">Payment Information:</h3>
+
+    {% if user_profile.has_paypal %}
+        <p><strong>Payment Method:</strong> PayPal ✅</p>
+        <p><strong>PayPal Email:</strong> {{ user_profile.paypal_email }}</p>
+        <p><strong>Payment Status:</strong> Ready to Receive 🟢</p>
+    {% else %}
+        <p><strong>Payment Method:</strong> PayPal ❌</p>
+        <p><strong>Payment Status:</strong> Not Set Up ⚠️</p>
+        <p><small>Please add your PayPal email in your profile settings to receive payments.</small></p>
+                   <a href="{% url 'edit_profile' username=user_profile.user.username %}" class="verification-link">
+                <i class="fas fa-plus-circle"></i> Add PayPal Email
+            </a>
+    {% endif %}
+
+    {% if user_profile.payment_message %}
+        <p><strong>Last Update:</strong> {{ user_profile.payment_message }} 📝</p>
+    {% endif %}
+
+    <!-- ✅ Profile Verification -->
+    {% if user_profile.profile_verified %}
+        <p>
+            <strong>Status:</strong>
+            <span>Verified</span>
+            <i class="material-icons" style="font-size:20px;color:green">verified_user</i>
+        </p>
+    {% else %}
+        <p>
+            <strong>Status:</strong>
+            <span>Not Verified</span>
+            <i class="material-icons" style="font-size:20px;color:red">error</i>
+        </p>
     {% endif %}
 </div>
+
+    
 
 
 <div class="bio">
@@ -1081,7 +1189,12 @@ body.dark-mode .campaign-title {
 
       
     </div>
-    
+   
+
+
+
+
+
     <script>
 function toggleFollow(button) {
     const userId = button.dataset.userId;

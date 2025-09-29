@@ -2,12 +2,21 @@
 import re
 from django import template
 from django.db.models import Sum
+from django.forms import BoundField
 
 register = template.Library()
 
-@register.filter
+@register.filter(name='add_class')
 def add_class(field, css_class):
-    return field.as_widget(attrs={'class': css_class})
+    """Add a CSS class to a form field"""
+    if hasattr(field, 'as_widget'):
+        return field.as_widget(attrs={"class": css_class})
+    elif isinstance(field, str):
+        # Handle string fields (like rendered radio buttons)
+        return field
+    else:
+        # Fallback for other field types
+        return field
 
 @register.filter
 def format_count(value):

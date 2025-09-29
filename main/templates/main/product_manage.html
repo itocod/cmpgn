@@ -2,248 +2,81 @@
 {% load static %}
 
 {% block content %}
-<div class="store-wrapper">
-    <div class="store-container">
-        <!-- Campaign Header -->
-        <div class="campaign-header">
-            <div class="campaign-info">
-                <p class="product-count">{{ product_count }} products available</p>
-            </div>
-        </div>
 
-        <!-- Main Content -->
-        <div class="store-content">
-            <!-- Sidebar Filters -->
-            <aside class="filters-sidebar">
-                <div class="filter-section">
-                    <h3>Filters</h3>
-                    
-                    <div class="filter-group">
-                        <label>Price Range</label>
-                        <div class="price-range">
-                            <input type="range" min="0" max="1000" value="500" class="slider" id="priceRange">
-                            <span class="price-value">$0 - $500</span>
-                        </div>
-                    </div>
 
-                    <div class="filter-group">
-                        <label>Stock Status</label>
-                        <div class="checkbox-group">
-                            <label class="checkbox-label">
-                                <input type="checkbox" checked id="inStockFilter"> In Stock
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" id="lowStockFilter"> Low Stock
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="checkbox" id="outOfStockFilter"> Out of Stock
-                            </label>
-                        </div>
-                    </div>
 
-                    <div class="filter-group">
-                        <label>Status</label>
-                        <div class="checkbox-group">
-                            <input type="checkbox" checked id="activeFilter"> Active
-                        </div>
-                    </div>
-                    <button class="apply-filters">Apply Filters</button>
-                </div>
-                
-                <!-- Middleman Information -->
-                <div class="middleman-info-sidebar">
-                    <h4><i class="fas fa-hands-helping"></i> Our Service</h4>
-                    <p>We connect you with trusted suppliers. Shipping is handled directly by them.</p>
-                    <div class="trust-badges">
-                        <div class="trust-badge">
-                            <i class="fas fa-shield-alt"></i>
-                            <span>Secure Payments</span>
-                        </div>
-                        <div class="trust-badge">
-                            <i class="fas fa-medal"></i>
-                            <span>Verified Suppliers</span>
-                        </div>
-                    </div>
-                </div>
-            </aside>
+    <style type="text/css">
+        
 
-            <!-- Product Grid -->
-            <main class="product-grid-section">
-                <div class="product-grid-header">
-                    <div class="sort-options">
-                        <label>Sort by:</label>
-                        <select class="sort-select" id="sortSelect">
-                            <option value="newest">Newest First</option>
-                            <option value="price_low">Price: Low to High</option>
-                            <option value="price_high">Price: High to Low</option>
-                            <option value="name">Name A-Z</option>
-                            <option value="stock_high">Stock: High to Low</option>
-                            <option value="stock_low">Stock: Low to High</option>
-                        </select>
-                    </div>
-                    <div class="view-options">
-                        <button class="view-btn grid-view active" id="gridViewBtn"><i class="fas fa-th"></i></button>
-                        <button class="view-btn list-view" id="listViewBtn"><i class="fas fa-list"></i></button>
-                    </div>
-                </div>
 
-                <div class="product-grid" id="productGrid">
-                    {% for product in products %}
-                    <div class="product-card" 
-                         data-price="{{ product.price }}" 
-                         data-stock="{{ product.stock_quantity }}" 
-                         data-active="{{ product.is_active|yesno:'true,false' }}" 
-                         data-date="{{ product.date_added|date:'Y-m-d H:i:s' }}">
-                         
-                        <div class="product-image">
-                            {% if product.image %}
-                            <img src="{{ product.image.url }}" alt="{{ product.name }}" 
-                                 data-product="{{ product.name }}" data-price="{{ product.price }}">
-                            {% else %}
-                            <div class="placeholder-image">No Image Available</div>
-                            {% endif %}
-                            
-                            <!-- Stock Status Badges -->
-                            <div class="product-badges">
-                                {% if not product.is_active %}
-                                <span class="badge inactive">Inactive</span>
-                                {% elif product.stock_quantity == 0 %}
-                                <span class="badge out-of-stock">Out of Stock</span>
-                                {% elif product.stock_quantity <= 5 %}
-                                <span class="badge low-stock">Low Stock</span>
-                                {% else %}
-                                <span class="badge in-stock">In Stock</span>
-                                {% endif %}
-                            </div>
-                            
-                            <button class="quick-view-btn" data-product-id="{{ product.id }}">Quick View</button>
-                        </div>
+    .sub {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* slightly bigger */
+    margin-bottom: 14px; 
+    padding: 14px; /* increased */
+    border-radius: 10px; 
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    transition: transform 0.2s ease;
+}
 
-                        <div class="product-info">
-                            <h3 class="product-title">{{ product.name }}</h3>
-                            <p class="product-description">{{ product.description|truncatewords:15 }}</p>
-                            
-                            <!-- Stock Information -->
-                            <div class="stock-display">
-                                {% if product.stock_quantity == 0 %}
-                                <div class="stock-status out-of-stock-status">
-                                    <i class="fas fa-times-circle"></i>
-                                    <span>Out of Stock</span>
-                                </div>
-                                {% elif product.stock_quantity <= 5 %}
-                                <div class="stock-status low-stock-status">
-                                    <i class="fas fa-exclamation-triangle"></i>
-                                    <span>Only {{ product.stock_quantity }} left</span>
-                                </div>
-                                {% else %}
-                                <div class="stock-status in-stock-status">
-                                    <i class="fas fa-check-circle"></i>
-                                    <span>{{ product.stock_quantity }} in stock</span>
-                                </div>
-                                {% endif %}
-                            </div>
-                            
-                            <div class="product-meta">
-                                <div class="product-price">${{ product.price }}</div>
-                            </div>
-                            
-                            <!-- Middleman Note -->
-                            <div class="middleman-note">
-                                <i class="fas fa-info-circle"></i>
-                                <span>Shipping by supplier</span>
-                            </div>
-                            
-                            <div class="product-actions">
-                                <button class="checkout-btn" 
-                                    {% if product.stock_quantity == 0 or not product.is_active %}disabled{% endif %}
-                                    onclick="proceedToCheckout({{ product.id }})">
-                                    <i class="fas fa-credit-card"></i> Proceed to Checkout
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    {% empty %}
-                    <div class="no-products">
-                        <i class="fas fa-box-open"></i>
-                        <h3>No products found</h3>
-                        <p>Check back later for new items</p>
-                    </div>
-                    {% endfor %}
-                </div>
+.sub:hover {
+    transform: translateY(-2px); 
+}
 
-                <!-- Pagination -->
-                <div class="pagination">
-                    <button class="page-btn prev" id="prevPage"><i class="fas fa-chevron-left"></i></button>
-                    <span class="page-numbers" id="pageInfo">Page 1 of 1</span>
-                    <button class="page-btn next" id="nextPage"><i class="fas fa-chevron-right"></i></button>
-                </div>
-            </main>
-        </div>
+.sub i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;   /* increased */
+    height: 38px;  /* increased */
+    font-size: 16px; /* slightly bigger */
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    color: #4b5563;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 1px solid #f9fafb;
+}
 
-        <!-- Form Section (visible to campaign owner) -->
-        {% if user == campaign.user.user %}
-        <div class="admin-panel">
-            <div class="panel-toggle" id="adminPanelToggle">
-                <i class="fas fa-store"></i> Store Management
-                <i class="fas fa-chevron-down toggle-icon"></i>
-            </div>
-            <div class="form-section" id="adminFormSection">
-                <h2 class="form-heading">{% if product %}Edit Product{% else %}Add New Product{% endif %}</h2>
-                <form class="product-form" method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
-                    <div class="form-grid">
-                        {{ form.as_p }}
-                    </div>
-                    <button type="submit" class="save-btn"><i class="fas fa-save"></i> Save Product</button>
-                </form>
-            </div>
-        </div>
-        {% endif %}
-    </div>
-</div>
+.sub h2 {
+    margin: 0;
+    font-size: 18px;  /* slightly larger */
+    font-weight: 600;
+    color: #1f2937;
+}
 
-<!-- Image Popup Modal -->
-<div class="modal-overlay" id="imagePopup">
-    <div class="modal-container">
-        <div class="modal-header">
-            <h3 id="popupProductName">Product Name</h3>
-            <button class="modal-close" id="closePopup">&times;</button>
-        </div>
-        <div class="modal-body">
-            <div class="modal-image">
-                <img src="" alt="Product image" id="popupImage">
-            </div>
-            <div class="modal-details">
-                <div class="modal-price" id="popupPrice">$0.00</div>
-                
-                <!-- Stock info in modal -->
-                <div class="modal-stock-info" id="popupStockInfo">
-                    <i class="fas fa-check-circle"></i>
-                    <span>In Stock</span>
-                </div>
-                
-                <p class="modal-description" id="popupDescription">Product description will appear here.</p>
-                
-                <!-- Middleman note in modal -->
-                <div class="modal-middleman-note">
-                    <i class="fas fa-info-circle"></i>
-                    <span>Note: We are a middleman service. Shipping is handled by the supplier.</span>
-                </div>
-                
-                <div class="modal-actions">
-                    <div class="quantity-selector">
-                        <button class="qty-btn minus">-</button>
-                        <input type="number" value="1" min="1" max="10" class="qty-input">
-                        <button class="qty-btn plus">+</button>
-                    </div>
-                    <button class="checkout-btn" onclick="proceedToCheckout(selectedProductId)">
-                        Proceed to Checkout
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+.sub p {
+    margin: 5px 0 0;
+    font-size: 13px;  /* increased */
+    color: #6b7280;
+    line-height: 1.45;
+}
+
+        /* Dark mode for sub elements */
+        body.dark-mode .sub {
+            background: #1e1e1e;
+            border: 1px solid #333;
+        }
+        
+        body.dark-mode .sub i {
+            background: linear-gradient(135deg, #2d2d2d 0%, #252525 100%);
+            color: #b0b0b0;
+            border: 1px solid #333;
+        }
+        
+        body.dark-mode .sub h2 {
+            color: #f0f0f0;
+        }
+        
+        body.dark-mode .sub p {
+            color: #a0a0a0;
+        }
+</style>
+
+
+
+
 
 <style>
 /* Base Styles */
@@ -1714,10 +1547,269 @@ body.dark-mode {
 }
 </style>
 
+<div class="sub">
+   <i class="fas fa-box-open"></i>
+   <div>
+       <h2>Campaign Products</h2>
+       <p>Browse products offered in this campaign and support by making a purchase.</p>
+   </div>
+</div>
+
+<div class="store-wrapper">
+    <div class="store-container">
+        <!-- Campaign Header -->
+        <div class="campaign-header">
+            <div class="campaign-info">
+                <p class="product-count">{{ product_count }} products available</p>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="store-content">
+            <!-- Sidebar Filters -->
+            <aside class="filters-sidebar">
+                <div class="filter-section">
+                    <h3>Filters</h3>
+                    
+                    <div class="filter-group">
+                        <label>Price Range</label>
+                        <div class="price-range">
+                            <input type="range" min="0" max="1000" value="500" class="slider" id="priceRange">
+                            <span class="price-value">$0 - $500</span>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Stock Status</label>
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" checked id="inStockFilter"> In Stock
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="lowStockFilter"> Low Stock
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="outOfStockFilter"> Out of Stock
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="filter-group">
+                        <label>Status</label>
+                        <div class="checkbox-group">
+                            <input type="checkbox" checked id="activeFilter"> Active
+                        </div>
+                    </div>
+                    <button class="apply-filters">Apply Filters</button>
+                </div>
+                
+                <!-- Middleman Information -->
+                <div class="middleman-info-sidebar">
+                    <h4><i class="fas fa-hands-helping"></i> Our Service</h4>
+                    <p>We connect you with trusted suppliers. Shipping is handled directly by them.</p>
+                    <div class="trust-badges">
+                        <div class="trust-badge">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>Secure Payments</span>
+                        </div>
+                        <div class="trust-badge">
+                            <i class="fas fa-medal"></i>
+                            <span>Verified Suppliers</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Product Grid -->
+            <main class="product-grid-section">
+                <div class="product-grid-header">
+                    <div class="sort-options">
+                        <label>Sort by:</label>
+                        <select class="sort-select" id="sortSelect">
+                            <option value="newest">Newest First</option>
+                            <option value="price_low">Price: Low to High</option>
+                            <option value="price_high">Price: High to Low</option>
+                            <option value="name">Name A-Z</option>
+                            <option value="stock_high">Stock: High to Low</option>
+                            <option value="stock_low">Stock: Low to High</option>
+                        </select>
+                    </div>
+                    <div class="view-options">
+                        <button class="view-btn grid-view active" id="gridViewBtn"><i class="fas fa-th"></i></button>
+                        <button class="view-btn list-view" id="listViewBtn"><i class="fas fa-list"></i></button>
+                    </div>
+                </div>
+
+                <div class="product-grid" id="productGrid">
+                    {% for product in products %}
+                    <div class="product-card" 
+                         data-price="{{ product.price }}" 
+                         data-stock="{{ product.stock_quantity }}" 
+                         data-active="{{ product.is_active|yesno:'true,false' }}" 
+                         data-date="{{ product.date_added|date:'Y-m-d H:i:s' }}">
+                         
+                        <div class="product-image">
+                            {% if product.image %}
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}" 
+                                 data-product="{{ product.name }}" data-price="{{ product.price }}">
+                            {% else %}
+                            <div class="placeholder-image">No Image Available</div>
+                            {% endif %}
+                            
+                            <!-- Stock Status Badges -->
+                            <div class="product-badges">
+                                {% if not product.is_active %}
+                                <span class="badge inactive">Inactive</span>
+                                {% elif product.stock_quantity == 0 %}
+                                <span class="badge out-of-stock">Out of Stock</span>
+                                {% elif product.stock_quantity <= 5 %}
+                                <span class="badge low-stock">Low Stock</span>
+                                {% else %}
+                                <span class="badge in-stock">In Stock</span>
+                                {% endif %}
+                            </div>
+                        <button class="quick-view-btn" data-product-id="{{ product.id }}">Quick View</button>
+                        </div>
+
+                        <div class="product-info">
+                            <h3 class="product-title">{{ product.name }}</h3>
+                            <p class="product-description">{{ product.description|truncatewords:15 }}</p>
+                            
+                            <!-- Stock Information -->
+                            <div class="stock-display">
+                                {% if product.stock_quantity == 0 %}
+                                <div class="stock-status out-of-stock-status">
+                                    <i class="fas fa-times-circle"></i>
+                                    <span>Out of Stock</span>
+                                </div>
+                                {% elif product.stock_quantity <= 5 %}
+                                <div class="stock-status low-stock-status">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <span>Only {{ product.stock_quantity }} left</span>
+                                </div>
+                                {% else %}
+                                <div class="stock-status in-stock-status">
+                                    <i class="fas fa-check-circle"></i>
+                                    <span>{{ product.stock_quantity }} in stock</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="product-meta">
+                                <div class="product-price">${{ product.price }}</div>
+                            </div>
+                            
+                            <!-- Middleman Note -->
+                            <div class="middleman-note">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Shipping by supplier</span>
+                            </div>
+                            
+                            <!-- PayPal Checkout Button -->
+                           <div class="product-actions">
+    {% if product.stock_quantity > 0 and product.is_active %}
+        <form action="{% url 'initiate_paypal_payment' product.id %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="quantity" value="1">
+            <button type="submit" class="checkout-btn">
+               <i class="fab fa-paypal"></i> Checkout with PayPal
+            </button>
+        </form>
+    {% else %}
+        <button class="checkout-btn" disabled>
+            <i class="fas fa-times-circle"></i> Out of Stock
+        </button>
+    {% endif %}
+</div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="no-products">
+                        <i class="fas fa-box-open"></i>
+                        <h3>No products found</h3>
+                        <p>Check back later for new items</p>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Pagination -->
+                <div class="pagination">
+                    <button class="page-btn prev" id="prevPage"><i class="fas fa-chevron-left"></i></button>
+                    <span class="page-numbers" id="pageInfo">Page 1 of 1</span>
+                    <button class="page-btn next" id="nextPage"><i class="fas fa-chevron-right"></i></button>
+                </div>
+            </main>
+        </div>
+
+        <!-- Form Section (visible to campaign owner) -->
+        {% if user == campaign.user.user %}
+        <div class="admin-panel">
+            <div class="panel-toggle" id="adminPanelToggle">
+                <i class="fas fa-store"></i> Store Management
+                <i class="fas fa-chevron-down toggle-icon"></i>
+            </div>
+            <div class="form-section" id="adminFormSection">
+                <h2 class="form-heading">{% if product %}Edit Product{% else %}Add New Product{% endif %}</h2>
+                <form class="product-form" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-grid">
+                        {{ form.as_p }}
+                    </div>
+                    <button type="submit" class="save-btn"><i class="fas fa-save"></i> Save Product</button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Image Popup Modal -->
+<div class="modal-overlay" id="imagePopup">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h3 id="popupProductName">Product Name</h3>
+            <button class="modal-close" id="closePopup">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="modal-image">
+                <img src="" alt="Product image" id="popupImage">
+            </div>
+            <div class="modal-details">
+                <div class="modal-price" id="popupPrice">$0.00</div>
+                
+                <!-- Stock info in modal -->
+                <div class="modal-stock-info" id="popupStockInfo">
+                    <i class="fas fa-check-circle"></i>
+                    <span>In Stock</span>
+                </div>
+                
+                <p class="modal-description" id="popupDescription">Product description will appear here.</p>
+                
+                <!-- Middleman note in modal -->
+                <div class="modal-middleman-note">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Note: We are a middleman service. Shipping is handled by the supplier.</span>
+                </div>
+                
+                <div class="modal-actions">
+                    <!-- PayPal checkout form for modal -->
+                    <form id="modalCheckoutForm" method="post" action="">
+                        {% csrf_token %}
+                        <input type="hidden" id="modalProductId" name="product_id" value="">
+                        <button type="submit" class="checkout-btn">
+                            <i class="fab fa-paypal"></i> Checkout with PayPal
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     // Image popup functionality
-    const productImages = document.querySelectorAll('.product-image img');
     const quickViewButtons = document.querySelectorAll('.quick-view-btn');
     const imagePopup = document.getElementById('imagePopup');
     const popupImage = document.getElementById('popupImage');
@@ -1725,8 +1817,46 @@ document.addEventListener('DOMContentLoaded', function() {
     const popupPrice = document.getElementById('popupPrice');
     const popupDescription = document.getElementById('popupDescription');
     const closePopup = document.getElementById('closePopup');
-    
-    // Quick view functionality
+    const modalCheckoutForm = document.getElementById('modalCheckoutForm');
+
+    // Quantity selector functionality
+    function setupQuantitySelectors() {
+        // Setup for modal quantity selector
+        const modalMinusBtn = document.querySelector('.modal-actions .qty-btn.minus');
+        const modalPlusBtn = document.querySelector('.modal-actions .qty-btn.plus');
+        const modalQtyInput = document.querySelector('.modal-actions .qty-input');
+        
+        if (modalMinusBtn && modalPlusBtn && modalQtyInput) {
+            modalMinusBtn.addEventListener('click', function() {
+                let currentValue = parseInt(modalQtyInput.value);
+                if (currentValue > 1) {
+                    modalQtyInput.value = currentValue - 1;
+                }
+            });
+            
+            modalPlusBtn.addEventListener('click', function() {
+                let currentValue = parseInt(modalQtyInput.value);
+                const maxStock = parseInt(modalQtyInput.getAttribute('max')) || 10;
+                if (currentValue < maxStock) {
+                    modalQtyInput.value = currentValue + 1;
+                }
+            });
+            
+            // Validate input on change
+            modalQtyInput.addEventListener('change', function() {
+                let value = parseInt(this.value);
+                const min = parseInt(this.getAttribute('min')) || 1;
+                const max = parseInt(this.getAttribute('max')) || 10;
+                
+                if (isNaN(value) || value < min) {
+                    this.value = min;
+                } else if (value > max) {
+                    this.value = max;
+                }
+            });
+        }
+    }
+
     quickViewButtons.forEach(button => {
         button.addEventListener('click', function() {
             const productCard = this.closest('.product-card');
@@ -1734,17 +1864,62 @@ document.addEventListener('DOMContentLoaded', function() {
             const productPrice = productCard.querySelector('.product-price').textContent;
             const productDesc = productCard.querySelector('.product-description').textContent;
             const productImg = productCard.querySelector('img') ? productCard.querySelector('img').src : '';
-            
+            const productId = this.dataset.productId;
+
+            // Stock & Active status from data attributes
+            const stockQuantity = parseInt(productCard.dataset.stock);
+            const isActive = productCard.dataset.active === 'true';
+
             popupImage.src = productImg;
             popupProductName.textContent = productName;
             popupPrice.textContent = productPrice;
             popupDescription.textContent = productDesc;
-            
+
+            // Set the product ID in the hidden input
+            document.getElementById('modalProductId').value = productId;
+
+            // Update the form action
+            modalCheckoutForm.action = `/product/${productId}/pay/`;
+
+            // Update the checkout button in modal based on stock & active status
+            const checkoutBtn = modalCheckoutForm.querySelector('.checkout-btn');
+            if (!isActive || stockQuantity === 0) {
+                checkoutBtn.innerHTML = '<i class="fas fa-times-circle"></i> Out of Stock';
+                checkoutBtn.disabled = true;
+            } else {
+                checkoutBtn.innerHTML = '<i class="fas fa-credit-card"></i> Proceed to Checkout';
+                checkoutBtn.disabled = false;
+            }
+
+            // Update quantity selector in modal with stock limits
+            const modalQtyInput = document.querySelector('.modal-actions .qty-input');
+            if (modalQtyInput && stockQuantity > 0) {
+                modalQtyInput.setAttribute('max', Math.min(stockQuantity, 10));
+                modalQtyInput.value = 1;
+            }
+
+            // Setup quantity selector for modal
+            setupQuantitySelectors();
+
             imagePopup.classList.add('active');
             document.body.style.overflow = 'hidden';
         });
     });
-    
+
+    // Handle modal form submission
+    if (modalCheckoutForm) {
+        modalCheckoutForm.addEventListener('submit', function(e) {
+            // Add quantity to form data
+            const quantityInput = document.createElement('input');
+            quantityInput.type = 'hidden';
+            quantityInput.name = 'quantity';
+            quantityInput.value = document.querySelector('.modal-actions .qty-input').value;
+            this.appendChild(quantityInput);
+            
+            // Form will submit normally to initiate payment
+        });
+    }
+
     // Close modal
     closePopup.addEventListener('click', function() {
         imagePopup.classList.remove('active');
@@ -1763,50 +1938,6 @@ document.addEventListener('DOMContentLoaded', function() {
             imagePopup.classList.remove('active');
             document.body.style.overflow = '';
         }
-    });
-    
-    // Quantity selector
-    const minusButtons = document.querySelectorAll('.qty-btn.minus');
-    const plusButtons = document.querySelectorAll('.qty-btn.plus');
-    const quantityInputs = document.querySelectorAll('.qty-input');
-    
-    minusButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const input = this.nextElementSibling;
-            if (parseInt(input.value) > 1) {
-                input.value = parseInt(input.value) - 1;
-            }
-        });
-    });
-    
-    plusButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const input = this.previousElementSibling;
-            if (parseInt(input.value) < 10) {
-                input.value = parseInt(input.value) + 1;
-            }
-        });
-    });
-    
-    // Add to cart functionality
-    const addToCartButtons = document.querySelectorAll('.add-to-cart-btn, .add-to-cart-modal');
-    
-    addToCartButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            // Here you would typically send an AJAX request to add the product to cart
-            // For now, we'll just show a confirmation
-            const productCard = this.closest('.product-card');
-            const productName = productCard ? productCard.querySelector('.product-title').textContent : 
-                                document.getElementById('popupProductName').textContent;
-            
-            alert(`Added ${productName} to your cart!`);
-            
-            // If this was in the modal, close it
-            if (this.classList.contains('add-to-cart-modal')) {
-                imagePopup.classList.remove('active');
-                document.body.style.overflow = '';
-            }
-        });
     });
     
     // View toggle functionality
@@ -2035,47 +2166,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // Initialize pagination
         updatePagination();
     }
-});
 
-// Add to cart function with stock validation
-function addToCart(productId) {
-    // Find the product card to check stock
-    const productCard = document.querySelector(`.product-card[data-product-id="${productId}"]`);
-    const stock = productCard ? parseInt(productCard.dataset.stock) : 0;
-    const productName = productCard ? productCard.querySelector('.product-title').textContent : 'Product';
-    
-    if (stock === 0) {
-        alert(`Sorry, "${productName}" is out of stock.`);
-        return;
-    }
-    
-    fetch(`/cart/add/${productId}/`, {
-        method: 'POST',
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            'X-CSRFToken': getCookie('csrftoken'),
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            // Show success message
-            alert(`Added "${productName}" to your cart!`);
-            
-            // Update cart counter if you have one
-            const cartCounter = document.querySelector('.cart-counter');
-            if (cartCounter) {
-                cartCounter.textContent = data.total_items;
-            }
-        } else {
-            alert(`Error: ${data.message}`);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred while adding the product to your cart.');
-    });
-}
+    // Initialize quantity selectors
+    setupQuantitySelectors();
+});
 
 // Helper function to get CSRF token
 function getCookie(name) {

@@ -95,27 +95,27 @@ WSGI_APPLICATION = 'buskx.wsgi.application'
 
 # Database configuration
 # PostgreSQL configuration (commented out)
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': env('DB_NAME'),  # Load database name from .env
-#         'USER': env('DB_USER'),  # Load username from .env
-#         'PASSWORD': env('DB_PASSWORD'),  # Load password from .env
-#         'HOST': env('DB_HOST'),  # Load host from .env
-#         'PORT': env('DB_PORT'),  # Load port from .env
-#         'OPTIONS': {
-#             'sslmode': 'require',  # SSL mode for secure connection
-#         },
-#     }
-# }
+ DATABASES = {
+     'default': {
+         'ENGINE': 'django.db.backends.postgresql',
+         'NAME': env('DB_NAME'),  # Load database name from .env
+         'USER': env('DB_USER'),  # Load username from .env
+         'PASSWORD': env('DB_PASSWORD'),  # Load password from .env
+         'HOST': env('DB_HOST'),  # Load host from .env
+         'PORT': env('DB_PORT'),  # Load port from .env
+         'OPTIONS': {
+             'sslmode': 'require',  # SSL mode for secure connection
+         },
+     }
+ }
 
 # SQLite configuration (default for development)
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+#DATABASES = {
+ #   'default': {
+   #     'ENGINE': 'django.db.backends.sqlite3',
+    #    'NAME': BASE_DIR / 'db.sqlite3',
+    #}
+#}
 
 
 
@@ -142,29 +142,29 @@ USE_I18N = True
 USE_TZ = True
 
 # AWS S3 configurations for static and media files
-#AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
-#AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
-#AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
-#AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME', default='us-east-1')
-#AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
-#AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
+AWS_S3_REGION_NAME = env('AWS_S3_REGION_NAME', default='us-east-1')
+AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
+AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 
 # Static files settings
-#STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-#STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/'
 
 # Media files settings
-#DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-#MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/media/'
 
 
 # Static files settings (local)
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+#STATIC_URL = '/static/'
+#STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 # Media files settings (local)
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+#MEDIA_URL = '/media/'
+#MEDIA_ROOT = BASE_DIR / 'media'
 
 
 
@@ -268,20 +268,65 @@ SITE_DOMAIN = 'www.rallynex.com'
 
 
 
-# PayPal settings
+
 PAYPAL_CLIENT_ID = env('PAYPAL_CLIENT_ID')
 PAYPAL_CLIENT_SECRET = env('PAYPAL_CLIENT_SECRET')
-PAYPAL_MODE = env('PAYPAL_MODE')  #
+PAYPAL_MODE = env('PAYPAL_MODE', default='sandbox')
+PAYPAL_PLATFORM_ACCOUNT = env('PAYPAL_PLATFORM_ACCOUNT', default='')
+PAYPAL_BRAND_NAME = 'RALLYNEX'
+PAYPAL_ENABLE_PAYOUTS = env.bool('PAYPAL_ENABLE_PAYOUTS', default=False)
+PAYPAL_API_BASE = (
+    "https://api-m.sandbox.paypal.com" if PAYPAL_MODE == "sandbox"
+    else "https://api-m.paypal.com"
+)
 
 
 
-PAYPAL_PLATFORM_EMAIL = env('PAYPAL_PLATFORM_EMAIL')
 
-if not PAYPAL_PLATFORM_EMAIL or '@' not in PAYPAL_PLATFORM_EMAIL:
-    raise ImproperlyConfigured("PAYPAL_PLATFORM_EMAIL must be a valid email address")
-
-# settings.py
 
 # RECOMMENDED Branding Settings (customized for Rallynex)
 PAYPAL_PAYMENT_DESCRIPTOR = "RALLYNEX*DONATION"  # Will appear on bank statements (22 char max)
 DEFAULT_FROM_EMAIL = 'notifications@rallynex.com'  # For donation receipts
+
+# Add to your settings.py
+FLUTTERWAVE_PUBLIC_KEY = os.environ.get('FLUTTERWAVE_PUBLIC_KEY', '')
+FLUTTERWAVE_SECRET_KEY = os.environ.get('FLUTTERWAVE_SECRET_KEY', '')
+FLUTTERWAVE_ENCRYPTION_KEY = os.environ.get('FLUTTERWAVE_ENCRYPTION_KEY', '')
+FLUTTERWAVE_PLATFORM_SUBACCOUNT = os.getenv("FLUTTERWAVE_PLATFORM_SUBACCOUNT")
+FLUTTERWAVE_REDIRECT_URL = "http://127.0.0.1:8000/donations/flutterwave/callback/" 
+
+# settings.py
+PLATFORM_SUBACCOUNT_ID = env("FLUTTERWAVE_PLATFORM_SUBACCOUNT_ID", default="")
+
+
+
+
+
+# settings.py
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': 'django_errors.log',
+        },
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file', 'console'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'main': {  # Your app name
+            'handlers': ['file', 'console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    },
+}

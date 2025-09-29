@@ -2504,8 +2504,45 @@ def search_campaign(request):
     
     return render(request, 'main/search_results.html', context)
 
+
+
+
+
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.db.models import Count
+from django.utils import timezone
+from itertools import chain
+from collections import defaultdict
+from .models import (
+    Profile, Notification, Campaign, Love, Comment, 
+    CampaignView, ActivityLove, ActivityComment, Follow,
+    NativeAd
+)
+from .utils import calculate_similarity  # Make sure this import matches your project structure
+
 @login_required
 def notification_list(request):
+    # Handle delete requests
+    if request.method == 'POST' and 'delete_notification' in request.POST:
+        notification_id = request.POST.get('notification_id')
+        try:
+            notification = Notification.objects.get(id=notification_id, user=request.user)
+            notification.is_active = False  # Soft delete
+            notification.save()
+            messages.success(request, 'Notification deleted successfully.')
+        except Notification.DoesNotExist:
+            messages.error(request, 'Notification not found.')
+        return redirect('notification_list')
+    
+    if request.method == 'POST' and 'clear_all' in request.POST:
+        # Soft delete all notifications for this user
+        Notification.objects.filter(user=request.user, is_active=True).update(is_active=False)
+        messages.success(request, 'All notifications cleared.')
+        return redirect('notification_list')
+    
     # Get following user IDs using the improved pattern
     current_user_following = request.user.following.all()
     following_user_ids = [follow.followed_id for follow in current_user_following]
@@ -2513,8 +2550,8 @@ def notification_list(request):
     user_profile = get_object_or_404(Profile, user=request.user)
     category_filter = request.GET.get('category', '')  # Get category filter from request
     
-    # Retrieve notifications for the logged-in user
-    notifications = Notification.objects.filter(user=request.user).order_by('-timestamp')
+    # Retrieve only active notifications for the logged-in user
+    notifications = Notification.objects.filter(user=request.user, is_active=True).order_by('-timestamp')
 
     # Mark notifications as viewed
     unread_notifications = notifications.filter(viewed=False)
@@ -2556,7 +2593,7 @@ def notification_list(request):
     activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
 
     # Combine all engagement pairs
-    all_pairs = chain( love_pairs, comment_pairs, view_pairs,
+    all_pairs = chain(love_pairs, comment_pairs, view_pairs,
                      activity_love_pairs, activity_comment_pairs)
 
     # Count number of unique campaigns each user engaged with
@@ -2614,6 +2651,10 @@ def notification_list(request):
         'selected_category': category_filter,
     }
     return render(request, 'main/notification_list.html', context)
+
+
+
+
 
 
 @login_required
@@ -6104,102 +6145,6 @@ def edit_gif(request):
 
 
 
-# views.py
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.decorators import login_required
-from .models import Campaign, Donation
-from .forms import DonationForm
-
-@login_required
-def create_donation(request, campaign_id):
-    campaign = get_object_or_404(Campaign, pk=campaign_id)
-
-    if request.method == 'POST':
-        form = DonationForm(request.POST)
-        if form.is_valid():
-            donation = form.save(commit=False)
-            donation.user = request.user
-            donation.campaign = campaign
-            donation.save()
-            return redirect('view_campaign', campaign_id=campaign.id)
-    else:
-        form = DonationForm()
-    # User data and following
-    user_profile = get_object_or_404(Profile, user=request.user)
-    following_users = request.user.following.values_list('followed', flat=True)
-    user_profile.last_campaign_check = timezone.now()
-    user_profile.save()
-    
-    ads = NativeAd.objects.all()
-
-    # Suggested users
-    current_user_following = user_profile.following.all()
-    all_profiles = Profile.objects.exclude(user=request.user).exclude(user__in=current_user_following)
-    suggested_users = []
-    
-    for profile in all_profiles:
-        similarity_score = calculate_similarity(user_profile, profile)
-        if similarity_score >= 0.5:
-            followers_count = Follow.objects.filter(followed=profile.user).count()
-            suggested_users.append({
-                'user': profile.user,
-                'followers_count': followers_count
-            })
-    suggested_users = suggested_users[:2]
-
-    # Trending campaigns (Only those with at least 1 love)
-    trending_campaigns = Campaign.objects.filter(visibility='public') \
-        .annotate(love_count_annotated=Count('loves')) \
-        .filter(love_count_annotated__gte=1) \
-        .order_by('-love_count_annotated')[:10]
-
-    # Top Contributors logic
-   
-    love_pairs = Love.objects.values_list('user_id', 'campaign_id')
-    comment_pairs = Comment.objects.values_list('user_id', 'campaign_id')
-    view_pairs = CampaignView.objects.values_list('user_id', 'campaign_id')
-    activity_love_pairs = ActivityLove.objects.values_list('user_id', 'activity__campaign_id')
-    activity_comment_pairs = ActivityComment.objects.values_list('user_id', 'activity__campaign_id')
-
-    # Combine all engagement pairs
-    all_pairs = chain( love_pairs, comment_pairs, view_pairs,
-                      activity_love_pairs, activity_comment_pairs)
-
-    # Count number of unique campaigns each user engaged with
-    user_campaign_map = defaultdict(set)
-    for user_id, campaign_id in all_pairs:
-        user_campaign_map[user_id].add(campaign_id)
-
-    # Build a list of contributors with their campaign engagement count
-    contributor_data = []
-    for user_id, campaign_set in user_campaign_map.items():
-        try:
-            profile = Profile.objects.get(user__id=user_id)
-            contributor_data.append({
-                'user': profile.user,
-                'image': profile.image,
-                'campaign_count': len(campaign_set),
-            })
-        except Profile.DoesNotExist:
-            continue
-
-    # Sort contributors by campaign_count descending
-    top_contributors = sorted(contributor_data, key=lambda x: x['campaign_count'], reverse=True)[:5]
-
-    context = {
-        'campaign': campaign,
-        'form': form,
-        'user_profile': user_profile,
-        'ads': ads,
-        'suggested_users': suggested_users,
-        'trending_campaigns': trending_campaigns,
-        'top_contributors': top_contributors,
-    }
-
-    return render(request, 'main/donation_form.html', context)
-
-
-
 
 @login_required
 def product_manage(request, campaign_id=None, product_id=None):
@@ -6324,6 +6269,8 @@ def product_manage(request, campaign_id=None, product_id=None):
     }
     
     return render(request, 'main/product_manage.html', context)
+
+
 
 
 
@@ -6554,29 +6501,490 @@ def remove_from_cart(request, item_id):
 
 
 
-from django.shortcuts import render, get_object_or_404, redirect
+
+# views.py - Updated with unique function names
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 from django.contrib import messages
-from .models import Pledge, Campaign
+from django.conf import settings
+from django.http import JsonResponse, HttpResponse
+from .models import Campaign, Donation
+from .paypal_utils import create_donation_paypal_order, capture_donation_paypal_order, send_donation_payout, process_donation_split
+import json
+import logging
 
-def pledge_payment_view(request, pledge_id):
-    pledge = get_object_or_404(Pledge, id=pledge_id)
-    campaign = pledge.campaign
+logger = logging.getLogger(__name__)
 
-    if pledge.is_fulfilled:
-        messages.info(request, "This pledge has already been fulfilled.")
-        return redirect('view_campaign', campaign_id=campaign.id)
-
+@login_required
+def create_donation(request, campaign_id):
+    campaign = get_object_or_404(Campaign, pk=campaign_id)
+    
     if request.method == 'POST':
-        # Mark pledge as fulfilled (replace with real payment integration if needed)
-        pledge.is_fulfilled = True
-        pledge.save()
-        messages.success(request, f"Thank you! Your pledge of ${pledge.amount} to '{campaign.title}' is now completed.")
-        return redirect('view_campaign', campaign_id=campaign.id)
+        amount = request.POST.get('amount')
+        
+        try:
+            amount_float = float(amount)
+            if amount_float <= 0:
+                messages.error(request, "Please enter a valid donation amount.")
+                return render(request, "main/donation_form.html", {"campaign": campaign})
+        except (ValueError, TypeError):
+            messages.error(request, "Please enter a valid donation amount.")
+            return render(request, "main/donation_form.html", {"campaign": campaign})
+        
+        # Create a donation record
+        donation = Donation.objects.create(
+            user=request.user,
+            campaign=campaign,
+            amount=amount_float,
+            fulfilled=False
+        )
+        
+        # Create PayPal order using the unique function name
+        return_url = request.build_absolute_uri(
+            reverse('donation_payment_callback', kwargs={'donation_id': donation.id})
+        )
+        cancel_url = request.build_absolute_uri(reverse('donation_failure'))
+        
+        try:
+            order = create_donation_paypal_order(amount_float, campaign.id, return_url, cancel_url)
+            
+            if order and 'id' in order:
+                donation.paypal_order_id = order['id']
+                donation.save()
+                
+                # Find approval URL
+                for link in order.get('links', []):
+                    if link.get('rel') == 'approve':
+                        return redirect(link['href'])
+            
+            messages.error(request, "Failed to create PayPal order. Please try again.")
+            logger.error(f"PayPal order creation failed for donation {donation.id}")
+            return redirect('view_campaign', campaign_id=campaign.id)
+            
+        except Exception as e:
+            messages.error(request, "An error occurred while processing your donation.")
+            logger.error(f"Error creating PayPal order: {e}")
+            return redirect('view_campaign', campaign_id=campaign.id)
+    
+    return render(request, "main/donation_form.html", {"campaign": campaign})
 
-    return render(request, 'main/pledge_payment.html', {
-        'pledge': pledge,
-        'campaign': campaign
+@login_required
+def donation_payment_callback(request, donation_id):
+    donation = get_object_or_404(Donation, id=donation_id, user=request.user)
+    
+    if request.GET.get('token') and request.GET.get('PayerID'):
+        try:
+            # Capture the payment using unique function name
+            capture_result = capture_donation_paypal_order(donation.paypal_order_id)
+            
+            if capture_result and capture_result.get('status') == 'COMPLETED':
+                donation.fulfilled = True
+                donation.save()
+                
+                # Process the payout split
+                platform_share, campaign_owner_share = process_donation_split(donation.amount)
+                
+                # Get the campaign owner
+                campaign_owner_profile = donation.campaign.user
+                
+                # Check if the campaign owner has a PayPal email
+                if campaign_owner_profile.paypal_email:
+                    payout_note = f"Donation to your campaign: {donation.campaign.title}"
+                    payout_result = send_donation_payout(
+                        campaign_owner_profile.paypal_email,
+                        campaign_owner_share,
+                        payout_note,
+                        f"donation_{donation.id}_owner"
+                    )
+                    
+                    if payout_result and payout_result.get('batch_header', {}).get('payout_batch_id'):
+                        donation.paypal_payout_id = payout_result['batch_header']['payout_batch_id']
+                        donation.save()
+                    else:
+                        logger.warning(f"Payout to campaign owner failed for donation {donation.id}")
+                else:
+                    logger.warning(f"Campaign owner has no PayPal email for donation {donation.id}")
+                    # Store this information for manual processing later
+                    donation.paypal_payout_id = "PENDING_NO_PAYPAL_EMAIL"
+                    donation.save()
+                
+                # Send payout to platform (10%)
+                if hasattr(settings, 'PAYPAL_PLATFORM_ACCOUNT') and settings.PAYPAL_PLATFORM_ACCOUNT:
+                    platform_payout_result = send_donation_payout(
+                        settings.PAYPAL_PLATFORM_ACCOUNT,
+                        platform_share,
+                        f"Platform fee for donation #{donation.id}",
+                        f"donation_{donation.id}_platform"
+                    )
+                    
+                    if not platform_payout_result:
+                        logger.warning(f"Platform payout failed for donation {donation.id}")
+                else:
+                    logger.error("PAYPAL_PLATFORM_ACCOUNT not configured in settings")
+                
+                messages.success(request, "Thank you for your donation!")
+                return redirect('donation_success', donation_id=donation.id)
+            else:
+                messages.error(request, "Payment capture failed. Please try again.")
+                logger.error(f"Payment capture failed for donation {donation.id}: {capture_result}")
+                return redirect('donation_failure')
+                
+        except Exception as e:
+            messages.error(request, "An error occurred while processing your payment.")
+            logger.error(f"Error processing payment callback: {e}")
+            return redirect('donation_failure')
+    
+    messages.error(request, "Payment authorization failed.")
+    return redirect('donation_failure')
+
+@login_required
+def donation_success(request, donation_id):
+    donation = get_object_or_404(Donation, id=donation_id, user=request.user)
+    return render(request, "main/donation_success.html", {"donation": donation})
+
+@login_required
+def donation_failure(request):
+    return render(request, "main/donation_failure.html")
+
+# Additional utility view for checking donation status
+@login_required
+def donation_status(request, donation_id):
+    donation = get_object_or_404(Donation, id=donation_id, user=request.user)
+    return JsonResponse({
+        'donation_id': donation.id,
+        'amount': str(donation.amount),
+        'campaign': donation.campaign.title,
+        'fulfilled': donation.fulfilled,
+        'paypal_order_id': donation.paypal_order_id,
+        'paypal_payout_id': donation.paypal_payout_id,
+        'timestamp': donation.timestamp.isoformat()
     })
 
 
 
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
+from django.contrib import messages
+from django.conf import settings
+from django.http import JsonResponse, HttpResponse
+from django.contrib.sessions.models import Session
+from .models import Campaign, Pledge
+from .pledge_utils import create_paypal_pledge_order, capture_paypal_order, send_paypal_payout, process_pledge_split
+import json
+import logging
+import time
+
+logger = logging.getLogger(__name__)
+
+def pledge_payment_page(request, pledge_id):
+    """Display the pledge payment page (works for anonymous + logged-in users)."""
+    pledge = get_object_or_404(Pledge, id=pledge_id)
+    campaign = pledge.campaign
+    return render(request, "main/pledge_payment.html", {
+        "pledge": pledge,
+        "campaign": campaign,
+    })
+
+def initiate_pledge_payment(request, pledge_id):
+    """Initiate PayPal payment for a pledge."""
+    pledge = get_object_or_404(Pledge, id=pledge_id)
+
+    # Save session key for anonymous tracking
+    if not pledge.user and not pledge.session_key:
+        pledge.session_key = request.session.session_key or request.session.create()
+        pledge.save()
+
+    return_url = request.build_absolute_uri(
+        reverse('pledge_payment_callback', kwargs={'pledge_id': pledge.id})
+    )
+    cancel_url = request.build_absolute_uri(reverse('pledge_failure'))
+
+    # Convert Decimal amount to float for PayPal
+    amount_float = float(pledge.amount)
+
+    # Create PayPal order with the correct function
+    order = create_paypal_pledge_order(
+        amount_float,           # amount (converted to float)
+        pledge.campaign.id,     # campaign_id
+        return_url,             # return_url
+        cancel_url,             # cancel_url
+        f"Pledge to campaign: {pledge.campaign.title}"  # description
+    )
+
+    if order and 'id' in order:
+        pledge.paypal_order_id = order['id']
+        pledge.payment_status = 'processing'
+        pledge.save()
+
+        # Find approval URL
+        for link in order.get('links', []):
+            if link.get('rel') == 'approve':
+                return redirect(link['href'])
+
+    messages.error(request, "Failed to create PayPal order. Please try again.")
+    logger.error(f"PayPal order creation failed for pledge {pledge.id}")
+    return redirect('pledge_payment_page', pledge_id=pledge.id)
+
+def pledge_payment_callback(request, pledge_id):
+    """Handle PayPal payment callback for both anonymous + logged-in users."""
+    pledge = get_object_or_404(Pledge, id=pledge_id)
+
+    if request.GET.get('token') and request.GET.get('PayerID'):
+        try:
+            # Capture the payment
+            capture_result = capture_paypal_order(pledge.paypal_order_id)
+            
+            # Debug logging
+            logger.info(f"Capture result type: {type(capture_result)}")
+            logger.info(f"Capture result: {capture_result}")
+
+            # Handle case where function returns a tuple (data, error)
+            if isinstance(capture_result, tuple) and len(capture_result) == 2:
+                capture_data, error = capture_result
+                if error is not None:
+                    logger.error(f"PayPal capture error: {error}")
+                    capture_result = {"error": str(error), "status": "failed"}
+                else:
+                    capture_result = capture_data
+
+            # Check if capture was successful
+            if (capture_result and 
+                isinstance(capture_result, dict) and 
+                capture_result.get('status') == 'COMPLETED'):
+                
+                pledge.is_fulfilled = True
+                pledge.payment_status = 'completed'
+                pledge.save()
+
+                # Process split
+                platform_share, campaign_owner_share = process_pledge_split(pledge.amount)
+
+                campaign_owner_profile = pledge.campaign.user
+
+                # Simple retry mechanism for payouts (3 attempts with exponential backoff)
+                max_retries = 3
+                payout_success = False
+                
+                # Send payout to campaign owner (50%)
+                if hasattr(campaign_owner_profile, "paypal_email") and campaign_owner_profile.paypal_email:
+                    for attempt in range(max_retries):
+                        try:
+                            payout_result = send_paypal_payout(
+                                campaign_owner_profile.paypal_email,
+                                campaign_owner_share,
+                                f"Pledge to your campaign: {pledge.campaign.title}",
+                                f"pledge_{pledge.id}_owner"
+                            )
+                            
+                            if payout_result and payout_result.get('batch_header', {}).get('payout_batch_id'):
+                                pledge.paypal_payout_id = payout_result['batch_header']['payout_batch_id']
+                                pledge.save()
+                                payout_success = True
+                                break  # Success, exit retry loop
+                            elif attempt == max_retries - 1:
+                                logger.warning(f"Payout to campaign owner failed after {max_retries} attempts for pledge {pledge.id}")
+                        except Exception as e:
+                            if attempt == max_retries - 1:
+                                logger.error(f"Payout failed after {max_retries} attempts: {e}")
+                            # Wait before retrying (exponential backoff: 1s, 2s, 4s)
+                            time.sleep(2 ** attempt)
+                else:
+                    logger.warning(f"Campaign owner missing PayPal email for pledge {pledge.id}")
+
+                # Only send platform share if campaign owner payout succeeded
+                if payout_success and getattr(settings, "PAYPAL_PLATFORM_ACCOUNT", None):
+                    # Retry logic for platform payout too
+                    for attempt in range(max_retries):
+                        try:
+                            platform_payout_result = send_paypal_payout(
+                                settings.PAYPAL_PLATFORM_ACCOUNT,
+                                platform_share,
+                                f"Platform fee for pledge #{pledge.id}",
+                                f"pledge_{pledge.id}_platform"
+                            )
+                            if platform_payout_result:
+                                break  # Success or at least we tried
+                            elif attempt == max_retries - 1:
+                                logger.warning(f"Platform payout failed after {max_retries} attempts for pledge {pledge.id}")
+                        except Exception as e:
+                            if attempt == max_retries - 1:
+                                logger.error(f"Platform payout failed after {max_retries} attempts: {e}")
+                            time.sleep(2 ** attempt)
+                elif not getattr(settings, "PAYPAL_PLATFORM_ACCOUNT", None):
+                    logger.error("PAYPAL_PLATFORM_ACCOUNT not configured in settings")
+
+                return redirect('pledge_success', pledge_id=pledge.id)
+            else:
+                # Capture failed
+                logger.error(f"PayPal capture failed for order {pledge.paypal_order_id}: {capture_result}")
+                pledge.payment_status = 'failed'
+                pledge.save()
+                messages.error(request, "Payment capture failed. Please try again.")
+                return redirect('pledge_failure')
+
+        except Exception as e:
+            pledge.payment_status = 'failed'
+            pledge.save()
+            logger.error(f"Error processing payment callback: {e}")
+            messages.error(request, "An error occurred while processing your payment.")
+            return redirect('pledge_failure')
+
+    messages.error(request, "Payment authorization failed.")
+    return redirect('pledge_failure')
+
+def pledge_success(request, pledge_id):
+    """Display success page with payout breakdown."""
+    pledge = get_object_or_404(Pledge, id=pledge_id)
+    platform_share, campaign_owner_share = process_pledge_split(pledge.amount)
+
+    return render(request, "main/pledge_success.html", {
+        'pledge': pledge,
+        'platform_share': platform_share,
+        'campaign_owner_share': campaign_owner_share
+    })
+
+def pledge_failure(request):
+    """Display failure page."""
+    return render(request, "main/pledge_failure.html")
+
+
+
+
+
+
+
+
+# views.py
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse, HttpResponse
+from django.conf import settings
+
+from .models import CampaignProduct, Transaction
+from .products_utils import create_paypal_order, capture_paypal_order, send_product_payout
+import logging
+
+logger = logging.getLogger(__name__)
+
+@login_required
+def initiate_paypal_payment(request, product_id):
+    """
+    Create a PayPal order for a product purchase
+    """
+    product = get_object_or_404(CampaignProduct, id=product_id)
+
+    if not product.can_be_purchased():
+        messages.error(request, "This product is not available for purchase.")
+        return redirect('product_detail', product_id=product_id)
+
+    # Get quantity from request
+    try:
+        quantity = int(request.POST.get("quantity", 1))
+        if quantity < 1 or quantity > product.stock_quantity:
+            messages.error(request, "Invalid quantity selected.")
+            return redirect('product_detail', product_id=product_id)
+    except (ValueError, TypeError):
+        quantity = 1
+
+    order, error = create_paypal_order(product, request.user, quantity, request)
+
+    if error:
+        messages.error(request, f"Payment Error: {error}")
+        return redirect('payment_failure')
+
+    # Redirect user to PayPal approval URL
+    for link in order.get("links", []):
+        if link.get("rel") == "approve":
+            return redirect(link["href"])
+
+    messages.error(request, "No PayPal approval link found.")
+    return redirect('payment_failure')
+
+@csrf_exempt
+def paypal_payment_callback(request):
+    """
+    Handle PayPal callback after approval - SIMPLIFIED for redirect flow
+    """
+    order_id = request.GET.get("token")
+    
+    if not order_id:
+        # Try to get from POST data (some PayPal flows might use POST)
+        order_id = request.POST.get("token")
+    
+    if not order_id:
+        logger.error("PayPal callback: Missing order ID")
+        messages.error(request, "Missing payment information. Please contact support.")
+        return redirect("payment_failure")
+
+    # Capture the payment
+    capture_data, error = capture_paypal_order(order_id)
+    
+    if error:
+        logger.error(f"PayPal capture failed: {error}")
+        messages.error(request, "Payment failed. Please try again.")
+        return redirect("payment_failure")
+
+    # Check if capture was successful
+    if capture_data.get('status') != 'COMPLETED':
+        logger.error(f"PayPal capture not completed: {capture_data}")
+        messages.error(request, "Payment was not completed successfully.")
+        return redirect("payment_failure")
+
+    # Find transaction in our DB
+    try:
+        transaction = Transaction.objects.get(tx_ref=order_id)
+    except Transaction.DoesNotExist:
+        logger.error(f"Transaction not found for order ID: {order_id}")
+        messages.error(request, "Transaction not found. Please contact support.")
+        return redirect("payment_failure")
+
+    # Update transaction status
+    capture_id = None
+    try:
+        capture_id = capture_data.get('purchase_units', [{}])[0].get('payments', {}).get('captures', [{}])[0].get('id')
+    except (IndexError, KeyError, AttributeError):
+        logger.warning("Could not extract capture ID from PayPal response")
+
+    transaction.mark_as_successful(capture_id)
+
+    # Trigger payout to seller (optional - can be done manually later)
+    if settings.PAYPAL_ENABLE_PAYOUTS:
+        try:
+            success, payout_error = send_product_payout(transaction)
+            if not success:
+                logger.warning(f"Payout failed: {payout_error}")
+                # Don't show this error to user - it's a backend issue
+        except Exception as e:
+            logger.error(f"Payout error: {str(e)}")
+
+    messages.success(request, "Payment successful! Thank you for your purchase.")
+    return redirect("payment_success", transaction_id=transaction.id)
+
+@login_required
+def payment_success(request, transaction_id):
+    """
+    Show success page after payment.
+    """
+    transaction = get_object_or_404(Transaction, id=transaction_id, buyer=request.user)
+    return render(request, "main/payment_success.html", {
+        "transaction": transaction,
+        "product": transaction.product
+    })
+
+@login_required
+def payment_failure(request):
+    """
+    Show failure page
+    """
+    return render(request, "main/payment_failure.html")
+
+@login_required
+def transaction_history(request):
+    """
+    Show user's transaction history
+    """
+    transactions = Transaction.objects.filter(buyer=request.user).order_by('-created_at')
+    return render(request, "main/transaction_history.html", {"transactions": transactions})

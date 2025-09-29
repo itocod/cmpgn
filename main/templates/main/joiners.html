@@ -9,20 +9,83 @@
 
 {% block content %}
 
-<!-- HTML -->
-<div class="cc-header">
-    <h3 class="activity-title">
-        Users who joined the campaign: 
-        <a class="campaign-link" href="{% url 'view_campaign' campaign_id=campaign.pk %}">{{ campaign.title }}</a>
-    </h3>
-    <span class="activity-count">
-        {{ joiners|length }} Participants |
-        <a href="{% url 'top_participants' campaign_id=campaign.pk %}" class="top-supporters-link">
-    <i class="fas fa-trophy"></i> Top Participants
-</a>
+    <style type="text/css">
+        
 
-    </span>
+
+    .sub {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* slightly bigger */
+    margin-bottom: 14px; 
+    padding: 14px; /* increased */
+    border-radius: 10px; 
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    transition: transform 0.2s ease;
+}
+
+.sub:hover {
+    transform: translateY(-2px); 
+}
+
+.sub i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;   /* increased */
+    height: 38px;  /* increased */
+    font-size: 16px; /* slightly bigger */
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    color: #4b5563;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 1px solid #f9fafb;
+}
+
+.sub h2 {
+    margin: 0;
+    font-size: 18px;  /* slightly larger */
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.sub p {
+    margin: 5px 0 0;
+    font-size: 13px;  /* increased */
+    color: #6b7280;
+    line-height: 1.45;
+}
+
+        /* Dark mode for sub elements */
+        body.dark-mode .sub {
+            background: #1e1e1e;
+            border: 1px solid #333;
+        }
+        
+        body.dark-mode .sub i {
+            background: linear-gradient(135deg, #2d2d2d 0%, #252525 100%);
+            color: #b0b0b0;
+            border: 1px solid #333;
+        }
+        
+        body.dark-mode .sub h2 {
+            color: #f0f0f0;
+        }
+        
+        body.dark-mode .sub p {
+            color: #a0a0a0;
+        }
+</style>
+<div class="sub">
+   <i class="fas fa-users"></i>
+   <div>
+       <h2>Campaign Joiners</h2>
+       <p>See all the users who have joined this campaign and are part of the movement.</p>
+   </div>
 </div>
+
+
 
 <div class="joiners-section">
     <h3>Joiners <span class="joiner-count">{{ joiners|length }}</span></h3>
@@ -39,7 +102,7 @@
                 </li>
             {% endfor %}
         {% else %}
-            <li class="no-suggested-users">No participants yet.</li>
+            <li class="no-suggested-users">No Joiner yet.</li>
         {% endif %}
     </ul>
 </div>

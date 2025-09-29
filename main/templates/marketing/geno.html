@@ -5,251 +5,287 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rallynex - Crowdfunding Platform</title>
-    <style>
-        /* General Styles */
-        body {
-            font-family: Arial, sans-serif;
+   <style>
+        /* Base Styles */
+        :root {
+            --primary: #2C5F9B;
+            --primary-dark: #1A4A7D;
+            --secondary: #FF6B35;
+            --accent: #4ECDC4;
+            --light: #F7F9FC;
+            --dark: #333333;
+            --gray: #718096;
+            --light-gray: #E2E8F0;
+            --white: #FFFFFF;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: var(--light);
             display: flex;
             flex-direction: column;
             min-height: 100vh;
         }
+
         a {
             text-decoration: none;
             color: inherit;
         }
 
-     
+        /* Header Styles */
+        header {
+            background-color: var(--white);
+            box-shadow: var(--shadow);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .logo {
+            width: 50px;
+            height: 50px;
+           
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+
         .site-name {
             font-size: 1.5rem;
-            font-weight: bold;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 0.5px;
         }
+
         .inspiration {
-            font-size: 1rem;
-            opacity: 0.8;
+            font-size: 0.75rem;
+            color: var(--secondary);
+            font-weight: 500;
+            letter-spacing: 0.5px;
         }
+
         .header-right {
             display: flex;
             align-items: center;
-            gap: 15px;
         }
-        .explore-link {
-            color: white;
-            font-weight: bold;
-            transition: opacity 0.3s ease;
-        }
-        .explore-link:hover {
-            opacity: 0.8;
-        }
-      
 
-        /* Body Styles */
+        .header-nav {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            position: relative;
+            font-weight: 600;
+            color: var(--dark);
+            padding: 0.5rem 0;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+        }
+
+        .link-underline {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover .link-underline {
+            width: 100%;
+        }
+
+        .donate-button {
+            background-color: var(--secondary);
+            color: white !important;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            transition: var(--transition);
+        }
+
+        .donate-button:hover {
+            background-color: #e55a2b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(255, 107, 53, 0.3);
+        }
+
+        .donate-button:hover .link-underline {
+            width: 0;
+        }
+
+        /* Main Content Styles */
         main {
             flex: 1;
-            padding: 20px;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .content-placeholder {
+            background: linear-gradient(135deg, var(--white), var(--light-gray));
+            border-radius: 12px;
+            padding: 3rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            margin: 2rem 0;
+        }
+
+        .content-placeholder h1 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+
+        .content-placeholder p {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            font-size: 1.1rem;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: var(--transition);
+            box-shadow: 0 4px 6px rgba(44, 95, 155, 0.2);
+        }
+
+        .cta-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(44, 95, 155, 0.3);
         }
 
         /* Footer Styles */
         footer {
-            background-color: #333;
-            color: white;
-            padding: 20px;
-            text-align: center;
+            background-color: var(--primary-dark);
+            color: var(--white);
+            padding: 3rem 2rem 1.5rem;
+            margin-top: auto;
         }
+
         .footer-links {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 15px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto 2rem;
         }
+
         .footer-links a {
-            color: #ccc;
-            transition: color 0.3s ease;
+            padding: 0.5rem 0;
+            transition: var(--transition);
+            position: relative;
+            display: inline-block;
         }
+
         .footer-links a:hover {
-            color: #007BFF;
+            color: var(--secondary);
+            transform: translateX(5px);
         }
+
+        .footer-links a::before {
+            content: "•";
+            color: var(--accent);
+            margin-right: 0.5rem;
+        }
+
         .footer-bottom {
-            margin-top: 15px;
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            max-width: 1200px;
+            margin: 0 auto;
+            color: var(--light-gray);
             font-size: 0.9rem;
-            color: #999;
         }
 
-        /* Media Queries for Responsiveness */
+        /* Mobile Responsiveness */
         @media (max-width: 768px) {
-            /* Adjust header for smaller screens */
             header {
+                padding: 1rem;
                 flex-direction: column;
-                align-items: flex-start;
-                padding: 10px;
+                gap: 1rem;
             }
-            .header-left, .header-right {
-                width: 100%;
-                justify-content: space-between;
+            
+            .header-nav {
+                gap: 1.5rem;
             }
-            .site-name {
-                font-size: 2rem; /* Larger font size for Rallynex on smaller screens */
+            
+            main {
+                padding: 1rem;
             }
-            .inspiration {
-                font-size: 0.9rem;
+            
+            .content-placeholder {
+                padding: 2rem 1rem;
             }
-            .donate-button {
-                padding: 6px 12px;
-                font-size: 0.9rem;
-            }
-
-            /* Adjust footer links for smaller screens */
+            
             .footer-links {
-                flex-direction: column;
-                gap: 10px;
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
             }
         }
 
         @media (max-width: 480px) {
-            /* Further adjustments for mobile */
-            .site-name {
-                font-size: 2.2rem; /* Even larger font size for very small screens */
+            .header-nav {
+                flex-direction: column;
+                gap: 0.5rem;
+                width: 100%;
+                text-align: center;
             }
-            .inspiration {
-                display: none; /* Hide inspiration text on very small screens */
+            
+            .logo-wrapper {
+                justify-content: center;
             }
-            .header-right {
-                gap: 10px;
-            }
-            .donate-button {
-                padding: 5px 10px;
-                font-size: 0.8rem;
-            }
-
-            /* Adjust main content padding */
-            main {
-                padding: 10px;
+            
+            .footer-links {
+                grid-template-columns: 1fr;
+                text-align: center;
             }
         }
-
-/* Header Styles */
-header {
-    background-color: #007BFF;
-    color: white;
-    padding: 15px 5%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
-
-/* Logo and Branding */
-.header-left {
-    display: flex;
-    align-items: center;
-}
-
-.logo-wrapper {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    gap: 12px;
-    transition: transform 0.3s ease;
-}
-
-.logo-wrapper:hover {
-    transform: translateX(-2px);
-}
-
-.logo {
-    height: 80px;
-    width: auto;
-    transition: transform 0.3s ease;
-}
-
-.logo:hover {
-    transform: scale(1.05);
-}
-
-.logo-text {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.2;
-}
-
-.site-name {
-    font-size: 1.5rem;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-    color: white;
-}
-
-.inspiration {
-    font-size: 0.85rem;
-    opacity: 0.9;
-    font-weight: 400;
-    color: rgba(255, 255, 255, 0.9);
-}
-
-/* Navigation */
-.header-right {
-    display: flex;
-    align-items: center;
-}
-
-.header-nav {
-    display: flex;
-    gap: 25px;
-}
-
-.nav-link {
-    position: relative;
-    color: white;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 1rem;
-    padding: 8px 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.link-underline {
-    height: 2px;
-    width: 0;
-    background: white;
-    transition: width 0.3s ease, background 0.3s ease;
-    margin-top: 4px;
-    border-radius: 2px;
-}
-
-.nav-link:hover .link-underline {
-    width: 100%;
-}
-
-/* Donate Button */
-.donate-button {
-    background: white;
-    color: #007BFF;
-    padding: 8px 20px;
-    border-radius: 30px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
-
-.donate-button:hover {
-    background: #f0f0f0;
-    color: #0062cc;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-}
-
-.donate-button .link-underline {
-    display: none;
-}
-
     </style>
 </head>
 <body>
@@ -257,7 +293,7 @@ header {
 <header>
     <div class="header-left">
         <a href="{% url 'index' %}" class="logo-wrapper">
-            <img src="{% static 'main/files/lg.png' %}" alt="Rallynex Logo" class="logo">
+            <img src="{% static 'main/files/z.png' %}" alt="Rallynex Logo" class="logo">
             <div class="logo-text">
                 <span class="site-name">Rallynex</span>
                 <span class="inspiration">Act Small, Change Big</span>

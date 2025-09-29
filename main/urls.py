@@ -143,7 +143,31 @@ path('pledge/<int:pledge_id>/toggle-fulfillment/', views.toggle_pledge_fulfillme
     path('cart/add/<int:product_id>/', views.add_to_cart, name='add_to_cart'),
     path('cart/update/<int:item_id>/', views.update_cart_item, name='update_cart_item'),
     path('cart/remove/<int:item_id>/', views.remove_from_cart, name='remove_from_cart'),
-      path('pledge-payment/<int:pledge_id>/', views.pledge_payment_view, name='pledge_payment'),
+
+
+path('pledge-payment/<int:pledge_id>/', views.pledge_payment_page, name='pledge_payment_page'),
+path('initiate-pledge-payment/<int:pledge_id>/', views.initiate_pledge_payment, name='initiate_pledge_payment'),
+path('pledge-payment-callback/<int:pledge_id>/', views.pledge_payment_callback, name='pledge_payment_callback'),
+path('pledge-success/<int:pledge_id>/', views.pledge_success, name='pledge_success'),
+path('pledge-failure/', views.pledge_failure, name='pledge_failure'),
+
+
+
+  
+
+    path('donate/<int:campaign_id>/', views.create_donation, name='create_donation'),
+    path('donate/callback/<int:donation_id>/', views.donation_payment_callback, name='donation_payment_callback'),
+    path('donate/success/<int:donation_id>/', views.donation_success, name='donation_success'),
+    path('donate/failure/', views.donation_failure, name='donation_failure'),
+
+
+      path("product/<int:product_id>/paypal/", views.initiate_paypal_payment, name="initiate_paypal_payment"),
+    path("paypal/callback/", views.paypal_payment_callback, name="paypal_payment_callback"),
+    path("payment/success/<int:transaction_id>/", views.payment_success, name="payment_success"),
+    path("payment/failure/", views.payment_failure, name="payment_failure"),
+    path("transactions/", views.transaction_history, name="transaction_history"),
+
+
 ]
 
 

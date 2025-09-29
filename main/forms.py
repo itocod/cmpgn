@@ -95,34 +95,22 @@ class ActivityForm(forms.ModelForm):
 ActivityFormSet = inlineformset_factory(Campaign, Activity, form=ActivityForm, extra=1, can_delete=False)
 
 
-# ProfileForm
 class ProfileForm(forms.ModelForm):
+    paypal_email = forms.EmailField(
+        required=False,
+        widget=forms.EmailInput(attrs={
+            'class': 'form-input',
+            'placeholder': 'Enter your PayPal email'
+        })
+    )
+
     class Meta:
         model = Profile
-        fields = ['image', 'bio', 'contact', 'location', 'date_of_birth', 'gender', 'highest_level_of_education']
-        widgets = {
-            'bio': forms.Textarea(attrs={'class': 'form-textarea'}),
-            'contact': forms.TextInput(attrs={'class': 'form-input'}),
-            'location': forms.TextInput(attrs={'class': 'form-input'}),
-            'date_of_birth': forms.DateInput(attrs={'class': 'form-input', 'type': 'date'}),
-            'gender': forms.Select(attrs={'class': 'form-select'}),
-            'highest_level_of_education': forms.Select(attrs={'class': 'form-select'}),
-        }
-
-    def clean_bio(self):
-        bio = self.cleaned_data.get('bio')
-        validate_no_long_words(bio)  # Validate the bio field
-        return bio
-
-    def clean_contact(self):
-        contact = self.cleaned_data.get('contact')
-        validate_no_long_words(contact)  # Validate the contact field
-        return contact
-
-    def clean_location(self):
-        location = self.cleaned_data.get('location')
-        validate_no_long_words(location)  # Validate the location field
-        return location
+        fields = [
+            'image', 'bio', 'contact', 'location',
+            'date_of_birth', 'gender', 'highest_level_of_education',
+            'paypal_email'
+        ]
 
 
 
@@ -409,10 +397,11 @@ class PledgeForm(forms.ModelForm):
 from django import forms
 from .models import Donation
 
+# forms.py
 class DonationForm(forms.ModelForm):
     class Meta:
         model = Donation
-        fields = ['amount', 'destination']
+        fields = ['amount']  # remove 'destination'
         widgets = {
             'amount': forms.NumberInput(attrs={
                 'class': 'form-control',
@@ -420,9 +409,8 @@ class DonationForm(forms.ModelForm):
                 'step': '0.01',
                 'min': '1'
             }),
-            'destination': forms.RadioSelect(attrs={'class': 'form-check-input'}),
         }
         labels = {
             'amount': 'Donation Amount',
-            'destination': 'Where should your donation go?',
         }
+

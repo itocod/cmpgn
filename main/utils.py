@@ -33,10 +33,6 @@ def calculate_similarity(profile1, profile2):
 
 
 
-
-
-
-
 def calculate_campaign_cost(audience_size, duration):
     # Define your pricing model based on audience size and duration
     # For example, you could charge a certain amount per user per day

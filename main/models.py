@@ -1,10 +1,11 @@
 import datetime
 import uuid
+import requests
 from django.conf import settings
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils import timezone
-from PIL import Image
+from PIL import Image, ExifTags
 from io import BytesIO
 from django.core.files.base import ContentFile
 from django.db.models.signals import post_save
@@ -12,11 +13,6 @@ from django.dispatch import receiver
 from tinymce.models import HTMLField
 from django.db.models.signals import m2m_changed
 from django.urls import reverse
-from PIL import Image, ExifTags
-from io import BytesIO
-from django.core.files.base import ContentFile
-
-
 
 User = get_user_model()
 
@@ -32,12 +28,13 @@ class Profile(models.Model):
         ('Some High School', 'Some High School'),
         ('High School Graduate', 'High School Graduate'),
         ('Some College', 'Some College'),
-        ('Associate\'s Degree', 'Associate\'s Degree'),
-        ('Bachelor\'s Degree', 'Bachelor\'s Degree'),
-        ('Master\'s Degree', 'Master\'s Degree'),
+        ("Associate's Degree", "Associate's Degree"),
+        ("Bachelor's Degree", "Bachelor's Degree"),
+        ("Master's Degree", "Master's Degree"),
         ('PhD', 'PhD'),
         ('Other', 'Other'),
     )
+
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     image = models.ImageField(upload_to='profile_pics/', default='profile_pics/pp.png', max_length=255)
     bio = models.TextField(default='No bio available')
@@ -51,7 +48,34 @@ class Profile(models.Model):
     followers = models.ManyToManyField(User, related_name='follower_profiles', blank=True)
     last_campaign_check = models.DateTimeField(default=timezone.now)
     last_chat_check = models.DateTimeField(default=timezone.now)
-    profile_verified = models.BooleanField(default=False) 
+    profile_verified = models.BooleanField(default=False)
+
+    # ✅ Payment-related field for PayPal
+    paypal_email = models.EmailField(max_length=255, blank=True, null=True)
+   
+
+    def has_paypal(self):
+        """Check if PayPal details are set"""
+        return bool(self.paypal_email)
+
+    def update_verification_status(self):
+        """Update verification status."""
+        self.profile_verified = True
+        self.save(update_fields=['profile_verified'])
+
+    def age(self):
+        if self.date_of_birth:
+            today = timezone.now().date()
+            return (
+                today.year - self.date_of_birth.year -
+                ((today.month, today.day) < (self.date_of_birth.month, self.date_of_birth.day))
+            )
+        return None
+
+    def __str__(self):
+        return f'{self.user.username} Profile'
+
+
     def age(self):
         if self.date_of_birth:
             today = timezone.now().date()
@@ -61,9 +85,8 @@ class Profile(models.Model):
 
     def update_verification_status(self):
         """Update verification status."""
-        self.profile_verified = True  # Mark the profile as verified
+        self.profile_verified = True
         self.save(update_fields=['profile_verified'])
-
 
     def __str__(self):
         return f'{self.user.username} Profile'
@@ -71,34 +94,30 @@ class Profile(models.Model):
     @property
     def total_loves(self):
         # Sum the loves for all campaigns owned by the user
+        from .models import Love  # Import here to avoid circular imports
         return Love.objects.filter(campaign__user=self).count()
 
     def is_changemaker(self):
-    # Correct the query to reflect the relationship with the Campaign model
-        activity_count = Activity.objects.filter(campaign__user=self).count()  # `campaign__user` references the Profile
+        # Correct the query to reflect the relationship with the Campaign model
+        from .models import Activity, ActivityLove  # Import here to avoid circular imports
+        activity_count = Activity.objects.filter(campaign__user=self).count()
         activity_love_count = ActivityLove.objects.filter(activity__campaign__user=self).count()
-
         return activity_count >= 1 and activity_love_count >= 1
 
-
-    def has_completed_stripe_onboarding(self):
-        if not self.stripe_account_id:
-            return False
-        try:
-            account = stripe.Account.retrieve(self.stripe_account_id)
-            return account.details_submitted and account.charges_enabled
-        except stripe.error.StripeError:
-            return False
     
   
-
-
 @receiver(post_save, sender=User)
 def create_or_update_user_profile(sender, instance, created, **kwargs):
     if created:
+        # Create user profile when new user is created
         Profile.objects.create(user=instance)
     else:
+        # Save existing profile on user update
         instance.profile.save()
+
+
+
+
 
 
 class UserVerification(models.Model):
@@ -307,6 +326,10 @@ class Campaign(models.Model):
             end_time = self.timestamp + timedelta(days=self.duration)
             remaining = end_time - timezone.now()
             return max(remaining.days, 0)
+
+
+
+
 
 
 
@@ -664,54 +687,79 @@ class SupportCampaign(models.Model):
         return f"{self.user.username} supports {self.campaign.title}"
 
 
+
+
 from django.db import models
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 
 User = get_user_model()
 
-DONATION_DESTINATION_CHOICES = (
-    ('campaign', 'Campaign Owner'),
-    ('site', 'Site Tip'),
-)
-
 class Donation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     campaign = models.ForeignKey('Campaign', on_delete=models.CASCADE, related_name='donations')
     amount = models.DecimalField(max_digits=10, decimal_places=2)
-    destination = models.CharField(max_length=10, choices=DONATION_DESTINATION_CHOICES, default='campaign')
     timestamp = models.DateTimeField(auto_now_add=True)
-    fulfilled = models.BooleanField(default=True)  # Donations are instant/tips
+    fulfilled = models.BooleanField(default=False)
+    paypal_order_id = models.CharField(max_length=100, unique=True, blank=True, null=True)  # Changed from tx_ref
+    paypal_payout_id = models.CharField(max_length=100, blank=True, null=True)  # For tracking payout to campaign owner
 
     def __str__(self):
-        dest = "site" if self.destination == 'site' else "campaign"
-        return f"{self.user.username} donated ${self.amount} to {dest} ({self.campaign.title})"
+        return f"{self.user.username} donated ${self.amount} to {self.campaign.title}"
+
+# Your other models (Campaign, Profile, etc.) remain the same
 
 
+from django.db import models
+from django.contrib.auth import get_user_model
 
+User = get_user_model()
 
- 
+# models.py - Update your Pledge model
 class Pledge(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, related_name='pledges')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    campaign = models.ForeignKey('Campaign', on_delete=models.CASCADE, related_name='pledges')
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     contact = models.EmailField(blank=True, null=True)
-
     is_fulfilled = models.BooleanField(default=False)
     timestamp = models.DateTimeField(auto_now_add=True)
+    anonymous_name = models.CharField(max_length=100, blank=True, null=True)
+
+    # ✅ PayPal payment tracking fields
+    paypal_order_id = models.CharField(max_length=100, unique=True, blank=True, null=True)
+    paypal_payout_id = models.CharField(max_length=100, blank=True, null=True)
+    payment_status = models.CharField(max_length=20, default='pending', choices=(
+        ('pending', 'Pending'),
+        ('processing', 'Processing'),
+        ('completed', 'Completed'),
+        ('failed', 'Failed'),
+    ))
+    
+    # Session key for anonymous users
+    session_key = models.CharField(max_length=40, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.user.username} pledged ${self.amount} to {self.campaign.title}"
+        if self.user:
+            return f"{self.user.username} pledged ${self.amount} to {self.campaign.title}"
+        else:
+            name = self.anonymous_name or "Anonymous"
+            return f"{name} pledged ${self.amount} to {self.campaign.title}"
 
     def toggle_fulfilled(self):
-        """Toggle the fulfillment status of the pledge"""
         self.is_fulfilled = not self.is_fulfilled
         self.save()
         return self.is_fulfilled
 
 
-from django.utils import timezone
+
+
+
+
+# models.py
 from django.db import models
+from django.contrib.auth.models import User
+from django.utils import timezone
+import uuid
 
 class CampaignProduct(models.Model):
     STOCK_STATUS_CHOICES = [
@@ -751,6 +799,56 @@ class CampaignProduct(models.Model):
             return "Discontinued"
         else:  # in_stock
             return f"{self.stock_quantity} in stock"
+
+    def can_be_purchased(self):
+        return (self.is_active and 
+                self.stock_status != 'out_of_stock' and 
+                self.stock_status != 'discontinued' and
+                self.stock_quantity > 0)
+
+
+class Transaction(models.Model):
+    STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('successful', 'Successful'),
+        ('failed', 'Failed'),
+        ('refunded', 'Refunded'),
+    ]
+    
+    PAYOUT_STATUS_CHOICES = [
+        ('pending', 'Pending'),
+        ('paid', 'Paid'),
+        ('failed', 'Failed'),
+    ]
+
+    product = models.ForeignKey(CampaignProduct, on_delete=models.CASCADE, related_name='transactions')
+    buyer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='purchases')
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    quantity = models.PositiveIntegerField(default=1)
+    tx_ref = models.CharField(max_length=255, unique=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    # PayPal tracking fields
+    paypal_order_id = models.CharField(max_length=255, null=True, blank=True)
+    paypal_capture_id = models.CharField(max_length=255, null=True, blank=True)
+    payout_status = models.CharField(max_length=50, choices=PAYOUT_STATUS_CHOICES, default="pending")
+    payout_reference = models.CharField(max_length=255, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.product.name} - ${self.amount} ({self.status})"
+
+    def mark_as_successful(self, paypal_capture_id=None):
+        self.status = 'successful'
+        if paypal_capture_id:
+            self.paypal_capture_id = paypal_capture_id
+        self.save()
+        
+        # Update stock
+        if self.product.stock_quantity >= self.quantity:
+            self.product.stock_quantity -= self.quantity
+            self.product.save()
 
 
 
@@ -1030,9 +1128,6 @@ class Message(models.Model):
 
 
 
-
-
-
 class Notification(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.CharField(max_length=255)
@@ -1040,11 +1135,11 @@ class Notification(models.Model):
     viewed = models.BooleanField(default=False)
     campaign_notification = models.BooleanField(default=False)
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE, null=True, blank=True)
-    redirect_link = models.URLField(blank=True, null=True)  # Add a field for the redirect link
+    redirect_link = models.URLField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)  # Add this field for soft deletion
 
     def __str__(self):
         return self.message
-
 
 
 

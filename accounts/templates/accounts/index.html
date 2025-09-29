@@ -5455,7 +5455,70 @@ body.dark-mode .comment-count {
                         transform 0.3s ease;
         }
 
+.sub {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* slightly bigger */
+    margin-bottom: 14px; 
+    padding: 14px; /* increased */
+    border-radius: 10px; 
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    transition: transform 0.2s ease;
+}
 
+.sub:hover {
+    transform: translateY(-2px); 
+}
+
+.sub i {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;   /* increased */
+    height: 38px;  /* increased */
+    font-size: 16px; /* slightly bigger */
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    color: #4b5563;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 1px solid #f9fafb;
+}
+
+.sub h2 {
+    margin: 0;
+    font-size: 18px;  /* slightly larger */
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.sub p {
+    margin: 5px 0 0;
+    font-size: 13px;  /* increased */
+    color: #6b7280;
+    line-height: 1.45;
+}
+
+        /* Dark mode for sub elements */
+        body.dark-mode .sub {
+            background: #1e1e1e;
+            border: 1px solid #333;
+        }
+        
+        body.dark-mode .sub i {
+            background: linear-gradient(135deg, #2d2d2d 0%, #252525 100%);
+            color: #b0b0b0;
+            border: 1px solid #333;
+        }
+        
+        body.dark-mode .sub h2 {
+            color: #f0f0f0;
+        }
+        
+        body.dark-mode .sub p {
+            color: #a0a0a0;
+        }
+        
 </style>
 
 </head>
@@ -5812,10 +5875,16 @@ body.dark-mode .comment-count {
 
     </br>
 
- <div class="explore-card">
-    <h3><i class="fas fa-compass"></i>Explore</h3>
-    <p>Explore campaigns to be part of.</p>
+
+<div class="sub">
+   <i class="fas fa-compass"></i>
+    <div>
+        <h2>Explore</h2>
+           <p>Explore campaigns to be part of.</p>
+    </div>
 </div>
+
+
 
 
 <form method="GET" action="{% url 'home' %}" class="filter-form">
@@ -6008,7 +6077,7 @@ body.dark-mode .comment-count {
         <!-- Purchase Products icon - only show if campaign product is enabled -->
         {% if campaign.supportcampaign_set.first.campaign_product_visible %}
             <a href="{% url 'product_manage' campaign_id=campaign.id %}" class="action-icon" data-title="Purchase Products">
-                <i class="fas fa-shopping-bag"></i>
+                <i class="fas fa-box-open"></i>
                 <span class="tooltip">Purchase Products</span>
             </a>
         {% endif %}
@@ -6441,7 +6510,7 @@ body.dark-mode .comment-count {
         <!-- Purchase Products icon - only show if campaign product is enabled -->
         {% if campaign.supportcampaign_set.first.campaign_product_visible %}
             <a href="{% url 'product_manage' campaign_id=campaign.id %}" class="action-icon" data-title="Purchase Products">
-                <i class="fas fa-shopping-bag"></i>
+                <i class="fas fa-box-open"></i>
                 <span class="tooltip">Purchase Products</span>
             </a>
         {% endif %}
