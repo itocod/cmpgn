@@ -59,7 +59,7 @@ packaging==24.1
 pathspec==0.10.1
 paypal-checkout-serversdk==1.0.3
 paypalhttp==1.0.1
-paypalrestsdk==1.13.3
+paypalrestsdk>=1.14.0
 pillow>=10.4.0
 proto-plus==1.26.0
 protobuf==5.29.3
