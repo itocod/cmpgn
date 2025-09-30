@@ -12,6 +12,7 @@ charset-normalizer==3.3.2
 cloudinary==1.41.0
 colorama==0.4.6
 cryptography==42.0.8
+cython==3.0.11
 dj-database-url==2.2.0
 Django==5.0.6
 django-allauth==0.63.3
@@ -23,7 +24,6 @@ django-environ==0.11.2
 django-extensions==3.2.3
 django-heroku==0.3.1
 django-js-asset==2.2.0
-django-quill==0.1.0
 django-quill-editor==0.1.42
 django-sslserver==0.22
 django-storages==1.14.4
@@ -50,16 +50,16 @@ log-symbols==0.0.14
 markdown-it-py==3.0.0
 MarkupSafe==2.1.5  # Downgraded for compatibility
 mdurl==0.1.2
-numpy==1.26.4  # Stable version instead of 2.0.0
+numpy==1.26.4  # Stable version for Python 3.13
 packaging==24.1
 pathspec==0.12.1
 paypal-checkout-serversdk==1.0.3
 paypalhttp==1.0.1
 paypalrestsdk==1.13.3
-pillow==10.4.0  # Updated version
+pillow==10.4.0
 proto-plus==1.26.0
 protobuf==5.29.3
-psycopg2-binary==2.9.9  # Use binary version only
+psycopg2-binary==2.9.9
 pyasn1==0.6.1
 pyasn1_modules==0.4.1
 pycparser==2.22
