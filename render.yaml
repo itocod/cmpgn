@@ -1,8 +1,15 @@
 services:
-  - name: web
-    buildCommand: python manage.py collectstatic --noinput
+  - type: web
+    name: buskx
+    env: python
+    plan: free
+    buildCommand: |
+      pip install --upgrade pip setuptools wheel
+      pip install -r requirements.txt
+      python manage.py collectstatic --noinput
+      python manage.py migrate
     startCommand: gunicorn buskx.wsgi --bind 0.0.0.0:$PORT
-    env:
+    envVars:
       - key: SECRET_KEY
         from: env
       - key: DEBUG
@@ -20,9 +27,3 @@ services:
       - key: DB_PORT
         from: env
 
-build:
-  steps:
-    - name: Install dependencies
-      command: pip install -r requirements.txt
-    - name: Run migrations
-      command: python manage.py migrate
